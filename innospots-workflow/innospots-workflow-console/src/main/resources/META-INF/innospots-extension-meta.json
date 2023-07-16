@@ -32,6 +32,15 @@
       "i18nNames": {
         "en_US": "Application",
         "zh_CN": "应用管理"
+      },
+    {
+      "name": "${schedule-task}",
+      "itemKey": "schedule-task",
+      "uri": "/schedule-task",
+      "icon": "schedule-task",
+      "i18nNames": {
+        "en_US": "Schedule Task",
+        "zh_CN": "调度任务管理"
       }
     }
   ]
