@@ -96,6 +96,10 @@ public class NodeExecutionBase {
                 this.startTime.toInstant(offset).toEpochMilli());
     }
 
+    public String getConsume(){
+        return consume();
+    }
+
 
     @Override
     public String toString() {

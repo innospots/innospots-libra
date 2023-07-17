@@ -18,6 +18,7 @@
 
 package io.innospots.workflow.core.execution.flow;
 
+import io.innospots.base.utils.DateTimeUtils;
 import io.innospots.base.utils.Initializer;
 import io.innospots.base.utils.InnospotIdGenerator;
 import io.innospots.workflow.core.execution.ExecutionStatus;
@@ -27,6 +28,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -179,6 +182,14 @@ public class FlowExecutionBase implements Initializer {
         sb.append(", status=").append(status);
         sb.append('}');
         return sb.toString();
+    }
+
+    public String getConsume(){
+        LocalDateTime end = this.endTime !=null ? this.endTime : LocalDateTime.now();
+        long e = end.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        LocalDateTime start = this.startTime !=null ? this.startTime : LocalDateTime.now();
+        long s = start.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        return DateTimeUtils.consume(e,s);
     }
 
 }
