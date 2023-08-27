@@ -50,7 +50,7 @@ public class DBTaskExecutionExplore implements ITaskExecutionExplore {
     public boolean reRun(String taskExecutionId) {
         TaskExecution taskExecution = taskExecutionOperator.getTaskExecution(taskExecutionId);
 
-        TaskEvent taskEvent = TaskEvent.build(taskExecution, TaskEvent.TaskAction.STOP);
+        TaskEvent taskEvent = TaskEvent.build(taskExecution, TaskEvent.TaskAction.RERUN);
 
         //forward application event
         ApplicationContextUtils.sendAppEvent(taskEvent);
