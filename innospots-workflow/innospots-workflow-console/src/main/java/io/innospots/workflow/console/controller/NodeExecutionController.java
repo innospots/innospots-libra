@@ -66,7 +66,7 @@ public class NodeExecutionController extends BaseController {
     public InnospotResponse<Map<String, NodeExecutionDisplay>> listNodeExecutionsByFlowExecution(
             @Parameter(name = "flowExecutionId") @PathVariable String flowExecutionId) {
 
-        return InnospotResponse.success(nodeExecutionReader.readExecutionByFlowExecutionId(flowExecutionId, Collections.emptyList(),false));
+        return InnospotResponse.success(nodeExecutionReader.readExecutionByFlowExecutionId(flowExecutionId, Collections.emptyList(), true));
     }
 
 

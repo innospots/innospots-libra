@@ -66,4 +66,6 @@ public class TaskExecutionEntity extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String message;
 
+    @Column
+    private String detailUrl;
 }

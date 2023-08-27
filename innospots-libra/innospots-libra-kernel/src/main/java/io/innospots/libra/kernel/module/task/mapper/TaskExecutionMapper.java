@@ -23,6 +23,7 @@ public interface TaskExecutionMapper extends BaseConvertMapper {
 
     @Mapping(target = "taskExecutionId", ignore = true)
     @Mapping(target = "taskName", ignore = true)
+    @Mapping(target = "detailUrl", ignore = true)
     @Mapping(target = "startTime", ignore = true)
     @Mapping(target = "createdTime", ignore = true)
     void updateEntity2Model(@MappingTarget TaskExecutionEntity entity, TaskExecution taskExecution);

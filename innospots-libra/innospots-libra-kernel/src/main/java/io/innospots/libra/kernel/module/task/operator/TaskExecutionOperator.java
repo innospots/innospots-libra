@@ -98,7 +98,6 @@ public class TaskExecutionOperator extends ServiceImpl<TaskExecutionDao, TaskExe
 
         for (TaskExecution taskExecution : taskExecutions) {
             taskExecution.setTimeConsume(DateTimeUtils.getDiffDayStr(DateTimeUtils.asDate(taskExecution.getEndTime()), DateTimeUtils.asDate(taskExecution.getStartTime())));
-            taskExecution.setDetailUrl("/task-execution/" + taskExecution.getAppKey() + "/" + taskExecution.getTaskExecutionId());
         }
     }
 }

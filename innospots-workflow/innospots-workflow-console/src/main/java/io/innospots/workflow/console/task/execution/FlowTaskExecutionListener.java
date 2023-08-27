@@ -80,6 +80,7 @@ public class FlowTaskExecutionListener implements IEventListener<FlowExecutionTa
         taskExecution.setStartTime(execution.getStartTime());
         taskExecution.setAppKey(execution.getSource());
         taskExecution.setAppName("工作流引擎");
+        taskExecution.setDetailUrl("/task-execution/" + taskExecution.getAppKey() + "/" + workflowInstance.getWorkflowInstanceId() + "/" + workflowInstance.getRevision());
         return taskExecution;
     }
 
