@@ -77,7 +77,9 @@ public class FlowExecutionController extends BaseController {
             @Parameter(name = "endTime") @RequestParam(required = false) String endTime,
             @Parameter(name = "revision") @RequestParam(required = false) Integer revision
     ) {
-
+        if (page > 0) {
+            page --;
+        }
         return InnospotResponse.success(flowExecutionReader.pageFlowExecutions(workflowInstanceId, revision,
                 statuses, startTime, endTime, page, size));
     }
