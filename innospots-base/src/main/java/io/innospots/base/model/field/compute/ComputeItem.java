@@ -18,7 +18,7 @@
 
 package io.innospots.base.model.field.compute;
 
-import io.innospots.base.function.FunctionDefinitionManager;
+import io.innospots.base.function.definition.FunctionDefinitionManager;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;

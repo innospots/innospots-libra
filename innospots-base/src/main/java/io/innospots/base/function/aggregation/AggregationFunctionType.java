@@ -16,11 +16,7 @@
  *  limitations under the License.
  */
 
-package io.innospots.base.re.function.aggregation;
-
-import java.util.Collection;
-import java.util.Map;
-import java.util.function.Function;
+package io.innospots.base.function.aggregation;
 
 /**
  * @author Smars

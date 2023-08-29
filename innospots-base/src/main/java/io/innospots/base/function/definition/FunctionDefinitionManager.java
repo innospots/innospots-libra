@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-package io.innospots.base.function;
+package io.innospots.base.function.definition;
 
 import com.github.benmanes.caffeine.cache.CacheLoader;
 import com.github.benmanes.caffeine.cache.Caffeine;

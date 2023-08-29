@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-package io.innospots.base.function;
+package io.innospots.base.function.definition;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

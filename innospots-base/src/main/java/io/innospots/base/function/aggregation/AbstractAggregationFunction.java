@@ -1,6 +1,5 @@
-package io.innospots.base.re.function.aggregation;
+package io.innospots.base.function.aggregation;
 
-import io.innospots.base.model.field.BaseField;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.base.re.IExpression;
 import org.apache.commons.math3.stat.descriptive.AbstractStorelessUnivariateStatistic;

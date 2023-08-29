@@ -1,4 +1,4 @@
-package io.innospots.base.re.function.aggregation;
+package io.innospots.base.function.aggregation;
 
 import org.apache.commons.math3.stat.descriptive.summary.Sum;
 
@@ -7,6 +7,11 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
+ * The formula for the SumFunction is:
+ * sum(x) = Σx
+ * where x represents the numerical values or sequence of values to be summed, and Σ indicates the sum operator.
+ * For example, if x = {1, 2, 3, 4, 5}, then sum(x) = 1 + 2 + 3 + 4 + 5 = 15.
+ * Therefore, the value of sum(x) is the sum of all the values in x.
  * @author Smars
  * @date 2023/8/22
  */

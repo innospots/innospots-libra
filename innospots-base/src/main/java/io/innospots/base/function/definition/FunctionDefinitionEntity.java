@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-package io.innospots.base.function;
+package io.innospots.base.function.definition;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

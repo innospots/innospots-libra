@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-package io.innospots.base.function;
+package io.innospots.base.function.definition;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.innospots.base.model.field.FieldValueType;

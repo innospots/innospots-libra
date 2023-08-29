@@ -1,4 +1,4 @@
-package io.innospots.base.re.function.aggregation;
+package io.innospots.base.function.aggregation;
 
 import io.innospots.base.model.field.ParamField;
 import io.innospots.base.re.IExpression;
@@ -21,6 +21,12 @@ public interface  IAggregationFunction {
 
     void initialize(ParamField summaryField, IExpression<?> condition);
 
+
+    /**
+     * convert the value to double, which this is the summary field in the item
+     * @param item
+     * @return
+     */
     default Double value(Map<String, Object> item) {
         try {
             Object v = item.getOrDefault(summaryFieldCode(), 0d);

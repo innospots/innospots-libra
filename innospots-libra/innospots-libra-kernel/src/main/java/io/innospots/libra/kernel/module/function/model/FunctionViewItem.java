@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.function.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import io.innospots.base.function.FunctionDefinition;
+import io.innospots.base.function.definition.FunctionDefinition;
 import io.innospots.base.model.field.FieldValueType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

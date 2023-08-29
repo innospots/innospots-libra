@@ -25,7 +25,7 @@ import io.innospots.base.model.field.BaseField;
 import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.re.IExpression;
 import io.innospots.base.re.aviator.AviatorExpression;
-import io.innospots.base.re.function.aggregation.AggregationFunctionType;
+import io.innospots.base.function.aggregation.AggregationFunctionType;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.base.utils.Initializer;
 import io.innospots.workflow.core.node.field.NodeParamField;
@@ -40,11 +40,9 @@ import org.apache.commons.math3.stat.descriptive.summary.Product;
 import org.apache.commons.math3.stat.descriptive.summary.Sum;
 import org.apache.commons.math3.stat.descriptive.summary.SumOfLogs;
 import org.apache.commons.math3.stat.descriptive.summary.SumOfSquares;
-import org.apache.commons.math3.stat.ranking.NaNStrategy;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * aggregation compute field
