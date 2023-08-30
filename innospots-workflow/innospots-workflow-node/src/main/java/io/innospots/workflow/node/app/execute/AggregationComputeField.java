@@ -20,12 +20,14 @@ package io.innospots.workflow.node.app.execute;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.innospots.base.condition.EmbedCondition;
+import io.innospots.base.function.aggregation.AggregationFunctionBuilder;
+import io.innospots.base.function.aggregation.AggregationFunctionType;
+import io.innospots.base.function.aggregation.IAggregationFunction;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.field.BaseField;
 import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.re.IExpression;
 import io.innospots.base.re.aviator.AviatorExpression;
-import io.innospots.base.function.aggregation.AggregationFunctionType;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.base.utils.Initializer;
 import io.innospots.workflow.core.node.field.NodeParamField;
@@ -33,16 +35,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.math3.stat.descriptive.AbstractStorelessUnivariateStatistic;
-import org.apache.commons.math3.stat.descriptive.moment.*;
-import org.apache.commons.math3.stat.descriptive.rank.Median;
-import org.apache.commons.math3.stat.descriptive.summary.Product;
-import org.apache.commons.math3.stat.descriptive.summary.Sum;
-import org.apache.commons.math3.stat.descriptive.summary.SumOfLogs;
-import org.apache.commons.math3.stat.descriptive.summary.SumOfSquares;
 
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * aggregation compute field
@@ -67,21 +62,23 @@ public class AggregationComputeField extends BaseField implements Initializer {
 
     private String expr;
 
-    public static AggregationComputeField build(Map<String,Object> fieldMap){
+    private IAggregationFunction aggregateFunction;
+
+    public static AggregationComputeField build(Map<String, Object> fieldMap) {
         AggregationComputeField computeField = new AggregationComputeField();
         computeField.name = (String) fieldMap.get("name");
         computeField.comment = (String) fieldMap.get("comment");
         computeField.code = (String) fieldMap.get("code");
-        if(fieldMap.containsKey("valueType")){
+        if (fieldMap.containsKey("valueType")) {
             computeField.valueType = FieldValueType.valueOf((String) fieldMap.get("valueType"));
         }
         computeField.functionType = AggregationFunctionType.valueOf((String) fieldMap.get("functionType"));
-        Map<String,Object> sf = (Map<String, Object>) fieldMap.get("summaryField");
-        if(sf != null){
-            computeField.summaryField = BeanUtils.toBean(sf,NodeParamField.class);
+        Map<String, Object> sf = (Map<String, Object>) fieldMap.get("summaryField");
+        if (sf != null) {
+            computeField.summaryField = BeanUtils.toBean(sf, NodeParamField.class);
         }
-        Map<String,Object> ct = (Map<String, Object>) fieldMap.get("condition");
-        if(ct!=null){
+        Map<String, Object> ct = (Map<String, Object>) fieldMap.get("condition");
+        if (ct != null) {
             computeField.condition = JSONUtils.parseObject(ct, EmbedCondition.class);
         }
 
@@ -94,14 +91,17 @@ public class AggregationComputeField extends BaseField implements Initializer {
         if (condition != null) {
             condition.initialize();
             expr = condition.getStatement();
-            if(StringUtils.isNotEmpty(expr)){
+            if (StringUtils.isNotEmpty(expr)) {
                 conditionExpression = new AviatorExpression(expr, null);
             }
         }
+        this.aggregateFunction = AggregationFunctionBuilder.build(functionType, summaryField, conditionExpression);
         log.debug("field,{},{} expression:{},", code, name, expr);
     }
 
     public Object compute(Collection<Map<String, Object>> items) {
+        return this.aggregateFunction.compute(items);
+        /*
         Object val = null;
         try {
             switch (functionType) {
@@ -175,8 +175,11 @@ public class AggregationComputeField extends BaseField implements Initializer {
             log.error(e.getMessage());
         }
         return val;
+
+         */
     }
 
+    /*
     double semiVariance(Collection<Map<String, Object>> items){
         SemiVariance semiVariance = new SemiVariance();
         return semiVariance.evaluate(toDoubleArray(items));
@@ -239,12 +242,8 @@ public class AggregationComputeField extends BaseField implements Initializer {
         return popStdDev(toDoubleArray(items));
     }
 
-    /**
-     * population standard deviation 总体标准差
-     *
-     * @param data
-     * @return
-     */
+
+
     double popStdDev(double[] data) {
         return Math.sqrt(popVariance(data));
     }
@@ -253,18 +252,14 @@ public class AggregationComputeField extends BaseField implements Initializer {
         return stcCompute(new StandardDeviation(),items);
     }
 
-    /**
-     * standard deviation 样本标准差
-     */
+
     double stdDev(double[] data) {
         double std_dev;
         std_dev = Math.sqrt(variance(data));
         return std_dev;
     }
 
-    /**
-     * population variance
-     */
+
     private Double popVariance(Collection<Map<String, Object>> items) {
         return popVariance(toDoubleArray(items));
     }
@@ -283,13 +278,6 @@ public class AggregationComputeField extends BaseField implements Initializer {
         return stcCompute(new Variance(), items);
     }
 
-
-    /**
-     * 样本方差
-     *
-     * @param data
-     * @return
-     */
     double variance(double[] data) {
         double variance = 0;
         double avg = Arrays.stream(data).average().orElse(0);
@@ -426,6 +414,6 @@ public class AggregationComputeField extends BaseField implements Initializer {
             return 0d;
         }
     }
-
+     */
 
 }
