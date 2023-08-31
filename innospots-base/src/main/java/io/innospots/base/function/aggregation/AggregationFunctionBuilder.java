@@ -9,11 +9,14 @@ import io.innospots.base.re.IExpression;
  */
 public class AggregationFunctionBuilder {
 
-    public static IAggregationFunction build(AggregationFunctionType functionType, ParamField summaryField, IExpression<?> condition){
+    public static IAggregationFunction build(AggregationFunctionType functionType,
+                                             ParamField summaryField,
+                                             ParamField weightField,
+                                             IExpression<?> condition){
         IAggregationFunction function = null;
         try {
             function = functionType.functionClass().newInstance();
-            function.initialize(summaryField,condition);
+            function.initialize(summaryField,weightField,condition);
         } catch (InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }

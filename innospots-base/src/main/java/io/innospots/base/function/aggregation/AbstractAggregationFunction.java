@@ -11,21 +11,24 @@ import java.util.Map;
  * @author Smars
  * @date 2023/8/22
  */
-public abstract class AbstractAggregationFunction implements IAggregationFunction{
+public abstract class AbstractAggregationFunction implements IAggregationFunction {
 
     protected ParamField summaryField;
+
+    protected ParamField weightField;
 
     protected IExpression<?> condition;
 
     @Override
-    public void initialize(ParamField summaryField, IExpression<?> condition){
+    public void initialize(ParamField summaryField, ParamField weightField, IExpression<?> condition) {
         this.summaryField = summaryField;
+        this.weightField = weightField;
         this.condition = condition;
     }
 
     @Override
     public boolean match(Map<String, Object> item) {
-        if(condition!=null){
+        if (condition != null) {
             return condition.executeBoolean(item);
         }
         return true;
@@ -36,15 +39,23 @@ public abstract class AbstractAggregationFunction implements IAggregationFunctio
         return summaryField.getCode();
     }
 
-    protected double[] toDoubleArray(Collection<Map<String,Object>> items){
+    @Override
+    public String weightFieldCode() {
+        if (weightField == null) {
+            return null;
+        }
+        return weightField.getCode();
+    }
+
+    protected double[] toDoubleArray(Collection<Map<String, Object>> items) {
         return items.stream()
                 .filter(this::match)
                 .mapToDouble(this::value).toArray();
     }
 
-    protected double stcCompute(AbstractStorelessUnivariateStatistic statistic, Collection<Map<String, Object>> items){
+    protected double stcCompute(AbstractStorelessUnivariateStatistic statistic, Collection<Map<String, Object>> items) {
         for (Map<String, Object> item : items) {
-            if(this.match(item)){
+            if (this.match(item)) {
                 statistic.increment(this.value(item));
             }
         }

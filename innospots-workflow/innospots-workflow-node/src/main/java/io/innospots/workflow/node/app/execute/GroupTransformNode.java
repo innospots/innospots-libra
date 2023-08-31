@@ -21,8 +21,8 @@ package io.innospots.workflow.node.app.execute;
 import io.innospots.workflow.core.execution.ExecutionInput;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.field.NodeParamField;
 import io.innospots.workflow.core.node.app.BaseAppNode;
+import io.innospots.workflow.core.node.field.NodeParamField;
 import io.innospots.workflow.core.node.instance.NodeInstance;
 import io.innospots.workflow.node.app.utils.NodeInstanceUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -32,15 +32,17 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * group by the dimension field and aggregate the summary field values
+ * like pandas group transform
+ *
  * @author Smars
  * @date 2021/3/16
  */
 @Slf4j
-public class AggregationNode extends BaseAppNode {
+public class GroupTransformNode extends BaseAppNode {
 
 
     private List<NodeParamField> dimensionFields;
+
     private NodeParamField listField;
 
     private List<AggregationComputeField> computeFields;
@@ -85,17 +87,17 @@ public class AggregationNode extends BaseAppNode {
                 groupItems.put(key, item);
             }//end for item
         }//end for execution input
+
         for (Map.Entry<String, Collection<Map<String, Object>>> entry : groupItems.asMap().entrySet()) {
-            Map<String, Object> item = new HashMap<>();
+            Map<String, Object> aggItem = new HashMap<>();
             //item.put(dimensionField.getCode(), entry.getKey());
             for (AggregationComputeField computeField : computeFields) {
-                item.put(computeField.getCode(), computeField.compute(entry.getValue()));
+                aggItem.put(computeField.getCode(), computeField.compute(entry.getValue()));
             }
-            String[] dims = entry.getKey().split("~");
-            for (int i = 0; i < dims.length; i++) {
-                item.put(dimensionFields.get(i).getCode(),dims[i]);
+            for (Map<String, Object> groupItem : entry.getValue()) {
+                groupItem.putAll(aggItem);
+                items.add(groupItem);
             }
-            items.add(item);
         }
         nodeOutput.setResults(items);
     }

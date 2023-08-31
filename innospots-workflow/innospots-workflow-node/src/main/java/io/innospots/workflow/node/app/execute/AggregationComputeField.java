@@ -53,6 +53,8 @@ public class AggregationComputeField extends BaseField implements Initializer {
 
     private NodeParamField summaryField;
 
+    private NodeParamField weightField;
+
     private EmbedCondition condition;
 
     @JsonIgnore
@@ -77,6 +79,12 @@ public class AggregationComputeField extends BaseField implements Initializer {
         if (sf != null) {
             computeField.summaryField = BeanUtils.toBean(sf, NodeParamField.class);
         }
+
+        Map<String,Object> wf = (Map<String, Object>) fieldMap.get("weightField");
+        if(wf!=null){
+            computeField.weightField = BeanUtils.toBean(sf,NodeParamField.class);
+        }
+
         Map<String, Object> ct = (Map<String, Object>) fieldMap.get("condition");
         if (ct != null) {
             computeField.condition = JSONUtils.parseObject(ct, EmbedCondition.class);
@@ -95,7 +103,7 @@ public class AggregationComputeField extends BaseField implements Initializer {
                 conditionExpression = new AviatorExpression(expr, null);
             }
         }
-        this.aggregateFunction = AggregationFunctionBuilder.build(functionType, summaryField, conditionExpression);
+        this.aggregateFunction = AggregationFunctionBuilder.build(functionType, summaryField,weightField, conditionExpression);
         log.debug("field,{},{} expression:{},", code, name, expr);
     }
 

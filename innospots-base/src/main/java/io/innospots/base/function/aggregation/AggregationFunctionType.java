@@ -34,7 +34,7 @@ public enum AggregationFunctionType {
     COUNT("count", "次数", CountFunction.class),
     MAX("maximum", "最大值", MaxFunction.class),
     MIN("minimum", "最小值", MinFunction.class),
-    POP_VARIANCE("population variance", "总体标准差", PopVarianceFunction.class),
+    POP_VARIANCE("population variance", "总体方差", PopVarianceFunction.class),
     POP_STD_DEV("population standard deviation", "总体标准差", PopStdDeviationFunction.class),
     STD_DEV("standard deviation", "标准差", StdDeviationFunction.class),
     VARIANCE("variance", "方差", VarianceFunction.class),//
@@ -47,8 +47,8 @@ public enum AggregationFunctionType {
     SKEW("sample skewness", "样本偏度（第三阶）", SkewnessFunction.class),
     KURT("kurtosis", "样本峰度（第四阶）", KurtosisFunction.class),
     SOS("sum of squares", "平方和", SumOfSquareFunction.class),
-    GeometricMean("geometric mean", "几何平均数", GeometricMeanFunction.class),
-    SumOfLogs("sum of log", "log求和", SumOfLogsFunction.class),
+    GEOMETRIC_MEAN("geometric mean", "几何平均数", GeometricMeanFunction.class),
+    SUM_OF_LOGS("sum of log", "log求和", SumOfLogsFunction.class),
     PERCENTILE("percentile", "百分位数", PercentileFunction.class),
     SEMI_VAR("semi variance", "半方差", SemiVarianceFunction.class);
 
