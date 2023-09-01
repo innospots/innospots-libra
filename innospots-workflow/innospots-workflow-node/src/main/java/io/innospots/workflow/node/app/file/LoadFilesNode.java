@@ -31,11 +31,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * load files from target path and return the file info
+ * that include file type, file path and file size etc.
  * @author Smars
  * @version 1.2.0
  * @date 2023/2/22
  */
-public class ReadFilesNode extends BaseAppNode {
+public class LoadFilesNode extends BaseAppNode {
 
     public static final String FIELD_SOURCE_FILES = "source_files";
     public static final String FIELD_FILE_VAR = "file_var";

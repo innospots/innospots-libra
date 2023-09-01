@@ -11,9 +11,6 @@ import io.innospots.workflow.node.app.BaseNodeTest;
 import io.innospots.workflow.node.app.NodeExecutionTest;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,16 +18,16 @@ import java.util.List;
  * @version 1.2.0
  * @date 2023/2/25
  */
-class WriteFilesNodeTest {
+class OutputFilesNodeTest {
 
 
     @Test
     void testInstance(){
-        NodeInstance nodeInstance = BaseNodeTest.build(WriteFilesNodeTest.class.getSimpleName()+".json");
+        NodeInstance nodeInstance = BaseNodeTest.build(OutputFilesNodeTest.class.getSimpleName()+".json");
         System.out.println(nodeInstance);
         System.out.println(System.getenv("HOME"));
-        BaseAppNode appNode = BaseNodeTest.baseAppNode(WriteFilesNodeTest.class.getSimpleName());
-        NodeExecution ne2 = ReadFilesNodeTest.readExecution();
+        BaseAppNode appNode = BaseNodeTest.baseAppNode(OutputFilesNodeTest.class.getSimpleName());
+        NodeExecution ne2 = LoadFilesNodeTest.readExecution();
         NodeExecution nodeExecution = NodeExecutionTest.build("key12345");
 
         ExecutionInput executionInput = new ExecutionInput();

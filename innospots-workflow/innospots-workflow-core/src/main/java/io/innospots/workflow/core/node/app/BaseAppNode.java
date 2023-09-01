@@ -456,6 +456,13 @@ public abstract class BaseAppNode implements INodeBuilder, INodeExecutor {
         return buildException;
     }
 
+    protected NodeOutput buildOutput(NodeExecution execution){
+        NodeOutput nodeOutput = new NodeOutput();
+        nodeOutput.addNextKey(this.nextNodeKeys());
+        execution.addOutput(nodeOutput);
+        return nodeOutput;
+    }
+
     /*
     protected IExpression getDefaultExpression() {
         if (this.actionScripts != null) {

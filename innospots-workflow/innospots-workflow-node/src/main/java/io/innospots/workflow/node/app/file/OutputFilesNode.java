@@ -33,11 +33,12 @@ import java.nio.file.StandardCopyOption;
 import java.util.Map;
 
 /**
+ * file output to target path that config in the node
  * @author Smars
  * @version 1.2.0
  * @date 2023/2/22
  */
-public class WriteFilesNode extends BaseAppNode {
+public class OutputFilesNode extends BaseAppNode {
 
     public static final String FIELD_FILE_PATTERN = "file_pattern";
 

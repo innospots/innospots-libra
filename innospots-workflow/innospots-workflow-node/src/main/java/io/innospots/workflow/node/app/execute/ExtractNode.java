@@ -116,9 +116,7 @@ public class ExtractNode extends BaseAppNode {
 
     @Override
     public void invoke(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = new NodeOutput();
-        nodeOutput.addNextKey(this.nextNodeKeys());
-        nodeExecution.addOutput(nodeOutput);
+        NodeOutput nodeOutput = buildOutput(nodeExecution);
         Set<Map<String, Object>> uniSet = new LinkedHashSet<>();
         List<Map<String,Object>> items = new ArrayList<>();
         int count = 0;

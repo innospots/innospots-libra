@@ -51,6 +51,11 @@ public class ParamField {
     protected List<ParamField> subFields;
 
     /**
+     * field comment information
+     */
+    protected String comment;
+
+    /**
      * field source key
      */
     protected String parentCode;

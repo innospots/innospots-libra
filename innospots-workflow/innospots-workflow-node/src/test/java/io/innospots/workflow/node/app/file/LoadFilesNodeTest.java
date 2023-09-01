@@ -7,7 +7,6 @@ import io.innospots.workflow.core.node.instance.NodeInstance;
 import io.innospots.workflow.node.app.BaseNodeTest;
 import io.innospots.workflow.node.app.NodeExecutionTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.core.env.Environment;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -18,7 +17,7 @@ import java.util.Arrays;
  * @version 1.2.0
  * @date 2023/2/25
  */
-class ReadFilesNodeTest {
+class LoadFilesNodeTest {
 
 
     @Test
@@ -28,10 +27,10 @@ class ReadFilesNodeTest {
     }
 
     static NodeExecution readExecution() {
-        NodeInstance nodeInstance = BaseNodeTest.build(ReadFilesNodeTest.class.getSimpleName()+".json");
+        NodeInstance nodeInstance = BaseNodeTest.build(LoadFilesNodeTest.class.getSimpleName()+".json");
         System.out.println(nodeInstance);
         System.out.println(System.getenv("HOME"));
-        BaseAppNode appNode = BaseNodeTest.baseAppNode(ReadFilesNodeTest.class.getSimpleName());
+        BaseAppNode appNode = BaseNodeTest.baseAppNode(LoadFilesNodeTest.class.getSimpleName());
         NodeExecution nodeExecution = NodeExecutionTest.build("key12345");
         appNode.invoke(nodeExecution);
         return nodeExecution;
@@ -58,18 +57,18 @@ class ReadFilesNodeTest {
         System.out.println(fs.getAbsolutePath());
         System.out.println(fs.getParent());
         System.out.println(fs.getParentFile().getAbsolutePath());
-        ReadFilesNode startNode = new ReadFilesNode();
+        LoadFilesNode startNode = new LoadFilesNode();
         //File[] ff =  startNode.selectFiles(imgDir);
     }
 
     @Test
     void testSelectFiles() {
-        ReadFilesNode readFilesNode = new ReadFilesNode();
-        File[] files = readFilesNode.selectFiles("/tmp/*.img");
+        LoadFilesNode loadFilesNode = new LoadFilesNode();
+        File[] files = loadFilesNode.selectFiles("/tmp/*.img");
         System.out.println(Arrays.toString(files));
-        files = readFilesNode.selectFiles("/tmp/*");
+        files = loadFilesNode.selectFiles("/tmp/*");
         System.out.println(Arrays.toString(files));
-        files = readFilesNode.selectFiles(System.getProperty("user.home") + "/Downloads/*.pdf");
+        files = loadFilesNode.selectFiles(System.getProperty("user.home") + "/Downloads/*.pdf");
         System.out.println(Arrays.toString(files));
         System.getProperties().forEach((k, v) -> {
             System.out.println(k + ":" + v);
