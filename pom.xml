@@ -88,6 +88,7 @@
         <!--        <spring-web.version>5.2.2.RELEASE</spring-web.version>-->
         <sshd.version>2.7.0</sshd.version>
         <tablesaw.version>0.43.1</tablesaw.version>
+        <ta4j.version>0.15</ta4j.version>
         <user-agent.version>1.21</user-agent.version>
         <junit.version>4.12</junit.version>
         <powermock.version>2.0.2</powermock.version>
@@ -566,6 +567,11 @@
                 <version>${tablesaw.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.ta4j</groupId>
+                <artifactId>ta4j-core</artifactId>
+                <version>${ta4j.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>io.innospots</groupId>

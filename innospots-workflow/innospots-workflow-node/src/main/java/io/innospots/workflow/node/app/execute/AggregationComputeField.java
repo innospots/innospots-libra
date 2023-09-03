@@ -21,7 +21,7 @@ package io.innospots.workflow.node.app.execute;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.innospots.base.condition.EmbedCondition;
 import io.innospots.base.function.aggregation.AggregationFunctionBuilder;
-import io.innospots.base.function.aggregation.AggregationFunctionType;
+import io.innospots.base.function.StatisticFunctionType;
 import io.innospots.base.function.aggregation.IAggregationFunction;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.field.BaseField;
@@ -60,7 +60,7 @@ public class AggregationComputeField extends BaseField implements Initializer {
     @JsonIgnore
     private IExpression<Object> conditionExpression;
 
-    private AggregationFunctionType functionType;
+    private StatisticFunctionType functionType;
 
     private String expr;
 
@@ -74,7 +74,7 @@ public class AggregationComputeField extends BaseField implements Initializer {
         if (fieldMap.containsKey("valueType")) {
             computeField.valueType = FieldValueType.valueOf((String) fieldMap.get("valueType"));
         }
-        computeField.functionType = AggregationFunctionType.valueOf((String) fieldMap.get("functionType"));
+        computeField.functionType = StatisticFunctionType.valueOf((String) fieldMap.get("functionType"));
         Map<String, Object> sf = (Map<String, Object>) fieldMap.get("summaryField");
         if (sf != null) {
             computeField.summaryField = BeanUtils.toBean(sf, NodeParamField.class);

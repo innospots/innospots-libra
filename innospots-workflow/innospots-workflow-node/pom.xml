@@ -25,6 +25,10 @@
             <groupId>tech.tablesaw</groupId>
             <artifactId>tablesaw-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.ta4j</groupId>
+            <artifactId>ta4j-core</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>net.datafaker</groupId>

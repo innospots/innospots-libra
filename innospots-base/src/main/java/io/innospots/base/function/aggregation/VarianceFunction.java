@@ -7,7 +7,7 @@ import java.util.Map;
 
 /**
  * The variance function is often calculated using the following formula:
- * variance = 1/n * sum((x_i - mean)^2)
+ * variance = 1/(n-1) * sum((x_i - mean)^2)
  * Where x_i are the data points, mean is the mean of the data points, and n is the number of data points.
  *
  * The variance is a measure of how spread out the data is from the mean. If the data is tightly clustered around the mean, the variance will be small. If the data is spread out over a large range, the variance will be large.

@@ -1,5 +1,6 @@
 package io.innospots.base.function.aggregation;
 
+import io.innospots.base.function.StatisticFunctionType;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.base.re.IExpression;
 
@@ -9,13 +10,13 @@ import io.innospots.base.re.IExpression;
  */
 public class AggregationFunctionBuilder {
 
-    public static IAggregationFunction build(AggregationFunctionType functionType,
+    public static IAggregationFunction build(StatisticFunctionType functionType,
                                              ParamField summaryField,
                                              ParamField weightField,
                                              IExpression<?> condition){
         IAggregationFunction function = null;
         try {
-            function = functionType.functionClass().newInstance();
+            function = functionType.aggFuncClass().newInstance();
             function.initialize(summaryField,weightField,condition);
         } catch (InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
