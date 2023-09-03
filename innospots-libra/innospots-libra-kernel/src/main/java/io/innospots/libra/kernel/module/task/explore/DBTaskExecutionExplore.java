@@ -38,7 +38,7 @@ public class DBTaskExecutionExplore implements ITaskExecutionExplore {
     @Override
     public boolean stop(String taskExecutionId) {
         TaskExecution taskExecution = taskExecutionOperator.getTaskExecution(taskExecutionId);
-        //TODO
+
         TaskEvent taskEvent = TaskEvent.build(taskExecution, TaskEvent.TaskAction.STOP);
 
         //forward application event
@@ -52,9 +52,8 @@ public class DBTaskExecutionExplore implements ITaskExecutionExplore {
 
         TaskEvent taskEvent = TaskEvent.build(taskExecution, TaskEvent.TaskAction.RERUN);
 
-        //forward application event
+        // forward application event
         ApplicationContextUtils.sendAppEvent(taskEvent);
-
-        return false;
+        return true;
     }
 }

@@ -17,12 +17,15 @@ public interface TaskExecutionMapper extends BaseConvertMapper {
 
     TaskExecutionMapper INSTANCE = Mappers.getMapper(TaskExecutionMapper.class);
 
+    @Mapping(target = "paramContext", expression = "java(mapToJsonStr(taskExecution.getParamContext()))")
     TaskExecutionEntity model2Entity(TaskExecution taskExecution);
 
+    @Mapping(target = "paramContext", expression = "java(jsonStrToMap(taskExecutionEntity.getParamContext()))")
     TaskExecution entity2Model(TaskExecutionEntity taskExecutionEntity);
 
     @Mapping(target = "taskExecutionId", ignore = true)
     @Mapping(target = "taskName", ignore = true)
+    @Mapping(target = "paramContext", ignore = true)
     @Mapping(target = "detailUrl", ignore = true)
     @Mapping(target = "startTime", ignore = true)
     @Mapping(target = "createdTime", ignore = true)

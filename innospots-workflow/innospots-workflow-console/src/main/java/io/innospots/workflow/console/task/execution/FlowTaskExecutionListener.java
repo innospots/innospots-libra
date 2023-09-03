@@ -14,7 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -82,6 +84,10 @@ public class FlowTaskExecutionListener implements IEventListener<FlowExecutionTa
         taskExecution.setAppName("工作流引擎");
         taskExecution.setDetailUrl("/task-execution/" + taskExecution.getAppKey() + "/" + execution.getFlowExecutionId()
                 + "/" + workflowInstance.getWorkflowInstanceId() + "/" + workflowInstance.getRevision());
+        Map<String, Object> paramContextMap = new HashMap<>();
+        paramContextMap.put("workflowInstanceId", workflowInstance.getWorkflowInstanceId());
+        paramContextMap.put("flowExecutionId", execution.getFlowExecutionId());
+        taskExecution.setParamContext(paramContextMap);
         return taskExecution;
     }
 
