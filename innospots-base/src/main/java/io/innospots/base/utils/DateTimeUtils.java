@@ -157,8 +157,7 @@ public class DateTimeUtils {
             return "---";
         }
         long diff = day1.getTime() - day2.getTime();
-        long sign = diff / Math.abs(diff);
-        if (sign < 0) {
+        if (diff < 0) {
             return "---";
         }
         diff = Math.abs(diff) / 1000;
