@@ -191,6 +191,7 @@ public interface IExecutionContextOperator {
                         nodeExecution.getNodeExecutionId(), INPUT_FILE_SUFFIX + count + FILE_MIME_TYPE));
                 try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(outFile)), StandardCharsets.UTF_8))) {
                     for (Map<String, Object> item : input.getData()) {
+                        //System.out.println(JSONUtils.toJsonString(item));
                         bw.write(JSONUtils.toJsonString(item));
                         bw.newLine();
                     }
@@ -212,6 +213,7 @@ public interface IExecutionContextOperator {
                         nodeExecution.getNodeExecutionId(), OUTPUT_FILE_SUFFIX + count + FILE_MIME_TYPE));
                 try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(outFile)), StandardCharsets.UTF_8))) {
                     for (Map<String, Object> item : nodeOutput.getResults()) {
+                        System.out.println(item + "---" + JSONUtils.toJsonString(item));
                         bw.write(JSONUtils.toJsonString(item));
                         bw.newLine();
                     }

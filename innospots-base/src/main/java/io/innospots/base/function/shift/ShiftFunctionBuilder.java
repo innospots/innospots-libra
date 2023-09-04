@@ -13,9 +13,12 @@ import java.lang.reflect.InvocationTargetException;
 public class ShiftFunctionBuilder {
 
 
-    public static IShiftFunction build(ShiftFunctionType functionType, ParamField field, int window) {
+    public static IShiftFunction build(ShiftFunctionType functionType, ParamField field, Integer window) {
         IShiftFunction function = null;
         try {
+            if(window == null){
+                window = 0;
+            }
             Constructor<? extends IShiftFunction> constructor = functionType.shiftFunctionClass().getDeclaredConstructor(int.class);
             constructor.setAccessible(true);
             function = constructor.newInstance(window);

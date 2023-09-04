@@ -68,7 +68,7 @@ public class JSONUtils {
 
     public static Jackson2ObjectMapperBuilder customBuilder() {
         return Jackson2ObjectMapperBuilder.json()
-                .serializationInclusion(JsonInclude.Include.NON_NULL)
+                .serializationInclusion(JsonInclude.Include.ALWAYS)
                 .featuresToDisable(WRITE_DATES_AS_TIMESTAMPS)
                 .failOnUnknownProperties(false)
                 .featuresToEnable(ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT)

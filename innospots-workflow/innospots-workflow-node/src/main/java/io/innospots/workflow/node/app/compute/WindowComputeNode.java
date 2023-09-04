@@ -4,15 +4,12 @@ import io.innospots.base.function.moving.IMovingFunction;
 import io.innospots.base.function.moving.MovingFunctionBuilder;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.Pair;
-import io.innospots.base.model.field.ComputeField;
 import io.innospots.workflow.core.execution.ExecutionInput;
 import io.innospots.workflow.core.execution.ExecutionStatus;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeOutput;
 import io.innospots.workflow.core.node.app.BaseAppNode;
-import io.innospots.workflow.core.node.field.ValueParamField;
 import io.innospots.workflow.core.node.instance.NodeInstance;
-import io.innospots.workflow.node.app.execute.DerivedVariableNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +17,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author Smars
@@ -60,7 +56,7 @@ public class WindowComputeNode extends BaseAppNode {
             rollingFields = buildFuncFields(ROLLING_FIELDS);
         } else if (funcType == FuncType.ACCUM) {
             accumFields = buildFuncFields(ACCUM_FIELDS);
-        } else if (funcType == FuncType.SHIFT) {
+        } else if (funcType == FuncType.COLUMN) {
             shiftFields = buildShiftFuncFields();
         }
     }
@@ -112,7 +108,7 @@ public class WindowComputeNode extends BaseAppNode {
 
     @Override
     public void invoke(NodeExecution nodeExecution) {
-        if (funcType == FuncType.SHIFT) {
+        if (funcType == FuncType.COLUMN) {
             computeShift(nodeExecution);
         } else {
             computeAccumAndRolling(nodeExecution);
@@ -206,7 +202,7 @@ public class WindowComputeNode extends BaseAppNode {
 
     public enum FuncType {
         ROLLING,
-        SHIFT,
+        COLUMN,
         ACCUM;
     }
 }

@@ -19,11 +19,11 @@ public class ShiftFunction extends AbstractShiftFunction {
     public Object[] compute(List<Map<String, Object>> items) {
         Object[] vs = new Object[items.size()];
         for (int i = 0; i < items.size(); i++) {
-            Map<String,Object> item = items.get(i);
             if(window<0 &&(i-window)<items.size()){
-                vs[i] = items.get(i-window);
-            }else{
-                vs[i+window] = item;
+                vs[i] = items.get(i-window).getOrDefault(fieldCode(),null);
+            }else if((i+window)<items.size()){
+                Object v = items.get(i).getOrDefault(fieldCode(),null);
+                vs[i+window] = v;
             }
         }
         return vs;
