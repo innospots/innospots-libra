@@ -63,18 +63,19 @@ public class TaskExecutionController {
 
     @PutMapping("{taskExecutionId}/{operateType}")
     @Operation(summary = "operate task executions")
-    public InnospotResponse<String> operateTaskExecution(@Parameter(name = "taskExecutionId", required = true) @PathVariable String taskExecutionId,
+    public InnospotResponse<Boolean> operateTaskExecution(@Parameter(name = "taskExecutionId", required = true) @PathVariable String taskExecutionId,
                                                          @PathVariable TaskEvent.TaskAction operateType) {
+        boolean result;
         if (operateType == TaskEvent.TaskAction.RERUN) {
-            taskExecutionExplore.reRun(taskExecutionId);
+            result = taskExecutionExplore.reRun(taskExecutionId);
 
         } else if (operateType == TaskEvent.TaskAction.STOP) {
-            taskExecutionExplore.stop(taskExecutionId);
+            result = taskExecutionExplore.stop(taskExecutionId);
 
         } else {
             throw InnospotException.buildException(this.getClass(), ResponseCode.PARAM_INVALID, ResponseCode.PARAM_INVALID.info());
         }
-        return success();
+        return success(result);
     }
 
     @GetMapping("task-code")
