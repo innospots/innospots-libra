@@ -143,6 +143,7 @@ public interface IExecutionContextOperator {
                     output.addResult(item);
                 }//end while
                 output.setTotal(total);
+                logger.info("context data file:{}, size:{}",outFile.getAbsolutePath(),output.log());
             } catch (IOException e) {
                 logger.error(e.getMessage(), e);
             }

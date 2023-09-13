@@ -138,6 +138,7 @@ public class NodeOutput {
     public Map<String,Object> log(){
         Map<String,Object> logs = new LinkedHashMap<>();
         logs.put("size",results.size());
+        logs.put("total", total);
         if(results.size()>0){
             logs.put("columns",results.get(0).keySet().size());
         }
