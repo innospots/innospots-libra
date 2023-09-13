@@ -21,7 +21,7 @@ package io.innospots.libra.base.utils;
 import io.innospots.base.exception.ResourceException;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -104,14 +104,16 @@ public class ExcelUtil {
         font.setFontName("宋体");
         font.setFontHeightInPoints((short) 10);
         if (mark == 1) {
-            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-            font.setColor(HSSFColor.WHITE.index);
+            font.setBold(true);
+//            font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+//            font.setColor(HSSFColor.WHITE.index);
+            font.setColor(Font.COLOR_NORMAL);
             styleBg.setFillForegroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
-            styleBg.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+            styleBg.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         }
         styleBg.setFont(font);
-        styleBg.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER); // 创建一个居中格式
-        styleBg.setAlignment(HSSFCellStyle.ALIGN_CENTER);// 水平
+        styleBg.setVerticalAlignment(VerticalAlignment.CENTER); // 创建一个居中格式
+        styleBg.setAlignment(HorizontalAlignment.CENTER);// 水平
         styleBg.setWrapText(true);
         return styleBg;
     }
@@ -198,11 +200,11 @@ public class ExcelUtil {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 格式化日期字符串
                 DecimalFormat nf = new DecimalFormat("0");// 格式化数字
                 switch (cell.getCellType()) {
-                    case XSSFCell.CELL_TYPE_STRING:
+                    case STRING:
                         // System.out.println(i+"行"+j+" 列 is String type");
                         value = cell.getStringCellValue();
                         break;
-                    case XSSFCell.CELL_TYPE_NUMERIC:
+                    case NUMERIC:
                         // System.out.println(i+"行"+j+" 列 is Number type ; DateFormt:"+cell.getCellStyle().getDataFormatString());
                         if ("@".equals(cell.getCellStyle().getDataFormatString())) {
                             value = df.format(cell.getNumericCellValue());
@@ -213,10 +215,10 @@ public class ExcelUtil {
                             value = sdf.format(HSSFDateUtil.getJavaDate(cell.getNumericCellValue()));
                         }
                         break;
-                    case XSSFCell.CELL_TYPE_BOOLEAN:
+                    case BOOLEAN:
                         value = cell.getBooleanCellValue();
                         break;
-                    case XSSFCell.CELL_TYPE_BLANK:
+                    case BLANK:
                         value = "";
                         break;
                     default:
@@ -267,10 +269,10 @@ public class ExcelUtil {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 格式化日期字符串
                 DecimalFormat nf = new DecimalFormat("0");// 格式化数字
                 switch (cell.getCellType()) {
-                    case XSSFCell.CELL_TYPE_STRING:
+                    case STRING:
                         value = cell.getStringCellValue();
                         break;
-                    case XSSFCell.CELL_TYPE_NUMERIC:
+                    case NUMERIC:
                         if ("@".equals(cell.getCellStyle().getDataFormatString())) {
                             value = df.format(cell.getNumericCellValue());
                         } else if ("General".equals(cell.getCellStyle().getDataFormatString())) {
@@ -280,10 +282,10 @@ public class ExcelUtil {
                             value = sdf.format(HSSFDateUtil.getJavaDate(cell.getNumericCellValue()));
                         }
                         break;
-                    case XSSFCell.CELL_TYPE_BOOLEAN:
+                    case BOOLEAN:
                         value = cell.getBooleanCellValue();
                         break;
-                    case XSSFCell.CELL_TYPE_BLANK:
+                    case BLANK:
                         value = "";
                         break;
                     default:

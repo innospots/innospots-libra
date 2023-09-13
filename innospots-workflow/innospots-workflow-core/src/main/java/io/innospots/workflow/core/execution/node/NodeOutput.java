@@ -51,6 +51,8 @@ public class NodeOutput {
 
     private long total;
 
+    private Map<String,Object> logs = new LinkedHashMap<>();
+
     public NodeOutput() {
     }
 
@@ -67,7 +69,7 @@ public class NodeOutput {
     }
 
     public void addResult(String key, Object value) {
-        Map<String, Object> r = new HashMap<>();
+        Map<String, Object> r = new LinkedHashMap<>();
         r.put(key, value);
         this.addResult(r);
     }
@@ -146,7 +148,21 @@ public class NodeOutput {
             }
             logs.put("resources",metas);
         }
-
+        logs.putAll(this.logs);
         return logs;
+    }
+
+    public void addLog(String key, Object value) {
+        this.logs.put(key, value);
+    }
+
+    public void addLog(Map<String, Object> logData) {
+        if (logData != null) {
+            this.logs.putAll(logData);
+        }
+    }
+
+    public int size(){
+        return this.results.size();
     }
 }
