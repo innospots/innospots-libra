@@ -212,16 +212,19 @@ public interface IExecutionContextOperator {
             for (NodeOutput nodeOutput : nodeExecution.getOutputs()) {
                 File outFile = new File(flwDir, String.join("~",
                         nodeExecution.getNodeExecutionId(), OUTPUT_FILE_SUFFIX + count + FILE_MIME_TYPE));
+                int outputCount = 0;
                 try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(outFile)), StandardCharsets.UTF_8))) {
                     for (Map<String, Object> item : nodeOutput.getResults()) {
-                        System.out.println(item + "---" + JSONUtils.toJsonString(item));
+                        //System.out.println(item + "---" + JSONUtils.toJsonString(item));
                         bw.write(JSONUtils.toJsonString(item));
                         bw.newLine();
+                        outputCount++;
                     }
                     bw.flush();
                 } catch (IOException e) {
                     logger.error(e.getMessage(), e);
                 }
+                logger.info("output save, file:{}, size:{}, outSize:{}",outFile.getAbsolutePath(),nodeOutput.size(),outputCount);
                 count++;
                 if(nodeOutput.getResources()!=null){
                     for (List<ExecutionResource> resources : nodeOutput.getResources().values()) {

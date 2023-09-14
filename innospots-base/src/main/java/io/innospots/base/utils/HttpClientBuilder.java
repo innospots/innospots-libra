@@ -126,10 +126,15 @@ public class HttpClientBuilder {
         StringBuffer param = new StringBuffer();
         if (MapUtils.isNotEmpty(params)) {
             url = dualPathVar(url, params);
+            if(!url.contains("?")){
+                url += "?";
+            }
             int i = 0;
             for (String key : params.keySet()) {
                 if (i == 0) {
-                    param.append("?");
+                    if(!url.endsWith("?")){
+                        param.append("&");
+                    }
                 } else {
                     param.append("&");
                 }
