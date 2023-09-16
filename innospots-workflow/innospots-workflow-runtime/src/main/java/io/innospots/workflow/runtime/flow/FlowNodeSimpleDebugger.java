@@ -244,6 +244,7 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
         }
 
         FlowExecution flowExecution = fillFlowExecution(inputs, workflowInstanceId);
+        flowExecution.setSaveSync(false);
 
         WorkflowRuntimeContext workflowRuntimeContext = WorkflowRuntimeContext.build(flowExecution);
 
@@ -262,6 +263,11 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
         return flowEngine.stop(flowExecutionId);
     }
 
+    @Override
+    public FlowExecution stopByFlowKey(String flowKey) {
+        return FlowEngineManager.eventFlowEngine().stopByFlowKey(flowKey);
+    }
+
     private FlowExecution fillFlowExecution(List<Map<String, Object>> inputs, Long workflowInstanceId) {
         FlowExecution flowExecution = null;
         if (CollectionUtils.isEmpty(inputs) || inputs.get(0).isEmpty()) {
@@ -277,7 +283,7 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
             flowExecution = FlowExecution.buildNewFlowExecution(
                     workflowInstanceId, 0, false, false, inputs);
         }
-
+        flowExecution.setSaveSync(true);
         return flowExecution;
     }
 }

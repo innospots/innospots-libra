@@ -35,9 +35,11 @@ import java.time.LocalDateTime;
 public class NodeExecutionStoreListener implements INodeExecutionListener {
 
     private AsyncDataStore<NodeExecution> nodeExecutionAsyncDataStore;
+    private INodeExecutionOperator nodeExecutionOperator;
 
 
     public NodeExecutionStoreListener(INodeExecutionOperator nodeExecutionOperator) {
+        this.nodeExecutionOperator = nodeExecutionOperator;
         nodeExecutionAsyncDataStore = new AsyncDataStore<>(nodeExecutionOperator, 3, 100, "node-execution");
     }
 
@@ -50,8 +52,13 @@ public class NodeExecutionStoreListener implements INodeExecutionListener {
     @Override
     public void complete(NodeExecution nodeExecution) {
         log.debug("node execution complete time:{} {}", LocalDateTime.now(), nodeExecution);
-        if (nodeExecutionAsyncDataStore != null && !nodeExecution.isSkipNodeExecution()) {
-            nodeExecutionAsyncDataStore.insert(nodeExecution);
+        if (!nodeExecution.isSkipNodeExecution()) {
+            if(nodeExecution.isSaveSync()){
+                nodeExecutionOperator.insert(nodeExecution);
+            }else{
+                nodeExecutionAsyncDataStore.insert(nodeExecution);
+            }
+
         } else {
             log.debug("node execution complete not store time:{} {}", LocalDateTime.now(), nodeExecution);
         }
@@ -60,8 +67,12 @@ public class NodeExecutionStoreListener implements INodeExecutionListener {
     @Override
     public void fail(NodeExecution nodeExecution) {
         log.debug("node execution fail time:{} {}", LocalDateTime.now(), nodeExecution);
-        if (nodeExecutionAsyncDataStore != null) {
-            nodeExecutionAsyncDataStore.insert(nodeExecution);
+        if (!nodeExecution.isSkipNodeExecution()) {
+            if(nodeExecution.isSaveSync()){
+                nodeExecutionOperator.insert(nodeExecution);
+            }else{
+                nodeExecutionAsyncDataStore.insert(nodeExecution);
+            }
         } else {
             log.info("node execution fail not store time:{} {}", LocalDateTime.now(), nodeExecution);
         }

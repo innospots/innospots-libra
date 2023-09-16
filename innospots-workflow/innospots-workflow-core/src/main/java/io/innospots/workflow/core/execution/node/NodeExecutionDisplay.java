@@ -67,7 +67,7 @@ public class NodeExecutionDisplay {
     @Schema(title = "execution output")
     private Map<String, Object> logs = new LinkedHashMap<>();
 
-    public static NodeExecutionDisplay build(NodeExecution nodeExecution, NodeInstance nodeInstance,int page,int size) {
+    public static NodeExecutionDisplay build(NodeExecution nodeExecution, NodeInstance nodeInstance, int page, int size) {
         if (nodeExecution == null) {
             return null;
         }
@@ -86,34 +86,48 @@ public class NodeExecutionDisplay {
         executionDisplay.logs.put("sequence", nodeExecution.getSequenceNumber());
         executionDisplay.logs.put("output_table", JSONUtils.toJsonString(nodeExecution.outputLog()));
         executionDisplay.logs.put("message", nodeExecution.getMessage());
+        if (CollectionUtils.isNotEmpty(nodeExecution.getOutputs())) {
+            List<NodeOutputPage> nodeOutputPages = new ArrayList<>();
+            for (NodeOutput output : nodeExecution.getOutputs()) {
+                if (CollectionUtils.isNotEmpty(output.getResults())) {
+                    if (page <= 0) {
+                        page = 1;
+                    }
+                    NodeOutputPage outputPage = new NodeOutputPage(output, page, size);
+                    for (int i = (page - 1) * size; i < size; i++) {
+                        if (i < output.getResults().size()) {
+                            outputPage.addItem(output.getResults().get(i));
+                        }
+                    }
+                    nodeOutputPages.add(outputPage);
+                }
+            }//end for
+            executionDisplay.outputs = nodeOutputPages;
+            executionDisplay.buildOutputField();
+        }
+        /*
         if(CollectionUtils.isNotEmpty(nodeExecution.getOutputs())){
             executionDisplay.outputs = nodeExecution.getOutputs().stream()
                     .map(nodeOutput -> new NodeOutputPage(nodeOutput,page,size))
                     .collect(Collectors.toList());
             executionDisplay.buildOutputField();
         }
-        if(nodeInstance!=null){
+         */
+        if (nodeInstance != null) {
             executionDisplay.schemaFields = nodeInstance.getOutputFields();
         }
 
         return executionDisplay;
     }
 
-    public static NodeExecutionDisplay build(NodeExecution nodeExecution,NodeInstance nodeInstance){
+    public static NodeExecutionDisplay build(NodeExecution nodeExecution, NodeInstance nodeInstance) {
         int size = 50;
-        for (NodeOutput output : nodeExecution.getOutputs()) {
-            if(CollectionUtils.isNotEmpty(output.getResults())){
-                output.setResults(CollectionUtil.sub(output.getResults(),0,size));
-            }
-        }//end for
-        return build(nodeExecution,nodeInstance,1,size);
+        return build(nodeExecution, nodeInstance, 1, size);
     }
 
-    public static NodeExecutionDisplay build(NodeExecution nodeExecution, int page, int size){
-        return build(nodeExecution,null,page,size);
+    public static NodeExecutionDisplay build(NodeExecution nodeExecution, int page, int size) {
+        return build(nodeExecution, null, page, size);
     }
-
-
 
 
     public void addLog(String key, Object value) {

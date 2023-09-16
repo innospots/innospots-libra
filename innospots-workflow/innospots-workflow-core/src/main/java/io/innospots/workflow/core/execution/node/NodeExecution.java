@@ -98,6 +98,7 @@ public class NodeExecution extends NodeExecutionBase {
         nodeExecution.flowStartTime = flowExecution.getStartTime();
         nodeExecution.memoryMode = flowExecution.isMemoryMode();
         nodeExecution.contextDataPath = flowExecution.flowExecutionDataPath();
+        nodeExecution.setSaveSync(flowExecution.isSaveSync());
         return nodeExecution;
     }
 
@@ -145,6 +146,9 @@ public class NodeExecution extends NodeExecutionBase {
 
     public Map<String, Object> outputLog() {
         Map<String, Object> logs = new LinkedHashMap<>();
+        if(this.outputs == null){
+            return logs;
+        }
         for (int i = 0; i < this.outputs.size(); i++) {
             NodeOutput nodeOutput = outputs.get(i);
             if (nodeOutput.getName() != null) {

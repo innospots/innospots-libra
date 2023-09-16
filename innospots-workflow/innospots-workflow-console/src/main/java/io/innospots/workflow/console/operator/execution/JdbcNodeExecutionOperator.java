@@ -32,6 +32,7 @@ import io.innospots.workflow.core.execution.ExecutionStatus;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;
 import io.innospots.workflow.core.execution.operator.INodeExecutionOperator;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.*;
@@ -43,6 +44,7 @@ import java.util.*;
  * @version 1.0.0
  * @date 2022/2/15
  */
+@Slf4j
 public class JdbcNodeExecutionOperator implements INodeExecutionOperator {
 
     private IDataOperator dataOperator;
@@ -138,6 +140,9 @@ public class JdbcNodeExecutionOperator implements INodeExecutionOperator {
     @Override
     public boolean insert(NodeExecution execution) {
         dataOperator.insert(NodeExecutionEntity.TABLE_NAME, NodeExecutionMapper.INSTANCE.modelToMap(execution, true));
+        if(log.isDebugEnabled()){
+            log.debug("node execution saved: {}",execution.getNodeExecutionId());
+        }
         executionContextOperator.saveExecutionContext(execution);
         execution.clearInput();
         if (!execution.isMemoryMode()) {

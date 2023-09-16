@@ -103,6 +103,8 @@ public class FlowExecutionBase implements Initializer {
 
     protected String resultCode;
 
+    protected boolean saveSync;
+
 
     @Setter(AccessLevel.NONE)
     private LinkedHashMap<String, NodeExecution> nodeExecutions = new LinkedHashMap<>();

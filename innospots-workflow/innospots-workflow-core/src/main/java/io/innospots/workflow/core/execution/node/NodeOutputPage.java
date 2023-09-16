@@ -39,9 +39,12 @@ public class NodeOutputPage {
         results.setPageSize(size);
         results.setCurrent(page);
         results.setTotal(nodeOutput.getTotal());
-        results.setList(nodeOutput.getResults());
+        //results.setList(nodeOutput.getResults());
         this.resources = nodeOutput.getResources();
         this.nextNodeKeys = nodeOutput.getNextNodeKeys();
         this.name = nodeOutput.getName();
+    }
+    public void addItem(Map<String,Object> item){
+        this.results.add(item);
     }
 }

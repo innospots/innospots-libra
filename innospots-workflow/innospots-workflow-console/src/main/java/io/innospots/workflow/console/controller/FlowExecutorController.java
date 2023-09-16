@@ -108,5 +108,12 @@ public class FlowExecutorController {
         return success(FlowNodeDebuggerBuilder.build("nodeDebugger").stop(workflowExecutionId));
     }
 
+    @OperationLog(operateType = OperateType.UPDATE, idParamPosition = 0)
+    @PostMapping("stop/workflow/flowKey")
+    @Operation(summary = "stop current executing workflow by key")
+    @ResourceItemOperation(key = "workflow-builder-execute")
+    public InnospotResponse<FlowExecutionBase> stopWorkflowByKey(@PathVariable String flowKey) {
+        return success(FlowNodeDebuggerBuilder.build("nodeDebugger").stop(flowKey));
+    }
 
 }

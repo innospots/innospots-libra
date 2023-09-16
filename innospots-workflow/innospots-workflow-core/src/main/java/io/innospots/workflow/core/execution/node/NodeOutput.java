@@ -132,6 +132,7 @@ public class NodeOutput {
         nodeOutput.resources = resources;
         nodeOutput.name = name;
         nodeOutput.nextNodeKeys = nextNodeKeys;
+        nodeOutput.total = total;
         return nodeOutput;
     }
 

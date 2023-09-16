@@ -302,6 +302,7 @@ public abstract class BaseAppNode implements INodeBuilder, INodeExecutor {
         NodeExecution nodeExecution = NodeExecution.buildNewNodeExecution(
                 nodeKey(),
                 flowExecution);
+        nodeExecution.setNodeCode(ni.getCode());
         flowExecution.addNodeExecution(nodeExecution);
         if (this.buildStatus != BuildStatus.DONE) {
             nodeExecution.end(buildException.getMessage(), ExecutionStatus.FAILED, false);

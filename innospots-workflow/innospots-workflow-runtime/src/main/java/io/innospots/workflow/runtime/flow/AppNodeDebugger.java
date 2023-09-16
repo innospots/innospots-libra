@@ -104,6 +104,7 @@ public class AppNodeDebugger {
 //        genericExpressionEngine.compile();
         appNode.build(identifier,ni);
         FlowExecution flowExecution = FlowExecution.buildNewFlowExecution(1L,0);
+        flowExecution.setSaveSync(true);
         NodeExecution nodeExecution = NodeExecution.buildNewNodeExecution(ni.getNodeKey(),flowExecution);
         List<ExecutionInput> inputs = new ArrayList<>();
         for (DebugInput input : debugPayload.getInputs()) {

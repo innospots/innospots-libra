@@ -148,6 +148,7 @@ public class ExcelFileNode extends BaseAppNode {
                 if (maxReadLines != null && counter.get() >= maxReadLines) {
                     return;
                 }
+//                Map<String, Object> nItem = new LinkedHashMap<>();
                 Map<String, Object> nItem = new LinkedHashMap<>();
                 if (selectColumn && selectedFields != null) {
                     for (ParamField field : selectedFields) {
@@ -176,7 +177,7 @@ public class ExcelFileNode extends BaseAppNode {
         }
         readerBuilder.charset(encoding);
         readerBuilder.doReadAll();
-        log.info("output:{}",nodeOutput.log());
+        log.info("output:{},{}",nodeExecution.getNodeExecutionId(),nodeOutput.log());
     }
 
     private void write(NodeExecution nodeExecution) {

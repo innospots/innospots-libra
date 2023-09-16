@@ -65,6 +65,8 @@ public class NodeExecutionBase {
 
     protected String nodeCode;
 
+    protected boolean saveSync;
+
 
     public String flowKey() {
         if (this.nodeExecutionId == null) {

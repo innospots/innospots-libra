@@ -39,6 +39,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -279,8 +280,8 @@ public class JdbcDataOperator implements IDataOperator {
         sqlBuilder.append(") ON DUPLICATE KEY UPDATE ");
 
         Set<String> columns = new HashSet<>(firstData.keySet());
+        Arrays.stream(keyColumn.split(",")).collect(Collectors.toList()).forEach(columns::remove);
 
-        columns.remove(keyColumn);
         int i = 0;
         for (String key : columns) {
             sqlBuilder.append(key).append(" = VALUES(").append(key).append(")");

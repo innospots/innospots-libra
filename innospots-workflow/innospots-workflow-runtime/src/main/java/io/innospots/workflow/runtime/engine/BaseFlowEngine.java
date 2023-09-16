@@ -43,6 +43,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Raydian
@@ -56,7 +57,9 @@ public abstract class BaseFlowEngine implements IFlowEngine {
 
     protected FlowManager flowManager;
 
-    protected Cache<String, FlowExecution> flowExecutionCache = Caffeine.newBuilder().build();
+    protected Cache<String, FlowExecution> flowExecutionCache = Caffeine.newBuilder().expireAfterWrite(1, TimeUnit.SECONDS).build();
+
+    protected Cache<String,String> flowKeyCache = Caffeine.newBuilder().build();
 
     public BaseFlowEngine(List<IFlowExecutionListener> flowExecutionListeners, FlowManager flowManager) {
         this.flowExecutionListeners = flowExecutionListeners;
@@ -118,9 +121,14 @@ public abstract class BaseFlowEngine implements IFlowEngine {
     public FlowExecution stop(String flowExecutionId) {
         FlowExecution flowExecution = flowExecutionCache.getIfPresent(flowExecutionId);
         if (flowExecution != null) {
-            flowExecution.setStatus(ExecutionStatus.STOPPED);
+            flowExecution.setStatus(ExecutionStatus.STOPPING);
         }
         return flowExecution;
+    }
+
+    @Override
+    public FlowExecution stopByFlowKey(String flowKey) {
+        return stop(flowKeyCache.getIfPresent(flowKey));
     }
 
     @Override
@@ -167,6 +175,7 @@ public abstract class BaseFlowEngine implements IFlowEngine {
         }
 
         flowExecutionCache.put(flowExecution.getFlowExecutionId(), flowExecution);
+        flowKeyCache.put(flowExecution.getFlowKey(), flowExecution.getFlowExecutionId());
         EventBusCenter.async(FlowExecutionTaskEvent.build(flowExecution));
     }
 
@@ -187,6 +196,7 @@ public abstract class BaseFlowEngine implements IFlowEngine {
             }
         }
         flowExecutionCache.invalidate(flowExecution.getFlowExecutionId());
+        flowKeyCache.invalidate(flowExecution.getFlowKey());
     }
 
     private Flow getFlow(FlowExecution flowExecution) {

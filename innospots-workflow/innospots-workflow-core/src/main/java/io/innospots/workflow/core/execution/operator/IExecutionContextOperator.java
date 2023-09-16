@@ -18,6 +18,7 @@
 
 package io.innospots.workflow.core.execution.operator;
 
+import com.github.benmanes.caffeine.cache.Cache;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.PageBody;
 import io.innospots.base.utils.DateTimeUtils;
@@ -112,6 +113,10 @@ public interface IExecutionContextOperator {
         }
         Arrays.sort(outFiles, Comparator.comparing(File::getName));
         List<NodeOutput> outputs = nodeExecution.getOutputs();
+        if (outputs == null) {
+            logger.warn("output is empty, but exist context file, {},{}", nodeExecution, Arrays.toString(outFiles));
+            return;
+        }
         int i = 0;
         for (File outFile : outFiles) {
             NodeOutput output = outputs.get(i);
@@ -119,7 +124,7 @@ public interface IExecutionContextOperator {
             if (targetNodeKey != null && !output.containNextNodeKey(targetNodeKey)) {
                 continue;
             }
-            if(page>0){
+            if (page > 0) {
                 page--;
             }
             try (BufferedReader br = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(outFile)), StandardCharsets.UTF_8))) {
@@ -129,13 +134,31 @@ public interface IExecutionContextOperator {
                 int end = (page + 1) * size;
                 int total = 0;
                 while ((line = br.readLine()) != null) {
-                    total++;
+                    if (line.startsWith("#total")) {
+                        line = line.replace("#total=", "");
+                        total = Integer.parseInt(line);
+                        continue;
+                    }
+                    if (line.startsWith("#resource=")) {
+                        line = line.replace("#resource=~~", "");
+                        String[] ss = line.split("~~");
+                        for (String s : ss) {
+                            String[] kv = s.split("@@@");
+                            List<ExecutionResource> executionResources = JSONUtils.toList(kv[1], ExecutionResource.class);
+                            for (ExecutionResource resource : executionResources) {
+                                output.addResource(Integer.parseInt(kv[0]), resource);
+                            }
+                        }//end for
+                        continue;
+                    }
+                    //total++;
                     if (count < start) {
                         count++;
                         continue;
                     }
-                    if(start >= end){
-                        continue;
+                    if (start >= end) {
+                        //stop read
+                        break;
                     }
                     Map<String, Object> item = JSONUtils.toMap(line);
                     start++;
@@ -143,7 +166,7 @@ public interface IExecutionContextOperator {
                     output.addResult(item);
                 }//end while
                 output.setTotal(total);
-                logger.info("context data file:{}, size:{}",outFile.getAbsolutePath(),output.log());
+                logger.info("read context data: {},page:{}, nodeKey: {}, file:{}", output.log(), page, targetNodeKey, outFile.getAbsolutePath());
             } catch (IOException e) {
                 logger.error(e.getMessage(), e);
             }
@@ -214,6 +237,20 @@ public interface IExecutionContextOperator {
                         nodeExecution.getNodeExecutionId(), OUTPUT_FILE_SUFFIX + count + FILE_MIME_TYPE));
                 int outputCount = 0;
                 try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(outFile)), StandardCharsets.UTF_8))) {
+                    bw.write("#total=" + nodeOutput.getTotal());
+                    bw.newLine();
+                    if (nodeOutput.getResources() != null) {
+                        String rLine = "";
+                        for (Map.Entry<Integer, List<ExecutionResource>> entry : nodeOutput.getResources().entrySet()) {
+                            List<ExecutionResource> resources = entry.getValue();
+                            List<ExecutionResource> outLists = saveExecutionResources(resources, flwDir);
+                            resources.clear();
+                            resources.addAll(outLists);
+                            rLine += "~~" + entry.getKey() + "@@@" + JSONUtils.toJsonString(resources);
+                        }
+                        bw.write("#resource=" + rLine);
+                        bw.newLine();
+                    }
                     for (Map<String, Object> item : nodeOutput.getResults()) {
                         //System.out.println(item + "---" + JSONUtils.toJsonString(item));
                         bw.write(JSONUtils.toJsonString(item));
@@ -224,18 +261,11 @@ public interface IExecutionContextOperator {
                 } catch (IOException e) {
                     logger.error(e.getMessage(), e);
                 }
-                logger.info("output save, file:{}, size:{}, outSize:{}",outFile.getAbsolutePath(),nodeOutput.size(),outputCount);
+                logger.info("saved outputContext data, outSize :{}, file:{}", outputCount, outFile.getAbsolutePath());
                 count++;
-                if(nodeOutput.getResources()!=null){
-                    for (List<ExecutionResource> resources : nodeOutput.getResources().values()) {
-                        List<ExecutionResource> outLists = saveExecutionResources(resources, flwDir);
-                        resources.clear();
-                        resources.addAll(outLists);
-                    }//end for
 
-                }
 
-            }//end for
+            }//end for output
         }
     }
 
