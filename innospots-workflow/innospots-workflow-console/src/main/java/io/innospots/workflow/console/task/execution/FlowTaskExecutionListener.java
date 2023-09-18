@@ -76,7 +76,7 @@ public class FlowTaskExecutionListener implements IEventListener<FlowExecutionTa
         } else if (execution.getStatus() == ExecutionStatus.FAILED) {
             taskExecution.setExecutionStatus(TaskExecutionStatus.FAILED);
 
-        } else if (execution.getStatus() == ExecutionStatus.NOT_PREPARED) {
+        } else if (execution.getStatus() == ExecutionStatus.NOT_PREPARED || execution.getStatus() == ExecutionStatus.STOPPED) {
             taskExecution.setExecutionStatus(TaskExecutionStatus.STOPPED);
         }
         taskExecution.setStartTime(execution.getStartTime());

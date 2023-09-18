@@ -21,6 +21,7 @@ package io.innospots.workflow.runtime.flow;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.collect.Lists;
+import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.utils.DateTimeUtils;
 import io.innospots.workflow.core.context.WorkflowRuntimeContext;
 import io.innospots.workflow.core.debug.AppDebugPayload;
@@ -30,6 +31,7 @@ import io.innospots.workflow.core.enums.FlowStatus;
 import io.innospots.workflow.core.execution.ExecutionResource;
 import io.innospots.workflow.core.execution.ExecutionStatus;
 import io.innospots.workflow.core.debug.FlowNodeDebugger;
+import io.innospots.workflow.core.execution.FlowExecutionTaskEvent;
 import io.innospots.workflow.core.execution.flow.FlowExecution;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeExecutionBase;
@@ -260,7 +262,14 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
     @Override
     public FlowExecution stop(String flowExecutionId) {
         IFlowEngine flowEngine = FlowEngineManager.eventFlowEngine();
-        return flowEngine.stop(flowExecutionId);
+        FlowExecution flowExecution = flowEngine.stop(flowExecutionId);
+        if (flowExecution == null) {
+            flowExecution = flowExecutionOperator.getFlowExecutionById(flowExecutionId, false);
+            flowExecution.setStatus(ExecutionStatus.STOPPED);
+
+            EventBusCenter.async(FlowExecutionTaskEvent.build(flowExecution));
+        }
+        return flowExecution;
     }
 
     @Override
