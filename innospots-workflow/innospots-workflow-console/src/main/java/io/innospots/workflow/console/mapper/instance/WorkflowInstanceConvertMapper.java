@@ -20,6 +20,7 @@ package io.innospots.workflow.console.mapper.instance;
 
 import io.innospots.base.mapper.BaseConvertMapper;
 import io.innospots.workflow.console.entity.instance.WorkflowInstanceEntity;
+import io.innospots.workflow.core.flow.WorkflowBaseInfo;
 import io.innospots.workflow.core.flow.WorkflowBody;
 import io.innospots.workflow.core.flow.WorkflowInfo;
 import io.innospots.workflow.core.flow.instance.WorkflowInstance;
@@ -40,6 +41,8 @@ public interface WorkflowInstanceConvertMapper extends BaseConvertMapper {
     WorkflowInstanceEntity workflowInfoToEntity(WorkflowInfo workflowInfo);
 
     WorkflowInstance entityToModel(WorkflowInstanceEntity workflowInstanceEntity);
+
+    WorkflowBaseInfo entityToBaseInfo(WorkflowInstanceEntity workflowInstanceEntity);
 
     WorkflowBody entityToFlowBody(WorkflowInstanceEntity workflowInstanceEntity);
 
