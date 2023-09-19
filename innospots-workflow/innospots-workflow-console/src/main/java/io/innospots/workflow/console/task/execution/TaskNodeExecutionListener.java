@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @Component
 public class TaskNodeExecutionListener implements IEventListener<NodeExecutionTaskEvent> {
 
-    private static final Logger logger = LoggerFactory.getLogger(FlowTaskExecutionListener.class);
+    private static final Logger logger = LoggerFactory.getLogger(TaskNodeExecutionListener.class);
 
     private final ITaskExecutionExplore taskExecutionExplore;
 

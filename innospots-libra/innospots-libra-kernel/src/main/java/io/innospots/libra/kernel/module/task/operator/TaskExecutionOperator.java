@@ -40,6 +40,9 @@ public class TaskExecutionOperator extends ServiceImpl<TaskExecutionDao, TaskExe
     @Transactional(rollbackFor = Exception.class)
     public Boolean updateTaskExecution(TaskExecution taskExecution) {
         TaskExecutionEntity entity = this.getById(taskExecution.getTaskExecutionId());
+        if (taskExecution.getPercent() <= 0 && entity.getPercent() > 0) {
+            taskExecution.setPercent(entity.getPercent());
+        }
         TaskExecutionMapper.INSTANCE.updateEntity2Model(entity, taskExecution);
         return super.updateById(entity);
     }
