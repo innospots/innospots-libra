@@ -47,6 +47,7 @@ public class FlowRuntimeRegistry {
 
     private String buildInfo;
 
+    private String flowKey;
 
     private LocalDateTime updateTime;
 

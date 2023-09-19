@@ -88,6 +88,18 @@ public class FlowExecution extends FlowExecutionBase {
     }
 
 
+    public static FlowExecution buildNewFlowExecution(String flowKey, List<Map<String, Object>> payloads){
+        FlowExecution flowExecution = new FlowExecution();;
+        flowExecution.setStatus(ExecutionStatus.READY);
+        flowExecution.contextDataPath = WorkflowRuntimeContext.contextResourcePath;
+        flowExecution.setFlowKey(flowKey);
+
+        if (payloads != null) {
+            flowExecution.input.setData(payloads);
+        }
+        return flowExecution;
+    }
+
     public static FlowExecution buildNewFlowExecution(Long flwInstanceId, Integer revision) {
         return buildNewFlowExecution(flwInstanceId, revision, false, false);
     }

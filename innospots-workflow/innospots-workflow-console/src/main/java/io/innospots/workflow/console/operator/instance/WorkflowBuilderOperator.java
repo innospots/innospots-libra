@@ -254,6 +254,14 @@ public class WorkflowBuilderOperator implements IWorkflowCacheDraftOperator {
         return getFlowInstance(entity, revision, includeNodes);
     }
 
+    public WorkflowBody getWorkflowBody(String flowKey, Boolean includeNodes){
+        WorkflowInstanceEntity entity = workflowInstanceOperator.getWorkflowInstanceEntity(flowKey);
+        if (entity == null) {
+            throw ResourceException.buildAbandonException(this.getClass(), flowKey);
+        }
+        return getFlowInstance(entity,entity.getRevision(),includeNodes);
+    }
+
     private WorkflowBody getFlowInstance(WorkflowInstanceEntity entity, Integer revision, Boolean includeNodes) {
         WorkflowBody flowInstance = WorkflowInstanceConvertMapper.INSTANCE.entityToFlowBody(entity);
         if (includeNodes) {

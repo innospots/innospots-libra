@@ -21,4 +21,9 @@ public class WorkflowDBLoader implements IWorkflowLoader {
         return workFlowBuilderOperator.getWorkflowBody(workflowInstanceId, revision, true);
     }
 
+    @Override
+    public WorkflowBody loadFlowInstance(String flowKey) {
+        return workFlowBuilderOperator.getWorkflowBody(flowKey,true);
+    }
+
 }

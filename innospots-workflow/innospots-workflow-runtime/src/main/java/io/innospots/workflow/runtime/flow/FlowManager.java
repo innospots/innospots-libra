@@ -27,6 +27,7 @@ import io.innospots.workflow.core.loader.IWorkflowLoader;
 import io.innospots.workflow.core.node.app.BaseAppNode;
 import io.innospots.workflow.core.node.app.TriggerNode;
 import io.innospots.workflow.core.runtime.FlowRuntimeRegistry;
+import io.innospots.workflow.node.app.StateNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +54,8 @@ public class FlowManager implements Closeable {
 
     private FlowPrepareExecutor flowPrepareExecutor;
 
+    private Map<String,String> flowKeyMap = new HashMap<>();
+
 
     public FlowManager(IWorkflowLoader workflowLoader) {
         this.workflowLoader = workflowLoader;
@@ -63,6 +66,19 @@ public class FlowManager implements Closeable {
         return loadFlow(workflowInstanceId, revision, false, true);
     }
 
+    public Flow loadFlow(String flowKey){
+        String key = flowKeyMap.get(flowKey);
+        Flow flow = flowCache.get(key);
+        if(flow == null){
+            WorkflowBody workflowBody = workflowLoader.loadFlowInstance(flowKey);
+            flow = load(workflowBody,true,false);
+            if (flow.isLoaded()) {
+                cacheFlow(flow);
+            }
+            flowKeyMap.put(flow.getFlowKey(),key);
+        }
+        return flow;
+    }
 
     public Flow loadFlow(Long workflowInstanceId, Integer revision, boolean force, boolean async) {
         String key = key(workflowInstanceId, revision);
@@ -82,25 +98,37 @@ public class FlowManager implements Closeable {
                 logger.info("async loading flow: {}", key);
                 WorkflowBody workflowBody = workflowLoader.loadFlowInstance(workflowInstanceId, revision);
                 if (workflowBody != null) {
-                    flow = new Flow(workflowBody, force);
-                    flow.setNodeExecutionListeners(this.nodeExecutionListeners);
-                    flowPrepareExecutor.asyncPrepare(flow);
+                    flow = load(workflowBody,force,true);
                 } else {
                     logger.warn("flowInstance is null, instanceId:{}, revision:{}", workflowInstanceId, revision);
                 }
             } else {
                 logger.info("loading flow: {}", key);
                 WorkflowBody workflowBody = workflowLoader.loadFlowInstance(workflowInstanceId, revision);
-                flow = new Flow(workflowBody, force);
-                flow.setNodeExecutionListeners(this.nodeExecutionListeners);
-                BuildProcessInfo buildProcessInfo = flow.prepare();
-                logger.info("flow build stat:{}", buildProcessInfo);
+                flow = load(workflowBody,force,false);
                 if (flow.isLoaded()) {
                     cacheFlow(flow);
                 }
             }
         }
 
+        if(flow!=null){
+            flowKeyMap.put(flow.getFlowKey(),key);
+        }
+
+        return flow;
+    }
+
+    private Flow load(WorkflowBody workflowBody,boolean force,boolean async){
+        Flow flow = new Flow(workflowBody, force);
+        flow.setNodeExecutionListeners(this.nodeExecutionListeners);
+        if(async){
+            flowPrepareExecutor.asyncPrepare(flow);
+        }else{;
+            flow.setNodeExecutionListeners(this.nodeExecutionListeners);
+            BuildProcessInfo buildProcessInfo = flow.prepare();
+            logger.info("flow build stat:{}", buildProcessInfo);
+        }
         return flow;
     }
 
@@ -182,16 +210,19 @@ public class FlowManager implements Closeable {
         List<FlowRuntimeRegistry> triggerInfos = new ArrayList<>();
         for (Flow flow : this.flowCache.values()) {
             for (BaseAppNode startNode : flow.startNodes()) {
+                FlowRuntimeRegistry flowRuntimeRegistry = new FlowRuntimeRegistry();
+                flowRuntimeRegistry.setFlowKey(flow.getFlowKey());
+                flowRuntimeRegistry.setFlowStatus(flow.getFlowStatus());
+                flowRuntimeRegistry.setBuildInfo(flow.getBuildProcessInfo().detail());
+                flowRuntimeRegistry.setWorkflowInstanceId(flow.getWorkflowInstanceId());
+                flowRuntimeRegistry.setRevision(flow.getRevision());
+                flowRuntimeRegistry.setUpdateTime(flow.getUpdatedTime());
+                flowRuntimeRegistry.setRegistryNode(startNode);
                 if (startNode instanceof TriggerNode) {
-                    FlowRuntimeRegistry flowRuntimeRegistry = new FlowRuntimeRegistry();
-                    flowRuntimeRegistry.setFlowStatus(flow.getFlowStatus());
-                    flowRuntimeRegistry.setBuildInfo(flow.getBuildProcessInfo().detail());
-                    flowRuntimeRegistry.setWorkflowInstanceId(flow.getWorkflowInstanceId());
-                    flowRuntimeRegistry.setRevision(flow.getRevision());
-                    flowRuntimeRegistry.setUpdateTime(flow.getUpdatedTime());
-                    flowRuntimeRegistry.setRegistryNode(startNode);
                     triggerInfos.add(flowRuntimeRegistry);
                     //logger.debug("flowTriggerInfo {}", flowTriggerInfo);
+                }else if(startNode instanceof StateNode){
+                    triggerInfos.add(flowRuntimeRegistry);
                 }
             }
 

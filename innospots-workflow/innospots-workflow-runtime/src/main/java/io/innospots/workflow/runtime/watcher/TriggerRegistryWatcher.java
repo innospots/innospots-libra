@@ -21,6 +21,7 @@ package io.innospots.workflow.runtime.watcher;
 import io.innospots.base.registry.ServiceRegistryHolder;
 import io.innospots.base.watcher.AbstractWatcher;
 import io.innospots.workflow.core.runtime.FlowRuntimeRegistry;
+import io.innospots.workflow.node.app.StateNode;
 import io.innospots.workflow.node.app.trigger.ApiTriggerNode;
 import io.innospots.workflow.node.app.trigger.CronTimerNode;
 import io.innospots.workflow.node.app.trigger.QueueTriggerNode;
@@ -65,6 +66,8 @@ public class TriggerRegistryWatcher extends AbstractWatcher {
         //schedule trigger
         List<FlowRuntimeRegistry> scheduleTriggers = new ArrayList<>();
 
+        List<FlowRuntimeRegistry> dummyTriggers = new ArrayList<>();
+
         for (FlowRuntimeRegistry flowTrigger : flowTriggers) {
             String nodeType = flowTrigger.getRegistryNode().nodeType();
             if (nodeType.equals(ApiTriggerNode.class.getName())) {
@@ -78,19 +81,24 @@ public class TriggerRegistryWatcher extends AbstractWatcher {
                     //主节点添加
                     scheduleTriggers.add(flowTrigger);
                 }
+            }else if (nodeType.equals(StateNode.class.getName())){
+                dummyTriggers.add(flowTrigger);
             }
         }//end for
 
         if (logger.isDebugEnabled()) {
-            logger.debug("event trigger size:{}, queue trigger size:{}, schedule trigger size:{}",
+            logger.debug("event trigger size:{}, queue trigger size:{}, schedule trigger size:{}, dummy size:{}",
                     eventTriggers.size(),
                     queueTriggers.size(),
-                    scheduleTriggers.size());
+                    scheduleTriggers.size(),
+                    dummyTriggers.size()
+                    );
         }
 
         runTimeContainerManager.registerEventTriggers(eventTriggers);
         runTimeContainerManager.registerQueueTriggers(queueTriggers);
         runTimeContainerManager.registerScheduleTriggers(scheduleTriggers);
+        runTimeContainerManager.registerDummyTriggers(dummyTriggers);
 
         return 5;
     }

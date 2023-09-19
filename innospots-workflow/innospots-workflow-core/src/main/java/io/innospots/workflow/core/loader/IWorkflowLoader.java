@@ -32,6 +32,8 @@ public interface IWorkflowLoader {
 
     WorkflowBody loadFlowInstance(Long workflowInstanceId, Integer revision);
 
+    WorkflowBody loadFlowInstance(String flowKey);
+
     default List<WorkflowBody> loadRecentlyUpdateOrOnLine(int recentMinutes){
         return Collections.emptyList();
     }

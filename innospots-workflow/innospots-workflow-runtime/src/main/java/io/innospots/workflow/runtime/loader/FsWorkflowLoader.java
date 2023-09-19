@@ -81,4 +81,9 @@ public class FsWorkflowLoader extends BaseWorkflowLoader {
         return flowInstanceCache.get(IWorkflowLoader.key(workflowInstanceId, revision));
     }
 
+    @Override
+    public WorkflowBody loadFlowInstance(String flowKey) {
+        return null;
+    }
+
 }

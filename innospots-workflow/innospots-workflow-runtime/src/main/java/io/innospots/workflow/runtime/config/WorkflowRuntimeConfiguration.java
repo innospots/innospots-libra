@@ -35,6 +35,7 @@ import io.innospots.workflow.core.loader.IWorkflowLoader;
 import io.innospots.workflow.core.webhook.DefaultResponseBuilder;
 import io.innospots.workflow.core.webhook.WorkflowResponseBuilder;
 import io.innospots.workflow.runtime.container.*;
+import io.innospots.workflow.runtime.container.listener.WorkflowRuntimeEventListener;
 import io.innospots.workflow.runtime.endpoint.WebhookRuntimeEndpoint;
 import io.innospots.workflow.runtime.endpoint.WebhookTestEndpoint;
 import io.innospots.workflow.runtime.endpoint.WorkflowManagementEndpoint;
@@ -147,6 +148,11 @@ public class WorkflowRuntimeConfiguration {
     }
 
     @Bean
+    public DummyRuntimeContainer dummyRuntimeContainer(){
+        return new DummyRuntimeContainer();
+    }
+
+    @Bean
     @ConditionalOnMissingBean
     public QuartzScheduleManager quartzScheduleManager() {
         QuartzScheduleManager quartzScheduleManager = new QuartzScheduleManager();
@@ -179,10 +185,17 @@ public class WorkflowRuntimeConfiguration {
             WebhookRuntimeContainer webhookRuntimeContainer,
             QueueRuntimeContainer queueRuntimeContainer,
             ScheduleRuntimeContainer scheduleRuntimeContainer,
+            DummyRuntimeContainer dummyRuntimeContainer,
             CycleTimerRuntimeContainer cycleTimerRuntimeContainer
     ) {
         return new RunTimeContainerManager(
-                webhookRuntimeContainer, cycleTimerRuntimeContainer, queueRuntimeContainer, scheduleRuntimeContainer);
+                webhookRuntimeContainer, cycleTimerRuntimeContainer, queueRuntimeContainer,dummyRuntimeContainer, scheduleRuntimeContainer);
+    }
+
+
+    @Bean
+    public WorkflowRuntimeEventListener workflowRuntimeEventListener(DummyRuntimeContainer dummyRuntimeContainer,WebhookRuntimeContainer webhookRuntimeContainer){
+        return new WorkflowRuntimeEventListener(dummyRuntimeContainer,webhookRuntimeContainer);
     }
 
     @Bean

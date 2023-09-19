@@ -28,6 +28,7 @@ public enum OutputFieldType {
     /**
      *
      */
+    NONE,
     LIST,
     MAP;
 }

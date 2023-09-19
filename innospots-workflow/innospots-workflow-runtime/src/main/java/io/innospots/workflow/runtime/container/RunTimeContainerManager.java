@@ -39,13 +39,17 @@ public class RunTimeContainerManager {
 
     private CycleTimerRuntimeContainer cycleTimerRuntimeContainer;
 
+    private DummyRuntimeContainer dummyRuntimeContainer;
+
     public RunTimeContainerManager(WebhookRuntimeContainer webhookRuntimeContainer,
                                    CycleTimerRuntimeContainer cycleTimerRuntimeContainer,
                                    QueueRuntimeContainer queueRuntimeContainer,
+                                   DummyRuntimeContainer dummyRuntimeContainer,
                                    ScheduleRuntimeContainer scheduleRuntimeContainer) {
         this.webhookRuntimeContainer = webhookRuntimeContainer;
         this.cycleTimerRuntimeContainer = cycleTimerRuntimeContainer;
         this.queueRuntimeContainer = queueRuntimeContainer;
+        this.dummyRuntimeContainer = dummyRuntimeContainer;
         this.scheduleRuntimeContainer = scheduleRuntimeContainer;
     }
 
@@ -70,6 +74,10 @@ public class RunTimeContainerManager {
 
     public void registerQueueTriggers(List<FlowRuntimeRegistry> triggerNodes) {
         queueRuntimeContainer.register(triggerNodes);
+    }
+
+    public void registerDummyTriggers(List<FlowRuntimeRegistry> triggerNodes){
+        dummyRuntimeContainer.register(triggerNodes);
     }
 
     public void addListener(Collection<WorkflowRuntimeListener> runtimeListeners) {

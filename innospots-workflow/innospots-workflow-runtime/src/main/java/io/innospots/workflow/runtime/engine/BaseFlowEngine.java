@@ -200,7 +200,13 @@ public abstract class BaseFlowEngine implements IFlowEngine {
     }
 
     private Flow getFlow(FlowExecution flowExecution) {
-        Flow flow = flowManager.loadFlow(flowExecution.getFlowInstanceId(), flowExecution.getRevision());
+        Flow flow = null;
+        if(flowExecution.getFlowKey()!=null){
+            flow = flowManager.loadFlow(flowExecution.getFlowKey());
+        }else{
+            flow = flowManager.loadFlow(flowExecution.getFlowInstanceId(), flowExecution.getRevision());
+        }
+
         if (flow == null) {
             throw ResourceException.buildAbandonException(this.getClass(), "flow not exist: " + flowExecution.getFlowInstanceId() + " ,revision: " + flowExecution.getRevision());
         }
