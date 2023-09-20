@@ -288,6 +288,14 @@ public class WorkflowBuilderOperator implements IWorkflowCacheDraftOperator {
         return flowInstance;
     }
 
+    public List<WorkflowBody> selectRecentlyUpdateOrOnLine(int recentMinutes){
+        List<WorkflowInstanceEntity> entityList = workflowInstanceOperator.selectRecentlyUpdateOrOnLine(recentMinutes);
+        if(CollectionUtils.isEmpty(entityList)){
+            return Collections.emptyList();
+        }
+        return entityList.stream().map(WorkflowInstanceConvertMapper.INSTANCE::entityToFlowBody).collect(Collectors.toList());
+    }
+
     /**
      * get flow instance by flowKey and revision
      *
