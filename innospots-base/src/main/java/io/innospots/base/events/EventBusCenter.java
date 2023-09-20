@@ -72,17 +72,19 @@ public class EventBusCenter {
         });
     }
 
-    public void post(EventBody event) {
+    public Object post(EventBody event) {
+        Object resp = null;
         if (event == null) {
-            return;
+            return resp;
         }
         for (Map.Entry<Class<? extends EventBody>, List<IEventListener>> entry : eventListeners.entrySet()) {
             if (event.getClass().equals(entry.getKey())) {
                 for (IEventListener listener : entry.getValue()) {
-                    listener.listen(event);
+                    resp =listener.listen(event);
                 }
             }
         }
+        return resp;
     }
 
     public static void async(EventBody event) {

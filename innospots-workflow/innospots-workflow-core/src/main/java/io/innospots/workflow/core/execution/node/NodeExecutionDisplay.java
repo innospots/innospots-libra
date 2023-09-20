@@ -68,24 +68,29 @@ public class NodeExecutionDisplay {
     private Map<String, Object> logs = new LinkedHashMap<>();
 
     public static NodeExecutionDisplay build(NodeExecution nodeExecution, NodeInstance nodeInstance, int page, int size) {
-        if (nodeExecution == null) {
-            return null;
+        NodeExecutionDisplay executionDisplay = buildNotContextPage(nodeExecution,nodeInstance);
+        if (CollectionUtils.isNotEmpty(nodeExecution.getOutputs())) {
+            List<NodeOutputPage> nodeOutputPages = new ArrayList<>();
+            for (NodeOutput output : nodeExecution.getOutputs()) {
+                if (CollectionUtils.isNotEmpty(output.getResults())) {
+                    if (page <= 0) {
+                        page = 1;
+                    }
+                    NodeOutputPage outputPage = new NodeOutputPage(output, page, size);
+                    outputPage.getResults().setList(output.getResults());
+                    nodeOutputPages.add(outputPage);
+                }
+            }//end for
+            executionDisplay.outputs = nodeOutputPages;
+            executionDisplay.buildOutputField();
         }
-        NodeExecutionDisplay executionDisplay = new NodeExecutionDisplay();
-        executionDisplay.flowExecutionId = nodeExecution.getFlowExecutionId();
-//        executionDisplay.inputs = nodeExecution.flatInput();
-        executionDisplay.inputs = nodeExecution.getInputs();
-        executionDisplay.nodeExecutionId = nodeExecution.getNodeExecutionId();
-        executionDisplay.nodeKey = nodeExecution.getNodeKey();
-        executionDisplay.logs.put("nodeExecutionId", nodeExecution.getNodeExecutionId());
-        executionDisplay.logs.put("nodeKey", executionDisplay.nodeKey);
-        executionDisplay.logs.put("status", nodeExecution.getStatus());
-        executionDisplay.logs.put("consume", nodeExecution.consume());
-        executionDisplay.logs.put("startTime", nodeExecution.getStartTime());
-        executionDisplay.logs.put("endTime", nodeExecution.getEndTime());
-        executionDisplay.logs.put("sequence", nodeExecution.getSequenceNumber());
-        executionDisplay.logs.put("output_table", JSONUtils.toJsonString(nodeExecution.outputLog()));
-        executionDisplay.logs.put("message", nodeExecution.getMessage());
+        return executionDisplay;
+    }
+
+    public static NodeExecutionDisplay build(NodeExecution nodeExecution, NodeInstance nodeInstance) {
+        int size = 50;
+        int page = 1;
+        NodeExecutionDisplay executionDisplay = buildNotContextPage(nodeExecution,nodeInstance);
         if (CollectionUtils.isNotEmpty(nodeExecution.getOutputs())) {
             List<NodeOutputPage> nodeOutputPages = new ArrayList<>();
             for (NodeOutput output : nodeExecution.getOutputs()) {
@@ -105,28 +110,37 @@ public class NodeExecutionDisplay {
             executionDisplay.outputs = nodeOutputPages;
             executionDisplay.buildOutputField();
         }
-        /*
-        if(CollectionUtils.isNotEmpty(nodeExecution.getOutputs())){
-            executionDisplay.outputs = nodeExecution.getOutputs().stream()
-                    .map(nodeOutput -> new NodeOutputPage(nodeOutput,page,size))
-                    .collect(Collectors.toList());
-            executionDisplay.buildOutputField();
-        }
-         */
-        if (nodeInstance != null) {
-            executionDisplay.schemaFields = nodeInstance.getOutputFields();
-        }
-
         return executionDisplay;
-    }
-
-    public static NodeExecutionDisplay build(NodeExecution nodeExecution, NodeInstance nodeInstance) {
-        int size = 50;
-        return build(nodeExecution, nodeInstance, 1, size);
     }
 
     public static NodeExecutionDisplay build(NodeExecution nodeExecution, int page, int size) {
         return build(nodeExecution, null, page, size);
+    }
+
+    private static NodeExecutionDisplay buildNotContextPage(NodeExecution nodeExecution, NodeInstance nodeInstance){
+        if (nodeExecution == null) {
+            return null;
+        }
+        NodeExecutionDisplay executionDisplay = new NodeExecutionDisplay();
+        executionDisplay.flowExecutionId = nodeExecution.getFlowExecutionId();
+//        executionDisplay.inputs = nodeExecution.flatInput();
+        executionDisplay.inputs = nodeExecution.getInputs();
+        executionDisplay.nodeExecutionId = nodeExecution.getNodeExecutionId();
+        executionDisplay.nodeKey = nodeExecution.getNodeKey();
+        executionDisplay.logs.put("nodeExecutionId", nodeExecution.getNodeExecutionId());
+        executionDisplay.logs.put("nodeKey", executionDisplay.nodeKey);
+        executionDisplay.logs.put("status", nodeExecution.getStatus());
+        executionDisplay.logs.put("consume", nodeExecution.consume());
+        executionDisplay.logs.put("startTime", nodeExecution.getStartTime());
+        executionDisplay.logs.put("endTime", nodeExecution.getEndTime());
+        executionDisplay.logs.put("sequence", nodeExecution.getSequenceNumber());
+        executionDisplay.logs.put("output_table", JSONUtils.toJsonString(nodeExecution.outputLog()));
+        executionDisplay.logs.put("message", nodeExecution.getMessage());
+
+        if (nodeInstance != null) {
+            executionDisplay.schemaFields = nodeInstance.getOutputFields();
+        }
+        return executionDisplay;
     }
 
 

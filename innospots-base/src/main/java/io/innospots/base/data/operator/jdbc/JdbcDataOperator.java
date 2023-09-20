@@ -302,7 +302,7 @@ public class JdbcDataOperator implements IDataOperator {
         }
 
         if(log.isDebugEnabled()){
-            log.debug("upsert sql:{}",sqlBuilder);
+            log.debug("upsert size:{}, sql:{}",inData.size(),sqlBuilder);
         }
 
         int upsert = 0;

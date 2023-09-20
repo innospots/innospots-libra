@@ -40,34 +40,34 @@ public enum FieldValueType {
     /**
      *
      */
-    FIELD_CODE("fld", "refer", "field code identity", String.class, "VARCHAR"),
-    STRING("string", "string", "character string", String.class, "VARCHAR"),
-    INTEGER("int", "number", "integer", Integer.class, "INT"),
-    BOOLEAN("boolean", "number", "boolean true or false", Boolean.class, "INT"),
-    LONG("long", "number", "long", Long.class, "BIGINT"),
-    DATE("date", "string", "yyyy-MM-dd", LocalDate.class, "DATE"),
-    TIME("time", "string", "HH:mm", LocalTime.class, "DATETIME"),
-    DATE_TIME("datetime", "string", "yyyy-MM-dd HH:mm:ss", LocalDateTime.class, "DATETIME"),
-    DOUBLE("double", "number", "00.0", Double.class, "DOUBLE"),
-    CURRENCY("currency", "number", "bigDecimal format", BigDecimal.class, "DECIMAL"),
-    TIMESTAMP("timestamp", "number", "millisecond", Long.class, "TIMESTAMP"),
-    YEAR_MONTH("ym", "number", "yyyyMM", Integer.class, "INT"),
-    YEAR_MONTH_DATE("ymd", "number", "yyyyMMdd", Integer.class, "INT"),
-    MONTH("mm", "number", "MM", Integer.class, "INT"),
-    MONTH_DATE("md", "number", "MMdd", Integer.class, "INT"),
-    DAY_OF_MONTH("dm", "number", "dd", Integer.class, "INT"),
-    MAP("map", "json", "", Map.class, "TEXT"),
-    LIST("list", "list", "", List.class, "TEXT"),
-    COLLECTION("seq", "list", "list,set, array", Collection.class, "TEXT"),
-    NUMBER("number", "number", "int,double float,long", Number.class, "DOUBLE"),
-    DECIMAL("decimal", "number", "decimal type", BigDecimal.class, "DECIMAL"),
-    SET("set", "list", "", Set.class, "TEXT"),
-    OBJECT("object", "json", "", Object.class, "Blob"),
-    FILE("object", "json", "", File.class, "Blob"),
+    FIELD_CODE("fld", "refer", "field code identity", String.class, "VARCHAR",null),
+    STRING("string", "string", "character string", String.class, "VARCHAR",null),
+    INTEGER("int", "number", "integer", Integer.class, "INT",new String[]{"^[-]{0,1}([1-9]\\d{1,8})"}),
+    BOOLEAN("boolean", "number", "boolean true or false", Boolean.class, "INT",null),
+    LONG("long", "number", "long", Long.class, "BIGINT",new String[]{"^[-]{0,1}([1-9]\\d{9,19})[lL]{0,1}"}),
+    DATE("date", "string", "yyyy-MM-dd", LocalDate.class, "DATE",new String[]{"^([1-9]\\d{3})[-/.](0[1-9]|1[0-2])[-/.](0[1-9]|[1-2][0-9]|3[0-1])"}),
+    TIME("time", "string", "HH:mm", LocalTime.class, "DATETIME",new String[]{"^(20|21|22|23|[0-1]\\d):([0-5]\\d)(?:\\:([0-5]\\d)){0,1}(?:\\.(\\d{3})){0,1}"}),
+    DATE_TIME("datetime", "string", "yyyy-MM-dd HH:mm:ss", LocalDateTime.class, "DATETIME",new String[]{"^([1-9]\\d{3})[-/.](0[1-9]|1[0-2])[-/.](0[1-9]|[1-2][0-9]|3[0-1])[ |T](20|21|22|23|[0-1]\\d):([0-5]\\d)(?:\\:([0-5]\\d)){0,1}(?:\\.(\\d{3})){0,1}"}),
+    DOUBLE("double", "number", "00.0", Double.class, "DOUBLE",new String[]{"^[-]{0,1}(\\d+)[.]{0,1}(\\d+)[dD]{0,1}"}),
+    CURRENCY("currency", "number", "bigDecimal format", BigDecimal.class, "DECIMAL",new String[]{"^[-]{0,1}([￥$€￡￠])(\\d+)[.]{0,1}(\\d+)"}),
+    TIMESTAMP("timestamp", "number", "millisecond", Long.class, "TIMESTAMP",null),
+    YEAR_MONTH("ym", "number", "yyyyMM", Integer.class, "INT",new String[]{"^([1-9]\\d{3})(0[1-9]|1[0-2])"}),
+    YEAR_MONTH_DATE("ymd", "number", "yyyyMMdd", Integer.class, "INT",new String[]{"^([1-9]\\d{3})(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])"}),
+    MONTH("mm", "number", "MM", Integer.class, "INT",null),
+    MONTH_DATE("md", "number", "MMdd", Integer.class, "INT",null),
+    DAY_OF_MONTH("dm", "number", "dd", Integer.class, "INT",null),
+    MAP("map", "json", "", Map.class, "TEXT",null),
+    LIST("list", "list", "", List.class, "TEXT",null),
+    COLLECTION("seq", "list", "list,set, array", Collection.class, "TEXT",null),
+    NUMBER("number", "number", "int,double float,long", Number.class, "DOUBLE",null),
+    DECIMAL("decimal", "number", "decimal type", BigDecimal.class, "DECIMAL",null),
+    SET("set", "list", "", Set.class, "TEXT",null),
+    OBJECT("object", "json", "", Object.class, "Blob",null),
+    FILE("object", "json", "", File.class, "Blob",null),
 
     // TODO dataview variable use
-    NUMERIC("numeric", "number", "00.0", Double.class, "DOUBLE"), // TODO
-    FRAGMENT("string", "string", "character string", String.class, "VARCHAR");
+    NUMERIC("numeric", "number", "00.0", Double.class, "DOUBLE",null), // TODO
+    FRAGMENT("string", "string", "character string", String.class, "VARCHAR",null);
 
 
     private String description;
@@ -80,13 +80,16 @@ public enum FieldValueType {
 
     private String dbFieldType;
 
+    private String[] patterns;
 
-    FieldValueType(String brief, String grouping, String description, Class<?> clazz, String dbFieldType) {
+
+    FieldValueType(String brief, String grouping, String description, Class<?> clazz, String dbFieldType,String[] patterns) {
         this.brief = brief;
         this.grouping = grouping;
         this.description = description;
         this.clazz = clazz;
         this.dbFieldType = dbFieldType;
+        this.patterns = patterns;
     }
 
     public static FieldValueType getTypeByBrief(String brief) {
@@ -178,7 +181,7 @@ public enum FieldValueType {
     }
 
     private static boolean isDateTime(Object value) {
-        return isDateString("^[1-9]\\d{3}([-/.])(0[1-9]|1[0-2])([-/.])(0[1-9]|[1-2][0-9]|3[0-1])[ |T](20|21|22|23|[0-1]\\d):[0-5]\\d(:[0-5]\\d){0,1}(\\.\\d{3}){0,1}", value);
+        return isDateString("^([1-9]\\d{3})[-/.](0[1-9]|1[0-2])[-/.](0[1-9]|[1-2][0-9]|3[0-1])[ |T](20|21|22|23|[0-1]\\d):([0-5]\\d)(?:\\:([0-5]\\d)){0,1}(?:\\.(\\d{3})){0,1}", value);
     }
 
     private static boolean isDateString(String format, Object value) {

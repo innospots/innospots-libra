@@ -18,6 +18,8 @@
 
 package io.innospots.workflow.node.app.logic;
 
+import io.innospots.base.events.EventBusCenter;
+import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.engine.FlowEngineManager;
 import io.innospots.workflow.core.enums.OutputFieldMode;
 import io.innospots.workflow.core.enums.OutputFieldType;
@@ -27,6 +29,7 @@ import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeOutput;
 import io.innospots.workflow.core.node.app.BaseAppNode;
 import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.runtime.FlowEventBody;
 import io.innospots.workflow.node.app.data.BaseDataNode;
 
 import java.util.ArrayList;
@@ -70,17 +73,24 @@ public class FlowNode extends BaseDataNode {
     @Override
     public void invoke(NodeExecution nodeExecution) {
         List<Map<String, Object>> payloads = new ArrayList<>();
-        for (ExecutionInput input : nodeExecution.getInputs()) {
-            payloads.addAll(input.getData());
-        }
-        long flowInstanceId = 0;
-        FlowExecution flowExecution = FlowExecution.buildNewFlowExecution(flowKey, payloads);
-
-
-        FlowEngineManager.eventFlowEngine().execute(flowExecution);
         NodeOutput nodeOutput = new NodeOutput();
         nodeOutput.addNextKey(this.nextNodeKeys());
-        nodeOutput.addResult(flowExecution.getOutput());
+        for (ExecutionInput input : nodeExecution.getInputs()) {
+            for (Map<String, Object> item : input.getData()) {
+                Object res = null;
+                FlowEventBody eventBody = new FlowEventBody();
+                eventBody.setFlowKey(flowKey);
+                eventBody.setBody(item);
+                res = EventBusCenter.getInstance().post(eventBody);
+                if(res instanceof Map){
+                    nodeOutput.addResult((Map<String, Object>) res);
+                }else if(res instanceof List){
+                    nodeOutput.setResults((List<Map<String, Object>>) res);
+                }else{
+                    nodeOutput.addResult(BeanUtils.toMap(res,false,false));
+                }
+            }
+        }//end for
 
     }
 

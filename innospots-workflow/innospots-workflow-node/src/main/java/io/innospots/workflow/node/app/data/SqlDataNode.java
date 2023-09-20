@@ -134,6 +134,8 @@ public class SqlDataNode extends DataNode {
             }
         }//end upsert
 
+        logger.info("table name:{}, primary name:{}",tableName,keyColumn);
+
         updateTimeColumn = nodeInstance.valueString(COLUMN_UPDATE_TIME);
 
         List<Map<String, Object>> updateConditionFields = (List<Map<String, Object>>) nodeInstance.value(FIELD_UPDATE_CONDITION);
