@@ -80,6 +80,10 @@ public class RunTimeContainerManager {
         dummyRuntimeContainer.register(triggerNodes);
     }
 
+    public void registerCycleTimerTriggers(List<FlowRuntimeRegistry> triggerNodes){
+        cycleTimerRuntimeContainer.register(triggerNodes);
+    }
+
     public void addListener(Collection<WorkflowRuntimeListener> runtimeListeners) {
         for (WorkflowRuntimeListener runtimeListener : runtimeListeners) {
             webhookRuntimeContainer.addListener(runtimeListener);
@@ -107,6 +111,10 @@ public class RunTimeContainerManager {
         triggers.put("schedules", schedules);
         List<Object> queues = new ArrayList<>(queueRuntimeContainer.runtimeFlowTriggers());
         triggers.put("queues", queues);
+        List<Object> dummies = new ArrayList<>(dummyRuntimeContainer.runtimeFlowTriggers());
+        triggers.put("dummies",dummies);
+        List<Object> cycles = new ArrayList<>(cycleTimerRuntimeContainer.runtimeFlowTriggers());
+        triggers.put("cycles",cycles);
         return triggers;
     }
 }
