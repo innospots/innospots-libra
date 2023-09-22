@@ -76,6 +76,7 @@ public class ValueParamField implements Initializer {
                     break;
             }
         } catch (Exception e) {
+            log.error(e.getMessage(),e);
             throw NodeFieldException.buildException(this.getClass(), e, "field replace fail,", item);
         }
 

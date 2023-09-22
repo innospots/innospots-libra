@@ -3,6 +3,7 @@ package io.innospots.workflow.core.node.field;
 import cn.hutool.core.util.ReUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.innospots.base.condition.Factor;
+import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.utils.DateTimeUtils;
 import io.innospots.base.utils.Initializer;
 import io.innospots.workflow.core.exception.NodeFieldException;
@@ -13,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
@@ -85,27 +87,43 @@ public class ExtendField implements Initializer {
                     }
                     break;
                 case plus_year:
-                    if (StringUtils.isNotEmpty(param) && field != null && field.getValueType() != null && field.getValueType().isTime()) {
+                    if (StringUtils.isNotEmpty(param)) {
                         long addAmt = Long.parseLong(param);
-                        val = field.getValueType().plusTime(val, addAmt, ChronoUnit.YEARS);
+                        if(field != null && field.getValueType() != null && field.getValueType().isTime()){
+                            val = field.getValueType().plusTime(val, addAmt, ChronoUnit.YEARS);
+                        }else{
+                            val = FieldValueType.DATE.normalize(LocalDate.now().plus(addAmt, ChronoUnit.YEARS),DateTimeUtils.DEFAULT_DATE_PATTERN);
+                        }
                     }
                     break;
                 case plus_month:
-                    if (StringUtils.isNotEmpty(param) && field != null && field.getValueType() != null && field.getValueType().isTime()) {
+                    if (StringUtils.isNotEmpty(param)) {
                         long addAmt = Long.parseLong(param);
-                        val = field.getValueType().plusTime(val, addAmt, ChronoUnit.MONTHS);
+                        if(field != null && field.getValueType() != null && field.getValueType().isTime()){
+                            val = field.getValueType().plusTime(val, addAmt, ChronoUnit.MONTHS);
+                        }else{
+                            val = FieldValueType.DATE.normalize(LocalDate.now().plus(addAmt, ChronoUnit.MONTHS),DateTimeUtils.DEFAULT_DATE_PATTERN);
+                        }
                     }
                     break;
                 case plus_day:
-                    if (StringUtils.isNotEmpty(param) && field != null && field.getValueType() != null && field.getValueType().isTime()) {
+                    if (StringUtils.isNotEmpty(param)) {
                         long addAmt = Long.parseLong(param);
-                        val = field.getValueType().plusTime(val, addAmt, ChronoUnit.DAYS);
+                        if(field != null && field.getValueType() != null && field.getValueType().isTime()){
+                            val = field.getValueType().plusTime(val, addAmt, ChronoUnit.DAYS);
+                        }else{
+                            val = FieldValueType.DATE.normalize(LocalDate.now().plus(addAmt, ChronoUnit.DAYS),DateTimeUtils.DEFAULT_DATE_PATTERN);
+                        }
                     }
                     break;
                 case plus_hour:
-                    if (StringUtils.isNotEmpty(param) && field != null && field.getValueType() != null && field.getValueType().isTime()) {
+                    if (StringUtils.isNotEmpty(param)) {
                         long addAmt = Long.parseLong(param);
-                        val = field.getValueType().plusTime(val, addAmt, ChronoUnit.HOURS);
+                        if(field != null && field.getValueType() != null && field.getValueType().isTime()){
+                            val = field.getValueType().plusTime(val, addAmt, ChronoUnit.HOURS);
+                        }else{
+                            val = FieldValueType.TIME.normalize(LocalTime.now().plus(addAmt, ChronoUnit.HOURS),DateTimeUtils.DEFAULT_TIME_PATTERN);
+                        }
                     }
                     break;
                 case regular_exp:

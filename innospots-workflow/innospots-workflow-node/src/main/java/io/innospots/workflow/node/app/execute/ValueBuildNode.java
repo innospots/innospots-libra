@@ -8,10 +8,9 @@ import io.innospots.workflow.core.node.app.BaseAppNode;
 import io.innospots.workflow.core.node.field.ExtendField;
 import io.innospots.workflow.core.node.field.ValueParamField;
 import io.innospots.workflow.core.node.instance.NodeInstance;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Smars
@@ -22,6 +21,7 @@ public class ValueBuildNode extends BaseAppNode {
     private static final String FIELD_REPLACE = "replace_fields";
 
     private static final String FIELD_EXTEND = "extend_fields";
+    private static final String FIELD_ACTION = "field_action";
 
     private static final String OUTPUT_RESTRICTED = "output_restricted";
 
@@ -29,14 +29,40 @@ public class ValueBuildNode extends BaseAppNode {
 
     private List<ExtendField> extendFields;
 
+    private FieldAction fieldAction;
+
+    private boolean outputRestricted;
+
     @Override
     protected void initialize(NodeInstance nodeInstance) {
         super.initialize(nodeInstance);
-        validFieldConfig(FIELD_REPLACE);
-        List<Map<String, Object>> v = (List<Map<String, Object>>) nodeInstance.value(FIELD_REPLACE);
-        valueParamFields = new ArrayList<>();
-        for (Map<String, Object> field : v) {
-            valueParamFields.add(JSONUtils.parseObject(field, ValueParamField.class));
+        validFieldConfig(FIELD_ACTION);
+        outputRestricted = nodeInstance.valueBoolean(OUTPUT_RESTRICTED);
+        fieldAction = FieldAction.valueOf(this.valueString(FIELD_ACTION));
+        if (fieldAction == FieldAction.FUNCTION) {
+            List<Map<String, Object>> v = (List<Map<String, Object>>) nodeInstance.value(FIELD_EXTEND);
+            extendFields = new ArrayList<>();
+            for (Map<String, Object> field : v) {
+                Object ff = field.get("field");
+                if(ff == null || StringUtils.isEmpty(ff.toString())){
+                    field.remove("field");
+                }
+                ExtendField extendField = JSONUtils.parseObject(field,ExtendField.class);
+                extendField.initialize();
+                extendFields.add(extendField);
+            }
+        } else {
+            List<Map<String, Object>> v = (List<Map<String, Object>>) nodeInstance.value(FIELD_REPLACE);
+            valueParamFields = new ArrayList<>();
+            for (Map<String, Object> field : v) {
+                Object ff = field.get("field");
+                if(ff == null || StringUtils.isEmpty(ff.toString())){
+                    field.remove("field");
+                }
+                ValueParamField vParamField = JSONUtils.parseObject(field, ValueParamField.class);
+                vParamField.initialize();
+                valueParamFields.add(vParamField);
+            }
         }
     }
 
@@ -47,12 +73,28 @@ public class ValueBuildNode extends BaseAppNode {
         nodeExecution.addOutput(nodeOutput);
         for (ExecutionInput executionInput : nodeExecution.getInputs()) {
             for (Map<String, Object> item : executionInput.getData()) {
-                for (ValueParamField valueParamField : valueParamFields) {
-                    item.put(valueParamField.getField().getCode(),valueParamField.replace(item));
+                if(fieldAction == FieldAction.REPLACE){
+                    for (ValueParamField valueParamField : valueParamFields) {
+                        item.put(valueParamField.getField().getCode(), valueParamField.replace(item));
+                    }
+                    nodeOutput.addResult(item);
+                }else{
+                    Map<String,Object> mv = new LinkedHashMap<>();
+                    if(!outputRestricted){
+                        mv.putAll(item);
+                    }
+                    for (ExtendField extendField : extendFields) {
+                        mv.put(extendField.getCode(),extendField.compute(item));
+                    }
+                    nodeOutput.addResult(mv);
                 }
-                nodeOutput.addResult(item);
             }//end executionInput
         }//end input
+    }
+
+    enum FieldAction {
+        REPLACE,
+        FUNCTION;
     }
 
 }
