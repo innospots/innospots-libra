@@ -34,42 +34,39 @@ public class ValueParamField implements Initializer {
     private Factor field;
 
     @JsonIgnore
-    private Map<String,Object> dict;
+    private Map<String, Object> dict;
 
     @Override
     public void initialize() {
-        if(method == ValueReplaceMethod.rp_dict){
+        if (method == ValueReplaceMethod.rp_dict) {
             dict = new HashMap<>();
-            if(StringUtils.isNotEmpty(value)){
+            if (StringUtils.isNotEmpty(value)) {
                 String[] vv = value.split(",");
                 for (String v : vv) {
                     String[] dv = v.split(":");
-                    if(dv.length>=2){
-                        dict.put(dv[0],dv[1]);
+                    if (dv.length >= 2) {
+                        dict.put(dv[0], dv[1]);
                     }
                 }
             }
         }
     }
 
-    public Object replace(Map<String,Object> item){
+    public Object replace(Map<String, Object> item) {
         Object val = item.get(field.getCode());
         try {
-            switch (method){
+            switch (method) {
                 case rp_rexp:
-                    if(StringUtils.isNotEmpty(value) && val != null){
+                    if (StringUtils.isNotEmpty(value) && val != null) {
                         String[] vv = value.split(",");
-                        val = String.valueOf(val).replaceAll(vv[0],vv[1]);
+                        val = String.valueOf(val).replaceAll(vv[0], vv[1]);
                     }
-                    break;
-                case rp_func:
-                    log.warn("replace function field value:{}",this);
                     break;
                 case rp_null:
-                    if(val == null){
+                    if (val == null) {
                         return value;
                     }
-                    if(StringUtils.isEmpty(String.valueOf(val))){
+                    if (StringUtils.isEmpty(String.valueOf(val))) {
                         return value;
                     }
                     break;
@@ -78,19 +75,19 @@ public class ValueParamField implements Initializer {
                 default:
                     break;
             }
-        }catch (Exception e){
-            throw NodeFieldException.buildException(this.getClass(),e,"field replace fail,",item);
+        } catch (Exception e) {
+            throw NodeFieldException.buildException(this.getClass(), e, "field replace fail,", item);
         }
 
         return val;
     }
 
 
-    public enum ValueReplaceMethod{
+    public enum ValueReplaceMethod {
+        //
         rp_null,
         rp_rexp,
-        rp_dict,
-        rp_func;
+        rp_dict;
     }
 
     @Override

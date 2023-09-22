@@ -1,12 +1,11 @@
 package io.innospots.workflow.node.app.execute;
 
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.model.field.ParamField;
-import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.ExecutionInput;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeOutput;
 import io.innospots.workflow.core.node.app.BaseAppNode;
+import io.innospots.workflow.core.node.field.ExtendField;
 import io.innospots.workflow.core.node.field.ValueParamField;
 import io.innospots.workflow.core.node.instance.NodeInstance;
 
@@ -21,7 +20,14 @@ import java.util.Map;
 public class ValueBuildNode extends BaseAppNode {
 
     private static final String FIELD_REPLACE = "replace_fields";
+
+    private static final String FIELD_EXTEND = "extend_fields";
+
+    private static final String OUTPUT_RESTRICTED = "output_restricted";
+
     private List<ValueParamField> valueParamFields;
+
+    private List<ExtendField> extendFields;
 
     @Override
     protected void initialize(NodeInstance nodeInstance) {

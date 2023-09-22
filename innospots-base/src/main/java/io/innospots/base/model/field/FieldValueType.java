@@ -29,7 +29,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -80,6 +82,9 @@ public enum FieldValueType {
 
     DATE("date", "string", "yyyy-MM-dd", LocalDate.class, "DATE",
             Pattern.compile("^([1-9]\\d{3})[-/.](0[1-9]|1[0-2])[-/.](0[1-9]|[1-2][0-9]|3[0-1])"), (p, v) -> {
+        if (v instanceof LocalDate) {
+            return v;
+        }
         Matcher m = p.matcher(v.toString());
         LocalDate localDate = null;
         while (m.find()) {
@@ -93,6 +98,9 @@ public enum FieldValueType {
 
     TIME("time", "string", "HH:mm", LocalTime.class, "DATETIME",
             Pattern.compile("^(20|21|22|23|[0-1]\\d):([0-5]\\d)(?:\\:([0-5]\\d)){0,1}(?:\\.(\\d{3})){0,1}"), (p, v) -> {
+        if (v instanceof LocalTime) {
+            return v;
+        }
         Matcher m = p.matcher(v.toString());
         LocalTime localTime = null;
         while (m.find()) {
@@ -100,17 +108,28 @@ public enum FieldValueType {
             int min = Integer.parseInt(m.group(2));
             int second = 0;
             if (m.groupCount() >= 4) {
-                second = Integer.parseInt(m.group(3));
+                String s = m.group(3);
+                if (s != null) {
+                    second = Integer.parseInt(s);
+                }
+
             }
             int nanos = 0;
             if (m.groupCount() >= 5) {
-                nanos = Integer.parseInt(m.group(4));
+                String s = m.group(4);
+                if (s != null) {
+                    nanos = Integer.parseInt(s);
+                }
             }
             localTime = LocalTime.of(hour, min, second, nanos);
         }
         return localTime;
     }),
+
     DATE_TIME("datetime", "string", "yyyy-MM-dd HH:mm:ss", LocalDateTime.class, "DATETIME", Pattern.compile("^([1-9]\\d{3})[-/.](0[1-9]|1[0-2])[-/.](0[1-9]|[1-2][0-9]|3[0-1])[ |T](20|21|22|23|[0-1]\\d):([0-5]\\d)(?:\\:([0-5]\\d)){0,1}(?:\\.(\\d{3})){0,1}"), (p, v) -> {
+        if (v instanceof LocalDateTime) {
+            return v;
+        }
         Matcher m = p.matcher(v.toString());
         LocalDateTime localDateTime = null;
         while (m.find()) {
@@ -122,10 +141,16 @@ public enum FieldValueType {
             int second = 0;
             int nanos = 0;
             if (m.groupCount() >= 7) {
-                second = Integer.parseInt(m.group(6));
+                String s = m.group(6);
+                if (s != null) {
+                    second = Integer.parseInt(s);
+                }
             }
             if (m.groupCount() >= 8) {
-                nanos = Integer.parseInt(m.group(7));
+                String s = m.group(7);
+                if (s != null) {
+                    nanos = Integer.parseInt(s);
+                }
             }
             localDateTime = LocalDateTime.of(year, month, day, hour, min, second, nanos);
         }
@@ -140,6 +165,9 @@ public enum FieldValueType {
     }),
     CURRENCY("currency", "number", "bigDecimal format",
             BigDecimal.class, "DECIMAL", Pattern.compile("^[-]{0,1}([￥$€￡￠])(\\d+)[.]{0,1}(\\d+)"), (p, v) -> {
+        if (v instanceof BigDecimal) {
+            return v;
+        }
         BigDecimal decimal = null;
         String vv = v.toString();
         Matcher m = p.matcher(vv);
@@ -151,18 +179,26 @@ public enum FieldValueType {
             unscaledVal = Long.parseLong(m.group(2)) * unscaledVal;
             int ps = 0;
             if (m.groupCount() >= 4) {
-                ps = Integer.parseInt(m.group(3));
+                String s = m.group(3);
+                if (s != null) {
+                    ps = Integer.parseInt(s);
+                }
             }
             decimal = BigDecimal.valueOf(unscaledVal, ps);
         }
         return decimal;
     }),
+
     TIMESTAMP("timestamp", "number", "millisecond",
             Long.class, "TIMESTAMP", null, (p, v) -> {
         return Long.valueOf(v.toString());
     }),
+
     YEAR_MONTH("ym", "number", "yyyyMM",
             Integer.class, "INT", Pattern.compile("^([1-9]\\d{3})(0[1-9]|1[0-2])"), (p, v) -> {
+        if (v instanceof LocalDate) {
+            return v;
+        }
         LocalDate date = null;
         Matcher m = p.matcher(v.toString());
         if (m.find()) {
@@ -172,8 +208,12 @@ public enum FieldValueType {
         }
         return date;
     }),
+
     YEAR_MONTH_DATE("ymd", "number", "yyyyMMdd",
             Integer.class, "INT", Pattern.compile("^([1-9]\\d{3})(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])"), (p, v) -> {
+        if (v instanceof LocalDate) {
+            return v;
+        }
         LocalDate date = null;
         Matcher m = p.matcher(v.toString());
         if (m.find()) {
@@ -184,6 +224,7 @@ public enum FieldValueType {
         }
         return date;
     }),
+
     MONTH("mm", "number", "MM",
             Integer.class, "INT", null, (p, v) -> {
         if (v instanceof Number) {
@@ -191,6 +232,7 @@ public enum FieldValueType {
         }
         return Integer.parseInt(v.toString());
     }),
+
     MONTH_DATE("md", "number", "MMdd",
             Integer.class, "INT", null, (p, v) -> {
         if (v instanceof Number) {
@@ -198,6 +240,7 @@ public enum FieldValueType {
         }
         return Integer.parseInt(v.toString());
     }),
+
     DAY_OF_MONTH("dm", "number", "dd",
             Integer.class, "INT", null, (p, v) -> {
         if (v instanceof Number) {
@@ -215,6 +258,9 @@ public enum FieldValueType {
             Number.class, "DOUBLE", null, (p, v) -> v),
     DECIMAL("decimal", "number", "decimal type",
             BigDecimal.class, "DECIMAL", null, (p, v) -> {
+        if (v instanceof BigDecimal) {
+            return v;
+        }
         try {
             DecimalFormat df = new DecimalFormat();
             Number vv = df.parse(v.toString());
@@ -278,6 +324,14 @@ public enum FieldValueType {
                 this == TIMESTAMP;
     }
 
+    public boolean isTime() {
+        return this == DATE_TIME ||
+                this == TIME ||
+                this == YEAR_MONTH_DATE ||
+                this == YEAR_MONTH ||
+                this == DATE;
+    }
+
     public boolean isMap() {
         return this.grouping.equals(MAP.grouping);
     }
@@ -312,18 +366,8 @@ public enum FieldValueType {
             return FieldValueType.DOUBLE;
         } else if (value instanceof BigDecimal) {
             return FieldValueType.CURRENCY;
-        } else if (isDateTime(value)) {
-            return FieldValueType.DATE_TIME;
-        } else if (isDate(value)) {
-            return FieldValueType.DATE;
-        } else if (isTime(value)) {
-            return FieldValueType.TIME;
-//        } else if (isTimestamp(value)) {
-//            return FieldValueType.TIMESTAMP;
         } else if (value instanceof Long) {
             return FieldValueType.LONG;
-        } else if (value instanceof String) {
-            return FieldValueType.STRING;
         } else if (value instanceof Map) {
             Map<String, Object> m = (Map<String, Object>) value;
             if (m.containsKey("resourceId") && m.containsKey("uri")) {
@@ -334,6 +378,14 @@ public enum FieldValueType {
             return FieldValueType.LIST;
         } else if (value instanceof Set) {
             return FieldValueType.SET;
+        } else if (isDateTime(value)) {
+            return FieldValueType.DATE_TIME;
+        } else if (isDate(value)) {
+            return FieldValueType.DATE;
+        } else if (isTime(value)) {
+            return FieldValueType.TIME;
+        } else if (value instanceof String) {
+            return FieldValueType.STRING;
         } else {
             return FieldValueType.OBJECT;
         }
@@ -349,12 +401,40 @@ public enum FieldValueType {
             return DateTimeFormatter.ofPattern(format).format((TemporalAccessor) val);
         }
 
-        val = String.format(format,val);
-        if(this.isNumber()){
-            return normalize(val);
+        if (format != null) {
+            val = String.format(format, val);
+            if (this.isNumber()) {
+                return normalize(val);
+            }
         }
-
         return val;
+    }
+
+    public Object plusTime(Object value, long amountToAdd, TemporalUnit unit) {
+        value = normalize(value);
+        if (value instanceof LocalDate) {
+            value = ((LocalDate) value).plus(amountToAdd, unit);
+        } else if (value instanceof LocalDateTime) {
+            value = ((LocalDateTime) value).plus(amountToAdd, unit);
+        } else if (value instanceof LocalTime) {
+            value = ((LocalTime) value).plus(amountToAdd, unit);
+        }
+        if (value instanceof TemporalAccessor) {
+            return DateTimeFormatter.ofPattern(this.description).format((TemporalAccessor) value);
+        }
+        return value;
+    }
+
+    public <E extends TemporalAccessor> E plusTime(Object value, long amountToAdd, TemporalUnit unit, Class<E> clazz) {
+        value = normalize(value);
+        if (value instanceof LocalDate) {
+            value = ((LocalDate) value).plus(amountToAdd, unit);
+        } else if (value instanceof LocalDateTime) {
+            value = ((LocalDateTime) value).plus(amountToAdd, unit);
+        } else if (value instanceof LocalTime) {
+            value = ((LocalTime) value).plus(amountToAdd, unit);
+        }
+        return (E) value;
     }
 
 
