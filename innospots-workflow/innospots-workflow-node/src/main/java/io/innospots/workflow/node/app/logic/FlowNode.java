@@ -45,15 +45,12 @@ public class FlowNode extends BaseDataNode {
 
     public static final String SUB_FLOW_KEY = "sub_flow_key";
 
-    public static final String WEBHOOK_FLOW_KEY = "webhook_flow_key";
 
     public static final String FLOW_TYPE = "flow_type";
 
     public static final String SYNC_SWITCH = "sync_switch";
 
     private String flowKey;
-
-    private FlowType flowType;
 
     private boolean syncSwitch;
 
@@ -62,42 +59,37 @@ public class FlowNode extends BaseDataNode {
     protected void initialize(NodeInstance nodeInstance) {
         super.initialize(nodeInstance);
         syncSwitch = nodeInstance.valueBoolean(SYNC_SWITCH);
-        flowType = FlowType.valueOf(this.valueString(FLOW_TYPE));
-        if (flowType == FlowType.DUMMY) {
-            flowKey = this.valueString(SUB_FLOW_KEY);
-        } else {
-            flowKey = this.valueString(WEBHOOK_FLOW_KEY);
-        }
+        flowKey = this.valueString(SUB_FLOW_KEY);
     }
 
     @Override
     public void invoke(NodeExecution nodeExecution) {
         List<Map<String, Object>> payloads = new ArrayList<>();
-        NodeOutput nodeOutput = new NodeOutput();
-        nodeOutput.addNextKey(this.nextNodeKeys());
+        NodeOutput nodeOutput = this.buildOutput(nodeExecution);
         for (ExecutionInput input : nodeExecution.getInputs()) {
             for (Map<String, Object> item : input.getData()) {
                 Object res = null;
                 FlowEventBody eventBody = new FlowEventBody();
                 eventBody.setFlowKey(flowKey);
                 eventBody.setBody(item);
-                res = EventBusCenter.getInstance().post(eventBody);
-                if(res instanceof Map){
+                if (syncSwitch) {
+                    res = EventBusCenter.getInstance().post(eventBody);
+                } else {
+                    EventBusCenter.getInstance().asyncPost(eventBody);
+                }
+                if (res == null) {
+                    return;
+                }
+                if (res instanceof Map) {
                     nodeOutput.addResult((Map<String, Object>) res);
-                }else if(res instanceof List){
+                } else if (res instanceof List) {
                     nodeOutput.setResults((List<Map<String, Object>>) res);
-                }else{
-                    nodeOutput.addResult(BeanUtils.toMap(res,false,false));
+                } else {
+                    nodeOutput.addResult(BeanUtils.toMap(res, false, false));
                 }
             }
         }//end for
 
     }
-
-    private enum FlowType {
-        DUMMY,
-        WEBHOOK;
-    }
-
 
 }

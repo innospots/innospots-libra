@@ -137,7 +137,7 @@ public class JSONUtils {
     }
 
     public static Map<String, Object> objectToMap(Object object) {
-        return OBJECT_MAPPER.convertValue(object, Map.class);
+        return OBJECT_MAPPER.convertValue(object, LinkedHashMap.class);
     }
 
     public static List<String> objectToStrList(Object object) {
@@ -350,7 +350,7 @@ public class JSONUtils {
         }
 
         try {
-            return OBJECT_MAPPER.readValue(json, new TypeReference<Map<K, V>>() {
+            return OBJECT_MAPPER.readValue(json, new TypeReference<LinkedHashMap<K, V>>() {
             });
         } catch (Exception e) {
             logger.error("json to map exception!, {}", e.getMessage(), e);

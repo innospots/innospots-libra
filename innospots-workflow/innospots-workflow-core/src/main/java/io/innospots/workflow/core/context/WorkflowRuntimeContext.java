@@ -22,8 +22,11 @@ package io.innospots.workflow.core.context;
 import io.innospots.workflow.core.execution.flow.FlowExecution;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.collections4.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -45,7 +48,7 @@ public class WorkflowRuntimeContext {
     private String path;
 
 
-    private Map<String, Object> response = new LinkedHashMap<>();
+    private List<Map<String, Object>> response = new ArrayList<>();
 
     public static String contextResourcePath = ".execution_contexts";
 
@@ -64,15 +67,14 @@ public class WorkflowRuntimeContext {
         }
     }
 
-    public void addResponse(String key) {
-        if (this.response == null) {
-            this.response = new LinkedHashMap<>();
+    public void fillResponse(){
+        if(flowExecution!=null && CollectionUtils.isNotEmpty(flowExecution.getOutput())){
+            this.response.addAll(flowExecution.getOutput());
         }
-        /*
-        if(flowExecution!=null){
-            this.response.put(key,flowExecution.get(key));
-        }
-         */
+    }
+
+    public void addResponse(Map<String,Object> item) {
+        this.response.add(item);
     }
 
     @Override

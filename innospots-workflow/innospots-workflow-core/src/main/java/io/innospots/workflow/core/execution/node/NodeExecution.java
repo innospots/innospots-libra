@@ -188,6 +188,16 @@ public class NodeExecution extends NodeExecutionBase {
         return outputList;
     }
 
+    public boolean inputIsEmpty() {
+        if(CollectionUtils.isEmpty(this.inputs)){
+            return true;
+        }
+        if(this.inputs.get(0)!=null && CollectionUtils.isEmpty(this.inputs.get(0).getData())){
+            return true;
+        }
+        return false;
+    }
+
     public void fillTotal(){
         this.outputs.forEach(NodeOutput::fillTotal);
     }

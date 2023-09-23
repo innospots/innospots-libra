@@ -125,6 +125,7 @@ public class HttpClientBuilder {
         HttpData httpData = new HttpData();
         StringBuffer param = new StringBuffer();
         if (MapUtils.isNotEmpty(params)) {
+            httpData.getParams().putAll(params);
             url = dualPathVar(url, params);
             if(!url.contains("?")){
                 url += "?";
@@ -149,6 +150,7 @@ public class HttpClientBuilder {
         try {
             HttpGet httpGet = new HttpGet(url);
             if (MapUtils.isNotEmpty(headers)) {
+                httpData.getHeaders().putAll(headers);
                 for (Map.Entry<String, String> entry : headers.entrySet()) {
                     httpGet.setHeader(entry.getKey(), entry.getValue());
                 }
@@ -187,7 +189,7 @@ public class HttpClientBuilder {
             httpData.addHeader(CONTENT_LENGTH, entity.getContentLength());
             if (contentType != null && contentType.getValue().contains("application/json")) {
                 if (result.startsWith("[")) {
-                    httpData.setBody(JSONUtils.toList(result, Map.class));
+                    httpData.setBody(JSONUtils.toList(result, LinkedHashMap.class));
                 } else if (result.startsWith("{")) {
                     httpData.setBody(JSONUtils.toMap(result));
                 } else {
@@ -235,7 +237,12 @@ public class HttpClientBuilder {
         HttpData httpData = new HttpData();
         url = dualQueryVar(url, query);
         HttpPost httpPost = new HttpPost(url);
-
+        if(query != null){
+            httpData.getParams().putAll(query);
+        }
+        if(params!=null){
+            httpData.getParams().putAll(params);
+        }
         try {
             List<NameValuePair> pairList = new ArrayList<>(params.size());
             for (Map.Entry<String, Object> entry : params.entrySet()) {
@@ -244,6 +251,7 @@ public class HttpClientBuilder {
                 pairList.add(pair);
             }
             if (MapUtils.isNotEmpty(headers)) {
+                httpData.getHeaders().putAll(headers);
                 for (Map.Entry<String, String> entry : headers.entrySet()) {
                     httpPost.setHeader(entry.getKey(), entry.getValue());
                 }
@@ -288,9 +296,11 @@ public class HttpClientBuilder {
         StringBuffer param = new StringBuffer();
         url = dualPathVar(url, params);
         url = dualQueryVar(url, params);
+        httpData.getParams().putAll(params);
 
         HttpPost httpPost = new HttpPost(url);
         if (MapUtils.isNotEmpty(headers)) {
+            httpData.getHeaders().putAll(headers);
             for (Map.Entry<String, String> entry : headers.entrySet()) {
                 httpPost.setHeader(entry.getKey(), entry.getValue());
             }

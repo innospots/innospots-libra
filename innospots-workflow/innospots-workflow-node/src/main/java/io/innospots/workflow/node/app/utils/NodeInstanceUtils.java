@@ -1,6 +1,7 @@
 package io.innospots.workflow.node.app.utils;
 
 import io.innospots.base.condition.EmbedCondition;
+import io.innospots.base.condition.Factor;
 import io.innospots.base.condition.Mode;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.json.JSONUtils;
@@ -41,6 +42,16 @@ public class NodeInstanceUtils {
         }
         return nodeParamFields;
     }
+
+    public static List<Factor> buildFactorFields(NodeInstance nodeInstance, String fieldName){
+        List<Factor> factorFields = null;
+        List<Map<String, Object>> fields = (List<Map<String, Object>>) nodeInstance.value(fieldName);
+        if(fields!=null){
+            factorFields = BeanUtils.toBean(fields, Factor.class);
+        }
+        return factorFields;
+    }
+
 
     public static <T> IExpression<T> buildExpression(NodeInstance nodeInstance, String fieldName, BaseAppNode appNode){
         EmbedCondition embedCondition = buildCondition(nodeInstance,fieldName,appNode);

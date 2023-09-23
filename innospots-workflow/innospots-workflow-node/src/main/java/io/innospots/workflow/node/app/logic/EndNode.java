@@ -19,15 +19,18 @@
 package io.innospots.workflow.node.app.logic;
 
 import com.google.common.base.Enums;
-import io.innospots.base.json.JSONUtils;
 import io.innospots.workflow.core.execution.ExecutionInput;
 import io.innospots.workflow.core.execution.flow.FlowExecution;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeOutput;
 import io.innospots.workflow.core.node.app.BaseAppNode;
+import io.innospots.workflow.core.node.field.NodeParamField;
 import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.node.app.utils.NodeInstanceUtils;
+import org.apache.commons.collections4.CollectionUtils;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,14 +39,15 @@ import java.util.Map;
  * @author Smars
  * @date 2021/9/19
  */
-public class WebhookEndNode extends BaseAppNode {
+public class EndNode extends BaseAppNode {
 
     private ReturnValueType returnValueType;
 
-    private Object returnValue;
-
     public static final String RETURN_VALUE_TYPE = "return_value_type";
-    public static final String RETURN_VALUE = "return_value";
+
+    private static final String RESPONSE_FIELD = "response_fields";
+
+    private List<NodeParamField> responseFields;
 
 
     @Override
@@ -51,18 +55,16 @@ public class WebhookEndNode extends BaseAppNode {
         super.initialize(nodeInstance);
         validFieldConfig(nodeInstance, RETURN_VALUE_TYPE);
         returnValueType = Enums.getIfPresent(ReturnValueType.class, nodeInstance.valueString(RETURN_VALUE_TYPE)).orNull();
-        if (returnValueType == ReturnValueType.JSON ||
-                returnValueType == ReturnValueType.TEXT) {
-            validFieldConfig(nodeInstance, RETURN_VALUE);
-        }
 
-        returnValue = nodeInstance.value(RETURN_VALUE);
+        if (returnValueType == ReturnValueType.FIELD) {
+            responseFields = NodeInstanceUtils.buildParamFields(nodeInstance, RESPONSE_FIELD);
+        }
     }
 
 
     @Override
     public void invoke(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = new NodeOutput();
+        NodeOutput nodeOutput = this.buildOutput(nodeExecution);
         switch (returnValueType) {
             case INPUT:
                 super.invoke(nodeExecution);
@@ -74,21 +76,21 @@ public class WebhookEndNode extends BaseAppNode {
                         break;
                     }
                 }
-                nodeExecution.addOutput(nodeOutput);
                 break;
-            case JSON:
-                Map<String, Object> item = JSONUtils.parseObject(returnValue.toString(), Map.class);
-                nodeOutput.addResult(item);
-                nodeExecution.addOutput(nodeOutput);
-                break;
-            case TEXT:
-                Map<String, Object> data = new HashMap<>();
-                data.put(returnValue.toString(), returnValue);
-                nodeOutput.addResult(data);
-                nodeExecution.addOutput(nodeOutput);
+            case FIELD:
+                Map<String, Object> nItem = new LinkedHashMap<>();
+                for (ExecutionInput input : nodeExecution.getInputs()) {
+                    for (Map<String, Object> item : input.getData()) {
+                        if (CollectionUtils.isNotEmpty(responseFields)) {
+                            for (NodeParamField field : responseFields) {
+                                nItem.put(field.getCode(), item.get(field.getCode()));
+                            }
+                        }
+                    }
+                }//end for input
+                nodeOutput.addResult(nItem);
                 break;
             case EMPTY:
-                nodeExecution.addOutput(nodeOutput);
                 break;
             default:
         }
@@ -107,8 +109,7 @@ public class WebhookEndNode extends BaseAppNode {
          */
         INPUT,
         FIRST_ITEM,
-        JSON,
-        TEXT,
-        EMPTY;
+        EMPTY,
+        FIELD;
     }
 }

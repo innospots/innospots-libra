@@ -82,9 +82,9 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
 
     @Override
     public Map<String, NodeExecutionDisplay> execute(Long workflowInstanceId, String nodeKey, List<Map<String, Object>> inputs) {
-        workflowCacheDraftOperator.saveCacheToDraft(workflowInstanceId);
+        WorkflowBaseBody workflowBaseBody = workflowCacheDraftOperator.saveCacheToDraft(workflowInstanceId);
 
-        inputs = convertApiInput(inputs);
+        inputs = convertApiInput(inputs,workflowBaseBody);
 
         IFlowEngine flowEngine = FlowEngineManager.eventFlowEngine();
         BuildProcessInfo buildProcessInfo = flowEngine.prepare(workflowInstanceId, 0, true);
@@ -123,7 +123,7 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
         flowExecution.setEndNodeKey(nodeKey);
         flowEngine.execute(flowExecution);
 
-        WorkflowBaseBody workflowBaseBody = workflowCacheDraftOperator.getFlowInstanceDraftOrCache(workflowInstanceId);
+        workflowBaseBody = workflowCacheDraftOperator.getFlowInstanceDraftOrCache(workflowInstanceId);
         Map<String, NodeInstance> nodeCache = null;
         try {
             nodeCache = workflowBaseBody.getNodes().stream().collect(Collectors.toMap(NodeInstance::getNodeKey, Function.identity()));
@@ -167,24 +167,41 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
 //        return nodeExecutionDisplayReader.readExecutionByFlowExecutionId(workflowInstanceId,flowExecution.getFlowExecutionId(),null);
     }
 
-    private List<Map<String, Object>> convertApiInput(List<Map<String, Object>> rawInputs) {
+    private List<Map<String, Object>> convertApiInput(List<Map<String, Object>> rawInputs,WorkflowBaseBody workflowBaseBody) {
         List<Map<String, Object>> nList = new ArrayList<>();
-        for (Map<String, Object> rawInput : rawInputs) {
-            if (rawInput.containsKey("contentType") &&
-                    (rawInput.containsKey("params") || rawInput.containsKey("headers") || rawInput.containsKey("body"))){
-                Object v = rawInput.get("params");
-                Map<String, Object> params = convertData(v);
-                rawInput.put("params", params);
-                v = rawInput.get("headers");
-                Map<String, Object> headers = convertData(v);
-                rawInput.put("headers", headers);
-                v = rawInput.get("body");
-                Map<String, Object> body = convertData(v);
-                rawInput.put("body", body);
+        NodeInstance node = workflowBaseBody.getNodes().stream().filter(ni-> "WEBHOOK".equals(ni.getCode())).findFirst().orElse(null);;
+        if(node!=null){
+            if(CollectionUtils.isNotEmpty(rawInputs)){
+                for (Map<String, Object> rawInput : rawInputs) {
+                    if(!rawInput.isEmpty()){
+                        nList.add(convertToMap(rawInput));
+                    }
+                }//end for
             }
-            nList.add(rawInput);
-        }//end for
+            if(nList.isEmpty()){
+                Map<String,Object> rawInput = (Map<String, Object>) node.getData().get("webhook_config");
+                nList.add(convertToMap(rawInput));
+            }
+        }
         return nList;
+    }
+
+    private Map<String,Object> convertToMap(Map<String,Object> rawInput){
+        Map<String,Object> input = new LinkedHashMap<>();
+        input.putAll(rawInput);
+        if (rawInput.containsKey("contentType") &&
+                (rawInput.containsKey("params") || rawInput.containsKey("headers") || rawInput.containsKey("body"))){
+            Object v = rawInput.get("params");
+            Map<String, Object> params = convertData(v);
+            input.put("params", params);
+            v = rawInput.get("headers");
+            Map<String, Object> headers = convertData(v);
+            input.put("headers", headers);
+            v = rawInput.get("body");
+            Map<String, Object> body = convertData(v);
+            input.put("body", body);
+        }
+        return input;
     }
 
     private Map<String, Object> convertData(Object data) {

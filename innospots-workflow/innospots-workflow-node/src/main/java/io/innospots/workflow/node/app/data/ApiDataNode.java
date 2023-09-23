@@ -173,7 +173,7 @@ public class ApiDataNode extends DataNode {
                 request(nodeOutput, item);
             }
         } else {
-            request(nodeOutput, new HashMap<>());
+            request(nodeOutput, new LinkedHashMap<>());
         }
     }
 
@@ -324,7 +324,7 @@ public class ApiDataNode extends DataNode {
                     requestBody.addQuery(factor.getName(), v);
                 }//end for query
             }//end if query not empty
-            Map<String, String> bValue = new HashMap<>(5);
+            Map<String, String> bValue = new LinkedHashMap<>(5);
             if (CollectionUtils.isNotEmpty(body)) {
                 for (Factor factor : body) {
                     Object value = null;

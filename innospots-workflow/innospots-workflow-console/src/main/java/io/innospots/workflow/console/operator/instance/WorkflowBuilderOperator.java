@@ -136,15 +136,16 @@ public class WorkflowBuilderOperator implements IWorkflowCacheDraftOperator {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void saveCacheToDraft(Long flowInstanceId) {
+    public WorkflowBaseBody saveCacheToDraft(Long flowInstanceId) {
         WorkflowInstanceCacheEntity cacheEntity = workflowInstanceCacheDao.selectById(flowInstanceId);
         if (cacheEntity == null) {
-            return;
+            return null;
         }
         WorkflowBaseBody flow = JSONUtils.parseObject(cacheEntity.getFlowInstance(), WorkflowBaseBody.class);
         if (flow != null) {
-            this.saveDraft(flow);
+            flow = this.saveDraft(flow);
         }
+        return flow;
     }
 
     public List<Map<String, Object>> selectNodeInputFields(Long workflowInstanceId, String nodeKey, Set<String> sourceNodeKeys) {

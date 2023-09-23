@@ -2,6 +2,7 @@ package io.innospots.workflow.runtime.container.listener;
 
 import io.innospots.base.events.EventBody;
 import io.innospots.base.events.IEventListener;
+import io.innospots.workflow.core.context.WorkflowRuntimeContext;
 import io.innospots.workflow.core.runtime.FlowEventBody;
 import io.innospots.workflow.core.webhook.WebhookPayload;
 import io.innospots.workflow.runtime.container.DummyRuntimeContainer;
@@ -30,7 +31,8 @@ public class WorkflowRuntimeEventListener implements IEventListener<FlowEventBod
     @Override
     public Object listen(FlowEventBody event) {
         if(DUMMY_NODE.equals(event.getNodeCode())){
-            return dummyRuntimeContainer.execute(event.getFlowKey(), (Map<String, Object>) event.getBody());
+            WorkflowRuntimeContext runtimeContext =  dummyRuntimeContainer.execute(event.getFlowKey(), (Map<String, Object>) event.getBody());
+            return runtimeContext.getResponse();
         }else if(WEBHOOK_NODE.equals(event.getNodeCode())){
             WebhookPayload payload = new WebhookPayload();
             payload.setFlowKey(event.getFlowKey());

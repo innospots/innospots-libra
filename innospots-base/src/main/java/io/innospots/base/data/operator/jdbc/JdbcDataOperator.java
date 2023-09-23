@@ -302,7 +302,7 @@ public class JdbcDataOperator implements IDataOperator {
         }
 
         if(log.isDebugEnabled()){
-            log.debug("upsert size:{}, sql:{}",inData.size(),sqlBuilder);
+            log.debug("upsert primary:{}, size:{}, sql:{}",keyColumn,inData.size(),sqlBuilder);
         }
 
         int upsert = 0;
@@ -311,6 +311,7 @@ public class JdbcDataOperator implements IDataOperator {
             upsert = Arrays.stream(ups).sum();
         }catch (RuntimeException e){
             log.error(e.getMessage(),e);
+            log.error("batch data:{}",inData);
             throw e;
         }
 

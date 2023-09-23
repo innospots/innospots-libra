@@ -13,7 +13,7 @@ public interface IWorkflowCacheDraftOperator {
 
     WorkflowBaseBody getFlowInstanceDraftOrCache(Long flowInstanceId);
 
-    void saveCacheToDraft(Long flowInstanceId);
+    WorkflowBaseBody saveCacheToDraft(Long flowInstanceId);
 
     WorkflowBody getWorkflowBody(Long workflowInstanceId, Integer revision, Boolean includeNodes);
 
