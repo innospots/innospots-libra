@@ -18,6 +18,7 @@
 
 package io.innospots.workflow.node.app.logic;
 
+import io.innospots.base.condition.Factor;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.engine.FlowEngineManager;
@@ -28,11 +29,15 @@ import io.innospots.workflow.core.execution.flow.FlowExecution;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeOutput;
 import io.innospots.workflow.core.node.app.BaseAppNode;
+import io.innospots.workflow.core.node.field.InputField;
 import io.innospots.workflow.core.node.instance.NodeInstance;
 import io.innospots.workflow.core.runtime.FlowEventBody;
+import io.innospots.workflow.node.app.StateNode;
 import io.innospots.workflow.node.app.data.BaseDataNode;
+import io.innospots.workflow.node.app.utils.NodeInstanceUtils;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +49,7 @@ public class FlowNode extends BaseDataNode {
 
 
     public static final String SUB_FLOW_KEY = "sub_flow_key";
+    public static final String INPUT_FIELDS = "input_fields";
 
 
     public static final String FLOW_TYPE = "flow_type";
@@ -54,12 +60,15 @@ public class FlowNode extends BaseDataNode {
 
     private boolean syncSwitch;
 
+    private List<InputField> inputFields;
+
 
     @Override
     protected void initialize(NodeInstance nodeInstance) {
         super.initialize(nodeInstance);
         syncSwitch = nodeInstance.valueBoolean(SYNC_SWITCH);
         flowKey = this.valueString(SUB_FLOW_KEY);
+        inputFields = NodeInstanceUtils.convertToList(nodeInstance,INPUT_FIELDS,InputField.class);
     }
 
     @Override
@@ -70,8 +79,15 @@ public class FlowNode extends BaseDataNode {
             for (Map<String, Object> item : input.getData()) {
                 Object res = null;
                 FlowEventBody eventBody = new FlowEventBody();
+                eventBody.setNodeCode(StateNode.StateNodeType.START.name());
                 eventBody.setFlowKey(flowKey);
-                eventBody.setBody(item);
+                Map<String,Object> nItem = new LinkedHashMap<>();
+                for (InputField inputField : this.inputFields) {
+                    if(inputField.getField()!=null){
+                        nItem.put(inputField.getCode(),item.get(inputField.getField().getCode()));
+                    }
+                }
+                eventBody.setBody(nItem);
                 if (syncSwitch) {
                     res = EventBusCenter.getInstance().post(eventBody);
                 } else {

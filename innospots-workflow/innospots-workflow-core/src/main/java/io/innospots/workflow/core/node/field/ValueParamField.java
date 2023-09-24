@@ -20,18 +20,9 @@ import java.util.Map;
 @Getter
 @Setter
 @Slf4j
-public class ValueParamField implements Initializer {
+public class ValueParamField extends InputField implements Initializer {
 
     private ValueReplaceMethod method;
-
-    private String code;
-
-    /**
-     * key:value,key:value
-     */
-    private String value;
-
-    private Factor field;
 
     @JsonIgnore
     private Map<String, Object> dict;

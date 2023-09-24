@@ -8,6 +8,7 @@ import io.innospots.workflow.core.node.app.BaseAppNode;
 import io.innospots.workflow.core.node.field.ExtendField;
 import io.innospots.workflow.core.node.field.ValueParamField;
 import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.node.app.utils.NodeInstanceUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
@@ -40,29 +41,9 @@ public class ValueBuildNode extends BaseAppNode {
         outputRestricted = nodeInstance.valueBoolean(OUTPUT_RESTRICTED);
         fieldAction = FieldAction.valueOf(this.valueString(FIELD_ACTION));
         if (fieldAction == FieldAction.FUNCTION) {
-            List<Map<String, Object>> v = (List<Map<String, Object>>) nodeInstance.value(FIELD_EXTEND);
-            extendFields = new ArrayList<>();
-            for (Map<String, Object> field : v) {
-                Object ff = field.get("field");
-                if(ff == null || StringUtils.isEmpty(ff.toString())){
-                    field.remove("field");
-                }
-                ExtendField extendField = JSONUtils.parseObject(field,ExtendField.class);
-                extendField.initialize();
-                extendFields.add(extendField);
-            }
+            extendFields = NodeInstanceUtils.convertToList(nodeInstance,FIELD_EXTEND,ExtendField.class);
         } else {
-            List<Map<String, Object>> v = (List<Map<String, Object>>) nodeInstance.value(FIELD_REPLACE);
-            valueParamFields = new ArrayList<>();
-            for (Map<String, Object> field : v) {
-                Object ff = field.get("field");
-                if(ff == null || StringUtils.isEmpty(ff.toString())){
-                    field.remove("field");
-                }
-                ValueParamField vParamField = JSONUtils.parseObject(field, ValueParamField.class);
-                vParamField.initialize();
-                valueParamFields.add(vParamField);
-            }
+            valueParamFields = NodeInstanceUtils.convertToList(nodeInstance,FIELD_REPLACE,ValueParamField.class);
         }
     }
 

@@ -30,19 +30,10 @@ import java.util.regex.Pattern;
 @Getter
 @Setter
 @Slf4j
-public class ExtendField implements Initializer {
+public class ExtendField extends InputField implements Initializer {
 
 
     private ExtendFunction function;
-
-    private String code;
-
-    /**
-     * comma to separate multi param
-     */
-    private String param;
-
-    private Factor field;
 
     @JsonIgnore
     private Map<String, Object> dict;

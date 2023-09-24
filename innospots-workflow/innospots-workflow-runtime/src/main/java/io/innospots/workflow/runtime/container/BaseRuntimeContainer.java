@@ -105,6 +105,7 @@ public abstract class BaseRuntimeContainer implements RuntimeContainer {
     }
 
     protected void end(WorkflowRuntimeContext workflowRuntimeContext) {
+        workflowRuntimeContext.fillResponse();
         for (WorkflowRuntimeListener runtimeListener : runtimeListeners) {
             runtimeListener.end(workflowRuntimeContext);
         }
