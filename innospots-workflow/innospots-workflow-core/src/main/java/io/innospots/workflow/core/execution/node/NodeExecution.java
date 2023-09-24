@@ -198,6 +198,10 @@ public class NodeExecution extends NodeExecutionBase {
         return false;
     }
 
+    public int inputSize(){
+        return this.inputs.size();
+    }
+
     public void fillTotal(){
         this.outputs.forEach(NodeOutput::fillTotal);
     }

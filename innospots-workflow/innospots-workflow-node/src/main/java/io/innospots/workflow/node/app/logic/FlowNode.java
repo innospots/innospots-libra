@@ -35,6 +35,7 @@ import io.innospots.workflow.core.runtime.FlowEventBody;
 import io.innospots.workflow.node.app.StateNode;
 import io.innospots.workflow.node.app.data.BaseDataNode;
 import io.innospots.workflow.node.app.utils.NodeInstanceUtils;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -45,6 +46,7 @@ import java.util.Map;
  * @author Raydian
  * @date 2020/12/20
  */
+@Slf4j
 public class FlowNode extends BaseDataNode {
 
 
@@ -93,13 +95,16 @@ public class FlowNode extends BaseDataNode {
                 } else {
                     EventBusCenter.getInstance().asyncPost(eventBody);
                 }
+                if(log.isDebugEnabled()){
+                    log.info("flow node:{}, nodeCode:{}, response:{}",this.nodeKey(),this.nodeCode(),res);
+                }
                 if (res == null) {
                     return;
                 }
                 if (res instanceof Map) {
                     nodeOutput.addResult((Map<String, Object>) res);
                 } else if (res instanceof List) {
-                    nodeOutput.setResults((List<Map<String, Object>>) res);
+                    nodeOutput.addResult((List<Map<String, Object>>)res);
                 } else {
                     nodeOutput.addResult(BeanUtils.toMap(res, false, false));
                 }

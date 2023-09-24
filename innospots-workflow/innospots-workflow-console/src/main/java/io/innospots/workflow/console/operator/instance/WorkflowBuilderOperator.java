@@ -151,6 +151,7 @@ public class WorkflowBuilderOperator implements IWorkflowCacheDraftOperator {
     public List<Map<String, Object>> selectNodeInputFields(Long workflowInstanceId, String nodeKey, Set<String> sourceNodeKeys) {
         WorkflowBaseBody workflowBaseBody = getFlowInstanceDraftOrCache(workflowInstanceId);
         if (workflowBaseBody == null) {
+            log.warn("select input field is null:{}, nodeKey:{}",workflowInstanceId, nodeKey);
             return Collections.emptyList();
         }
 
@@ -161,6 +162,7 @@ public class WorkflowBuilderOperator implements IWorkflowCacheDraftOperator {
 //            sourceNodeKeys = this.edgeOperator.selectSourceNodeKey(workflowInstanceId,0,nodeKey);
         }
         if (CollectionUtils.isEmpty(sourceNodeKeys)) {
+            log.warn("sourceNode key, select input field is null:{}, nodeKey:{}",workflowInstanceId, nodeKey);
             return Collections.emptyList();
         }
         List<Map<String, Object>> result = new ArrayList<>();
@@ -180,6 +182,9 @@ public class WorkflowBuilderOperator implements IWorkflowCacheDraftOperator {
                 result.add(nodeMap);
             }
         }//end for
+        if(result.isEmpty()){
+            log.warn("select input field is null:{}, nodeKey:{}",workflowInstanceId, nodeKey);
+        }
         return result;
     }
 

@@ -81,6 +81,9 @@ public class StateNode extends BaseAppNode {
                             nItem.put(inputField.getCode(),inputField.getValue());
                         }
                     }
+                    if(log.isDebugEnabled()){
+                        log.debug("start node input:{}",nItem);
+                    }
                     nodeOutput.addResult(nItem);
                 }else{
                     for (ExecutionInput input : nodeExecution.getInputs()) {
@@ -92,6 +95,9 @@ public class StateNode extends BaseAppNode {
                                     if(v!=null &&StringUtils.isNotEmpty(v.toString())){
                                         nItem.put(inputField.getCode(),v);
                                     }
+                                }
+                                if(log.isDebugEnabled()){
+                                    log.debug("start node input:{}",nItem);
                                 }
                                 nodeOutput.addResult(nItem);
                             }

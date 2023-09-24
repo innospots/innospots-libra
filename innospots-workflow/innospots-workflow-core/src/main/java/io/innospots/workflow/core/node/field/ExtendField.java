@@ -79,41 +79,50 @@ public class ExtendField extends InputField implements Initializer {
                     break;
                 case plus_year:
                     if (StringUtils.isNotEmpty(param)) {
-                        long addAmt = Long.parseLong(param);
-                        if(field != null && field.getValueType() != null && field.getValueType().isTime()){
+                        String[] ps = param.split(",");
+                        long addAmt = Long.parseLong(ps[0]);
+                        String prmFormat = ps.length > 1 ? ps[1] : DateTimeUtils.DEFAULT_DATE_PATTERN;
+
+                        if (field != null && field.getValueType() != null && field.getValueType().isTime()) {
                             val = field.getValueType().plusTime(val, addAmt, ChronoUnit.YEARS);
-                        }else{
-                            val = FieldValueType.DATE.normalize(LocalDate.now().plus(addAmt, ChronoUnit.YEARS),DateTimeUtils.DEFAULT_DATE_PATTERN);
+                        } else {
+                            val = FieldValueType.DATE.normalize(LocalDate.now().plus(addAmt, ChronoUnit.YEARS), prmFormat);
                         }
                     }
                     break;
                 case plus_month:
                     if (StringUtils.isNotEmpty(param)) {
-                        long addAmt = Long.parseLong(param);
-                        if(field != null && field.getValueType() != null && field.getValueType().isTime()){
+                        String[] ps = param.split(",");
+                        long addAmt = Long.parseLong(ps[0]);
+                        String prmFormat = ps.length > 1 ? ps[1] : DateTimeUtils.DEFAULT_DATE_PATTERN;
+                        if (field != null && field.getValueType() != null && field.getValueType().isTime()) {
                             val = field.getValueType().plusTime(val, addAmt, ChronoUnit.MONTHS);
-                        }else{
-                            val = FieldValueType.DATE.normalize(LocalDate.now().plus(addAmt, ChronoUnit.MONTHS),DateTimeUtils.DEFAULT_DATE_PATTERN);
+                        } else {
+                            val = FieldValueType.DATE.normalize(LocalDate.now().plus(addAmt, ChronoUnit.MONTHS), prmFormat);
                         }
                     }
                     break;
                 case plus_day:
                     if (StringUtils.isNotEmpty(param)) {
-                        long addAmt = Long.parseLong(param);
-                        if(field != null && field.getValueType() != null && field.getValueType().isTime()){
+                        String[] ps = param.split(",");
+                        long addAmt = Long.parseLong(ps[0]);
+                        String prmFormat = ps.length > 1 ? ps[1] : DateTimeUtils.DEFAULT_DATE_PATTERN;
+                        if (field != null && field.getValueType() != null && field.getValueType().isTime()) {
                             val = field.getValueType().plusTime(val, addAmt, ChronoUnit.DAYS);
-                        }else{
-                            val = FieldValueType.DATE.normalize(LocalDate.now().plus(addAmt, ChronoUnit.DAYS),DateTimeUtils.DEFAULT_DATE_PATTERN);
+                        } else {
+                            val = FieldValueType.DATE.normalize(LocalDate.now().plus(addAmt, ChronoUnit.DAYS), prmFormat);
                         }
                     }
                     break;
                 case plus_hour:
                     if (StringUtils.isNotEmpty(param)) {
-                        long addAmt = Long.parseLong(param);
-                        if(field != null && field.getValueType() != null && field.getValueType().isTime()){
+                        String[] ps = param.split(",");
+                        long addAmt = Long.parseLong(ps[0]);
+                        String prmFormat = ps.length > 1 ? ps[1] : DateTimeUtils.DEFAULT_TIME_PATTERN;
+                        if (field != null && field.getValueType() != null && field.getValueType().isTime()) {
                             val = field.getValueType().plusTime(val, addAmt, ChronoUnit.HOURS);
-                        }else{
-                            val = FieldValueType.TIME.normalize(LocalTime.now().plus(addAmt, ChronoUnit.HOURS),DateTimeUtils.DEFAULT_TIME_PATTERN);
+                        } else {
+                            val = FieldValueType.TIME.normalize(LocalTime.now().plus(addAmt, ChronoUnit.HOURS), prmFormat);
                         }
                     }
                     break;

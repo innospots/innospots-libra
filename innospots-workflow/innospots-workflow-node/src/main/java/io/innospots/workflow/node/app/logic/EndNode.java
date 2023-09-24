@@ -64,12 +64,12 @@ public class EndNode extends BaseAppNode {
 
     @Override
     public void invoke(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = this.buildOutput(nodeExecution);
         switch (returnValueType) {
             case INPUT:
                 super.invoke(nodeExecution);
                 break;
             case FIRST_ITEM:
+                NodeOutput nodeOutput = this.buildOutput(nodeExecution);
                 for (ExecutionInput executionInput : nodeExecution.getInputs()) {
                     for (Map<String, Object> item : executionInput.getData()) {
                         nodeOutput.addResult(item);
@@ -78,6 +78,7 @@ public class EndNode extends BaseAppNode {
                 }
                 break;
             case FIELD:
+                nodeOutput = this.buildOutput(nodeExecution);
                 Map<String, Object> nItem = new LinkedHashMap<>();
                 for (ExecutionInput input : nodeExecution.getInputs()) {
                     for (Map<String, Object> item : input.getData()) {

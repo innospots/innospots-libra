@@ -74,9 +74,7 @@ public class AggregationNode extends BaseAppNode {
 
     @Override
     public void invoke(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = new NodeOutput();
-        nodeOutput.addNextKey(this.nextNodeKeys());
-        nodeExecution.addOutput(nodeOutput);
+        NodeOutput nodeOutput = this.buildOutput(nodeExecution);
         List<Map<String, Object>> items = new ArrayList<>();
         ArrayListValuedHashMap<String, Map<String, Object>> groupItems = new ArrayListValuedHashMap<>();
         for (ExecutionInput executionInput : nodeExecution.getInputs()) {
