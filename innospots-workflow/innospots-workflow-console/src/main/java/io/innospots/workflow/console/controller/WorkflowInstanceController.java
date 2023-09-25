@@ -30,6 +30,7 @@ import io.innospots.libra.base.model.QueryRequest;
 import io.innospots.workflow.console.operator.execution.ExecutionManagerOperator;
 import io.innospots.workflow.console.operator.instance.WorkflowBuilderOperator;
 import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
+import io.innospots.workflow.console.service.WorkflowService;
 import io.innospots.workflow.core.flow.WorkflowBaseInfo;
 import io.innospots.workflow.core.flow.WorkflowInfo;
 import io.innospots.workflow.core.flow.instance.WorkflowInstance;
@@ -62,12 +63,16 @@ public class WorkflowInstanceController extends BaseController {
 
     private final ExecutionManagerOperator executionManagerOperator;
 
+    private final WorkflowService workflowService;
+
     public WorkflowInstanceController(WorkflowInstanceOperator workflowInstanceOperator,
                                       WorkflowBuilderOperator workflowBuilderOperator,
-                                      ExecutionManagerOperator executionManagerOperator) {
+                                      ExecutionManagerOperator executionManagerOperator,
+                                      WorkflowService workflowService) {
         this.workflowInstanceOperator = workflowInstanceOperator;
         this.workflowBuilderOperator = workflowBuilderOperator;
         this.executionManagerOperator = executionManagerOperator;
+        this.workflowService = workflowService;
     }
 
     /**
@@ -163,7 +168,7 @@ public class WorkflowInstanceController extends BaseController {
     @GetMapping("page")
     @Operation(summary = "page workflows")
     public InnospotResponse<PageBody<WorkflowInstance>> pageWorkflows(QueryRequest request) {
-        PageBody<WorkflowInstance> page = workflowInstanceOperator.pageWorkflows(request);
+        PageBody<WorkflowInstance> page = workflowService.getWorkflows(request);
         return success(page);
     }
 
