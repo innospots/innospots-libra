@@ -102,8 +102,8 @@ public abstract class BaseAppNode implements INodeBuilder, INodeExecutor {
             appNode.build(flowIdentifier, nodeInstance);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException |
                  InvocationTargetException e) {
-            logger.error(e.getMessage());
-            throw InnospotException.buildException(BaseAppNode.class, ResponseCode.INITIALIZING, e);
+            logger.error(e.getMessage(),e);
+//            throw InnospotException.buildException(BaseAppNode.class, ResponseCode.INITIALIZING, e);
         }
         return appNode;
     }
@@ -336,6 +336,13 @@ public abstract class BaseAppNode implements INodeBuilder, INodeExecutor {
         String msg = "";
         boolean next;
         do {
+            if(this.buildStatus == BuildStatus.FAIL){
+                isFail = true;
+                if(this.buildException !=null){
+                    msg = ExceptionUtil.stacktraceToString(this.buildException,2048);
+                }
+                break;
+            }
             isFail = false;
             try {
                 invoke(nodeExecution, flowExecution);

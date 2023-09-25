@@ -150,12 +150,14 @@ public class Flow extends WorkflowInstance {
                         if (appNode == null) {
                             try {
                                 appNode = BaseAppNode.buildAppNode(workflowBody.identifier(), nextNode);
-                                if (appNode.getBuildException() != null) {
-                                    throw appNode.getBuildException();
-                                }
                                 appNode.addNodeExecutionListener(nodeExecutionListeners);
                                 tmpNodeCache.put(appNode.nodeKey(), appNode);
-                                buildProcessInfo.incrementSuccess();
+                                if (appNode.getBuildException() != null) {
+                                    buildProcessInfo.addNodeProcess(appNode.nodeKey(),appNode.getBuildException());
+                                    //throw appNode.getBuildException();
+                                }else{
+                                    buildProcessInfo.incrementSuccess();
+                                }
                             } catch (Exception e) {
                                 logger.error(e.getMessage(), e);
                                 buildProcessInfo.incrementFail();

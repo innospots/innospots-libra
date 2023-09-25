@@ -19,8 +19,10 @@
 package io.innospots.workflow.core.webhook;
 
 
+import cn.hutool.http.HttpStatus;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.workflow.core.context.WorkflowRuntimeContext;
+import io.innospots.workflow.core.execution.ExecutionStatus;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -50,12 +52,16 @@ public class DefaultResponseBuilder implements WorkflowResponseBuilder {
                         workflowRuntimeContext.getFlowExecution().getEndTime()
                 ).toMillis());
         response.setResponseTime(workflowRuntimeContext.getFlowExecution().getEndTime());
-
-        if (webhookConfig == null) {
+        if(workflowRuntimeContext.getFlowExecution().getStatus() == ExecutionStatus.FAILED){
+            response.setCode(workflowRuntimeContext.getFlowExecution().getResultCode());
+            response.setBody(workflowRuntimeContext.getFlowExecution().getResult());
             return response;
+        }else{
+            if (webhookConfig == null) {
+                return response;
+            }
+            response.setCode(webhookConfig.getResponseCode());
         }
-
-        response.setCode(webhookConfig.getResponseCode());
 
         if (webhookConfig.getResponseMode() == FlowWebhookConfig.ResponseMode.ACK) {
             Map<String, Object> body = new HashMap<>(7);
