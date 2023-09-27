@@ -7,6 +7,7 @@ Innospots是一款开箱即用的开源企业数字化智能决策解决方案�
 [![CN doc](https://img.shields.io/badge/文档-中文版-blue.svg)](http://innospots.com/manual)
 
 
+
 ## 产品特色
 
 ### 工作流自动化引擎
