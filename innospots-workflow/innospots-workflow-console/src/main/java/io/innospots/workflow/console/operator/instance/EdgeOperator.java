@@ -164,7 +164,7 @@ public class EdgeOperator extends ServiceImpl<EdgeInstanceDao, EdgeInstanceEntit
     public boolean deleteByWorkflowInstanceIdAndRevision(Long workflowInstanceId, Integer revision) {
         QueryWrapper<EdgeInstanceEntity> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(EdgeInstanceEntity::getWorkflowInstanceId, workflowInstanceId)
-                .le(EdgeInstanceEntity::getRevision, revision);
+                .eq(EdgeInstanceEntity::getRevision, revision);
         return this.remove(wrapper);
     }
 

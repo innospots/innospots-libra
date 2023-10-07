@@ -18,6 +18,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static io.innospots.workflow.node.app.compute.FunctionField.buildFuncFields;
+import static io.innospots.workflow.node.app.compute.ShiftFunctionField.buildShiftFuncFields;
+
 /**
  * @author Smars
  * @date 2023/9/2
@@ -31,6 +34,7 @@ public class WindowComputeNode extends BaseAppNode {
     private static final String ROLLING_FIELDS = "rolling_fields";
 
     private static final String ACCUM_FIELDS = "accum_fields";
+
     private static final String SHIFT_FIELDS = "shift_fields";
 
     /**
@@ -53,33 +57,14 @@ public class WindowComputeNode extends BaseAppNode {
         funcType = FuncType.valueOf(valueString(FUNC_TYPE));
         outputRestricted = nodeInstance.valueBoolean(FIELD_OUTPUT_RESTRICTED);
         if (funcType == FuncType.ROLLING) {
-            rollingFields = buildFuncFields(ROLLING_FIELDS);
+            rollingFields = buildFuncFields(nodeInstance,ROLLING_FIELDS);
         } else if (funcType == FuncType.ACCUM) {
-            accumFields = buildFuncFields(ACCUM_FIELDS);
+            accumFields = buildFuncFields(nodeInstance,ACCUM_FIELDS);
         } else if (funcType == FuncType.COLUMN) {
-            shiftFields = buildShiftFuncFields();
+            shiftFields = buildShiftFuncFields(nodeInstance);
         }
     }
 
-    private List<ShiftFunctionField> buildShiftFuncFields() {
-        List<Map<String, Object>> values = ni.valueList(SHIFT_FIELDS);
-        List<ShiftFunctionField> functionFields = new ArrayList<>();
-        for (Map<String, Object> field : values) {
-            ShiftFunctionField s = JSONUtils.parseObject(field, ShiftFunctionField.class);
-            s.initialize();
-            functionFields.add(s);
-        }
-        return functionFields;
-    }
-
-    private List<FunctionField> buildFuncFields(String fieldName) {
-        List<Map<String, Object>> values = ni.valueList(fieldName);
-        List<FunctionField> functionFields = new ArrayList<>();
-        for (Map<String, Object> field : values) {
-            functionFields.add(JSONUtils.parseObject(field, FunctionField.class));
-        }
-        return functionFields;
-    }
 
     private List<Pair<FunctionField, IMovingFunction>> buildMovingFunctions(NodeExecution nodeExecution) {
         Integer total = null;
@@ -116,93 +101,19 @@ public class WindowComputeNode extends BaseAppNode {
     }
 
     private void computeShift(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = buildOutput(nodeExecution);
-        List<Map<String, Object>> outData = new ArrayList<>();
-        StringBuilder error = new StringBuilder();
-        for (ExecutionInput executionInput : nodeExecution.getInputs()) {
-            outData.addAll(executionInput.getData());
-        }//end for execution input
-        List<Map<String, Object>> nFData = new ArrayList<>();
-        for (ShiftFunctionField shiftField : shiftFields) {
-            try {
-                Object[] obj = shiftField.getShiftFunction().compute(outData);
-                if (!this.outputRestricted) {
-                    for (int i = 0; i < obj.length; i++) {
-                        outData.get(i).put(shiftField.getFieldCode(), obj[i]);
-                    }
-                    continue;
-                }//end not outputRestricted
-                if (nFData.isEmpty()) {
-                    for (int i = 0; i < obj.length; i++) {
-                        Map<String, Object> nItem = new LinkedHashMap<>();
-                        nItem.put(shiftField.getFieldCode(), obj[i]);
-                        nFData.add(nItem);
-                    }
-                } else {
-                    for (int i = 0; i < obj.length; i++) {
-                        nFData.get(i).put(shiftField.getFieldCode(), obj[i]);
-                    }
-                }//end not empty nFData
-            } catch (Exception e) {
-                logger.error("compute field failed:{}, data size:{}", shiftField, outData.size(), e);
-                error.append(shiftField.getFieldCode());
-                error.append(", ");
-                error.append(shiftField.getFunction());
-                error.append(" ,error: ");
-                error.append(e.getMessage());
-            }
 
-        }//end for
-        if (error.length() > 0) {
-            nodeExecution.setMessage(error.toString());
-            nodeExecution.setStatus(ExecutionStatus.FAILED);
-        }
-        if (nFData.isEmpty()) {
-            nodeOutput.setResults(outData);
-        } else {
-            nodeOutput.setResults(nFData);
-        }
+        NodeOutput nodeOutput = this.buildOutput(nodeExecution);
+
+        ShiftFunctionField.computeShift(nodeOutput,nodeExecution,this.shiftFields,outputRestricted,logger);
     }
 
     private void computeAccumAndRolling(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = buildOutput(nodeExecution);
-        List<Map<String, Object>> outData = new ArrayList<>();
-        StringBuilder error = new StringBuilder();
-        List<Pair<FunctionField, IMovingFunction>> movingFunctions = buildMovingFunctions(nodeExecution);
-        for (ExecutionInput executionInput : nodeExecution.getInputs()) {
-            for (Map<String, Object> item : executionInput.getData()) {
-                Map<String, Object> out = new LinkedHashMap<>();
-                for (Pair<FunctionField, IMovingFunction> functionPair : movingFunctions) {
-                    FunctionField functionField = functionPair.getLeft();
-                    try {
-                        Object result = functionPair.getRight().compute(item);
-                        out.put(functionPair.getLeft().getFieldCode(), result);
-                    } catch (Exception e) {
-                        logger.error("compute field failed:{}, data:{}", functionField, item, e);
-                        error.append(functionField.getFieldCode());
-                        error.append(", ");
-                        error.append(functionField.getFunction());
-                        error.append(" ,error: ");
-                        error.append(e.getMessage());
-                    }
 
-                }
-                if (!this.outputRestricted) {
-                    out.putAll(item);
-                }
-                outData.add(out);
-            }//end for item
-        }//end for execution input
-        if (error.length() > 0) {
-            nodeExecution.setMessage(error.toString());
-            nodeExecution.setStatus(ExecutionStatus.FAILED);
-        }
-        nodeOutput.setResults(outData);
+        NodeOutput nodeOutput = this.buildOutput(nodeExecution);
+
+        List<FunctionField> functionFields = this.funcType == FuncType.ACCUM ? this.accumFields : this.rollingFields;
+
+        FunctionField.computeAccumAndRolling(nodeOutput,nodeExecution,funcType,functionFields,this.outputRestricted,logger);
     }
 
-    public enum FuncType {
-        ROLLING,
-        COLUMN,
-        ACCUM;
-    }
 }

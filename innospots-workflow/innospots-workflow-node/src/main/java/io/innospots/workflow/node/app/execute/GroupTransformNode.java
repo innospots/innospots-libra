@@ -48,9 +48,13 @@ public class GroupTransformNode extends BaseAppNode {
     private List<AggregationComputeField> computeFields;
 
     public static final String FIELD_AGGREGATE = "aggregate_field";
+
     public static final String FIELD_DIMENSION_PAYLOAD = "dim_field_payload";
+
     public static final String FIELD_DIMENSION_LIST = "dim_field_list";
+
     public static final String FIELD_SOURCE_TYPE = "source_field_type";
+
     public static final String FIELD_PARENT_LIST = "list_parent_field";
 
     private String sourceFieldType;

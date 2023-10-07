@@ -443,6 +443,7 @@ public class WorkflowBuilderOperator implements IWorkflowCacheDraftOperator {
 
         // delete not keep revision
 
+
         QueryWrapper<WorkflowRevisionEntity> allRevisionQuery = new QueryWrapper<>();
         allRevisionQuery.lambda().eq(WorkflowRevisionEntity::getWorkflowInstanceId, workflowInstanceId)
                 .gt(WorkflowRevisionEntity::getRevision, 0)
