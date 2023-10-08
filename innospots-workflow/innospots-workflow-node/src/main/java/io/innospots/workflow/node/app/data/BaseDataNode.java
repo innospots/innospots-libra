@@ -31,6 +31,7 @@ import io.innospots.workflow.core.execution.node.NodeOutput;
 import io.innospots.workflow.core.node.app.BaseAppNode;
 import io.innospots.workflow.core.node.instance.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,7 +86,7 @@ public class BaseDataNode extends BaseAppNode {
         }
 
         String outMode = nodeInstance.valueString(FIELD_OUTPUT_MODE_MAP);
-        if (outMode != null) {
+        if (StringUtils.isNotEmpty(outMode)) {
             this.outputFieldMode = OutputFieldMode.valueOf(outMode);
         }
 
@@ -135,7 +136,7 @@ public class BaseDataNode extends BaseAppNode {
                 } else if (body instanceof List) {
                     List l = (List) body;
                     result.putAll((Map<? extends String, ?>) l.get(0));
-                    log.warn("fill value is collection type, select first item:{}", body);
+                    log.warn("fill value is collection type, select first item:{}", l.get(0));
                 } else {
                     result.put(this.nodeKey(), JSONUtils.toJsonString(body));
                     log.error("the type of value is not correct,{}, {}", body, body.getClass());
