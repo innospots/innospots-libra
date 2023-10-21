@@ -55,4 +55,6 @@ public interface FlowNodeDebugger {
 
     FlowExecution stop(String flowExecutionId);
 
+    FlowExecution stopByFlowKey(String flowExecutionId);
+
 }

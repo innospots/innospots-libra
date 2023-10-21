@@ -272,7 +272,7 @@ public class NodeInstanceOperator extends ServiceImpl<NodeInstanceDao, NodeInsta
     public boolean deleteByWorkflowInstanceIdAndRevision(Long workflowInstanceId, Integer revision) {
         QueryWrapper<NodeInstanceEntity> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(NodeInstanceEntity::getWorkflowInstanceId, workflowInstanceId)
-                .le(NodeInstanceEntity::getRevision, revision);
+                .eq(NodeInstanceEntity::getRevision, revision);
         return this.remove(wrapper);
     }
 

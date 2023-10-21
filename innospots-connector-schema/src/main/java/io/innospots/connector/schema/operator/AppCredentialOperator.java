@@ -32,6 +32,7 @@ import io.innospots.base.data.schema.SimpleAppCredential;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.PageBody;
+import io.innospots.base.store.CacheStoreManager;
 import io.innospots.base.utils.StringConverter;
 import io.innospots.connector.schema.dao.AppCredentialDao;
 import io.innospots.connector.schema.entity.AppCredentialEntity;
@@ -44,6 +45,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Smars
@@ -54,17 +56,13 @@ public class AppCredentialOperator extends ServiceImpl<AppCredentialDao, AppCred
 
     private final IEncryptor encryptor;
 
-    private final SystemTempCacheOperator systemTempCacheOperator;
-
     private final SchemaRegistryOperator schemaRegistryOperator;
 
     public AppCredentialOperator(
             AuthProperties authProperties,
-            SystemTempCacheOperator systemTempCacheOperator,
             SchemaRegistryOperator schemaRegistryOperator
     ) {
         this.encryptor = EncryptorBuilder.build(EncryptType.BLOWFISH, authProperties.getSecretKey());
-        this.systemTempCacheOperator = systemTempCacheOperator;
         this.schemaRegistryOperator = schemaRegistryOperator;
     }
 
@@ -96,7 +94,6 @@ public class AppCredentialOperator extends ServiceImpl<AppCredentialDao, AppCred
             qw.lambda().eq(AppCredentialEntity::getCode, code);
             codeCount = this.count(qw);
         } while (codeCount > 0);
-
         this.authedValuesProcess(credential);
         AppCredentialEntity entity = CredentialConvertMapper.INSTANCE.modelToEntity(credential);
         super.save(entity);
@@ -231,22 +228,27 @@ public class AppCredentialOperator extends ServiceImpl<AppCredentialDao, AppCred
 
 
     private void authedValuesProcess(AppCredentialInfo credential) {
-        if (!"oauth2-api".equals(credential.getConfigCode())) {
+        if (!"oauth2-auth-api".equals(credential.getConfigCode())) {
             return;
         }
-
-        if (MapUtils.isEmpty(credential.getFormValues())) {
-            return;
-        }
+//
+//        if (MapUtils.isEmpty(credential.getFormValues())) {
+//            return;
+//        }
 
         this.decryptFormValues(credential);
         String clientId = String.valueOf(credential.getFormValues().get("client_id"));
-        String clientSecret = String.valueOf(credential.getFormValues().get("client_secret"));
 
-        String cacheKey = clientId + "_" + clientSecret;
-        String value = systemTempCacheOperator.get(cacheKey);
-        credential.setAuthedValues(value);
-        systemTempCacheOperator.delete(cacheKey);
+        String cacheKey = clientId + "_" + credential.getAppNodeCode();
+        String jsonToken = CacheStoreManager.get(cacheKey);
+        if(jsonToken!=null){
+            Map<String,Object> tokens = JSONUtils.toMap(jsonToken);
+            credential.getFormValues().putAll(tokens);
+        }
+        String formValuesStr = encryptor.encode(JSONUtils.toJsonString(credential.getFormValues()));
+        credential.setEncryptFormValues(formValuesStr);
+        credential.getFormValues().clear();
+        CacheStoreManager.remove(cacheKey);
     }
 
     private void decryptFormValues(AppCredentialInfo appCredentialInfo) {

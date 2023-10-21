@@ -18,10 +18,17 @@
 
 package io.innospots.workflow.node.app.trigger;
 
+import cn.hutool.core.codec.Base64;
+import cn.hutool.http.Header;
+import cn.hutool.http.HttpStatus;
+import io.innospots.base.exception.AuthenticationException;
 import io.innospots.base.model.field.ParamField;
+import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.ExecutionInput;
 import io.innospots.workflow.core.execution.ExecutionResource;
+import io.innospots.workflow.core.execution.ExecutionStatus;
+import io.innospots.workflow.core.execution.flow.FlowExecution;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeOutput;
 import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;
@@ -29,7 +36,10 @@ import io.innospots.workflow.core.node.app.TriggerNode;
 import io.innospots.workflow.core.node.instance.NodeInstance;
 import io.innospots.workflow.core.webhook.FlowWebhookConfig;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -72,15 +82,33 @@ public class ApiTriggerNode extends TriggerNode {
         flowWebhookConfig.setAuthType(FlowWebhookConfig.AuthType.valueOf(nodeInstance.valueString(FIELD_AUTH_TYPE)));
         flowWebhookConfig.setResponseMode(FlowWebhookConfig.ResponseMode.valueOf(nodeInstance.valueString(FIELD_RESPONSE_MODE)));
         flowWebhookConfig.setResponseCode(nodeInstance.valueString(FIELD_RESPONSE_CODE));
+
         List<Map<String, Object>> responseField = (List<Map<String, Object>>) nodeInstance.value("responseFields");
         if (responseField != null) {
             List<ParamField> params = BeanUtils.toBean(responseField, ParamField.class);
             flowWebhookConfig.setResponseFields(params);
         }
-        Object v = nodeInstance.value(FIELD_AUTH_BODY);
-        if (v != null) {
-            flowWebhookConfig.setAuthBody((Map<String, Object>) v);
+
+        if(flowWebhookConfig.getAuthType() == FlowWebhookConfig.AuthType.BASIC_AUTH){
+
+            flowWebhookConfig.auth(this.valueString(FlowWebhookConfig.BASIC_AUTH_USERNAME),this.valueString(FlowWebhookConfig.BASIC_AUTH_PASSWORD));
         }
+
+        if(flowWebhookConfig.getAuthType() == FlowWebhookConfig.AuthType.BEARER_AUTH){
+            flowWebhookConfig.auth(this.valueString(FlowWebhookConfig.BEARER_AUTH_TOKEN));
+        }
+    }
+
+    @Override
+    protected void invoke(NodeExecution nodeExecution, FlowExecution flowExecution) {
+        if (!validateAuthentication(nodeExecution)) {
+            nodeExecution.setStatus(ExecutionStatus.FAILED);
+            nodeExecution.setMessage("鉴权失败");
+            flowExecution.setResultCode(HttpStatus.HTTP_UNAUTHORIZED+"");
+            flowExecution.setResult(ResponseCode.AUTH_FAILED.info());
+            return;
+        }
+        super.invoke(nodeExecution, flowExecution);
     }
 
     @Override
@@ -100,6 +128,41 @@ public class ApiTriggerNode extends TriggerNode {
         }
         nodeOutput.addNextKey(this.nextNodeKeys());
         nodeExecution.addOutput(nodeOutput);
+    }
+
+    private boolean validateAuthentication(NodeExecution nodeExecution) {
+        if(flowWebhookConfig.getAuthType() == FlowWebhookConfig.AuthType.NONE){
+            return true;
+        }
+        Integer revision = nodeExecution.getRevision();
+        if (revision <= 0) {
+            return true;
+        }
+
+        boolean flag = false;
+        List<ExecutionInput> inputs = nodeExecution.getInputs();
+        for (ExecutionInput input : inputs) {
+            for (Map<String, Object> item : input.getData()) {
+                Map<String,Object> headerMap = (Map<String, Object>) item.get("headers");
+                if (MapUtils.isEmpty(headerMap)) {
+                    continue;
+                }
+                if(!headerMap.containsKey(Header.AUTHORIZATION.getValue())){
+                    return false;
+                }
+                String value = headerMap.get("Authorization").toString();
+                if(flowWebhookConfig.getAuthType() == FlowWebhookConfig.AuthType.BASIC_AUTH){
+                    String username = flowWebhookConfig.username();
+                    String password = flowWebhookConfig.password();
+                    flag = StringUtils.equalsIgnoreCase("Basic " + Base64.encode(username + ":" + password), value);
+                    break;
+                }else if(flowWebhookConfig.getAuthType() == FlowWebhookConfig.AuthType.BEARER_AUTH){
+                    flag = StringUtils.equalsIgnoreCase("Bearer " + flowWebhookConfig.token(), value);
+                    break;
+                }
+            }
+        }
+        return flag;
     }
 
     public String apiPath() {

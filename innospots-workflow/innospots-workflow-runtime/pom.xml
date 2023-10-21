@@ -13,9 +13,22 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!--
+        <dependency>
             <groupId>io.innospots</groupId>
             <artifactId>innospots-workflow-console</artifactId>
         </dependency>
+        -->
         <dependency>
             <groupId>io.innospots</groupId>
             <artifactId>innospots-workflow-node</artifactId>
@@ -27,6 +40,11 @@
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>

@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
  * @date 2021/3/16
  */
 @Slf4j
-public class DataNode extends BaseAppNode {
+public class DataNode extends BaseDataNode {
 
     private static final Logger logger = LoggerFactory.getLogger(DataNode.class);
 
@@ -57,25 +57,7 @@ public class DataNode extends BaseAppNode {
 
     public static final String FIELD_CREDENTIAL_ID = "credential";
 
-
-    /**
-     * store mode ,see OutputFieldMode
-     */
-    public static final String FIELD_OUTPUT_MODE_MAP = "output_mode_map";
-    public static final String FIELD_OUTPUT_MODE_LIST = "output_mode_list";
-    public static final String FIELD_OUTPUT_TYPE = "output_field_type";
-    /**
-     * store field variable name
-     */
-    public static final String FIELD_VARIABLE = "variable_name";
-
     protected Integer credentialId;
-
-    protected OutputFieldMode outputFieldMode;
-
-    protected OutputFieldType outputFieldType;
-
-    protected String outputField;
 
 
     @Override
@@ -85,103 +67,4 @@ public class DataNode extends BaseAppNode {
         dataOperatorPoint = ApplicationContextUtils.getBean(IDataOperatorPoint.class);
     }
 
-    protected void fillOutputConfig(NodeInstance nodeInstance) {
-        validFieldConfig(nodeInstance, FIELD_OUTPUT_TYPE);
-        this.outputFieldType = OutputFieldType.valueOf(nodeInstance.valueString(FIELD_OUTPUT_TYPE));
-
-        if (!nodeInstance.containsKey(FIELD_OUTPUT_MODE_MAP) && !nodeInstance.containsKey(FIELD_OUTPUT_MODE_LIST)) {
-            throw ConfigException.buildMissingException(this.getClass(), "nodeKey:" + nodeKey() + ", field:" + FIELD_OUTPUT_MODE_LIST+" or "+FIELD_OUTPUT_MODE_MAP);
-        }
-        String outMode = nodeInstance.valueString(FIELD_OUTPUT_MODE_MAP);
-        if (outMode != null) {
-            this.outputFieldMode = OutputFieldMode.valueOf(outMode);
-        }
-
-        if (this.outputFieldMode == null) {
-            this.outputFieldMode = OutputFieldMode.valueOf(nodeInstance.valueString(FIELD_OUTPUT_MODE_LIST));
-        }
-
-        if (this.outputFieldMode == OutputFieldMode.FIELD) {
-            validFieldConfig(nodeInstance, FIELD_VARIABLE);
-            this.outputField = nodeInstance.valueString(FIELD_VARIABLE);
-        }
-    }
-
-
-    @Override
-    public void invoke(NodeExecution nodeExecution) {
-        super.invoke(nodeExecution);
-    }
-
-
-    protected void fillOutput(NodeOutput nodeOutput, Map<String, Object> input) {
-        fillOutput(nodeOutput, input, null);
-    }
-
-    protected void fillOutput(NodeOutput nodeOutput, Map<String, Object> input, Object body) {
-        Map<String, Object> result = new LinkedHashMap<>();
-
-        if (this.outputFieldMode != OutputFieldMode.OVERWRITE && input != null) {
-            result.putAll(input);
-            nodeOutput.addResult(result);
-        }
-
-
-        if (body == null) {
-            return;
-        }
-        switch (this.outputFieldMode) {
-            case FIELD:
-                result.put(this.outputField, body);
-                nodeOutput.addResult(result);
-                break;
-            case PAYLOAD:
-                if (body instanceof Map) {
-                    result.putAll((Map<String, Object>) body);
-                } else if (body instanceof List) {
-                    List l = (List) body;
-                    result.putAll((Map<? extends String, ?>) l.get(0));
-                    log.warn("fill value is collection type, select first item:{}", body);
-                } else {
-                    result.put(this.nodeKey(), JSONUtils.toJsonString(body));
-                    log.error("the type of value is not correct,{}, {}", body, body.getClass());
-                }
-                nodeOutput.addResult(result);
-                break;
-            case OVERWRITE:
-                if (body instanceof Map) {
-                    result.putAll((Map<String, Object>) body);
-                    nodeOutput.addResult(result);
-                } else if (body instanceof List) {
-                    ((List<?>) body).forEach(item -> {
-                        if (item instanceof Map) {
-                            nodeOutput.addResult((Map<String, Object>) item);
-                        } else {
-                            nodeOutput.addResult(JSONUtils.objectToMap(item));
-                            log.error("the type of value is not correct,{}, {}", item, item.getClass());
-                        }
-                    });
-                } else {
-                    result.put(this.nodeKey(), JSONUtils.toJsonString(body));
-                    nodeOutput.addResult(result);
-                    log.error("the type of value is not correct,{}, {}", body, body.getClass());
-                }
-            default:
-        }//end switch
-
-    }
-
-
-    protected List<Factor> conditionValues(Map<String, Object> input, List<Factor> factors) {
-        List<Factor> conditions = new ArrayList<>();
-        if (factors == null) {
-            return conditions;
-        }
-        for (Factor conditionField : factors) {
-            Factor fc = BeanUtils.copyProperties(conditionField, Factor.class);
-            fc.setValue(conditionField.value(input));
-            conditions.add(fc);
-        }
-        return conditions;
-    }
 }

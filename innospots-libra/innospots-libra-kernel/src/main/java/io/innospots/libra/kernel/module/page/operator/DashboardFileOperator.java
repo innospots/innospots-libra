@@ -22,7 +22,7 @@ import io.innospots.base.configuration.InnospotConfigProperties;
 import io.innospots.base.enums.ImageType;
 import io.innospots.base.exception.InnospotException;
 import io.innospots.base.model.response.ResponseCode;
-import io.innospots.libra.base.utils.ImageFileUploader;
+import io.innospots.base.utils.ImageFileUploader;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

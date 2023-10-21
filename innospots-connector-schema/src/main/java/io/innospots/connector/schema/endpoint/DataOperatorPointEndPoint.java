@@ -76,17 +76,13 @@ public class DataOperatorPointEndPoint implements IDataOperatorPoint {
     @Override
     public InnospotResponse<Integer> upsert(Integer credentialId, String tableName, String keyColumn, Map<String, Object> data) {
         IDataOperator dataOperator = dataOperatorManager.buildDataOperator(credentialId);
-        //return dataOperator.upsert(tableName, keyColumn, data);
-        // TODO
-        return null;
+        return InnospotResponse.success(dataOperator.upsert(tableName, keyColumn, data));
     }
 
     @Override
     public InnospotResponse<Integer> upsertForBatch(Integer credentialId, String tableName, String keyColumn, List<Map<String, Object>> data) {
         IDataOperator dataOperator = dataOperatorManager.buildDataOperator(credentialId);
-        //return dataOperator.upsertBatch(tableName, keyColumn, data);
-        // TODO
-        return null;
+        return InnospotResponse.success(dataOperator.upsertBatch(tableName, keyColumn, data));
     }
 
     @Override

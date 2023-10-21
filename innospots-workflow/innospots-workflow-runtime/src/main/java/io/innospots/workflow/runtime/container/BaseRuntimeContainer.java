@@ -84,6 +84,7 @@ public abstract class BaseRuntimeContainer implements RuntimeContainer {
                 triggerInfo.getWorkflowInstanceId(),
                 triggerInfo.getRevision(), payloads);
         flowExecution.addContext(context);
+        flowExecution.setSource(triggerInfo.getRegistryNode().nodeCode());
         WorkflowRuntimeContext workflowRuntimeContext = WorkflowRuntimeContext.build(flowExecution);
         workflowRuntimeContext.addContext(context);
         return workflowRuntimeContext;
@@ -104,6 +105,7 @@ public abstract class BaseRuntimeContainer implements RuntimeContainer {
     }
 
     protected void end(WorkflowRuntimeContext workflowRuntimeContext) {
+        workflowRuntimeContext.fillResponse();
         for (WorkflowRuntimeListener runtimeListener : runtimeListeners) {
             runtimeListener.end(workflowRuntimeContext);
         }

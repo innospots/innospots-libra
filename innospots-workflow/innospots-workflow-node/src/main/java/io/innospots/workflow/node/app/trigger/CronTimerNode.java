@@ -89,6 +89,8 @@ public class CronTimerNode extends TriggerNode {
         String scheduleModeStr = nodeInstance.valueString(FIELD_SCHEDULE_MODE);
         ScheduleMode scheduleMode = scheduleModeStr != null ? Enums.getIfPresent(ScheduleMode.class, scheduleModeStr).orNull() : null;
         String runDateTime = null;
+        eventBody.put(FIELD_SCHEDULE_MODE, scheduleMode);
+
         if (scheduleMode == ScheduleMode.ONCE) {
             validFieldConfig(nodeInstance, FIELD_RUN_DATE_TIME);
             runDateTime = nodeInstance.valueString(FIELD_RUN_DATE_TIME);
@@ -96,7 +98,7 @@ public class CronTimerNode extends TriggerNode {
             return;
         }
 
-        eventBody.put(FIELD_SCHEDULE_MODE, scheduleMode);
+
 
         String periodUnitStr = nodeInstance.valueString(FIELD_PERIOD_UNIT);
         TimePeriod timePeriod = periodUnitStr != null ? Enums.getIfPresent(TimePeriod.class, periodUnitStr).orNull() : null;

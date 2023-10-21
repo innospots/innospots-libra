@@ -20,11 +20,13 @@ package io.innospots.workflow.runtime.engine;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.workflow.core.engine.IFlowEngine;
 import io.innospots.workflow.core.enums.FlowStatus;
 import io.innospots.workflow.core.exception.FlowPrepareException;
 import io.innospots.workflow.core.execution.ExecutionStatus;
+import io.innospots.workflow.core.execution.FlowExecutionTaskEvent;
 import io.innospots.workflow.core.execution.flow.FlowExecution;
 import io.innospots.workflow.core.execution.listener.IFlowExecutionListener;
 import io.innospots.workflow.core.execution.node.NodeExecution;
@@ -41,6 +43,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Raydian
@@ -54,7 +57,9 @@ public abstract class BaseFlowEngine implements IFlowEngine {
 
     protected FlowManager flowManager;
 
-    protected Cache<String, FlowExecution> flowExecutionCache = Caffeine.newBuilder().build();
+    protected Cache<String, FlowExecution> flowExecutionCache = Caffeine.newBuilder().expireAfterWrite(1, TimeUnit.SECONDS).build();
+
+    protected Cache<String,String> flowKeyCache = Caffeine.newBuilder().build();
 
     public BaseFlowEngine(List<IFlowExecutionListener> flowExecutionListeners, FlowManager flowManager) {
         this.flowExecutionListeners = flowExecutionListeners;
@@ -116,9 +121,14 @@ public abstract class BaseFlowEngine implements IFlowEngine {
     public FlowExecution stop(String flowExecutionId) {
         FlowExecution flowExecution = flowExecutionCache.getIfPresent(flowExecutionId);
         if (flowExecution != null) {
-            flowExecution.setStatus(ExecutionStatus.STOPPED);
+            flowExecution.setStatus(ExecutionStatus.STOPPING);
         }
         return flowExecution;
+    }
+
+    @Override
+    public FlowExecution stopByFlowKey(String flowKey) {
+        return stop(flowKeyCache.getIfPresent(flowKey));
     }
 
     @Override
@@ -165,7 +175,8 @@ public abstract class BaseFlowEngine implements IFlowEngine {
         }
 
         flowExecutionCache.put(flowExecution.getFlowExecutionId(), flowExecution);
-
+        flowKeyCache.put(flowExecution.getFlowKey(), flowExecution.getFlowExecutionId());
+        EventBusCenter.async(FlowExecutionTaskEvent.build(flowExecution));
     }
 
     private void completeFlow(FlowExecution flowExecution, boolean isUpdate) {
@@ -185,10 +196,17 @@ public abstract class BaseFlowEngine implements IFlowEngine {
             }
         }
         flowExecutionCache.invalidate(flowExecution.getFlowExecutionId());
+        flowKeyCache.invalidate(flowExecution.getFlowKey());
     }
 
     private Flow getFlow(FlowExecution flowExecution) {
-        Flow flow = flowManager.loadFlow(flowExecution.getFlowInstanceId(), flowExecution.getRevision());
+        Flow flow = null;
+        if(flowExecution.getFlowKey()!=null){
+            flow = flowManager.loadFlow(flowExecution.getFlowKey());
+        }else{
+            flow = flowManager.loadFlow(flowExecution.getFlowInstanceId(), flowExecution.getRevision());
+        }
+
         if (flow == null) {
             throw ResourceException.buildAbandonException(this.getClass(), "flow not exist: " + flowExecution.getFlowInstanceId() + " ,revision: " + flowExecution.getRevision());
         }
@@ -196,6 +214,7 @@ public abstract class BaseFlowEngine implements IFlowEngine {
             logger.warn("the flow is not loaded completed, {},{}", flow.getWorkflowInstanceId(), flow.getRevision());
             flowExecution.setStatus(ExecutionStatus.NOT_PREPARED);
         }
+        flowExecution.setTotalCount(flow.nodeSize());
         return flow;
     }
 

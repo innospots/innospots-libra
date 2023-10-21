@@ -21,15 +21,17 @@ package io.innospots.workflow.runtime.flow;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.collect.Lists;
+import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.utils.DateTimeUtils;
-import io.innospots.workflow.console.operator.instance.WorkflowBuilderOperator;
 import io.innospots.workflow.core.context.WorkflowRuntimeContext;
 import io.innospots.workflow.core.debug.AppDebugPayload;
 import io.innospots.workflow.core.engine.FlowEngineManager;
+import io.innospots.workflow.core.engine.IFlowEngine;
 import io.innospots.workflow.core.enums.FlowStatus;
 import io.innospots.workflow.core.execution.ExecutionResource;
 import io.innospots.workflow.core.execution.ExecutionStatus;
 import io.innospots.workflow.core.debug.FlowNodeDebugger;
+import io.innospots.workflow.core.execution.FlowExecutionTaskEvent;
 import io.innospots.workflow.core.execution.flow.FlowExecution;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeExecutionBase;
@@ -38,11 +40,12 @@ import io.innospots.workflow.core.execution.operator.IFlowExecutionOperator;
 import io.innospots.workflow.core.execution.reader.NodeExecutionReader;
 import io.innospots.workflow.core.flow.BuildProcessInfo;
 import io.innospots.workflow.core.flow.WorkflowBaseBody;
+import io.innospots.workflow.core.flow.instance.IWorkflowCacheDraftOperator;
 import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.webhook.DefaultResponseBuilder;
 import io.innospots.workflow.core.webhook.WorkflowResponse;
 import io.innospots.workflow.node.app.trigger.ApiTriggerNode;
 import io.innospots.workflow.runtime.engine.BaseFlowEngine;
-import io.innospots.workflow.runtime.response.DefaultResponseBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -65,23 +68,25 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
 
     private IFlowExecutionOperator flowExecutionOperator;
 
-    private WorkflowBuilderOperator workFlowBuilderOperator;
+    private IWorkflowCacheDraftOperator workflowCacheDraftOperator;
 
     private Cache<Long, String> executionCache = Caffeine.newBuilder().build();
 
-    public FlowNodeSimpleDebugger(WorkflowBuilderOperator workFlowBuilderOperator,
+    public FlowNodeSimpleDebugger(IWorkflowCacheDraftOperator workFlowBuilderOperator,
                                   NodeExecutionReader nodeExecutionReader,
                                   IFlowExecutionOperator flowExecutionOperator) {
-        this.workFlowBuilderOperator = workFlowBuilderOperator;
+        this.workflowCacheDraftOperator = workFlowBuilderOperator;
         this.nodeExecutionReader = nodeExecutionReader;
         this.flowExecutionOperator = flowExecutionOperator;
     }
 
     @Override
     public Map<String, NodeExecutionDisplay> execute(Long workflowInstanceId, String nodeKey, List<Map<String, Object>> inputs) {
-        workFlowBuilderOperator.saveCacheToDraft(workflowInstanceId);
+        WorkflowBaseBody workflowBaseBody = workflowCacheDraftOperator.saveCacheToDraft(workflowInstanceId);
 
-        BaseFlowEngine flowEngine = (BaseFlowEngine) FlowEngineManager.eventFlowEngine();
+        inputs = convertApiInput(inputs,workflowBaseBody);
+
+        IFlowEngine flowEngine = FlowEngineManager.eventFlowEngine();
         BuildProcessInfo buildProcessInfo = flowEngine.prepare(workflowInstanceId, 0, true);
         log.info("build info:{}", buildProcessInfo);
         Map<String, NodeExecutionDisplay> result = new LinkedHashMap<>();
@@ -111,13 +116,14 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
 
         FlowExecution flowExecution = fillFlowExecution(inputs, workflowInstanceId);
 
+
         //endNodeKey
         log.info("flow execution: {}", flowExecution);
         //executionCache.put(workflowInstanceId,flowExecution.getFlowExecutionId());
         flowExecution.setEndNodeKey(nodeKey);
         flowEngine.execute(flowExecution);
 
-        WorkflowBaseBody workflowBaseBody = workFlowBuilderOperator.getFlowInstanceDraftOrCache(workflowInstanceId);
+        workflowBaseBody = workflowCacheDraftOperator.getFlowInstanceDraftOrCache(workflowInstanceId);
         Map<String, NodeInstance> nodeCache = null;
         try {
             nodeCache = workflowBaseBody.getNodes().stream().collect(Collectors.toMap(NodeInstance::getNodeKey, Function.identity()));
@@ -132,8 +138,8 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
         nodeExecutions.sort(Comparator.comparingInt(NodeExecutionBase::getSequenceNumber));
         LinkedHashMap<String, String> outMap = new LinkedHashMap<>();
         for (NodeExecution nodeExecution : nodeExecutions) {
-            NodeExecutionDisplay executionDisplay = NodeExecutionDisplay.build(nodeExecution);
             NodeInstance nodeInstance = nodeCache.get(nodeExecution.getNodeKey());
+            NodeExecutionDisplay executionDisplay = NodeExecutionDisplay.build(nodeExecution,nodeInstance);
             result.put(nodeExecution.getNodeKey(), executionDisplay);
             outMap.put(nodeInstance.simpleInfo(), nodeExecution.getNodeExecutionId());
         }
@@ -145,9 +151,11 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
         NodeInstance nodeInstance = nodeCache.get(nodeKey);
         NodeExecutionDisplay executionDisplay = result.get(nodeKey);
         if (executionDisplay != null && nodeInstance != null && flowExecution.getStatus() == ExecutionStatus.COMPLETE) {
-            nodeInstance.setOutputFields(executionDisplay.getOutputFields());
-            workFlowBuilderOperator.saveFlowInstanceToCache(workflowBaseBody);
-            workFlowBuilderOperator.saveCacheToDraft(workflowInstanceId);
+            if(CollectionUtils.isEmpty(nodeInstance.getOutputFields())){
+                nodeInstance.setOutputFields(executionDisplay.getOutputFields());
+            }
+            workflowCacheDraftOperator.saveFlowInstanceToCache(workflowBaseBody);
+            workflowCacheDraftOperator.saveCacheToDraft(workflowInstanceId);
         }
         try {
             Thread.sleep(1000);
@@ -157,6 +165,54 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
         executionCache.invalidate(workflowInstanceId);
         return result;
 //        return nodeExecutionDisplayReader.readExecutionByFlowExecutionId(workflowInstanceId,flowExecution.getFlowExecutionId(),null);
+    }
+
+    private List<Map<String, Object>> convertApiInput(List<Map<String, Object>> rawInputs,WorkflowBaseBody workflowBaseBody) {
+        List<Map<String, Object>> nList = new ArrayList<>();
+        NodeInstance node = workflowBaseBody.getNodes().stream().filter(ni-> "WEBHOOK".equals(ni.getCode())).findFirst().orElse(null);;
+        if(node!=null){
+            if(CollectionUtils.isNotEmpty(rawInputs)){
+                for (Map<String, Object> rawInput : rawInputs) {
+                    if(!rawInput.isEmpty()){
+                        nList.add(convertToMap(rawInput));
+                    }
+                }//end for
+            }
+            if(nList.isEmpty()){
+                Map<String,Object> rawInput = (Map<String, Object>) node.getData().get("webhook_config");
+                nList.add(convertToMap(rawInput));
+            }
+        }
+        return nList;
+    }
+
+    private Map<String,Object> convertToMap(Map<String,Object> rawInput){
+        Map<String,Object> input = new LinkedHashMap<>();
+        input.putAll(rawInput);
+        if (rawInput.containsKey("contentType") &&
+                (rawInput.containsKey("params") || rawInput.containsKey("headers") || rawInput.containsKey("body"))){
+            Object v = rawInput.get("params");
+            Map<String, Object> params = convertData(v);
+            input.put("params", params);
+            v = rawInput.get("headers");
+            Map<String, Object> headers = convertData(v);
+            input.put("headers", headers);
+            v = rawInput.get("body");
+            Map<String, Object> body = convertData(v);
+            input.put("body", body);
+        }
+        return input;
+    }
+
+    private Map<String, Object> convertData(Object data) {
+        Map<String, Object> mm = new HashMap<>();
+        if (data instanceof List) {
+            List<Map<String, Object>> item = (List<Map<String, Object>>) data;
+            for (Map<String, Object> m : item) {
+                mm.put(String.valueOf(m.get("name")), m.get("value"));
+            }
+        }
+        return mm;
     }
 
     @Override
@@ -192,7 +248,7 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
 
     @Override
     public WorkflowResponse testWebhook(String flowKey, List<Map<String, Object>> inputs) {
-        WorkflowBaseBody workflowBaseBody = workFlowBuilderOperator.getWorkflowBodyByKey(flowKey, 0, false);
+        WorkflowBaseBody workflowBaseBody = workflowCacheDraftOperator.getWorkflowBodyByKey(flowKey, 0, false);
         BaseFlowEngine flowEngine = (BaseFlowEngine) FlowEngineManager.eventFlowEngine();
         Long workflowInstanceId = workflowBaseBody.getWorkflowInstanceId();
         BuildProcessInfo buildProcessInfo = flowEngine.prepare(workflowInstanceId, 0, false);
@@ -207,6 +263,7 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
         }
 
         FlowExecution flowExecution = fillFlowExecution(inputs, workflowInstanceId);
+        flowExecution.setSaveSync(false);
 
         WorkflowRuntimeContext workflowRuntimeContext = WorkflowRuntimeContext.build(flowExecution);
 
@@ -215,15 +272,26 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
         flowEngine.execute(flowExecution);
         Flow flow = flowEngine.flow(workflowInstanceId, 0);
         ApiTriggerNode triggerNode = (ApiTriggerNode) flow.startNodes().get(0);
-
         //update out field
-        return new DefaultResponseBuilder().build(workflowRuntimeContext, triggerNode);
+        return new DefaultResponseBuilder().build(workflowRuntimeContext, triggerNode.getFlowWebhookConfig());
     }
 
     @Override
     public FlowExecution stop(String flowExecutionId) {
-        BaseFlowEngine flowEngine = (BaseFlowEngine) FlowEngineManager.eventFlowEngine();
-        return flowEngine.stop(flowExecutionId);
+        IFlowEngine flowEngine = FlowEngineManager.eventFlowEngine();
+        FlowExecution flowExecution = flowEngine.stop(flowExecutionId);
+        if (flowExecution == null) {
+            flowExecution = flowExecutionOperator.getFlowExecutionById(flowExecutionId, false);
+            flowExecution.setStatus(ExecutionStatus.STOPPED);
+
+            EventBusCenter.async(FlowExecutionTaskEvent.build(flowExecution));
+        }
+        return flowExecution;
+    }
+
+    @Override
+    public FlowExecution stopByFlowKey(String flowKey) {
+        return FlowEngineManager.eventFlowEngine().stopByFlowKey(flowKey);
     }
 
     private FlowExecution fillFlowExecution(List<Map<String, Object>> inputs, Long workflowInstanceId) {
@@ -241,7 +309,7 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
             flowExecution = FlowExecution.buildNewFlowExecution(
                     workflowInstanceId, 0, false, false, inputs);
         }
-
+        flowExecution.setSaveSync(true);
         return flowExecution;
     }
 }

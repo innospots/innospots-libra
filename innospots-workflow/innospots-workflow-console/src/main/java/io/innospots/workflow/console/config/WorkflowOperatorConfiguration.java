@@ -33,6 +33,7 @@ import io.innospots.workflow.console.dao.execution.NodeExecutionDao;
 import io.innospots.workflow.console.dao.execution.ScheduledNodeExecutionDao;
 import io.innospots.workflow.console.dao.instance.WorkflowInstanceCacheDao;
 import io.innospots.workflow.console.dao.instance.WorkflowRevisionDao;
+import io.innospots.workflow.console.loader.WorkflowDBLoader;
 import io.innospots.workflow.console.operator.WorkflowCategoryOperator;
 import io.innospots.workflow.console.operator.apps.AppCategoryOperator;
 import io.innospots.workflow.console.operator.apps.AppFlowTemplateOperator;
@@ -52,11 +53,14 @@ import io.innospots.workflow.core.execution.reader.FlowExecutionReader;
 import io.innospots.workflow.core.execution.reader.NodeExecutionReader;
 import io.innospots.workflow.core.execution.store.FlowExecutionStoreListener;
 import io.innospots.workflow.core.execution.store.NodeExecutionStoreListener;
+import io.innospots.workflow.core.flow.instance.IWorkflowCacheDraftOperator;
+import io.innospots.workflow.core.loader.IWorkflowLoader;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -68,6 +72,7 @@ import java.io.File;
  * @date 2021/3/16
  */
 @Configuration
+@ComponentScan(basePackages = {"io.innospots.workflow.console.listener","io.innospots.workflow.console.task"})
 @EnableCaching
 @EnableConfigurationProperties({InnospotConfigProperties.class, InnospotWorkflowProperties.class})
 @Import({DatasourceConfiguration.class, LibraBaseConfiguration.class})
@@ -143,6 +148,11 @@ public class WorkflowOperatorConfiguration {
     }
 
     @Bean
+    public IWorkflowLoader workflowInstanceLoader(WorkflowBuilderOperator workflowBuilderOperator){
+        return new WorkflowDBLoader(workflowBuilderOperator);
+    }
+
+    @Bean
     public WorkflowBuilderOperator workflowBuilderOperator(WorkflowRevisionDao workflowRevisionDao,
                                                            WorkflowInstanceCacheDao instanceCacheDao,
                                                            WorkflowInstanceOperator workflowInstanceOperator,
@@ -175,10 +185,11 @@ public class WorkflowOperatorConfiguration {
 
     @Bean
     public NodeExecutionReader nodeExecutionDisplayReader(
+            IWorkflowCacheDraftOperator workflowCacheDraftOperator,
             INodeExecutionOperator nodeExecutionOperator,
             IFlowExecutionOperator flowExecutionOperator
     ) {
-        return new NodeExecutionReader(nodeExecutionOperator, flowExecutionOperator);
+        return new NodeExecutionReader(workflowCacheDraftOperator,nodeExecutionOperator, flowExecutionOperator);
     }
 
     @Bean

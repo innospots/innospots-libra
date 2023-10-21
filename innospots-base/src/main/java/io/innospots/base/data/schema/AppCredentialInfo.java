@@ -77,9 +77,9 @@ public class AppCredentialInfo extends BaseModelInfo {
     @Schema(title = "props")
     private Map<String,Object> props;
 
-    @Schema(title = "authed values")
-    @JsonIgnore
-    private String authedValues;
+//    @Schema(title = "authed values")
+//    @JsonIgnore
+//    private String authedValues;
 
     @Schema(title = "app node code")
     private String appNodeCode;

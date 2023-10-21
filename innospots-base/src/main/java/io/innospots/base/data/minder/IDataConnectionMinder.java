@@ -52,7 +52,7 @@ public interface IDataConnectionMinder {
      * @param connectionCredential
      * @return
      */
-    boolean test(ConnectionCredential connectionCredential);
+    Object test(ConnectionCredential connectionCredential);
 
     /**
      * release connection

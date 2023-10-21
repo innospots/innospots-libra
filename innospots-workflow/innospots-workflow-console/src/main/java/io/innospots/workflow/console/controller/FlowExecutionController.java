@@ -60,7 +60,7 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 @Tag(name = "Workflow Execution")
 public class FlowExecutionController extends BaseController {
 
-    private FlowExecutionReader flowExecutionReader;
+    private final FlowExecutionReader flowExecutionReader;
 
     public FlowExecutionController(FlowExecutionReader flowExecutionReader) {
         this.flowExecutionReader = flowExecutionReader;
@@ -70,14 +70,16 @@ public class FlowExecutionController extends BaseController {
     @Operation(summary = "page flow executions using workflowInstanceId")
     public InnospotResponse<PageBody<FlowExecutionBase>> pageFlowExecutions(
             @Parameter(name = "workflowInstanceId") @PathVariable Long workflowInstanceId,
-            @Parameter(name = "page") @RequestParam(required = false, defaultValue = "1") Integer page,
+            @Parameter(name = "page") @RequestParam(required = false, defaultValue = "0") Integer page,
             @Parameter(name = "size") @RequestParam(required = false, defaultValue = "20") Integer size,
             @Parameter(name = "statuses") @RequestParam(required = false) List<String> statuses,
             @Parameter(name = "startTime") @RequestParam(required = false) String startTime,
             @Parameter(name = "endTime") @RequestParam(required = false) String endTime,
             @Parameter(name = "revision") @RequestParam(required = false) Integer revision
     ) {
-
+        if (page > 0) {
+            page --;
+        }
         return InnospotResponse.success(flowExecutionReader.pageFlowExecutions(workflowInstanceId, revision,
                 statuses, startTime, endTime, page, size));
     }

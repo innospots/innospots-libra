@@ -36,33 +36,28 @@ import java.time.LocalDateTime;
 public class FlowExecutionStoreListener implements IFlowExecutionListener {
 
     private AsyncDataStore<FlowExecution> flowExecutionAsyncDataStore;
-    private IFlowExecutionOperator IFlowExecutionOperator;
+    private IFlowExecutionOperator flowExecutionOperator;
 
     public FlowExecutionStoreListener(IFlowExecutionOperator flowExecutionOperator) {
-        this.IFlowExecutionOperator = flowExecutionOperator;
+        this.flowExecutionOperator = flowExecutionOperator;
         flowExecutionAsyncDataStore = new AsyncDataStore<>(flowExecutionOperator, 4, 100, "event-store");
     }
 
     @Override
     public void start(FlowExecution flowExecution) {
         log.debug("runtime content store start time:{}", LocalDateTime.now());
-        if (flowExecutionAsyncDataStore == null) {
-            log.warn("data store is null, flowExecution:{}", flowExecution);
-            return;
-        }
         if (!flowExecution.isSkipFlowExecution()) {
-            IFlowExecutionOperator.insert(flowExecution);
-//            flowExecutionAsyncDataStore.insert(flowExecution);
+            if(flowExecution.isSaveSync()){
+                flowExecutionOperator.insert(flowExecution);
+            }else{
+                flowExecutionAsyncDataStore.insert(flowExecution);
+            }
         }
     }
 
     @Override
     public void complete(FlowExecution flowExecution) {
         log.debug("runtime content store end time:{}", LocalDateTime.now());
-        if (flowExecutionAsyncDataStore == null) {
-            log.warn("data store is null, flowExecution:{}", flowExecution);
-            return;
-        }
         if (!flowExecution.isSkipFlowExecution()) {
             this.update(flowExecution);
         }
@@ -70,7 +65,12 @@ public class FlowExecutionStoreListener implements IFlowExecutionListener {
 
     @Override
     public void update(FlowExecution flowExecution) {
-        flowExecutionAsyncDataStore.update(flowExecution);
+        if(flowExecution.isSaveSync()){
+            flowExecutionOperator.update(flowExecution);
+        }else{
+            flowExecutionAsyncDataStore.update(flowExecution);
+        }
+
     }
 
     @PreDestroy

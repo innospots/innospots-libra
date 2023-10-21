@@ -57,26 +57,26 @@ public class BaseException extends RuntimeException {
     protected String module;
 
     public BaseException(Class<?> invokeClass, ResponseCode responseCode, Throwable cause, Object... params) {
-        this(invokeClass.getName(), responseCode, cause, params);
+        this(invokeClass.getSimpleName(), responseCode, cause, params);
     }
 
     public BaseException(Class<?> invokeClass, ResponseCode responseCode, String message, String detail) {
-        this.module = invokeClass.getName();
+        this.module = invokeClass.getSimpleName();
         this.code = responseCode.getCode();
         this.message = message;
         this.detail = detail;
     }
 
     public BaseException(Class<?> invokeClass, ResponseCode responseCode, Object... params) {
-        this(invokeClass.getName(), responseCode, params);
+        this(invokeClass.getSimpleName(), responseCode, params);
     }
 
     public BaseException(Class<?> invokeClass, ResponseCode responseCode, String messageCode, String defaultMessage, Object... params) {
-        this(invokeClass.getName(), responseCode, messageCode, defaultMessage, params);
+        this(invokeClass.getSimpleName(), responseCode, messageCode, defaultMessage, params);
     }
 
     public BaseException(Class<?> invokeClass, ResponseCode responseCode, String messageCode, String defaultMessage, Throwable cause, Object... params) {
-        this(invokeClass.getName(), responseCode, messageCode, defaultMessage, cause, params);
+        this(invokeClass.getSimpleName(), responseCode, messageCode, defaultMessage, cause, params);
     }
 
     public BaseException(String module, ResponseCode responseCode, Throwable cause, Object... params) {
@@ -116,7 +116,7 @@ public class BaseException extends RuntimeException {
             this.message = responseCode.getInfo() + ", " + Arrays.toString(params);
         }
         if (cause != null && cause.getMessage() != null) {
-            detail = cause.getClass().getName() + " , throwable: " + cause.getMessage();
+            detail = cause.getClass().getSimpleName() + " , throwable: " + cause.getMessage();
         }
     }
 

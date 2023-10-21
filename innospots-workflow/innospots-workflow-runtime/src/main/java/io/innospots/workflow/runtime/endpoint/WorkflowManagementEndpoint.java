@@ -103,17 +103,19 @@ public class WorkflowManagementEndpoint {
     }
 
     @GetMapping("runtime")
-    @Operation(summary = "online flow in the runtime container")
+    @Operation(summary = "published workflow in runtime")
     public InnospotResponse<Map<String, Object>> runtime() {
         return success(containerManager.runtimeTriggers());
     }
 
     @GetMapping("schedule-infos")
+    @Operation(summary = "published schedule workflow")
     public InnospotResponse<List<Map<String, Object>>> scheduleInfo() {
         return success(quartzScheduleManager.schedulerInfo());
     }
 
     @GetMapping("webhook-address")
+    @Operation(summary = "webhook address")
     public InnospotResponse<Map<String, String>> apiAddress() {
         Map<String, String> flowInfo = new LinkedHashMap<>();
         String host = workflowServerProperties.getHost();
@@ -130,7 +132,8 @@ public class WorkflowManagementEndpoint {
         flowInfo.put("webhookApiServer",
                 "http://" +
                         host +
-                        ":" + webhookServer.getPort() + WorkflowWebhookServer.API_PATH
+                        ":" + workflowServerProperties.getPort() +
+                        PathConstant.ROOT_PATH + PathConstant.RUNTIME_PATH
         );
         return InnospotResponse.success(flowInfo);
     }

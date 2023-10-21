@@ -75,6 +75,7 @@ public class Flow extends WorkflowInstance {
         buildProcessInfo.setWorkflowInstanceId(this.workflowBody.getWorkflowInstanceId());
         buildProcessInfo.setFlowKey(workflowBody.getFlowKey());
         buildProcessInfo.setDatasourceCode(workflowBody.getDatasourceCode());
+        buildProcessInfo.setTriggerCode(this.workflowBody.getTriggerCode());
     }
 
     public BuildProcessInfo prepare() {
@@ -149,12 +150,14 @@ public class Flow extends WorkflowInstance {
                         if (appNode == null) {
                             try {
                                 appNode = BaseAppNode.buildAppNode(workflowBody.identifier(), nextNode);
-                                if (appNode.getBuildException() != null) {
-                                    throw appNode.getBuildException();
-                                }
                                 appNode.addNodeExecutionListener(nodeExecutionListeners);
                                 tmpNodeCache.put(appNode.nodeKey(), appNode);
-                                buildProcessInfo.incrementSuccess();
+                                if (appNode.getBuildException() != null) {
+                                    buildProcessInfo.addNodeProcess(appNode.nodeKey(),appNode.getBuildException());
+                                    //throw appNode.getBuildException();
+                                }else{
+                                    buildProcessInfo.incrementSuccess();
+                                }
                             } catch (Exception e) {
                                 logger.error(e.getMessage(), e);
                                 buildProcessInfo.incrementFail();
@@ -268,6 +271,10 @@ public class Flow extends WorkflowInstance {
 
     public void clear() {
         this.workflowBody = null;
+    }
+
+    public int nodeSize(){
+        return this.nodeCache.size();
     }
 
 

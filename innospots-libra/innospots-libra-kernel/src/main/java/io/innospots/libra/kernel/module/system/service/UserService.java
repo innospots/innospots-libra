@@ -27,7 +27,7 @@ import io.innospots.base.model.user.RoleInfo;
 import io.innospots.base.model.user.UserInfo;
 import io.innospots.base.utils.CCH;
 import io.innospots.libra.base.model.QueryRequest;
-import io.innospots.libra.base.utils.ImageFileUploader;
+import io.innospots.base.utils.ImageFileUploader;
 import io.innospots.libra.kernel.module.system.entity.UserRoleEntity;
 import io.innospots.libra.kernel.module.system.model.user.UserForm;
 import io.innospots.libra.kernel.module.system.operator.AvatarResourceOperator;

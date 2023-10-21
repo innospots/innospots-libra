@@ -99,7 +99,7 @@ public class ImapConnectionMinder extends BaseDataConnectionMinder {
 
 
     @Override
-    public boolean test(ConnectionCredential connectionCredential) {
+    public Object test(ConnectionCredential connectionCredential) {
         Properties props = new Properties();
         props.putAll(connectionCredential.getConfig());
         Session session = Session.getDefaultInstance(props, new Authenticator() {

@@ -27,6 +27,7 @@ import io.innospots.base.data.schema.reader.IConnectionCredentialReader;
 import io.innospots.connector.schema.operator.*;
 import io.innospots.connector.schema.reader.ConnectionCredentialReader;
 import io.innospots.connector.schema.reader.SchemaRegistryReader;
+import io.innospots.connector.schema.service.Oauth2CallbackService;
 import io.innospots.libra.base.configuration.AuthProperties;
 import io.innospots.libra.base.operator.SystemTempCacheOperator;
 import org.mybatis.spring.annotation.MapperScan;
@@ -49,12 +50,16 @@ import org.springframework.context.annotation.Configuration;
 public class AppConfiguration {
 
     @Bean
+    public Oauth2CallbackService oauth2CallbackService(ConnectionCredentialReader connectionCredentialReader){
+        return new Oauth2CallbackService(connectionCredentialReader);
+    }
+
+    @Bean
     public AppCredentialOperator appCredentialOperator(
             AuthProperties authProperties,
-            SystemTempCacheOperator systemTempCacheOperator,
             SchemaRegistryOperator schemaRegistryOperator
     ) {
-        return new AppCredentialOperator(authProperties, systemTempCacheOperator, schemaRegistryOperator);
+        return new AppCredentialOperator(authProperties, schemaRegistryOperator);
     }
 
     @Bean
@@ -77,10 +82,12 @@ public class AppConfiguration {
         return new SchemaCategoryOperator(datasetOperator);
     }
 
+    /**
     @Bean
     public HttpApiOperator httpApiOperator(SchemaRegistryOperator schemaRegistryOperator) {
         return new HttpApiOperator(schemaRegistryOperator);
     }
+     */
 
     @Bean
     public SchemaRegistryReader schemaRegistryReader(

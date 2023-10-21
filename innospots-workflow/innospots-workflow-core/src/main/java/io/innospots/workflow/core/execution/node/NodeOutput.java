@@ -22,8 +22,10 @@ import io.innospots.workflow.core.execution.ExecutionResource;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * node execute output for each branch
@@ -47,6 +49,10 @@ public class NodeOutput {
 
     private String name;
 
+    private long total;
+
+    private Map<String,Object> logs = new LinkedHashMap<>();
+
     public NodeOutput() {
     }
 
@@ -63,13 +69,17 @@ public class NodeOutput {
     }
 
     public void addResult(String key, Object value) {
-        Map<String, Object> r = new HashMap<>();
+        Map<String, Object> r = new LinkedHashMap<>();
         r.put(key, value);
         this.addResult(r);
     }
 
     public void addResult(Collection<Map<String, Object>> items) {
         results.addAll(items);
+    }
+
+    public void fillTotal(){
+        total = results.size();
     }
 
     public List<ExecutionResource> itemResources(Integer position) {
@@ -122,6 +132,39 @@ public class NodeOutput {
         nodeOutput.resources = resources;
         nodeOutput.name = name;
         nodeOutput.nextNodeKeys = nextNodeKeys;
+        nodeOutput.total = total;
         return nodeOutput;
+    }
+
+    public Map<String,Object> log(){
+        Map<String,Object> logs = new LinkedHashMap<>();
+        logs.put("size",results.size());
+        logs.put("total", total);
+        if(results.size()>0){
+            logs.put("columns",results.get(0).keySet().size());
+        }
+        if(MapUtils.isNotEmpty(resources)){
+            List<Map<String,Object>> metas = new ArrayList<>();
+            for (List<ExecutionResource> executionResources : resources.values()) {
+                metas.addAll(executionResources.stream().map(ExecutionResource::toMetaInfo).collect(Collectors.toList()));
+            }
+            logs.put("resources",metas);
+        }
+        logs.putAll(this.logs);
+        return logs;
+    }
+
+    public void addLog(String key, Object value) {
+        this.logs.put(key, value);
+    }
+
+    public void addLog(Map<String, Object> logData) {
+        if (logData != null) {
+            this.logs.putAll(logData);
+        }
+    }
+
+    public int size(){
+        return this.results.size();
     }
 }

@@ -30,5 +30,6 @@ public enum DataOperation {
     DELETE,
     GET_ONE,
     GET_LIST,
-    UPDATE;
+    UPDATE,
+    UPSERT;
 }

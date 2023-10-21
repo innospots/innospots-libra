@@ -34,4 +34,18 @@ public interface IExpression<E> {
     E execute(Object... args) throws ScriptException;
 
     String[] arguments();
+
+    default boolean executeBoolean(Map<String,Object> env){
+        Object v = execute(env);
+        boolean o = false;
+        if (v instanceof String) {
+            o = Boolean.parseBoolean((String) v);
+        }
+
+        if (v instanceof Boolean) {
+            o = (Boolean) v;
+        }//end if
+        return o;
+    }
+
 }

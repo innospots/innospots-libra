@@ -18,9 +18,9 @@
 
 package io.innospots.workflow.console.operator.apps;
 
-import io.innospots.libra.base.enums.CategoryType;
-import io.innospots.libra.base.model.BaseCategory;
-import io.innospots.libra.base.operator.BaseCategoryOperator;
+import io.innospots.libra.base.category.CategoryType;
+import io.innospots.libra.base.category.BaseCategory;
+import io.innospots.libra.base.category.BaseCategoryOperator;
 
 import java.util.List;
 

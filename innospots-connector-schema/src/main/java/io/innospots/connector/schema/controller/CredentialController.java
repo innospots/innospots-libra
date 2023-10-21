@@ -76,7 +76,7 @@ public class CredentialController extends BaseController {
 
     @PostMapping("connection/test")
     @Operation(summary = "test connection", description = "Connection test")
-    public InnospotResponse<Boolean> testConnection(
+    public InnospotResponse<Object> testConnection(
             @Parameter(name = "credentialInfo") @Validated @RequestBody AppCredentialInfo appCredentialInfo,
             BindingResult bindingResult) {
         if (StringUtils.isBlank(appCredentialInfo.getEncryptFormValues())) {
@@ -85,7 +85,7 @@ public class CredentialController extends BaseController {
 
         // fill credential
         ConnectionCredential connection = connectionCredentialReader.fillCredential(appCredentialInfo);
-        Boolean connectionTest = DataConnectionMinderManager.testConnection(connection);
+        Object connectionTest = DataConnectionMinderManager.testConnection(connection);
         return success(connectionTest);
     }
 

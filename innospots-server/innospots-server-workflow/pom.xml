@@ -16,6 +16,11 @@
 
         <dependency>
             <groupId>io.innospots</groupId>
+            <artifactId>innospots-workflow-console</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.innospots</groupId>
             <artifactId>innospots-workflow-runtime</artifactId>
         </dependency>
 

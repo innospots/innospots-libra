@@ -20,6 +20,9 @@ package io.innospots.workflow.core.loader;
 
 import io.innospots.workflow.core.flow.WorkflowBody;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * @author Raydian
  * @date 2020/12/20
@@ -28,6 +31,14 @@ public interface IWorkflowLoader {
 
 
     WorkflowBody loadFlowInstance(Long workflowInstanceId, Integer revision);
+
+    WorkflowBody loadFlowInstance(String flowKey);
+
+    default List<WorkflowBody> loadRecentlyUpdateOrOnLine(int recentMinutes){
+        return Collections.emptyList();
+    }
+
+
 
     static String key(Long workflowInstanceId, Integer revision) {
         return "Flow_"

@@ -24,6 +24,7 @@ import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
 import com.google.common.collect.ImmutableList;
+import io.innospots.base.store.CacheStoreManager;
 import io.innospots.base.utils.CCH;
 import io.innospots.libra.base.dao.handler.EntityMetaObjectHandler;
 import io.innospots.libra.base.operator.SystemTempCacheOperator;
@@ -42,8 +43,8 @@ import java.util.List;
  * @date 2022/2/10
  */
 @Configuration
-@EntityScan(basePackages = "io.innospots.libra.base.entity")
-@MapperScan(basePackages = "io.innospots.libra.base.dao")
+@EntityScan(basePackages = {"io.innospots.libra.base.entity","io.innospots.libra.base.category"})
+@MapperScan(basePackages = {"io.innospots.libra.base.dao","io.innospots.libra.base.category"})
 @EnableConfigurationProperties({AuthProperties.class})
 public class LibraBaseConfiguration {
 
@@ -70,7 +71,8 @@ public class LibraBaseConfiguration {
             "app_node_group_node",
             "sys_todo_task",
             "sys_todo_task_comment",
-            "sys_todo_task_tag"
+            "sys_todo_task_tag",
+            "sys_task_execution"
     );
 
     /**
@@ -115,6 +117,8 @@ public class LibraBaseConfiguration {
 
     @Bean
     public SystemTempCacheOperator systemTempCacheOperator() {
-        return new SystemTempCacheOperator();
+        SystemTempCacheOperator cacheOperator =  new SystemTempCacheOperator();
+        CacheStoreManager.set(cacheOperator);
+        return cacheOperator;
     }
 }

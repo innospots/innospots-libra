@@ -55,6 +55,8 @@ public class BuildProcessInfo {
 
     private Exception buildException;
 
+    private String triggerCode;
+
     public boolean isLoaded() {
         return FlowStatus.LOADED.equals(status) && buildException == null && failCounter.intValue() == 0;
     }
@@ -157,6 +159,14 @@ public class BuildProcessInfo {
 
     public String getDatasourceCode() {
         return datasourceCode;
+    }
+
+    public String getTriggerCode() {
+        return triggerCode;
+    }
+
+    public void setTriggerCode(String triggerCode) {
+        this.triggerCode = triggerCode;
     }
 
     public void setDatasourceCode(String datasourceCode) {

@@ -21,10 +21,12 @@ package io.innospots.libra.base.operator;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.innospots.base.exception.ResourceException;
+import io.innospots.base.store.CacheStore;
 import io.innospots.libra.base.dao.SystemTempCacheDao;
 import io.innospots.libra.base.entity.SystemTempCacheEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -33,7 +35,7 @@ import java.util.List;
  * @date 2023/3/13
  */
 @Slf4j
-public class SystemTempCacheOperator extends ServiceImpl<SystemTempCacheDao, SystemTempCacheEntity> {
+public class SystemTempCacheOperator extends ServiceImpl<SystemTempCacheDao, SystemTempCacheEntity> implements CacheStore {
 
     public Boolean put(String cacheKey, String cacheValue) {
         SystemTempCacheEntity cache = getByCacheKey(cacheKey);
@@ -48,9 +50,28 @@ public class SystemTempCacheOperator extends ServiceImpl<SystemTempCacheDao, Sys
         return true;
     }
 
+    @Override
+    public void save(String key, String value) {
+        SystemTempCacheEntity entity = new SystemTempCacheEntity();
+        entity.setCacheKey(key);
+        entity.setCacheValue(value);
+        super.save(entity);
+    }
+
     public String get(String cacheKey) {
+        if (StringUtils.isBlank(cacheKey)) {
+            return null;
+        }
         SystemTempCacheEntity cache = getByCacheKey(cacheKey);
         return cache == null ? null : cache.getCacheValue();
+    }
+
+    @Override
+    public boolean remove(String key) {
+        if (StringUtils.isBlank(key)) {
+            return false;
+        }
+        return super.remove(new QueryWrapper<SystemTempCacheEntity>().lambda().eq(SystemTempCacheEntity::getCacheKey,key));
     }
 
     public void delete(String cacheKey) {

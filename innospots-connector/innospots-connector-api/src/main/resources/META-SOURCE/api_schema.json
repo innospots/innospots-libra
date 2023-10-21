@@ -159,72 +159,96 @@
           "options": []
         },
         {
-          "label": "Scope",
-          "name": "scope",
-          "placeholder": "input scope",
+          "label": "重定向地址",
+          "name": "redirect_address",
+          "placeholder": "http://ip:port",
           "required": true,
           "labelGrid": 4,
-          "tips": "Scope",
-          "type": "INPUT",
-          "expression": "",
-          "gridSize": 4,
-          "options": []
-        },
-        {
-          "label": "Callback Url",
-          "name": "callback_url",
-          "placeholder": "input callback url",
-          "required": true,
-          "labelGrid": 4,
-          "tips": "Callback Url",
+          "tips": "授权回调的域名或IP地址，不需要指定路径",
           "type": "INPUT",
           "expression": "",
           "gridSize": 8,
           "options": []
         },
         {
-          "label": "Authority Url",
+          "label": "授权地址",
           "name": "authority_url",
-          "placeholder": "input authority url",
+          "placeholder": "http://example.com/oauth2.0/authorize",
           "required": true,
           "labelGrid": 4,
-          "tips": "Authority Url",
+          "tips": "OAuth 2.0 的授权地址",
           "type": "INPUT",
           "expression": "",
           "gridSize": 8,
           "options": []
         },
         {
-          "label": "Access Token Url",
+          "label": "AccessToken地址",
           "name": "access_token_url",
           "placeholder": "input access token url",
           "required": true,
           "labelGrid": 4,
-          "tips": "Access token Url",
+          "tips": "OAuth 2.0 使用 Authentication Code 换取 Access Token 的地址",
           "type": "INPUT",
           "expression": "",
           "gridSize": 8,
           "options": []
         },
         {
-          "label": "Auth Url Param",
-          "name": "auth_url_param",
-          "placeholder": "input auth url param",
+          "label": "AccessToken请求方法",
+          "name": "access_token_url_request_method",
+          "placeholder": "",
           "required": true,
           "labelGrid": 4,
-          "tips": "Auth Url Param",
-          "type": "INPUT",
+          "tips": "GET POST",
+          "type": "SELECT",
+          "value": "POST",
+          "defaultValue": "POST",
           "expression": "",
           "gridSize": 4,
+          "options": [{
+            "name": "GET",
+            "value": "GET"
+          },{
+            "name": "POST",
+            "value": "POST"
+          }]
+        },
+        {
+          "label": "Oauth Scope",
+          "name": "scope",
+          "placeholder": "scopes",
+          "required": false,
+          "labelGrid": 4,
+          "tips": "OAuth 2.0的scopes",
+          "type": "INPUT",
+          "expression": "",
+          "gridSize": 8,
           "options": []
         },
         {
-          "label": "Auth",
-          "name": "auth",
-          "placeholder": "input auth",
-          "required": true,
+          "label": "token位置",
+          "name": "token_location",
+          "placeholder": "",
+          "required": false,
           "labelGrid": 4,
-          "tips": "auth",
+          "tips": "token 参数在请求头还是请求参数上",
+          "type": "RADIO",
+          "expression": "",
+          "gridSize": 4,
+          "options": [
+            {"name":"请求头","value":"HEADER"},
+            {"name":"请求参数","value":"PARAM"},
+            {"name":"请求体","value":"BODY"}
+          ]
+        },
+        {
+          "label": "token参数",
+          "name": "token_param",
+          "placeholder": "请求参数的名称",
+          "required": false,
+          "labelGrid": 4,
+          "tips": "请求参数的名称",
           "type": "INPUT",
           "expression": "",
           "gridSize": 4,
@@ -259,8 +283,8 @@
       "defaults": {},
       "elements": [
         {
-          "label": "token地址",
-          "name": "token_address",
+          "label": "AccessToken地址",
+          "name": "access_token_url",
           "placeholder": "http://ip:port",
           "required": true,
           "labelGrid": 4,
@@ -278,6 +302,8 @@
           "labelGrid": 4,
           "tips": "GET POST",
           "type": "SELECT",
+          "value": "POST",
+          "defaultValue": "POST",
           "expression": "",
           "gridSize": 4,
           "options": [{
@@ -287,30 +313,6 @@
             "name": "POST",
             "value": "POST"
           }]
-        },
-        {
-          "label": "请求参数",
-          "name": "query_param",
-          "placeholder": "",
-          "required": false,
-          "labelGrid": 4,
-          "tips": "http query params",
-          "type": "INPUT",
-          "expression": "",
-          "gridSize": 4,
-          "options": []
-        },
-        {
-          "label": "请求Body",
-          "name": "post_body",
-          "placeholder": "",
-          "required": false,
-          "labelGrid": 4,
-          "tips": "http post json body",
-          "type": "TEXTAREA",
-          "expression": "",
-          "gridSize": 4,
-          "options": []
         },
         {
           "label": "token位置",
@@ -341,10 +343,10 @@
           "options": []
         },
         {
-          "label": "JsonPath",
-          "name": "token_json_path",
-          "placeholder": "$.data.body",
-          "value": "$.data.body",
+          "label": "TokenPath",
+          "name": "token_path",
+          "placeholder": "$.access_token",
+          "value": "$.access_token",
           "required": false,
           "labelGrid": 4,
           "tips": "返回结果的token所在的JsonPath",
@@ -354,13 +356,37 @@
           "options": []
         },
         {
-          "label": "参数缓存时间(秒)",
-          "name": "cache_time",
-          "placeholder": "缓存时间，秒",
+          "label": "token过期时间(秒)",
+          "name": "expires_in",
+          "placeholder": "token过期时间，秒",
           "required": false,
           "labelGrid": 4,
-          "tips": "参数缓存时间",
+          "tips": "Token过期时间",
           "type": "NUMBER",
+          "expression": "",
+          "gridSize": 4,
+          "options": []
+        },
+        {
+          "label": "请求参数",
+          "name": "query_param",
+          "placeholder": "",
+          "required": false,
+          "labelGrid": 4,
+          "tips": "http query params",
+          "type": "INPUT",
+          "expression": "",
+          "gridSize": 4,
+          "options": []
+        },
+        {
+          "label": "请求Body",
+          "name": "post_body",
+          "placeholder": "",
+          "required": false,
+          "labelGrid": 4,
+          "tips": "http post json body",
+          "type": "TEXTAREA",
           "expression": "",
           "gridSize": 4,
           "options": []
@@ -370,16 +396,16 @@
     {
       "name": "Oauth2 client",
       "code": "oauth2-client-api",
-      "minder": "io.innospots.connector.api.minder.OAuth2ApiConnectionMinder",
+      "minder": "io.innospots.connector.api.minder.OAuth2ClientConnectionMinder",
       "defaults": {},
       "elements": [
         {
-          "label": "Authority Url",
-          "name": "authority_url",
-          "placeholder": "input authority url",
+          "label": "AccessToken地址",
+          "name": "access_token_url",
+          "placeholder": "http://ip:port",
           "required": true,
           "labelGrid": 4,
-          "tips": "Authority Url",
+          "tips": "获取授权的URL地址",
           "type": "INPUT",
           "expression": "",
           "gridSize": 8,
@@ -400,10 +426,10 @@
         {
           "label": "client_id",
           "name": "client_id",
-          "placeholder": "Input client_id",
+          "placeholder": "输入 client_id",
           "required": true,
           "labelGrid": 4,
-          "tips": "client_id",
+          "tips": "oauth2 client模式的client_id",
           "type": "INPUT",
           "expression": "",
           "gridSize": 4,
@@ -412,10 +438,40 @@
         {
           "label": "client_secret",
           "name": "client_secret",
-          "placeholder": "Input client_secret",
+          "placeholder": "输入 client_secret",
           "required": true,
           "labelGrid": 4,
-          "tips": "client_secret",
+          "tips": "oauth2 client模式的client_secret",
+          "type": "INPUT",
+          "expression": "",
+          "gridSize": 4,
+          "options": []
+        },
+        {
+          "label": "token位置",
+          "name": "token_location",
+          "placeholder": "",
+          "required": true,
+          "labelGrid": 4,
+          "tips": "token 参数在请求头还是请求参数上",
+          "type": "RADIO",
+          "expression": "",
+          "gridSize": 4,
+          "options": [
+            {"name":"请求头","value":"HEADER"},
+            {"name":"请求参数","value":"PARAM"},
+            {"name":"请求体","value":"BODY"}
+          ]
+        },
+        {
+          "label": "token参数",
+          "name": "token_param",
+          "placeholder": "access_token",
+          "defaultValue": "access_token",
+          "value": "access_token",
+          "required": true,
+          "labelGrid": 4,
+          "tips": "accessToken的参数名",
           "type": "INPUT",
           "expression": "",
           "gridSize": 4,
@@ -423,5 +479,352 @@
         }
       ]
     }
-  ]
+  ],
+  "appForm": {
+    "type": "object",
+    "formWidth": 420,
+    "formMinWidth": 360,
+    "formMaxWidth": 700,
+    "isFixedWidth": false,
+    "properties": {
+      "displayName": {
+        "type": "string",
+        "title": "节点名称",
+        "required": true,
+        "isDefault": true,
+        "readOnlyWidget": "ReadOnlyWidget",
+        "props": {
+          "placeholder": "请输入节点名称"
+        },
+        "default": "API"
+      },
+      "auth_type": {
+        "type": "string",
+        "title": "鉴权方式",
+        "required": false,
+        "isDefault": true,
+        "widget": "AuthSelect",
+        "readOnlyWidget": "AuthSelect",
+        "props": {
+          "placeholder": "请选择鉴权方式"
+        },
+        "nodeId": 64,
+        "options": [{
+          "value": "none",
+          "label": "None"
+        }, {
+          "value": "oauth2-auth-api",
+          "label": "Oauth2 Auth"
+        }, {
+          "value": "token-auth-api",
+          "label": "Token Auth"
+        }]
+      },
+      "credential": {
+        "type": "number",
+        "title": "凭据",
+        "required": false,
+        "isDefault": true,
+        "showAddButton": true,
+        "showEditButton": true,
+        "widget": "CredentialSelect",
+        "readOnlyWidget": "CredentialSelect",
+        "widgetRules": [{
+          "result": "visible",
+          "relation": "OR",
+          "children": [{
+            "source": {
+              "value": "auth_type",
+              "label": "鉴权方式 - auth_type"
+            },
+            "term": {
+              "value": "notnull",
+              "label": "有值"
+            }
+          }]
+        }],
+        "hidden": "{{!(formData.auth_type != undefined && formData.auth_type != '')}}"
+      },
+      "url_address": {
+        "type": "array",
+        "title": "请求地址",
+        "required": true,
+        "isDefault": true,
+        "widget": "HttpURLInput",
+        "readOnlyWidget": "HttpURLInput",
+        "props": {
+          "placeholder": "请输入请求地址"
+        }
+      },
+      "request_params": {
+        "title": "HTTP请求",
+        "type": "array",
+        "widget": "HttpRequest",
+        "readOnlyWidget": "HttpRequest",
+        "required": false,
+        "isSelect": true,
+        "dependencies": "url_address"
+      },
+      "output_payload": {
+        "title": "返回数据是否存入Payload",
+        "type": "boolean",
+        "widget": "switch",
+        "default": false,
+        "readOnlyWidget": "ReadOnlyWidget",
+        "required": false,
+        "props": {}
+      },
+      "switch_cache": {
+        "title": "是否缓存",
+        "type": "boolean",
+        "widget": "switch",
+        "default": false,
+        "readOnlyWidget": "ReadOnlyWidget",
+        "description": "缓存调用结果",
+        "required": false,
+        "widgetRules": [{
+          "result": "visible",
+          "relation": "OR",
+          "children": [{
+            "source": {
+              "value": "output_payload",
+              "label": "返回数据是否存入Payload - output_payload"
+            },
+            "term": {
+              "value": "true",
+              "label": "选中"
+            }
+          }]
+        }],
+        "hidden": "{{!(formData.output_payload == true)}}"
+      },
+      "cache_second": {
+        "title": "缓存时间(秒)",
+        "type": "number",
+        "readOnlyWidget": "ReadOnlyWidget",
+        "required": false,
+        "default": 300,
+        "props": {
+          "addonAfter": "秒",
+          "min": 1
+        },
+        "widgetRules": [{
+          "result": "visible",
+          "relation": "AND",
+          "children": [{
+            "source": {
+              "value": "switch_cache",
+              "label": "是否缓存 - switch_cache"
+            },
+            "term": {
+              "value": "true",
+              "label": "选中"
+            }
+          }, {
+            "source": {
+              "value": "output_payload",
+              "label": "返回数据是否存入Payload - output_payload"
+            },
+            "term": {
+              "value": "true",
+              "label": "选中"
+            }
+          }]
+        }],
+        "hidden": "{{!(formData.switch_cache == true && formData.output_payload == true)}}"
+      },
+      "extract_path": {
+        "title": "数据提取",
+        "type": "string",
+        "readOnlyWidget": "ReadOnlyWidget",
+        "default": "$",
+        "required": false,
+        "props": {},
+        "widgetRules": [{
+          "result": "visible",
+          "relation": "OR",
+          "children": [{
+            "source": {
+              "value": "output_payload",
+              "label": "返回数据是否存入Payload - output_payload"
+            },
+            "term": {
+              "value": "true",
+              "label": "选中"
+            }
+          }]
+        }],
+        "hidden": "{{!(formData.output_payload == true)}}"
+      },
+      "output_field_type": {
+        "title": "返回数据类型",
+        "type": "string",
+        "enum": ["LIST", "MAP"],
+        "enumNames": ["列表", "单条(对象)"],
+        "widget": "radio",
+        "readOnlyWidget": "ReadOnlyWidget",
+        "default": "MAP",
+        "required": true,
+        "props": {
+          "optionType": "default"
+        },
+        "widgetRules": [{
+          "result": "visible",
+          "relation": "OR",
+          "children": [{
+            "source": {
+              "value": "output_payload",
+              "label": "返回数据是否存入Payload - output_payload"
+            },
+            "term": {
+              "value": "true",
+              "label": "选中"
+            }
+          }]
+        }],
+        "hidden": "{{!(formData.output_payload == true)}}"
+      },
+      "output_mode_map": {
+        "title": "存储方式",
+        "type": "string",
+        "options": [{
+          "value": "FIELD",
+          "label": "存入变量"
+        }, {
+          "value": "PAYLOAD",
+          "label": "合并入Payload"
+        }, {
+          "value": "OVERWRITE",
+          "label": "覆盖Payload"
+        }],
+        "widget": "Select",
+        "readOnlyWidget": "Select",
+        "required": true,
+        "widgetRules": [{
+          "result": "visible",
+          "relation": "OR",
+          "children": [{
+            "source": {
+              "value": "output_field_type",
+              "label": "返回数据类型 - output_field_type"
+            },
+            "term": {
+              "value": "equals",
+              "label": "等于"
+            },
+            "value": "MAP"
+          }]
+        }, {
+          "result": "hidden",
+          "relation": "OR",
+          "children": [{
+            "source": {
+              "value": "output_payload",
+              "label": "返回数据是否存入Payload - output_payload"
+            },
+            "term": {
+              "value": "false",
+              "label": "未选中"
+            }
+          }]
+        }],
+        "optionsType": "customOptions",
+        "hidden": "{{!(formData.output_field_type == 'MAP') || (formData.output_payload == false || formData.output_payload == undefined)}}"
+      },
+      "output_mode_list": {
+        "title": "存储方式",
+        "type": "string",
+        "options": [{
+          "value": "FIELD",
+          "label": "存入变量"
+        }, {
+          "value": "OVERWRITE",
+          "label": "覆盖Payload"
+        }],
+        "widget": "Select",
+        "readOnlyWidget": "Select",
+        "required": true,
+        "optionsType": "customOptions",
+        "widgetRules": [{
+          "result": "visible",
+          "relation": "OR",
+          "children": [{
+            "source": {
+              "value": "output_field_type",
+              "label": "返回数据类型 - output_field_type"
+            },
+            "term": {
+              "value": "equals",
+              "label": "等于"
+            },
+            "value": "LIST"
+          }]
+        }, {
+          "result": "hidden",
+          "relation": "OR",
+          "children": [{
+            "source": {
+              "value": "output_payload",
+              "label": "返回数据是否存入Payload - output_payload"
+            },
+            "term": {
+              "value": "false",
+              "label": "未选中"
+            }
+          }]
+        }],
+        "hidden": "{{!(formData.output_field_type == 'LIST') || (formData.output_payload == false || formData.output_payload == undefined)}}"
+      },
+      "variable_name": {
+        "title": "存储变量名称",
+        "type": "string",
+        "readOnlyWidget": "ReadOnlyWidget",
+        "required": false,
+        "props": {},
+        "widgetRules": [{
+          "result": "visible",
+          "relation": "OR",
+          "children": [{
+            "source": {
+              "value": "output_mode_map",
+              "label": "存储方式 - output_mode_map"
+            },
+            "term": {
+              "value": "equals",
+              "label": "等于"
+            },
+            "value": "FIELD"
+          }]
+        }, {
+          "result": "visible",
+          "relation": "OR",
+          "children": [{
+            "source": {
+              "value": "output_mode_list",
+              "label": "存储方式 - output_mode_list"
+            },
+            "term": {
+              "value": "equals",
+              "label": "等于"
+            },
+            "value": "FIELD"
+          }]
+        }, {
+          "result": "hidden",
+          "relation": "OR",
+          "children": [{
+            "source": {
+              "value": "output_payload",
+              "label": "返回数据是否存入Payload - output_payload"
+            },
+            "term": {
+              "value": "false",
+              "label": "未选中"
+            }
+          }]
+        }],
+        "hidden": "{{!(formData.output_mode_map == 'FIELD') || !(formData.output_mode_list == 'FIELD') || (formData.output_payload == false || formData.output_payload == undefined)}}"
+      }
+    }
+  }
 }

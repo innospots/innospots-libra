@@ -18,13 +18,9 @@
 
 package io.innospots.workflow.runtime;
 
-import io.innospots.libra.base.model.swagger.SwaggerOpenApiBuilder;
-import io.innospots.workflow.console.WorkflowOperatorImporter;
-import io.innospots.workflow.console.operator.instance.WorkflowBuilderOperator;
-import io.innospots.workflow.core.loader.IWorkflowLoader;
+
 import io.innospots.workflow.runtime.config.WorkflowRuntimeConfiguration;
 import io.innospots.workflow.runtime.flow.FlowManager;
-import io.innospots.workflow.runtime.loader.DbWorkflowLoader;
 import io.innospots.workflow.runtime.starter.WorkflowStarter;
 import org.springdoc.core.GroupedOpenApi;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -42,7 +38,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-@WorkflowOperatorImporter
+//@WorkflowOperatorImporter
 @Import({WorkflowRuntimeImporter.StreamFlowEngineConfiguration.class, WorkflowRuntimeConfiguration.class})
 public @interface WorkflowRuntimeImporter {
 
@@ -55,16 +51,21 @@ public @interface WorkflowRuntimeImporter {
             return new WorkflowStarter(flowManager);
         }
 
+        /*
         @Bean
         public IWorkflowLoader workflowLoader(WorkflowBuilderOperator workFlowBuilderOperator) {
             return new DbWorkflowLoader(workFlowBuilderOperator);
         }
+         */
 
 
         @Bean
         @ConditionalOnProperty(prefix = "innospots.config", name = "enable-swagger", havingValue = "true")
         public GroupedOpenApi workflowRuntimeOpenApi() {
-            return SwaggerOpenApiBuilder.buildGroupedOpenApi("workflow-runtime", "io.innospots.workflow.runtime");
+            return GroupedOpenApi.builder().group("workflow-runtime")
+                    .packagesToScan("io.innospots.workflow.runtime")
+                    .pathsToMatch("/**")
+                    .build();
         }
 
     }

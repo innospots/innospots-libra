@@ -20,22 +20,24 @@ package io.innospots.workflow.node.app.execute;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.innospots.base.condition.EmbedCondition;
+import io.innospots.base.function.aggregation.AggregationFunctionBuilder;
+import io.innospots.base.function.StatisticFunctionType;
+import io.innospots.base.function.aggregation.IAggregationFunction;
+import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.field.BaseField;
+import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.re.IExpression;
 import io.innospots.base.re.aviator.AviatorExpression;
-import io.innospots.base.re.function.aggregation.AggregationFunctionType;
+import io.innospots.base.utils.BeanUtils;
 import io.innospots.base.utils.Initializer;
-import io.innospots.workflow.core.node.NodeParamField;
+import io.innospots.workflow.core.node.field.NodeParamField;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * aggregation compute field
@@ -51,14 +53,45 @@ public class AggregationComputeField extends BaseField implements Initializer {
 
     private NodeParamField summaryField;
 
+    private NodeParamField weightField;
+
     private EmbedCondition condition;
 
     @JsonIgnore
     private IExpression<Object> conditionExpression;
 
-    private AggregationFunctionType functionType;
+    private StatisticFunctionType functionType;
 
     private String expr;
+
+    private IAggregationFunction aggregateFunction;
+
+    public static AggregationComputeField build(Map<String, Object> fieldMap) {
+        AggregationComputeField computeField = new AggregationComputeField();
+        computeField.name = (String) fieldMap.get("name");
+        computeField.comment = (String) fieldMap.get("comment");
+        computeField.code = (String) fieldMap.get("code");
+        if (fieldMap.containsKey("valueType")) {
+            computeField.valueType = FieldValueType.valueOf((String) fieldMap.get("valueType"));
+        }
+        computeField.functionType = StatisticFunctionType.valueOf((String) fieldMap.get("functionType"));
+        Map<String, Object> sf = (Map<String, Object>) fieldMap.get("summaryField");
+        if (sf != null) {
+            computeField.summaryField = BeanUtils.toBean(sf, NodeParamField.class);
+        }
+
+        Map<String,Object> wf = (Map<String, Object>) fieldMap.get("weightField");
+        if(wf!=null){
+            computeField.weightField = BeanUtils.toBean(sf,NodeParamField.class);
+        }
+
+        Map<String, Object> ct = (Map<String, Object>) fieldMap.get("condition");
+        if (ct != null) {
+            computeField.condition = JSONUtils.parseObject(ct, EmbedCondition.class);
+        }
+
+        return computeField;
+    }
 
 
     @Override
@@ -66,12 +99,17 @@ public class AggregationComputeField extends BaseField implements Initializer {
         if (condition != null) {
             condition.initialize();
             expr = condition.getStatement();
-            conditionExpression = new AviatorExpression(expr, null);
+            if (StringUtils.isNotEmpty(expr)) {
+                conditionExpression = new AviatorExpression(expr, null);
+            }
         }
+        this.aggregateFunction = AggregationFunctionBuilder.build(functionType, summaryField,weightField, conditionExpression);
         log.debug("field,{},{} expression:{},", code, name, expr);
     }
 
     public Object compute(Collection<Map<String, Object>> items) {
+        return this.aggregateFunction.compute(items);
+        /*
         Object val = null;
         try {
             switch (functionType) {
@@ -93,25 +131,148 @@ public class AggregationComputeField extends BaseField implements Initializer {
                 case DISCOUNT:
                     val = distinctCount(items);
                     break;
+                case STD_DEV:
+                    val = stdDev(items);
+                    break;
+                case VARIANCE:
+                    val = variance(items);
+                    break;
+                case POP_STD_DEV:
+                    val = popStdDev(items);
+                    break;
+                case POP_VARIANCE:
+                    val = popVariance(items);
+                    break;
+                case KURT:
+                    val = kurtosis(items);
+                    break;
+                case MAD:
+                    val = meanAbsDev(items);
+                    break;
+                case SEM:
+                    val = stdErrOfMean(items);
+                    break;
+                case SOS:
+                    val = sumOfSquares(items);
+                    break;
+                case MODE:
+                    val = mode(items);
+                    break;
+                case PROD:
+                    val = product(items);
+                    break;
+                case SKEW:
+                    val = skewness(items);
+                    break;
+                case SEMI_VAR:
+                    val = semiVariance(items);
+                    break;
+                case SumOfLogs:
+                    val = sumOfLogs(items);
+                    break;
+                case GeometricMean:
+                    val = geometricMean(items);
+                    break;
+                case MEDIAN:
+                    val = median(items);
+                    break;
+                case PERCENTILE:
                 default:
             }
         } catch (Exception e) {
             log.error(e.getMessage());
         }
         return val;
+
+         */
     }
 
-    /**
-     * population variance
-     */
+    /*
+    double semiVariance(Collection<Map<String, Object>> items){
+        SemiVariance semiVariance = new SemiVariance();
+        return semiVariance.evaluate(toDoubleArray(items));
+    }
+
+    double sumOfLogs(Collection<Map<String, Object>> items){
+        return stcCompute(new SumOfLogs(),items);
+    }
+
+
+    double geometricMean(Collection<Map<String, Object>> items){
+        return stcCompute(new GeometricMean(),items);
+    }
+
+    double sumOfSquares(Collection<Map<String, Object>> items){
+        return stcCompute(new SumOfSquares(),items);
+    }
+
+
+    double kurtosis(Collection<Map<String, Object>> items){
+        return stcCompute(new Kurtosis(),items);
+    }
+
+
+    double skewness(Collection<Map<String, Object>> items){
+        return stcCompute(new Skewness(),items);
+    }
+
+    double product(Collection<Map<String, Object>> items){
+        return stcCompute(new Product(),items);
+    }
+
+
+    double meanAbsDev(Collection<Map<String, Object>> items){
+        Mean mean = new Mean();
+        for (Map<String, Object> item : items) {
+            if(this.matchItem(item)){
+                mean.increment(value(item));
+            }
+        }
+        return mean.getResult()/mean.getN();
+    }
+
+    double stdErrOfMean(Collection<Map<String, Object>> items){
+        StandardDeviation stdDev = new StandardDeviation();
+        for (Map<String, Object> item : items) {
+            if(this.matchItem(item)){
+                stdDev.increment(value(item));
+            }
+        }
+        return stdDev.getResult() / Math.sqrt(stdDev.getN());
+    }
+
+
+    double mode(Collection<Map<String, Object>> items){
+        return 0d;
+    }
+
+    double popStdDev(Collection<Map<String, Object>> items){
+        return popStdDev(toDoubleArray(items));
+    }
+
+
+
+    double popStdDev(double[] data) {
+        return Math.sqrt(popVariance(data));
+    }
+
+    private Object stdDev(Collection<Map<String, Object>> items){
+        return stcCompute(new StandardDeviation(),items);
+    }
+
+
+    double stdDev(double[] data) {
+        double std_dev;
+        std_dev = Math.sqrt(variance(data));
+        return std_dev;
+    }
+
+
     private Double popVariance(Collection<Map<String, Object>> items) {
-        double[] data = items.stream()
-                .filter(this::matchItem)
-                .mapToDouble(this::value).toArray();
-        return varp(data);
+        return popVariance(toDoubleArray(items));
     }
 
-    private Double varp(double[] data) {
+    private Double popVariance(double[] data) {
         double variance = 0;
         double avg = Arrays.stream(data).average().orElse(0);
         for (int i = 0; i < data.length; i++) {
@@ -121,22 +282,10 @@ public class AggregationComputeField extends BaseField implements Initializer {
         return variance;
     }
 
-    /**
-     * population standard deviation 总体标准差
-     *
-     * @param data
-     * @return
-     */
-    private double popStdDev(double[] data) {
-        return Math.sqrt(varp(data));
+    private Object variance(Collection<Map<String, Object>> items){
+        return stcCompute(new Variance(), items);
     }
 
-    /**
-     * 样本方差
-     *
-     * @param data
-     * @return
-     */
     double variance(double[] data) {
         double variance = 0;
         double avg = Arrays.stream(data).average().orElse(0);
@@ -147,13 +296,14 @@ public class AggregationComputeField extends BaseField implements Initializer {
         return variance;
     }
 
-    /**
-     * standard deviation 样本标准差
-     */
-    double stdDev(double[] data) {
-        double std_dev;
-        std_dev = Math.sqrt(variance(data));
-        return std_dev;
+
+    private double stcCompute(AbstractStorelessUnivariateStatistic statistic,Collection<Map<String, Object>> items){
+        for (Map<String, Object> item : items) {
+            if(this.matchItem(item)){
+                statistic.increment(this.value(item));
+            }
+        }
+        return statistic.getResult();
     }
 
     private Object count(Collection<Map<String, Object>> items) {
@@ -178,16 +328,15 @@ public class AggregationComputeField extends BaseField implements Initializer {
                 }).orElse(null);
     }
 
-    private Object middle(Collection<Map<String, Object>> items) {
-        List<Object> list = items.stream()
+    private Object median(Collection<Map<String, Object>> items) {
+        Median median = new Median();
+        return median.evaluate(toDoubleArray(items));
+    }
+
+    private double[] toDoubleArray(Collection<Map<String,Object>> items){
+        return items.stream()
                 .filter(this::matchItem)
-                .map(item -> item.get(summaryField.getCode())).sorted().collect(Collectors.toList());
-        int ln = list.size();
-        if (ln % 2 == 0) {
-            return (Double.parseDouble(String.valueOf(list.get(ln / 2 - 1))) + Double.parseDouble((String) list.get(ln / 2))) / 2;
-        } else {
-            return list.get(list.size() / 2);
-        }
+                .mapToDouble(this::value).toArray();
     }
 
     private Object max(Collection<Map<String, Object>> items) {
@@ -203,32 +352,35 @@ public class AggregationComputeField extends BaseField implements Initializer {
     }
 
     private Object avg(Collection<Map<String, Object>> items) {
-        Double avg = items.stream()
-                .filter(this::matchItem)
-                .mapToDouble(this::value).average().orElse(0);
-        return avg;
+        return stcCompute(new Mean(),items);
     }
 
     private Object sum(Collection<Map<String, Object>> items) {
-        Double sum = items.stream()
-                .filter(this::matchItem)
-                .mapToDouble(this::value).sum();
+        Sum sum = new Sum();
+        Double sumVal = 0d;
+        for (Map<String, Object> item : items) {
+            if(this.matchItem(item)){
+                sum.increment(value(item));
+            }
+        }
+        sumVal = sum.getResult();
+
         Object v = 0;
         switch (summaryField.getValueType()) {
             case DECIMAL:
-                v = BigDecimal.valueOf(sum);
+                v = BigDecimal.valueOf(sumVal);
                 break;
             case DOUBLE:
                 v = sum;
                 break;
             case INTEGER:
             case NUMBER:
-                v = sum.intValue();
+                v = sumVal.intValue();
                 break;
             default:
-                double e = sum - sum.intValue();
+                double e = sumVal - sumVal.intValue();
                 if (e == 0) {
-                    v = sum.intValue();
+                    v = sumVal.intValue();
                 }
         }
         return v;
@@ -255,13 +407,21 @@ public class AggregationComputeField extends BaseField implements Initializer {
     }
 
     private Double value(Map<String, Object> item) {
-        Object v = item.getOrDefault(summaryField.getCode(), 0d);
-        if (v instanceof Double) {
-            return (double) v;
-        } else {
-            return Double.parseDouble(v.toString());
+        try {
+            Object v = item.getOrDefault(summaryField.getCode(), 0d);
+            if (v instanceof Double) {
+                return (double) v;
+            }else if(v instanceof Number){
+                return ((Number) v).doubleValue();
+            } else if(v !=null && v.toString().matches("[\\d]+[.]*[\\d]+")){
+                return Double.parseDouble(v.toString());
+            }else{
+                return 0d;
+            }
+        }catch (Exception e){
+            return 0d;
         }
     }
-
+     */
 
 }

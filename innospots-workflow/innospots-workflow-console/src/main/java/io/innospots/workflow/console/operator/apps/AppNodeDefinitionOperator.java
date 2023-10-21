@@ -117,6 +117,15 @@ public class AppNodeDefinitionOperator extends ServiceImpl<AppNodeDefinitionDao,
         return AppNodeDefinitionConvertMapper.INSTANCE.entityToModelList(this.list(queryWrapper));
     }
 
+    public List<AppNodeDefinitionEntity> listByCodes(List<String> codes) {
+        if (CollectionUtils.isEmpty(codes)) {
+            return new ArrayList<>();
+        }
+        QueryWrapper<AppNodeDefinitionEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().in(AppNodeDefinitionEntity::getCode, codes);
+        return this.list(queryWrapper);
+    }
+
     /**
      * create app info
      *

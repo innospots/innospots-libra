@@ -82,4 +82,11 @@ public class ExecutionInput {
         return this.resources == null || this.resources.isEmpty();
     }
 
+    public int size(){
+        if(data == null){
+            return 0;
+        }
+        return data.size();
+    }
+
 }

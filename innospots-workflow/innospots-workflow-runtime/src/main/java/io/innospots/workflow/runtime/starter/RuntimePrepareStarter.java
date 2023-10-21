@@ -79,7 +79,7 @@ public class RuntimePrepareStarter implements ApplicationRunner {
 
     @PreDestroy
     public void close() {
-        workflowWebhookServer.stop();
+        //workflowWebhookServer.stop();
     }
 
 }

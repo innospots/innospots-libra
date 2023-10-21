@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,9 +80,11 @@ public class EmbedCondition extends BaseCondition {
                 BaseCondition condition = embeds.get(i);
                 condition.setMode(this.mode);
                 condition.initialize();
-                buf.append("(");
-                buf.append(condition.statement);
-                buf.append(")");
+                if(StringUtils.isNotEmpty(condition.statement)){
+                    buf.append("(");
+                    buf.append(condition.statement);
+                    buf.append(")");
+                }
                 if (i < embeds.size() - 1) {
                     buf.append(relation.symbol(mode));
                 }

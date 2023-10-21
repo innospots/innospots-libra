@@ -100,11 +100,13 @@ public class JdbcExecutionContextOperator implements IExecutionContextOperator {
 
     @Override
     public void saveExecutionContext(NodeExecution nodeExecution) {
-        this.saveInputItems(nodeExecution);
-        this.saveOutputItems(nodeExecution);
         ExecutionContextEntity executionContextEntity = ExecutionContextMapper.toExecutionContextEntity(nodeExecution);
         dataOperator.insert(ExecutionContextEntity.TABLE_NAME, BeanUtils.toMap(executionContextEntity, true, true));
-
+        if(logger.isDebugEnabled()){
+            logger.debug("save node execution context,{}",nodeExecution.getNodeExecutionId());
+        }
+        //this.saveInputItems(nodeExecution);
+        this.saveOutputItems(nodeExecution);
     }
 
     @Override

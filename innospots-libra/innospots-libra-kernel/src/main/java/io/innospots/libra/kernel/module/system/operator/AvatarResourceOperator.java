@@ -25,7 +25,7 @@ import io.innospots.base.enums.ImageType;
 import io.innospots.base.exception.InnospotException;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.model.response.ResponseCode;
-import io.innospots.libra.base.utils.ImageFileUploader;
+import io.innospots.base.utils.ImageFileUploader;
 import io.innospots.libra.kernel.module.system.dao.AvatarResourceDao;
 import io.innospots.libra.kernel.module.system.entity.AvatarResourceEntity;
 import lombok.extern.slf4j.Slf4j;

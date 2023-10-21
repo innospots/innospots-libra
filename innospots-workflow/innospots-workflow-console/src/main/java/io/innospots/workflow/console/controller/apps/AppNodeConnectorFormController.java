@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static io.innospots.base.model.response.InnospotResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
@@ -92,13 +93,13 @@ public class AppNodeConnectorFormController {
                     throw ConfigException.buildTypeException(this.getClass(), "credentialFormConfig load failed.");
                 }
             }
-
             for (FormElement element : formConfig.getElements()) {
                 Object defaultValue = connectorConfig.getValue(element.getName());
                 if(defaultValue!=null){
                     element.setValue(String.valueOf(defaultValue));
                 }
-                element.setReadOnly(defaultValue != null);
+                element.setReadOnly(connectorConfig.isReadOnly(element.getName()));
+                //element.setReadOnly(defaultValue != null);
             }//end for element
 
             configs.add(formConfig);

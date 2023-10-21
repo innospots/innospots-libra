@@ -68,7 +68,7 @@ public class JSONUtils {
 
     public static Jackson2ObjectMapperBuilder customBuilder() {
         return Jackson2ObjectMapperBuilder.json()
-                .serializationInclusion(JsonInclude.Include.NON_NULL)
+                .serializationInclusion(JsonInclude.Include.ALWAYS)
                 .featuresToDisable(WRITE_DATES_AS_TIMESTAMPS)
                 .failOnUnknownProperties(false)
                 .featuresToEnable(ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT)
@@ -137,7 +137,7 @@ public class JSONUtils {
     }
 
     public static Map<String, Object> objectToMap(Object object) {
-        return OBJECT_MAPPER.convertValue(object, Map.class);
+        return OBJECT_MAPPER.convertValue(object, LinkedHashMap.class);
     }
 
     public static List<String> objectToStrList(Object object) {
@@ -180,6 +180,10 @@ public class JSONUtils {
             logger.error("parse object exception!", e);
         }
         return null;
+    }
+
+    public static <T> T parseObject(Map<String,Object> map, Class<T> clazz) {
+        return parseObject(toJsonString(map),clazz);
     }
 
     public static <T> T parseObject(String json, TypeReference<T> type) {
@@ -346,7 +350,7 @@ public class JSONUtils {
         }
 
         try {
-            return OBJECT_MAPPER.readValue(json, new TypeReference<Map<K, V>>() {
+            return OBJECT_MAPPER.readValue(json, new TypeReference<LinkedHashMap<K, V>>() {
             });
         } catch (Exception e) {
             logger.error("json to map exception!, {}", e.getMessage(), e);

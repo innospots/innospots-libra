@@ -101,5 +101,11 @@ public class NodeExecutionEntity extends PBaseEntity {
     @Column(columnDefinition = "TEXT")
     private String message;
 
+    @Column(length = 32)
+    private String nodeName;
+
+    @Column(length = 32)
+    private String nodeCode;
+
 
 }

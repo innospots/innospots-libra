@@ -70,13 +70,12 @@ public class HttpDataExecutor implements IExecutionOperator, HttpConstant {
 
             } else {
                 String cnt = requestBody.getContent();
-                if (StringUtils.isEmpty(cnt)) {
-                    data = httpConnection.post(url, requestBody.getQuery(), cnt, requestBody.getHeaders(), httpContext);
+                if (StringUtils.isNotEmpty(cnt)) {
+                    data = httpConnection.post(url, requestBody.getQuery(),
+                            JSONUtils.toMap(cnt), requestBody.getHeaders(), httpContext);
                 } else {
-                    data = httpConnection.post(url,
-                            requestBody.getQuery(),
-                            StringUtils.isNotEmpty(requestBody.getContent()) ? JSONUtils.toMap(requestBody.getContent()) : requestBody.getBody(),
-                            requestBody.getHeaders(), httpContext);
+                    data = httpConnection.post(url, requestBody.getQuery(),
+                            requestBody.getBody(), requestBody.getHeaders(), httpContext);
                 }
             }
         } else if (ApiMethod.GET.equals(ApiMethod.valueOf(requestBody.getOperation()))) {

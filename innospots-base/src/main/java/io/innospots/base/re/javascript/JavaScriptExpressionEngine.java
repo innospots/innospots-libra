@@ -145,7 +145,7 @@ public class JavaScriptExpressionEngine implements IExpressionEngine {
             CompiledScript compiledScript = compilable.compile(methodBody);
             String[] args = methodBody.substring(methodBody.indexOf("(") + 1, methodBody.indexOf(")")).split(",");
             scriptExpression = new JavaScriptExpression(compiledScript, args);
-        } catch (ScriptException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
         return scriptExpression;

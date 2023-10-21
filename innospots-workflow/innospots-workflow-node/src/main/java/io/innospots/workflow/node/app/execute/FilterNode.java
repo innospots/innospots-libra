@@ -21,10 +21,12 @@ package io.innospots.workflow.node.app.execute;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.model.Pair;
+import io.innospots.workflow.core.exception.FlowRuntimeException;
 import io.innospots.workflow.core.execution.ExecutionInput;
+import io.innospots.workflow.core.execution.ExecutionStatus;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.NodeParamField;
+import io.innospots.workflow.core.node.field.NodeParamField;
 import io.innospots.workflow.core.node.app.BaseAppNode;
 import io.innospots.workflow.core.node.instance.NodeInstance;
 
@@ -68,16 +70,19 @@ public class FilterNode extends BaseAppNode {
     }
 
     public static Pair<ExecutionInput, ExecutionInput> splitSet(NodeExecution nodeExecution, String mainSourceNodeKey) {
+        if (nodeExecution.inputSize() <= 1) {
+            throw FlowRuntimeException.buildException(FilterNode.class,"the size of node execution input must have more than 2","");
+        }
         ExecutionInput mainInput = null;
         ExecutionInput filterInput = null;
         for (ExecutionInput input : nodeExecution.getInputs()) {
-            if(mainSourceNodeKey==null){
-                if(mainInput == null){
+            if (mainSourceNodeKey == null) {
+                if (mainInput == null) {
                     mainInput = input;
-                }else{
+                } else {
                     filterInput = input;
                 }
-            }else if (input.getSourceKey().equals(mainSourceNodeKey)) {
+            } else if (input.getSourceKey().equals(mainSourceNodeKey)) {
                 mainInput = input;
             } else {
                 filterInput = input;
@@ -88,13 +93,10 @@ public class FilterNode extends BaseAppNode {
 
     @Override
     public void invoke(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = new NodeOutput();
-        nodeOutput.addNextKey(this.nextNodeKeys());
-        nodeExecution.addOutput(nodeOutput);
-
         Pair<ExecutionInput, ExecutionInput> pair = splitSet(nodeExecution, mainSourceNodeKey);
         ExecutionInput mainInput = pair.getLeft();
         ExecutionInput filterInput = pair.getRight();
+        NodeOutput nodeOutput = buildOutput(nodeExecution);
 
         if (mainInput == null) {
             throw ResourceException.buildAbandonException(this.getClass(),

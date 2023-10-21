@@ -38,10 +38,8 @@ import org.apache.ibatis.jdbc.SQL;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -52,6 +50,8 @@ import java.util.Map;
 public class JdbcDataOperator implements IDataOperator {
 
     protected JdbcTemplate jdbcTemplate;
+
+    protected int max_batch_size = 200;
 
     protected IFactorStatement factorStatement = FactorStatementBuilder.build(Mode.DB);
 
@@ -239,40 +239,82 @@ public class JdbcDataOperator implements IDataOperator {
 
     @Override
     public Integer upsertBatch(String tableName, String keyColumn, List<Map<String, Object>> data) {
+        if(data.size() <= max_batch_size){
+            return eachBatchUpsert(tableName,keyColumn,data);
+        }
+        int count = 0;
+        List<Map<String,Object>> items = new ArrayList<>();
+        for (Map<String, Object> item : data) {
+            if(items.size()< max_batch_size){
+                items.add(item);
+            }else{
+                count += eachBatchUpsert(tableName,keyColumn,items);
+                items.clear();
+            }
+        }//end for
+        if(items.size() >0){
+            count += eachBatchUpsert(tableName,keyColumn,items);
+        }
+
+        return count;
+    }
+
+
+    public Integer eachBatchUpsert(String tableName, String keyColumn, List<Map<String, Object>> data){
         if (CollectionUtils.isEmpty(data)) {
             return 0;
         }
 
-        SQL sql = new SQL().INSERT_INTO(tableName);
+        StringBuilder sqlBuilder = new StringBuilder();
+        sqlBuilder.append("INSERT INTO ").append(tableName).append(" (");
         Map<String, Object> firstData = data.get(0);
+        sqlBuilder.append(String.join(", ", firstData.keySet())).append(")");
+        sqlBuilder.append(" VALUES (");
+        for (int i = 0; i < firstData.size(); i++) {
+            if(i < firstData.size() - 1){
+                sqlBuilder.append("?, ");
+            }else{
+                sqlBuilder.append("?");
+            }
+        }//end for
+        sqlBuilder.append(") ON DUPLICATE KEY UPDATE ");
 
-        for (String key : firstData.keySet()) {
-            sql.INTO_COLUMNS(key);
-        }
-
-        for (Map<String, Object> map : data) {
-            map.forEach((k, v) -> {
-                String value = String.valueOf(factorStatement.normalizeValue(v, FieldValueType.convertTypeByValue(v)));
-                sql.INTO_VALUES(value);
-            });
-            sql.ADD_ROW();
-        }
-
-        StringBuilder sb = new StringBuilder(sql.toString());
-        sb.append(" ON DUPLICATE KEY UPDATE ");
-
-        firstData.remove(keyColumn);
+        Set<String> columns = new HashSet<>(firstData.keySet());
+        Arrays.stream(keyColumn.split(",")).collect(Collectors.toList()).forEach(columns::remove);
 
         int i = 0;
-        for (String key : firstData.keySet()) {
-            sb.append(key).append(" = VALUES(").append(key).append(")");
-            if (i != firstData.keySet().size() - 1) {
-                sb.append(",");
+        for (String key : columns) {
+            sqlBuilder.append(key).append(" = VALUES(").append(key).append(")");
+            if (i != columns.size() - 1) {
+                sqlBuilder.append(",");
             }
             i++;
         }
 
-        int upsert = jdbcTemplate.update(sb.toString());
+        List<Object[]> inData = new ArrayList<>();
+        for (Map<String, Object> item : data) {
+            Object[] obj = new Object[item.size()];
+            int j = 0;
+            for (String k : item.keySet()) {
+                obj[j++] = item.get(k);
+            }
+            inData.add(obj);
+        }
+
+        if(log.isDebugEnabled()){
+            log.debug("upsert primary:{}, size:{}, sql:{}",keyColumn,inData.size(),sqlBuilder);
+        }
+
+        int upsert = 0;
+        try {
+            int[] ups = jdbcTemplate.batchUpdate(sqlBuilder.toString(),inData);
+            upsert = Arrays.stream(ups).sum();
+        }catch (RuntimeException e){
+            log.error(e.getMessage(),e);
+            log.error("batch data:{}",inData);
+            throw e;
+        }
+
         return upsert;
     }
 

@@ -44,5 +44,4 @@ public class WorkflowResponse {
     private Object body;
 
     private String code;
-
 }

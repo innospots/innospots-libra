@@ -20,7 +20,7 @@ package io.innospots.base.configuration;
 
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.GlobalExceptionHandler;
-import io.innospots.base.function.FunctionDefinitionOperator;
+import io.innospots.base.function.definition.FunctionDefinitionOperator;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.registry.ServiceRegistryDao;
 import io.innospots.base.registry.ServiceRegistryManager;
@@ -80,7 +80,7 @@ public class BaseServiceConfiguration {
 
     @Bean
     public EventBusCenter eventBusCenter() {
-        return new EventBusCenter();
+        return EventBusCenter.getInstance();
     }
 
     @Bean

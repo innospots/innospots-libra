@@ -38,6 +38,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 import static io.innospots.base.model.response.InnospotResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
@@ -172,5 +173,10 @@ public class AppManagementController extends BaseController {
         return success(appService.deleteNodeDefinition(nodeId));
     }
 
+    @GetMapping("icons")
+    @Operation(summary = "app node icons")
+    public InnospotResponse<Map<String,String>> getAppNodeIcon() {
+        return success(appService.getAppNodeIcons());
+    }
 
 }

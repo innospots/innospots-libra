@@ -20,8 +20,10 @@ package io.innospots.workflow.runtime.endpoint;
 
 
 import io.innospots.base.constant.PathConstant;
+import io.innospots.workflow.core.webhook.WebhookPayload;
 import io.innospots.workflow.core.webhook.WorkflowResponse;
 import io.innospots.workflow.runtime.container.WebhookRuntimeContainer;
+import io.innospots.workflow.runtime.utils.WebhookPayloadConverter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -38,7 +40,7 @@ import java.util.Map;
  * @date 2021/3/12
  */
 
-@RequestMapping(PathConstant.ROOT_PATH + "runtime/webhook")
+@RequestMapping(PathConstant.ROOT_PATH + PathConstant.RUNTIME_PATH)
 @RestController
 @Tag(name = "Webhook Runtime Api")
 public class WebhookRuntimeEndpoint {
@@ -52,7 +54,7 @@ public class WebhookRuntimeEndpoint {
 
     @PostMapping(value = "{flowKey}")
     @Operation(summary = "post webhook")
-    public WorkflowResponse eventPost(
+    public WorkflowResponse apiPost(
             HttpServletRequest request,
             @Parameter(required = true) @PathVariable String flowKey,
             @Parameter(required = false) @RequestHeader Map<String, Object> headers,
@@ -60,9 +62,8 @@ public class WebhookRuntimeEndpoint {
             @RequestPart(required = false) MultipartFile[] multipartFiles,
             @RequestBody Map<String, Object> body
     ) {
-        //WebhookPayload payload = WebhookPayloadConverter.convert(flowKey,request,headers,requestParams,body);
-        //return webhookRuntimeContainer.execute(payload);
-        return null;
+        WebhookPayload payload = WebhookPayloadConverter.convert(flowKey,request,headers,requestParams,body);
+        return webhookRuntimeContainer.execute(payload);
     }
 
     @PostMapping("v2/{flowKey}")
@@ -83,16 +84,14 @@ public class WebhookRuntimeEndpoint {
 
     @GetMapping("{flowKey}")
     @Operation(summary = "get webhook")
-    public WorkflowResponse eventGet(@Parameter(required = true) @PathVariable String flowKey,
+    public WorkflowResponse apiGet(
+            @Parameter(required = true) @PathVariable String flowKey,
+                                   HttpServletRequest request,
                                      @Parameter(required = false) @RequestParam(required = false) Map<String, Object> params,
                                      @Parameter(required = false) @RequestHeader(required = false) Map<String, Object> headers) {
 
-        Map<String, Object> payload = new HashMap<>();
-        payload.put("headers", headers);
-        payload.put("params", params);
-        payload.put("body", Collections.emptyMap());
-        return null;
-        //return flowNodeDebugger.testWebhook(flowKey,payload);
+        WebhookPayload payload = WebhookPayloadConverter.convert(flowKey,request,headers,params,null);
+        return webhookRuntimeContainer.execute(payload);
     }
 
 

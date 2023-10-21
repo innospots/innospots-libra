@@ -39,6 +39,7 @@ import io.innospots.workflow.console.enums.FlowVersion;
 import io.innospots.workflow.console.listener.WorkflowPageListener;
 import io.innospots.workflow.console.mapper.instance.WorkflowInstanceConvertMapper;
 import io.innospots.workflow.console.operator.apps.AppFlowTemplateOperator;
+import io.innospots.workflow.core.flow.WorkflowBaseInfo;
 import io.innospots.workflow.core.flow.WorkflowInfo;
 import io.innospots.workflow.core.flow.instance.WorkflowInstance;
 import lombok.extern.slf4j.Slf4j;
@@ -115,6 +116,13 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
         return this.count(queryWrapper) > 0;
     }
 
+    public List<WorkflowBaseInfo> listWorkflows(String triggerCode){
+        QueryWrapper<WorkflowInstanceEntity> query = new QueryWrapper<>();
+        query.lambda().eq(WorkflowInstanceEntity::getStatus,DataStatus.ONLINE)
+                .eq(WorkflowInstanceEntity::getTriggerCode,triggerCode);
+        List<WorkflowInstanceEntity> entities = this.list(query);
+        return entities.stream().map(WorkflowInstanceConvertMapper.INSTANCE::entityToBaseInfo).collect(Collectors.toList());
+    }
 
     /**
      * List workflow infos

@@ -21,11 +21,13 @@ package io.innospots.workflow.console.service;
 import io.innospots.base.model.PageBody;
 import io.innospots.base.registry.ServiceRegistryHolder;
 import io.innospots.base.utils.DateTimeUtils;
+import io.innospots.libra.base.model.QueryRequest;
 import io.innospots.workflow.console.dao.instance.WorkflowInstanceCacheDao;
+import io.innospots.workflow.console.entity.apps.AppNodeDefinitionEntity;
 import io.innospots.workflow.console.entity.instance.WorkflowInstanceEntity;
-import io.innospots.workflow.console.enums.WorkflowType;
 import io.innospots.workflow.console.model.flow.WorkflowChart;
 import io.innospots.workflow.console.model.flow.WorkflowStatistics;
+import io.innospots.workflow.console.operator.apps.AppNodeDefinitionOperator;
 import io.innospots.workflow.console.operator.execution.ExecutionManagerOperator;
 import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
 import io.innospots.workflow.core.config.InnospotWorkflowProperties;
@@ -44,6 +46,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -65,18 +68,37 @@ public class WorkflowService {
 
     private final ExecutionManagerOperator executionManagerOperator;
 
-    private InnospotWorkflowProperties innospotWorkflowProperties;
+    private final InnospotWorkflowProperties innospotWorkflowProperties;
+
+    private final AppNodeDefinitionOperator appNodeDefinitionOperator;
 
     public WorkflowService(WorkflowInstanceOperator workflowInstanceOperator,
                            IFlowExecutionOperator IFlowExecutionOperator,
                            WorkflowInstanceCacheDao workflowInstanceCacheDao,
                            InnospotWorkflowProperties innospotWorkflowProperties,
-                           ExecutionManagerOperator executionManagerOperator) {
+                           ExecutionManagerOperator executionManagerOperator,
+                           AppNodeDefinitionOperator appNodeDefinitionOperator) {
         this.workflowInstanceOperator = workflowInstanceOperator;
         this.IFlowExecutionOperator = IFlowExecutionOperator;
         this.innospotWorkflowProperties = innospotWorkflowProperties;
         this.workflowInstanceCacheDao = workflowInstanceCacheDao;
         this.executionManagerOperator = executionManagerOperator;
+        this.appNodeDefinitionOperator = appNodeDefinitionOperator;
+    }
+
+    public PageBody<WorkflowInstance> getWorkflows(QueryRequest request) {
+        PageBody<WorkflowInstance> results = workflowInstanceOperator.pageWorkflows(request);
+        List<WorkflowInstance> workflowInstances = results.getList();
+        if (CollectionUtils.isNotEmpty(workflowInstances)) {
+            List<String> triggerCodes = workflowInstances.stream().map(WorkflowInstance::getTriggerCode).distinct().collect(Collectors.toList());
+            List<AppNodeDefinitionEntity> appNodeDefinitionEntities = appNodeDefinitionOperator.listByCodes(triggerCodes);
+            Map<String, AppNodeDefinitionEntity> appNodeDefinitionEntityMap = appNodeDefinitionEntities.stream()
+                    .collect(Collectors.toMap(AppNodeDefinitionEntity::getCode, Function.identity()));
+            for (WorkflowInstance workflowInstance : workflowInstances) {
+                workflowInstance.setIcon(appNodeDefinitionEntityMap.get(workflowInstance.getTriggerCode()).getIcon());
+            }
+        }
+        return results;
     }
 
     public WorkflowStatistics getWorkflowStat(Long workflowInstanceId) {

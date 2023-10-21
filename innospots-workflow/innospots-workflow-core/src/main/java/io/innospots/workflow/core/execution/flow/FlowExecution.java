@@ -78,10 +78,27 @@ public class FlowExecution extends FlowExecutionBase {
 
     private String contextDataPath;
 
+    /**
+     * the total node count in the flow
+     */
+    private int totalCount = 0;
+
     public FlowExecution() {
         this.startTime = LocalDateTime.now();
     }
 
+
+    public static FlowExecution buildNewFlowExecution(String flowKey, List<Map<String, Object>> payloads){
+        FlowExecution flowExecution = new FlowExecution();;
+        flowExecution.setStatus(ExecutionStatus.READY);
+        flowExecution.contextDataPath = WorkflowRuntimeContext.contextResourcePath;
+        flowExecution.setFlowKey(flowKey);
+
+        if (payloads != null) {
+            flowExecution.input.setData(payloads);
+        }
+        return flowExecution;
+    }
 
     public static FlowExecution buildNewFlowExecution(Long flwInstanceId, Integer revision) {
         return buildNewFlowExecution(flwInstanceId, revision, false, false);

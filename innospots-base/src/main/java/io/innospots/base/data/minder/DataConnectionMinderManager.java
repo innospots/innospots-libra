@@ -89,10 +89,10 @@ public class DataConnectionMinderManager {
         return null;
     }
 
-    public static Boolean testConnection(ConnectionCredential connectionCredential) {
-        IDataConnectionMinder dataConnectionDriver = newInstanceByConnectorNameAndConfigCode(connectionCredential.getConnectorName(),connectionCredential.getConfigCode());
-        if (dataConnectionDriver != null) {
-            return dataConnectionDriver.test(connectionCredential);
+    public static Object testConnection(ConnectionCredential connectionCredential) {
+        IDataConnectionMinder dataConnectionMinder =  newInstanceByConnectorNameAndConfigCode(connectionCredential.getConnectorName(),connectionCredential.getConfigCode());
+        if (dataConnectionMinder != null) {
+            return dataConnectionMinder.test(connectionCredential);
         }
         return false;
     }
@@ -102,10 +102,10 @@ public class DataConnectionMinderManager {
         if (formConfig == null) {
             return false;
         }
-        IDataConnectionMinder dataConnectionDriver = newInstanceByConnectorNameAndConfigCode(connectionCredential.getConnectorName(),connectionCredential.getConfigCode());
-        if (dataConnectionDriver != null) {
-            dataConnectionDriver.open();
-            return dataConnectionDriver.fetchSample(connectionCredential, null);
+        IDataConnectionMinder dataConnectionMinder = newInstanceByConnectorNameAndConfigCode(connectionCredential.getConnectorName(),connectionCredential.getConfigCode());
+        if (dataConnectionMinder != null) {
+            dataConnectionMinder.open();
+            return dataConnectionMinder.fetchSample(connectionCredential, null);
         }
         return null;
     }

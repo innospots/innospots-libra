@@ -24,12 +24,13 @@ import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeExecutionDisplay;
 import io.innospots.workflow.core.execution.operator.IFlowExecutionOperator;
 import io.innospots.workflow.core.execution.operator.INodeExecutionOperator;
+import io.innospots.workflow.core.flow.WorkflowBaseBody;
+import io.innospots.workflow.core.flow.WorkflowBody;
+import io.innospots.workflow.core.flow.instance.IWorkflowCacheDraftOperator;
+import io.innospots.workflow.core.node.instance.NodeInstance;
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * the node execution display in the flow canvas
@@ -40,14 +41,19 @@ import java.util.Map;
  */
 public class NodeExecutionReader {
 
-    private INodeExecutionOperator INodeExecutionOperator;
+    private INodeExecutionOperator nodeExecutionOperator;
 
-    private IFlowExecutionOperator IFlowExecutionOperator;
+    private IFlowExecutionOperator flowExecutionOperator;
 
-    public NodeExecutionReader(INodeExecutionOperator INodeExecutionOperator,
-                               IFlowExecutionOperator IFlowExecutionOperator) {
-        this.INodeExecutionOperator = INodeExecutionOperator;
-        this.IFlowExecutionOperator = IFlowExecutionOperator;
+    private IWorkflowCacheDraftOperator workflowCacheDraftOperator;
+
+    public NodeExecutionReader(
+            IWorkflowCacheDraftOperator workflowCacheDraftOperator,
+            INodeExecutionOperator nodeExecutionOperator,
+                               IFlowExecutionOperator flowExecutionOperator) {
+        this.nodeExecutionOperator = nodeExecutionOperator;
+        this.workflowCacheDraftOperator = workflowCacheDraftOperator;
+        this.flowExecutionOperator = flowExecutionOperator;
     }
 
     public Map<String, NodeExecutionDisplay> readExecutionByFlowExecutionId(String flowExecutionId, List<String> nodeKeys) {
@@ -57,7 +63,7 @@ public class NodeExecutionReader {
     public Map<String, NodeExecutionDisplay> readExecutionByFlowExecutionId(String flowExecutionId, List<String> nodeKeys, boolean includeContext) {
 
 
-        List<NodeExecution> nodeExecutions = INodeExecutionOperator.
+        List<NodeExecution> nodeExecutions = nodeExecutionOperator.
                 getNodeExecutionsByFlowExecutionId(flowExecutionId, nodeKeys, includeContext);
 
         if (CollectionUtils.isEmpty(nodeExecutions)) {
@@ -65,8 +71,18 @@ public class NodeExecutionReader {
         }
 
         Map<String, NodeExecutionDisplay> nodeDisplays = new HashMap<>(nodeExecutions.size());
+        WorkflowBody workflowBody = null;
+        if(nodeExecutions.size() > 0){
+            NodeExecution ne = nodeExecutions.get(0);
+            workflowBody = workflowCacheDraftOperator.getWorkflowBody(ne.getFlowInstanceId(),ne.getRevision(),true);
+        }
+
         for (NodeExecution nodeExecution : nodeExecutions) {
-            nodeDisplays.put(nodeExecution.getNodeKey(), NodeExecutionDisplay.build(nodeExecution));
+            NodeInstance nodeInstance = null;
+            if(workflowBody!=null){
+                nodeInstance = workflowBody.findNode(nodeExecution.getNodeKey());
+            }
+            nodeDisplays.put(nodeExecution.getNodeKey(), NodeExecutionDisplay.build(nodeExecution,nodeInstance));
         }
 
         return nodeDisplays;
@@ -74,7 +90,7 @@ public class NodeExecutionReader {
 
     public Map<String, NodeExecutionDisplay> readLatestNodeExecutionByFlowInstanceId(Long workflowInstanceId, Integer revision, List<String> nodeKeys) {
 
-        PageBody<FlowExecutionBase> flowExecutions = IFlowExecutionOperator.pageLatestFlowExecutions(workflowInstanceId, revision, 0, 1);
+        PageBody<FlowExecutionBase> flowExecutions = flowExecutionOperator.pageLatestFlowExecutions(workflowInstanceId, revision, 0, 1);
 
         if (CollectionUtils.isEmpty(flowExecutions.getList())) {
             return Collections.emptyMap();
@@ -84,7 +100,23 @@ public class NodeExecutionReader {
     }
 
     public NodeExecutionDisplay findNodeExecution(String nodeExecutionId, int page, int size) {
-        return NodeExecutionDisplay.build(INodeExecutionOperator.getNodeExecutionById(nodeExecutionId, true, page, size));
+        NodeExecution nodeExecution = nodeExecutionOperator.getNodeExecutionById(nodeExecutionId, true, page, size);
+        NodeExecutionDisplay nodeExecutionDisplay = null;
+        if(nodeExecution!=null){
+            if(nodeExecution.getRevision()==null || nodeExecution.getRevision() == 0){
+                WorkflowBaseBody workflowBaseBody = workflowCacheDraftOperator.getFlowInstanceDraftOrCache(nodeExecution.getFlowInstanceId());
+                if(workflowBaseBody!=null){
+                    NodeInstance nodeInstance = workflowBaseBody.getNodes().stream().filter(ni-> Objects.equals(ni.getNodeKey(),nodeExecution.getNodeKey())).findFirst().orElse(null);
+                    nodeExecutionDisplay = NodeExecutionDisplay.build(nodeExecution,nodeInstance,page,size);
+                }
+            }else{
+                WorkflowBody workflowBody =
+                        workflowCacheDraftOperator.getWorkflowBody(nodeExecution.getFlowInstanceId(),nodeExecution.getRevision(),true);
+                NodeInstance nodeInstance = workflowBody.findNode(nodeExecution.getNodeKey());
+                nodeExecutionDisplay = NodeExecutionDisplay.build(nodeExecution,nodeInstance,page,size);
+            }
+        }
+        return nodeExecutionDisplay;
     }
 
 

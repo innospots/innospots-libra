@@ -22,6 +22,7 @@ package io.innospots.workflow.runtime.server;
 import io.innospots.base.registry.ServiceRegistryHolder;
 import io.innospots.base.registry.enums.ServiceType;
 import io.innospots.connector.schema.AppSchemaImporter;
+import io.innospots.workflow.console.WorkflowOperatorImporter;
 import io.innospots.workflow.runtime.WorkflowRuntimeImporter;
 import io.undertow.UndertowOptions;
 import org.springframework.boot.SpringApplication;
@@ -39,6 +40,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication(exclude = {QuartzAutoConfiguration.class,
         HibernateJpaAutoConfiguration.class,
         FreeMarkerAutoConfiguration.class})
+@WorkflowOperatorImporter
 @WorkflowRuntimeImporter
 @AppSchemaImporter
 @EnableScheduling

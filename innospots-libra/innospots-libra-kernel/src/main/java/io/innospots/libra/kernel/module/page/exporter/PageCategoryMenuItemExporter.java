@@ -23,7 +23,7 @@ import io.innospots.libra.base.menu.BaseItem;
 import io.innospots.libra.base.menu.DynamicMenuItemExporter;
 import io.innospots.libra.base.menu.ItemType;
 import io.innospots.libra.base.menu.ResourceItem;
-import io.innospots.libra.base.model.BaseCategory;
+import io.innospots.libra.base.category.BaseCategory;
 import io.innospots.libra.kernel.module.page.operator.PageCategoryOperator;
 import org.springframework.stereotype.Component;
 

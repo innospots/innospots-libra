@@ -51,4 +51,13 @@ public class AppConnectorConfig {
         return null;
     }
 
+    public boolean isReadOnly(String name) {
+        Object rv = getValue("readOnly");
+        if(rv instanceof Map){
+            Map<String,Boolean> ro = (Map<String, Boolean>) rv;
+            return ro.getOrDefault(name,Boolean.FALSE);
+        }
+        return false;
+    }
+
 }

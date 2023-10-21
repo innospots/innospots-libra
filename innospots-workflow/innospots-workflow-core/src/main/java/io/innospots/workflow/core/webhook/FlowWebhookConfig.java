@@ -23,6 +23,7 @@ import io.innospots.base.model.field.ParamField;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,9 +35,9 @@ import java.util.Map;
 @Setter
 public class FlowWebhookConfig {
 
-    public static final String BASIC_AUTH_USERNAME = "userName";
-    public static final String BASIC_AUTH_PASSWORD = "password";
-    public static final String BEARER_AUTH_TOKEN = "token";
+    public static final String BASIC_AUTH_USERNAME = "authBody.username";
+    public static final String BASIC_AUTH_PASSWORD = "authBody.password";
+    public static final String BEARER_AUTH_TOKEN = "authBody.token";
 
     private String path;
 
@@ -47,7 +48,7 @@ public class FlowWebhookConfig {
     private AuthType authType;
 
 
-    private Map<String, Object> authBody;
+    private Map<String, String> authBody=new HashMap<>();
 
     private List<ParamField> responseFields;
 
@@ -55,6 +56,27 @@ public class FlowWebhookConfig {
     private ResponseMode responseMode;
 
     private ResponseData responseData;
+
+    public String username() {
+        return authBody.get(BASIC_AUTH_USERNAME);
+    }
+
+    public String password() {
+        return authBody.get(BASIC_AUTH_PASSWORD);
+    }
+
+    public String token() {
+        return authBody.get(BEARER_AUTH_TOKEN);
+    }
+
+    public void auth(String username,String password) {
+        this.authBody.put(BASIC_AUTH_USERNAME,username);
+        this.authBody.put(BASIC_AUTH_PASSWORD,password);
+    }
+
+    public void auth(String token){
+        this.authBody.put(BEARER_AUTH_TOKEN,token);
+    }
 
 
     /**

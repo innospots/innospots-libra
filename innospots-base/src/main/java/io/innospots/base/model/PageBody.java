@@ -20,6 +20,7 @@ package io.innospots.base.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,6 +52,13 @@ public class PageBody<T> {
 
     public List<T> getList() {
         return list;
+    }
+
+    public void add(T item){
+        if(this.list == null){
+            this.list = new ArrayList<>();
+        }
+        this.list.add(item);
     }
 
     public void setList(List<T> list) {

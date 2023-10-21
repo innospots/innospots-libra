@@ -98,6 +98,7 @@ public class NodeExecution extends NodeExecutionBase {
         nodeExecution.flowStartTime = flowExecution.getStartTime();
         nodeExecution.memoryMode = flowExecution.isMemoryMode();
         nodeExecution.contextDataPath = flowExecution.flowExecutionDataPath();
+        nodeExecution.setSaveSync(flowExecution.isSaveSync());
         return nodeExecution;
     }
 
@@ -143,6 +144,22 @@ public class NodeExecution extends NodeExecutionBase {
         outputs.add(nodeOutput);
     }
 
+    public Map<String, Object> outputLog() {
+        Map<String, Object> logs = new LinkedHashMap<>();
+        if(this.outputs == null){
+            return logs;
+        }
+        for (int i = 0; i < this.outputs.size(); i++) {
+            NodeOutput nodeOutput = outputs.get(i);
+            if (nodeOutput.getName() != null) {
+                logs.put(nodeOutput.getName(), nodeOutput.log());
+            } else {
+                logs.put("output_" + i, nodeOutput.log());
+            }
+        }
+        return logs;
+    }
+
     public void addLog(String key, Object value) {
         this.logs.put(key, value);
     }
@@ -169,6 +186,24 @@ public class NodeExecution extends NodeExecutionBase {
             }
         }
         return outputList;
+    }
+
+    public boolean inputIsEmpty() {
+        if(CollectionUtils.isEmpty(this.inputs)){
+            return true;
+        }
+        if(this.inputs.get(0)!=null && CollectionUtils.isEmpty(this.inputs.get(0).getData())){
+            return true;
+        }
+        return false;
+    }
+
+    public int inputSize(){
+        return this.inputs.size();
+    }
+
+    public void fillTotal(){
+        this.outputs.forEach(NodeOutput::fillTotal);
     }
 
     /**

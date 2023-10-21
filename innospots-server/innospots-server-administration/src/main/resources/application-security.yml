@@ -32,7 +32,7 @@ innospots:
       - /innospots/api/test/**
       - /innospots/api/image/**
       - /innospots/api/workflow/flow-execution/resources/**
-      - /api/credential/oauth2/**
+      - /innospots/api/oauth2/callback/**
       - /
       - /403
       - /*.svg

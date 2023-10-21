@@ -19,10 +19,12 @@
 package io.innospots.base.data.schema.config;
 
 import io.innospots.base.enums.ConnectType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Smars
@@ -31,6 +33,7 @@ import java.util.List;
  */
 @Getter
 @Setter
+@Schema(title = "connection schema")
 public class ConnectionMinderSchema {
 
     private String name;
@@ -53,6 +56,9 @@ public class ConnectionMinderSchema {
     private String description;
 
     private List<CredentialFormConfig> configs;
+
+    @Schema(title = "application node definition form element")
+    private Map<String,Object> appForm;
 
     @Override
     public String toString() {

@@ -39,7 +39,7 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
  * @date 2022/9/8
  */
 @RestController
-@RequestMapping(PATH_ROOT_ADMIN + "/apps/schema/sample/test")
+@RequestMapping(PATH_ROOT_ADMIN + "apps/schema/sample/test")
 @Tag(name = "Schema Data Sample Test")
 public class DataSampleTestController extends BaseController {
 

@@ -21,8 +21,10 @@ package io.innospots.workflow.runtime.watcher;
 import io.innospots.base.registry.ServiceRegistryHolder;
 import io.innospots.base.watcher.AbstractWatcher;
 import io.innospots.workflow.core.runtime.FlowRuntimeRegistry;
+import io.innospots.workflow.node.app.StateNode;
 import io.innospots.workflow.node.app.trigger.ApiTriggerNode;
 import io.innospots.workflow.node.app.trigger.CronTimerNode;
+import io.innospots.workflow.node.app.trigger.CycleTimerNode;
 import io.innospots.workflow.node.app.trigger.QueueTriggerNode;
 import io.innospots.workflow.runtime.container.RunTimeContainerManager;
 import io.innospots.workflow.runtime.flow.FlowManager;
@@ -65,32 +67,45 @@ public class TriggerRegistryWatcher extends AbstractWatcher {
         //schedule trigger
         List<FlowRuntimeRegistry> scheduleTriggers = new ArrayList<>();
 
+        List<FlowRuntimeRegistry> dummyTriggers = new ArrayList<>();
+
+        List<FlowRuntimeRegistry> cycleTriggers = new ArrayList<>();
+
         for (FlowRuntimeRegistry flowTrigger : flowTriggers) {
             String nodeType = flowTrigger.getRegistryNode().nodeType();
             if (nodeType.equals(ApiTriggerNode.class.getName())) {
                 eventTriggers.add(flowTrigger);
-            } else if (nodeType.equals(QueueTriggerNode.class.getName())) {
+            } else if (flowTrigger.getRegistryNode() instanceof QueueTriggerNode) {
                 //TODO 此处需要做多节点集群识别处理，是否全部节点都能做队列触发器
                 queueTriggers.add(flowTrigger);
             } else if (nodeType.equals(CronTimerNode.class.getName())) {
-                //TODO
                 if (ServiceRegistryHolder.isLeader()) {
-                    //主节点添加
+                    //master node
                     scheduleTriggers.add(flowTrigger);
                 }
+            }else if(flowTrigger.getRegistryNode() instanceof CycleTimerNode){
+                if(ServiceRegistryHolder.isLeader()){
+                    cycleTriggers.add(flowTrigger);
+                }
+            } else if (nodeType.equals(StateNode.class.getName())){
+                dummyTriggers.add(flowTrigger);
             }
         }//end for
 
         if (logger.isDebugEnabled()) {
-            logger.debug("event trigger size:{}, queue trigger size:{}, schedule trigger size:{}",
+            logger.debug("event size:{}, queue size:{}, schedule size:{}, dummy size:{}, cycle size:{}",
                     eventTriggers.size(),
                     queueTriggers.size(),
-                    scheduleTriggers.size());
+                    scheduleTriggers.size(),
+                    dummyTriggers.size(),
+                    cycleTriggers.size()
+            );
         }
 
         runTimeContainerManager.registerEventTriggers(eventTriggers);
         runTimeContainerManager.registerQueueTriggers(queueTriggers);
         runTimeContainerManager.registerScheduleTriggers(scheduleTriggers);
+        runTimeContainerManager.registerDummyTriggers(dummyTriggers);
 
         return 5;
     }

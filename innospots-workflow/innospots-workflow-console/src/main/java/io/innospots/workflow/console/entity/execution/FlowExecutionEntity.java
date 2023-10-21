@@ -120,7 +120,7 @@ public class FlowExecutionEntity extends PBaseEntity {
     private String executionUri;
 
     /**
-     * the data source
+     * trigger code
      */
     @Column(length = 128)
     private String source;

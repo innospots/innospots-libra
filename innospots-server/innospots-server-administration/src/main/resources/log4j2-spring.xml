@@ -79,6 +79,7 @@
         <Logger name="io.innospots.libra.kernel.interceptor" level="info"/>
         <Logger name="io.innospots.libra.kernel.module.i18n.service.I18nTransMessageService" level="debug"/>
         <Logger name="io.innospots.base.data" level="info"/>
+        <Logger name="io.innospots.base.data.operator.jdbc" level="debug"/>
         <Logger name="io.innospots.workflow.runtime.container" level="info"/>
         <Logger name="io.innospots.workflow.runtime" level="debug"/>
         <Logger name="io.innospots.workflow.runtime.flow.node" level="debug"/>

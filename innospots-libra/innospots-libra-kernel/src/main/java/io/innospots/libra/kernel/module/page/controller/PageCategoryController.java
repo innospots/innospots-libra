@@ -21,12 +21,12 @@ package io.innospots.libra.kernel.module.page.controller;
 
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.controller.BaseController;
-import io.innospots.libra.base.enums.CategoryType;
+import io.innospots.libra.base.category.CategoryType;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
-import io.innospots.libra.base.model.BaseCategory;
+import io.innospots.libra.base.category.BaseCategory;
 import io.innospots.libra.kernel.module.page.operator.PageCategoryOperator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

@@ -109,7 +109,7 @@ public class HttpConnection {
     }
 
     public HttpData post(String url, Map<String, Object> params, String requestBody, Map<String, String> headers) {
-        return post(url, fillParams(params), requestBody, fillHeader(headers), null);
+        return post(url, params, requestBody, headers, null);
     }
 
 

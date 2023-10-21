@@ -21,9 +21,9 @@ package io.innospots.connector.schema.operator;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.innospots.base.data.schema.SchemaRegistryType;
 import io.innospots.connector.schema.entity.SchemaRegistryEntity;
-import io.innospots.libra.base.enums.CategoryType;
-import io.innospots.libra.base.model.BaseCategory;
-import io.innospots.libra.base.operator.BaseCategoryOperator;
+import io.innospots.libra.base.category.CategoryType;
+import io.innospots.libra.base.category.BaseCategory;
+import io.innospots.libra.base.category.BaseCategoryOperator;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

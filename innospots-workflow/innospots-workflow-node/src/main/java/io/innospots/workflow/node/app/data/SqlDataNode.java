@@ -22,7 +22,11 @@ import com.google.common.base.Enums;
 import io.innospots.base.condition.Factor;
 import io.innospots.base.data.ap.ISqlOperatorPoint;
 import io.innospots.base.data.enums.DataOperation;
+import io.innospots.base.data.minder.DataConnectionMinderManager;
+import io.innospots.base.data.minder.IDataConnectionMinder;
 import io.innospots.base.data.operator.UpdateItem;
+import io.innospots.base.data.schema.ConnectionCredential;
+import io.innospots.base.data.schema.SchemaField;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.model.DataBody;
 import io.innospots.base.model.PageBody;
@@ -37,6 +41,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,6 +66,8 @@ public class SqlDataNode extends DataNode {
 
     public static final String FIELD_TABLE_NAME = "table_name";
     public static final String FIELD_OPERATION = "data_operation";
+    public static final String KEY_COLUMN = "key_column";
+    public static final String COLUMN_UPDATE_TIME = "updated_time";
 
     /**
      * sql中参数的开始和结束字符
@@ -76,6 +83,9 @@ public class SqlDataNode extends DataNode {
     protected List<Factor> columnFields;
 
     protected String tableName;
+
+    protected String keyColumn;
+    protected String updateTimeColumn;
 
     /**
      * where clause, when update operation
@@ -96,7 +106,7 @@ public class SqlDataNode extends DataNode {
 
         //solve enum key not exits or key is null
         List<Map<String, Object>> columnFieldMapping = (List<Map<String, Object>>) nodeInstance.value(FIELD_COLUMN_MAPPING);
-        if (operation == DataOperation.INSERT && columnFieldMapping == null) {
+        if ((operation == DataOperation.INSERT || operation == DataOperation.UPSERT) && columnFieldMapping == null) {
             throw ConfigException.buildMissingException(this.getClass(), this.nodeKey(), FIELD_COLUMN_MAPPING);
         }
         if (operation == DataOperation.UPDATE && columnFieldMapping == null) {
@@ -106,6 +116,27 @@ public class SqlDataNode extends DataNode {
         if (DataOperation.UPDATE == operation) {
             columnFields = columnFields.stream().filter(f -> !f.checkNull()).collect(Collectors.toList());
         }
+
+        keyColumn = nodeInstance.valueString(KEY_COLUMN);
+
+        if (DataOperation.UPSERT == operation) {
+            IDataConnectionMinder connectionMinder = DataConnectionMinderManager.getCredentialMinder(credentialId);
+            if (connectionMinder != null) {
+                List<SchemaField> schemaFields = connectionMinder.schemaRegistryFields(tableName);
+                schemaFields = schemaFields.stream().filter(SchemaField::getPkey).collect(Collectors.toList());
+                keyColumn = "";
+                for (int i = 0; i < schemaFields.size(); i++) {
+                    keyColumn += schemaFields.get(i).getCode();
+                    if (i < schemaFields.size() - 1) {
+                        keyColumn += ",";
+                    }
+                }//end for
+            }
+        }//end upsert
+
+        logger.info("table name:{}, primary name:{}",tableName,keyColumn);
+
+        updateTimeColumn = nodeInstance.valueString(COLUMN_UPDATE_TIME);
 
         List<Map<String, Object>> updateConditionFields = (List<Map<String, Object>>) nodeInstance.value(FIELD_UPDATE_CONDITION);
         if (operation == DataOperation.UPDATE) {
@@ -135,7 +166,6 @@ public class SqlDataNode extends DataNode {
     }
 
 
-
     @Override
     public void invoke(NodeExecution nodeExecution) {
         switch (operation) {
@@ -150,6 +180,9 @@ public class SqlDataNode extends DataNode {
                 break;
             case UPDATE:
                 update(nodeExecution);
+                break;
+            case UPSERT:
+                upsert(nodeExecution);
                 break;
             default:
                 logger.warn("data operation not set correctly:{} , execution:{}", operation, nodeExecution);
@@ -188,46 +221,6 @@ public class SqlDataNode extends DataNode {
         return sql;
     }
 
-    /*
-    protected void fetchOne(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = new NodeOutput();
-        nodeOutput.addNextKey(this.nextNodeKeys());
-        nodeExecution.addOutput(nodeOutput);
-        for (ExecutionInput executionInput : nodeExecution.getInputs()) {
-            for (Map<String, Object> item : executionInput.getData()) {
-                List<Factor> conditions = conditionValues(item, this.queryConditions);
-                InnospotResponse<DataBody<Map<String, Object>>> innospotResponse = dataOperatorPoint.queryForObject(credentialId, tableName, conditions);
-                if (logger.isDebugEnabled()) {
-                    logger.debug("data query:{}", innospotResponse);
-                }
-                Object data = innospotResponse.getBody().getBody();
-                fillOutput(nodeOutput, item, data);
-            }//end item
-
-        }//end execution input
-
-    }
-
-
-
-    protected void query(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = new NodeOutput();
-        nodeOutput.addNextKey(this.nextNodeKeys());
-        nodeExecution.addOutput(nodeOutput);
-        for (ExecutionInput executionInput : nodeExecution.getInputs()) {
-            for (Map<String, Object> item : executionInput.getData()) {
-                List<Factor> conditions = conditionValues(item, this.queryConditions);
-                InnospotResponse<PageBody<Map<String, Object>>> innospotResponse = dataOperatorPoint.queryForList(credentialId, tableName, conditions, 0, MAX_QUERY_SIZE);
-                if (logger.isDebugEnabled()) {
-                    logger.debug("data query:{}", innospotResponse);
-                }
-                fillOutput(nodeOutput, item, innospotResponse.getBody().getList());
-            }//end for item
-        }//end for execution input
-
-    }
-
-     */
 
     protected void insert(NodeExecution nodeExecution) {
         List<Map<String, Object>> insertList = new ArrayList<>();
@@ -239,6 +232,9 @@ public class SqlDataNode extends DataNode {
                 Map<String, Object> insertData = new HashMap<>();
                 for (Factor columnField : this.columnFields) {
                     insertData.put(columnField.getCode(), columnField.value(item));
+                }
+                if (this.updateTimeColumn != null && !insertData.containsKey(this.updateTimeColumn)) {
+                    insertData.put(this.updateTimeColumn, LocalDateTime.now());
                 }
                 insertList.add(insertData);
                 fillOutput(nodeOutput, item);
@@ -260,6 +256,9 @@ public class SqlDataNode extends DataNode {
                 Map<String, Object> upData = new HashMap<>();
                 for (Factor columnField : this.columnFields) {
                     upData.put(columnField.getCode(), columnField.value(item));
+                }
+                if (this.updateTimeColumn != null && !upData.containsKey(this.updateTimeColumn)) {
+                    upData.put(this.updateTimeColumn, LocalDateTime.now());
                 }
                 List<Factor> conditions = conditionValues(item, this.updateConditions);
                 UpdateItem updateItem = new UpdateItem();
@@ -329,8 +328,29 @@ public class SqlDataNode extends DataNode {
             }
             fillOutput(nodeOutput, null, innospotResponse.getBody().getList());
         }
+    }
 
+    protected void upsert(NodeExecution nodeExecution) {
+        List<Map<String, Object>> insertList = new ArrayList<>();
+        NodeOutput nodeOutput = new NodeOutput();
+        nodeOutput.addNextKey(this.nextNodeKeys());
+        nodeExecution.addOutput(nodeOutput);
+        for (ExecutionInput executionInput : nodeExecution.getInputs()) {
+            for (Map<String, Object> item : executionInput.getData()) {
+                Map<String, Object> insertData = new HashMap<>();
+                for (Factor columnField : this.columnFields) {
+                    insertData.put(columnField.getCode(), columnField.value(item));
+                }
+                if (this.updateTimeColumn != null && !insertData.containsKey(this.updateTimeColumn)) {
+                    insertData.put(this.updateTimeColumn, LocalDateTime.now());
+                }
+                insertList.add(insertData);
+                fillOutput(nodeOutput, item);
+            }// end for item
+        }//end for input
+        InnospotResponse<Integer> resp = dataOperatorPoint.upsertForBatch(credentialId, tableName, keyColumn, insertList);
 
+        nodeExecution.setMessage(resp.getMessage());
     }
 
 

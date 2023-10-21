@@ -51,7 +51,7 @@ public class MysqlDataConnectionMinder extends JdbcDataConnectionMinder {
 
 
     @Override
-    public boolean test(ConnectionCredential connectionCredential) {
+    public Object test(ConnectionCredential connectionCredential) {
         connectionCredential.getConfig().put(DRIVER_CLASS_NAME, "com.mysql.cj.jdbc.Driver");
         return super.test(connectionCredential);
     }

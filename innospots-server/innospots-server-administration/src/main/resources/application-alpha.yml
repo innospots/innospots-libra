@@ -24,4 +24,5 @@ innospots:
   workflow:
     executionStorePath: .execution_contexts
     server:
-      port: ${innosports.workflow.server.port:19876}
+      port: ${server.port:19876}
+      host: 1.15.20.45

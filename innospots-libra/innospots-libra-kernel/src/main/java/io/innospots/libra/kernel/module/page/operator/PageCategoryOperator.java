@@ -19,9 +19,9 @@
 package io.innospots.libra.kernel.module.page.operator;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.innospots.libra.base.enums.CategoryType;
-import io.innospots.libra.base.model.BaseCategory;
-import io.innospots.libra.base.operator.BaseCategoryOperator;
+import io.innospots.libra.base.category.CategoryType;
+import io.innospots.libra.base.category.BaseCategory;
+import io.innospots.libra.base.category.BaseCategoryOperator;
 import io.innospots.libra.kernel.module.page.entity.PageEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

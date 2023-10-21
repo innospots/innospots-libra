@@ -88,7 +88,7 @@ public class HttpDataConnectionMinder extends BaseDataConnectionMinder {
 
 
     @Override
-    public boolean test(ConnectionCredential connectionCredential) {
+    public Object test(ConnectionCredential connectionCredential) {
         return true;
     }
 

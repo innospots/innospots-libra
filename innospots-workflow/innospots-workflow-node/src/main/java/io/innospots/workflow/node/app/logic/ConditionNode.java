@@ -29,6 +29,7 @@ import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeOutput;
 import io.innospots.workflow.core.node.app.BaseAppNode;
 import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.node.app.utils.NodeInstanceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,8 +61,13 @@ public class ConditionNode extends BaseAppNode {
         super.initialize(nodeInstance);
         this.trueNextNodeKeys = nodeInstance.findNodeKeysByAnchor(FIELD_TRUE_ANCHOR_KEY);
         this.falseNextNodeKeys = nodeInstance.findNodeKeysByAnchor(FIELD_FALSE_ANCHOR_KEY);
-        this.conditionExpression = buildCondition(nodeInstance).getStatement();
+        EmbedCondition embedCondition = NodeInstanceUtils.buildCondition(nodeInstance,FIELD_CONDITIONS,this);
+        if(embedCondition==null){
+            throw ConfigException.buildMissingException(this.getClass(), "nodeKey:" + this.nodeKey() + ", field:" + FIELD_CONDITIONS);
+        }
+        this.conditionExpression =embedCondition.getStatement();
         this.expression = new AviatorExpression(this.conditionExpression, null);
+
     }
 
     @Override
@@ -133,28 +139,5 @@ public class ConditionNode extends BaseAppNode {
     }
 
      */
-
-    private EmbedCondition buildCondition(NodeInstance nodeInstance) {
-        Object v = nodeInstance.getData().get(FIELD_CONDITIONS);
-        EmbedCondition condition = null;
-        if (v == null) {
-            throw ConfigException.buildMissingException(this.getClass(), "nodeKey:" + nodeKey() + ", field:" + FIELD_CONDITIONS);
-        }
-        try {
-
-
-            condition = JSONUtils.parseObject(JSONUtils.toJsonString(v), EmbedCondition.class);
-            if (condition == null) {
-                throw ConfigException.buildTypeException(this.getClass(), "condition json invalid format, nodeKey:" + nodeKey());
-            }
-            condition.setMode(Mode.SCRIPT);
-            condition.initialize();
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw ConfigException.buildTypeException(this.getClass(), "if template invalid format, nodeKey:" + nodeKey() + ", error: " + e.getMessage());
-        }
-
-        return condition;
-    }
 
 }

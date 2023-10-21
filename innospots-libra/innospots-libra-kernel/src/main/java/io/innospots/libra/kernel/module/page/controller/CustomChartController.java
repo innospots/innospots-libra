@@ -41,7 +41,7 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
  */
 @Slf4j
 @RestController
-@RequestMapping(PATH_ROOT_ADMIN + "/plugins")
+@RequestMapping(PATH_ROOT_ADMIN + "plugins")
 @Tag(name = "CustomChart")
 public class CustomChartController {
 

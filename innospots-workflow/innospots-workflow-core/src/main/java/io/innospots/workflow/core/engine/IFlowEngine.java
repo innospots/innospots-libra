@@ -44,6 +44,8 @@ public interface IFlowEngine {
 
     FlowExecution stop(String flowExecutionId);
 
+    FlowExecution stopByFlowKey(String flowKey);
+
     FlowExecution run(Long workflowInstanceId,
                       Integer revisionId,
                       String targetNodeKey,

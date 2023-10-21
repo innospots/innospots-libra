@@ -25,8 +25,8 @@ import io.innospots.workflow.core.runtime.FlowRuntimeRegistry;
 import io.innospots.workflow.core.webhook.FlowWebhookConfig;
 import io.innospots.workflow.core.webhook.WebhookPayload;
 import io.innospots.workflow.core.webhook.WorkflowResponse;
+import io.innospots.workflow.core.webhook.WorkflowResponseBuilder;
 import io.innospots.workflow.node.app.trigger.ApiTriggerNode;
-import io.innospots.workflow.runtime.response.WorkflowResponseBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +54,7 @@ public class WebhookRuntimeContainer extends BaseRuntimeContainer {
     public WorkflowResponse execute(WebhookPayload webhookPayload) {
         FlowRuntimeRegistry triggerInfo = triggerPaths.get(webhookPayload.getFlowKey());
         if (triggerInfo == null) {
-            throw ResourceException.buildAbandonException(this.getClass(), "flow trigger not find, key:" + webhookPayload.getFlowKey());
+            throw ResourceException.buildAbandonException(this.getClass(), "api flow trigger not find, maybe not be published, key:" + webhookPayload.getFlowKey());
         }
         if (logger.isDebugEnabled()) {
             logger.debug("run trigger,{}:{} {}", triggerInfo.key(), triggerInfo, webhookPayload);
@@ -63,18 +63,19 @@ public class WebhookRuntimeContainer extends BaseRuntimeContainer {
         FlowExecution flowExecution = FlowExecution.buildNewFlowExecution(
                 triggerInfo.getWorkflowInstanceId(),
                 triggerInfo.getRevision());
+        flowExecution.setSource(triggerInfo.getRegistryNode().nodeCode());
         flowExecution.setInput(webhookPayload.toExecutionInput());
 
         WorkflowRuntimeContext workflowRuntimeContext = WorkflowRuntimeContext.build(flowExecution);
         execute(workflowRuntimeContext);
 
-        return workflowResponseBuilder.build(workflowRuntimeContext, (ApiTriggerNode) triggerInfo.getRegistryNode());
+        return workflowResponseBuilder.build(workflowRuntimeContext, ((ApiTriggerNode) triggerInfo.getRegistryNode()).getFlowWebhookConfig());
     }
 
     public WorkflowResponse run(String path, FlowWebhookConfig.RequestMethod method, Map<String, Object> payload, Map<String, Object> context) {
         FlowRuntimeRegistry triggerInfo = triggerPaths.get(path);
         if (triggerInfo == null) {
-            throw ResourceException.buildAbandonException(this.getClass(), "flow trigger not find, key:" + path);
+            throw ResourceException.buildAbandonException(this.getClass(), "api flow trigger not find, maybe not be published, key:" + path);
         }
 
         ApiTriggerNode triggerNode = (ApiTriggerNode) triggerInfo.getRegistryNode();
@@ -84,7 +85,7 @@ public class WebhookRuntimeContainer extends BaseRuntimeContainer {
 
         WorkflowRuntimeContext workflowRuntimeContext = execute(triggerInfo, payload, context);
 
-        return workflowResponseBuilder.build(workflowRuntimeContext, (ApiTriggerNode) triggerInfo.getRegistryNode());
+        return workflowResponseBuilder.build(workflowRuntimeContext, ((ApiTriggerNode) triggerInfo.getRegistryNode()).getFlowWebhookConfig());
 
     }
 

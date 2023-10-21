@@ -41,6 +41,7 @@ import io.innospots.workflow.core.engine.IFlowEngine;
 import io.innospots.workflow.core.flow.BuildProcessInfo;
 import io.innospots.workflow.core.flow.WorkflowBaseBody;
 import io.innospots.workflow.core.flow.WorkflowBody;
+import io.innospots.workflow.core.flow.instance.IWorkflowCacheDraftOperator;
 import io.innospots.workflow.core.node.instance.Edge;
 import io.innospots.workflow.core.node.instance.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +60,7 @@ import java.util.stream.Collectors;
  * @date 2021/3/16
  */
 @Slf4j
-public class WorkflowBuilderOperator {
+public class WorkflowBuilderOperator implements IWorkflowCacheDraftOperator {
 
     public static final String CACHE_NAME = "CACHE_FLOW_INSTANCE";
 
@@ -96,6 +97,7 @@ public class WorkflowBuilderOperator {
      * @param workflowBaseBody
      * @return
      */
+    @Override
     public boolean saveFlowInstanceToCache(WorkflowBaseBody workflowBaseBody) {
         WorkflowInstanceCacheEntity cacheEntity = workflowInstanceCacheDao.selectById(workflowBaseBody.getWorkflowInstanceId());
 
@@ -120,6 +122,7 @@ public class WorkflowBuilderOperator {
      * @param flowInstanceId
      * @return
      */
+    @Override
     public WorkflowBaseBody getFlowInstanceDraftOrCache(Long flowInstanceId) {
         WorkflowInstanceCacheEntity cacheEntity = workflowInstanceCacheDao.selectById(flowInstanceId);
         WorkflowBaseBody flow;
@@ -131,21 +134,24 @@ public class WorkflowBuilderOperator {
         return flow;
     }
 
+    @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void saveCacheToDraft(Long flowInstanceId) {
+    public WorkflowBaseBody saveCacheToDraft(Long flowInstanceId) {
         WorkflowInstanceCacheEntity cacheEntity = workflowInstanceCacheDao.selectById(flowInstanceId);
         if (cacheEntity == null) {
-            return;
+            return null;
         }
         WorkflowBaseBody flow = JSONUtils.parseObject(cacheEntity.getFlowInstance(), WorkflowBaseBody.class);
         if (flow != null) {
-            this.saveDraft(flow);
+            flow = this.saveDraft(flow);
         }
+        return flow;
     }
 
     public List<Map<String, Object>> selectNodeInputFields(Long workflowInstanceId, String nodeKey, Set<String> sourceNodeKeys) {
         WorkflowBaseBody workflowBaseBody = getFlowInstanceDraftOrCache(workflowInstanceId);
         if (workflowBaseBody == null) {
+            log.warn("select input field is null:{}, nodeKey:{}",workflowInstanceId, nodeKey);
             return Collections.emptyList();
         }
 
@@ -156,6 +162,7 @@ public class WorkflowBuilderOperator {
 //            sourceNodeKeys = this.edgeOperator.selectSourceNodeKey(workflowInstanceId,0,nodeKey);
         }
         if (CollectionUtils.isEmpty(sourceNodeKeys)) {
+            log.warn("sourceNode key, select input field is null:{}, nodeKey:{}",workflowInstanceId, nodeKey);
             return Collections.emptyList();
         }
         List<Map<String, Object>> result = new ArrayList<>();
@@ -175,6 +182,9 @@ public class WorkflowBuilderOperator {
                 result.add(nodeMap);
             }
         }//end for
+        if(result.isEmpty()){
+            log.warn("select input field is null:{}, nodeKey:{}",workflowInstanceId, nodeKey);
+        }
         return result;
     }
 
@@ -239,16 +249,23 @@ public class WorkflowBuilderOperator {
      * @param includeNodes
      * @return
      */
-    //TODO add Cacheable
+    @Override
     @Cacheable(cacheNames = CACHE_NAME, key = "#workflowInstanceId + '-' + #revision", condition = "!#includeNodes")
     public WorkflowBody getWorkflowBody(Long workflowInstanceId, Integer revision, Boolean includeNodes) {
         WorkflowInstanceEntity entity = workflowInstanceOperator.getWorkflowInstanceEntity(workflowInstanceId);
-
         if (entity == null) {
             throw ResourceException.buildAbandonException(this.getClass(), workflowInstanceId, revision);
         }
 
         return getFlowInstance(entity, revision, includeNodes);
+    }
+
+    public WorkflowBody getWorkflowBody(String flowKey, Boolean includeNodes){
+        WorkflowInstanceEntity entity = workflowInstanceOperator.getWorkflowInstanceEntity(flowKey);
+        if (entity == null) {
+            throw ResourceException.buildAbandonException(this.getClass(), flowKey);
+        }
+        return getFlowInstance(entity,entity.getRevision(),includeNodes);
     }
 
     private WorkflowBody getFlowInstance(WorkflowInstanceEntity entity, Integer revision, Boolean includeNodes) {
@@ -277,6 +294,14 @@ public class WorkflowBuilderOperator {
         return flowInstance;
     }
 
+    public List<WorkflowBody> selectRecentlyUpdateOrOnLine(int recentMinutes){
+        List<WorkflowInstanceEntity> entityList = workflowInstanceOperator.selectRecentlyUpdateOrOnLine(recentMinutes);
+        if(CollectionUtils.isEmpty(entityList)){
+            return Collections.emptyList();
+        }
+        return entityList.stream().map(WorkflowInstanceConvertMapper.INSTANCE::entityToFlowBody).collect(Collectors.toList());
+    }
+
     /**
      * get flow instance by flowKey and revision
      *
@@ -285,6 +310,7 @@ public class WorkflowBuilderOperator {
      * @param includeNodes
      * @return
      */
+    @Override
     public WorkflowBaseBody getWorkflowBodyByKey(String flowKey, Integer revision, Boolean includeNodes) {
         WorkflowInstanceEntity entity = workflowInstanceOperator.getWorkflowInstanceEntity(flowKey);
         if (entity == null) {
@@ -321,6 +347,7 @@ public class WorkflowBuilderOperator {
      * @param workflowBaseBody
      * @return
      */
+    @Override
     @Transactional(rollbackFor = {Exception.class})
     public WorkflowBaseBody saveDraft(WorkflowBaseBody workflowBaseBody) {
         //验证节点无循环依赖
@@ -415,6 +442,7 @@ public class WorkflowBuilderOperator {
         workflowInstanceCacheDao.deleteById(workflowInstanceId);
 
         // delete not keep revision
+
 
         QueryWrapper<WorkflowRevisionEntity> allRevisionQuery = new QueryWrapper<>();
         allRevisionQuery.lambda().eq(WorkflowRevisionEntity::getWorkflowInstanceId, workflowInstanceId)

@@ -20,9 +20,10 @@ package io.innospots.workflow.runtime.starter;
 
 
 import io.innospots.base.watcher.WatcherSupervisor;
-import io.innospots.workflow.console.operator.execution.ScheduledNodeExecutionOperator;
-import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
+//import io.innospots.workflow.console.operator.execution.ScheduledNodeExecutionOperator;
+//import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
 import io.innospots.workflow.core.execution.operator.IScheduledNodeExecutionOperator;
+import io.innospots.workflow.core.loader.IWorkflowLoader;
 import io.innospots.workflow.runtime.container.RunTimeContainerManager;
 import io.innospots.workflow.runtime.flow.FlowManager;
 import io.innospots.workflow.runtime.scheduled.ScheduledNodeExecutionWatcher;
@@ -64,13 +65,13 @@ public class WatcherStarter implements ApplicationRunner {
 
 
     private WorkflowStatusWatcher workflowStatusWatcher() {
-        WorkflowInstanceOperator instanceOperator = applicationContext.getBean(WorkflowInstanceOperator.class);
+        IWorkflowLoader workflowLoader = applicationContext.getBean(IWorkflowLoader.class);
         FlowManager flowManager = applicationContext.getBean(FlowManager.class);
-        return new WorkflowStatusWatcher(instanceOperator, flowManager);
+        return new WorkflowStatusWatcher(workflowLoader, flowManager);
     }
 
     private ScheduledNodeExecutionWatcher scheduledNodeExecutionWatcher() {
-        IScheduledNodeExecutionOperator scheduledNodeExecutionOperator = applicationContext.getBean(ScheduledNodeExecutionOperator.class);
+        IScheduledNodeExecutionOperator scheduledNodeExecutionOperator = applicationContext.getBean(IScheduledNodeExecutionOperator.class);
         return new ScheduledNodeExecutionWatcher(scheduledNodeExecutionOperator);
     }
 }

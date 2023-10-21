@@ -39,13 +39,17 @@ public class RunTimeContainerManager {
 
     private CycleTimerRuntimeContainer cycleTimerRuntimeContainer;
 
+    private DummyRuntimeContainer dummyRuntimeContainer;
+
     public RunTimeContainerManager(WebhookRuntimeContainer webhookRuntimeContainer,
                                    CycleTimerRuntimeContainer cycleTimerRuntimeContainer,
                                    QueueRuntimeContainer queueRuntimeContainer,
+                                   DummyRuntimeContainer dummyRuntimeContainer,
                                    ScheduleRuntimeContainer scheduleRuntimeContainer) {
         this.webhookRuntimeContainer = webhookRuntimeContainer;
         this.cycleTimerRuntimeContainer = cycleTimerRuntimeContainer;
         this.queueRuntimeContainer = queueRuntimeContainer;
+        this.dummyRuntimeContainer = dummyRuntimeContainer;
         this.scheduleRuntimeContainer = scheduleRuntimeContainer;
     }
 
@@ -70,6 +74,14 @@ public class RunTimeContainerManager {
 
     public void registerQueueTriggers(List<FlowRuntimeRegistry> triggerNodes) {
         queueRuntimeContainer.register(triggerNodes);
+    }
+
+    public void registerDummyTriggers(List<FlowRuntimeRegistry> triggerNodes){
+        dummyRuntimeContainer.register(triggerNodes);
+    }
+
+    public void registerCycleTimerTriggers(List<FlowRuntimeRegistry> triggerNodes){
+        cycleTimerRuntimeContainer.register(triggerNodes);
     }
 
     public void addListener(Collection<WorkflowRuntimeListener> runtimeListeners) {
@@ -99,6 +111,10 @@ public class RunTimeContainerManager {
         triggers.put("schedules", schedules);
         List<Object> queues = new ArrayList<>(queueRuntimeContainer.runtimeFlowTriggers());
         triggers.put("queues", queues);
+        List<Object> dummies = new ArrayList<>(dummyRuntimeContainer.runtimeFlowTriggers());
+        triggers.put("dummies",dummies);
+        List<Object> cycles = new ArrayList<>(cycleTimerRuntimeContainer.runtimeFlowTriggers());
+        triggers.put("cycles",cycles);
         return triggers;
     }
 }

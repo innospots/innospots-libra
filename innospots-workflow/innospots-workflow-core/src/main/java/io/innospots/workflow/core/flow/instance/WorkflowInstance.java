@@ -43,4 +43,6 @@ public class WorkflowInstance extends WorkflowInstanceBase {
     @Schema(title = "created time")
     protected LocalDateTime createdTime;
 
+    @Schema(title = "icon")
+    protected String icon;
 }

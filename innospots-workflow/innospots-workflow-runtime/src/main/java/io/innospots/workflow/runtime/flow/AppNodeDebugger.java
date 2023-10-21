@@ -22,8 +22,7 @@ import cn.hutool.crypto.digest.DigestUtil;
 import io.innospots.base.enums.ImageType;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.re.ExpressionEngineFactory;
-import io.innospots.base.re.GenericExpressionEngine;
-import io.innospots.libra.base.utils.ImageFileUploader;
+import io.innospots.base.utils.ImageFileUploader;
 import io.innospots.workflow.core.debug.AppDebugPayload;
 import io.innospots.workflow.core.debug.DebugInput;
 import io.innospots.workflow.core.execution.ExecutionInput;
@@ -105,6 +104,7 @@ public class AppNodeDebugger {
 //        genericExpressionEngine.compile();
         appNode.build(identifier,ni);
         FlowExecution flowExecution = FlowExecution.buildNewFlowExecution(1L,0);
+        flowExecution.setSaveSync(true);
         NodeExecution nodeExecution = NodeExecution.buildNewNodeExecution(ni.getNodeKey(),flowExecution);
         List<ExecutionInput> inputs = new ArrayList<>();
         for (DebugInput input : debugPayload.getInputs()) {
@@ -116,6 +116,6 @@ public class AppNodeDebugger {
         nodeExecution.setInputs(inputs);
         appNode.innerExecute(nodeExecution,flowExecution);
         ExpressionEngineFactory.clear(identifier);
-        return NodeExecutionDisplay.build(nodeExecution);
+        return NodeExecutionDisplay.build(nodeExecution,ni);
     }
 }

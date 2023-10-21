@@ -90,7 +90,7 @@ public class JdbcDataConnectionMinder extends BaseDataConnectionMinder {
     }
 
     @Override
-    public boolean test(ConnectionCredential connectionCredential) {
+    public Object test(ConnectionCredential connectionCredential) {
         Map<String, Object> configs = connectionCredential.getConfig();
         HikariDataSource hikariDataSource = new HikariDataSource();
         String jdbcUrl = "" + configs.get(JDBC_URL_PREFIX) +

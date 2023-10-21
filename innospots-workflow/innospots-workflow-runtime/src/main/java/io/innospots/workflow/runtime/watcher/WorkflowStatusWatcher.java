@@ -20,8 +20,7 @@ package io.innospots.workflow.runtime.watcher;
 
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.watcher.AbstractWatcher;
-import io.innospots.workflow.console.entity.instance.WorkflowInstanceEntity;
-import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
+import io.innospots.workflow.core.flow.WorkflowBody;
 import io.innospots.workflow.core.loader.IWorkflowLoader;
 import io.innospots.workflow.runtime.flow.Flow;
 import io.innospots.workflow.runtime.flow.FlowManager;
@@ -42,22 +41,22 @@ public class WorkflowStatusWatcher extends AbstractWatcher {
 
     private static final Logger logger = LoggerFactory.getLogger(WorkflowStatusWatcher.class);
 
-    private WorkflowInstanceOperator workflowInstanceOperator;
+    private IWorkflowLoader workflowLoader;
 
     private FlowManager flowManager;
 
     private int recentMinutes = 3;
 
-    public WorkflowStatusWatcher(WorkflowInstanceOperator workflowInstanceOperator,
+    public WorkflowStatusWatcher(IWorkflowLoader workflowLoader,
                                  FlowManager flowManager) {
-        this.workflowInstanceOperator = workflowInstanceOperator;
+        this.workflowLoader = workflowLoader;
         this.flowManager = flowManager;
     }
 
     @Override
     public int execute() {
         //recent update flowInstance
-        List<WorkflowInstanceEntity> flowInstances = workflowInstanceOperator.selectRecentlyUpdateOrOnLine(recentMinutes);
+        List<WorkflowBody> flowInstances = workflowLoader.loadRecentlyUpdateOrOnLine(recentMinutes);
         if (CollectionUtils.isEmpty(flowInstances)) {
             logger.debug("not exit available online or updated flow.");
             return 0;
@@ -66,24 +65,24 @@ public class WorkflowStatusWatcher extends AbstractWatcher {
         Set<String> onlineSet = new HashSet<>(flowManager.cacheFlowKeys());
 
         for (int i = 0; i < flowInstances.size(); i++) {
-            WorkflowInstanceEntity instance = flowInstances.get(i);
-            if (instance.getStatus() == DataStatus.OFFLINE ||
-                    instance.getStatus() == DataStatus.REMOVED) {
-                String key = IWorkflowLoader.key(instance.getWorkflowInstanceId(), instance.getRevision());
+            WorkflowBody workflowBody = flowInstances.get(i);
+            if (workflowBody.getStatus() == DataStatus.OFFLINE ||
+                    workflowBody.getStatus() == DataStatus.REMOVED) {
+                String key = IWorkflowLoader.key(workflowBody.getWorkflowInstanceId(), workflowBody.getRevision());
                 logger.info("remove offline flow from manager:{}", key);
                 flowManager.clear(key);
-            } else if (instance.getStatus() == DataStatus.ONLINE) {
-                String key = IWorkflowLoader.key(instance.getWorkflowInstanceId(), instance.getRevision());
+            } else if (workflowBody.getStatus() == DataStatus.ONLINE) {
+                String key = IWorkflowLoader.key(workflowBody.getWorkflowInstanceId(), workflowBody.getRevision());
                 onlineSet.remove(key);
-                Flow flow = flowManager.findFlow(instance.getWorkflowInstanceId(), instance.getRevision());
+                Flow flow = flowManager.findFlow(workflowBody.getWorkflowInstanceId(), workflowBody.getRevision());
                 if (flow == null) {
                     //flow not exist
                     logger.info("the flow is online:{}", key);
-                    flowManager.loadFlow(instance.getWorkflowInstanceId(), instance.getRevision());
-                } else if (flow.hasUpdate(instance.getUpdatedTime())) {
+                    flowManager.loadFlow(workflowBody.getWorkflowInstanceId(), workflowBody.getRevision());
+                } else if (flow.hasUpdate(workflowBody.getUpdatedTime())) {
                     //flow update
                     logger.info("the flow has bean updated: {}, refresh flow.", key);
-                    flowManager.loadFlow(instance.getWorkflowInstanceId(), instance.getRevision(), true, true);
+                    flowManager.loadFlow(workflowBody.getWorkflowInstanceId(), workflowBody.getRevision(), true, true);
                 }
             }
         }//end for

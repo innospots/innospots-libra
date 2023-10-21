@@ -23,7 +23,7 @@ import io.innospots.base.exception.InnospotException;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.model.system.OrganizationInfo;
 import io.innospots.base.utils.CCH;
-import io.innospots.libra.base.utils.ImageFileUploader;
+import io.innospots.base.utils.ImageFileUploader;
 import io.innospots.libra.kernel.module.config.operator.SysConfigOperator;
 import io.innospots.libra.kernel.module.system.entity.AvatarResourceEntity;
 import io.innospots.libra.kernel.module.system.operator.AvatarResourceOperator;

@@ -101,12 +101,19 @@ public class FlowExecutorController {
     }
 
     @OperationLog(operateType = OperateType.UPDATE, idParamPosition = 0)
-    @PostMapping("stop/flow-execution/{workflowExecutionId}")
+    @PostMapping("execute/stop/flow-execution/{workflowExecutionId}")
     @Operation(summary = "stop workflow execution")
     @ResourceItemOperation(key = "workflow-builder-execute")
     public InnospotResponse<FlowExecutionBase> currentFlowExecution(@PathVariable String workflowExecutionId) {
         return success(FlowNodeDebuggerBuilder.build("nodeDebugger").stop(workflowExecutionId));
     }
 
+    @OperationLog(operateType = OperateType.UPDATE, idParamPosition = 0)
+    @PostMapping("execute/stop/workflow/{flowKey}")
+    @Operation(summary = "stop current executing workflow by key")
+    @ResourceItemOperation(key = "workflow-builder-execute")
+    public InnospotResponse<FlowExecutionBase> stopWorkflowByKey(@PathVariable String flowKey) {
+        return success(FlowNodeDebuggerBuilder.build("nodeDebugger").stop(flowKey));
+    }
 
 }

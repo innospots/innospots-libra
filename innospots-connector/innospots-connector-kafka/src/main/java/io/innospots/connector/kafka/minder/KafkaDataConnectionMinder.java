@@ -93,7 +93,7 @@ public class KafkaDataConnectionMinder extends BaseDataConnectionMinder implemen
     }
 
     @Override
-    public boolean test(ConnectionCredential connectionCredential) {
+    public Object test(ConnectionCredential connectionCredential) {
         String bootstrapServers = connectionCredential.v(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG);
         Properties properties = new Properties();
         properties.setProperty(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);

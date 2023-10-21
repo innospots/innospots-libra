@@ -48,7 +48,7 @@ public class RedisDataConnectionMinder extends BaseDataConnectionMinder {
     }
 
     @Override
-    public boolean test(ConnectionCredential connectionCredential) {
+    public Object test(ConnectionCredential connectionCredential) {
         String serverIp = connectionCredential.v(SERVER_IP);
         int port = Integer.parseInt(connectionCredential.v(PORT));
         Jedis jedis = new Jedis(serverIp, port);

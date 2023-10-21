@@ -40,6 +40,7 @@ public enum Opt {
     UNEQUAL("!=", "!=", "not equal"),
     LIKE("like", "like", "wildcard match"),
     NULL("is null", "==", "null value"),
+    HASVAL("has value", "!=", "null value"),
     NOTNULL("is not null", "!=", "not null value"),
     BETWEEN("between", "between", "two value range scope");
 

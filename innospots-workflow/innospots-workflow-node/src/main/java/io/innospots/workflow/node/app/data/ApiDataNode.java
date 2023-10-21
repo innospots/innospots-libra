@@ -173,7 +173,7 @@ public class ApiDataNode extends DataNode {
                 request(nodeOutput, item);
             }
         } else {
-            request(nodeOutput, new HashMap<>());
+            request(nodeOutput, new LinkedHashMap<>());
         }
     }
 
@@ -253,6 +253,7 @@ public class ApiDataNode extends DataNode {
 
     private InnospotResponse<DataBody> doRequest(Map<String, Object> item) {
         RequestBody requestBody = new RequestBody();
+        requestBody.setCredentialId(credentialId);
         requestBody.setOperation(operation);
         requestBody.setUri(urlAddress);
         requestBody.setConnectorName("Http");
@@ -308,10 +309,13 @@ public class ApiDataNode extends DataNode {
                 for (Factor factor : query) {
                     Object v = factor.value(item);
                     if (v == null) {
+                        v = factor.getValue();
+                    }
+                    if(v==null){
                         continue;
                     }
                     if (StringUtils.isNotEmpty(requestBody.getUri())) {
-                        String ph = "{" + factor.getName() + "}";
+                        String ph = "${" + factor.getName() + "}";
                         if (requestBody.getUri().contains(ph)) {
                             requestBody.setUri(requestBody.getUri().replace(ph, v.toString()));
                             continue;
@@ -320,7 +324,7 @@ public class ApiDataNode extends DataNode {
                     requestBody.addQuery(factor.getName(), v);
                 }//end for query
             }//end if query not empty
-            Map<String, String> bValue = new HashMap<>(5);
+            Map<String, String> bValue = new LinkedHashMap<>(5);
             if (CollectionUtils.isNotEmpty(body)) {
                 for (Factor factor : body) {
                     Object value = null;

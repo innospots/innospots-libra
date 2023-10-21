@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.module.function.model;
 
-import io.innospots.base.function.FunctionDefinition;
+import io.innospots.base.function.definition.FunctionDefinition;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;

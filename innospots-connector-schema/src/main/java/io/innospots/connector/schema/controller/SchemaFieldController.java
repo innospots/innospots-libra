@@ -45,11 +45,10 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
  * @author Alfred
  * @date 2021-02-04
  */
-//@RestController
-//@RequestMapping(PATH_ROOT_ADMIN + "apps/schema/fields")
-//@ModuleMenu(menuKey = "libra-apps-schema")
-//@Tag(name = "Schema Field")
-@Deprecated
+@RestController
+@RequestMapping(PATH_ROOT_ADMIN + "apps/schema/fields")
+@ModuleMenu(menuKey = "libra-apps")
+@Tag(name = "Schema Field")
 public class SchemaFieldController extends BaseController {
 
     private final SchemaFieldOperator schemaFieldOperator;
