@@ -18,9 +18,9 @@
 
 package io.innospots.base.events;
 
-import io.innospots.base.utils.ThreadPoolBuilder;
+import io.innospots.base.utils.thread.ThreadPoolBuilder;
+import io.innospots.base.utils.thread.ThreadTaskExecutor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +39,7 @@ public class EventBusCenter {
 
     private static EventBusCenter eventBusCenter;
 
-    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+    private ThreadTaskExecutor threadPoolTaskExecutor;
 
     public EventBusCenter() {
         threadPoolTaskExecutor = ThreadPoolBuilder.build("event-bus", 10000);

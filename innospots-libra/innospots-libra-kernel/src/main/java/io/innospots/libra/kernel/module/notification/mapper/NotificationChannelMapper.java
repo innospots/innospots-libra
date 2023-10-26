@@ -18,8 +18,8 @@
 
 package io.innospots.libra.kernel.module.notification.mapper;
 
+import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.mapper.BaseConvertMapper;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.libra.kernel.module.notification.entity.NotificationChannelEntity;
 import io.innospots.libra.kernel.module.notification.model.NotificationChannel;
@@ -35,7 +35,7 @@ import java.util.List;
  * @date 2022/4/26
  */
 @Mapper
-public interface NotificationChannelMapper extends BaseConvertMapper {
+public interface NotificationChannelMapper extends BaseBeanConverter {
 
     NotificationChannelMapper INSTANCE = Mappers.getMapper(NotificationChannelMapper.class);
 

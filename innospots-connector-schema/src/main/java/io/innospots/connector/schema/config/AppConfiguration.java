@@ -29,7 +29,6 @@ import io.innospots.connector.schema.reader.ConnectionCredentialReader;
 import io.innospots.connector.schema.reader.SchemaRegistryReader;
 import io.innospots.connector.schema.service.Oauth2CallbackService;
 import io.innospots.libra.base.configuration.AuthProperties;
-import io.innospots.libra.base.operator.SystemTempCacheOperator;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

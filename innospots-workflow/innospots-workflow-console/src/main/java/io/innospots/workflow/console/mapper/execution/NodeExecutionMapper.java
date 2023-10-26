@@ -18,7 +18,7 @@
 
 package io.innospots.workflow.console.mapper.execution;
 
-import io.innospots.base.mapper.BaseConvertMapper;
+import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.base.utils.CCH;
 import io.innospots.base.utils.DateTimeUtils;
@@ -37,7 +37,7 @@ import java.util.Map;
  * @date 2022/2/18
  */
 @Mapper
-public interface NodeExecutionMapper extends BaseConvertMapper {
+public interface NodeExecutionMapper extends BaseBeanConverter {
 
     NodeExecutionMapper INSTANCE = Mappers.getMapper(NodeExecutionMapper.class);
 

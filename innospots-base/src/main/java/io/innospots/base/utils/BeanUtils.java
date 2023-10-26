@@ -18,6 +18,8 @@
 
 package io.innospots.base.utils;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import io.innospots.base.exception.BaseException;
 import io.innospots.base.model.response.ResponseCode;
 import lombok.SneakyThrows;
@@ -45,19 +47,16 @@ import java.util.function.Function;
  * @create: 2021-01-22 22:27
  **/
 @Slf4j
-public class BeanUtils extends org.springframework.beans.BeanUtils {
+public class BeanUtils{
 
     public static void copyProperties(Object source, Object target) {
-
-        org.springframework.beans.BeanUtils.copyProperties(source, target, getNullPropertyNames(source));
+        BeanUtil.copyProperties(source,target, CopyOptions.create().ignoreNullValue());
+        //org.springframework.beans.BeanUtils.copyProperties(source, target, getNullPropertyNames(source));
 
     }
 
     public static <T> T copyProperties(Object source, Class<T> targetClass) {
-
-        T targetBean = createBean(targetClass);
-        copyProperties(source, targetBean, getNullPropertyNames(source));
-        return targetBean;
+        return BeanUtil.copyProperties(source,targetClass);
     }
 
     /**
@@ -77,7 +76,7 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
         try {
             for (S t : sourceCollection) {
                 T entity = targetClass.newInstance();
-                org.springframework.beans.BeanUtils.copyProperties(t, entity);
+                copyProperties(t, entity);
                 result.add(entity);
             }
         } catch (Exception e) {
@@ -87,50 +86,10 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
         return result;
     }
 
-    private static String[] getNullPropertyNames(Object source) {
 
-        final BeanWrapper src = new BeanWrapperImpl(source);
-        Set<String> emptyNames = new HashSet<String>();
-        for (java.beans.PropertyDescriptor pd : src.getPropertyDescriptors()) {
-            if (src.getPropertyValue(pd.getName()) == null) {
-                emptyNames.add(pd.getName());
-            }
-        }
-        return new HashSet<String>().toArray(new String[emptyNames.size()]);
-    }
-
-
-    @SneakyThrows
-    private static <T> T createBean(Class<T> clazz) {
-        return clazz.newInstance();
-    }
 
     public static Map<String, Object> toMap(Object object, boolean underscore, boolean ignoreNull) {
-        Map<String, Object> beanMap = new HashMap<>();
-        PropertyDescriptor[] propertyDescriptors = getPropertyDescriptors(object.getClass());
-        for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
-            String properName = propertyDescriptor.getName();
-            if ("class".equals(properName)) {
-                continue;
-            }
-            String beanKey = underscore ? StringConverter.camelToUnderscore(properName) : properName;
-            Method readMethod = propertyDescriptor.getReadMethod();
-            if (readMethod == null) {
-                continue;
-            } else if (!readMethod.isAccessible()) {
-                readMethod.setAccessible(true);
-            }
-            try {
-                Object value = readMethod.invoke(object);
-                if (value != null || !ignoreNull) {
-                    beanMap.put(beanKey, value);
-                }
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                log.error(e.getMessage(), e);
-            }
-        }
-
-        return beanMap;
+        return BeanUtil.beanToMap(object,underscore,ignoreNull);
     }
 
 
@@ -150,95 +109,8 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
     }
 
     public static <T> T toBean(Map<String, Object> beanMap, Class<T> valueType, boolean underscore) {
-        T bean = org.springframework.beans.BeanUtils.instantiateClass(valueType);
-        PropertyDescriptor[] propertyDescriptors = getPropertyDescriptors(valueType);
-        for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
-            String properName = propertyDescriptor.getName();
-            Class properType = propertyDescriptor.getPropertyType();
-            if ("class".equals(properName)) {
-                continue;
-            }
-            String beanKey = underscore ? StringConverter.camelToUnderscore(properName) : properName;
-            if (beanMap.containsKey(beanKey)) {
-                Method writeMethod = propertyDescriptor.getWriteMethod();
-                if (null == writeMethod) {
-                    continue;
-                }
-                Object value = beanMap.get(beanKey);
-                if (value != null && !"".equals(value.toString().trim())) {
-                    if (!(value instanceof Enum) && propertyDescriptor.getPropertyType().isEnum()) {
-                        Enum[] objects = (Enum[]) propertyDescriptor.getPropertyType().getEnumConstants();
-                        for (Enum object : objects) {
-                            if (value.equals(object.name())) {
-                                value = object;
-                                break;
-                            }
-                        }
-                    }
-                    try {
-                        if (properType.equals(int.class) || properType.equals(Integer.class)) {
-                            value = Integer.valueOf(value.toString());
-                        }
-                        if (properType.equals(byte.class) || properType.equals(Byte.class)) {
-                            value = Byte.valueOf(value.toString());
-                        }
-                        if (properType.equals(long.class) || properType.equals(Long.class)) {
-                            value = Long.valueOf(value.toString());
-                        }
-                        if (properType.equals(short.class) || properType.equals(Short.class)) {
-                            value = Short.valueOf(value.toString());
-                        }
-                        if (properType.equals(float.class) || properType.equals(Float.class)) {
-                            value = Float.valueOf(value.toString());
-                        }
-                        if (properType.equals(double.class) || properType.equals(Double.class)) {
-                            value = Double.valueOf(value.toString());
-                        }
-                        if (properType.equals(boolean.class) || properType.equals(Boolean.class)) {
-                            value = Boolean.valueOf(value.toString());
-                        }
-                        if (properType.equals(LocalDateTime.class) && value instanceof Timestamp) {
-                            value = ((Timestamp) value).toLocalDateTime();
-                        }
-                        if (properType.equals(LocalDate.class) && value instanceof Timestamp) {
-                            value = ((Timestamp) value).toLocalDateTime().toLocalDate();
-                        }
-
-                    } catch (Exception e) {
-                        log.error("value format error properType:{} data:{}", properType.getName(), value, e);
-                        value = null;
-                    }
-
-                }
-                if (value != null) {
-                    if ((properType.equals(char.class) || properType.equals(Character.class)) &&
-                            (!char.class.equals(value.getClass()) || !Character.class.equals(value.getClass()))) {
-                        String strValue = value.toString();
-                        value = strValue.subSequence(0, strValue.length()).charAt(0);
-                    }
-                }
-
-
-                if (!writeMethod.isAccessible()) {
-                    writeMethod.setAccessible(true);
-                }
-                try {
-                    writeMethod.invoke(bean, value);
-                } catch (Throwable throwable) {
-                    throw new RuntimeException("Could not set property '" + properName + " ' to bean, value " + value + " " + throwable);
-                }
-            }
-        }
-        return bean;
-    }
-
-    public static void fillNullValue(Map<String, Object> source, Object targetBean) {
-        final BeanWrapper src = new BeanWrapperImpl(targetBean);
-        for (java.beans.PropertyDescriptor pd : src.getPropertyDescriptors()) {
-            if (src.getPropertyValue(pd.getName()) == null) {
-                src.setPropertyValue(pd.getName(), source.get(pd.getName()));
-            }
-        }
+        return BeanUtil.mapToBean(beanMap,valueType,underscore,CopyOptions.create().ignoreError());
+        //return bean;
     }
 
     public static <T> String getFieldName(FieldFunction<T, ?> fieldFunction, boolean isUnderscore) {

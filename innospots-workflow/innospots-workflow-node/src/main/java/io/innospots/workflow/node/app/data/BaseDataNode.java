@@ -19,10 +19,8 @@
 package io.innospots.workflow.node.app.data;
 
 import io.innospots.base.condition.Factor;
-import io.innospots.base.data.ap.IDataOperatorPoint;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.utils.ApplicationContextUtils;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.enums.OutputFieldMode;
 import io.innospots.workflow.core.enums.OutputFieldType;

@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.notification.mapper;
 
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.mapper.BaseConvertMapper;
+import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.libra.kernel.module.notification.entity.NotificationSettingEntity;
 import io.innospots.libra.kernel.module.notification.model.NotificationSetting;
 import org.mapstruct.Mapper;
@@ -34,7 +34,7 @@ import java.util.List;
  * @date 2022/4/26
  */
 @Mapper
-public interface NotificationSettingMapper extends BaseConvertMapper {
+public interface NotificationSettingMapper extends BaseBeanConverter {
 
     NotificationSettingMapper INSTANCE = Mappers.getMapper(NotificationSettingMapper.class);
 

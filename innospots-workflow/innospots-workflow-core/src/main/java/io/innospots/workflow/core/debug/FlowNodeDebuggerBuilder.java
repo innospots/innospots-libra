@@ -19,7 +19,7 @@
 package io.innospots.workflow.core.debug;
 
 
-import io.innospots.base.utils.ApplicationContextUtils;
+import io.innospots.base.utils.BeanContextAware;
 
 /**
  * @author Smars
@@ -30,7 +30,7 @@ public class FlowNodeDebuggerBuilder {
 
 
     public static FlowNodeDebugger build(String flowType) {
-        return ApplicationContextUtils.getBean(flowType, FlowNodeDebugger.class);
+        return BeanContextAware.getBean(flowType, FlowNodeDebugger.class);
     }
 
 

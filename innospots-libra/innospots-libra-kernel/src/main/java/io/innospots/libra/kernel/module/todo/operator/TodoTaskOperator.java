@@ -32,7 +32,7 @@ import io.innospots.base.utils.CCH;
 import io.innospots.libra.kernel.module.todo.dao.TodoTaskDao;
 import io.innospots.libra.kernel.module.todo.entity.TodoTaskEntity;
 import io.innospots.libra.kernel.module.todo.enums.TaskStatus;
-import io.innospots.libra.kernel.module.todo.mapper.TodoTaskConvertMapper;
+import io.innospots.libra.kernel.module.todo.mapper.TodoTaskBeanConverter;
 import io.innospots.libra.kernel.module.todo.model.TodoTask;
 import io.innospots.libra.kernel.module.todo.model.TodoTaskRequest;
 import org.apache.commons.collections4.CollectionUtils;
@@ -52,7 +52,7 @@ public class TodoTaskOperator extends ServiceImpl<TodoTaskDao, TodoTaskEntity> {
     public TodoTask createTodoTask(TodoTask todoTask) {
         this.checkDifferentTaskName(todoTask);
         todoTask.setTaskStatus(TaskStatus.Pending);
-        TodoTaskConvertMapper mapper = TodoTaskConvertMapper.INSTANCE;
+        TodoTaskBeanConverter mapper = TodoTaskBeanConverter.INSTANCE;
         TodoTaskEntity entity = mapper.model2Entity(todoTask);
         super.save(entity);
         return mapper.entity2Model(entity);
@@ -62,7 +62,7 @@ public class TodoTaskOperator extends ServiceImpl<TodoTaskDao, TodoTaskEntity> {
     public Boolean updateTodoTask(TodoTask todoTask) {
         this.checkDifferentTaskName(todoTask);
         TodoTaskEntity entity = this.getById(todoTask.getTaskId());
-        TodoTaskConvertMapper.INSTANCE.updateEntity2Model(entity, todoTask);
+        TodoTaskBeanConverter.INSTANCE.updateEntity2Model(entity, todoTask);
         return super.updateById(entity);
     }
 

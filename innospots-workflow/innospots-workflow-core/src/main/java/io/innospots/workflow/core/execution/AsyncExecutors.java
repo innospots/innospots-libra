@@ -18,7 +18,7 @@
 
 package io.innospots.workflow.core.execution;
 
-import io.innospots.base.utils.ThreadPoolBuilder;
+import io.innospots.base.utils.thread.ThreadPoolBuilder;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.concurrent.ListenableFuture;
 

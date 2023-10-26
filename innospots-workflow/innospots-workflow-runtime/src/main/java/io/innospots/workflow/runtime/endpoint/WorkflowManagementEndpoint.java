@@ -21,7 +21,7 @@ package io.innospots.workflow.runtime.endpoint;
 import io.innospots.base.constant.PathConstant;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.base.quartz.QuartzScheduleManager;
-import io.innospots.base.utils.ApplicationContextUtils;
+import io.innospots.base.utils.BeanContextAware;
 import io.innospots.workflow.runtime.config.WorkflowServerProperties;
 import io.innospots.workflow.runtime.container.RunTimeContainerManager;
 import io.innospots.workflow.runtime.flow.Flow;
@@ -120,15 +120,15 @@ public class WorkflowManagementEndpoint {
         Map<String, String> flowInfo = new LinkedHashMap<>();
         String host = workflowServerProperties.getHost();
         if (StringUtils.isEmpty(host)) {
-            host = ApplicationContextUtils.serverIpAddress();
+            host = BeanContextAware.serverIpAddress();
         }
         flowInfo.put("webhookApiTest",
                 "http://" +
                         host +
-                        ":" + ApplicationContextUtils.serverPort() + PathConstant.ROOT_PATH +
+                        ":" + BeanContextAware.serverPort() + PathConstant.ROOT_PATH +
                         "test/webhook"
         );
-        WorkflowWebhookServer webhookServer = ApplicationContextUtils.getBean(WorkflowWebhookServer.class);
+        WorkflowWebhookServer webhookServer = BeanContextAware.getBean(WorkflowWebhookServer.class);
         flowInfo.put("webhookApiServer",
                 "http://" +
                         host +

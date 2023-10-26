@@ -18,7 +18,7 @@
 
 package io.innospots.workflow.console.mapper.execution;
 
-import io.innospots.base.mapper.BaseConvertMapper;
+import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.base.utils.CCH;
 import io.innospots.workflow.console.entity.execution.ScheduledNodeExecutionEntity;
@@ -35,7 +35,7 @@ import java.util.Map;
  * @date 2022/4/5
  */
 @Mapper
-public interface ScheduledNodeExecutionMapper extends BaseConvertMapper {
+public interface ScheduledNodeExecutionMapper extends BaseBeanConverter {
 
 
     ScheduledNodeExecutionMapper INSTANCE = Mappers.getMapper(ScheduledNodeExecutionMapper.class);

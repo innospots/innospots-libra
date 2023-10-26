@@ -21,7 +21,7 @@ package io.innospots.libra.base.terminal;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import eu.bitwalker.useragentutils.UserAgent;
-import io.innospots.base.constant.Constants;
+import io.innospots.base.constant.RegexConstants;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.HttpUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -85,7 +85,7 @@ public class TerminalInfoInterceptor implements HandlerInterceptor {
         try {
             if (ip == null || ip.startsWith("127.0.0") || ip.startsWith("192.168.") || ip.startsWith("10.") || ip.startsWith("100.") || ip.matches("^172\\.(1[6-9]|2[0-9]|3[0-1])\\.[0-9]{1,3}\\.[0-9]{1,3}$")) {
             }else {
-                String rspStr = HttpUtils.sendGet(Constants.IP_URL, "ip=" + ip + "&json=true", "GBK");
+                String rspStr = HttpUtils.sendGet(RegexConstants.IP_URL, "ip=" + ip + "&json=true", "GBK");
                 if (StringUtils.isNotBlank(rspStr)) {
                     Map<String, String> resultMap = JSONUtils.toMap(rspStr, String.class, String.class);
                     if (MapUtils.isNotEmpty(resultMap)) {

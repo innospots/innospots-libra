@@ -22,7 +22,7 @@ import com.github.benmanes.caffeine.cache.CacheLoader;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import io.innospots.base.function.definition.FunctionDefinition;
-import io.innospots.base.function.definition.FunctionDefinitionOperator;
+import io.innospots.libra.base.function.FunctionDefinitionOperator;
 import io.innospots.libra.kernel.module.function.model.FunctionCategory;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;

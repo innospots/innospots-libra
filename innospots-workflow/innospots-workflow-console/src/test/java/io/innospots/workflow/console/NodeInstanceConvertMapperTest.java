@@ -3,7 +3,7 @@ package io.innospots.workflow.console;
 
 import io.innospots.base.model.field.ParamField;
 import io.innospots.workflow.console.entity.instance.NodeInstanceEntity;
-import io.innospots.workflow.console.mapper.instance.NodeInstanceConvertMapper;
+import io.innospots.workflow.console.mapper.instance.NodeInstanceBeanConverter;
 import io.innospots.workflow.core.node.instance.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -40,13 +40,13 @@ public class NodeInstanceConvertMapperTest {
         ports.add(port);
         instance.setPorts(ports);
 
-        NodeInstanceEntity entity = NodeInstanceConvertMapper.INSTANCE.modelToEntity(instance);
+        NodeInstanceEntity entity = NodeInstanceBeanConverter.INSTANCE.modelToEntity(instance);
 
         log.info("entity.data:{}", entity.getData());
         log.info("entity.inputFields:{}", entity.getInputFields());
 
         log.info("instance:{}", instance.getPorts());
-        NodeInstance old = NodeInstanceConvertMapper.INSTANCE.entityToModel(entity);
+        NodeInstance old = NodeInstanceBeanConverter.INSTANCE.entityToModel(entity);
         log.info("old instance:{}", old.getPorts());
     }
 

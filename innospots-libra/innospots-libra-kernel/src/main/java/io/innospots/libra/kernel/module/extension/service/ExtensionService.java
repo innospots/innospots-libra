@@ -29,7 +29,7 @@ import io.innospots.libra.base.extension.LibraExtensionInformation;
 import io.innospots.libra.base.extension.LibraExtensionProperties;
 import io.innospots.libra.kernel.module.extension.entity.ExtDefinitionEntity;
 import io.innospots.libra.kernel.module.extension.entity.ExtInstallmentEntity;
-import io.innospots.libra.kernel.module.extension.mapper.AppInstallmentConvertMapper;
+import io.innospots.libra.kernel.module.extension.mapper.AppInstallmentBeanConverter;
 import io.innospots.libra.kernel.module.extension.model.ExtensionInstallInfo;
 import io.innospots.libra.kernel.module.extension.operator.ExtDefinitionOperator;
 import io.innospots.libra.kernel.module.extension.operator.ExtInstallmentOperator;
@@ -221,7 +221,7 @@ public class ExtensionService {
         copyToClassPath(extDefinitionEntity);
         //保存或是更新应用安装信息
         extInstallmentEntity = extInstallmentOperator.saveInstallInfo(extInstallmentEntity);
-        ExtensionInstallInfo appInstallInfo = AppInstallmentConvertMapper.INSTANCE.entityToModel(extInstallmentEntity, extDefinitionEntity);
+        ExtensionInstallInfo appInstallInfo = AppInstallmentBeanConverter.INSTANCE.entityToModel(extInstallmentEntity, extDefinitionEntity);
         //TODO 通知服务重启
 
         return appInstallInfo;

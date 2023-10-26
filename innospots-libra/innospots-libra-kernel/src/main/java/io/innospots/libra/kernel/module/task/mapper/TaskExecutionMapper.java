@@ -1,6 +1,6 @@
 package io.innospots.libra.kernel.module.task.mapper;
 
-import io.innospots.base.mapper.BaseConvertMapper;
+import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.libra.base.task.TaskExecution;
 import io.innospots.libra.kernel.module.task.entity.TaskExecutionEntity;
 import org.mapstruct.Mapper;
@@ -13,7 +13,7 @@ import org.mapstruct.factory.Mappers;
  * @date 2023/8/7
  */
 @Mapper
-public interface TaskExecutionMapper extends BaseConvertMapper {
+public interface TaskExecutionMapper extends BaseBeanConverter {
 
     TaskExecutionMapper INSTANCE = Mappers.getMapper(TaskExecutionMapper.class);
 

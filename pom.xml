@@ -13,6 +13,7 @@
         <module>innospots-data-provider</module>
         <module>innospots-connector</module>
         <module>innospots-connector-schema</module>
+        <module>innospots-server/innospots-server-base</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -47,7 +48,7 @@
         <guava.version>30.1-jre</guava.version>
         <easyexcel.version>3.3.2</easyexcel.version>
 
-        <hutool.version>5.8.9</hutool.version>
+        <hutool.version>5.8.22</hutool.version>
         <mail.version>1.6.2</mail.version>
         <innospots-ui.version>1.2.0-SNAPSHOT</innospots-ui.version>
         <innospots-page-ui.version>1.2.0-SNAPSHOT</innospots-page-ui.version>
@@ -88,6 +89,7 @@
         <spring-security-oauth2.version>2.1.4.RELEASE</spring-security-oauth2.version>
         <!--        <spring-web.version>5.2.2.RELEASE</spring-web.version>-->
         <sshd.version>2.7.0</sshd.version>
+        <swagger.version>2.2.0</swagger.version>
         <tablesaw.version>0.43.1</tablesaw.version>
         <ta4j.version>0.15</ta4j.version>
         <user-agent.version>1.21</user-agent.version>
@@ -550,6 +552,12 @@
             </dependency>
 
             <dependency>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-core</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.noear</groupId>
                 <artifactId>snack3</artifactId>
                 <version>${snack3.version}</version>
@@ -573,6 +581,8 @@
                 <artifactId>ta4j-core</artifactId>
                 <version>${ta4j.version}</version>
             </dependency>
+
+
 
             <dependency>
                 <groupId>io.innospots</groupId>
@@ -609,10 +619,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j2</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
             <version>${slf4j.version}</version>
@@ -624,9 +630,30 @@
             <version>${mockito-inline.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <!--
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        -->
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -636,17 +663,13 @@
             <version>${junit-vintage-engine.version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
     </dependencies>
 
     <build>

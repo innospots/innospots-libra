@@ -32,7 +32,7 @@ import io.innospots.base.exception.LoadConfigurationException;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.exception.data.DataConnectionException;
 import io.innospots.base.model.PageBody;
-import io.innospots.base.utils.ApplicationContextUtils;
+import io.innospots.base.utils.BeanContextAware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,11 +66,11 @@ public class DataConnectionMinderManager {
     }
 
     public static IDataConnectionMinder getCredentialMinder(Integer credentialId) {
-        return ApplicationContextUtils.getBean(DataConnectionMinderManager.class).getMinder(credentialId);
+        return BeanContextAware.getBean(DataConnectionMinderManager.class).getMinder(credentialId);
     }
 
     public static IQueueConnectionMinder getCredentialQueueMinder(Integer credentialId) {
-        return (IQueueConnectionMinder) ApplicationContextUtils.getBean(DataConnectionMinderManager.class).getMinder(credentialId);
+        return (IQueueConnectionMinder) BeanContextAware.getBean(DataConnectionMinderManager.class).getMinder(credentialId);
     }
 
     public static IDataConnectionMinder newInstanceByConnectorNameAndConfigCode(String connectorName, String configCode) {

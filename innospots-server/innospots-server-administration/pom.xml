@@ -13,7 +13,6 @@
     <description>web server administration platform</description>
 
     <dependencies>
-
         <dependency>
             <groupId>io.innospots</groupId>
             <artifactId>innospots-connector-schema</artifactId>

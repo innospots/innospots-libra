@@ -28,8 +28,8 @@ import io.innospots.workflow.console.dao.apps.AppNodeGroupNodeDao;
 import io.innospots.workflow.console.entity.apps.AppNodeDefinitionEntity;
 import io.innospots.workflow.console.entity.apps.AppNodeGroupEntity;
 import io.innospots.workflow.console.entity.apps.AppNodeGroupNodeEntity;
-import io.innospots.workflow.console.mapper.apps.AppNodeDefinitionConvertMapper;
-import io.innospots.workflow.console.mapper.apps.AppNodeGroupConvertMapper;
+import io.innospots.workflow.console.mapper.apps.AppNodeDefinitionBeanConverter;
+import io.innospots.workflow.console.mapper.apps.AppNodeGroupBeanConverter;
 import io.innospots.workflow.core.node.apps.AppNodeDefinition;
 import io.innospots.workflow.core.node.apps.AppNodeGroup;
 import org.apache.commons.collections4.CollectionUtils;
@@ -85,7 +85,7 @@ public class AppNodeGroupOperator {
         if (row != 1) {
             throw ResourceException.buildCreateException(this.getClass(), "create node group error");
         }
-        return AppNodeGroupConvertMapper.INSTANCE.entityToModel(entity);
+        return AppNodeGroupBeanConverter.INSTANCE.entityToModel(entity);
     }
 
 
@@ -204,13 +204,13 @@ public class AppNodeGroupOperator {
                     if (!ndMap.containsKey(entity.getNodeGroupId())) {
                         ndMap.put(entity.getNodeGroupId(), new ArrayList<>());
                     }
-                    ndMap.get(entity.getNodeGroupId()).add(AppNodeDefinitionConvertMapper.INSTANCE.entityToModel(entity));
+                    ndMap.get(entity.getNodeGroupId()).add(AppNodeDefinitionBeanConverter.INSTANCE.entityToModel(entity));
                 }
             }
         }
         List<AppNodeGroup> resultList = new ArrayList<>();
         for (AppNodeGroupEntity nodeGroupEntity : list) {
-            AppNodeGroup appNodeGroup = AppNodeGroupConvertMapper.INSTANCE.entityToModel(nodeGroupEntity);
+            AppNodeGroup appNodeGroup = AppNodeGroupBeanConverter.INSTANCE.entityToModel(nodeGroupEntity);
             appNodeGroup.setNodes(ndMap.getOrDefault(appNodeGroup.getNodeGroupId(), new ArrayList<>()));
             resultList.add(appNodeGroup);
         }

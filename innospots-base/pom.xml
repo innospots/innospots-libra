@@ -13,11 +13,13 @@
 
     <dependencies>
 
+        <!--
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
             <scope>provided</scope>
         </dependency>
+
 
         <dependency>
             <groupId>com.baomidou</groupId>
@@ -31,21 +33,23 @@
             <scope>provided</scope>
         </dependency>
 
+
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <scope>provided</scope>
         </dependency>
 
+
         <dependency>
             <groupId>jakarta.persistence</groupId>
             <artifactId>jakarta.persistence-api</artifactId>
             <scope>provided</scope>
         </dependency>
-
+                -->
         <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-core</artifactId>
             <scope>provided</scope>
         </dependency>
 
@@ -103,10 +107,12 @@
             <artifactId>javax.annotation-api</artifactId>
         </dependency>
 
+        <!--
         <dependency>
             <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
         </dependency>
+        -->
 
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
@@ -136,6 +142,11 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
         </dependency>
 
         <!--

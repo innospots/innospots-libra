@@ -18,13 +18,12 @@
 
 package io.innospots.base.data.schema;
 
-import io.innospots.base.constant.Constants;
+import io.innospots.base.constant.RegexConstants;
 import io.innospots.base.model.BaseModelInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -46,7 +45,7 @@ public class SchemaCatalog extends BaseModelInfo {
     @Size(max = 32, message = "name length max 64")
     @NotBlank(message = "Name cannot be blank")
     @Schema(title = "name")
-    @Pattern(regexp = Constants.NAME_REGEX, message = "name, only supports: contains a maximum of 32 characters, including letters, digits, and underscores (_), and chinese.")
+    @Pattern(regexp = RegexConstants.NAME_REGEX, message = "name, only supports: contains a maximum of 32 characters, including letters, digits, and underscores (_), and chinese.")
     protected String name;
 
     @Schema(title = "code")
@@ -70,7 +69,6 @@ public class SchemaCatalog extends BaseModelInfo {
     @Schema(title = "schema field list")
     protected List<SchemaField> schemaFields;
 
-    @Column
     protected Integer categoryId;
 
 }

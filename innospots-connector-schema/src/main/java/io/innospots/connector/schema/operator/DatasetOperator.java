@@ -31,7 +31,7 @@ import io.innospots.base.model.PageBody;
 import io.innospots.connector.schema.dao.SchemaRegistryDao;
 import io.innospots.connector.schema.entity.AppCredentialEntity;
 import io.innospots.connector.schema.entity.SchemaRegistryEntity;
-import io.innospots.connector.schema.mapper.SchemaRegistryConvertMapper;
+import io.innospots.connector.schema.mapper.SchemaRegistryBeanConverter;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,8 +64,8 @@ public class DatasetOperator extends ServiceImpl<SchemaRegistryDao, SchemaRegist
             dataset.setCategoryId(0);
         }
 
-        SchemaRegistry schemaRegistry = schemaRegistryOperator.createSchemaRegistry(SchemaRegistryConvertMapper.INSTANCE.datasetToSchemaRegistry(dataset));
-        return SchemaRegistryConvertMapper.INSTANCE.schemaRegistryToDataset(schemaRegistry);
+        SchemaRegistry schemaRegistry = schemaRegistryOperator.createSchemaRegistry(SchemaRegistryBeanConverter.INSTANCE.datasetToSchemaRegistry(dataset));
+        return SchemaRegistryBeanConverter.INSTANCE.schemaRegistryToDataset(schemaRegistry);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -77,8 +77,8 @@ public class DatasetOperator extends ServiceImpl<SchemaRegistryDao, SchemaRegist
         if (dataset.getCategoryId() == null) {
             dataset.setCategoryId(0);
         }
-        SchemaRegistry schemaRegistry = schemaRegistryOperator.updateSchemaRegistry(SchemaRegistryConvertMapper.INSTANCE.datasetToSchemaRegistry(dataset));
-        return SchemaRegistryConvertMapper.INSTANCE.schemaRegistryToDataset(schemaRegistry);
+        SchemaRegistry schemaRegistry = schemaRegistryOperator.updateSchemaRegistry(SchemaRegistryBeanConverter.INSTANCE.datasetToSchemaRegistry(dataset));
+        return SchemaRegistryBeanConverter.INSTANCE.schemaRegistryToDataset(schemaRegistry);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -87,19 +87,19 @@ public class DatasetOperator extends ServiceImpl<SchemaRegistryDao, SchemaRegist
     }
 
     public Dataset getDatasetById(Integer registryId) {
-        return SchemaRegistryConvertMapper.INSTANCE.schemaRegistryToDataset(schemaRegistryOperator.getSchemaRegistryById(registryId, true));
+        return SchemaRegistryBeanConverter.INSTANCE.schemaRegistryToDataset(schemaRegistryOperator.getSchemaRegistryById(registryId, true));
     }
 
     public List<Dataset> listDatasets(Integer categoryId, String queryCode, String sort) {
         List<SchemaRegistry> schemaRegistries = schemaRegistryOperator.listSchemaRegistries(queryCode, sort, categoryId, SchemaRegistryType.DATASET);
-        List<Dataset> datasets = SchemaRegistryConvertMapper.INSTANCE.schemaRegistriesToDatasets(schemaRegistries);
+        List<Dataset> datasets = SchemaRegistryBeanConverter.INSTANCE.schemaRegistriesToDatasets(schemaRegistries);
         this.fillDatasetIcon(datasets);
         return datasets;
     }
 
     public PageBody<Dataset> pageDatasets(Integer categoryId, Integer page, Integer size, String queryCode, String sort) {
         PageBody<SchemaRegistry> schemaRegistryPageBody = schemaRegistryOperator.pageSchemaRegistries(queryCode, sort, categoryId, SchemaRegistryType.DATASET, page, size);
-        List<Dataset> datasets = SchemaRegistryConvertMapper.INSTANCE.schemaRegistriesToDatasets(schemaRegistryPageBody.getList());
+        List<Dataset> datasets = SchemaRegistryBeanConverter.INSTANCE.schemaRegistriesToDatasets(schemaRegistryPageBody.getList());
         PageBody<Dataset> pageBody = new PageBody<>();
         this.fillDatasetIcon(datasets);
         pageBody.setList(datasets);
@@ -125,7 +125,7 @@ public class DatasetOperator extends ServiceImpl<SchemaRegistryDao, SchemaRegist
     @Override
     public List<Dataset> listDatasets(Integer credentialId) {
         List<SchemaRegistry> schemaRegistries = schemaRegistryOperator.listSchemaRegistries(credentialId);
-        return SchemaRegistryConvertMapper.INSTANCE.schemaRegistriesToDatasets(schemaRegistries);
+        return SchemaRegistryBeanConverter.INSTANCE.schemaRegistriesToDatasets(schemaRegistries);
     }
 
     @Override
@@ -134,7 +134,7 @@ public class DatasetOperator extends ServiceImpl<SchemaRegistryDao, SchemaRegist
             return Collections.emptyList();
         }
         List<SchemaRegistry> schemaRegistries = schemaRegistryOperator.listByRegistryIds(ids);
-        return SchemaRegistryConvertMapper.INSTANCE.schemaRegistriesToDatasets(schemaRegistries);
+        return SchemaRegistryBeanConverter.INSTANCE.schemaRegistriesToDatasets(schemaRegistries);
     }
 
     private void fillDatasetIcon(List<Dataset> datasets){

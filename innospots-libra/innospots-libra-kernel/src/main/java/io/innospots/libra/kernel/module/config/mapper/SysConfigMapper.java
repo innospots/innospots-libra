@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.module.config.mapper;
 
-import io.innospots.base.mapper.BaseConvertMapper;
+import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.libra.kernel.module.config.entity.SysConfigEntity;
 import io.innospots.libra.kernel.module.config.model.SysConfigItem;
 
@@ -27,7 +27,7 @@ import io.innospots.libra.kernel.module.config.model.SysConfigItem;
  * @version 1.0.0
  * @date 2022/1/15
  */
-public interface SysConfigMapper extends BaseConvertMapper {
+public interface SysConfigMapper extends BaseBeanConverter {
 
 
     SysConfigEntity entityToModel(SysConfigItem sysConfigItem);

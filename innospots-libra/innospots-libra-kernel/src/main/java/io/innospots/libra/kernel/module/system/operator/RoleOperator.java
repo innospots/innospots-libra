@@ -27,7 +27,7 @@ import com.google.common.base.CaseFormat;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.model.PageBody;
-import io.innospots.base.model.user.RoleInfo;
+import io.innospots.libra.kernel.module.system.model.role.RoleInfo;
 import io.innospots.base.utils.CCH;
 import io.innospots.libra.base.model.QueryRequest;
 import io.innospots.libra.kernel.module.system.dao.RoleDao;

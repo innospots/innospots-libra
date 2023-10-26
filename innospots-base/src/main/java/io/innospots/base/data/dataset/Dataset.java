@@ -18,7 +18,7 @@
 
 package io.innospots.base.data.dataset;
 
-import io.innospots.base.constant.Constants;
+import io.innospots.base.constant.RegexConstants;
 import io.innospots.base.model.BaseModelInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -58,7 +58,7 @@ public class Dataset extends BaseModelInfo {
     @NotBlank(message = "Name cannot be blank")
     @Size(max = 32, message = "name length max 32")
     @Schema(title = "name")
-    @Pattern(regexp = Constants.NAME_REGEX, message = "name, only supports: contains a maximum of 32 characters, including letters, digits, and underscores (_), and chinese.")
+    @Pattern(regexp = RegexConstants.NAME_REGEX, message = "name, only supports: contains a maximum of 32 characters, including letters, digits, and underscores (_), and chinese.")
     protected String name;
 
     @NotNull(message = "script cannot be empty")

@@ -47,7 +47,7 @@ public class BaseCategoryOperator extends ServiceImpl<BaseCategoryDao, BaseCateg
         entity.setCategoryName(categoryName);
         entity.setCategoryType(categoryType);
         super.save(entity);
-        return BaseCategoryMapper.INSTANCE.entityToModel(entity);
+        return BaseCategoryBeanConverter.INSTANCE.entityToModel(entity);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -81,7 +81,7 @@ public class BaseCategoryOperator extends ServiceImpl<BaseCategoryDao, BaseCateg
             }
         });
         entities.sort(Comparator.comparing(BaseCategoryEntity::getOrders));
-        return BaseCategoryMapper.INSTANCE.entitiesToModels(entities);
+        return BaseCategoryBeanConverter.INSTANCE.entitiesToModels(entities);
     }
 
     public boolean checkNameExist(String categoryName, CategoryType categoryType) {

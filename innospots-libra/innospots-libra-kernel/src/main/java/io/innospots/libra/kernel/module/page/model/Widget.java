@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.module.page.model;
 
-import io.innospots.base.constant.Constants;
+import io.innospots.base.constant.RegexConstants;
 import io.innospots.base.model.BaseModelInfo;
 import io.innospots.libra.kernel.module.page.enums.WidgetType;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -48,7 +48,7 @@ public class Widget extends BaseModelInfo {
 
     @Schema(title = "name")
     @Size(max = 32, message = "name length max 32")
-    @Pattern(regexp = Constants.NAME_REGEX, message = "name, only supports: contains a maximum of 32 characters, including letters, digits, and underscores (_), and chinese.")
+    @Pattern(regexp = RegexConstants.NAME_REGEX, message = "name, only supports: contains a maximum of 32 characters, including letters, digits, and underscores (_), and chinese.")
     private String name;
 
     @Schema(title = "Widget type")

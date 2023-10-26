@@ -25,7 +25,7 @@ import io.innospots.libra.base.operator.SysUserReader;
 import io.innospots.libra.kernel.module.todo.entity.TodoTaskEntity;
 import io.innospots.libra.kernel.module.todo.entity.TodoTaskTagEntity;
 import io.innospots.libra.kernel.module.todo.enums.TaskPriority;
-import io.innospots.libra.kernel.module.todo.mapper.TodoTaskConvertMapper;
+import io.innospots.libra.kernel.module.todo.mapper.TodoTaskBeanConverter;
 import io.innospots.libra.kernel.module.todo.model.TodoTask;
 import io.innospots.libra.kernel.module.todo.model.TodoTaskComment;
 import io.innospots.libra.kernel.module.todo.model.TodoTaskRequest;
@@ -103,7 +103,7 @@ public class TodoTaskService {
     }
 
     public TodoTask getTodoTask(Integer taskId) {
-        TodoTask task = TodoTaskConvertMapper.INSTANCE.entity2Model(todoTaskOperator.getTodoTask(taskId));
+        TodoTask task = TodoTaskBeanConverter.INSTANCE.entity2Model(todoTaskOperator.getTodoTask(taskId));
 
         List<TodoTaskTagEntity> entities = todoTaskTagOperator.listByTaskId(taskId);
         task.setTags(entities.stream().map(TodoTaskTagEntity::getTagName).collect(Collectors.toList()));
@@ -156,7 +156,7 @@ public class TodoTaskService {
         IPage<TodoTaskEntity> page = todoTaskOperator.pageTodoTasks(request);
         PageBody<TodoTask> pageBody = new PageBody<>();
         List<TodoTaskEntity> entities = page.getRecords();
-        List<TodoTask> todoTasks = entities.stream().map(TodoTaskConvertMapper.INSTANCE::entity2Model).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
+        List<TodoTask> todoTasks = entities.stream().map(TodoTaskBeanConverter.INSTANCE::entity2Model).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
         this.generateTasks(todoTasks);
         pageBody.setList(todoTasks);
         pageBody.setCurrent(page.getCurrent());

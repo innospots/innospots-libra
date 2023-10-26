@@ -31,7 +31,7 @@ import io.innospots.base.model.PageBody;
 import io.innospots.base.utils.StringConverter;
 import io.innospots.connector.schema.dao.SchemaRegistryDao;
 import io.innospots.connector.schema.entity.SchemaRegistryEntity;
-import io.innospots.connector.schema.mapper.SchemaRegistryConvertMapper;
+import io.innospots.connector.schema.mapper.SchemaRegistryBeanConverter;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,7 +77,7 @@ public class SchemaRegistryOperator extends ServiceImpl<SchemaRegistryDao, Schem
 
     @Transactional(rollbackFor = Exception.class)
     public SchemaRegistry createSchemaRegistry(SchemaRegistry schemaRegistry) {
-        SchemaRegistryEntity entity = SchemaRegistryConvertMapper.INSTANCE.modelToEntity(schemaRegistry);
+        SchemaRegistryEntity entity = SchemaRegistryBeanConverter.INSTANCE.modelToEntity(schemaRegistry);
         createSchemaRegistry(entity);
         schemaRegistry.setRegistryId(entity.getRegistryId());
         schemaRegistry.setCode(entity.getCode());
@@ -90,7 +90,7 @@ public class SchemaRegistryOperator extends ServiceImpl<SchemaRegistryDao, Schem
         if (this.checkNameExistAndExcludeOriginalName(schemaRegistry.getName(), schemaRegistry.getRegistryId())) {
             throw ResourceException.buildExistException(this.getClass(), "name exist: " + schemaRegistry.getName());
         }
-        SchemaRegistryEntity entity = SchemaRegistryConvertMapper.INSTANCE.modelToEntity(schemaRegistry);
+        SchemaRegistryEntity entity = SchemaRegistryBeanConverter.INSTANCE.modelToEntity(schemaRegistry);
         super.updateById(entity);
         saveSchemeField(schemaRegistry);
         return this.getSchemaRegistryById(entity.getRegistryId(), true);
@@ -120,7 +120,7 @@ public class SchemaRegistryOperator extends ServiceImpl<SchemaRegistryDao, Schem
 
     public SchemaRegistry getSchemaRegistryById(Integer registryId, boolean includeField) {
         SchemaRegistryEntity entity = super.getById(registryId);
-        SchemaRegistry schemaRegistry = SchemaRegistryConvertMapper.INSTANCE.entityToModel(entity);
+        SchemaRegistry schemaRegistry = SchemaRegistryBeanConverter.INSTANCE.entityToModel(entity);
         if (includeField) {
             schemaRegistry.setSchemaFields(this.schemaFieldOperator.listByRegistryId(schemaRegistry.getRegistryId()));
         }
@@ -135,7 +135,7 @@ public class SchemaRegistryOperator extends ServiceImpl<SchemaRegistryDao, Schem
         QueryWrapper<SchemaRegistryEntity> query = new QueryWrapper<>();
         query.lambda().eq(SchemaRegistryEntity::getCode, code);
         SchemaRegistryEntity entity = this.getOne(query);
-        SchemaRegistry schemaRegistry = SchemaRegistryConvertMapper.INSTANCE.entityToModel(entity);
+        SchemaRegistry schemaRegistry = SchemaRegistryBeanConverter.INSTANCE.entityToModel(entity);
         if (includeField) {
             schemaRegistry.setSchemaFields(this.schemaFieldOperator.listByRegistryId(schemaRegistry.getRegistryId()));
         }
@@ -146,7 +146,7 @@ public class SchemaRegistryOperator extends ServiceImpl<SchemaRegistryDao, Schem
         QueryWrapper<SchemaRegistryEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(SchemaRegistryEntity::getCredentialId, credentialId);
         List<SchemaRegistryEntity> entities = super.list(queryWrapper);
-        return CollectionUtils.isEmpty(entities) ? Collections.emptyList() : SchemaRegistryConvertMapper.INSTANCE.entitiesToModels(entities);
+        return CollectionUtils.isEmpty(entities) ? Collections.emptyList() : SchemaRegistryBeanConverter.INSTANCE.entitiesToModels(entities);
     }
 
     public List<SchemaRegistry> listSchemaRegistries(String queryCode, String sortField, Integer categoryId, SchemaRegistryType registryType) {
@@ -166,7 +166,7 @@ public class SchemaRegistryOperator extends ServiceImpl<SchemaRegistryDao, Schem
         }
 
         List<SchemaRegistryEntity> entities = super.list(queryWrapper);
-        return CollectionUtils.isEmpty(entities) ? Collections.emptyList() : SchemaRegistryConvertMapper.INSTANCE.entitiesToModels(entities);
+        return CollectionUtils.isEmpty(entities) ? Collections.emptyList() : SchemaRegistryBeanConverter.INSTANCE.entitiesToModels(entities);
     }
 
     public PageBody<SchemaRegistry> pageSchemaRegistries(String queryCode, String sortField, Integer categoryId, SchemaRegistryType registryType, Integer page, Integer size) {
@@ -186,7 +186,7 @@ public class SchemaRegistryOperator extends ServiceImpl<SchemaRegistryDao, Schem
         }
 
         Page<SchemaRegistryEntity> entities = super.page(PageDTO.of(page, size), queryWrapper);
-        List<SchemaRegistry> schemaRegistries = SchemaRegistryConvertMapper.INSTANCE.entitiesToModels(entities.getRecords());
+        List<SchemaRegistry> schemaRegistries = SchemaRegistryBeanConverter.INSTANCE.entitiesToModels(entities.getRecords());
 
         PageBody<SchemaRegistry> pageBody = new PageBody<>();
         pageBody.setList(schemaRegistries);
@@ -223,6 +223,6 @@ public class SchemaRegistryOperator extends ServiceImpl<SchemaRegistryDao, Schem
 
     public List<SchemaRegistry> listByRegistryIds(Set<Integer> ids) {
         List<SchemaRegistryEntity> entities = super.listByIds(ids);
-        return SchemaRegistryConvertMapper.INSTANCE.entitiesToModels(entities);
+        return SchemaRegistryBeanConverter.INSTANCE.entitiesToModels(entities);
     }
 }

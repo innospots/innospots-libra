@@ -28,7 +28,7 @@ import com.google.common.base.CaseFormat;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.model.PageBody;
-import io.innospots.base.utils.ApplicationContextUtils;
+import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.StringConverter;
 import io.innospots.libra.base.event.NewPageEvent;
 import io.innospots.libra.base.event.NotificationAnnotation;
@@ -37,7 +37,7 @@ import io.innospots.workflow.console.dao.instance.WorkflowInstanceDao;
 import io.innospots.workflow.console.entity.instance.WorkflowInstanceEntity;
 import io.innospots.workflow.console.enums.FlowVersion;
 import io.innospots.workflow.console.listener.WorkflowPageListener;
-import io.innospots.workflow.console.mapper.instance.WorkflowInstanceConvertMapper;
+import io.innospots.workflow.console.mapper.instance.WorkflowInstanceBeanConverter;
 import io.innospots.workflow.console.operator.apps.AppFlowTemplateOperator;
 import io.innospots.workflow.core.flow.WorkflowBaseInfo;
 import io.innospots.workflow.core.flow.WorkflowInfo;
@@ -93,7 +93,7 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
             throw ResourceException.buildDuplicateException(this.getClass(), "create workflow name exist, name: " + workflowInfo.getName());
         }
 
-        WorkflowInstanceEntity workflowInstanceEntity = WorkflowInstanceConvertMapper.INSTANCE.workflowInfoToEntity(workflowInfo);
+        WorkflowInstanceEntity workflowInstanceEntity = WorkflowInstanceBeanConverter.INSTANCE.workflowInfoToEntity(workflowInfo);
 
         boolean hasFlowKey;
         do {
@@ -105,8 +105,8 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
         workflowInstanceEntity.setRevision(FlowVersion.DRAFT.getVersion());
         workflowInstanceEntity.setStatus(DataStatus.OFFLINE);
         this.save(workflowInstanceEntity);
-        ApplicationContextUtils.sendAppEvent(new NewPageEvent(workflowInstanceEntity.getWorkflowInstanceId(), WorkflowPageListener.PAGE_TYPE));
-        return WorkflowInstanceConvertMapper.INSTANCE.entityToModel(workflowInstanceEntity);
+        BeanContextAware.sendAppEvent(new NewPageEvent(workflowInstanceEntity.getWorkflowInstanceId(), WorkflowPageListener.PAGE_TYPE));
+        return WorkflowInstanceBeanConverter.INSTANCE.entityToModel(workflowInstanceEntity);
     }
 
     private boolean checkWorkflowName(String name) {
@@ -121,7 +121,7 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
         query.lambda().eq(WorkflowInstanceEntity::getStatus,DataStatus.ONLINE)
                 .eq(WorkflowInstanceEntity::getTriggerCode,triggerCode);
         List<WorkflowInstanceEntity> entities = this.list(query);
-        return entities.stream().map(WorkflowInstanceConvertMapper.INSTANCE::entityToBaseInfo).collect(Collectors.toList());
+        return entities.stream().map(WorkflowInstanceBeanConverter.INSTANCE::entityToBaseInfo).collect(Collectors.toList());
     }
 
     /**
@@ -139,7 +139,7 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
         pageBody.setPageSize(entityPage.getSize());
         pageBody.setTotal(entityPage.getTotal());
         pageBody.setTotalPage(entityPage.getPages());
-        pageBody.setList(entities.stream().map(WorkflowInstanceConvertMapper.INSTANCE::entityToModel).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size()))));
+        pageBody.setList(entities.stream().map(WorkflowInstanceBeanConverter.INSTANCE::entityToModel).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size()))));
         return pageBody;
     }
 
@@ -163,7 +163,7 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
         if (!check) {
             throw ResourceException.buildNotExistException(this.getClass(), "workflow template is not exist, code: " + workflowInstance.getTemplateCode());
         }
-        WorkflowInstanceEntity workflowInstanceEntity = WorkflowInstanceConvertMapper.INSTANCE.modelToEntity(workflowInstance);
+        WorkflowInstanceEntity workflowInstanceEntity = WorkflowInstanceBeanConverter.INSTANCE.modelToEntity(workflowInstance);
         return super.updateById(workflowInstanceEntity);
     }
 
@@ -239,7 +239,7 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
         if (workflowInstanceEntity == null) {
             throw ResourceException.buildNotExistException(this.getClass(), "workflow is not exist, id: " + workflowInstanceId);
         }
-        return WorkflowInstanceConvertMapper.INSTANCE.entityToModel(workflowInstanceEntity);
+        return WorkflowInstanceBeanConverter.INSTANCE.entityToModel(workflowInstanceEntity);
     }
 
     public WorkflowInstanceEntity getWorkflowInstanceEntity(Long workflowInstanceId) {

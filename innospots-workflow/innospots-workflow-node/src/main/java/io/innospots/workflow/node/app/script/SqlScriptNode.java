@@ -22,7 +22,7 @@ import io.innospots.base.condition.Factor;
 import io.innospots.base.data.ap.ISqlOperatorPoint;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.model.response.InnospotResponse;
-import io.innospots.base.utils.ApplicationContextUtils;
+import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.ExecutionInput;
 import io.innospots.workflow.core.execution.node.NodeExecution;
@@ -83,7 +83,7 @@ public class SqlScriptNode extends BaseAppNode {
             conditionFields = BeanUtils.toBean(conditionFieldMapping, Factor.class);
         }
 
-        sqlOperatorPoint = ApplicationContextUtils.getBean(ISqlOperatorPoint.class);
+        sqlOperatorPoint = BeanContextAware.getBean(ISqlOperatorPoint.class);
         sqlQueryClause = nodeInstance.valueString(FIELD_SQL_CLAUSE);
         if (sqlQueryClause != null) {
             sqlQueryClause = sqlQueryClause.replaceAll("\\n", " ");

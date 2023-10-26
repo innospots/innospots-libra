@@ -28,7 +28,7 @@ import io.innospots.base.data.schema.config.CredentialFormConfig;
 import io.innospots.base.data.schema.reader.IConnectionCredentialReader;
 import io.innospots.base.exception.AuthenticationException;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.connector.schema.mapper.CredentialConvertMapper;
+import io.innospots.connector.schema.mapper.CredentialBeanConverter;
 import io.innospots.connector.schema.operator.AppCredentialOperator;
 import io.innospots.libra.base.configuration.AuthProperties;
 import org.apache.commons.collections4.MapUtils;
@@ -97,7 +97,7 @@ public class ConnectionCredentialReader implements IConnectionCredentialReader {
         }
 
         ConnectionCredential connectionCredential =
-                CredentialConvertMapper.INSTANCE.credentialToConnection(appCredentialInfo);
+                CredentialBeanConverter.INSTANCE.credentialToConnection(appCredentialInfo);
 
         if (StringUtils.isBlank(appCredentialInfo.getEncryptFormValues())) {
             connectionCredential.setConfig(new HashMap<>());

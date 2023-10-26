@@ -41,8 +41,8 @@ public class LocaleMessageUtils {
     private static TimeZone defaultTimeZone;
 
     public static MessageSource messageSource() {
-        if(ApplicationContextUtils.isLoaded()){
-            return ApplicationContextUtils.getBean("messageSource", MessageSource.class);
+        if(BeanContextAware.isLoaded()){
+            return BeanContextAware.getBean("messageSource", MessageSource.class);
         }
         return null;
     }

@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.module.page.mapper;
 
-import io.innospots.base.mapper.BaseConvertMapper;
+import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.libra.kernel.module.page.entity.PageEntity;
 import io.innospots.libra.kernel.module.page.model.Page;
 import io.innospots.libra.kernel.module.page.model.PageDetail;
@@ -34,7 +34,7 @@ import java.util.List;
  * @date 2022/1/21
  */
 @Mapper
-public interface PageMapper extends BaseConvertMapper {
+public interface PageMapper extends BaseBeanConverter {
 
     PageMapper INSTANCE = Mappers.getMapper(PageMapper.class);
 

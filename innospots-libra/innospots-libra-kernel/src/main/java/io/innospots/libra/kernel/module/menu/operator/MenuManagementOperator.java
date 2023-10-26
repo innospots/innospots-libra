@@ -24,7 +24,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.exception.ValidatorException;
-import io.innospots.base.utils.ApplicationContextUtils;
+import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.StringConverter;
 import io.innospots.libra.base.extension.LibraClassPathExtPropertiesLoader;
 import io.innospots.libra.base.menu.BaseItem;
@@ -130,7 +130,7 @@ public class MenuManagementOperator extends ServiceImpl<MenuResourceDao, MenuRes
         List<String> itemKeys = resourceEntities.stream().map(MenuResourceEntity::getItemKey).filter(StringUtils::isNotBlank).distinct().collect(Collectors.toList());
         Boolean result = this.deleteMenuByIds(resourceIds);
         if (result) {
-            ApplicationContextUtils.applicationContext().publishEvent(new MenuDelEvent(resourceId, itemKeys));
+            BeanContextAware.applicationContext().publishEvent(new MenuDelEvent(resourceId, itemKeys));
         }
         return result;
     }

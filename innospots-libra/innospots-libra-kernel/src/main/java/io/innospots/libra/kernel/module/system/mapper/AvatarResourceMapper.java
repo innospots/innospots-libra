@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.module.system.mapper;
 
-import io.innospots.base.model.user.AvatarInfo;
+import io.innospots.libra.kernel.module.system.model.user.AvatarInfo;
 import io.innospots.libra.kernel.module.system.entity.AvatarResourceEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

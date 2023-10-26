@@ -18,7 +18,7 @@
 
 package io.innospots.base.model.field;
 
-import io.innospots.base.constant.Constants;
+import io.innospots.base.constant.RegexConstants;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,12 +40,12 @@ public class BaseField {
 
     @Size(max = 32, message = "Name length max 32")
     @NotBlank(message = "Name cannot be blank")
-    @Pattern(regexp = Constants.NAME_REGEX, message = "name, only supports: contains a maximum of 32 characters, including letters, digits, and underscores (_), and chinese.")
+    @Pattern(regexp = RegexConstants.NAME_REGEX, message = "name, only supports: contains a maximum of 32 characters, including letters, digits, and underscores (_), and chinese.")
     protected String name;
 
     @Size(max = 64, message = "Code length max 64")
     @NotBlank(message = "Code cannot be blank")
-    @Pattern(regexp = Constants.CODE_REGEX, message = "code, only supports: contains a maximum of 64 characters, including letters, digits, and underscores (_), and chinese. It can't all be numbers.")
+    @Pattern(regexp = RegexConstants.CODE_REGEX, message = "code, only supports: contains a maximum of 64 characters, including letters, digits, and underscores (_), and chinese. It can't all be numbers.")
     protected String code;
 
     @NotNull(message = "ValueType cannot be empty")

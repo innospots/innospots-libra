@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.module.workspace.mapper;
 
-import io.innospots.base.mapper.BaseConvertMapper;
+import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.libra.kernel.module.page.model.PageDetail;
 import io.innospots.libra.kernel.module.workspace.entity.WorkspaceEntity;
 import io.innospots.libra.kernel.module.workspace.model.Workspace;
@@ -33,7 +33,7 @@ import java.util.List;
  * @date 2022/1/30
  */
 @Mapper
-public interface WorkspaceMapper extends BaseConvertMapper {
+public interface WorkspaceMapper extends BaseBeanConverter {
 
     WorkspaceMapper INSTANCE = Mappers.getMapper(WorkspaceMapper.class);
 

@@ -22,7 +22,7 @@ import io.innospots.base.data.schema.ApiSchemaRegistry;
 import io.innospots.base.data.schema.SchemaRegistry;
 import io.innospots.base.data.schema.SchemaRegistryType;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.base.mapper.ApiSchemaRegistryConvertMapper;
+import io.innospots.base.converter.ApiSchemaRegistryBeanConverter;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -46,11 +46,11 @@ public class HttpApiOperator {
             throw ResourceException.buildExistException(this.getClass(), apiSchemaRegistry.getName());
         }
 
-        SchemaRegistry schemaRegistry = ApiSchemaRegistryConvertMapper.INSTANCE.apiToSchemaRegistry(apiSchemaRegistry);
+        SchemaRegistry schemaRegistry = ApiSchemaRegistryBeanConverter.INSTANCE.apiToSchemaRegistry(apiSchemaRegistry);
         // Set default credentialId
         schemaRegistry.setCredentialId(0);
         schemaRegistry = schemaRegistryOperator.createSchemaRegistry(schemaRegistry);
-        return ApiSchemaRegistryConvertMapper.INSTANCE.schemaRegistryToApi(schemaRegistry);
+        return ApiSchemaRegistryBeanConverter.INSTANCE.schemaRegistryToApi(schemaRegistry);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -58,9 +58,9 @@ public class HttpApiOperator {
         if (schemaRegistryOperator.checkNameExist(apiSchemaRegistry.getName(), apiSchemaRegistry.getCredentialId())) {
             throw ResourceException.buildExistException(this.getClass(), apiSchemaRegistry.getName());
         }
-        SchemaRegistry schemaRegistry = ApiSchemaRegistryConvertMapper.INSTANCE.apiToSchemaRegistry(apiSchemaRegistry);
+        SchemaRegistry schemaRegistry = ApiSchemaRegistryBeanConverter.INSTANCE.apiToSchemaRegistry(apiSchemaRegistry);
         schemaRegistry = schemaRegistryOperator.updateSchemaRegistry(schemaRegistry);
-        return ApiSchemaRegistryConvertMapper.INSTANCE.schemaRegistryToApi(schemaRegistry);
+        return ApiSchemaRegistryBeanConverter.INSTANCE.schemaRegistryToApi(schemaRegistry);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -73,12 +73,12 @@ public class HttpApiOperator {
         if (schemaRegistry == null) {
             throw ResourceException.buildNotExistException(this.getClass(), "http api registry not exist", schemaRegistryId);
         }
-        return ApiSchemaRegistryConvertMapper.INSTANCE.schemaRegistryToApi(schemaRegistry);
+        return ApiSchemaRegistryBeanConverter.INSTANCE.schemaRegistryToApi(schemaRegistry);
     }
 
     public List<ApiSchemaRegistry> listApiRegistries(String queryCode, String sort) {
         List<SchemaRegistry> schemaRegistries = schemaRegistryOperator.listSchemaRegistries(queryCode, sort, null, SchemaRegistryType.API);
-        return ApiSchemaRegistryConvertMapper.INSTANCE.schemaRegistriesToApis(schemaRegistries);
+        return ApiSchemaRegistryBeanConverter.INSTANCE.schemaRegistriesToApis(schemaRegistries);
     }
 
 }

@@ -2,7 +2,7 @@ package io.innospots.workflow.console;
 
 
 import io.innospots.workflow.console.entity.instance.EdgeInstanceEntity;
-import io.innospots.workflow.console.mapper.instance.EdgeInstanceConvertMapper;
+import io.innospots.workflow.console.mapper.instance.EdgeInstanceBeanConverter;
 import io.innospots.workflow.core.node.instance.Edge;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -22,7 +22,7 @@ public class EdgeInstanceConvertMapperTest {
         edge.setData(mapData);
 
 
-        EdgeInstanceEntity entity = EdgeInstanceConvertMapper.INSTANCE.modelToEntity(edge);
+        EdgeInstanceEntity entity = EdgeInstanceBeanConverter.INSTANCE.modelToEntity(edge);
 
         log.info("entity.data:{}", entity.getData());
     }
@@ -35,7 +35,7 @@ public class EdgeInstanceConvertMapperTest {
         entity.setData("{\"k1\":\"v1\"}");
         entity.setStartPoint("{\"k1\":\"v1\"}");
 
-        Edge edge = EdgeInstanceConvertMapper.INSTANCE.entityToModel(entity);
+        Edge edge = EdgeInstanceBeanConverter.INSTANCE.entityToModel(entity);
 
         log.info("edge:{}", edge);
         log.info("edge.startPoint:{}", edge.getStartPoint());

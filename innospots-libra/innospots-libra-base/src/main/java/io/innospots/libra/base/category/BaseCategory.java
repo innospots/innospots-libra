@@ -18,7 +18,7 @@
 
 package io.innospots.libra.base.category;
 
-import io.innospots.base.constant.Constants;
+import io.innospots.base.constant.RegexConstants;
 import io.innospots.base.model.PBaseModelInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -49,7 +49,7 @@ public class BaseCategory extends PBaseModelInfo {
     @Size(max = 16, message = "category name length max 16")
     @NotBlank(message = "category name must not be null")
     @Schema(title = "category name")
-    @Pattern(regexp = Constants.NAME_REGEX, message = "name, only supports: contains a maximum of 32 characters, including letters, digits, and underscores (_), and chinese.")
+    @Pattern(regexp = RegexConstants.NAME_REGEX, message = "name, only supports: contains a maximum of 32 characters, including letters, digits, and underscores (_), and chinese.")
     private String categoryName;
 
     @Schema(title = "subset total")

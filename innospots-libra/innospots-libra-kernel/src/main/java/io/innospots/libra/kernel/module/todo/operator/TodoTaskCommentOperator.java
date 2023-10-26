@@ -24,13 +24,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.innospots.base.enums.ImageType;
 import io.innospots.base.exception.InnospotException;
 import io.innospots.base.model.response.ResponseCode;
-import io.innospots.base.utils.ApplicationContextUtils;
+import io.innospots.base.utils.BeanContextAware;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.event.NewAvatarEvent;
 import io.innospots.base.utils.ImageFileUploader;
 import io.innospots.libra.kernel.module.todo.dao.TodoTaskCommentDao;
 import io.innospots.libra.kernel.module.todo.entity.TodoTaskCommentEntity;
-import io.innospots.libra.kernel.module.todo.mapper.TodoTaskCommentConvertMapper;
+import io.innospots.libra.kernel.module.todo.mapper.TodoTaskCommentBeanConverter;
 import io.innospots.libra.kernel.module.todo.model.TodoTaskComment;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -57,7 +57,7 @@ public class TodoTaskCommentOperator extends ServiceImpl<TodoTaskCommentDao, Tod
 
     @Transactional(rollbackFor = Exception.class)
     public TodoTaskComment createTodoTaskComment(TodoTaskComment todoTaskComment) {
-        TodoTaskCommentConvertMapper mapper = TodoTaskCommentConvertMapper.INSTANCE;
+        TodoTaskCommentBeanConverter mapper = TodoTaskCommentBeanConverter.INSTANCE;
         TodoTaskCommentEntity entity = mapper.model2Entity(todoTaskComment);
         super.save(entity);
         return mapper.entity2Model(entity);
@@ -69,7 +69,7 @@ public class TodoTaskCommentOperator extends ServiceImpl<TodoTaskCommentDao, Tod
         lambda.eq(TodoTaskCommentEntity::getTaskId, taskId);
 
         List<TodoTaskCommentEntity> entities = super.list(queryWrapper);
-        return entities.stream().map(TodoTaskCommentConvertMapper.INSTANCE::entity2Model).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
+        return entities.stream().map(TodoTaskCommentBeanConverter.INSTANCE::entity2Model).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
     }
 
     public List<Map<String, Object>> selectCountByTaskId(List<Integer> taskIds) {
@@ -104,7 +104,7 @@ public class TodoTaskCommentOperator extends ServiceImpl<TodoTaskCommentDao, Tod
                 String imgPath = parentPath.toFile().getAbsolutePath() + File.separator + imgName;
                 String base64 = ImageFileUploader.readImageBase64(imgPath);
                 //TODO save to disk
-                ApplicationContextUtils.sendAppEvent(new NewAvatarEvent(time, ImageType.COMMENT, i, "data:image/png;base64," + base64));
+                BeanContextAware.sendAppEvent(new NewAvatarEvent(time, ImageType.COMMENT, i, "data:image/png;base64," + base64));
                 imageUrls.add(BaseController.PATH_ROOT_ADMIN + "image/" + ImageType.COMMENT + "/" + time + "?imageSort=" + i);
 
             } catch (IOException e) {

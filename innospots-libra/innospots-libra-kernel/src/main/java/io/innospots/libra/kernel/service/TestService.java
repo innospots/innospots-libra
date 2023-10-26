@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.service;
 
-import io.innospots.base.utils.ApplicationContextUtils;
+import io.innospots.base.utils.BeanContextAware;
 import io.innospots.libra.base.log.OperationLog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -36,7 +36,7 @@ public class TestService {
     //@OperationLog(detail = "log1")
     public void log1(Map<String,Object> item){
       log.info("log1:{}",item);
-      TestService ts = ApplicationContextUtils.getBean(TestService.class);
+      TestService ts = BeanContextAware.getBean(TestService.class);
       ts.log2(item);
     }
 

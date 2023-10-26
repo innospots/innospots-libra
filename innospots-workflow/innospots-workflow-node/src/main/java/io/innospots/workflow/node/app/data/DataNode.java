@@ -18,31 +18,12 @@
 
 package io.innospots.workflow.node.app.data;
 
-import com.google.common.base.Enums;
-import io.innospots.base.condition.Factor;
 import io.innospots.base.data.ap.IDataOperatorPoint;
-import io.innospots.base.data.enums.DataOperation;
-import io.innospots.base.data.operator.UpdateItem;
-import io.innospots.base.exception.ConfigException;
-import io.innospots.base.json.JSONUtils;
-import io.innospots.base.model.DataBody;
-import io.innospots.base.model.PageBody;
-import io.innospots.base.model.response.InnospotResponse;
-import io.innospots.base.utils.ApplicationContextUtils;
-import io.innospots.base.utils.BeanUtils;
-import io.innospots.workflow.core.enums.OutputFieldMode;
-import io.innospots.workflow.core.enums.OutputFieldType;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.app.BaseAppNode;
+import io.innospots.base.utils.BeanContextAware;
 import io.innospots.workflow.core.node.instance.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Smars
@@ -64,7 +45,7 @@ public class DataNode extends BaseDataNode {
     protected void initialize(NodeInstance nodeInstance) {
         super.initialize(nodeInstance);
         credentialId = nodeInstance.valueInteger(FIELD_CREDENTIAL_ID);
-        dataOperatorPoint = ApplicationContextUtils.getBean(IDataOperatorPoint.class);
+        dataOperatorPoint = BeanContextAware.getBean(IDataOperatorPoint.class);
     }
 
 }

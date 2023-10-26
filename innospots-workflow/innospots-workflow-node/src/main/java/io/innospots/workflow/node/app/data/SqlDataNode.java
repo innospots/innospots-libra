@@ -25,13 +25,12 @@ import io.innospots.base.data.enums.DataOperation;
 import io.innospots.base.data.minder.DataConnectionMinderManager;
 import io.innospots.base.data.minder.IDataConnectionMinder;
 import io.innospots.base.data.operator.UpdateItem;
-import io.innospots.base.data.schema.ConnectionCredential;
 import io.innospots.base.data.schema.SchemaField;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.model.DataBody;
 import io.innospots.base.model.PageBody;
 import io.innospots.base.model.response.InnospotResponse;
-import io.innospots.base.utils.ApplicationContextUtils;
+import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.ExecutionInput;
 import io.innospots.workflow.core.execution.node.NodeExecution;
@@ -152,7 +151,7 @@ public class SqlDataNode extends DataNode {
             queryConditions = BeanUtils.toBean(queryConditionFields, Factor.class);
         }
 
-        sqlOperatorPoint = ApplicationContextUtils.getBean(ISqlOperatorPoint.class);
+        sqlOperatorPoint = BeanContextAware.getBean(ISqlOperatorPoint.class);
         sqlQueryClause = nodeInstance.valueString(FIELD_SQL_CLAUSE);
         if (sqlQueryClause != null) {
             sqlQueryClause = sqlQueryClause.replaceAll("\\n", " ");

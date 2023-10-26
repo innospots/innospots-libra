@@ -36,10 +36,8 @@ import io.innospots.base.store.CacheStoreManager;
 import io.innospots.base.utils.StringConverter;
 import io.innospots.connector.schema.dao.AppCredentialDao;
 import io.innospots.connector.schema.entity.AppCredentialEntity;
-import io.innospots.connector.schema.mapper.CredentialConvertMapper;
+import io.innospots.connector.schema.mapper.CredentialBeanConverter;
 import io.innospots.libra.base.configuration.AuthProperties;
-import io.innospots.libra.base.operator.SystemTempCacheOperator;
-import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,7 +70,7 @@ public class AppCredentialOperator extends ServiceImpl<AppCredentialDao, AppCred
         if (entity == null) {
             return null;
         }
-        return CredentialConvertMapper.INSTANCE.entityToModel(entity);
+        return CredentialBeanConverter.INSTANCE.entityToModel(entity);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -95,7 +93,7 @@ public class AppCredentialOperator extends ServiceImpl<AppCredentialDao, AppCred
             codeCount = this.count(qw);
         } while (codeCount > 0);
         this.authedValuesProcess(credential);
-        AppCredentialEntity entity = CredentialConvertMapper.INSTANCE.modelToEntity(credential);
+        AppCredentialEntity entity = CredentialBeanConverter.INSTANCE.modelToEntity(credential);
         super.save(entity);
         return this.getCredential(entity.getCredentialId());
     }
@@ -106,7 +104,7 @@ public class AppCredentialOperator extends ServiceImpl<AppCredentialDao, AppCred
             throw ResourceException.buildExistException(this.getClass(), appCredentialInfo.getName());
         }
         this.authedValuesProcess(appCredentialInfo);
-        AppCredentialEntity entity = CredentialConvertMapper.INSTANCE.modelToEntity(appCredentialInfo);
+        AppCredentialEntity entity = CredentialBeanConverter.INSTANCE.modelToEntity(appCredentialInfo);
         super.updateById(entity);
         return this.getCredential(entity.getCredentialId());
     }
@@ -123,7 +121,7 @@ public class AppCredentialOperator extends ServiceImpl<AppCredentialDao, AppCred
         QueryWrapper<AppCredentialEntity> qw = new QueryWrapper<>();
         qw.lambda().eq(AppCredentialEntity::getCode, credentialCode);
         AppCredentialEntity appCredentialEntity = this.getOne(qw);
-        return CredentialConvertMapper.INSTANCE.entityToModel(appCredentialEntity);
+        return CredentialBeanConverter.INSTANCE.entityToModel(appCredentialEntity);
     }
 
     /**
@@ -143,7 +141,7 @@ public class AppCredentialOperator extends ServiceImpl<AppCredentialDao, AppCred
         List<AppCredentialEntity> entities = this.list(query);
         List<SimpleAppCredential> simpleAppCredentials = new ArrayList<>();
         for (AppCredentialEntity entity : entities) {
-            SimpleAppCredential simpleAppCredential = CredentialConvertMapper.INSTANCE.entityToSimpleModel(entity);
+            SimpleAppCredential simpleAppCredential = CredentialBeanConverter.INSTANCE.entityToSimpleModel(entity);
             simpleAppCredentials.add(simpleAppCredential);
         }
         return simpleAppCredentials;
@@ -167,7 +165,7 @@ public class AppCredentialOperator extends ServiceImpl<AppCredentialDao, AppCred
         }
 
         List<AppCredentialEntity> entities = super.list(query);
-        return CredentialConvertMapper.INSTANCE.entitiesToModels(entities);
+        return CredentialBeanConverter.INSTANCE.entitiesToModels(entities);
     }
 
     public PageBody<AppCredentialInfo> pageCredentials(String queryInput, String configCode, String connector, String sort, int page, int size) {
@@ -190,7 +188,7 @@ public class AppCredentialOperator extends ServiceImpl<AppCredentialDao, AppCred
         }
 
         IPage<AppCredentialEntity> entityPage = super.page(PageDTO.of(page, size), query);
-        List<AppCredentialInfo> appCredentialInfoList = CredentialConvertMapper.INSTANCE.entitiesToModels(entityPage.getRecords());
+        List<AppCredentialInfo> appCredentialInfoList = CredentialBeanConverter.INSTANCE.entitiesToModels(entityPage.getRecords());
 
         PageBody<AppCredentialInfo> pageBody = new PageBody<>();
         pageBody.setList(appCredentialInfoList);

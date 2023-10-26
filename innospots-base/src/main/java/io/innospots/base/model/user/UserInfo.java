@@ -19,7 +19,7 @@
 package io.innospots.base.model.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import io.innospots.base.constant.Constants;
+import io.innospots.base.constant.RegexConstants;
 import io.innospots.base.enums.OnOff;
 import io.innospots.base.json.annotation.MaskValue;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -42,7 +42,7 @@ import java.util.List;
 public class UserInfo extends SimpleUser {
 
     @NotNull(message = "email must not be null")
-    @Pattern(regexp = Constants.REXP_EMAIL, message = "illegal email format")
+    @Pattern(regexp = RegexConstants.REXP_EMAIL, message = "illegal email format")
     @Size(max = 128, message = "email length max 128")
     private String email;
 
@@ -51,7 +51,7 @@ public class UserInfo extends SimpleUser {
     private String password;
 
     @Size(max = 32, message = "mobile length max 32")
-    @Pattern(regexp = Constants.REXP_PHONE, message = "illegal mobile")
+    @Pattern(regexp = RegexConstants.REXP_PHONE, message = "illegal mobile")
     private String mobile;
 
     protected String department;

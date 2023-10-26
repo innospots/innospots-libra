@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.module.system.mapper;
 
-import io.innospots.base.model.user.UserRoleInfo;
+import io.innospots.libra.kernel.module.system.model.role.UserRoleInfo;
 import io.innospots.libra.kernel.module.system.entity.UserRoleEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.function.controller;
 
 import io.innospots.base.function.definition.FunctionDefinition;
-import io.innospots.base.function.definition.FunctionDefinitionOperator;
+import io.innospots.libra.base.function.FunctionDefinitionOperator;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;

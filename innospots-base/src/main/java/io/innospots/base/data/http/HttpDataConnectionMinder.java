@@ -24,7 +24,6 @@ import io.innospots.base.data.operator.IExecutionOperator;
 import io.innospots.base.data.operator.IOperator;
 import io.innospots.base.data.schema.ApiSchemaRegistry;
 import io.innospots.base.data.schema.ConnectionCredential;
-import io.innospots.base.mapper.ApiSchemaRegistryConvertMapper;
 import io.innospots.base.model.RequestBody;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;

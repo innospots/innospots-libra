@@ -20,7 +20,7 @@ package io.innospots.libra.kernel.module.workspace.service;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import io.innospots.base.constant.Constants;
+import io.innospots.base.constant.RegexConstants;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.DateTimeUtils;
 import io.innospots.base.utils.HttpUtils;
@@ -50,9 +50,9 @@ public class WorkspaceService {
             .build();
 
     public News getActivityInfo() {
-        News news = newsCache.getIfPresent(Constants.ACTIVITY_URL);
+        News news = newsCache.getIfPresent(RegexConstants.ACTIVITY_URL);
         if (news == null || StringUtils.isEmpty(news.getLink())) {
-            String rspStr = HttpUtils.sendGet(Constants.ACTIVITY_URL);
+            String rspStr = HttpUtils.sendGet(RegexConstants.ACTIVITY_URL);
             if (StringUtils.isNotBlank(rspStr)) {
                 List<Map<String, Object>> resultList = JSONUtils.toMapList(rspStr, Map.class);
                 if (CollectionUtils.isEmpty(resultList)) {
@@ -65,17 +65,17 @@ public class WorkspaceService {
                 news.setLink(map.get("link").toString());
                 LinkedHashMap<String, Object> titleMap = (LinkedHashMap<String, Object>) map.get("title");
                 news.setTitle(titleMap.get("rendered").toString());
-                newsCache.put(Constants.ACTIVITY_URL, news);
+                newsCache.put(RegexConstants.ACTIVITY_URL, news);
             }
         }
         return news;
     }
 
     public NewsInfo getNewsInfo() {
-        NewsInfo newsInfo = newsInfoCache.getIfPresent(Constants.NEWS_URL);
+        NewsInfo newsInfo = newsInfoCache.getIfPresent(RegexConstants.NEWS_URL);
         if (newsInfo == null
                 || (CollectionUtils.isNotEmpty(newsInfo.getNews()) && StringUtils.isEmpty(newsInfo.getNews().get(0).getLink()))) {
-            String rspStr = HttpUtils.sendGet(Constants.NEWS_URL);
+            String rspStr = HttpUtils.sendGet(RegexConstants.NEWS_URL);
             if (StringUtils.isNotBlank(rspStr)) {
                 List<Map<String, Object>> resultList = JSONUtils.toMapList(rspStr, Map.class);
                 if (CollectionUtils.isEmpty(resultList)) {
@@ -106,7 +106,7 @@ public class WorkspaceService {
                     i++;
                 }
                 newsInfo.setNews(newsList);
-                newsInfoCache.put(Constants.NEWS_URL, newsInfo);
+                newsInfoCache.put(RegexConstants.NEWS_URL, newsInfo);
             }
         }
         return newsInfo;

@@ -29,7 +29,7 @@ import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.PageBody;
-import io.innospots.base.utils.ApplicationContextUtils;
+import io.innospots.base.utils.BeanContextAware;
 import io.innospots.libra.base.event.DynamicMenuDelEvent;
 import io.innospots.libra.kernel.module.page.dao.PageDao;
 import io.innospots.libra.kernel.module.page.entity.PageEntity;
@@ -145,7 +145,7 @@ public class PageOperator extends ServiceImpl<PageDao, PageEntity> {
             super.removeById(pageId);
             widgetOperator.remove(new QueryWrapper<WidgetEntity>().lambda().eq(WidgetEntity::getPageId, pageId));
             // delete cascade menu
-            ApplicationContextUtils.sendAppEvent(new DynamicMenuDelEvent(pageId, entity.getPageType()));
+            BeanContextAware.sendAppEvent(new DynamicMenuDelEvent(pageId, entity.getPageType()));
         }
         return true;
     }

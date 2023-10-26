@@ -19,9 +19,9 @@
 package io.innospots.libra.kernel.module.system.service;
 
 import io.innospots.base.model.PageBody;
-import io.innospots.base.model.user.RoleInfo;
+import io.innospots.libra.kernel.module.system.model.role.RoleInfo;
 import io.innospots.base.model.user.SimpleUser;
-import io.innospots.base.utils.ApplicationContextUtils;
+import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.CCH;
 import io.innospots.libra.base.model.QueryRequest;
 import io.innospots.libra.kernel.module.system.entity.UserRoleEntity;
@@ -97,7 +97,7 @@ public class UserRoleService {
         Boolean result = roleOperator.deleteRole(roleId);
         // delete role user
         if (result) {
-            ApplicationContextUtils.applicationContext().publishEvent(new RoleDelEvent(roleId));
+            BeanContextAware.applicationContext().publishEvent(new RoleDelEvent(roleId));
         }
         return result;
     }

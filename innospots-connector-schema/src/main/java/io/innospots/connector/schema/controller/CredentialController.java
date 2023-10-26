@@ -27,7 +27,7 @@ import io.innospots.base.data.schema.config.ConnectionMinderSchemaLoader;
 import io.innospots.base.data.schema.reader.IConnectionCredentialReader;
 import io.innospots.base.model.PageBody;
 import io.innospots.base.model.response.InnospotResponse;
-import io.innospots.connector.schema.mapper.CredentialConvertMapper;
+import io.innospots.connector.schema.mapper.CredentialBeanConverter;
 import io.innospots.connector.schema.operator.AppCredentialOperator;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperationLog;
@@ -163,7 +163,7 @@ public class CredentialController extends BaseController {
         List<AppCredentialInfo> list = appCredentialOperator.listCredentials(null, null, null, null);
         for (AppCredentialInfo info : list) {
             ConnectionMinderSchema minderSchema = ConnectionMinderSchemaLoader.getConnectionMinderSchema(info.getConnectorName());
-            SimpleAppCredential simple = CredentialConvertMapper.INSTANCE.credentialToSimple(info);
+            SimpleAppCredential simple = CredentialBeanConverter.INSTANCE.credentialToSimple(info);
             simple.setConnectType(minderSchema.getConnectType());
             simple.setIcon(minderSchema.getIcon());
             simpleList.add(simple);

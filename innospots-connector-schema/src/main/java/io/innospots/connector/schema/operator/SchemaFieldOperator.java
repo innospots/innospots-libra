@@ -28,7 +28,7 @@ import io.innospots.base.model.field.FieldScope;
 import io.innospots.base.model.field.FieldValueType;
 import io.innospots.connector.schema.dao.SchemaFieldDao;
 import io.innospots.connector.schema.entity.SchemaFieldEntity;
-import io.innospots.connector.schema.mapper.SchemaFieldConvertMapper;
+import io.innospots.connector.schema.mapper.SchemaFieldBeanConverter;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -91,7 +91,7 @@ public class SchemaFieldOperator extends ServiceImpl<SchemaFieldDao, SchemaField
             this.removeByIds(removeIds);
         }
 
-        entities = SchemaFieldConvertMapper.INSTANCE.modelsToEntities(addFields);
+        entities = SchemaFieldBeanConverter.INSTANCE.modelsToEntities(addFields);
 
         super.saveOrUpdateBatch(entities);
         for (int i = 0; i < schemaFields.size(); i++) {
@@ -105,7 +105,7 @@ public class SchemaFieldOperator extends ServiceImpl<SchemaFieldDao, SchemaField
         QueryWrapper<SchemaFieldEntity> query = new QueryWrapper<>();
         query.lambda().eq(SchemaFieldEntity::getRegistryId, registryId);
         List<SchemaFieldEntity> entities = super.list(query);
-        return SchemaFieldConvertMapper.INSTANCE.entitiesToModels(entities);
+        return SchemaFieldBeanConverter.INSTANCE.entitiesToModels(entities);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -113,7 +113,7 @@ public class SchemaFieldOperator extends ServiceImpl<SchemaFieldDao, SchemaField
         if (this.checkCodeExist(schemaField.getName(), schemaField.getRegistryId())) {
             throw ResourceException.buildExistException(this.getClass(), schemaField.getName());
         }
-        SchemaFieldEntity entity = SchemaFieldConvertMapper.INSTANCE.modelToEntity(schemaField);
+        SchemaFieldEntity entity = SchemaFieldBeanConverter.INSTANCE.modelToEntity(schemaField);
         super.save(entity);
         schemaField.setFieldId(entity.getFieldId());
         return schemaField;
@@ -124,7 +124,7 @@ public class SchemaFieldOperator extends ServiceImpl<SchemaFieldDao, SchemaField
         if (this.checkCodeExistAndExcludeOriginalCode(schemaField.getName(), schemaField.getRegistryId(), schemaField.getFieldId())) {
             throw ResourceException.buildExistException(this.getClass(), schemaField.getName());
         }
-        SchemaFieldEntity entity = SchemaFieldConvertMapper.INSTANCE.modelToEntity(schemaField);
+        SchemaFieldEntity entity = SchemaFieldBeanConverter.INSTANCE.modelToEntity(schemaField);
         super.updateById(entity);
         return schemaField;
     }

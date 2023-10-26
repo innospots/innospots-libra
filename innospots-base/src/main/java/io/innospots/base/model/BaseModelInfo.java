@@ -32,15 +32,11 @@ import java.time.LocalDateTime;
 @Setter
 public class BaseModelInfo {
 
-//    protected Integer orgId;
-
     protected String createdBy;
 
     protected String updatedBy;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     protected LocalDateTime createdTime;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     protected LocalDateTime updatedTime;
 }

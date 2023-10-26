@@ -19,7 +19,7 @@
 package io.innospots.base.model.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import io.innospots.base.constant.Constants;
+import io.innospots.base.constant.RegexConstants;
 import io.innospots.base.enums.DataStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -46,7 +46,7 @@ public class SimpleUser {
     protected String realName;
 
     @NotNull(message = "user name must not be null")
-    @Pattern(regexp = Constants.EN_NUM, message = "illegal user name")
+    @Pattern(regexp = RegexConstants.EN_NUM, message = "illegal user name")
     @Size(max = 128, message = "real name length max 128")
     protected String userName;
 

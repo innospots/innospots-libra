@@ -21,13 +21,11 @@ package io.innospots.workflow.console.controller.apps;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.menu.ModuleMenu;
-import io.innospots.libra.base.menu.ResourceItemOperation;
-import io.innospots.workflow.console.mapper.apps.AppNodeGroupConvertMapper;
+import io.innospots.workflow.console.mapper.apps.AppNodeGroupBeanConverter;
 import io.innospots.workflow.console.operator.apps.AppFlowTemplateOperator;
 import io.innospots.workflow.core.node.apps.AppFlowTemplate;
 import io.innospots.workflow.core.node.apps.AppNodeGroupBaseInfo;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,7 +56,7 @@ public class AppCategoryController extends BaseController {
     public InnospotResponse<List<AppNodeGroupBaseInfo>> listCategories(
             @RequestParam(required = false, defaultValue = "true") boolean onlyConnector) {
         return InnospotResponse.success(
-                AppNodeGroupConvertMapper.INSTANCE.modelToBaseList(
+                AppNodeGroupBeanConverter.INSTANCE.modelToBaseList(
                         appFlowTemplateOperator.getTemplate(1, true, onlyConnector,false)
                                 .getAppNodeGroups())
         );

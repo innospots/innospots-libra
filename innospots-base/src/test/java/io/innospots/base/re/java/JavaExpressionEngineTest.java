@@ -4,7 +4,7 @@ import io.innospots.base.exception.ScriptException;
 import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.base.re.IExpression;
-import io.innospots.base.utils.ThreadPoolBuilder;
+import io.innospots.base.utils.thread.ThreadPoolBuilder;
 import javassist.*;
 import javassist.bytecode.CodeAttribute;
 import javassist.bytecode.LocalVariableAttribute;

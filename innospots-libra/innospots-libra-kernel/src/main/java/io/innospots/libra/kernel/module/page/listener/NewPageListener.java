@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.module.page.listener;
 
-import io.innospots.base.utils.ApplicationContextUtils;
+import io.innospots.base.utils.BeanContextAware;
 import io.innospots.libra.base.event.NewPageEvent;
 import io.innospots.libra.base.event.PageCreatedEvent;
 import io.innospots.libra.kernel.module.page.enums.PageOperationType;
@@ -49,7 +49,7 @@ public class NewPageListener {
         pageDetail.setPageType(newPageEvent.getPageType());
         pageDetail = pageOperator.createOrUpdate(pageDetail, PageOperationType.SAVE);
         if (pageDetail != null) {
-            ApplicationContextUtils.sendAppEvent(new PageCreatedEvent(newPageEvent.getSource(), pageDetail.getId(), newPageEvent.getPageType()));
+            BeanContextAware.sendAppEvent(new PageCreatedEvent(newPageEvent.getSource(), pageDetail.getId(), newPageEvent.getPageType()));
         }
     }
 }

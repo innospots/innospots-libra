@@ -31,8 +31,8 @@ import io.innospots.libra.kernel.module.i18n.dao.I18nTransMessageDao;
 import io.innospots.libra.kernel.module.i18n.entity.I18nDictionaryEntity;
 import io.innospots.libra.kernel.module.i18n.entity.I18nLanguageEntity;
 import io.innospots.libra.kernel.module.i18n.entity.I18nTransMessageEntity;
+import io.innospots.libra.kernel.module.i18n.mapper.I18NLanguageBeanConverter;
 import io.innospots.libra.kernel.module.i18n.mapper.I18nDictionaryConvertMapper;
-import io.innospots.libra.kernel.module.i18n.mapper.I18nLanguageConvertMapper;
 import io.innospots.libra.kernel.module.i18n.model.I18nTransMessageGroup;
 import io.innospots.libra.kernel.module.i18n.model.TransHeaderColumn;
 import lombok.extern.slf4j.Slf4j;
@@ -84,9 +84,9 @@ public class I18nTransMessageOperator {
         if (languageEntityList != null && !languageEntityList.isEmpty()) {
             languageEntityList.forEach(entity -> {
                 if (entity.isDefaultLan()) {
-                    result.add(0, I18nLanguageConvertMapper.INSTANCE.entityToTransHeaderColumn(entity));
+                    result.add(0, I18NLanguageBeanConverter.INSTANCE.entityToTransHeaderColumn(entity));
                 } else {
-                    result.add(I18nLanguageConvertMapper.INSTANCE.entityToTransHeaderColumn(entity));
+                    result.add(I18NLanguageBeanConverter.INSTANCE.entityToTransHeaderColumn(entity));
                 }
             });
         }

@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.page.mapper;
 
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.mapper.BaseConvertMapper;
+import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.libra.kernel.module.page.entity.WidgetEntity;
 import io.innospots.libra.kernel.module.page.model.RelationWidget;
 import io.innospots.libra.kernel.module.page.model.Widget;
@@ -35,7 +35,7 @@ import java.util.List;
  * @date 2022/1/24
  */
 @Mapper
-public interface WidgetMapper extends BaseConvertMapper {
+public interface WidgetMapper extends BaseBeanConverter {
     WidgetMapper INSTANCE = Mappers.getMapper(WidgetMapper.class);
 
     @Mappings({

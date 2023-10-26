@@ -21,7 +21,7 @@ package io.innospots.administration.server;
 
 import io.innospots.base.registry.ServiceRegistryHolder;
 import io.innospots.base.registry.enums.ServiceType;
-import io.innospots.base.utils.ApplicationContextUtils;
+import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.DateTimeUtils;
 import io.innospots.connector.schema.AppSchemaApiImporter;
 import io.innospots.libra.kernel.LibraKernelImporter;
@@ -73,7 +73,7 @@ public class InnospotAdministrationServer {
     class MyInfo implements InfoContributor {
         @Override
         public void contribute(Info.Builder builder) {
-            ApplicationContext context = ApplicationContextUtils.applicationContext();
+            ApplicationContext context = BeanContextAware.applicationContext();
             Map<String, String> runInfo = new LinkedHashMap<>();
             runInfo.put("applicationId", context.getId());
             runInfo.put("applicationName", context.getApplicationName());

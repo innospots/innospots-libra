@@ -19,17 +19,12 @@
 package io.innospots.workflow.node.app.data;
 
 import io.innospots.base.condition.Factor;
-import io.innospots.base.data.ap.IDataSenderPoint;
 import io.innospots.base.data.minder.DataConnectionMinderManager;
 import io.innospots.base.data.minder.IDataConnectionMinder;
 import io.innospots.base.data.minder.IQueueConnectionMinder;
 import io.innospots.base.data.operator.IQueueSender;
 import io.innospots.base.data.schema.SchemaRegistry;
-import io.innospots.base.data.schema.reader.CachedSchemaRegistryReader;
 import io.innospots.base.exception.ConfigException;
-import io.innospots.base.exception.ResourceException;
-import io.innospots.base.model.response.InnospotResponse;
-import io.innospots.base.utils.ApplicationContextUtils;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.ExecutionInput;
 import io.innospots.workflow.core.execution.node.NodeExecution;

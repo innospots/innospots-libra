@@ -19,12 +19,10 @@
 package io.innospots.workflow.node.app.data;
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.io.IoUtil;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.base.Enums;
 import io.innospots.base.condition.Factor;
-import io.innospots.base.data.ap.IDataOperatorPoint;
 import io.innospots.base.data.minder.DataConnectionMinderManager;
 import io.innospots.base.data.minder.IDataConnectionMinder;
 import io.innospots.base.json.JSONUtils;
@@ -32,10 +30,8 @@ import io.innospots.base.model.DataBody;
 import io.innospots.base.model.RequestBody;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.base.re.IExpression;
-import io.innospots.base.utils.ApplicationContextUtils;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.base.utils.PlaceholderUtils;
-import io.innospots.workflow.core.enums.OutputFieldMode;
 import io.innospots.workflow.core.enums.OutputFieldType;
 import io.innospots.workflow.core.execution.ExecutionInput;
 import io.innospots.workflow.core.execution.node.NodeExecution;
@@ -47,13 +43,10 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.noear.snack.ONode;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;

@@ -18,7 +18,7 @@
 
 package io.innospots.workflow.runtime.container;
 
-import io.innospots.base.utils.ThreadPoolBuilder;
+import io.innospots.base.utils.thread.ThreadPoolBuilder;
 import io.innospots.workflow.core.runtime.FlowRuntimeRegistry;
 import io.innospots.workflow.node.app.trigger.CycleTimerNode;
 import org.slf4j.Logger;

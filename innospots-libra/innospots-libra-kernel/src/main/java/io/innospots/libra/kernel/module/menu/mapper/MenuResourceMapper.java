@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.menu.mapper;
 
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.mapper.BaseConvertMapper;
+import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.libra.base.menu.OptElement;
 import io.innospots.libra.base.menu.ResourceItem;
 import io.innospots.libra.kernel.module.menu.entity.MenuResourceEntity;
@@ -37,7 +37,7 @@ import java.util.Map;
  * @date 2022/1/12
  */
 @Mapper
-public interface MenuResourceMapper extends BaseConvertMapper {
+public interface MenuResourceMapper extends BaseBeanConverter {
 
     MenuResourceMapper INSTANCE = Mappers.getMapper(MenuResourceMapper.class);
 

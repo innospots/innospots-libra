@@ -22,7 +22,7 @@ import io.innospots.base.data.minder.DataConnectionMinderManager;
 import io.innospots.base.data.minder.IQueueConnectionMinder;
 import io.innospots.base.data.operator.IQueueReceiver;
 import io.innospots.base.model.DataBody;
-import io.innospots.base.utils.ThreadPoolBuilder;
+import io.innospots.base.utils.thread.ThreadPoolBuilder;
 import io.innospots.workflow.core.context.WorkflowRuntimeContext;
 import io.innospots.workflow.core.runtime.FlowRuntimeRegistry;
 import io.innospots.workflow.node.app.trigger.QueueTriggerNode;

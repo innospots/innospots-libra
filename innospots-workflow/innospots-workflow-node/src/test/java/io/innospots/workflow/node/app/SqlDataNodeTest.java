@@ -3,7 +3,7 @@ package io.innospots.workflow.node.app;
 import io.innospots.base.data.enums.DataOperation;
 import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.model.field.ParamField;
-import io.innospots.base.utils.ApplicationContextUtils;
+import io.innospots.base.utils.BeanContextAware;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.node.instance.NodeInstance;
 import io.innospots.workflow.node.app.data.DataNode;
@@ -84,8 +84,8 @@ public class SqlDataNodeTest {
          */
 
         @Bean
-        public ApplicationContextUtils applicationContextUtils() {
-            return new ApplicationContextUtils();
+        public BeanContextAware applicationContextUtils() {
+            return new BeanContextAware();
         }
     }
 

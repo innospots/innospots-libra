@@ -23,7 +23,7 @@ import io.innospots.base.exception.InnospotException;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.model.PageBody;
 import io.innospots.base.model.response.ResponseCode;
-import io.innospots.base.model.user.RoleInfo;
+import io.innospots.libra.kernel.module.system.model.role.RoleInfo;
 import io.innospots.base.model.user.UserInfo;
 import io.innospots.base.utils.CCH;
 import io.innospots.libra.base.model.QueryRequest;

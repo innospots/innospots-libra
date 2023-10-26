@@ -21,7 +21,7 @@ package io.innospots.base.function.definition;
 import com.github.benmanes.caffeine.cache.CacheLoader;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
-import io.innospots.base.utils.ApplicationContextUtils;
+import io.innospots.base.utils.BeanContextAware;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.slf4j.Logger;
@@ -58,8 +58,8 @@ public class FunctionDefinitionManager {
 
 
     public static Map<String, FunctionDefinition> loadFunctions(String functionType) {
-        FunctionDefinitionOperator functionDefinitionOperator = ApplicationContextUtils.getBean(FunctionDefinitionOperator.class);
-        List<FunctionDefinition> functionDefinitionList = functionDefinitionOperator.listFunctions(functionType, null);
+        IFunctionLoader functionLoader = BeanContextAware.getBean(IFunctionLoader.class);
+        List<FunctionDefinition> functionDefinitionList = functionLoader.loadFunctions(functionType);
         return functionDefinitionList.stream().
                 collect(Collectors.toMap(FunctionDefinition::getName, Function.identity()));
     }

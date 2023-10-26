@@ -33,7 +33,6 @@ import io.innospots.workflow.core.execution.reader.NodeExecutionReader;
 import io.innospots.workflow.core.flow.instance.IWorkflowCacheDraftOperator;
 import io.innospots.workflow.core.loader.IWorkflowLoader;
 import io.innospots.workflow.core.webhook.DefaultResponseBuilder;
-import io.innospots.workflow.core.webhook.WorkflowResponseBuilder;
 import io.innospots.workflow.runtime.container.*;
 import io.innospots.workflow.runtime.container.listener.WorkflowRuntimeEventListener;
 import io.innospots.workflow.runtime.endpoint.WebhookRuntimeEndpoint;

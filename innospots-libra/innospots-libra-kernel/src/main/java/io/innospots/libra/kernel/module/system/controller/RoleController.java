@@ -20,7 +20,7 @@ package io.innospots.libra.kernel.module.system.controller;
 
 import io.innospots.base.model.PageBody;
 import io.innospots.base.model.response.InnospotResponse;
-import io.innospots.base.model.user.RoleInfo;
+import io.innospots.libra.kernel.module.system.model.role.RoleInfo;
 import io.innospots.base.model.user.SimpleUser;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;

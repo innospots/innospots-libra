@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.module.notification.mapper;
 
-import io.innospots.base.mapper.BaseConvertMapper;
+import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.base.utils.DateTimeUtils;
 import io.innospots.libra.kernel.module.notification.entity.NotificationMessageEntity;
 import io.innospots.libra.kernel.module.notification.model.NotificationMessage;
@@ -34,7 +34,7 @@ import java.time.LocalDateTime;
  * @date 2022/1/15
  */
 @Mapper
-public interface NotificationMessageMapper extends BaseConvertMapper {
+public interface NotificationMessageMapper extends BaseBeanConverter {
 
     NotificationMessageMapper INSTANCE = Mappers.getMapper(NotificationMessageMapper.class);
 
