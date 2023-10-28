@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.innospots.base.configuration.InnospotConfigProperties;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.utils.DateTimeUtils;
+import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.base.utils.ZipFileUtils;
 import io.innospots.libra.base.extension.ExtensionStatus;
 import io.innospots.libra.base.extension.LibraExtensionInformation;

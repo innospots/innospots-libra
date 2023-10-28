@@ -26,10 +26,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.CaseFormat;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.exception.ValidatorException;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.libra.kernel.module.system.model.role.RoleInfo;
 import io.innospots.base.utils.CCH;
-import io.innospots.libra.base.model.QueryRequest;
+import io.innospots.base.data.request.FormQuery;
 import io.innospots.libra.kernel.module.system.dao.RoleDao;
 import io.innospots.libra.kernel.module.system.entity.SysRoleEntity;
 import io.innospots.libra.kernel.module.system.enums.SystemRoleCode;
@@ -117,7 +117,7 @@ public class RoleOperator extends ServiceImpl<RoleDao, SysRoleEntity> {
      *
      * @return
      */
-    public PageBody<RoleInfo> list(QueryRequest request) {
+    public PageBody<RoleInfo> list(FormQuery request) {
         QueryWrapper<SysRoleEntity> queryWrapper = new QueryWrapper<>();
         LambdaQueryWrapper<SysRoleEntity> lambda = queryWrapper.lambda();
         if (StringUtils.isNotEmpty(request.getQueryInput())) {

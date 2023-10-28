@@ -18,11 +18,11 @@
 
 package io.innospots.libra.security.logger.controller;
 
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.base.utils.CCH;
 import io.innospots.libra.base.menu.ModuleMenu;
-import io.innospots.libra.security.logger.model.LogQueryRequest;
+import io.innospots.libra.security.logger.model.LogFormQuery;
 import io.innospots.libra.security.logger.model.LoginLog;
 import io.innospots.libra.security.logger.operator.LoginLogOperator;
 import io.swagger.v3.oas.annotations.Operation;
@@ -53,7 +53,7 @@ public class LoginLogController {
 
     @GetMapping("page")
     @Operation(summary = "page logs")
-    public InnospotResponse<PageBody<LoginLog>> pageLoginLogs(LogQueryRequest request) {
+    public InnospotResponse<PageBody<LoginLog>> pageLoginLogs(LogFormQuery request) {
         PageBody<LoginLog> pageModel = loginLogOperator.pageLogs(request);
         return success(pageModel);
     }

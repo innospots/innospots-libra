@@ -25,13 +25,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.CaseFormat;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.utils.CCH;
 import io.innospots.libra.base.event.MessageEvent;
 import io.innospots.libra.kernel.module.notification.dao.NotificationMessageDao;
 import io.innospots.libra.kernel.module.notification.entity.NotificationMessageEntity;
 import io.innospots.libra.kernel.module.notification.mapper.NotificationMessageMapper;
-import io.innospots.libra.kernel.module.notification.model.MessageQueryRequest;
+import io.innospots.libra.kernel.module.notification.model.MessageFormQuery;
 import io.innospots.libra.kernel.module.notification.model.NotificationMessage;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -56,7 +56,7 @@ public class NotificationMessageOperator extends ServiceImpl<NotificationMessage
      *
      * @return
      */
-    public PageBody<NotificationMessage> pageMessages(MessageQueryRequest request) {
+    public PageBody<NotificationMessage> pageMessages(MessageFormQuery request) {
         QueryWrapper<NotificationMessageEntity> queryWrapper = new QueryWrapper<>();
         LambdaQueryWrapper<NotificationMessageEntity> lambda = queryWrapper.lambda();
         if (request.getUserId() != null) {

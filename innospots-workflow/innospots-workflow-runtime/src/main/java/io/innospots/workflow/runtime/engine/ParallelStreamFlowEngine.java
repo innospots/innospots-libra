@@ -18,7 +18,7 @@
 
 package io.innospots.workflow.runtime.engine;
 
-import io.innospots.base.utils.DateTimeUtils;
+import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.base.utils.thread.ThreadPoolBuilder;
 import io.innospots.workflow.core.execution.ExecutionStatus;
 import io.innospots.workflow.core.execution.flow.FlowExecution;

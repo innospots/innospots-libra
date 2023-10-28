@@ -23,8 +23,8 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import io.innospots.base.utils.I18nUtils;
-import io.innospots.base.utils.LocaleMessageUtils;
+import io.innospots.base.i18n.I18nUtils;
+import io.innospots.base.i18n.LocaleMessageUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;

@@ -27,7 +27,7 @@ import io.innospots.base.data.schema.SchemaField;
 import io.innospots.base.data.schema.SchemaRegistry;
 import io.innospots.base.data.schema.SchemaRegistryType;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.utils.StringConverter;
 import io.innospots.connector.schema.dao.SchemaRegistryDao;
 import io.innospots.connector.schema.entity.SchemaRegistryEntity;

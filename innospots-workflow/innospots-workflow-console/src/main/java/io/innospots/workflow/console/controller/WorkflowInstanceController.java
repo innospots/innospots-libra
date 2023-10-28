@@ -19,14 +19,14 @@
 package io.innospots.workflow.console.controller;
 
 import io.innospots.base.enums.DataStatus;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
-import io.innospots.libra.base.model.QueryRequest;
+import io.innospots.base.data.request.FormQuery;
 import io.innospots.workflow.console.operator.execution.ExecutionManagerOperator;
 import io.innospots.workflow.console.operator.instance.WorkflowBuilderOperator;
 import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
@@ -167,7 +167,7 @@ public class WorkflowInstanceController extends BaseController {
      */
     @GetMapping("page")
     @Operation(summary = "page workflows")
-    public InnospotResponse<PageBody<WorkflowInstance>> pageWorkflows(QueryRequest request) {
+    public InnospotResponse<PageBody<WorkflowInstance>> pageWorkflows(FormQuery request) {
         PageBody<WorkflowInstance> page = workflowService.getWorkflows(request);
         return success(page);
     }

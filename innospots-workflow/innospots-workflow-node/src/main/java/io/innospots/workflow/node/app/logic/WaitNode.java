@@ -21,7 +21,7 @@ package io.innospots.workflow.node.app.logic;
 
 import io.innospots.base.quartz.TimePeriod;
 import io.innospots.base.utils.BeanContextAware;
-import io.innospots.base.utils.DateTimeUtils;
+import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.workflow.core.execution.ExecutionInput;
 import io.innospots.workflow.core.execution.ExecutionStatus;
 import io.innospots.workflow.core.execution.flow.FlowExecution;

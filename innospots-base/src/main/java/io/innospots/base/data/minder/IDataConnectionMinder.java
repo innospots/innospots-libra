@@ -19,13 +19,11 @@
 package io.innospots.base.data.minder;
 
 
-import io.innospots.base.data.operator.IOperator;
-import io.innospots.base.data.schema.ConnectionCredential;
+import io.innospots.base.data.body.PageBody;
+import io.innospots.base.data.credential.ConnectionCredential;
 import io.innospots.base.data.schema.SchemaCatalog;
-import io.innospots.base.data.schema.SchemaField;
 import io.innospots.base.data.schema.SchemaRegistry;
 import io.innospots.base.data.schema.reader.ISchemaRegistryReader;
-import io.innospots.base.model.PageBody;
 
 import java.util.List;
 import java.util.Map;
@@ -34,7 +32,7 @@ import java.util.Map;
  * @author Raydian
  * @date 2021/1/31
  */
-public interface IDataConnectionMinder {
+public interface IDataConnectionMinder<Operator> {
 
 
     void initialize(ISchemaRegistryReader schemaRegistryReader, ConnectionCredential connectionCredential);
@@ -47,14 +45,6 @@ public interface IDataConnectionMinder {
     void open();
 
     /**
-     * test data connection
-     *
-     * @param connectionCredential
-     * @return
-     */
-    Object test(ConnectionCredential connectionCredential);
-
-    /**
      * release connection
      */
     void close();
@@ -62,15 +52,14 @@ public interface IDataConnectionMinder {
 
     /**
      * fetch database table schema，which include table field
-     *
+     * registryCode is table name
      * @param registryCode
      * @return
      */
     SchemaRegistry schemaRegistry(String registryCode);
 
-    SchemaRegistry schemaRegistry(Integer registryId);
 
-    List<SchemaField> schemaRegistryFields(String tableName);
+    SchemaRegistry schemaRegistry(Integer registryId);
 
     /**
      * fetch database table schema
@@ -82,51 +71,20 @@ public interface IDataConnectionMinder {
 
     List<SchemaCatalog> schemaCatalogs();
 
+
+    Operator buildOperator();
+
     /**
-     * connector name
+     * test data connection
      *
+     * @param connectionCredential
      * @return
      */
-    String connector();
-
-    default IOperator buildOperator() {
-        return null;
-    }
-
-    default IOperator buildOperator(Map<String, Object> params) {
-        return null;
-    }
-
-    default IOperator buildOperator(String... params) {
-        return null;
-    }
-
-    /*
-    default IDataOperator dataOperator() {
-        return null;
-    }
-
-    default ISqlOperator sqlOperator() {
-        return null;
-    }
-
-    default IQueueReceiver dataReceiver(String topic, String group, String offset, String format) {
-        return dataReceiver(topic, group, offset, format, 0, 0);
-    }
-
-    default IQueueReceiver dataReceiver(String topic, String group, String offset, String format, long pollTimeout, int pollSize) {
-        return null;
-    }
-
-    default IQueueSender dataSender() {
-        return null;
-    }
-
-     */
+    Object testConnect(ConnectionCredential connectionCredential);
 
     Object fetchSample(ConnectionCredential connectionCredential, String tableName);
 
-    default PageBody<Map<String, Object>> fetchSamples(ConnectionCredential connectionCredential, SchemaRegistry schemaRegistry, int page, int size) {
+    default PageBody<Map<String, Object>> fetchSamples(ConnectionCredential connectionCredential, Map<String,Object> config) {
         return null;
     }
 

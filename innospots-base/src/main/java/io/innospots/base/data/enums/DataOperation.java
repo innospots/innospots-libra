@@ -28,8 +28,9 @@ public enum DataOperation {
      */
     INSERT,
     DELETE,
-    GET_ONE,
-    GET_LIST,
+    GET,
+    LIST,
     UPDATE,
-    UPSERT;
+    UPSERT,
+    EXECUTE;
 }

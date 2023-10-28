@@ -18,17 +18,13 @@
 
 package io.innospots.base.data.http;
 
-import io.innospots.base.data.enums.ApiAuth;
-import io.innospots.base.data.schema.ConnectionCredential;
+import io.innospots.base.data.credential.ConnectionCredential;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.utils.HttpClientBuilder;
+import io.innospots.base.utils.http.HttpClientBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.protocol.HttpContext;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 

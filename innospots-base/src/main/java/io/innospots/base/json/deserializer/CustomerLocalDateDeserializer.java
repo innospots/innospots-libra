@@ -21,8 +21,8 @@ package io.innospots.base.json.deserializer;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import io.innospots.base.model.LocaleContext;
-import io.innospots.base.utils.LocaleMessageUtils;
+import io.innospots.base.i18n.LocaleContext;
+import io.innospots.base.i18n.LocaleMessageUtils;
 
 import java.io.IOException;
 import java.time.LocalDate;

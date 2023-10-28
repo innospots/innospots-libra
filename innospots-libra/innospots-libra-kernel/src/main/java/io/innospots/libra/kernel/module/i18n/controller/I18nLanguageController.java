@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.i18n.controller;
 
 import io.innospots.base.enums.DataStatus;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.model.system.OrganizationInfo;
@@ -28,7 +28,7 @@ import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
-import io.innospots.libra.base.model.QueryRequest;
+import io.innospots.base.data.request.FormQuery;
 import io.innospots.libra.kernel.module.i18n.model.I18nLanguage;
 import io.innospots.libra.kernel.module.i18n.operator.I18nLanguageOperator;
 import io.innospots.libra.kernel.service.SysConfigCommonService;
@@ -176,13 +176,13 @@ public class I18nLanguageController extends BaseController {
     /**
      * page of I18nLanguage
      *
-     * @param queryRequest queryInput: 空，OFFLINE，ONLINE
+     * @param formRequest queryInput: 空，OFFLINE，ONLINE
      * @return
      */
     @GetMapping("page")
     @Operation(summary = "page i18n language")
-    public InnospotResponse<PageBody<I18nLanguage>> pageLanguages(QueryRequest queryRequest) {
-        return success(i18nLanguageOperator.pageLanguages(queryRequest));
+    public InnospotResponse<PageBody<I18nLanguage>> pageLanguages(FormQuery formRequest) {
+        return success(i18nLanguageOperator.pageLanguages(formRequest));
     }
 
     /**

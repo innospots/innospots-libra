@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.logger.mapper;
 
 import io.innospots.base.converter.BaseBeanConverter;
-import io.innospots.base.utils.DateTimeUtils;
+import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.libra.kernel.module.logger.entity.SysOperateLogEntity;
 import io.innospots.libra.kernel.module.logger.model.SysOperateLog;
 import org.mapstruct.AfterMapping;

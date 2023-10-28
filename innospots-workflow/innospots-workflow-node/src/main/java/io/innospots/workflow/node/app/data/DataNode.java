@@ -18,7 +18,7 @@
 
 package io.innospots.workflow.node.app.data;
 
-import io.innospots.base.data.ap.IDataOperatorPoint;
+import io.innospots.base.data.point.IDataOperatorPoint;
 import io.innospots.base.utils.BeanContextAware;
 import io.innospots.workflow.core.node.instance.NodeInstance;
 import lombok.extern.slf4j.Slf4j;

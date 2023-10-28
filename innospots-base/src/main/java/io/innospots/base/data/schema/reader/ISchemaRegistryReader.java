@@ -31,8 +31,10 @@ import java.util.List;
 public interface ISchemaRegistryReader {
 
 
-    List<SchemaRegistry> listSchemaRegistries(Integer credentialId, boolean includeField);
+    List<SchemaRegistry> listSchemaRegistries(String credentialKey, boolean includeField);
 
 
-    SchemaRegistry getSchemaRegistry(Integer credentialId, String registryCode, Integer registryId);
+    SchemaRegistry getSchemaRegistry(String credentialKey, String registryCode);
+
+    SchemaRegistry getSchemaRegistry(String credentialKey, Integer registryId);
 }

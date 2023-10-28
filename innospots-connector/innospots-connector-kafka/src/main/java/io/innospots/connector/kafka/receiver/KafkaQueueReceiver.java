@@ -18,11 +18,10 @@
 
 package io.innospots.connector.kafka.receiver;
 
-import io.innospots.base.data.enums.MessageFormat;
 import io.innospots.base.data.operator.IQueueReceiver;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.model.DataBody;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.DataBody;
+import io.innospots.base.data.body.PageBody;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;

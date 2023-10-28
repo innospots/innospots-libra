@@ -18,14 +18,14 @@
 
 package io.innospots.libra.kernel.module.notification.controller;
 
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
-import io.innospots.libra.kernel.module.notification.model.MessageQueryRequest;
+import io.innospots.libra.kernel.module.notification.model.MessageFormQuery;
 import io.innospots.libra.kernel.module.notification.model.NotificationMessage;
 import io.innospots.libra.kernel.module.notification.operator.NotificationMessageOperator;
 import io.swagger.v3.oas.annotations.Operation;
@@ -58,7 +58,7 @@ public class NotificationMessageController extends BaseController {
 
     @GetMapping("page")
     @Operation(summary = "page message")
-    public InnospotResponse<PageBody<NotificationMessage>> pageMessages(MessageQueryRequest request) {
+    public InnospotResponse<PageBody<NotificationMessage>> pageMessages(MessageFormQuery request) {
         PageBody<NotificationMessage> pageModel = notificationMessageOperator.pageMessages(request);
         return success(pageModel);
     }

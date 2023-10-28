@@ -18,6 +18,8 @@
 
 package io.innospots.base.utils;
 
+import cn.hutool.core.io.resource.Resource;
+
 import java.util.Map;
 
 /**
@@ -25,6 +27,8 @@ import java.util.Map;
  * @date 2020/12/15
  */
 public interface BeanContextAware {
+
+    Resource[] getResources(String locationPattern);
 
     boolean isLoaded();
 

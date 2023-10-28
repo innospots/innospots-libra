@@ -5,13 +5,13 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.CaseFormat;
-import io.innospots.base.model.PageBody;
-import io.innospots.base.utils.DateTimeUtils;
+import io.innospots.base.data.body.PageBody;
+import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.libra.base.task.TaskExecution;
 import io.innospots.libra.kernel.module.task.dao.TaskExecutionDao;
 import io.innospots.libra.kernel.module.task.entity.TaskExecutionEntity;
 import io.innospots.libra.kernel.module.task.mapper.TaskExecutionMapper;
-import io.innospots.libra.kernel.module.task.model.TaskExecutionRequest;
+import io.innospots.libra.kernel.module.task.model.TaskExecutionForm;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -62,7 +62,7 @@ public class TaskExecutionOperator extends ServiceImpl<TaskExecutionDao, TaskExe
         return taskExecution;
     }
 
-    public PageBody<TaskExecution> pageTaskExecutions(TaskExecutionRequest request) {
+    public PageBody<TaskExecution> pageTaskExecutions(TaskExecutionForm request) {
         QueryWrapper<TaskExecutionEntity> query = new QueryWrapper<>();
         if (StringUtils.isNotBlank(request.getQueryInput())) {
             query.like("TASK_NAME", "%" + request.getQueryInput() + "%");

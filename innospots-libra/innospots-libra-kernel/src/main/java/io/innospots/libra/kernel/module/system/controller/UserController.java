@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.system.controller;
 
 import io.innospots.base.enums.DataStatus;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.base.model.user.UserInfo;
 import io.innospots.libra.base.controller.BaseController;
@@ -27,7 +27,7 @@ import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
-import io.innospots.libra.base.model.QueryRequest;
+import io.innospots.base.data.request.FormQuery;
 import io.innospots.libra.kernel.module.system.model.user.UserForm;
 import io.innospots.libra.kernel.module.system.model.user.UserPassword;
 import io.innospots.libra.kernel.module.system.operator.UserOperator;
@@ -106,7 +106,7 @@ public class UserController extends BaseController {
 
     @GetMapping("page")
     @Operation(summary = "query user")
-    public InnospotResponse<PageBody<UserInfo>> pageUsers(QueryRequest request) {
+    public InnospotResponse<PageBody<UserInfo>> pageUsers(FormQuery request) {
         PageBody<UserInfo> pageModel = userService.pageUsers(request);
         return success(pageModel);
     }

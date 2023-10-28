@@ -1,6 +1,6 @@
 package io.innospots.workflow.console.controller.task;
 
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.workflow.console.model.task.TaskNodeExecution;

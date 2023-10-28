@@ -58,7 +58,7 @@
         <jackson.version.core>2.13.3</jackson.version.core>
 
 
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
         <javassist.version>3.27.0-GA</javassist.version>
         <junit-vintage-engine.version>5.8.1</junit-vintage-engine.version>
 
@@ -89,7 +89,7 @@
         <spring-security-oauth2.version>2.1.4.RELEASE</spring-security-oauth2.version>
         <!--        <spring-web.version>5.2.2.RELEASE</spring-web.version>-->
         <sshd.version>2.7.0</sshd.version>
-        <swagger.version>2.2.0</swagger.version>
+        <swagger.version>2.2.18</swagger.version>
         <tablesaw.version>0.43.1</tablesaw.version>
         <ta4j.version>0.15</ta4j.version>
         <user-agent.version>1.21</user-agent.version>
@@ -613,6 +613,13 @@
                 <artifactId>easyexcel</artifactId>
                 <version>${easyexcel.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>jakarta.inject</groupId>
+                <artifactId>jakarta.inject-api</artifactId>
+                <version>2.0.1</version>
+            </dependency>
+
 
         </dependencies>
     </dependencyManagement>

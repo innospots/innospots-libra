@@ -1,17 +1,15 @@
 package io.innospots.connector.schema.service;
 
 import io.innospots.base.data.minder.DataConnectionMinderManager;
-import io.innospots.base.data.schema.AppCredentialInfo;
-import io.innospots.base.data.schema.ConnectionCredential;
+import io.innospots.connector.schema.model.AppCredentialInfo;
+import io.innospots.base.data.credential.ConnectionCredential;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.store.CacheStoreManager;
-import io.innospots.connector.schema.operator.AppCredentialOperator;
 import io.innospots.connector.schema.reader.ConnectionCredentialReader;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
 
 import java.util.Map;
 

@@ -21,11 +21,11 @@ package io.innospots.connector.schema.reader;
 import io.innospots.base.crypto.EncryptType;
 import io.innospots.base.crypto.EncryptorBuilder;
 import io.innospots.base.crypto.IEncryptor;
-import io.innospots.base.data.schema.AppCredentialInfo;
-import io.innospots.base.data.schema.ConnectionCredential;
+import io.innospots.connector.schema.model.AppCredentialInfo;
+import io.innospots.base.data.credential.ConnectionCredential;
 import io.innospots.base.data.schema.config.ConnectionMinderSchemaLoader;
-import io.innospots.base.data.schema.config.CredentialFormConfig;
-import io.innospots.base.data.schema.reader.IConnectionCredentialReader;
+import io.innospots.base.data.schema.config.CredentialAuthOption;
+import io.innospots.base.data.credential.IConnectionCredentialReader;
 import io.innospots.base.exception.AuthenticationException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.connector.schema.mapper.CredentialBeanConverter;
@@ -76,8 +76,8 @@ public class ConnectionCredentialReader implements IConnectionCredentialReader {
         if (connectionCredential == null) {
             return null;
         }
-        CredentialFormConfig credentialFormConfig = ConnectionMinderSchemaLoader.getCredentialFormConfig(connectionCredential.getConnectorName(), connectionCredential.getConfigCode());
-        connectionCredential.getConfig().putAll(credentialFormConfig.getDefaults());
+        CredentialAuthOption credentialAuthOption = ConnectionMinderSchemaLoader.getCredentialFormConfig(connectionCredential.getConnectorName(), connectionCredential.getConfigCode());
+        connectionCredential.getConfig().putAll(credentialAuthOption.getDefaults());
         return connectionCredential;
     }
 

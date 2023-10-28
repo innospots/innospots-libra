@@ -25,9 +25,9 @@ import com.google.common.base.Enums;
 import io.innospots.base.condition.Factor;
 import io.innospots.base.data.minder.DataConnectionMinderManager;
 import io.innospots.base.data.minder.IDataConnectionMinder;
+import io.innospots.base.data.request.ItemRequest;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.model.DataBody;
-import io.innospots.base.model.RequestBody;
+import io.innospots.base.data.body.DataBody;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.base.re.IExpression;
 import io.innospots.base.utils.BeanUtils;
@@ -245,22 +245,22 @@ public class ApiDataNode extends DataNode {
     }
 
     private InnospotResponse<DataBody> doRequest(Map<String, Object> item) {
-        RequestBody requestBody = new RequestBody();
-        requestBody.setCredentialId(credentialId);
-        requestBody.setOperation(operation);
-        requestBody.setUri(urlAddress);
-        requestBody.setConnectorName("Http");
+        ItemRequest itemRequest = new ItemRequest();
+        itemRequest.setCredentialId(credentialId);
+        itemRequest.setOperation(operation);
+        itemRequest.setUri(urlAddress);
+        itemRequest.setConnectorName("Http");
         if (requestParam != null) {
-            requestParam.fill(item, requestBody);
+            requestParam.fill(item, itemRequest);
         }
         InnospotResponse<DataBody> dataBody = null;
         if (dataCache) {
-            dataBody = dataBodyCache.getIfPresent(requestBody.key());
+            dataBody = dataBodyCache.getIfPresent(itemRequest.key());
         }
         if (dataBody == null) {
-            dataBody = dataOperatorPoint.execute(requestBody);
+            dataBody = dataOperatorPoint.execute(itemRequest);
             if (dataCache) {
-                dataBodyCache.put(requestBody.key(), dataBody);
+                dataBodyCache.put(itemRequest.key(), dataBody);
             }
         }
 
@@ -288,14 +288,14 @@ public class ApiDataNode extends DataNode {
         private String template;
 
 
-        public void fill(Map<String, Object> item, RequestBody requestBody) {
+        public void fill(Map<String, Object> item, ItemRequest itemRequest) {
             if (CollectionUtils.isNotEmpty(headers)) {
                 for (Factor factor : headers) {
                     Object v = factor.value(item);
                     if (v == null) {
                         continue;
                     }
-                    requestBody.addHeader(factor.getName(), v);
+                    itemRequest.addHeader(factor.getName(), v);
                 }
             }//end if header empty
             if (CollectionUtils.isNotEmpty(query)) {
@@ -307,14 +307,14 @@ public class ApiDataNode extends DataNode {
                     if(v==null){
                         continue;
                     }
-                    if (StringUtils.isNotEmpty(requestBody.getUri())) {
+                    if (StringUtils.isNotEmpty(itemRequest.getUri())) {
                         String ph = "${" + factor.getName() + "}";
-                        if (requestBody.getUri().contains(ph)) {
-                            requestBody.setUri(requestBody.getUri().replace(ph, v.toString()));
+                        if (itemRequest.getUri().contains(ph)) {
+                            itemRequest.setUri(itemRequest.getUri().replace(ph, v.toString()));
                             continue;
                         }
                     }//end uri not empty
-                    requestBody.addQuery(factor.getName(), v);
+                    itemRequest.addQuery(factor.getName(), v);
                 }//end for query
             }//end if query not empty
             Map<String, String> bValue = new LinkedHashMap<>(5);
@@ -333,9 +333,9 @@ public class ApiDataNode extends DataNode {
                 }//end for body
             }//end if body not empty
             if (StringUtils.isNotEmpty(template) && bValue.size() > 0) {
-                requestBody.setContent(PlaceholderUtils.replacePlaceholders(template, bValue));
+                itemRequest.setContent(PlaceholderUtils.replacePlaceholders(template, bValue));
             } else if (bValue.size() > 0) {
-                requestBody.add(bValue);
+                itemRequest.add(bValue);
             }//end if template
 
         }

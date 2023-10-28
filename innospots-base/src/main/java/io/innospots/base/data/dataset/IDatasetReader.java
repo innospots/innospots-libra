@@ -18,12 +18,6 @@
 
 package io.innospots.base.data.dataset;
 
-import io.innospots.base.constant.ServiceConstant;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
 import java.util.List;
 import java.util.Set;
 
@@ -36,11 +30,9 @@ import java.util.Set;
 public interface IDatasetReader {
 
 
-    @GetMapping(ServiceConstant.PATH_ROOT_DATA_API + "{credentialId}/data-set/list")
-    List<Dataset> listDatasets(@PathVariable("credentialId") Integer credentialId);
+    List<Dataset> listDatasets(Integer credentialId);
 
-    @PostMapping(ServiceConstant.PATH_ROOT_DATA_API + "/data-set/list")
-    List<Dataset> listDatasets(@RequestBody Set<Integer> ids);
+    List<Dataset> listDatasets(Set<Integer> ids);
 
 
 }

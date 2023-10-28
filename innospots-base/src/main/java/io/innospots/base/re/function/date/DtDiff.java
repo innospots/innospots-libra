@@ -18,7 +18,7 @@
 
 package io.innospots.base.re.function.date;
 
-import io.innospots.base.utils.DateTimeUtils;
+import io.innospots.base.utils.time.DateTimeUtils;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;

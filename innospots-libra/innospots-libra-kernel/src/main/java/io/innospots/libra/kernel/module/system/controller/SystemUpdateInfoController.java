@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.system.controller;
 
 import io.innospots.base.model.response.InnospotResponse;
-import io.innospots.base.utils.DateTimeUtils;
+import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.extension.LibraClassPathExtPropertiesLoader;
 import io.innospots.libra.base.extension.LibraExtensionProperties;

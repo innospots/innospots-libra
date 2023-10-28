@@ -18,8 +18,9 @@
 
 package io.innospots.base.data.operator;
 
-import io.innospots.base.model.DataBody;
-import io.innospots.base.model.RequestBody;
+import io.innospots.base.data.body.DataBody;
+import io.innospots.base.data.request.BatchRequest;
+import io.innospots.base.data.request.ItemRequest;
 
 /**
  * @author Smars
@@ -28,6 +29,4 @@ import io.innospots.base.model.RequestBody;
  */
 public interface IExecutionOperator<T> extends IOperator {
 
-
-    DataBody<T> execute(RequestBody requestBody);
 }

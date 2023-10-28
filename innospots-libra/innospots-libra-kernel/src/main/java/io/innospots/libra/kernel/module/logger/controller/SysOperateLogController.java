@@ -18,11 +18,11 @@
 
 package io.innospots.libra.kernel.module.logger.controller;
 
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.menu.ModuleMenu;
-import io.innospots.libra.kernel.module.logger.model.LogQueryRequest;
+import io.innospots.libra.kernel.module.logger.model.LogFormQuery;
 import io.innospots.libra.kernel.module.logger.model.SysOperateLog;
 import io.innospots.libra.kernel.module.logger.model.UserLogInfo;
 import io.innospots.libra.kernel.module.logger.operator.SysLogOperator;
@@ -58,7 +58,7 @@ public class SysOperateLogController extends BaseController {
 
     @GetMapping("page")
     @Operation(summary = "query the operate log", description = "query the operate log")
-    public InnospotResponse<PageBody<SysOperateLog>> pageLogs(LogQueryRequest queryRequest) {
+    public InnospotResponse<PageBody<SysOperateLog>> pageLogs(LogFormQuery queryRequest) {
 
         PageBody<SysOperateLog> pageBody = logOperator.pageLogs(queryRequest);
         return success(pageBody);

@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.notification.mapper;
 
 import io.innospots.base.converter.BaseBeanConverter;
-import io.innospots.base.utils.DateTimeUtils;
+import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.libra.kernel.module.notification.entity.NotificationMessageEntity;
 import io.innospots.libra.kernel.module.notification.model.NotificationMessage;
 import org.mapstruct.Mapper;

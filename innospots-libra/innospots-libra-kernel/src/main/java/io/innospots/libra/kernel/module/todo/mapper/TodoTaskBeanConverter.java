@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.todo.mapper;
 
 import io.innospots.base.converter.BaseBeanConverter;
-import io.innospots.base.utils.DateTimeUtils;
+import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.libra.kernel.module.todo.entity.TodoTaskEntity;
 import io.innospots.libra.kernel.module.todo.model.TodoTask;
 import org.mapstruct.Mapper;

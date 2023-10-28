@@ -19,8 +19,8 @@
 package io.innospots.workflow.console.operator.execution;
 
 import io.innospots.base.data.operator.IDataOperator;
-import io.innospots.base.model.DataBody;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.DataBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.console.entity.execution.ExecutionContextEntity;
 import io.innospots.workflow.console.mapper.execution.ExecutionContextMapper;

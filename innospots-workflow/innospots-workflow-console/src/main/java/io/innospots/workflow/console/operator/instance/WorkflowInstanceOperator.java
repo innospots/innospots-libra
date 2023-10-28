@@ -27,12 +27,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.CaseFormat;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.StringConverter;
 import io.innospots.libra.base.event.NewPageEvent;
 import io.innospots.libra.base.event.NotificationAnnotation;
-import io.innospots.libra.base.model.QueryRequest;
+import io.innospots.base.data.request.FormQuery;
 import io.innospots.workflow.console.dao.instance.WorkflowInstanceDao;
 import io.innospots.workflow.console.entity.instance.WorkflowInstanceEntity;
 import io.innospots.workflow.console.enums.FlowVersion;
@@ -129,7 +129,7 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
      *
      * @return
      */
-    public PageBody<WorkflowInstance> pageWorkflows(QueryRequest request) {
+    public PageBody<WorkflowInstance> pageWorkflows(FormQuery request) {
         QueryWrapper<WorkflowInstanceEntity> queryWrapper = this.queryWrapper(request);
         PageBody<WorkflowInstance> pageBody = new PageBody<>();
         IPage<WorkflowInstanceEntity> oPage = new Page<>(request.getPage(), request.getSize());
@@ -296,7 +296,7 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
      * @param request
      * @return
      */
-    private QueryWrapper<WorkflowInstanceEntity> queryWrapper(QueryRequest request) {
+    private QueryWrapper<WorkflowInstanceEntity> queryWrapper(FormQuery request) {
         QueryWrapper<WorkflowInstanceEntity> query = new QueryWrapper<>();
         LambdaQueryWrapper<WorkflowInstanceEntity> lambda = query.lambda();
 

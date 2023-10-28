@@ -21,15 +21,13 @@ package io.innospots.connector.api.minder;
 import cn.hutool.core.net.url.UrlBuilder;
 import io.innospots.base.constant.PathConstant;
 import io.innospots.base.data.enums.ApiMethod;
-import io.innospots.base.data.schema.ConnectionCredential;
-import io.innospots.base.exception.AuthenticationException;
+import io.innospots.base.data.credential.ConnectionCredential;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.store.CacheStoreManager;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.builder.BuilderException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

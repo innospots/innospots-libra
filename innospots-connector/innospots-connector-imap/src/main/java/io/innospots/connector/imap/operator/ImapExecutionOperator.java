@@ -19,8 +19,8 @@
 package io.innospots.connector.imap.operator;
 
 import io.innospots.base.data.operator.IExecutionOperator;
-import io.innospots.base.model.DataBody;
-import io.innospots.base.model.RequestBody;
+import io.innospots.base.data.body.DataBody;
+import io.innospots.base.data.request.ItemRequest;
 import jakarta.mail.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,8 +45,8 @@ public class ImapExecutionOperator implements IExecutionOperator<Map<String, Obj
     }
 
     @Override
-    public DataBody<Map<String, Object>> execute(RequestBody requestBody) {
-        String folderName = (String) requestBody.getBody().getOrDefault(KEY_FOLDER, "INBOX");
+    public DataBody<Map<String, Object>> execute(ItemRequest itemRequest) {
+        String folderName = (String) itemRequest.getBody().getOrDefault(KEY_FOLDER, "INBOX");
         DataBody dataBody = new DataBody();
         try {
             Folder folder = imapStore.getFolder(folderName);

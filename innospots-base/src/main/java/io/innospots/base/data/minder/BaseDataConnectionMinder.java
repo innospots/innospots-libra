@@ -19,7 +19,7 @@
 package io.innospots.base.data.minder;
 
 
-import io.innospots.base.data.schema.ConnectionCredential;
+import io.innospots.base.data.credential.ConnectionCredential;
 import io.innospots.base.data.schema.SchemaCatalog;
 import io.innospots.base.data.schema.SchemaField;
 import io.innospots.base.data.schema.SchemaRegistry;
@@ -35,7 +35,7 @@ import java.util.List;
  * @version 1.0.0
  * @date 2022/9/14
  */
-public abstract class BaseDataConnectionMinder implements IDataConnectionMinder {
+public abstract class BaseDataConnectionMinder<Operator> implements IDataConnectionMinder<Operator> {
 
     protected ISchemaRegistryReader schemaRegistryReader;
 
@@ -54,12 +54,12 @@ public abstract class BaseDataConnectionMinder implements IDataConnectionMinder 
 
     @Override
     public SchemaRegistry schemaRegistry(String registryCode) {
-        return schemaRegistryReader.getSchemaRegistry(connectionCredential.getCredentialId(), registryCode, null);
+        return schemaRegistryReader.getSchemaRegistry(connectionCredential.getCredentialKey(), registryCode);
     }
 
     @Override
     public SchemaRegistry schemaRegistry(Integer registryId) {
-        return schemaRegistryReader.getSchemaRegistry(connectionCredential.getCredentialId(), null, registryId);
+        return schemaRegistryReader.getSchemaRegistry(connectionCredential.getCredentialKey(), registryId);
     }
 
     @Override
@@ -73,23 +73,9 @@ public abstract class BaseDataConnectionMinder implements IDataConnectionMinder 
         return schemaCatalogs;
     }
 
-
-    @Override
-    public List<SchemaField> schemaRegistryFields(String tableName) {
-        SchemaRegistry schemaRegistry = schemaRegistry(tableName);
-        if (schemaRegistry != null) {
-            return schemaRegistry.getSchemaFields();
-        }
-        return Collections.emptyList();
-    }
-
     @Override
     public List<SchemaRegistry> schemaRegistries(boolean includeField) {
-        return schemaRegistryReader.listSchemaRegistries(connectionCredential.getCredentialId(), includeField);
+        return schemaRegistryReader.listSchemaRegistries(connectionCredential.getCredentialKey(), includeField);
     }
 
-    @Override
-    public String connector() {
-        return this.getClass().getName();
-    }
 }

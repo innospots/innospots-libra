@@ -18,8 +18,6 @@
 
 package io.innospots.connector.mysql.operator;
 
-import io.innospots.base.data.operator.jdbc.JdbcSqlOperator;
-
 import javax.sql.DataSource;
 
 

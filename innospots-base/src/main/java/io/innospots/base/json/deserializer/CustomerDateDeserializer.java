@@ -21,8 +21,8 @@ package io.innospots.base.json.deserializer;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import io.innospots.base.model.LocaleContext;
-import io.innospots.base.utils.LocaleMessageUtils;
+import io.innospots.base.i18n.LocaleContext;
+import io.innospots.base.i18n.LocaleMessageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.FastDateFormat;
 

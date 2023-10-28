@@ -27,7 +27,7 @@ import io.innospots.base.data.schema.SchemaRegistryType;
 import io.innospots.base.data.schema.config.ConnectionMinderSchema;
 import io.innospots.base.data.schema.config.ConnectionMinderSchemaLoader;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.connector.schema.dao.SchemaRegistryDao;
 import io.innospots.connector.schema.entity.AppCredentialEntity;
 import io.innospots.connector.schema.entity.SchemaRegistryEntity;

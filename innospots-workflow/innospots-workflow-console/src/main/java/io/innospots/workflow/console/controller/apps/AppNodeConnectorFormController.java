@@ -19,7 +19,7 @@
 package io.innospots.workflow.console.controller.apps;
 
 import io.innospots.base.data.schema.config.ConnectionMinderSchemaLoader;
-import io.innospots.base.data.schema.config.CredentialFormConfig;
+import io.innospots.base.data.schema.config.CredentialAuthOption;
 import io.innospots.base.data.schema.config.FormElement;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.model.response.InnospotResponse;
@@ -31,7 +31,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.MapUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +39,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import static io.innospots.base.model.response.InnospotResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
@@ -65,13 +63,13 @@ public class AppNodeConnectorFormController {
 
     @GetMapping("{appNodeId}")
     @Operation(summary = "app node connector form config")
-    public InnospotResponse<List<CredentialFormConfig>> selectAppNodeConnectorFormConfig(
+    public InnospotResponse<List<CredentialAuthOption>> selectAppNodeConnectorFormConfig(
             @Parameter(name = "appNodeId") @PathVariable Integer appNodeId
     ) {
         AppNodeDefinition definition = appNodeDefinitionOperator.getNodeDefinition(appNodeId);
-        List<CredentialFormConfig> configs = new ArrayList<>();
+        List<CredentialAuthOption> configs = new ArrayList<>();
 
-        CredentialFormConfig formConfig = null;
+        CredentialAuthOption formConfig = null;
         if (CollectionUtils.isEmpty(definition.getConnectorConfigs())) {
             formConfig = ConnectionMinderSchemaLoader.getCredentialFormConfig(definition.getConnectorName());
             configs.add(formConfig);
@@ -80,15 +78,15 @@ public class AppNodeConnectorFormController {
         String NoneCode = "none";
         for (AppConnectorConfig connectorConfig : definition.getConnectorConfigs()) {
             if (NoneCode.equals(connectorConfig.getConfigCode())) {
-                formConfig = new CredentialFormConfig();
+                formConfig = new CredentialAuthOption();
                 formConfig.setCode(connectorConfig.getConfigCode());
                 formConfig.setName(connectorConfig.getConfigName());
                 formConfig.setElements(Collections.emptyList());
             } else {
                 try {
-                    CredentialFormConfig credentialFormConfig =
+                    CredentialAuthOption credentialAuthOption =
                             ConnectionMinderSchemaLoader.getCredentialFormConfig(definition.getConnectorName(), connectorConfig.getConfigCode());
-                    formConfig = (CredentialFormConfig) credentialFormConfig.clone();
+                    formConfig = (CredentialAuthOption) credentialAuthOption.clone();
                 } catch (Exception e) {
                     throw ConfigException.buildTypeException(this.getClass(), "credentialFormConfig load failed.");
                 }

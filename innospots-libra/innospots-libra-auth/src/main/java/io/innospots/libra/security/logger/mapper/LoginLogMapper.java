@@ -18,7 +18,7 @@
 
 package io.innospots.libra.security.logger.mapper;
 
-import io.innospots.base.utils.DateTimeUtils;
+import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.libra.security.logger.entity.LoginLogEntity;
 import io.innospots.libra.security.logger.model.LoginLog;
 import org.mapstruct.Mapper;

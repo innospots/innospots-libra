@@ -19,7 +19,7 @@
 package io.innospots.connector.schema.controller;
 
 import io.innospots.base.data.dataset.Dataset;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.connector.schema.operator.DatasetOperator;
 import io.innospots.libra.base.log.OperateType;

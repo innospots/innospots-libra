@@ -20,26 +20,24 @@ package io.innospots.connector.schema.controller;
 
 import io.innospots.base.data.http.HttpConnection;
 import io.innospots.base.data.http.HttpDataExecutor;
+import io.innospots.base.data.request.ItemRequest;
 import io.innospots.base.data.schema.ApiSchemaRegistry;
-import io.innospots.base.data.schema.ConnectionCredential;
-import io.innospots.base.data.schema.reader.IConnectionCredentialReader;
+import io.innospots.base.data.credential.ConnectionCredential;
+import io.innospots.base.data.credential.IConnectionCredentialReader;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.connector.schema.operator.HttpApiOperator;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
-import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 import static io.innospots.base.model.response.InnospotResponse.success;
-import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
 
 
@@ -117,8 +115,8 @@ public class HttpApiController extends BaseController {
         HttpConnection httpConnection = new HttpConnection(connectionCredential);
         HttpDataExecutor httpDataExecutor = new HttpDataExecutor(httpConnection);
 //        HttpDataExecutor httpDataExecutor = new HttpDataExecutor(httpConnection, apiSchemaRegistry);
-        io.innospots.base.model.RequestBody requestBody = new io.innospots.base.model.RequestBody();
-        requestBody.setBody(apiSchemaRegistry.getParamValue());
-        return success(httpDataExecutor.execute(requestBody).getBody());
+        ItemRequest itemRequest = new ItemRequest();
+        itemRequest.setBody(apiSchemaRegistry.getParamValue());
+        return success(httpDataExecutor.execute(itemRequest).getBody());
     }
 }

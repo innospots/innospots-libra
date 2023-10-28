@@ -23,7 +23,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import eu.bitwalker.useragentutils.UserAgent;
 import io.innospots.base.constant.RegexConstants;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.utils.HttpUtils;
+import io.innospots.base.utils.http.HttpUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;

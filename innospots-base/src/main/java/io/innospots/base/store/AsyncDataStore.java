@@ -19,9 +19,9 @@
 package io.innospots.base.store;
 
 import io.innospots.base.utils.thread.ThreadPoolBuilder;
+import io.innospots.base.utils.thread.ThreadTaskExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ public class AsyncDataStore<E> implements IDataStore<E> {
     private LinkedBlockingQueue<E> insertQueue;
     private LinkedBlockingQueue<E> updateQueue;
 
-    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+    private ThreadTaskExecutor threadTaskExecutor;
 
     private boolean isRunning;
 
@@ -52,7 +52,7 @@ public class AsyncDataStore<E> implements IDataStore<E> {
     public AsyncDataStore(IDataStore<E> dataStore, int storeThreadSize, int batchSize, String poolName) {
         this.executionStore = dataStore;
         this.poolName = poolName;
-        threadPoolTaskExecutor = ThreadPoolBuilder.build(storeThreadSize, poolName);
+        threadTaskExecutor = ThreadPoolBuilder.build(storeThreadSize, poolName);
         insertQueue = new LinkedBlockingQueue<>(10000);
 
         updateQueue = new LinkedBlockingQueue<>(10000);
@@ -60,7 +60,7 @@ public class AsyncDataStore<E> implements IDataStore<E> {
         this.isRunning = true;
 
         for (int i = 0; i < batchSize; i++) {
-            threadPoolTaskExecutor.execute(new ExecutionStoreThread());
+            threadTaskExecutor.execute(new ExecutionStoreThread());
         }
     }
 
@@ -88,7 +88,7 @@ public class AsyncDataStore<E> implements IDataStore<E> {
     public void close() {
         this.isRunning = false;
         //TODO should waiting queue data are been stored completely.
-        threadPoolTaskExecutor.shutdown();
+        threadTaskExecutor.shutdown();
     }
 
 

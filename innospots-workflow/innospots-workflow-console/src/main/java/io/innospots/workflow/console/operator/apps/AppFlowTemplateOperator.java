@@ -24,7 +24,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.workflow.console.dao.apps.AppFlowTemplateDao;
 import io.innospots.workflow.console.entity.apps.AppFlowTemplateEntity;
 import io.innospots.workflow.console.mapper.apps.AppFlowTemplateBeanConverter;

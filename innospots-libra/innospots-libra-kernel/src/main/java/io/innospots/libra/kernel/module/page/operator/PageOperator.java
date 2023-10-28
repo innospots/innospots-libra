@@ -28,7 +28,7 @@ import io.innospots.base.data.dataset.IDatasetReader;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.utils.BeanContextAware;
 import io.innospots.libra.base.event.DynamicMenuDelEvent;
 import io.innospots.libra.kernel.module.page.dao.PageDao;

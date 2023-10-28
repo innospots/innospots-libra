@@ -18,7 +18,7 @@
 
 package io.innospots.base.data.operator;
 
-import io.innospots.base.model.DataBody;
+import io.innospots.base.data.body.DataBody;
 
 /**
  * @author Smars

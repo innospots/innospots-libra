@@ -19,8 +19,10 @@
 package io.innospots.base.data.operator;
 
 import io.innospots.base.condition.Factor;
-import io.innospots.base.model.DataBody;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.DataBody;
+import io.innospots.base.data.body.PageBody;
+import io.innospots.base.data.operator.jdbc.SelectClause;
+import io.innospots.base.data.operator.jdbc.UpdateItem;
 import io.innospots.base.utils.StringConverter;
 
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 数据的增删改查操作
+ * data crud operator
  *
  * @author Smars
  * @date 2021/5/3

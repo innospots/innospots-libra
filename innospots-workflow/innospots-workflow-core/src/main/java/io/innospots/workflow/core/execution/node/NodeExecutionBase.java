@@ -19,7 +19,7 @@
 package io.innospots.workflow.core.execution.node;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.innospots.base.utils.DateTimeUtils;
+import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.workflow.core.execution.ExecutionStatus;
 import lombok.Getter;
 import lombok.Setter;

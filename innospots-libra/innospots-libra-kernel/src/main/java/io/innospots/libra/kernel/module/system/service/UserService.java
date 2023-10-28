@@ -21,13 +21,13 @@ package io.innospots.libra.kernel.module.system.service;
 import io.innospots.base.enums.ImageType;
 import io.innospots.base.exception.InnospotException;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.libra.kernel.module.system.model.role.RoleInfo;
 import io.innospots.base.model.user.UserInfo;
 import io.innospots.base.utils.CCH;
-import io.innospots.libra.base.model.QueryRequest;
-import io.innospots.base.utils.ImageFileUploader;
+import io.innospots.base.data.request.FormQuery;
+import io.innospots.libra.base.utils.ImageFileUploader;
 import io.innospots.libra.kernel.module.system.entity.UserRoleEntity;
 import io.innospots.libra.kernel.module.system.model.user.UserForm;
 import io.innospots.libra.kernel.module.system.operator.AvatarResourceOperator;
@@ -135,7 +135,7 @@ public class UserService {
         return userInfo;
     }
 
-    public PageBody<UserInfo> pageUsers(QueryRequest request) {
+    public PageBody<UserInfo> pageUsers(FormQuery request) {
         PageBody<UserInfo> pageBody = userOperator.pageUsers(request);
         List<UserInfo> userInfos = pageBody.getList();
         List<Integer> userIds = userInfos.stream().map(UserInfo::getUserId).collect(Collectors.toList());

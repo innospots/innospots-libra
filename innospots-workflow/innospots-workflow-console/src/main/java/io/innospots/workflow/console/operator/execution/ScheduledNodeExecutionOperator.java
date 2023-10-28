@@ -22,9 +22,9 @@ import io.innospots.base.condition.Factor;
 import io.innospots.base.condition.Opt;
 import io.innospots.base.data.minder.DataConnectionMinderManager;
 import io.innospots.base.data.operator.IDataOperator;
-import io.innospots.base.data.operator.SelectClause;
-import io.innospots.base.data.operator.UpdateItem;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.operator.jdbc.SelectClause;
+import io.innospots.base.data.operator.jdbc.UpdateItem;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.store.IDataStore;
 import io.innospots.base.utils.BeanUtils;
@@ -40,7 +40,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static io.innospots.base.utils.DateTimeUtils.DEFAULT_DATETIME_PATTERN;
+import static io.innospots.base.utils.time.DateTimeUtils.DEFAULT_DATETIME_PATTERN;
 
 /**
  * @author Smars

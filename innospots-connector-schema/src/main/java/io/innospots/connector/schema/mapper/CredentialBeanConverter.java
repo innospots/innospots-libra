@@ -19,10 +19,10 @@
 package io.innospots.connector.schema.mapper;
 
 import io.innospots.base.converter.BaseBeanConverter;
-import io.innospots.base.data.schema.AppCredentialInfo;
-import io.innospots.base.data.schema.SimpleAppCredential;
+import io.innospots.connector.schema.model.AppCredentialInfo;
+import io.innospots.connector.schema.model.SimpleAppCredential;
 import io.innospots.connector.schema.entity.AppCredentialEntity;
-import io.innospots.base.data.schema.ConnectionCredential;
+import io.innospots.base.data.credential.ConnectionCredential;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

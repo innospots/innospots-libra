@@ -19,13 +19,13 @@
 package io.innospots.connector.schema.controller;
 
 import io.innospots.base.data.minder.DataConnectionMinderManager;
-import io.innospots.base.data.schema.AppCredentialInfo;
-import io.innospots.base.data.schema.ConnectionCredential;
-import io.innospots.base.data.schema.SimpleAppCredential;
+import io.innospots.connector.schema.model.AppCredentialInfo;
+import io.innospots.base.data.credential.ConnectionCredential;
+import io.innospots.connector.schema.model.SimpleAppCredential;
 import io.innospots.base.data.schema.config.ConnectionMinderSchema;
 import io.innospots.base.data.schema.config.ConnectionMinderSchemaLoader;
-import io.innospots.base.data.schema.reader.IConnectionCredentialReader;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.credential.IConnectionCredentialReader;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.connector.schema.mapper.CredentialBeanConverter;
 import io.innospots.connector.schema.operator.AppCredentialOperator;

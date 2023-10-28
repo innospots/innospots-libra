@@ -20,7 +20,7 @@ package io.innospots.connector.kafka.sender;
 
 import io.innospots.base.data.operator.IQueueSender;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.utils.DateTimeUtils;
+import io.innospots.base.utils.time.DateTimeUtils;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;

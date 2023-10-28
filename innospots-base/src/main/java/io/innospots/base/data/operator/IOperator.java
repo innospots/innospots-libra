@@ -18,10 +18,26 @@
 
 package io.innospots.base.data.operator;
 
+import io.innospots.base.data.body.DataBody;
+import io.innospots.base.data.request.BatchRequest;
+import io.innospots.base.data.request.ItemRequest;
+
 /**
  * @author Smars
  * @version 1.2.0
  * @date 2023/2/13
  */
 public interface IOperator {
+
+    void open();
+
+    default DataBody<?> execute(ItemRequest itemRequest){
+        return null;
+    }
+
+    default DataBody<?> execute(BatchRequest itemRequest){
+        return null;
+    }
+
+    void close();
 }

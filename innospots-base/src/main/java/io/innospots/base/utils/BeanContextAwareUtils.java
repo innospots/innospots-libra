@@ -18,6 +18,7 @@
 
 package io.innospots.base.utils;
 
+import cn.hutool.core.io.resource.Resource;
 import cn.hutool.core.lang.Assert;
 import io.innospots.base.events.EventBody;
 import io.innospots.base.events.EventBusCenter;
@@ -42,6 +43,11 @@ public class BeanContextAwareUtils {
 
     public static BeanContextAware beanContextAware() {
         return contextAware;
+    }
+
+    public static Resource[] getResources(String locationPattern){
+        Assert.notNull(contextAware, "application context is null.");
+        return contextAware.getResources(locationPattern);
     }
 
     /**

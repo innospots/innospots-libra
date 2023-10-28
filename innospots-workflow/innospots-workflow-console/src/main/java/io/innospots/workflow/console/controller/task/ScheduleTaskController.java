@@ -1,7 +1,7 @@
 package io.innospots.workflow.console.controller.task;
 
 import io.innospots.base.enums.DataStatus;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.base.quartz.ScheduleMode;
 import io.innospots.libra.base.menu.ModuleMenu;
@@ -11,8 +11,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 

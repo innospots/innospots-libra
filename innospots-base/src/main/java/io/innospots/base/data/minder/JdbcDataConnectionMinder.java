@@ -19,14 +19,12 @@
 package io.innospots.base.data.minder;
 
 
-import com.zaxxer.hikari.HikariDataSource;
-import com.zaxxer.hikari.HikariPoolMXBean;
+import cn.hutool.db.ds.DSFactory;
+import cn.hutool.db.ds.hikari.HikariDSFactory;
+import cn.hutool.setting.Setting;
+import io.innospots.base.data.credential.ConnectionCredential;
 import io.innospots.base.data.operator.IDataOperator;
-import io.innospots.base.data.operator.IOperator;
-import io.innospots.base.data.operator.ISqlOperator;
 import io.innospots.base.data.operator.jdbc.JdbcDataOperator;
-import io.innospots.base.data.operator.jdbc.JdbcSqlOperator;
-import io.innospots.base.data.schema.ConnectionCredential;
 import io.innospots.base.data.schema.SchemaField;
 import io.innospots.base.data.schema.SchemaRegistry;
 import io.innospots.base.data.schema.SchemaRegistryType;
@@ -38,6 +36,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -48,7 +48,7 @@ import java.util.*;
  * @author Raydian
  * @date 2021/1/31
  */
-public class JdbcDataConnectionMinder extends BaseDataConnectionMinder {
+public class JdbcDataConnectionMinder extends BaseDataConnectionMinder<IDataOperator> {
 
     private static final Logger logger = LoggerFactory.getLogger(JdbcDataConnectionMinder.class);
 
@@ -56,6 +56,7 @@ public class JdbcDataConnectionMinder extends BaseDataConnectionMinder {
     public static final String DATABASE = "database";
     public static final String PORT = "port";
     public static final String JDBC_URL_PREFIX = "jdbcUrlPrefix";
+    public static final String JDBC_URL_PARAM = "jdbcUrlParam";
     public static final String USERNAME = "user_name";
     public static final String PASSWORD = "db_password";
     public static final String DRIVER_CLASS_NAME = "driver_class";
@@ -72,45 +73,25 @@ public class JdbcDataConnectionMinder extends BaseDataConnectionMinder {
 
     protected JdbcDataOperator dataOperator;
 
-    protected JdbcSqlOperator sqlOperator;
-
     public void open(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
     @Override
     public void open() {
-
         if (dataSource != null) {
-            HikariPoolMXBean mxBean = ((HikariDataSource) dataSource).getHikariPoolMXBean();
-            logger.info("active connections:{}, idle connections:{}, thread await connections:{}", mxBean.getActiveConnections(), mxBean.getIdleConnections(), mxBean.getThreadsAwaitingConnection());
             return;
         }
-        this.dataSource = buildDataSource(this.connectionCredential);
+        logger.info("open datasource: {}", connectionCredential);
+        this.dataSource = buildDataSource(connectionCredential, "5");
     }
 
     @Override
-    public Object test(ConnectionCredential connectionCredential) {
-        Map<String, Object> configs = connectionCredential.getConfig();
-        HikariDataSource hikariDataSource = new HikariDataSource();
-        String jdbcUrl = "" + configs.get(JDBC_URL_PREFIX) +
-                configs.get(SERVER_IP) +
-                ":" +
-                configs.get(PORT) +
-                "/" +
-                configs.get(DATABASE) +
-                "?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8&zeroDateTimeBehavior=CONVERT_TO_NULL";
-
-        hikariDataSource.setJdbcUrl(jdbcUrl);
-        hikariDataSource.setUsername(String.valueOf(configs.get(USERNAME)));
-        hikariDataSource.setPassword(String.valueOf(configs.get(PASSWORD)));
-        hikariDataSource.setDriverClassName(String.valueOf(configs.get(DRIVER_CLASS_NAME)));
-        hikariDataSource.setMaximumPoolSize(1);
-        // TODO 其他参数暂时先用默认的
-
+    public Object testConnect(ConnectionCredential connectionCredential) {
+        DataSource dataSource = buildDataSource(connectionCredential, "1");
         Connection connection = null;
         try {
-            connection = hikariDataSource.getConnection();
+            connection = dataSource.getConnection();
             if (connection == null) {
                 return false;
             } else {
@@ -129,25 +110,10 @@ public class JdbcDataConnectionMinder extends BaseDataConnectionMinder {
                 try {
                     connection.close();
                 } catch (SQLException e) {
-                    throw DataConnectionException.buildException(this.getClass(), "Connection close error");
+                    logger.error("Connection testFailure, " + e.getMessage());
                 }
             }
-
-        }
-    }
-
-    @Override
-    public void close() {
-        try {
-            if (dataSource != null) {
-                if (dataSource instanceof HikariDataSource) {
-                    if (!((HikariDataSource) dataSource).isClosed()) {
-                        ((HikariDataSource) dataSource).close();
-                    }
-                }
-            }
-        } catch (Exception e) {
-            throw DataConnectionException.buildException(this.getClass(), "Connection close failure", e);
+            close(dataSource);
         }
     }
 
@@ -156,31 +122,15 @@ public class JdbcDataConnectionMinder extends BaseDataConnectionMinder {
     public SchemaRegistry schemaRegistry(String tableName) {
         ResultSet resultSet = null;
         try (Connection connection = this.dataSource.getConnection()) {
-            SchemaRegistry schemaRegistry = new SchemaRegistry();
-            schemaRegistry.setCredentialId(this.connectionCredential.getCredentialId());
-            schemaRegistry.setName(tableName);
-            schemaRegistry.setCode(tableName);
-
+            SchemaRegistry schemaRegistry = null;
             DatabaseMetaData metaData = connection.getMetaData();
             String catalog = connection.getCatalog();
             resultSet = metaData.getTables(catalog,
                     connection.getSchema(), tableName, TABLE_TYPES);
 
-            String type = null;
-            String comment = null;
-            while (resultSet.next()) {
-                type = resultSet.getString(TABLE_TYPE);
-                comment = resultSet.getString(REMARKS);
+            if (resultSet.next()) {
+                schemaRegistry = buildSchemaRegistry(resultSet);
             }
-            if (StringUtils.isBlank(type)) {
-                return null;
-            }
-
-            schemaRegistry.setSchemaFields(schemaRegistryFields(connection, tableName));
-            schemaRegistry.setDescription(comment);
-            schemaRegistry.setRegistryType(SchemaRegistryType.valueOf(type));
-
-//            this.fillSchemaTable(connection, schemaRegistry);
             return schemaRegistry;
         } catch (SQLException e) {
             throw DataSchemaException.buildException(this.getClass(), "Get schemaTable failure", e);
@@ -190,18 +140,7 @@ public class JdbcDataConnectionMinder extends BaseDataConnectionMinder {
     }
 
 
-    @Override
-    public List<SchemaField> schemaRegistryFields(String tableName) {
-        List<SchemaField> schemaFields = Collections.emptyList();
-        try (Connection connection = this.dataSource.getConnection()) {
-            schemaFields = schemaRegistryFields(connection, tableName);
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-        return schemaFields;
-    }
-
-    public List<SchemaField> schemaRegistryFields(Connection connection, String tableName) {
+    private List<SchemaField> schemaRegistryFields(Connection connection, String tableName) {
         List<SchemaField> schemaFields = new ArrayList<>();
         ResultSet resultSet = null;
         ResultSet pkResultSet = null;
@@ -258,7 +197,7 @@ public class JdbcDataConnectionMinder extends BaseDataConnectionMinder {
 
     @Override
     public List<SchemaRegistry> schemaRegistries(boolean includeField) {
-        //  TODO calcite
+
         ResultSet resultSet = null;
         try (Connection connection = this.dataSource.getConnection()) {
             List<SchemaRegistry> schemaRegistryList = new ArrayList<>();
@@ -270,22 +209,10 @@ public class JdbcDataConnectionMinder extends BaseDataConnectionMinder {
             resultSet = metaData.getTables(catalog, schema, tableNamePattern, TABLE_TYPES);
 
             while (resultSet.next()) {
-
-                String name = resultSet.getString(TABLE_NAME);
-                String comment = resultSet.getString(REMARKS);
-                String tableType = resultSet.getString(TABLE_TYPE);
-
-                SchemaRegistry schemaRegistry = new SchemaRegistry();
-                schemaRegistry.setCredentialId(this.connectionCredential.getCredentialId());
-                schemaRegistry.setCode(name);
-                schemaRegistry.setName(name);
-                schemaRegistry.setDescription(StringUtils.isNotBlank(comment) ? comment : name);
-                schemaRegistry.setRegistryType(TABLE.equals(tableType) ? SchemaRegistryType.TABLE : SchemaRegistryType.VIEW);
-
+                SchemaRegistry schemaRegistry = buildSchemaRegistry(resultSet);
                 if (includeField) {
-                    schemaRegistry.setSchemaFields(schemaRegistryFields(connection, name));
+                    schemaRegistry.setSchemaFields(schemaRegistryFields(connection, schemaRegistry.getName()));
                 }
-
                 schemaRegistryList.add(schemaRegistry);
             }
 
@@ -297,61 +224,86 @@ public class JdbcDataConnectionMinder extends BaseDataConnectionMinder {
         }
     }
 
-
-    @Override
-    public IOperator buildOperator() {
-        return dataOperator();
+    private SchemaRegistry buildSchemaRegistry(ResultSet resultSet) throws SQLException {
+        SchemaRegistry schemaRegistry = new SchemaRegistry();
+        String name = resultSet.getString(TABLE_NAME);
+        String comment = resultSet.getString(REMARKS);
+        String tableType = resultSet.getString(TABLE_TYPE);
+        schemaRegistry.setCredentialKey(this.connectionCredential.getCredentialKey());
+        schemaRegistry.setCode(name);
+        schemaRegistry.setName(name);
+        schemaRegistry.setDescription(StringUtils.isNotBlank(comment) ? comment : name);
+        schemaRegistry.setRegistryType(TABLE.equals(tableType) ? SchemaRegistryType.TABLE : SchemaRegistryType.VIEW);
+        return schemaRegistry;
     }
 
 
-    public IDataOperator dataOperator() {
+    @Override
+    public IDataOperator buildOperator() {
         if (this.dataOperator == null) {
             this.dataOperator = new JdbcDataOperator(dataSource);
         }
         return dataOperator;
     }
 
-    public ISqlOperator sqlOperator() {
-        if (this.sqlOperator == null) {
-            this.sqlOperator = new JdbcSqlOperator(dataSource);
-        }
-        return sqlOperator;
-    }
 
-    protected DataSource buildDataSource(ConnectionCredential connectionCredential) {
-        Map<String, Object> configs = this.connectionCredential.getConfig();
+    public static DataSource buildDataSource(ConnectionCredential connectionCredential, String maxPoolSize) {
+        Map<String, Object> configs = connectionCredential.getConfig();
+        Setting setting = new Setting();
+        DataSource dataSource = null;
+        String jdbcParam = connectionCredential.prop(JDBC_URL_PARAM) == null ?
+                "allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&zeroDateTimeBehavior=CONVERT_TO_NULL" :
+                connectionCredential.prop(JDBC_URL_PARAM);
 
-        HikariDataSource hikariDataSource = new HikariDataSource();
+//        HikariDataSource hikariDataSource = new HikariDataSource();
 
         String jdbcUrl = "" + configs.get(JDBC_URL_PREFIX) +
                 configs.get(SERVER_IP) +
                 ":" +
                 configs.get(PORT) +
                 "/" +
-                configs.get(DATABASE) +
-                // TODO
-                "?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8&zeroDateTimeBehavior=CONVERT_TO_NULL";
+                configs.get(DATABASE) + "?" + jdbcParam;
 
-        hikariDataSource.setJdbcUrl(jdbcUrl);
+        setting.set(DSFactory.KEY_ALIAS_URL[1], jdbcUrl);
+        setting.set(DSFactory.KEY_ALIAS_DRIVER[1], String.valueOf(configs.get(DRIVER_CLASS_NAME)));
+        setting.set(DSFactory.KEY_ALIAS_USER[1], String.valueOf(configs.get(USERNAME)));
+        setting.set(DSFactory.KEY_ALIAS_PASSWORD[1], String.valueOf(configs.get(PASSWORD)));
+        setting.set(DSFactory.KEY_CONN_PROPS[0], "true");
+        setting.set(DSFactory.KEY_CONN_PROPS[1], "true");
+        setting.set("maxPoolSize", maxPoolSize);
+        setting.set("minIdle", "1");
+        setting.set("connectionTestQuery", "select 1");
+        configs.forEach((k, v) -> {
+            setting.put(k, String.valueOf(v));
+        });
+
+        try (DSFactory dsFactory = HikariDSFactory.create(setting)) {
+            dataSource = dsFactory.getDataSource();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+
+//        hikariDataSource.setJdbcUrl(jdbcUrl);
 //        hikariDataSource.setJdbcUrl(String.valueOf(configs.get(JDBC_URL)));
-        hikariDataSource.setUsername(String.valueOf(configs.get(USERNAME)));
-        hikariDataSource.setPassword(String.valueOf(configs.get(PASSWORD)));
-        hikariDataSource.setDriverClassName(String.valueOf(configs.get(DRIVER_CLASS_NAME)));
+//        hikariDataSource.setUsername(String.valueOf(configs.get(USERNAME)));
+//        hikariDataSource.setPassword(String.valueOf(configs.get(PASSWORD)));
+//        hikariDataSource.setDriverClassName();
 
         // parameter setting
-        hikariDataSource.setMaximumPoolSize(5);
-        hikariDataSource.setMinimumIdle(1);
+//        hikariDataSource.setMaximumPoolSize(5);
+//        hikariDataSource.setMinimumIdle(1);
 //        hikariDataSource.setMaxLifetime(35000);
 //        hikariDataSource.setIdleTimeout(10000);
 //        hikariDataSource.setConnectionTimeout(25000);
 //        hikariDataSource.setValidationTimeout(40000);
-        hikariDataSource.setConnectionTestQuery("select 1");
+//        hikariDataSource.setConnectionTestQuery("select 1");
 
         // Get remarks configuration
-        hikariDataSource.addDataSourceProperty("remarks", "true");
+//        hikariDataSource.addDataSourceProperty("remarks", "true");
         // Get table remarks configuration
-        hikariDataSource.addDataSourceProperty("useInformationSchema", "true");
-        return hikariDataSource;
+//        hikariDataSource.addDataSourceProperty("useInformationSchema", "true");
+
+        return dataSource;
     }
 
     @Override
@@ -372,13 +324,6 @@ public class JdbcDataConnectionMinder extends BaseDataConnectionMinder {
 
     protected FieldValueType convertType(String type) {
         FieldValueType valueType = null;
-        // TODO 以下类型未转换
-        //  FIELD_CODE
-        //  YEAR_MONTH
-        //  YEAR_MONTH_DATE
-        //  MONTH_DATE
-        //  DAY_OF_MONTH
-
         switch (type) {
             case "BIT":
             case "TINYINT":
@@ -424,6 +369,27 @@ public class JdbcDataConnectionMinder extends BaseDataConnectionMinder {
         }
 
         return valueType;
+    }
+
+    @Override
+    public void close() {
+        try {
+            if (dataSource != null) {
+                close(dataSource);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
+
+    private void close(DataSource dataSource) {
+        try {
+            Method close = dataSource.getClass().getMethod("close");
+            close.invoke(dataSource);
+            logger.info("close connection, credential: {}",connectionCredential.getCredentialKey());
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            logger.error(e.getMessage());
+        }
     }
 
 }

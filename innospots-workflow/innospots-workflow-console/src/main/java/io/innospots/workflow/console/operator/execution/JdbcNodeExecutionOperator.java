@@ -20,10 +20,10 @@ package io.innospots.workflow.console.operator.execution;
 
 import io.innospots.base.condition.Opt;
 import io.innospots.base.data.operator.IDataOperator;
-import io.innospots.base.data.operator.SelectClause;
-import io.innospots.base.data.operator.UpdateItem;
-import io.innospots.base.model.DataBody;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.operator.jdbc.SelectClause;
+import io.innospots.base.data.operator.jdbc.UpdateItem;
+import io.innospots.base.data.body.DataBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.console.entity.execution.NodeExecutionEntity;

@@ -18,7 +18,7 @@
 
 package io.innospots.libra.base.extension;
 
-import io.innospots.base.utils.LocaleMessageUtils;
+import io.innospots.base.i18n.LocaleMessageUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections4.MapUtils;

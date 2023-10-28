@@ -22,7 +22,7 @@ import cn.hutool.crypto.digest.DigestUtil;
 import io.innospots.base.enums.ImageType;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.re.ExpressionEngineFactory;
-import io.innospots.base.utils.ImageFileUploader;
+import io.innospots.base.utils.http.ImageFileUploader;
 import io.innospots.workflow.core.debug.AppDebugPayload;
 import io.innospots.workflow.core.debug.DebugInput;
 import io.innospots.workflow.core.execution.ExecutionInput;

@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.todo.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.user.UserInfo;
 import io.innospots.libra.base.operator.SysUserReader;
 import io.innospots.libra.kernel.module.todo.entity.TodoTaskEntity;
@@ -28,7 +28,7 @@ import io.innospots.libra.kernel.module.todo.enums.TaskPriority;
 import io.innospots.libra.kernel.module.todo.mapper.TodoTaskBeanConverter;
 import io.innospots.libra.kernel.module.todo.model.TodoTask;
 import io.innospots.libra.kernel.module.todo.model.TodoTaskComment;
-import io.innospots.libra.kernel.module.todo.model.TodoTaskRequest;
+import io.innospots.libra.kernel.module.todo.model.TodoTaskForm;
 import io.innospots.libra.kernel.module.todo.operator.TodoTaskCommentOperator;
 import io.innospots.libra.kernel.module.todo.operator.TodoTaskOperator;
 import io.innospots.libra.kernel.module.todo.operator.TodoTaskTagOperator;
@@ -152,7 +152,7 @@ public class TodoTaskService {
         return priorities;
     }
 
-    public PageBody<TodoTask> pageTasks(TodoTaskRequest request) {
+    public PageBody<TodoTask> pageTasks(TodoTaskForm request) {
         IPage<TodoTaskEntity> page = todoTaskOperator.pageTodoTasks(request);
         PageBody<TodoTask> pageBody = new PageBody<>();
         List<TodoTaskEntity> entities = page.getRecords();

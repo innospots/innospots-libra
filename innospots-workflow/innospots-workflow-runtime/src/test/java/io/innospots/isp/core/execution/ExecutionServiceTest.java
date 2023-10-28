@@ -1,6 +1,6 @@
 package io.innospots.isp.core.execution;
 
-import io.innospots.base.utils.DateTimeUtils;
+import io.innospots.base.utils.time.DateTimeUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.CompletableFuture;

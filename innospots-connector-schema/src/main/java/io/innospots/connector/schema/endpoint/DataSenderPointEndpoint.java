@@ -18,7 +18,6 @@
 
 package io.innospots.connector.schema.endpoint;
 
-import io.innospots.base.data.ap.IDataSenderPoint;
 import io.innospots.base.data.operator.IQueueSender;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.connector.schema.operator.DataOperatorManager;

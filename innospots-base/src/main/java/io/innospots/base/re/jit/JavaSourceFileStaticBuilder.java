@@ -79,7 +79,7 @@ public class JavaSourceFileStaticBuilder implements SourceFileBuilder {
                 .addImport("import com.googlecode.aviator.Expression;")
                 .addImport("import org.slf4j.LoggerFactory;")
                 .addImport("import static io.innospots.base.re.function.HttpFunc.*;")
-                .addImport("import static io.innospots.base.utils.DateTimeUtils.*;")
+                .addImport("import static io.innospots.base.utils.time.DateTimeUtils.*;")
                 .addField("private static final Logger logger = LoggerFactory.getLogger(" + className + ".class);");
         return this;
     }

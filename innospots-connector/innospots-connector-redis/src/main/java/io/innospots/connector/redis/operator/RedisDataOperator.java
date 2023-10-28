@@ -19,7 +19,7 @@
 package io.innospots.connector.redis.operator;
 
 import io.innospots.base.data.operator.IKvOperator;
-import io.innospots.base.model.DataBody;
+import io.innospots.base.data.body.DataBody;
 import redis.clients.jedis.Jedis;
 
 /**

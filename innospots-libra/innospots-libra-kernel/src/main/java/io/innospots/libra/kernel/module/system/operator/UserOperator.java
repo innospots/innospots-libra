@@ -31,13 +31,13 @@ import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.AuthenticationException;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.exception.ValidatorException;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.user.SimpleUser;
 import io.innospots.base.model.user.UserInfo;
 import io.innospots.libra.base.configuration.AuthProperties;
 import io.innospots.libra.base.event.NotificationAnnotation;
 import io.innospots.libra.base.menu.AuthMode;
-import io.innospots.libra.base.model.QueryRequest;
+import io.innospots.base.data.request.FormQuery;
 import io.innospots.libra.kernel.module.system.dao.UserDao;
 import io.innospots.libra.kernel.module.system.entity.SysUserEntity;
 import io.innospots.libra.kernel.module.system.mapper.UserInfoMapper;
@@ -218,7 +218,7 @@ public class UserOperator extends ServiceImpl<UserDao, SysUserEntity> {
      *
      * @return
      */
-    public PageBody<UserInfo> pageUsers(QueryRequest request) {
+    public PageBody<UserInfo> pageUsers(FormQuery request) {
         QueryWrapper<SysUserEntity> queryWrapper = new QueryWrapper<>();
         LambdaQueryWrapper<SysUserEntity> lambda = queryWrapper.lambda();
         if (StringUtils.isNotEmpty(request.getQueryInput())) {

@@ -25,14 +25,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.CaseFormat;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.base.model.PageBody;
-import io.innospots.base.utils.DateTimeUtils;
+import io.innospots.base.data.body.PageBody;
+import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.ResourceType;
 import io.innospots.libra.kernel.module.logger.dao.SysOperateLogDao;
 import io.innospots.libra.kernel.module.logger.entity.SysOperateLogEntity;
 import io.innospots.libra.kernel.module.logger.mapper.SysOperateLogMapper;
-import io.innospots.libra.kernel.module.logger.model.LogQueryRequest;
+import io.innospots.libra.kernel.module.logger.model.LogFormQuery;
 import io.innospots.libra.kernel.module.logger.model.SysOperateLog;
 import io.innospots.libra.kernel.module.logger.model.UserLogInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -58,7 +58,7 @@ public class SysLogOperator extends ServiceImpl<SysOperateLogDao, SysOperateLogE
      *
      * @return
      */
-    public PageBody<SysOperateLog> pageLogs(LogQueryRequest request) {
+    public PageBody<SysOperateLog> pageLogs(LogFormQuery request) {
         QueryWrapper<SysOperateLogEntity> query = new QueryWrapper<>();
         LambdaQueryWrapper<SysOperateLogEntity> lambda = query.lambda();
         if (CollectionUtils.isNotEmpty(request.getUsernames())) {

@@ -22,9 +22,9 @@ package io.innospots.base.data.http;
 import io.innospots.base.data.minder.BaseDataConnectionMinder;
 import io.innospots.base.data.operator.IExecutionOperator;
 import io.innospots.base.data.operator.IOperator;
+import io.innospots.base.data.request.ItemRequest;
 import io.innospots.base.data.schema.ApiSchemaRegistry;
-import io.innospots.base.data.schema.ConnectionCredential;
-import io.innospots.base.model.RequestBody;
+import io.innospots.base.data.credential.ConnectionCredential;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,8 +104,8 @@ public class HttpDataConnectionMinder extends BaseDataConnectionMinder {
     public Object fetchSample(ConnectionCredential connectionCredential, ApiSchemaRegistry apiSchemaRegistry) {
         HttpDataExecutor httpDataExecutor = new HttpDataExecutor(httpConnection);
 //        HttpDataExecutor httpDataExecutor = new HttpDataExecutor(new HttpConnection(connectionCredential, authHeaders()), apiSchemaRegistry);
-        RequestBody requestBody = new RequestBody();
-        return httpDataExecutor.execute(requestBody).getBody();
+        ItemRequest itemRequest = new ItemRequest();
+        return httpDataExecutor.execute(itemRequest).getBody();
     }
 
     @Override
@@ -115,8 +115,8 @@ public class HttpDataConnectionMinder extends BaseDataConnectionMinder {
 
 //        HttpDataExecutor httpDataExecutor = new HttpDataExecutor(httpConnection, getApiSchemaRegistry(tableName));
         HttpDataExecutor httpDataExecutor = new HttpDataExecutor(httpConnection);
-        RequestBody requestBody = new RequestBody();
-        return httpDataExecutor.execute(requestBody).getBody();
+        ItemRequest itemRequest = new ItemRequest();
+        return httpDataExecutor.execute(itemRequest).getBody();
     }
 
     @Override

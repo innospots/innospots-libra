@@ -18,12 +18,12 @@
 
 package io.innospots.libra.kernel.module.system.service;
 
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.libra.kernel.module.system.model.role.RoleInfo;
 import io.innospots.base.model.user.SimpleUser;
 import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.CCH;
-import io.innospots.libra.base.model.QueryRequest;
+import io.innospots.base.data.request.FormQuery;
 import io.innospots.libra.kernel.module.system.entity.UserRoleEntity;
 import io.innospots.libra.kernel.module.system.model.role.RoleDelEvent;
 import io.innospots.libra.kernel.module.system.operator.RoleOperator;
@@ -102,7 +102,7 @@ public class UserRoleService {
         return result;
     }
 
-    public PageBody<RoleInfo> pageRoles(QueryRequest request) {
+    public PageBody<RoleInfo> pageRoles(FormQuery request) {
         PageBody<RoleInfo> roleInfoPageBody = roleOperator.list(request);
         List<RoleInfo> roleInfos = roleInfoPageBody.getList();
         List<Map<String, Object>> userRoles = userRoleOperator.selectCountByRoleId();

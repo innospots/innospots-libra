@@ -20,15 +20,14 @@ package io.innospots.workflow.node.app.data;
 
 import com.google.common.base.Enums;
 import io.innospots.base.condition.Factor;
-import io.innospots.base.data.ap.ISqlOperatorPoint;
 import io.innospots.base.data.enums.DataOperation;
 import io.innospots.base.data.minder.DataConnectionMinderManager;
 import io.innospots.base.data.minder.IDataConnectionMinder;
-import io.innospots.base.data.operator.UpdateItem;
+import io.innospots.base.data.operator.jdbc.UpdateItem;
 import io.innospots.base.data.schema.SchemaField;
 import io.innospots.base.exception.ConfigException;
-import io.innospots.base.model.DataBody;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.DataBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.BeanUtils;

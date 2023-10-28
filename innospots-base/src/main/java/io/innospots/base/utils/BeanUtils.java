@@ -24,10 +24,8 @@ import io.innospots.base.exception.BaseException;
 import io.innospots.base.model.response.ResponseCode;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
-import org.springframework.util.CollectionUtils;
 
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;

@@ -26,8 +26,8 @@ import io.innospots.base.enums.ScriptType;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.exception.data.HttpConnectionException;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.model.DataBody;
-import io.innospots.base.model.RequestBody;
+import io.innospots.base.data.body.DataBody;
+import io.innospots.base.data.request.ItemRequest;
 import io.innospots.base.model.field.FieldScope;
 import io.innospots.base.re.GenericExpressionEngine;
 import io.innospots.base.re.IExpression;
@@ -76,8 +76,8 @@ public class HttpDataRegistryExecutor implements IExecutionOperator {
 
 
     @Override
-    public DataBody<?> execute(RequestBody requestBody) {
-        Map<String, Object> body = requestBody.getBody();
+    public DataBody<?> execute(ItemRequest itemRequest) {
+        Map<String, Object> body = itemRequest.getBody();
         String url = this.schemaRegistry.getAddress();
 
         String httpBodyTemplate = this.schemaRegistry.getBodyTemplate();
@@ -123,7 +123,7 @@ public class HttpDataRegistryExecutor implements IExecutionOperator {
         }
 
         if (data.getStatus() != HttpStatus.SC_OK) {
-            throw HttpConnectionException.buildException(this.getClass(), requestBody);
+            throw HttpConnectionException.buildException(this.getClass(), itemRequest);
         }
 
         if (this.postScriptExpression != null && data.getBody() != null) {

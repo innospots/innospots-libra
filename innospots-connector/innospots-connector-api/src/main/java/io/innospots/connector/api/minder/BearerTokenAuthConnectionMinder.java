@@ -20,7 +20,7 @@ package io.innospots.connector.api.minder;
 
 import io.innospots.base.data.http.HttpDataConnectionMinder;
 import io.innospots.base.data.http.HttpDataExecutor;
-import io.innospots.base.utils.HttpClientBuilder;
+import io.innospots.base.utils.http.HttpClientBuilder;
 
 import java.util.HashMap;
 import java.util.Map;

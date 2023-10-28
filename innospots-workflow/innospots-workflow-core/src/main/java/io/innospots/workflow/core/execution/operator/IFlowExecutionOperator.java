@@ -18,7 +18,7 @@
 
 package io.innospots.workflow.core.execution.operator;
 
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.store.IDataStore;
 import io.innospots.workflow.core.execution.ExecutionStatus;
 import io.innospots.workflow.core.execution.flow.FlowExecution;

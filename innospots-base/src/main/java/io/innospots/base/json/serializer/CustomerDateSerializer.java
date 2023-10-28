@@ -21,8 +21,8 @@ package io.innospots.base.json.serializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import io.innospots.base.model.LocaleContext;
-import io.innospots.base.utils.LocaleMessageUtils;
+import io.innospots.base.i18n.LocaleContext;
+import io.innospots.base.i18n.LocaleMessageUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
 import java.io.IOException;

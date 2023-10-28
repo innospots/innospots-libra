@@ -22,7 +22,7 @@ package io.innospots.administration.server;
 import io.innospots.base.registry.ServiceRegistryHolder;
 import io.innospots.base.registry.enums.ServiceType;
 import io.innospots.base.utils.BeanContextAware;
-import io.innospots.base.utils.DateTimeUtils;
+import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.connector.schema.AppSchemaApiImporter;
 import io.innospots.libra.kernel.LibraKernelImporter;
 import io.innospots.libra.security.LibraAuthImporter;

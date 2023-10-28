@@ -34,7 +34,7 @@ import io.innospots.libra.kernel.module.todo.entity.TodoTaskEntity;
 import io.innospots.libra.kernel.module.todo.enums.TaskStatus;
 import io.innospots.libra.kernel.module.todo.mapper.TodoTaskBeanConverter;
 import io.innospots.libra.kernel.module.todo.model.TodoTask;
-import io.innospots.libra.kernel.module.todo.model.TodoTaskRequest;
+import io.innospots.libra.kernel.module.todo.model.TodoTaskForm;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -88,7 +88,7 @@ public class TodoTaskOperator extends ServiceImpl<TodoTaskDao, TodoTaskEntity> {
         return entity;
     }
 
-    public IPage<TodoTaskEntity> pageTodoTasks(TodoTaskRequest request) {
+    public IPage<TodoTaskEntity> pageTodoTasks(TodoTaskForm request) {
         QueryWrapper<TodoTaskEntity> query = new QueryWrapper<>();
         if (StringUtils.isNotBlank(request.getQueryInput())) {
             query.like("s.TASK_NAME", "%" + request.getQueryInput() + "%");

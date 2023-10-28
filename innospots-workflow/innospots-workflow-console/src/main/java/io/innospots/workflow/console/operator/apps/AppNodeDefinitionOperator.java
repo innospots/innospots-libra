@@ -27,7 +27,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.enums.ImageType;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.utils.BeanContextAware;
 import io.innospots.libra.base.event.AvatarRemoveEvent;
 import io.innospots.workflow.console.dao.apps.AppNodeDefinitionDao;

@@ -36,7 +36,7 @@ public class CachedSchemaRegistryReader implements ISchemaRegistryReader {
 
     private final ISchemaRegistryReader schemaRegistryReader;
 
-    private final Cache<Integer, List<SchemaRegistry>> schemaRegistryListCache;
+    private final Cache<String, List<SchemaRegistry>> schemaRegistryListCache;
 
     private final Cache<String, SchemaRegistry> schemaRegistryCache;
 
@@ -53,11 +53,11 @@ public class CachedSchemaRegistryReader implements ISchemaRegistryReader {
     }
 
     @Override
-    public List<SchemaRegistry> listSchemaRegistries(Integer credentialId, boolean includeField) {
+    public List<SchemaRegistry> listSchemaRegistries(String credentialKey, boolean includeField) {
 
-        List<SchemaRegistry> schemaRegistries = schemaRegistryListCache.get(credentialId,
+        List<SchemaRegistry> schemaRegistries = schemaRegistryListCache.get(credentialKey,
                 // 始终保持数据源id对应的数据集列表信息是最新的全部数据
-                key -> this.schemaRegistryReader.listSchemaRegistries(credentialId, includeField));
+                key -> this.schemaRegistryReader.listSchemaRegistries(credentialKey, includeField));
 
         if (CollectionUtils.isEmpty(schemaRegistries)) {
             return Collections.emptyList();
@@ -68,15 +68,24 @@ public class CachedSchemaRegistryReader implements ISchemaRegistryReader {
 
 
     @Override
-    public SchemaRegistry getSchemaRegistry(Integer credentialId, String registryCode, Integer registryId) {
+    public SchemaRegistry getSchemaRegistry(String credentialKey, String registryCode) {
 
-        String schemaKey = credentialId + "_" + StringUtils.defaultString(registryCode, "") + "_";
-        schemaKey += registryId != null ? registryId : "";
+        String schemaKey = credentialKey + "_" + StringUtils.defaultString(registryCode, "");
         // 从schemaRegistryCache获取
         return schemaRegistryCache.get(schemaKey,
                 // 始终保持数据源id对应的数据集列表信息是最新的全部数据
-                key -> this.schemaRegistryReader.getSchemaRegistry(credentialId, registryCode, registryId));
+                key -> this.schemaRegistryReader.getSchemaRegistry(credentialKey, registryCode));
 
+    }
+
+    @Override
+    public SchemaRegistry getSchemaRegistry(String credentialKey, Integer registryId) {
+
+        String schemaKey = credentialKey + "_" + registryId;
+        // 从schemaRegistryCache获取
+        return schemaRegistryCache.get(schemaKey,
+                // 始终保持数据源id对应的数据集列表信息是最新的全部数据
+                key -> this.schemaRegistryReader.getSchemaRegistry(credentialKey, registryId));
     }
 
 

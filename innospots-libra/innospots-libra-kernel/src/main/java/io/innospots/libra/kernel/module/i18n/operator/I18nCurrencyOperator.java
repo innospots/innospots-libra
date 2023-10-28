@@ -24,8 +24,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.base.CaseFormat;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.base.model.PageBody;
-import io.innospots.libra.base.model.QueryRequest;
+import io.innospots.base.data.body.PageBody;
+import io.innospots.base.data.request.FormQuery;
 import io.innospots.libra.kernel.module.i18n.dao.I18nCurrencyDao;
 import io.innospots.libra.kernel.module.i18n.dao.I18nLanguageDao;
 import io.innospots.libra.kernel.module.i18n.entity.I18nCurrencyEntity;
@@ -138,7 +138,7 @@ public class I18nCurrencyOperator {
     }
 
 
-    public PageBody<I18nCurrency> pageCurrencies(QueryRequest request) {
+    public PageBody<I18nCurrency> pageCurrencies(FormQuery request) {
         PageBody<I18nCurrency> result = new PageBody<>();
         Page<I18nCurrencyEntity> queryPage = new Page<>(request.getPage(), request.getSize());
 

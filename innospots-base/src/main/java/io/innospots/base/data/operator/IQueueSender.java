@@ -27,13 +27,9 @@ import java.util.Map;
  */
 public interface IQueueSender extends IOperator {
 
-    void openSender();
-
     Map<String, Object> send(String tableName, Map<String, Object> body);
 
     Map<String, Object> send(String tableName, List<Map<String, Object>> bodies);
 
-
-    void close();
 
 }

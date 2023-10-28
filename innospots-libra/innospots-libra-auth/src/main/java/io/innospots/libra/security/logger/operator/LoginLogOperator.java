@@ -25,16 +25,16 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.CaseFormat;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.utils.CCH;
-import io.innospots.base.utils.DateTimeUtils;
+import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.libra.base.enums.LoginStatus;
 import io.innospots.libra.base.terminal.TerminalInfo;
 import io.innospots.libra.base.terminal.TerminalRequestContextHolder;
 import io.innospots.libra.security.logger.dao.LoginLogDao;
 import io.innospots.libra.security.logger.entity.LoginLogEntity;
 import io.innospots.libra.security.logger.mapper.LoginLogMapper;
-import io.innospots.libra.security.logger.model.LogQueryRequest;
+import io.innospots.libra.security.logger.model.LogFormQuery;
 import io.innospots.libra.security.logger.model.LoginLog;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -65,7 +65,7 @@ public class LoginLogOperator extends ServiceImpl<LoginLogDao, LoginLogEntity> {
      *
      * @return
      */
-    public PageBody<LoginLog> pageLogs(LogQueryRequest request) {
+    public PageBody<LoginLog> pageLogs(LogFormQuery request) {
         QueryWrapper<LoginLogEntity> queryWrapper = new QueryWrapper<>();
         LambdaQueryWrapper<LoginLogEntity> lambda = queryWrapper.lambda();
         if (CollectionUtils.isNotEmpty(request.getUsernames())) {

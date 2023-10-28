@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.module.system.controller;
 
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.kernel.module.system.model.role.RoleInfo;
 import io.innospots.base.model.user.SimpleUser;
@@ -27,7 +27,7 @@ import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
-import io.innospots.libra.base.model.QueryRequest;
+import io.innospots.base.data.request.FormQuery;
 import io.innospots.libra.kernel.module.system.model.role.UserRole;
 import io.innospots.libra.kernel.module.system.operator.RoleOperator;
 import io.innospots.libra.kernel.module.system.operator.UserOperator;
@@ -112,7 +112,7 @@ public class RoleController extends BaseController {
 
     @GetMapping("page")
     @Operation(summary = "role list")
-    public InnospotResponse<PageBody<RoleInfo>> pageRoles(QueryRequest request) {
+    public InnospotResponse<PageBody<RoleInfo>> pageRoles(FormQuery request) {
         PageBody<RoleInfo> pageModel = userRoleService.pageRoles(request);
         return success(pageModel);
     }

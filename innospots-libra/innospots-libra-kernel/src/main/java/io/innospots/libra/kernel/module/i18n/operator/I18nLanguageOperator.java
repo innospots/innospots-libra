@@ -22,8 +22,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.base.model.PageBody;
-import io.innospots.libra.base.model.QueryRequest;
+import io.innospots.base.data.body.PageBody;
+import io.innospots.base.data.request.FormQuery;
 import io.innospots.libra.kernel.module.i18n.dao.I18nLanguageDao;
 import io.innospots.libra.kernel.module.i18n.entity.I18nLanguageEntity;
 import io.innospots.libra.kernel.module.i18n.mapper.I18NLanguageBeanConverter;
@@ -141,9 +141,9 @@ public class I18nLanguageOperator {
         return num == 1;
     }
 
-    public PageBody<I18nLanguage> pageLanguages(QueryRequest queryRequest) {
-        DataStatus dataStatus = isNotBlank(queryRequest.getQueryInput()) ? valueOf(queryRequest.getQueryInput()) : null;
-        return page(dataStatus, queryRequest.getPage(), queryRequest.getSize(), queryRequest.getPaging());
+    public PageBody<I18nLanguage> pageLanguages(FormQuery formRequest) {
+        DataStatus dataStatus = isNotBlank(formRequest.getQueryInput()) ? valueOf(formRequest.getQueryInput()) : null;
+        return page(dataStatus, formRequest.getPage(), formRequest.getSize(), formRequest.getPaging());
     }
 
     public PageBody<I18nLanguage> page(DataStatus status, int page, int size, boolean paging) {

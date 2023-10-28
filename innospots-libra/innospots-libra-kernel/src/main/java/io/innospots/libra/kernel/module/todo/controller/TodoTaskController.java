@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.module.todo.controller;
 
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
@@ -27,7 +27,7 @@ import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
 import io.innospots.libra.kernel.module.todo.enums.TaskStatus;
 import io.innospots.libra.kernel.module.todo.model.TodoTask;
-import io.innospots.libra.kernel.module.todo.model.TodoTaskRequest;
+import io.innospots.libra.kernel.module.todo.model.TodoTaskForm;
 import io.innospots.libra.kernel.module.todo.operator.TodoTaskOperator;
 import io.innospots.libra.kernel.module.todo.operator.TodoTaskTagOperator;
 import io.innospots.libra.kernel.module.todo.service.TodoTaskService;
@@ -128,7 +128,7 @@ public class TodoTaskController extends BaseController {
 
     @GetMapping("page")
     @Operation(summary = "query task")
-    public InnospotResponse<PageBody<TodoTask>> pageTodoTasks(TodoTaskRequest request) {
+    public InnospotResponse<PageBody<TodoTask>> pageTodoTasks(TodoTaskForm request) {
         PageBody<TodoTask> pageModel = todoTaskService.pageTasks(request);
         return success(pageModel);
     }

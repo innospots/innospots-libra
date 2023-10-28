@@ -4,7 +4,7 @@ import cn.hutool.http.HttpStatus;
 import io.innospots.base.data.enums.ApiMethod;
 import io.innospots.base.data.http.HttpConnection;
 import io.innospots.base.data.http.HttpData;
-import io.innospots.base.data.schema.ConnectionCredential;
+import io.innospots.base.data.credential.ConnectionCredential;
 import io.innospots.base.exception.AuthenticationException;
 import io.innospots.base.json.JSONUtils;
 import lombok.Getter;

@@ -18,8 +18,8 @@
 
 package io.innospots.base.model.response;
 
-import io.innospots.base.model.DataBody;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.DataBody;
+import io.innospots.base.data.body.PageBody;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.apache.commons.collections4.CollectionUtils;
 

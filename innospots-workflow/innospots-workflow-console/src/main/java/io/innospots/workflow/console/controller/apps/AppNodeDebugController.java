@@ -18,7 +18,6 @@
 
 package io.innospots.workflow.console.controller.apps;
 
-import io.innospots.base.model.DataBody;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
@@ -26,7 +25,6 @@ import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
 import io.innospots.workflow.core.debug.AppDebugPayload;
 import io.innospots.workflow.core.debug.FlowNodeDebuggerBuilder;
-import io.innospots.workflow.core.execution.ExecutionInput;
 import io.innospots.workflow.core.execution.ExecutionResource;
 import io.innospots.workflow.core.execution.node.NodeExecutionDisplay;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,8 +32,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;

@@ -20,7 +20,7 @@ package io.innospots.libra.base.menu;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.innospots.base.json.annotation.I18n;
-import io.innospots.base.utils.LocaleMessageUtils;
+import io.innospots.base.i18n.LocaleMessageUtils;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;

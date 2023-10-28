@@ -18,10 +18,10 @@
 
 package io.innospots.workflow.console.service;
 
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.registry.ServiceRegistryHolder;
-import io.innospots.base.utils.DateTimeUtils;
-import io.innospots.libra.base.model.QueryRequest;
+import io.innospots.base.utils.time.DateTimeUtils;
+import io.innospots.base.data.request.FormQuery;
 import io.innospots.workflow.console.dao.instance.WorkflowInstanceCacheDao;
 import io.innospots.workflow.console.entity.apps.AppNodeDefinitionEntity;
 import io.innospots.workflow.console.entity.instance.WorkflowInstanceEntity;
@@ -86,7 +86,7 @@ public class WorkflowService {
         this.appNodeDefinitionOperator = appNodeDefinitionOperator;
     }
 
-    public PageBody<WorkflowInstance> getWorkflows(QueryRequest request) {
+    public PageBody<WorkflowInstance> getWorkflows(FormQuery request) {
         PageBody<WorkflowInstance> results = workflowInstanceOperator.pageWorkflows(request);
         List<WorkflowInstance> workflowInstances = results.getList();
         if (CollectionUtils.isNotEmpty(workflowInstances)) {

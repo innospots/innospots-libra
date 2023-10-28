@@ -20,7 +20,7 @@ package io.innospots.base.exception;
 
 
 import io.innospots.base.model.response.ResponseCode;
-import io.innospots.base.utils.LocaleMessageUtils;
+import io.innospots.base.i18n.LocaleMessageUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;

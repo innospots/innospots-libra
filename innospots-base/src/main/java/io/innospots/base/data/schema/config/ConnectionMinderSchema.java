@@ -55,7 +55,7 @@ public class ConnectionMinderSchema {
 
     private String description;
 
-    private List<CredentialFormConfig> configs;
+    private List<CredentialAuthOption> options;
 
     @Schema(title = "application node definition form element")
     private Map<String,Object> appForm;
@@ -67,7 +67,7 @@ public class ConnectionMinderSchema {
         sb.append(", icon='").append(icon).append('\'');
         sb.append(", order=").append(order);
         sb.append(", enabled=").append(enabled);
-        sb.append(", configs=").append(configs);
+        sb.append(", options=").append(options);
         sb.append('}');
         return sb.toString();
     }

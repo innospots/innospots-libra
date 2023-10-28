@@ -20,7 +20,6 @@ package io.innospots.server.base.configuration;
 
 import com.zaxxer.hikari.HikariDataSource;
 import io.innospots.base.data.operator.jdbc.JdbcDataOperator;
-import io.innospots.base.data.operator.jdbc.JdbcSqlOperator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

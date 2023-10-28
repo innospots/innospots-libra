@@ -19,7 +19,7 @@
 package io.innospots.workflow.node.app.data;
 
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.utils.LocaleMessageUtils;
+import io.innospots.base.i18n.LocaleMessageUtils;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeOutput;
 import io.innospots.workflow.core.node.app.BaseAppNode;

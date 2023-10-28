@@ -19,11 +19,8 @@
 package io.innospots.connector.api.minder;
 
 import io.innospots.base.data.enums.ApiMethod;
-import io.innospots.base.data.http.HttpData;
-import io.innospots.base.data.schema.ConnectionCredential;
-import io.innospots.base.exception.data.HttpConnectionException;
+import io.innospots.base.data.credential.ConnectionCredential;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpStatus;
 
 /**
  * @author Smars

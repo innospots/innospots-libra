@@ -19,7 +19,6 @@
 package io.innospots.workflow.node.app.script;
 
 import io.innospots.base.condition.Factor;
-import io.innospots.base.data.ap.ISqlOperatorPoint;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.base.utils.BeanContextAware;

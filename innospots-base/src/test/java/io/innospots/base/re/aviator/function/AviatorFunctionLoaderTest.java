@@ -5,7 +5,7 @@ import com.googlecode.aviator.Expression;
 import com.googlecode.aviator.runtime.type.AviatorFunction;
 import io.innospots.base.function.definition.FunctionDefinition;
 import io.innospots.base.function.definition.FunctionDefinitionManager;
-import io.innospots.base.utils.DateTimeUtils;
+import io.innospots.base.utils.time.DateTimeUtils;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,7 +1,7 @@
 package io.innospots.libra.kernel.module.task.controller;
 
 import io.innospots.base.exception.InnospotException;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.libra.base.menu.ModuleMenu;
@@ -9,7 +9,7 @@ import io.innospots.libra.base.task.TaskEvent;
 import io.innospots.libra.base.task.TaskExecution;
 import io.innospots.libra.base.task.TaskExecutionStatus;
 import io.innospots.libra.kernel.module.task.explore.DBTaskExecutionExplore;
-import io.innospots.libra.kernel.module.task.model.TaskExecutionRequest;
+import io.innospots.libra.kernel.module.task.model.TaskExecutionForm;
 import io.innospots.libra.kernel.module.task.operator.TaskExecutionOperator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -47,7 +47,7 @@ public class TaskExecutionController {
 
     @GetMapping("page/task-execution")
     @Operation(summary = "page task executions")
-    public InnospotResponse<PageBody<TaskExecution>> pageTaskExecutions(TaskExecutionRequest request) {
+    public InnospotResponse<PageBody<TaskExecution>> pageTaskExecutions(TaskExecutionForm request) {
 
         PageBody<TaskExecution> pageModel = taskExecutionOperator.pageTaskExecutions(request);
         return success(pageModel);

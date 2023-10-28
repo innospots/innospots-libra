@@ -18,7 +18,6 @@
 
 package io.innospots.workflow.node.app.execute;
 
-import io.innospots.base.data.enums.JoinType;
 import io.innospots.base.model.Pair;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.ExecutionInput;

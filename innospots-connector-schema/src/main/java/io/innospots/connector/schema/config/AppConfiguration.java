@@ -19,11 +19,9 @@
 package io.innospots.connector.schema.config;
 
 import io.innospots.base.configuration.InnospotConfigProperties;
-import io.innospots.base.data.ap.ISqlOperatorPoint;
 import io.innospots.base.data.minder.DataConnectionMinderManager;
-import io.innospots.base.data.schema.reader.CachedConnectionCredentialReader;
 import io.innospots.base.data.schema.reader.CachedSchemaRegistryReader;
-import io.innospots.base.data.schema.reader.IConnectionCredentialReader;
+import io.innospots.base.data.credential.IConnectionCredentialReader;
 import io.innospots.connector.schema.operator.*;
 import io.innospots.connector.schema.reader.ConnectionCredentialReader;
 import io.innospots.connector.schema.reader.SchemaRegistryReader;

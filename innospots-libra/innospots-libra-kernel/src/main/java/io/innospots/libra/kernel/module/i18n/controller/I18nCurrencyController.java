@@ -19,14 +19,14 @@
 package io.innospots.libra.kernel.module.i18n.controller;
 
 import io.innospots.base.enums.DataStatus;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
-import io.innospots.libra.base.model.QueryRequest;
+import io.innospots.base.data.request.FormQuery;
 import io.innospots.libra.kernel.module.i18n.model.I18nCurrency;
 import io.innospots.libra.kernel.module.i18n.operator.I18nCurrencyOperator;
 import io.swagger.v3.oas.annotations.Operation;
@@ -99,8 +99,8 @@ public class I18nCurrencyController extends BaseController {
 
     @GetMapping("page")
     @Operation(summary = "page of i18n currency")
-    public InnospotResponse<PageBody<I18nCurrency>> pageCurrencies(QueryRequest queryRequest) {
-        return success(i18nCurrencyOperator.pageCurrencies(queryRequest));
+    public InnospotResponse<PageBody<I18nCurrency>> pageCurrencies(FormQuery formRequest) {
+        return success(i18nCurrencyOperator.pageCurrencies(formRequest));
     }
 
     /**

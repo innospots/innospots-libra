@@ -18,10 +18,9 @@
 
 package io.innospots.workflow.core.execution.operator;
 
-import com.github.benmanes.caffeine.cache.Cache;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.model.PageBody;
-import io.innospots.base.utils.DateTimeUtils;
+import io.innospots.base.data.body.PageBody;
+import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.workflow.core.execution.ExecutionInput;
 import io.innospots.workflow.core.execution.ExecutionResource;
 import io.innospots.workflow.core.execution.flow.FlowExecution;

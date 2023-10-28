@@ -18,10 +18,9 @@
 
 package io.innospots.connector.schema.controller;
 
-import io.innospots.base.data.ap.IDataSenderPoint;
 import io.innospots.base.data.minder.DataConnectionMinderManager;
-import io.innospots.base.data.schema.ConnectionCredential;
-import io.innospots.base.data.schema.reader.IConnectionCredentialReader;
+import io.innospots.base.data.credential.ConnectionCredential;
+import io.innospots.base.data.credential.IConnectionCredentialReader;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.swagger.v3.oas.annotations.Operation;

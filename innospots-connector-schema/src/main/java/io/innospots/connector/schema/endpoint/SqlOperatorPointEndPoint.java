@@ -18,10 +18,8 @@
 
 package io.innospots.connector.schema.endpoint;
 
-import io.innospots.base.data.ap.ISqlOperatorPoint;
-import io.innospots.base.data.operator.ISqlOperator;
-import io.innospots.base.model.DataBody;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.DataBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.connector.schema.operator.DataOperatorManager;
 import org.springframework.web.bind.annotation.RestController;

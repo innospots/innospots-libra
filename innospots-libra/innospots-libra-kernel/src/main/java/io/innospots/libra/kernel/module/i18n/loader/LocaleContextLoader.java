@@ -20,7 +20,7 @@ package io.innospots.libra.kernel.module.i18n.loader;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
-import io.innospots.base.model.LocaleContext;
+import io.innospots.base.i18n.LocaleContext;
 import io.innospots.libra.kernel.module.i18n.model.I18nCurrency;
 import io.innospots.libra.kernel.module.i18n.model.I18nLanguage;
 import io.innospots.libra.kernel.module.i18n.operator.I18nCurrencyOperator;

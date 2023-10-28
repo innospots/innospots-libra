@@ -21,25 +21,17 @@ package io.innospots.connector.schema.controller;
 import io.innospots.base.data.minder.DataConnectionMinderManager;
 import io.innospots.base.data.minder.IDataConnectionMinder;
 import io.innospots.base.data.schema.SchemaCatalog;
-import io.innospots.base.data.schema.SchemaRegistry;
-import io.innospots.base.model.PageBody;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.connector.schema.operator.SchemaRegistryOperator;
 import io.innospots.libra.base.controller.BaseController;
-import io.innospots.libra.base.log.OperateType;
-import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
-import io.innospots.libra.base.menu.ResourceItemOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 import static io.innospots.base.model.response.InnospotResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;

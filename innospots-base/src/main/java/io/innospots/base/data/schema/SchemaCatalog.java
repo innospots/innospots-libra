@@ -41,7 +41,6 @@ import java.util.List;
 @Schema(title = "schema catalog")
 public class SchemaCatalog extends BaseModelInfo {
 
-
     @Size(max = 32, message = "name length max 64")
     @NotBlank(message = "Name cannot be blank")
     @Schema(title = "name")
@@ -51,24 +50,10 @@ public class SchemaCatalog extends BaseModelInfo {
     @Schema(title = "code")
     protected String code;
 
-    /*
-    @Size(max = 32, message = "config code length max 32")
-    @NotBlank(message = "config code cannot be blank")
-    @Schema(title = "app credential config code")
-    @Pattern(regexp = Constants.CODE_REGEX, message = "code, only supports: contains a maximum of 32 characters, including letters, digits, and underscores (_), and chinese. It can't all be numbers.")
-    protected String configCode;
-     */
-
-    //    @NotNull(message = "credentialId cannot be empty")
-    @Schema(title = "credential id")
-    protected Integer credentialId;
-
-    @Schema(title = "description")
-    protected String description;
+    @Schema(title = "credential key")
+    protected String credentialKey;
 
     @Schema(title = "schema field list")
     protected List<SchemaField> schemaFields;
-
-    protected Integer categoryId;
 
 }

@@ -18,12 +18,17 @@
 
 package io.innospots.base.data.schema;
 
+import io.innospots.base.constant.RegexConstants;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,19 +47,15 @@ public class SchemaRegistry extends SchemaCatalog {
     @Schema(title = "schema registry id")
     protected Integer registryId;
 
+    @Schema(title = "description")
+    protected String description;
+
     @NotNull(message = "registryType cannot be empty")
     @Schema(title = "registryType type")
     protected SchemaRegistryType registryType;
 
-//    @Schema(title = "connector Name")
-//    private String connectorName;
+    protected Integer categoryId;
 
-    /**
-     * {
-     * "message.format":"changelog-json", 队列消息格式
-     * "scan.startup.mode":"earliest-offset" 队列读取模式
-     * }
-     */
     @Schema(title = "configs")
     protected Map<String, Object> configs;
 

@@ -1,6 +1,6 @@
 package io.innospots.workflow.core.execution.node;
 
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.workflow.core.execution.ExecutionResource;
 import lombok.Getter;
 import lombok.Setter;

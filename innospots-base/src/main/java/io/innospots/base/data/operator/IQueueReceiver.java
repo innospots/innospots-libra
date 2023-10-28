@@ -18,10 +18,11 @@
 
 package io.innospots.base.data.operator;
 
-import io.innospots.base.model.DataBody;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.DataBody;
+import io.innospots.base.data.body.PageBody;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * @author Smars
@@ -30,8 +31,6 @@ import java.util.Map;
 public interface IQueueReceiver extends IOperator {
 
     void openSubscribe(String group);
-
-    void openSubscribe();
 
     void openSubscribe(String topic, String group, Long pollTimeOut);
 
@@ -42,6 +41,8 @@ public interface IQueueReceiver extends IOperator {
     PageBody<Map<String, Object>> receive(int size);
 
     DataBody<Map<String, Object>> receiveLastData();
+
+    void listen(Consumer<?> consumer);
 
     void close();
 

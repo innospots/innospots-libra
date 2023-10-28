@@ -21,9 +21,9 @@ package io.innospots.workflow.node.app.trigger;
 import io.innospots.base.data.minder.DataConnectionMinderManager;
 import io.innospots.base.data.minder.IDataConnectionMinder;
 import io.innospots.base.data.operator.IExecutionOperator;
-import io.innospots.base.data.schema.ConnectionCredential;
-import io.innospots.base.model.DataBody;
-import io.innospots.base.model.RequestBody;
+import io.innospots.base.data.request.ItemRequest;
+import io.innospots.base.data.credential.ConnectionCredential;
+import io.innospots.base.data.body.DataBody;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.node.instance.NodeInstance;
 
@@ -80,15 +80,15 @@ public class EmailTriggerNode extends CycleTimerNode {
     @Override
     public void invoke(NodeExecution nodeExecution) {
         super.invoke(nodeExecution);
-        RequestBody requestBody = new RequestBody();
-        requestBody.add(FIELD_MAIL_BOX, mailBoxName);
+        ItemRequest itemRequest = new ItemRequest();
+        itemRequest.add(FIELD_MAIL_BOX, mailBoxName);
         if (actionName != null) {
-            requestBody.add(FIELD_ACTION, actionName);
+            itemRequest.add(FIELD_ACTION, actionName);
         }
         if (attachPrefix != null) {
-            requestBody.add(FIELD_ATTACH_PREFIX, attachPrefix);
+            itemRequest.add(FIELD_ATTACH_PREFIX, attachPrefix);
         }
-        DataBody<Map<String, Object>> dataBody = executionOperator.execute(requestBody);
+        DataBody<Map<String, Object>> dataBody = executionOperator.execute(itemRequest);
 
     }
 }

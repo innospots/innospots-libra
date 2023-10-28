@@ -18,7 +18,7 @@
 
 package io.innospots.workflow.core.execution.flow;
 
-import io.innospots.base.utils.DateTimeUtils;
+import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.base.utils.Initializer;
 import io.innospots.base.utils.InnospotIdGenerator;
 import io.innospots.workflow.core.execution.ExecutionStatus;
@@ -29,7 +29,6 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.LinkedHashMap;
 import java.util.List;
 

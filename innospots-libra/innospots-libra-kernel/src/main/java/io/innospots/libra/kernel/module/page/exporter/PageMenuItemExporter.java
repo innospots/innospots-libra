@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.page.exporter;
 
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.libra.base.extension.LibraClassPathExtPropertiesLoader;
 import io.innospots.libra.base.menu.BaseItem;
 import io.innospots.libra.base.menu.DynamicMenuItemExporter;

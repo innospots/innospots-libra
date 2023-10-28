@@ -22,7 +22,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.enums.ImageType;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.base.model.PageBody;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.utils.BeanContextAware;
 import io.innospots.libra.base.event.NewAvatarEvent;
 import io.innospots.workflow.console.entity.apps.AppNodeDefinitionEntity;

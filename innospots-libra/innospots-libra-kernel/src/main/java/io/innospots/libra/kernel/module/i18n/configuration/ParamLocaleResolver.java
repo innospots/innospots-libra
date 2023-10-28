@@ -18,8 +18,8 @@
 
 package io.innospots.libra.kernel.module.i18n.configuration;
 
-import io.innospots.base.model.LocaleContext;
-import io.innospots.base.utils.LocaleMessageUtils;
+import io.innospots.base.i18n.LocaleContext;
+import io.innospots.base.i18n.LocaleMessageUtils;
 import io.innospots.libra.kernel.module.i18n.loader.LocaleContextLoader;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 

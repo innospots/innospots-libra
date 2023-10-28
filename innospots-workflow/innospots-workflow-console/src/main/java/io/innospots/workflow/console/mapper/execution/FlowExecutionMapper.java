@@ -21,7 +21,7 @@ package io.innospots.workflow.console.mapper.execution;
 import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.base.utils.CCH;
-import io.innospots.base.utils.DateTimeUtils;
+import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.workflow.console.entity.execution.FlowExecutionEntity;
 import io.innospots.workflow.core.execution.flow.FlowExecution;
 import io.innospots.workflow.core.execution.flow.FlowExecutionBase;

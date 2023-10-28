@@ -19,7 +19,7 @@
 package io.innospots.base.re.function;
 
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.utils.HttpClientBuilder;
+import io.innospots.base.utils.http.HttpClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
