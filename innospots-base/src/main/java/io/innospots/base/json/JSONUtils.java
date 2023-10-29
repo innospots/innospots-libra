@@ -24,9 +24,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.type.CollectionType;
+import io.innospots.base.i18n.LocaleContext;
 import io.innospots.base.json.deserializer.CustomerDateDeserializer;
 import io.innospots.base.json.deserializer.CustomerLocalDateDeserializer;
 import io.innospots.base.json.deserializer.CustomerLocalDateTimeDeserializer;
@@ -35,17 +38,16 @@ import io.innospots.base.json.serializer.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
 import static com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_SINGLE_QUOTES;
-import static com.fasterxml.jackson.databind.DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT;
-import static com.fasterxml.jackson.databind.DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL;
+import static com.fasterxml.jackson.databind.DeserializationFeature.*;
 import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -59,30 +61,38 @@ public class JSONUtils {
     /**
      * can use static singleton, inject: just make sure to reuse!
      */
-    private static final ObjectMapper OBJECT_MAPPER = customBuilder().build();
+    private static final ObjectMapper OBJECT_MAPPER = customMapper();
 
 
     private JSONUtils() {
         throw new UnsupportedOperationException("Construct JSONUtils");
     }
 
-    public static Jackson2ObjectMapperBuilder customBuilder() {
-        return Jackson2ObjectMapperBuilder.json()
-                .serializationInclusion(JsonInclude.Include.ALWAYS)
-                .featuresToDisable(WRITE_DATES_AS_TIMESTAMPS)
-                .failOnUnknownProperties(false)
-                .featuresToEnable(ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT)
-                .featuresToEnable(ALLOW_SINGLE_QUOTES)
-                .featuresToEnable(READ_UNKNOWN_ENUM_VALUES_AS_NULL)
-                .deserializerByType(LocalDateTime.class, CustomerLocalDateTimeDeserializer.getInstance())
-                .deserializerByType(LocalTime.class, CustomerLocalTimeDeserializer.getInstance())
-                .deserializerByType(LocalDate.class, CustomerLocalDateDeserializer.getInstance())
-                .deserializerByType(Date.class, CustomerDateDeserializer.getInstance())
-                .serializerByType(LocalDateTime.class, CustomerLocalDateTimeSerializer.getInstance())
-                .serializerByType(LocalTime.class, CustomerLocalTimeSerializer.getInstance())
-                .serializerByType(LocalDate.class, CustomerLocalDateSerializer.getInstance())
-                .serializerByType(Date.class, CustomerDateSerializer.getInstance())
-                .serializerByType(java.sql.Date.class, CustomerSqlDateSerializer.getInstance());
+    public static ObjectMapper customMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setDateFormat(new SimpleDateFormat(LocaleContext.getDefaultLocalContext().getDateFormat()));
+        objectMapper.setLocale(LocaleContext.getDefaultLocalContext().getLocale());
+        objectMapper.setTimeZone(LocaleContext.getDefaultLocalContext().getTimeZone());
+        objectMapper.setAnnotationIntrospector(new JacksonAnnotationIntrospector());
+        objectMapper.setDefaultPropertyInclusion(JsonInclude.Include.ALWAYS);
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(LocalDateTime.class,CustomerLocalDateTimeSerializer.getInstance());
+        module.addSerializer(LocalDate.class,CustomerLocalDateSerializer.getInstance());
+        module.addSerializer(Date.class,CustomerDateSerializer.getInstance());
+        module.addSerializer(LocalTime.class,CustomerLocalTimeSerializer.getInstance());
+        module.addSerializer(java.sql.Date.class,CustomerSqlDateSerializer.getInstance());
+        module.addDeserializer(LocalDateTime.class, CustomerLocalDateTimeDeserializer.getInstance())
+                .addDeserializer(LocalTime.class, CustomerLocalTimeDeserializer.getInstance())
+                .addDeserializer(LocalDate.class, CustomerLocalDateDeserializer.getInstance())
+                .addDeserializer(Date.class, CustomerDateDeserializer.getInstance());
+        objectMapper.registerModule(module);
+        objectMapper.configure(WRITE_DATES_AS_TIMESTAMPS,false);
+        objectMapper.configure(ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT,true);
+        objectMapper.configure(ALLOW_SINGLE_QUOTES,true);
+        objectMapper.configure(READ_UNKNOWN_ENUM_VALUES_AS_NULL,true);
+        objectMapper.configure(FAIL_ON_UNKNOWN_PROPERTIES,false);
+
+        return objectMapper;
     }
 
     public static ObjectMapper mapper() {

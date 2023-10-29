@@ -18,9 +18,9 @@
 
 package io.innospots.workflow.console.controller.apps;
 
-import io.innospots.base.data.schema.config.ConnectionMinderSchemaLoader;
-import io.innospots.base.data.schema.config.CredentialAuthOption;
-import io.innospots.base.data.schema.config.FormElement;
+import io.innospots.base.connector.schema.config.ConnectionMinderSchemaLoader;
+import io.innospots.base.connector.schema.config.CredentialAuthOption;
+import io.innospots.base.connector.schema.config.FormElement;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.menu.ModuleMenu;

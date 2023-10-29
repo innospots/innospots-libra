@@ -19,9 +19,9 @@
 package io.innospots.connector.mysql.minder;
 
 
-import io.innospots.base.data.minder.JdbcDataConnectionMinder;
+import io.innospots.base.connector.jdbc.JdbcDataConnectionMinder;
 import io.innospots.base.data.operator.IDataOperator;
-import io.innospots.base.data.credential.ConnectionCredential;
+import io.innospots.base.connector.credential.ConnectionCredential;
 import io.innospots.connector.mysql.operator.MysqlDataOperator;
 import io.innospots.connector.mysql.operator.MysqlSqlOperator;
 import lombok.extern.slf4j.Slf4j;

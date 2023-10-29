@@ -27,6 +27,6 @@ import io.innospots.base.data.request.ItemRequest;
  * @version 1.2.0
  * @date 2023/2/1
  */
-public interface IExecutionOperator<T> extends IOperator {
+public interface IExecutionOperator extends IOperator {
 
 }

@@ -18,11 +18,11 @@
 
 package io.innospots.base.model;
 
-import org.springframework.lang.Nullable;
-import org.springframework.util.Assert;
-import org.springframework.util.ObjectUtils;
+
+import cn.hutool.core.lang.Assert;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -69,21 +69,21 @@ public class Pair<S, T> {
     }
 
     @Override
-    public boolean equals(@Nullable Object o) {
+    public boolean equals( Object o) {
         if (this == o) {
             return true;
         } else if (!(o instanceof Pair)) {
             return false;
         } else {
             Pair<?, ?> pair = (Pair) o;
-            return !ObjectUtils.nullSafeEquals(this.left, pair.left) ? false : ObjectUtils.nullSafeEquals(this.right, pair.right);
+            return !Objects.equals(this.left, pair.left) ? false : Objects.equals(this.right, pair.right);
         }
     }
 
     @Override
     public int hashCode() {
-        int result = ObjectUtils.nullSafeHashCode(this.left);
-        result = 31 * result + ObjectUtils.nullSafeHashCode(this.right);
+        int result = Objects.hashCode(this.left);
+        result = 31 * result + Objects.hashCode(this.right);
         return result;
     }
 

@@ -18,7 +18,7 @@
 
 package io.innospots.base.data.body;
 
-import io.innospots.base.data.schema.SchemaColumn;
+import io.innospots.base.connector.schema.SchemaColumn;
 
 import java.util.List;
 

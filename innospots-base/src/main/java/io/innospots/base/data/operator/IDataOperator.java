@@ -104,7 +104,7 @@ public interface IDataOperator extends IOperator {
     Integer updateForBatch(String tableName, List<UpdateItem> items);
 
 
-    Integer delete(String tableName, List<Factor> condition);
+    Integer delete(String tableName, String field,Object value);
 
     Integer deleteBatch(
             String tableName,

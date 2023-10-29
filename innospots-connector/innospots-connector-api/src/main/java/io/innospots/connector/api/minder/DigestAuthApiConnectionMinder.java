@@ -18,11 +18,9 @@
 
 package io.innospots.connector.api.minder;
 
-import io.innospots.base.data.http.HttpDataConnectionMinder;
-import io.innospots.base.data.http.HttpDataExecutor;
+import io.innospots.base.connector.http.HttpDataConnectionMinder;
+import io.innospots.base.connector.http.HttpDataExecutor;
 import io.innospots.base.data.operator.IExecutionOperator;
-import io.innospots.base.data.operator.IOperator;
-import io.innospots.base.data.schema.ApiSchemaRegistry;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;

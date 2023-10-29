@@ -48,9 +48,9 @@ public class Dataset extends BaseModelInfo {
 //    @Schema(title = "registry id")
 //    private Integer registryId;
 
-    @NotNull(message = "credentialId cannot be empty")
-    @Schema(title = "credential id")
-    protected Integer credentialId;
+    @NotNull(message = "credentialKey cannot be empty")
+    @Schema(title = "credential key")
+    protected String credentialKey;
 
     @Schema(title = "dataset code")
     private String code;

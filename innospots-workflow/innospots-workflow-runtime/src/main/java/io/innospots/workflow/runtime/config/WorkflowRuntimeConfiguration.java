@@ -21,7 +21,7 @@ package io.innospots.workflow.runtime.config;
 
 import io.innospots.base.configuration.BaseServiceConfiguration;
 import io.innospots.base.configuration.DatasourceConfiguration;
-import io.innospots.base.data.minder.DataConnectionMinderManager;
+import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.quartz.QuartzScheduleManager;
 import io.innospots.workflow.core.config.InnospotWorkflowProperties;
 import io.innospots.workflow.core.debug.FlowNodeDebugger;

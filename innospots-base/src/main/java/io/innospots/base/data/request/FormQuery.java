@@ -22,6 +22,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Map;
+
 /**
  * @author chenc
  * @date 2021/3/11 10:10
@@ -32,6 +34,8 @@ import lombok.Setter;
 public class FormQuery {
 
     protected Integer categoryId;
+
+    protected Map<String,String> params;
 
     @Schema(title = "query input something")
     protected String queryInput;

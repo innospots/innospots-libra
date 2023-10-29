@@ -30,7 +30,7 @@ import java.util.List;
  * @date 2022/3/13
  */
 @Mapper
-public interface ParamFieldBeanConverter extends BaseBeanConverter {
+public interface ParamFieldBeanConverter {
 
     ParamFieldBeanConverter INSTANCE = Mappers.getMapper(ParamFieldBeanConverter.class);
 

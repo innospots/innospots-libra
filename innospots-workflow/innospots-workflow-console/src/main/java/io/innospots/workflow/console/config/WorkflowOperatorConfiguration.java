@@ -20,7 +20,7 @@ package io.innospots.workflow.console.config;
 
 import io.innospots.base.configuration.DatasourceConfiguration;
 import io.innospots.base.configuration.InnospotConfigProperties;
-import io.innospots.base.data.minder.DataConnectionMinderManager;
+import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.data.operator.IDataOperator;
 import io.innospots.base.re.GenericExpressionEngine;
 import io.innospots.libra.base.configuration.LibraBaseConfiguration;

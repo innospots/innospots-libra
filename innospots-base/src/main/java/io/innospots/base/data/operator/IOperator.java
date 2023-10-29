@@ -29,7 +29,8 @@ import io.innospots.base.data.request.ItemRequest;
  */
 public interface IOperator {
 
-    void open();
+    default void open(){
+    }
 
     default DataBody<?> execute(ItemRequest itemRequest){
         return null;
@@ -39,5 +40,6 @@ public interface IOperator {
         return null;
     }
 
-    void close();
+    default void close(){
+    }
 }

@@ -23,7 +23,6 @@ import io.innospots.base.registry.ServiceRegistryHolder;
 import io.innospots.base.registry.enums.ServiceType;
 import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.time.DateTimeUtils;
-import io.innospots.connector.schema.AppSchemaApiImporter;
 import io.innospots.libra.kernel.LibraKernelImporter;
 import io.innospots.libra.security.LibraAuthImporter;
 import io.innospots.workflow.console.WorkflowApiImporter;
@@ -54,7 +53,6 @@ import java.util.Map;
 //@EnableAutoConfiguration
 @LibraAuthImporter
 @LibraKernelImporter
-@AppSchemaApiImporter
 @WorkflowRuntimeImporter
 @WorkflowApiImporter
 @EnableScheduling

@@ -32,11 +32,12 @@ public interface BaseBeanConverter<Model,Entity> {
 
     Model entityToModel(Entity entity);
 
+    Entity modelToEntity(Model model);
+
     List<Model> entitiesToModels(List<Entity> entities);
 
     List<Entity> modelsToEntities(List<Model> models);
 
-    Entity modelToEntity(Model entity);
 
     /**
      * json string to map

@@ -30,9 +30,9 @@ import java.util.Set;
 public interface IDatasetReader {
 
 
-    List<Dataset> listDatasets(Integer credentialId);
+    List<Dataset> listDatasets(String credentialKey);
 
-    List<Dataset> listDatasets(Set<Integer> ids);
+    List<Dataset> listDatasets(Set<String> keys);
 
 
 }

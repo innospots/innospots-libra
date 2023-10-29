@@ -18,8 +18,8 @@
 
 package io.innospots.connector.api.minder;
 
-import io.innospots.base.data.http.HttpDataConnectionMinder;
-import io.innospots.base.data.http.HttpDataExecutor;
+import io.innospots.base.connector.http.HttpDataConnectionMinder;
+import io.innospots.base.connector.http.HttpDataExecutor;
 
 import java.util.HashMap;
 import java.util.Map;

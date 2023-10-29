@@ -19,7 +19,7 @@
 package io.innospots.base.utils.http;
 
 import cn.hutool.http.HttpStatus;
-import io.innospots.base.data.http.HttpData;
+import io.innospots.base.connector.http.HttpData;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.json.JSONUtils;
 import org.apache.commons.collections4.MapUtils;

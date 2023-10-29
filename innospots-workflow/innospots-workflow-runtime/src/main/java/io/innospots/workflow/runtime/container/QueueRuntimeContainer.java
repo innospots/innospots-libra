@@ -18,8 +18,8 @@
 
 package io.innospots.workflow.runtime.container;
 
-import io.innospots.base.data.minder.DataConnectionMinderManager;
-import io.innospots.base.data.minder.IQueueConnectionMinder;
+import io.innospots.base.connector.minder.DataConnectionMinderManager;
+import io.innospots.base.connector.minder.IQueueConnectionMinder;
 import io.innospots.base.data.operator.IQueueReceiver;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.base.utils.thread.ThreadPoolBuilder;

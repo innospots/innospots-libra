@@ -18,11 +18,11 @@
 
 package io.innospots.workflow.node.app.trigger;
 
-import io.innospots.base.data.minder.DataConnectionMinderManager;
-import io.innospots.base.data.minder.IDataConnectionMinder;
+import io.innospots.base.connector.minder.DataConnectionMinderManager;
+import io.innospots.base.connector.minder.IDataConnectionMinder;
 import io.innospots.base.data.operator.IExecutionOperator;
 import io.innospots.base.data.request.ItemRequest;
-import io.innospots.base.data.credential.ConnectionCredential;
+import io.innospots.base.connector.credential.ConnectionCredential;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.node.instance.NodeInstance;

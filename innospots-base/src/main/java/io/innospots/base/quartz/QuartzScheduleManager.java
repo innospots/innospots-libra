@@ -27,7 +27,6 @@ import org.quartz.impl.DirectSchedulerFactory;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Lazy;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -40,7 +39,6 @@ import java.util.stream.Collectors;
  * @author Raydian
  * @date 2020/12/15
  */
-@Lazy(false)
 public class QuartzScheduleManager {
 
     private static final Logger logger = LoggerFactory.getLogger(QuartzScheduleManager.class);
