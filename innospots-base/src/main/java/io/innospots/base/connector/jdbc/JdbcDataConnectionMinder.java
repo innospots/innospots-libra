@@ -225,6 +225,11 @@ public class JdbcDataConnectionMinder extends BaseDataConnectionMinder<IDataOper
         }
     }
 
+    @Override
+    public String schemaName() {
+        return "jdbc";
+    }
+
     private SchemaRegistry buildSchemaRegistry(ResultSet resultSet) throws SQLException {
         SchemaRegistry schemaRegistry = new SchemaRegistry();
         String name = resultSet.getString(TABLE_NAME);

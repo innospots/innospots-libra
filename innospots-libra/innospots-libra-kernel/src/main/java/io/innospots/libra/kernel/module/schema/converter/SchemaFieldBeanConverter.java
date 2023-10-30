@@ -22,7 +22,7 @@ import io.innospots.base.connector.schema.SchemaField;
 import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.base.data.dataset.Variable;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.connector.schema.entity.SchemaFieldEntity;
+import io.innospots.libra.kernel.module.schema.entity.SchemaFieldEntity;
 import org.apache.commons.collections4.MapUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -36,18 +36,9 @@ import java.util.Map;
  * @date 2022-01-01
  */
 @Mapper
-public interface SchemaFieldBeanConverter extends BaseBeanConverter {
+public interface SchemaFieldBeanConverter extends BaseBeanConverter<SchemaField, SchemaFieldEntity> {
 
     SchemaFieldBeanConverter INSTANCE = Mappers.getMapper(SchemaFieldBeanConverter.class);
-
-    @Mapping(defaultValue = "false", target = "pkey")
-    SchemaFieldEntity modelToEntity(SchemaField schemaField);
-
-    List<SchemaFieldEntity> modelsToEntities(List<SchemaField> schemaFields);
-
-    SchemaField entityToModel(SchemaFieldEntity schemaFieldEntity);
-
-    List<SchemaField> entitiesToModels(List<SchemaFieldEntity> dataFieldEntities);
 
     default Variable entityToVariable(SchemaFieldEntity fieldEntity) {
         Variable variable = new Variable();

@@ -36,7 +36,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @TableName(value = SchemaRegistryEntity.TABLE_NAME)
-@Table(name = SchemaRegistryEntity.TABLE_NAME, indexes = {@Index(name = "idx_datasource_reg", columnList = "credentialId")})
+@Table(name = SchemaRegistryEntity.TABLE_NAME, indexes = {@Index(name = "idx_credential_key", columnList = "credentialKey")})
 public class SchemaRegistryEntity extends PBaseEntity {
 
     public static final String TABLE_NAME = "ds_schema_registry";
@@ -46,10 +46,10 @@ public class SchemaRegistryEntity extends PBaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer registryId;
 
-    @Column(length = 128)
+    @Column(length = 64)
     private String name;
 
-    @Column(length = 128)
+    @Column(length = 64)
     private String code;
 
     @Column(length = 8)

@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.schema.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import io.innospots.connector.schema.entity.SchemaFieldEntity;
+import io.innospots.libra.kernel.module.schema.entity.SchemaFieldEntity;
 
 
 /**

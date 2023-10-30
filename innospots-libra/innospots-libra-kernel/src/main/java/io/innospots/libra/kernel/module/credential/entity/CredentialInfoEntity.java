@@ -39,7 +39,7 @@ import javax.persistence.*;
 @TableName(CredentialInfoEntity.TABLE_NAME)
 public class CredentialInfoEntity extends PBaseEntity {
 
-    public static final String TABLE_NAME = "ds_credential";
+    public static final String TABLE_NAME = "ds_credential_info";
 
     @Id
     @TableId(type = IdType.INPUT)

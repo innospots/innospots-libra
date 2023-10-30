@@ -20,10 +20,11 @@ package io.innospots.libra.kernel.module.schema.operator;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.innospots.base.connector.schema.SchemaRegistryType;
-import io.innospots.connector.schema.entity.SchemaRegistryEntity;
 import io.innospots.libra.base.category.BaseCategory;
 import io.innospots.libra.base.category.BaseCategoryOperator;
 import io.innospots.libra.base.category.CategoryType;
+import io.innospots.libra.kernel.module.schema.dataset.DatasetOperator;
+import io.innospots.libra.kernel.module.schema.entity.SchemaRegistryEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -46,8 +47,7 @@ public class SchemaCategoryOperator extends BaseCategoryOperator {
     @Transactional(rollbackFor = Exception.class)
     public Boolean deleteCategory(Integer categoryId) {
         // cascade delete
-        datasetOperator.remove(
-                new QueryWrapper<SchemaRegistryEntity>().lambda().eq(SchemaRegistryEntity::getCategoryId, categoryId));
+        //datasetOperator.remove(new QueryWrapper<SchemaRegistryEntity>().lambda().eq(SchemaRegistryEntity::getCategoryId, categoryId));
         return super.deleteCategory(categoryId);
     }
 

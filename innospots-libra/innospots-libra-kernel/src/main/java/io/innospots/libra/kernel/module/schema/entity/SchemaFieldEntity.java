@@ -52,7 +52,7 @@ public class SchemaFieldEntity extends PBaseEntity {
     @Column
     private Integer registryId;
 
-    @Column(length = 128)
+    @Column(length = 64)
     private String registryCode;
 
     @Column(length = 64)

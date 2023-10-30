@@ -33,7 +33,7 @@ public class Variable {
     private String viewId; // registryId
 
     //    private String sourceId;
-    private String credentialId;
+    private String credentialKey;
 
     private String name;
 

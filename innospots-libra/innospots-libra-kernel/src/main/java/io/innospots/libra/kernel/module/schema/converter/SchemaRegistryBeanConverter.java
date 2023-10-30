@@ -25,7 +25,7 @@ import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.base.data.dataset.Dataset;
 import io.innospots.base.data.dataset.Variable;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.connector.schema.entity.SchemaRegistryEntity;
+import io.innospots.libra.kernel.module.schema.entity.SchemaRegistryEntity;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -43,21 +43,16 @@ import java.util.Map;
  * @date 2022-01-01
  */
 @Mapper
-public interface SchemaRegistryBeanConverter extends BaseBeanConverter {
+public interface SchemaRegistryBeanConverter extends BaseBeanConverter<SchemaRegistry, SchemaRegistryEntity> {
 
     SchemaRegistryBeanConverter INSTANCE = Mappers.getMapper(SchemaRegistryBeanConverter.class);
 
-    SchemaRegistryEntity modelToEntity(SchemaRegistry schemaRegistry);
-
-    SchemaRegistry entityToModel(SchemaRegistryEntity schemaRegistryEntity);
-
-    List<SchemaRegistry> entitiesToModels(List<SchemaRegistryEntity> dataSetEntities);
 
     default Dataset schemaRegistryToDataset(SchemaRegistry schemaRegistry) {
         Dataset dataset = new Dataset();
         dataset.setId(schemaRegistry.getRegistryId());
         dataset.setName(schemaRegistry.getName());
-        dataset.setCredentialId(schemaRegistry.getCredentialId());
+        dataset.setCredentialKey(schemaRegistry.getCredentialKey());
         dataset.setCategoryId(schemaRegistry.getCategoryId());
         dataset.setScript(String.valueOf(schemaRegistry.scriptValue("script")));
         dataset.setModel(String.valueOf(schemaRegistry.configValue("model")));
@@ -68,7 +63,7 @@ public interface SchemaRegistryBeanConverter extends BaseBeanConverter {
                 Variable variable = new Variable();
                 variable.setViewId(schemaField.getRegistryId() != null ? schemaField.getRegistryId().toString() : null);
                 variable.setName(schemaField.getName());
-                variable.setCredentialId(String.valueOf(schemaRegistry.getCredentialId()));
+                variable.setCredentialKey(String.valueOf(schemaRegistry.getCredentialKey()));
                 Map<String, Object> config = JSONUtils.toMap(schemaField.getConfig());
                 if (MapUtils.isNotEmpty(config)) {
                     variable.setType(String.valueOf(config.get("type")));
@@ -103,7 +98,7 @@ public interface SchemaRegistryBeanConverter extends BaseBeanConverter {
         schemaRegistry.setRegistryType(SchemaRegistryType.DATASET);
         schemaRegistry.setRegistryId(dataset.getId());
         schemaRegistry.setName(dataset.getName());
-        schemaRegistry.setCredentialId(dataset.getCredentialId());
+        schemaRegistry.setCredentialKey(dataset.getCredentialKey());
         schemaRegistry.setCategoryId(dataset.getCategoryId());
         schemaRegistry.addScript("script", dataset.getScript());
         schemaRegistry.addConfig("model", dataset.getModel());

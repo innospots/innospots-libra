@@ -42,20 +42,20 @@ public class HttpApiOperator {
 
     @Transactional(rollbackFor = Exception.class)
     public ApiSchemaRegistry createApiRegistry(ApiSchemaRegistry apiSchemaRegistry) {
-        if (schemaRegistryOperator.checkNameExist(apiSchemaRegistry.getName(), apiSchemaRegistry.getCredentialId())) {
+        if (schemaRegistryOperator.checkNameExist(apiSchemaRegistry.getName(), apiSchemaRegistry.getCredentialKey())) {
             throw ResourceException.buildExistException(this.getClass(), apiSchemaRegistry.getName());
         }
 
         SchemaRegistry schemaRegistry = ApiSchemaRegistryBeanConverter.INSTANCE.apiToSchemaRegistry(apiSchemaRegistry);
         // Set default credentialId
-        schemaRegistry.setCredentialId(0);
+        schemaRegistry.setCredentialKey("");
         schemaRegistry = schemaRegistryOperator.createSchemaRegistry(schemaRegistry);
         return ApiSchemaRegistryBeanConverter.INSTANCE.schemaRegistryToApi(schemaRegistry);
     }
 
     @Transactional(rollbackFor = Exception.class)
     public ApiSchemaRegistry updateApiRegistry(ApiSchemaRegistry apiSchemaRegistry) {
-        if (schemaRegistryOperator.checkNameExist(apiSchemaRegistry.getName(), apiSchemaRegistry.getCredentialId())) {
+        if (schemaRegistryOperator.checkNameExist(apiSchemaRegistry.getName(), apiSchemaRegistry.getCredentialKey())) {
             throw ResourceException.buildExistException(this.getClass(), apiSchemaRegistry.getName());
         }
         SchemaRegistry schemaRegistry = ApiSchemaRegistryBeanConverter.INSTANCE.apiToSchemaRegistry(apiSchemaRegistry);

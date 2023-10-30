@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-package io.innospots.libra.kernel.module.credential.model;
+package io.innospots.base.connector.credential;
 
-import io.innospots.base.connector.credential.BaseCredentialInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.innospots.base.constant.RegexConstants;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -27,6 +27,8 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author Smars
@@ -35,7 +37,7 @@ import javax.validation.constraints.Size;
  */
 @Getter
 @Setter
-public class CredentialInfo extends BaseCredentialInfo {
+public class CredentialInfo {
 
     @Size(max = 32, message = "name length max 32")
     @NotBlank(message = "Name cannot be blank")
@@ -45,5 +47,26 @@ public class CredentialInfo extends BaseCredentialInfo {
 
     @Schema(title = "encrypt json string  form values")
     private String encryptFormValues;
+
+    @Schema(title = "credential primary key")
+    protected String credentialKey;
+
+    @NotBlank(message = "credential type code cannot be blank")
+    @Schema(title = "credential type code")
+    protected String credentialTypeCode;
+
+    @NotBlank(message = "connector name can't be blank")
+    @Schema(title = "connector name")
+    protected String connectorName;
+
+    /**
+     * credential config form
+     */
+    @Schema(title = "formValues")
+    @JsonIgnore
+    protected Map<String, Object> formValues = new LinkedHashMap<>();
+
+    @Schema(title = "props")
+    protected Map<String,Object> props;
 
 }

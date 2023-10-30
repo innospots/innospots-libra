@@ -28,5 +28,5 @@ public interface IConnectionCredentialReader {
 
     ConnectionCredential readCredential(String credentialKey);
 
-    ConnectionCredential fillCredential(BaseCredentialInfo credentialInfo);
+    ConnectionCredential fillCredential(CredentialInfo credentialInfo);
 }

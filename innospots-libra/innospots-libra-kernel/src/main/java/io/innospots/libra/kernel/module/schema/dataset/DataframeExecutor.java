@@ -1,22 +1,22 @@
 /*
- *  Copyright © 2021-2023 Innospots (http://www.innospots.com)
- *  Licensed to the Apache Software Foundation (ASF) under one or more
- *  contributor license agreements.  See the NOTICE file distributed with
- *  this work for additional information regarding copyright ownership.
- *  The ASF licenses this file to You under the Apache License, Version 2.0
- *  (the "License"); you may not use this file except in compliance with
- *  the License. You may obtain a copy of the License at
+ * Copyright © 2021-2023 Innospots (http://www.innospots.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
-package io.innospots.libra.kernel.module.schema.operator;
+package io.innospots.libra.kernel.module.schema.dataset;
 
 import datart.Column;
 import datart.PageInfo;
@@ -35,6 +35,7 @@ import io.innospots.base.data.body.SqlDataPageBody;
 import io.innospots.base.data.dataset.Dataset;
 import io.innospots.base.data.dataset.DatasetExecuteParam;
 import io.innospots.base.data.dataset.Variable;
+import io.innospots.base.data.point.IDataOperatorPoint;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.Pair;
 import io.innospots.base.model.response.InnospotResponse;
@@ -55,16 +56,16 @@ public class DataframeExecutor {
 
     private final IConnectionCredentialReader connectionCredentialReader;
 
-    private final ISqlOperatorPoint sqlOperator;
+    private final IDataOperatorPoint dataOperatorPoint;
 
     private final DatasetOperator datasetOperator;
 
 
     public DataframeExecutor(IConnectionCredentialReader connectionCredentialReader,
-                             ISqlOperatorPoint sqlOperator,
+                             IDataOperatorPoint dataOperatorPoint,
                              DatasetOperator datasetOperator) {
         this.connectionCredentialReader = connectionCredentialReader;
-        this.sqlOperator = sqlOperator;
+        this.dataOperatorPoint = dataOperatorPoint;
         this.datasetOperator = datasetOperator;
     }
 
@@ -87,7 +88,7 @@ public class DataframeExecutor {
 
         if (viewExecuteParam.getPageInfo().isCountTotal()) {
             String countSql = SqlScriptBuilderManager.buildCountSql(connectionCredential.getConnectorName(), viewExecuteParam);
-            InnospotResponse<DataBody<Map<String, Object>>> dataBody = sqlOperator.queryForObject(dataset.getCredentialId(), countSql);
+            InnospotResponse<DataBody<Map<String, Object>>> dataBody = dataOperatorPoint.queryForObject(dataset.getCredentialId(), countSql);
             Long total = this.parseResultCount(dataBody);
             viewExecuteParam.getPageInfo().setTotal(total);
             dataframe.setPageInfo(viewExecuteParam.getPageInfo());
@@ -96,7 +97,7 @@ public class DataframeExecutor {
         String sql = SqlScriptBuilderManager.buildSql(connectionCredential.getConnectorName(), viewExecuteParam);
         dataframe.setScript(sql);
 
-        InnospotResponse<PageBody> pageBody = sqlOperator.queryForList(dataset.getCredentialId(), sql);
+        InnospotResponse<PageBody> pageBody = dataOperatorPoint.queryForList(dataset.getCredentialId(), sql);
         SqlDataPageBody sqlDataPageBody = (SqlDataPageBody) pageBody.getBody();
         this.parseResultData(dataframe, sqlDataPageBody);
         return dataframe;

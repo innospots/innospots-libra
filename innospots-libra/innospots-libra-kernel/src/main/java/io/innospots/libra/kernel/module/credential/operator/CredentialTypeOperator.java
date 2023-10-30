@@ -67,12 +67,13 @@ public class CredentialTypeOperator extends ServiceImpl<CredentialTypeDao, Crede
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateCredentialType(CredentialType credentialType){
+    public CredentialType updateCredentialType(CredentialType credentialType){
         if (this.checkExist(credentialType.getName(),credentialType.getTypeCode())) {
             throw ResourceException.buildExistException(this.getClass(), credentialType.getName());
         }
         CredentialTypeEntity entity = CredentialTypeConverter.INSTANCE.modelToEntity(credentialType);
-        return this.updateById(entity);
+        this.updateById(entity);
+        return credentialType;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -87,7 +88,9 @@ public class CredentialTypeOperator extends ServiceImpl<CredentialTypeDao, Crede
 
     public List<CredentialType> listCredentialTypes(String connectorName){
         QueryWrapper<CredentialTypeEntity> qw = new QueryWrapper<>();
-        qw.lambda().eq(CredentialTypeEntity::getConnectorName,connectorName);
+        if(connectorName != null){
+            qw.lambda().eq(CredentialTypeEntity::getConnectorName,connectorName);
+        }
         return CredentialTypeConverter.INSTANCE.entitiesToModels(this.list(qw));
     }
 

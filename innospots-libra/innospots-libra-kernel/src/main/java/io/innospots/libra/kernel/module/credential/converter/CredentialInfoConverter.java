@@ -18,17 +18,14 @@
 
 package io.innospots.libra.kernel.module.credential.converter;
 
-import io.innospots.base.connector.credential.BaseCredentialInfo;
 import io.innospots.base.connector.credential.ConnectionCredential;
 import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.libra.kernel.module.credential.entity.CredentialInfoEntity;
 import io.innospots.libra.kernel.module.credential.entity.CredentialTypeEntity;
-import io.innospots.libra.kernel.module.credential.model.CredentialInfo;
+import io.innospots.base.connector.credential.CredentialInfo;
 import io.innospots.libra.kernel.module.credential.model.SimpleCredentialInfo;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-
-import java.util.List;
 
 
 /**
@@ -40,7 +37,7 @@ public interface CredentialInfoConverter extends BaseBeanConverter<CredentialInf
     CredentialInfoConverter INSTANCE = Mappers.getMapper(CredentialInfoConverter.class);
 
 
-    ConnectionCredential credentialToConnection(BaseCredentialInfo credentialInfo);
+    ConnectionCredential credentialToConnection(CredentialInfo credentialInfo);
 
     SimpleCredentialInfo credentialToSimple(CredentialInfo credentialInfo);
 

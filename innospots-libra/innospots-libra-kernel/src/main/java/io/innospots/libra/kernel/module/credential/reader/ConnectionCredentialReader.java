@@ -19,6 +19,7 @@
 package io.innospots.libra.kernel.module.credential.reader;
 
 import io.innospots.base.connector.credential.ConnectionCredential;
+import io.innospots.base.connector.credential.CredentialInfo;
 import io.innospots.base.connector.credential.IConnectionCredentialReader;
 import io.innospots.base.connector.schema.config.ConnectionMinderSchemaLoader;
 import io.innospots.base.connector.schema.config.CredentialAuthOption;
@@ -27,10 +28,9 @@ import io.innospots.base.crypto.EncryptorBuilder;
 import io.innospots.base.crypto.IEncryptor;
 import io.innospots.base.exception.AuthenticationException;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.connector.schema.mapper.CredentialBeanConverter;
-import io.innospots.connector.schema.model.AppCredentialInfo;
-import io.innospots.connector.schema.operator.AppCredentialOperator;
 import io.innospots.libra.base.configuration.AuthProperties;
+import io.innospots.libra.kernel.module.credential.converter.CredentialInfoConverter;
+import io.innospots.libra.kernel.module.credential.operator.CredentialInfoOperator;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -45,66 +45,56 @@ public class ConnectionCredentialReader implements IConnectionCredentialReader {
 
     private final IEncryptor encryptor;
 
-    private final AppCredentialOperator credentialOperator;
+    private final CredentialInfoOperator credentialOperator;
 
     public ConnectionCredentialReader(
-            AppCredentialOperator credentialOperator,
+            CredentialInfoOperator credentialOperator,
             AuthProperties authProperties) {
         this.credentialOperator = credentialOperator;
         encryptor = EncryptorBuilder.build(EncryptType.BLOWFISH, authProperties.getSecretKey());
     }
 
     @Override
-    public ConnectionCredential readCredential(Integer credentialId) {
-        AppCredentialInfo appCredentialInfo = credentialOperator.getCredential(credentialId);
-        return fillCredential(appCredentialInfo);
+    public ConnectionCredential readCredential(String credentialKey) {
+        CredentialInfo credentialInfo = credentialOperator.getCredential(credentialKey);
+        return this.fillCredential(credentialInfo);
     }
+
 
     @Override
-    public ConnectionCredential readCredential(String credentialCode) {
-        AppCredentialInfo appCredentialInfo = credentialOperator.getCredentialByCode(credentialCode);
-        return fillCredential(appCredentialInfo);
-    }
-
-    @Override
-    public ConnectionCredential fillCredential(AppCredentialInfo appCredentialInfo) {
-        if (appCredentialInfo == null) {
+    public ConnectionCredential fillCredential(CredentialInfo credentialInfo) {
+        if (credentialInfo == null) {
             return null;
         }
-        // decrypt formValues
-        ConnectionCredential connectionCredential = this.decryptFormValues(appCredentialInfo);
-        if (connectionCredential == null) {
-            return null;
-        }
-        CredentialAuthOption credentialAuthOption = ConnectionMinderSchemaLoader.getCredentialFormConfig(connectionCredential.getConnectorName(), connectionCredential.getConfigCode());
-        connectionCredential.getConfig().putAll(credentialAuthOption.getDefaults());
-        return connectionCredential;
+        CredentialAuthOption credentialAuthOption = ConnectionMinderSchemaLoader.getCredentialFormConfig(credentialInfo.getConnectorName(), credentialInfo.getCredentialTypeCode());
+        credentialInfo.getProps().putAll(credentialAuthOption.getDefaults());
+        return decryptFormValues(credentialInfo);
     }
 
-    public AppCredentialInfo encryptFormValues(AppCredentialInfo appCredentialInfo){
-        if(MapUtils.isEmpty(appCredentialInfo.getFormValues())){
-            return appCredentialInfo;
+    public CredentialInfo encryptFormValues(CredentialInfo credentialInfo){
+        if(MapUtils.isEmpty(credentialInfo.getFormValues())){
+            return credentialInfo;
         }
-        String jsonStr = JSONUtils.toJsonString(appCredentialInfo.getFormValues());
-        appCredentialInfo.setEncryptFormValues(encryptor.encode(jsonStr));
+        String jsonStr = JSONUtils.toJsonString(credentialInfo.getFormValues());
+        credentialInfo.setEncryptFormValues(encryptor.encode(jsonStr));
 
-        return appCredentialInfo;
+        return credentialInfo;
     }
 
-    private ConnectionCredential decryptFormValues(AppCredentialInfo appCredentialInfo) {
-        if (appCredentialInfo == null) {
+    private ConnectionCredential decryptFormValues(CredentialInfo credentialInfo) {
+        if (credentialInfo == null) {
             return null;
         }
 
         ConnectionCredential connectionCredential =
-                CredentialBeanConverter.INSTANCE.credentialToConnection(appCredentialInfo);
+                CredentialInfoConverter.INSTANCE.credentialToConnection(credentialInfo);
 
-        if (StringUtils.isBlank(appCredentialInfo.getEncryptFormValues())) {
+        if (StringUtils.isBlank(credentialInfo.getEncryptFormValues())) {
             connectionCredential.setConfig(new HashMap<>());
             return connectionCredential;
         }
         try {
-            String formValuesStr = encryptor.decode(appCredentialInfo.getEncryptFormValues());
+            String formValuesStr = encryptor.decode(credentialInfo.getEncryptFormValues());
             connectionCredential.setConfig(JSONUtils.toMap(formValuesStr));
         } catch (Exception e) {
             throw AuthenticationException.buildDecryptException(this.getClass(), "form values");

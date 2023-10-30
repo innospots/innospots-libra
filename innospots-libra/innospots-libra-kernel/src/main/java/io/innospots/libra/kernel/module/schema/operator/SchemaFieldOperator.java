@@ -26,9 +26,9 @@ import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.field.FieldScope;
 import io.innospots.base.model.field.FieldValueType;
-import io.innospots.connector.schema.dao.SchemaFieldDao;
-import io.innospots.connector.schema.entity.SchemaFieldEntity;
-import io.innospots.connector.schema.mapper.SchemaFieldBeanConverter;
+import io.innospots.libra.kernel.module.schema.converter.SchemaFieldBeanConverter;
+import io.innospots.libra.kernel.module.schema.dao.SchemaFieldDao;
+import io.innospots.libra.kernel.module.schema.entity.SchemaFieldEntity;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.transaction.annotation.Transactional;
 

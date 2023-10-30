@@ -18,9 +18,9 @@
 
 package io.innospots.libra.kernel.module.schema.dao;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import io.innospots.connector.schema.entity.SchemaRegistryEntity;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.innospots.libra.kernel.module.schema.entity.SchemaRegistryEntity;
 
 /**
  * @author Alfred

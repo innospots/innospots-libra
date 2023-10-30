@@ -24,29 +24,24 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.CaseFormat;
-import io.innospots.base.crypto.EncryptType;
-import io.innospots.base.crypto.EncryptorBuilder;
-import io.innospots.base.crypto.IEncryptor;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.request.FormQuery;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.StringConverter;
-import io.innospots.libra.base.configuration.AuthProperties;
 import io.innospots.libra.kernel.module.credential.converter.CredentialInfoConverter;
 import io.innospots.libra.kernel.module.credential.dao.CredentialInfoDao;
+import io.innospots.libra.kernel.module.credential.dao.CredentialTypeDao;
 import io.innospots.libra.kernel.module.credential.entity.CredentialInfoEntity;
 import io.innospots.libra.kernel.module.credential.entity.CredentialTypeEntity;
-import io.innospots.libra.kernel.module.credential.model.CredentialInfo;
+import io.innospots.base.connector.credential.CredentialInfo;
 import io.innospots.libra.kernel.module.credential.model.SimpleCredentialInfo;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -56,10 +51,10 @@ import java.util.stream.Collectors;
  */
 public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, CredentialInfoEntity> {
 
-    private final IEncryptor encryptor;
+    private final CredentialTypeDao credentialTypeDao;
 
-    public CredentialInfoOperator(AuthProperties authProperties) {
-        this.encryptor = EncryptorBuilder.build(EncryptType.BLOWFISH, authProperties.getSecretKey());
+    public CredentialInfoOperator(CredentialTypeDao credentialTypeDao) {
+        this.credentialTypeDao = credentialTypeDao;
     }
 
     public CredentialInfo getCredential(String credentialKey) {
@@ -67,10 +62,7 @@ public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, Crede
         if (entity == null) {
             return null;
         }
-        CredentialInfo credentialInfo = CredentialInfoConverter.INSTANCE.entityToModel(entity);
-        //decryptFormValues(credentialInfo);
-        return credentialInfo;
-
+        return CredentialInfoConverter.INSTANCE.entityToModel(entity);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -114,7 +106,7 @@ public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, Crede
      * @param credentialTypeCode
      * @return
      */
-    public List<SimpleCredentialInfo> listSimpleAppCredentials(String credentialTypeCode){
+    public List<SimpleCredentialInfo> listSimpleCredentials(String credentialTypeCode){
         QueryWrapper<CredentialInfoEntity> query = new QueryWrapper<>();
         if(credentialTypeCode!=null){
             query.lambda().eq(CredentialInfoEntity::getCredentialTypeCode,credentialTypeCode);
@@ -183,38 +175,12 @@ public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, Crede
     }
 
 
-    private void authedValuesProcess(CredentialInfo credential) {
-
-        this.decryptFormValues(credential);
-        /*
-        String clientId = String.valueOf(credential.getFormValues().get("client_id"));
-
-        String cacheKey = clientId + "_" + credential.getAppNodeCode();
-        String jsonToken = CacheStoreManager.get(cacheKey);
-        if(jsonToken!=null){
-            Map<String,Object> tokens = JSONUtils.toMap(jsonToken);
-            credential.getFormValues().putAll(tokens);
-        }
-        String formValuesStr = encryptor.encode(JSONUtils.toJsonString(credential.getFormValues()));
-        credential.setEncryptFormValues(formValuesStr);
-        credential.getFormValues().clear();
-        CacheStoreManager.remove(cacheKey);
-
-         */
-    }
-
     private Map<String, CredentialTypeEntity> findCredentialTypes(Set<String> typeCode){
-        return null;
+        List<CredentialTypeEntity> typeEntities = credentialTypeDao.selectBatchIds(typeCode);
+        if(CollectionUtils.isEmpty(typeEntities)){
+            return Collections.emptyMap();
+        }
+        return typeEntities.stream().collect(Collectors.toMap(CredentialTypeEntity::getTypeCode, Function.identity()));
     }
 
-    private void decryptFormValues(CredentialInfo credentialInfo) {
-        if (credentialInfo == null) {
-            return;
-        }
-        if (StringUtils.isBlank(credentialInfo.getEncryptFormValues())) {
-            return;
-        }
-        String formValuesStr = encryptor.decode(credentialInfo.getEncryptFormValues());
-        credentialInfo.setFormValues(JSONUtils.toMap(formValuesStr));
-    }
 }
