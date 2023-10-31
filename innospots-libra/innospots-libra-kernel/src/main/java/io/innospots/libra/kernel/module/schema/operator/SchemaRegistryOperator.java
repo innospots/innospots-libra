@@ -87,7 +87,7 @@ public class SchemaRegistryOperator extends ServiceImpl<SchemaRegistryDao, Schem
 
     @Transactional(rollbackFor = Exception.class)
     public SchemaRegistry updateSchemaRegistry(SchemaRegistry schemaRegistry) {
-        if (this.checkNameExistAndExcludeOriginalName(schemaRegistry.getName(), schemaRegistry.getRegistryId())) {
+        if (this.checkNameExist(schemaRegistry.getName(), schemaRegistry.getRegistryId())) {
             throw ResourceException.buildExistException(this.getClass(), "name exist: " + schemaRegistry.getName());
         }
         SchemaRegistryEntity entity = SchemaRegistryBeanConverter.INSTANCE.modelToEntity(schemaRegistry);
@@ -209,17 +209,16 @@ public class SchemaRegistryOperator extends ServiceImpl<SchemaRegistryDao, Schem
         }
     }
 
-    public boolean checkNameExistAndExcludeOriginalName(String name, Integer registryId) {
-        return super.count(new QueryWrapper<SchemaRegistryEntity>().lambda()
-                .eq(SchemaRegistryEntity::getName, name)
-                .ne(SchemaRegistryEntity::getRegistryId, registryId)) > 0;
+    public boolean checkNameExist(String name, Integer registryId) {
+        QueryWrapper<SchemaRegistryEntity> qw = new QueryWrapper<SchemaRegistryEntity>();
+        qw.lambda().eq(SchemaRegistryEntity::getName, name);
+        if(registryId!=null){
+            qw.lambda().ne(SchemaRegistryEntity::getRegistryId,registryId);
+        }
+        return super.count(qw) > 0;
+
     }
 
-    public boolean checkNameExist(String name, String credentialKey) {
-        return super.count(new QueryWrapper<SchemaRegistryEntity>().lambda()
-                .eq(SchemaRegistryEntity::getName, name)
-                .ne(SchemaRegistryEntity::getCredentialKey, credentialKey)) > 0;
-    }
 
     public List<SchemaRegistry> listByRegistryIds(Set<String> keys) {
         List<SchemaRegistryEntity> entities = super.listByIds(keys);

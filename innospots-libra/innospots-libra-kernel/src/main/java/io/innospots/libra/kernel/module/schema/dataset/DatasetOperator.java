@@ -18,8 +18,6 @@
 
 package io.innospots.libra.kernel.module.schema.dataset;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.innospots.base.connector.schema.SchemaRegistry;
 import io.innospots.base.connector.schema.SchemaRegistryType;
 import io.innospots.base.connector.schema.config.ConnectionMinderSchema;
@@ -31,8 +29,6 @@ import io.innospots.base.exception.ResourceException;
 import io.innospots.libra.kernel.module.credential.entity.CredentialInfoEntity;
 import io.innospots.libra.kernel.module.credential.operator.CredentialInfoOperator;
 import io.innospots.libra.kernel.module.schema.converter.SchemaRegistryBeanConverter;
-import io.innospots.libra.kernel.module.schema.dao.SchemaRegistryDao;
-import io.innospots.libra.kernel.module.schema.entity.SchemaRegistryEntity;
 import io.innospots.libra.kernel.module.schema.operator.SchemaRegistryOperator;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +40,7 @@ import java.util.stream.Collectors;
  * @author Alfred
  * @date 2022/1/31
  */
-public class DatasetOperator extends ServiceImpl<SchemaRegistryDao, SchemaRegistryEntity> implements IDatasetReader {
+public class DatasetOperator implements IDatasetReader {
 
     private final SchemaRegistryOperator schemaRegistryOperator;
 
@@ -58,7 +54,7 @@ public class DatasetOperator extends ServiceImpl<SchemaRegistryDao, SchemaRegist
 
     @Transactional(rollbackFor = Exception.class)
     public Dataset createDataset(Dataset dataset) {
-        if (this.checkNameExist(dataset.getName())) {
+        if (schemaRegistryOperator.checkNameExist(dataset.getName(),dataset.getId())) {
             throw ResourceException.buildExistException(this.getClass(), dataset.getName());
         }
         // set default categoryId
@@ -72,7 +68,7 @@ public class DatasetOperator extends ServiceImpl<SchemaRegistryDao, SchemaRegist
 
     @Transactional(rollbackFor = Exception.class)
     public Dataset updateDataset(Dataset dataset) {
-        if (this.checkNameExistAndExcludeOriginalName(dataset.getName(), dataset.getId())) {
+        if (schemaRegistryOperator.checkNameExist(dataset.getName(), dataset.getId())) {
             throw ResourceException.buildExistException(this.getClass(), dataset.getName());
         }
         // set default categoryId
@@ -111,18 +107,6 @@ public class DatasetOperator extends ServiceImpl<SchemaRegistryDao, SchemaRegist
         return pageBody;
     }
 
-    private boolean checkNameExist(String name) {
-        return super.count(new QueryWrapper<SchemaRegistryEntity>().lambda()
-                .eq(SchemaRegistryEntity::getName, name)
-                .eq(SchemaRegistryEntity::getRegistryType, SchemaRegistryType.DATASET)) > 0;
-    }
-
-    private boolean checkNameExistAndExcludeOriginalName(String name, Integer registryId) {
-        return super.count(new QueryWrapper<SchemaRegistryEntity>().lambda()
-                .eq(SchemaRegistryEntity::getName, name)
-                .eq(SchemaRegistryEntity::getRegistryType, SchemaRegistryType.DATASET)
-                .ne(SchemaRegistryEntity::getRegistryId, registryId)) > 0;
-    }
 
     @Override
     public List<Dataset> listDatasets(String credentialKey) {

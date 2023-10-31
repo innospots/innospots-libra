@@ -24,8 +24,8 @@ import io.innospots.base.connector.schema.SchemaRegistry;
 import io.innospots.base.connector.schema.reader.ISchemaRegistryReader;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.exception.ValidatorException;
-import io.innospots.connector.schema.operator.SchemaFieldOperator;
-import io.innospots.connector.schema.operator.SchemaRegistryOperator;
+import io.innospots.libra.kernel.module.schema.operator.SchemaFieldOperator;
+import io.innospots.libra.kernel.module.schema.operator.SchemaRegistryOperator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -50,9 +50,9 @@ public class SchemaRegistryReader implements ISchemaRegistryReader {
     }
 
     @Override
-    public List<SchemaRegistry> listSchemaRegistries(Integer credentialId, boolean includeField) {
+    public List<SchemaRegistry> listSchemaRegistries(String credentialKey, boolean includeField) {
 
-        List<SchemaRegistry> schemaRegistries = this.schemaRegistryOperator.listSchemaRegistries(credentialId);
+        List<SchemaRegistry> schemaRegistries = this.schemaRegistryOperator.listSchemaRegistries(credentialKey);
         if (includeField && CollectionUtils.isNotEmpty(schemaRegistries)) {
             for (SchemaRegistry schemaRegistry : schemaRegistries) {
                 schemaRegistry.setSchemaFields(schemaFieldOperator.listByRegistryId(schemaRegistry.getRegistryId()));
@@ -64,21 +64,34 @@ public class SchemaRegistryReader implements ISchemaRegistryReader {
 
 
     @Override
-    public SchemaRegistry getSchemaRegistry(Integer credentialId, String registryCode, Integer registryId) {
+    public SchemaRegistry getSchemaRegistry(String credentialKey, Integer registryId) {
 
         SchemaRegistry schemaRegistry = null;
 
         if (registryId != null) {
             schemaRegistry = this.schemaRegistryOperator.getSchemaRegistryById(registryId);
             if (schemaRegistry == null) {
-                throw ResourceException.buildNotExistException(this.getClass(), "registry not exist, credentialId: " + credentialId + " , registryId: " + registryId);
+                throw ResourceException.buildNotExistException(this.getClass(), "registry not exist, credentialKey: " + credentialKey + " , registryId: " + registryId);
             }
             List<SchemaField> schemaFields = this.schemaFieldOperator.listByRegistryId(registryId);
             schemaRegistry.setSchemaFields(schemaFields);
-        } else if (registryCode != null) {
+        } else {
+            throw ValidatorException.buildMissingException(this.getClass(), "registryId and registryCode can't be empty at the same time.");
+        }
+
+        return schemaRegistry;
+    }
+
+
+    @Override
+    public SchemaRegistry getSchemaRegistry(String credentialKey, String registryCode) {
+
+        SchemaRegistry schemaRegistry = null;
+
+        if (registryCode != null) {
             schemaRegistry = this.schemaRegistryOperator.getSchemaRegistryByCode(registryCode);
             if (schemaRegistry == null) {
-                throw ResourceException.buildNotExistException(this.getClass(), "registry not exist, credentialId: " + credentialId + " , registryCode: " + registryCode);
+                throw ResourceException.buildNotExistException(this.getClass(), "registry not exist, credentialKey: " + credentialKey + " , registryCode: " + registryCode);
             }
             List<SchemaField> schemaFields = this.schemaFieldOperator.listByRegistryId(schemaRegistry.getRegistryId());
             schemaRegistry.setSchemaFields(schemaFields);

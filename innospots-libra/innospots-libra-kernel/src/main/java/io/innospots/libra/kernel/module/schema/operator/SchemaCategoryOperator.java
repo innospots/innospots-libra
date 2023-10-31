@@ -23,7 +23,6 @@ import io.innospots.base.connector.schema.SchemaRegistryType;
 import io.innospots.libra.base.category.BaseCategory;
 import io.innospots.libra.base.category.BaseCategoryOperator;
 import io.innospots.libra.base.category.CategoryType;
-import io.innospots.libra.kernel.module.schema.dataset.DatasetOperator;
 import io.innospots.libra.kernel.module.schema.entity.SchemaRegistryEntity;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,10 +36,10 @@ import java.util.stream.Collectors;
  */
 public class SchemaCategoryOperator extends BaseCategoryOperator {
 
-    private final DatasetOperator datasetOperator;
+    private final SchemaRegistryOperator schemaRegistryOperator;
 
-    public SchemaCategoryOperator(DatasetOperator datasetOperator) {
-        this.datasetOperator = datasetOperator;
+    public SchemaCategoryOperator(SchemaRegistryOperator schemaRegistryOperator) {
+        this.schemaRegistryOperator = schemaRegistryOperator;
     }
 
     @Override
@@ -52,25 +51,17 @@ public class SchemaCategoryOperator extends BaseCategoryOperator {
     }
 
     public List<BaseCategory> listCategories() {
-        List<BaseCategory> list = super.listCategories(CategoryType.DATA_SET);
-
-        List<Map<String, Object>> groupList = datasetOperator.listMaps(
-                new QueryWrapper<SchemaRegistryEntity>()
-                        .select("CASE WHEN CATEGORY_ID IS NULL THEN 0 ELSE CATEGORY_ID END AS CATEGORY_ID,COUNT(1) CNT ")
-                        .groupBy("CATEGORY_ID")
-                        .lambda()
-                        .eq(SchemaRegistryEntity::getRegistryType, SchemaRegistryType.DATASET)
-        );
-
-        Map<Integer, Integer> groupMap = groupList.stream().collect(
-                Collectors.toMap(
-                        k -> Integer.valueOf(k.get("CATEGORY_ID").toString()),
-                        v -> Integer.valueOf(v.get("CNT").toString())));
+        List<BaseCategory> list = this.listCategories(CategoryType.DATA_SET);
+        QueryWrapper<SchemaRegistryEntity> qw = new QueryWrapper<>();
+        qw.lambda().select(SchemaRegistryEntity::getCategoryId,SchemaRegistryEntity::getRegistryId)
+                .eq(SchemaRegistryEntity::getRegistryType,SchemaRegistryType.DATASET);
+        List<SchemaRegistryEntity> entries = schemaRegistryOperator.list(qw);
+        Map<Integer, Long> groupMap = entries.stream().collect(Collectors.groupingBy(SchemaRegistryEntity::getCategoryId,Collectors.counting()));
 
         // fill subsetTotal
         for (BaseCategory category : list) {
-            Integer count = groupMap.get(category.getCategoryId());
-            category.setTotalCount(count == null ? 0 : count);
+            Long count = groupMap.get(category.getCategoryId());
+            category.setTotalCount(count.intValue());
         }
 
         return list;

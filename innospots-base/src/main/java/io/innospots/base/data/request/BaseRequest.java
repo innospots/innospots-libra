@@ -21,7 +21,7 @@ import java.util.Objects;
 @Setter
 public class BaseRequest<Body> {
 
-    protected Integer credentialId;
+    protected String credentialKey;
 
     protected String operation;
 
@@ -90,12 +90,12 @@ public class BaseRequest<Body> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ItemRequest that = (ItemRequest) o;
-        return Objects.equals(credentialId, that.credentialId) && Objects.equals(operation, that.operation) && Objects.equals(targetName, that.targetName) && Objects.equals(uri, that.uri) && Objects.equals(headers, that.headers) && Objects.equals(body, that.body) && Objects.equals(query, that.query) && Objects.equals(connectorName, that.connectorName);
+        return Objects.equals(credentialKey, that.credentialKey) && Objects.equals(operation, that.operation) && Objects.equals(targetName, that.targetName) && Objects.equals(uri, that.uri) && Objects.equals(headers, that.headers) && Objects.equals(body, that.body) && Objects.equals(query, that.query) && Objects.equals(connectorName, that.connectorName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(credentialId, operation, targetName, uri, headers, body, query, connectorName);
+        return Objects.hash(credentialKey, operation, targetName, uri, headers, body, query, connectorName);
     }
 
     public String key(){
@@ -105,7 +105,7 @@ public class BaseRequest<Body> {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{");
-        sb.append("credentialId=").append(credentialId);
+        sb.append("credentialKey=").append(credentialKey);
         sb.append(", operation='").append(operation).append('\'');
         sb.append(", targetName='").append(targetName).append('\'');
         sb.append(", uri='").append(uri).append('\'');

@@ -19,6 +19,8 @@
 package io.innospots.base.data.operator;
 
 import io.innospots.base.data.body.DataBody;
+import io.innospots.base.data.body.PageBody;
+import io.innospots.base.data.request.BaseRequest;
 import io.innospots.base.data.request.BatchRequest;
 import io.innospots.base.data.request.ItemRequest;
 
@@ -32,11 +34,11 @@ public interface IOperator {
     default void open(){
     }
 
-    default DataBody<?> execute(ItemRequest itemRequest){
+    default <Body,D> DataBody<D> execute(BaseRequest<Body> itemRequest){
         return null;
     }
 
-    default DataBody<?> execute(BatchRequest itemRequest){
+    default <Body,D> PageBody<D> executePage(BaseRequest<Body> itemRequest){
         return null;
     }
 

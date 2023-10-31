@@ -42,7 +42,7 @@ public class HttpApiOperator {
 
     @Transactional(rollbackFor = Exception.class)
     public ApiSchemaRegistry createApiRegistry(ApiSchemaRegistry apiSchemaRegistry) {
-        if (schemaRegistryOperator.checkNameExist(apiSchemaRegistry.getName(), apiSchemaRegistry.getCredentialKey())) {
+        if (schemaRegistryOperator.checkNameExist(apiSchemaRegistry.getName(), null)) {
             throw ResourceException.buildExistException(this.getClass(), apiSchemaRegistry.getName());
         }
 
@@ -55,7 +55,7 @@ public class HttpApiOperator {
 
     @Transactional(rollbackFor = Exception.class)
     public ApiSchemaRegistry updateApiRegistry(ApiSchemaRegistry apiSchemaRegistry) {
-        if (schemaRegistryOperator.checkNameExist(apiSchemaRegistry.getName(), apiSchemaRegistry.getCredentialKey())) {
+        if (schemaRegistryOperator.checkNameExist(apiSchemaRegistry.getName(), apiSchemaRegistry.getRegistryId())) {
             throw ResourceException.buildExistException(this.getClass(), apiSchemaRegistry.getName());
         }
         SchemaRegistry schemaRegistry = ApiSchemaRegistryBeanConverter.INSTANCE.apiToSchemaRegistry(apiSchemaRegistry);

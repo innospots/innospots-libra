@@ -18,14 +18,11 @@
 
 package io.innospots.base.data.request;
 
-import cn.hutool.crypto.digest.DigestUtil;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @author Smars
@@ -34,8 +31,26 @@ import java.util.Objects;
  */
 @Getter
 @Setter
-public class ItemRequest extends QueryRequest {
+public class ItemRequest extends BaseRequest<Map<String,Object>> {
 
-    private String content;
+    public ItemRequest(String credentialKey) {
+        this.credentialKey = credentialKey;
+    }
 
+    public ItemRequest() {
+    }
+
+    public void add(String key, Object value) {
+        if(this.body == null){
+            this.body = new HashMap<>();
+        }
+        this.body.put(key, value);
+    }
+
+    public void add(Map<String, ? extends Object> item) {
+        if(this.body == null){
+            this.body = new HashMap<>();
+        }
+        this.body.putAll(item);
+    }
 }

@@ -35,7 +35,11 @@ import io.innospots.base.data.body.SqlDataPageBody;
 import io.innospots.base.data.dataset.Dataset;
 import io.innospots.base.data.dataset.DatasetExecuteParam;
 import io.innospots.base.data.dataset.Variable;
+import io.innospots.base.data.operator.DataOperatorManager;
+import io.innospots.base.data.operator.IDataOperator;
 import io.innospots.base.data.point.IDataOperatorPoint;
+import io.innospots.base.data.request.ItemRequest;
+import io.innospots.base.data.request.SimpleRequest;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.Pair;
 import io.innospots.base.model.response.InnospotResponse;
@@ -56,19 +60,15 @@ public class DataframeExecutor {
 
     private final IConnectionCredentialReader connectionCredentialReader;
 
-    private final IDataOperatorPoint dataOperatorPoint;
+    private DataOperatorManager dataOperatorManager;
 
     private final DatasetOperator datasetOperator;
 
-
-    public DataframeExecutor(IConnectionCredentialReader connectionCredentialReader,
-                             IDataOperatorPoint dataOperatorPoint,
-                             DatasetOperator datasetOperator) {
+    public DataframeExecutor(IConnectionCredentialReader connectionCredentialReader, DataOperatorManager dataOperatorManager, DatasetOperator datasetOperator) {
         this.connectionCredentialReader = connectionCredentialReader;
-        this.dataOperatorPoint = dataOperatorPoint;
+        this.dataOperatorManager = dataOperatorManager;
         this.datasetOperator = datasetOperator;
     }
-
 
     public Dataframe datasetData(ViewExecuteParam viewExecuteParam) {
         if (StringUtils.isEmpty(viewExecuteParam.getViewId()) || (CollectionUtils.isEmpty(viewExecuteParam.getColumns()) &&
@@ -79,35 +79,34 @@ public class DataframeExecutor {
         }
 
         Dataset dataset = datasetOperator.getDatasetById(Integer.valueOf(viewExecuteParam.getViewId()));
-        ConnectionCredential connectionCredential = connectionCredentialReader.readCredential(dataset.getCredentialId());
+        ConnectionCredential connectionCredential = connectionCredentialReader.readCredential(dataset.getCredentialKey());
         viewExecuteParam.setScript(dataset.getScript());
         viewExecuteParam.setModel(this.parseSchema(dataset.getModel()));
         viewExecuteParam.setScriptVariables((this.parseVariables(viewExecuteParam, dataset.getVariables())));
 
         Dataframe dataframe = new Dataframe();
-
+        IDataOperator dataOperator = dataOperatorManager.buildDataOperator(dataset.getCredentialKey());
         if (viewExecuteParam.getPageInfo().isCountTotal()) {
             String countSql = SqlScriptBuilderManager.buildCountSql(connectionCredential.getConnectorName(), viewExecuteParam);
-            InnospotResponse<DataBody<Map<String, Object>>> dataBody = dataOperatorPoint.queryForObject(dataset.getCredentialId(), countSql);
-            Long total = this.parseResultCount(dataBody);
+            SimpleRequest request = new SimpleRequest(dataset.getCredentialKey(),countSql);
+            DataBody<Map<String, Object>> body = dataOperator.execute(request);
+            Long total = this.parseResultCount(body);
             viewExecuteParam.getPageInfo().setTotal(total);
             dataframe.setPageInfo(viewExecuteParam.getPageInfo());
         }
 
         String sql = SqlScriptBuilderManager.buildSql(connectionCredential.getConnectorName(), viewExecuteParam);
         dataframe.setScript(sql);
-
-        InnospotResponse<PageBody> pageBody = dataOperatorPoint.queryForList(dataset.getCredentialId(), sql);
-        SqlDataPageBody sqlDataPageBody = (SqlDataPageBody) pageBody.getBody();
-        this.parseResultData(dataframe, sqlDataPageBody);
+        SqlDataPageBody pageBody = (SqlDataPageBody<?>) dataOperator.executePage(new SimpleRequest(dataset.getCredentialKey(),sql));
+        this.parseResultData(dataframe, pageBody);
         return dataframe;
     }
 
-    public Dataframe datasetData(Integer credentialId, int page, int size, DatasetExecuteParam datasetExecuteParam) {
+    public Dataframe datasetData(String credentialKey, int page, int size, DatasetExecuteParam datasetExecuteParam) {
         Dataset dataset = new Dataset();
-        dataset.setCredentialId(credentialId);
+        dataset.setCredentialKey(credentialKey);
         dataset.setScript(datasetExecuteParam.getScript());
-        ConnectionCredential connectionCredential = connectionCredentialReader.readCredential(credentialId);
+        ConnectionCredential connectionCredential = connectionCredentialReader.readCredential(credentialKey);
 
         ViewExecuteParam viewExecuteParam = new ViewExecuteParam();
         PageInfo pageInfo = new PageInfo();
@@ -118,37 +117,38 @@ public class DataframeExecutor {
         viewExecuteParam.setScript(datasetExecuteParam.getScript());
         viewExecuteParam.setParams(datasetExecuteParam.getParams());
         viewExecuteParam.setScriptVariables((this.parseVariables(viewExecuteParam, datasetExecuteParam.getVariables())));
-
+        IDataOperator dataOperator = dataOperatorManager.buildDataOperator(dataset.getCredentialKey());
 
         String countSql = SqlScriptBuilderManager.buildCountSql(connectionCredential.getConnectorName(), viewExecuteParam);
-        InnospotResponse<DataBody<Map<String, Object>>> dataBody = sqlOperator.queryForObject(dataset.getCredentialId(), countSql);
-        Long total = this.parseResultCount(dataBody);
+
+        SimpleRequest request = new SimpleRequest(dataset.getCredentialKey(),countSql);
+        DataBody<Map<String, Object>> body = dataOperator.execute(request);
+        Long total = this.parseResultCount(body);
 
         Dataframe dataframe = new Dataframe();
         pageInfo.setTotal(total);
         dataframe.setPageInfo(pageInfo);
 
         String sql = SqlScriptBuilderManager.buildSql(connectionCredential.getConnectorName(), viewExecuteParam);
-        InnospotResponse<PageBody> pageBody = sqlOperator.queryForList(dataset.getCredentialId(), sql);
-        SqlDataPageBody sqlDataPageBody = (SqlDataPageBody) pageBody.getBody();
+        SqlDataPageBody pageBody = (SqlDataPageBody<?>) dataOperator.executePage(new SimpleRequest(dataset.getCredentialKey(),sql));
         dataframe.setScript(sql);
-        this.parseResultData(dataframe, sqlDataPageBody);
+        this.parseResultData(dataframe, pageBody);
         return dataframe;
     }
 
     public Boolean functionValidate(Integer viewId, String snippet) {
         Dataset dataset = datasetOperator.getDatasetById(viewId);
-        ConnectionCredential connectionCredential = connectionCredentialReader.readCredential(dataset.getCredentialId());
-        return SqlScriptBuilderManager.functionValidate(connectionCredential.getConfigCode(), snippet);
+        ConnectionCredential connectionCredential = connectionCredentialReader.readCredential(dataset.getCredentialKey());
+        return SqlScriptBuilderManager.functionValidate(connectionCredential.getAuthOption(), snippet);
     }
 
     public Set<StdSqlOperator> supportedFunctions(Integer viewId) {
         Dataset dataset = datasetOperator.getDatasetById(viewId);
-        ConnectionCredential connectionCredential = connectionCredentialReader.readCredential(dataset.getCredentialId());
-        return SqlScriptBuilderManager.supportedFunctions(connectionCredential.getConfigCode());
+        ConnectionCredential connectionCredential = connectionCredentialReader.readCredential(dataset.getCredentialKey());
+        return SqlScriptBuilderManager.supportedFunctions(connectionCredential.getAuthOption());
     }
 
-    private void parseResultData(Dataframe dataframe, SqlDataPageBody sqlDataPageBody) {
+    private void parseResultData(Dataframe dataframe, SqlDataPageBody<Map<String,Object>> sqlDataPageBody) {
         List<Pair<String, ValueType>> columns = this.convertColumnsValueType(sqlDataPageBody.getSchemaColumns());
         List<Column> resultColumns = new ArrayList<>();
 
@@ -165,9 +165,9 @@ public class DataframeExecutor {
         dataframe.setRows(data);
     }
 
-    private Long parseResultCount(InnospotResponse<DataBody<Map<String, Object>>> dataBody) {
-        if (MapUtils.isNotEmpty(dataBody.getBody().getBody())) {
-            for (Map.Entry<String, Object> entry : dataBody.getBody().getBody().entrySet()) {
+    private Long parseResultCount(DataBody<Map<String, Object>> dataBody) {
+        if (MapUtils.isNotEmpty(dataBody.getBody())) {
+            for (Map.Entry<String, Object> entry : dataBody.getBody().entrySet()) {
                 return (Long) entry.getValue();
             }
         }
