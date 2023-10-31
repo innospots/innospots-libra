@@ -23,7 +23,7 @@ public class FlowTaskScheduleListener {
             return;
         }
         if ("CRONTIMER".equals(taskEvent.appKey())) {
-            Map<String, Object> param = (Map<String, Object>) taskEvent.getSource();
+            Map<String, Object> param = (Map<String, Object>) taskEvent.getBody();
             String flowExecutionId = param.get("flowExecutionId").toString();
             FlowNodeDebuggerBuilder.build("nodeDebugger").stop(flowExecutionId);
         }
@@ -35,7 +35,7 @@ public class FlowTaskScheduleListener {
             return;
         }
         if ("CRONTIMER".equals(taskEvent.appKey())) {
-            Map<String, Object> param = (Map<String, Object>) taskEvent.getSource();
+            Map<String, Object> param = (Map<String, Object>) taskEvent.getBody();
             Long workflowInstanceId = Long.parseLong(param.get("workflowInstanceId").toString());
             FlowNodeDebuggerBuilder.build("nodeDebugger").execute(workflowInstanceId, null, new ArrayList<>());
         }

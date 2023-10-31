@@ -43,7 +43,8 @@ public enum ResourceType {
     SysConfig("libra"),
     Workflow("workflow"),
     WorkflowCategory("workflow"),
-    Application("application");
+    Credential("credential"),
+    Extension("extension");
 
     private String module;
 

@@ -1,5 +1,6 @@
 package io.innospots.libra.kernel.module.task.explore;
 
+import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.utils.BeanContextAware;
 import io.innospots.libra.base.task.ITaskExecutionExplore;
 import io.innospots.libra.base.task.TaskEvent;
@@ -42,7 +43,7 @@ public class DBTaskExecutionExplore implements ITaskExecutionExplore {
         TaskEvent taskEvent = TaskEvent.build(taskExecution, TaskEvent.TaskAction.STOP);
 
         //forward application event
-        BeanContextAware.sendAppEvent(taskEvent);
+        EventBusCenter.getInstance().post(taskEvent);
         return true;
     }
 
@@ -53,7 +54,7 @@ public class DBTaskExecutionExplore implements ITaskExecutionExplore {
         TaskEvent taskEvent = TaskEvent.build(taskExecution, TaskEvent.TaskAction.RERUN);
 
         // forward application event
-        BeanContextAware.sendAppEvent(taskEvent);
+        EventBusCenter.getInstance().post(taskEvent);
         return true;
     }
 }

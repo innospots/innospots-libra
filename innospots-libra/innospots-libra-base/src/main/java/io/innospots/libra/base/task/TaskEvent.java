@@ -1,6 +1,6 @@
 package io.innospots.libra.base.task;
 
-import org.springframework.context.ApplicationEvent;
+import io.innospots.base.events.EventBody;
 
 import java.util.Map;
 
@@ -8,7 +8,7 @@ import java.util.Map;
  * @author Smars
  * @date 2023/8/8
  */
-public class TaskEvent extends ApplicationEvent {
+public class TaskEvent extends EventBody {
 
     private String appKey;
 
@@ -16,7 +16,7 @@ public class TaskEvent extends ApplicationEvent {
 
     private TaskAction taskAction;
 
-    public static TaskEvent build(TaskExecution taskExecution,TaskAction taskAction){
+    public static TaskEvent build(TaskExecution taskExecution, TaskAction taskAction) {
         TaskEvent taskEvent = new TaskEvent(taskExecution.getParamContext(),
                 taskExecution.getAppKey(),
                 taskExecution.getExtensionKey(), taskAction);
@@ -27,21 +27,21 @@ public class TaskEvent extends ApplicationEvent {
         super(source);
     }
 
-    private TaskEvent(Object source, String appKey, String extensionKey,TaskAction taskAction) {
+    private TaskEvent(Object source, String appKey, String extensionKey, TaskAction taskAction) {
         super(source);
         this.appKey = appKey;
         this.extensionKey = extensionKey;
         this.taskAction = taskAction;
     }
 
-    public Map<String,Object> params(){
-        if(source!=null){
-            return (Map<String, Object>) source;
+    public Map<String, Object> params() {
+        if (body != null) {
+            return (Map<String, Object>) body;
         }
         return null;
     }
 
-    public enum TaskAction{
+    public enum TaskAction {
         STOP,
         RERUN;
     }

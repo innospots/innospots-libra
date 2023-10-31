@@ -22,7 +22,6 @@ import cn.hutool.core.img.ImgUtil;
 import io.innospots.base.enums.ImageType;
 import io.innospots.base.model.Pair;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.*;

@@ -109,7 +109,6 @@ public class LibraBaseConfiguration {
         return new EntityMetaObjectHandler();
     }
 
-    // TODO 后续规范表名的忽略规则
     private boolean ignoreTableCondition(String tableName) {
         long count = IGNORE_TABLES.stream().filter(data -> data.equals(tableName)).count();
         return count > 0;

@@ -66,7 +66,7 @@ public class AuthProperties {
     /**
      * token issuer
      */
-    private String tokenIssuer = "innospot";
+    private String tokenIssuer = "innospots";
     /**
      * token expire time minute
      */
@@ -91,7 +91,7 @@ public class AuthProperties {
      */
     private List<String> ignorePermissionPaths = new ArrayList<>();
 
-    private List<AppAuthInfo> appAuthInfos = new ArrayList<>();
+//    private List<AppAuthInfo> appAuthInfos = new ArrayList<>();
 
     /**
      * if true suer admin have all the permission
