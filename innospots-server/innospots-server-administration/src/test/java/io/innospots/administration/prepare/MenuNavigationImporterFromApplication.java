@@ -9,7 +9,7 @@ import io.innospots.libra.base.menu.ResourceItem;
 import io.innospots.libra.kernel.LibraKernelImporter;
 import io.innospots.libra.kernel.module.menu.dao.MenuResourceDao;
 import io.innospots.libra.kernel.module.menu.entity.MenuResourceEntity;
-import io.innospots.libra.kernel.module.menu.mapper.MenuResourceMapper;
+import io.innospots.libra.kernel.module.menu.converter.MenuResourceMapper;
 import io.innospots.libra.kernel.module.menu.operator.MenuManagementOperator;
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.jupiter.api.Test;

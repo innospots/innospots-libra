@@ -18,7 +18,6 @@
 
 package io.innospots.server.base.registry;
 
-import io.innospots.server.base.configuration.InnospotConfigProperties;
 import io.innospots.server.base.registry.enums.ServiceRole;
 import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.watcher.WatcherSupervisor;

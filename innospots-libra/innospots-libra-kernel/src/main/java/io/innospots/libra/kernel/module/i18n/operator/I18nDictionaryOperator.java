@@ -26,7 +26,7 @@ import io.innospots.base.data.body.PageBody;
 import io.innospots.libra.base.entity.BaseEntity;
 import io.innospots.libra.kernel.module.i18n.dao.I18nDictionaryDao;
 import io.innospots.libra.kernel.module.i18n.entity.I18nDictionaryEntity;
-import io.innospots.libra.kernel.module.i18n.mapper.I18nDictionaryConvertMapper;
+import io.innospots.libra.kernel.module.i18n.converter.I18nDictionaryConvertMapper;
 import io.innospots.libra.kernel.module.i18n.model.I18nDictionary;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

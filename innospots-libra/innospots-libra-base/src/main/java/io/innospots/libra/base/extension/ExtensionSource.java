@@ -26,11 +26,15 @@ package io.innospots.libra.base.extension;
  */
 public enum ExtensionSource {
     /**
-     * core app
+     * core install
      */
     CORE,
     /**
-     * market app
+     * local install
+     */
+    LOCAL,
+    /**
+     * market install
      */
     MARKET;
 }

@@ -23,7 +23,7 @@ import com.github.benmanes.caffeine.cache.CacheLoader;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import io.innospots.base.model.user.UserInfo;
-import io.innospots.libra.base.event.MessageEvent;
+import io.innospots.libra.kernel.events.MessageEvent;
 import io.innospots.libra.base.operator.SysUserReader;
 import io.innospots.libra.kernel.module.notification.entity.NotificationMessageEntity;
 import io.innospots.libra.kernel.module.notification.model.NotificationChannel;

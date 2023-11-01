@@ -40,7 +40,7 @@ import java.util.regex.Pattern;
 public class ResourceRequestMatcher {
 
 
-    private ResourceItem resourceItem;
+    private final ResourceItem resourceItem;
 
     private List<Pair<UrlPathRequestMatcher, OptElement>> urlMatchers = new ArrayList<>();
 

@@ -30,7 +30,7 @@ import io.innospots.libra.kernel.module.page.model.PageDetail;
 import io.innospots.libra.kernel.module.page.operator.PageOperator;
 import io.innospots.libra.kernel.module.workspace.dao.WorkspaceDao;
 import io.innospots.libra.kernel.module.workspace.entity.WorkspaceEntity;
-import io.innospots.libra.kernel.module.workspace.mapper.WorkspaceMapper;
+import io.innospots.libra.kernel.module.workspace.converter.WorkspaceBeanConverter;
 import io.innospots.libra.kernel.module.workspace.model.*;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,13 +55,13 @@ public class WorkspaceOperator extends ServiceImpl<WorkspaceDao, WorkspaceEntity
 
     @Transactional(rollbackFor = Exception.class)
     public Workspace updateWorkspace(Workspace workspace) {
-        WorkspaceEntity entity = WorkspaceMapper.INSTANCE.modelToEntity(workspace);
+        WorkspaceEntity entity = WorkspaceBeanConverter.INSTANCE.modelToEntity(workspace);
         super.updateById(entity);
 
-        PageDetail pageDetail = WorkspaceMapper.INSTANCE.workspaceToPageDetail(workspace);
+        PageDetail pageDetail = WorkspaceBeanConverter.INSTANCE.workspaceToPageDetail(workspace);
         PageDetail pageDetailUpdate = pageOperator.createOrUpdate(pageDetail, PageOperationType.SAVE);
 
-        Workspace update = WorkspaceMapper.INSTANCE.pageDetailToWorkspace(pageDetailUpdate);
+        Workspace update = WorkspaceBeanConverter.INSTANCE.pageDetailToWorkspace(pageDetailUpdate);
         update.setUserId(workspace.getUserId());
         return update;
     }
@@ -75,7 +75,7 @@ public class WorkspaceOperator extends ServiceImpl<WorkspaceDao, WorkspaceEntity
         }
 
         PageDetail pageDetail = pageOperator.getPageDetail(entity.getPageId());
-        Workspace workspace = WorkspaceMapper.INSTANCE.pageDetailToWorkspace(pageDetail);
+        Workspace workspace = WorkspaceBeanConverter.INSTANCE.pageDetailToWorkspace(pageDetail);
         workspace.setUserId(entity.getUserId());
         return workspace;
     }

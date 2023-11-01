@@ -25,7 +25,7 @@ import io.innospots.libra.base.operator.SysUserReader;
 import io.innospots.libra.kernel.module.todo.entity.TodoTaskEntity;
 import io.innospots.libra.kernel.module.todo.entity.TodoTaskTagEntity;
 import io.innospots.libra.kernel.module.todo.enums.TaskPriority;
-import io.innospots.libra.kernel.module.todo.mapper.TodoTaskBeanConverter;
+import io.innospots.libra.kernel.module.todo.converter.TodoTaskBeanConverter;
 import io.innospots.libra.kernel.module.todo.model.TodoTask;
 import io.innospots.libra.kernel.module.todo.model.TodoTaskComment;
 import io.innospots.libra.kernel.module.todo.model.TodoTaskForm;

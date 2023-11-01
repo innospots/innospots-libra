@@ -18,9 +18,10 @@
 
 package io.innospots.libra.kernel.module.page.listener;
 
-import io.innospots.base.utils.BeanContextAware;
-import io.innospots.libra.base.event.NewPageEvent;
-import io.innospots.libra.base.event.PageCreatedEvent;
+import io.innospots.base.events.EventBusCenter;
+import io.innospots.base.events.IEventListener;
+import io.innospots.libra.kernel.events.NewPageEvent;
+import io.innospots.libra.kernel.events.PageCreatedEvent;
 import io.innospots.libra.kernel.module.page.enums.PageOperationType;
 import io.innospots.libra.kernel.module.page.model.PageDetail;
 import io.innospots.libra.kernel.module.page.operator.PageOperator;
@@ -35,7 +36,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class NewPageListener {
+public class NewPageListener implements IEventListener<NewPageEvent> {
 
     private final PageOperator pageOperator;
 
@@ -45,11 +46,16 @@ public class NewPageListener {
 
     @EventListener(value = NewPageEvent.class)
     public void handleEvent(NewPageEvent newPageEvent) {
+    }
+
+    @Override
+    public Object listen(NewPageEvent newPageEvent) {
         PageDetail pageDetail = new PageDetail();
         pageDetail.setPageType(newPageEvent.getPageType());
         pageDetail = pageOperator.createOrUpdate(pageDetail, PageOperationType.SAVE);
         if (pageDetail != null) {
-            BeanContextAware.sendAppEvent(new PageCreatedEvent(newPageEvent.getSource(), pageDetail.getId(), newPageEvent.getPageType()));
+            EventBusCenter.postSync(new PageCreatedEvent(newPageEvent.getBody(), pageDetail.getId(), newPageEvent.getPageType()));
         }
+        return null;
     }
 }

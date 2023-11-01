@@ -26,9 +26,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.CaseFormat;
 import io.innospots.base.enums.DataStatus;
+import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.StringConverter;
 import io.innospots.libra.base.event.NewPageEvent;
 import io.innospots.libra.base.event.NotificationAnnotation;
@@ -105,7 +105,7 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
         workflowInstanceEntity.setRevision(FlowVersion.DRAFT.getVersion());
         workflowInstanceEntity.setStatus(DataStatus.OFFLINE);
         this.save(workflowInstanceEntity);
-        BeanContextAware.sendAppEvent(new NewPageEvent(workflowInstanceEntity.getWorkflowInstanceId(), WorkflowPageListener.PAGE_TYPE));
+        EventBusCenter.postSync(new NewPageEvent(workflowInstanceEntity.getWorkflowInstanceId(), WorkflowPageListener.PAGE_TYPE));
         return WorkflowInstanceBeanConverter.INSTANCE.entityToModel(workflowInstanceEntity);
     }
 

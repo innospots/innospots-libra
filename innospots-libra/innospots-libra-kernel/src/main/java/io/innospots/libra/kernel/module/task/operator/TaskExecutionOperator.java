@@ -10,7 +10,7 @@ import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.libra.base.task.TaskExecution;
 import io.innospots.libra.kernel.module.task.dao.TaskExecutionDao;
 import io.innospots.libra.kernel.module.task.entity.TaskExecutionEntity;
-import io.innospots.libra.kernel.module.task.mapper.TaskExecutionMapper;
+import io.innospots.libra.kernel.module.task.converter.TaskExecutionBeanConverter;
 import io.innospots.libra.kernel.module.task.model.TaskExecutionForm;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -32,7 +32,7 @@ public class TaskExecutionOperator extends ServiceImpl<TaskExecutionDao, TaskExe
 
     @Transactional(rollbackFor = Exception.class)
     public Boolean createTaskExecution(TaskExecution taskExecution) {
-        TaskExecutionMapper mapper = TaskExecutionMapper.INSTANCE;
+        TaskExecutionBeanConverter mapper = TaskExecutionBeanConverter.INSTANCE;
         TaskExecutionEntity entity = mapper.model2Entity(taskExecution);
         return super.save(entity);
     }
@@ -47,13 +47,13 @@ public class TaskExecutionOperator extends ServiceImpl<TaskExecutionDao, TaskExe
         if (taskExecution.getPercent() <= 0 && entity.getPercent() > 0) {
             taskExecution.setPercent(entity.getPercent());
         }
-        TaskExecutionMapper.INSTANCE.updateEntity2Model(entity, taskExecution);
+        TaskExecutionBeanConverter.INSTANCE.updateEntity2Model(entity, taskExecution);
         return super.updateById(entity);
     }
 
     public TaskExecution getTaskExecution(String taskExecutionId) {
         TaskExecutionEntity entity = this.getById(taskExecutionId);
-        return TaskExecutionMapper.INSTANCE.entity2Model(entity);
+        return TaskExecutionBeanConverter.INSTANCE.entity2Model(entity);
     }
 
     public TaskExecution getTaskExecutionById(String taskExecutionId) {
@@ -92,7 +92,7 @@ public class TaskExecutionOperator extends ServiceImpl<TaskExecutionDao, TaskExe
         pageBody.setPageSize(entityPage.getSize());
         pageBody.setTotal(entityPage.getTotal());
         pageBody.setTotalPage(entityPage.getPages());
-        List<TaskExecution> taskExecutions = entities.stream().map(TaskExecutionMapper.INSTANCE::entity2Model).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
+        List<TaskExecution> taskExecutions = entities.stream().map(TaskExecutionBeanConverter.INSTANCE::entity2Model).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
         this.generateTaskExecutions(taskExecutions);
         pageBody.setList(taskExecutions);
         return pageBody;

@@ -21,10 +21,10 @@ package io.innospots.libra.kernel.module.extension.operator;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.BeanUtils;
-import io.innospots.libra.base.event.AppEvent;
+import io.innospots.libra.kernel.events.ExtensionEvent;
 import io.innospots.libra.base.extension.ExtensionStatus;
 import io.innospots.libra.base.extension.LibraClassPathExtPropertiesLoader;
 import io.innospots.libra.base.extension.LibraExtensionInformation;
@@ -33,7 +33,7 @@ import io.innospots.libra.kernel.module.extension.dao.ExtDefinitionDao;
 import io.innospots.libra.kernel.module.extension.dao.ExtInstallmentDao;
 import io.innospots.libra.kernel.module.extension.entity.ExtDefinitionEntity;
 import io.innospots.libra.kernel.module.extension.entity.ExtInstallmentEntity;
-import io.innospots.libra.kernel.module.extension.mapper.AppInstallmentBeanConverter;
+import io.innospots.libra.kernel.module.extension.converter.AppInstallmentBeanConverter;
 import io.innospots.libra.kernel.module.extension.model.ExtensionInstallInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -148,7 +148,7 @@ public class ExtInstallmentOperator extends ServiceImpl<ExtInstallmentDao, ExtIn
         }
 
         //send appEvent notice status change
-        BeanContextAware.sendAppEvent(new AppEvent(extInstallmentEntity.getExtKey(), "", ExtensionStatus.DISABLED));
+        EventBusCenter.getInstance().post(new ExtensionEvent(extInstallmentEntity.getExtKey(), "", ExtensionStatus.DISABLED));
 
         return true;
     }
@@ -170,7 +170,7 @@ public class ExtInstallmentOperator extends ServiceImpl<ExtInstallmentDao, ExtIn
         }
 
         //send appEvent notice status change
-        BeanContextAware.sendAppEvent(new AppEvent(extInstallmentEntity.getExtKey(), "", ExtensionStatus.ENABLED));
+        EventBusCenter.getInstance().post((new ExtensionEvent(extInstallmentEntity.getExtKey(), "", ExtensionStatus.ENABLED)));
 
         return true;
     }

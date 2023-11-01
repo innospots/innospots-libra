@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.module.notification.event;
 
-import io.innospots.libra.base.event.NotificationAnnotation;
+import io.innospots.libra.kernel.events.NotificationAnnotation;
 import io.innospots.libra.base.extension.LibraClassPathExtPropertiesLoader;
 import io.innospots.libra.base.extension.LibraExtensionProperties;
 import io.innospots.libra.base.menu.ResourceItem;

@@ -220,7 +220,7 @@ public class SchemaRegistryOperator extends ServiceImpl<SchemaRegistryDao, Schem
     }
 
 
-    public List<SchemaRegistry> listByRegistryIds(Set<String> keys) {
+    public List<SchemaRegistry> listByRegistryIds(Set<Integer> keys) {
         List<SchemaRegistryEntity> entities = super.listByIds(keys);
         return SchemaRegistryBeanConverter.INSTANCE.entitiesToModels(entities);
     }

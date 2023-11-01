@@ -23,19 +23,17 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.dataset.Dataset;
 import io.innospots.base.data.dataset.IDatasetReader;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.data.body.PageBody;
-import io.innospots.base.utils.BeanContextAware;
-import io.innospots.libra.base.event.DynamicMenuDelEvent;
 import io.innospots.libra.kernel.module.page.dao.PageDao;
 import io.innospots.libra.kernel.module.page.entity.PageEntity;
 import io.innospots.libra.kernel.module.page.entity.WidgetEntity;
 import io.innospots.libra.kernel.module.page.enums.PageOperationType;
-import io.innospots.libra.kernel.module.page.mapper.PageMapper;
+import io.innospots.libra.kernel.module.page.converter.PageBeanConverter;
 import io.innospots.libra.kernel.module.page.model.Page;
 import io.innospots.libra.kernel.module.page.model.PageDetail;
 import io.innospots.libra.kernel.module.page.model.Widget;
@@ -107,7 +105,7 @@ public class PageOperator extends ServiceImpl<PageDao, PageEntity> {
                 pageDetail.setCategoryId(0);
             }
         }
-        PageEntity entity = PageMapper.INSTANCE.modelToEntity(pageDetail);
+        PageEntity entity = PageBeanConverter.INSTANCE.modelToEntity(pageDetail);
         super.saveOrUpdate(entity);
         pageDetail.setId(entity.getPageId());
 
@@ -145,17 +143,17 @@ public class PageOperator extends ServiceImpl<PageDao, PageEntity> {
             super.removeById(pageId);
             widgetOperator.remove(new QueryWrapper<WidgetEntity>().lambda().eq(WidgetEntity::getPageId, pageId));
             // delete cascade menu
-            BeanContextAware.sendAppEvent(new DynamicMenuDelEvent(pageId, entity.getPageType()));
+//            BeanContextAware.sendAppEvent(new DynamicMenuDelEvent(pageId, entity.getPageType()));
         }
         return true;
     }
 
     public PageDetail getPageDetail(Integer pageId) {
         PageEntity entity = super.getById(pageId);
-        Page page = PageMapper.INSTANCE.entityToModel(entity);
+        Page page = PageBeanConverter.INSTANCE.entityToModel(entity);
         List<Widget> widgets = widgetOperator.list(pageId);
 
-        PageDetail pageDetail = PageMapper.INSTANCE.modelToDetail(page);
+        PageDetail pageDetail = PageBeanConverter.INSTANCE.modelToDetail(page);
         pageDetail.setWidgets(widgets);
 
         Set<Integer> viewIds = new HashSet<>();
@@ -192,7 +190,7 @@ public class PageOperator extends ServiceImpl<PageDao, PageEntity> {
 
         List<PageEntity> entities = this.list(query);
 
-        return PageMapper.INSTANCE.entitiesToModels(entities);
+        return PageBeanConverter.INSTANCE.entitiesToModels(entities);
     }
 
     public PageBody<Page> pagePages(Integer pageCategoryId, String queryCode, int page, int size) {
@@ -217,7 +215,7 @@ public class PageOperator extends ServiceImpl<PageDao, PageEntity> {
 
         IPage<PageEntity> entityPage = super.page(PageDTO.of(page, size), query);
 
-        List<Page> pages = PageMapper.INSTANCE.entitiesToModels(entityPage.getRecords());
+        List<Page> pages = PageBeanConverter.INSTANCE.entitiesToModels(entityPage.getRecords());
         PageBody<Page> pageBody = new PageBody<>();
         pageBody.setList(pages);
         pageBody.setPageSize(entityPage.getSize());

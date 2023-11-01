@@ -19,15 +19,6 @@
 package io.innospots.base.exception;
 
 import io.innospots.base.model.response.ResponseCode;
-import io.innospots.base.i18n.LocaleMessageUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * @author chenc
@@ -65,46 +56,6 @@ public class ValidatorException extends BaseException {
 
     public static ValidatorException buildInvalidException(String module, String message) {
         return new ValidatorException(module, message);
-    }
-
-    public static ValidatorException buildInvalidException(BindingResult bindingResult) {
-        List<String> messages = new ArrayList<>();
-        Set<String> modules = new LinkedHashSet<>();
-        for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            Object[] args;
-            if (fieldError.getArguments() != null) {
-                args = new Object[fieldError.getArguments().length + 2];
-                for (int i = 1; i < fieldError.getArguments().length; i++) {
-                    args[i + 2] = fieldError.getArguments()[i];
-                }
-            } else {
-                args = new Object[2];
-            }
-            //bean name
-            args[0] = fieldError.getObjectName();
-            //bean field
-            args[1] = fieldError.getField();
-            //bean value
-            args[2] = fieldError.getRejectedValue();
-            modules.add(String.valueOf(args[0]));
-            String msg = null;
-            //codes definitions: ValidType.beanName.fieldName,ValidType.fieldName,ValidType.javaType,ValidType
-            //codes: NotBlank.datasource.dyType,NotBlank.dbType, NotBlank.java.util.String, NotBlank
-            if (fieldError.getCodes() != null) {
-                for (String code : fieldError.getCodes()) {
-                    msg = LocaleMessageUtils.message(code, args, "");
-                    if (StringUtils.isNotEmpty(msg)) {
-                        break;
-                    }
-                }
-            }
-            if (StringUtils.isEmpty(msg)) {
-                msg = fieldError.getDefaultMessage();
-            }
-            messages.add(msg);
-        }//end for
-        return ValidatorException.buildInvalidException(String.join(",", modules),
-                String.join(",", messages));
     }
 
 }

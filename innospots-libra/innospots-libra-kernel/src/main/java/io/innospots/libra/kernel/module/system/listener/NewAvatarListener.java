@@ -18,24 +18,26 @@
 
 package io.innospots.libra.kernel.module.system.listener;
 
-import io.innospots.libra.base.event.NewAvatarEvent;
+import io.innospots.base.events.IEventListener;
+import io.innospots.libra.kernel.events.NewAvatarEvent;
 import io.innospots.libra.kernel.module.system.operator.AvatarResourceOperator;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class NewAvatarListener {
+public class NewAvatarListener implements IEventListener<NewAvatarEvent> {
+
     private final AvatarResourceOperator avatarResourceOperator;
 
     public NewAvatarListener(AvatarResourceOperator avatarResourceOperator) {
         this.avatarResourceOperator = avatarResourceOperator;
     }
 
-    @EventListener(value = NewAvatarEvent.class)
-    public void handleEvent(NewAvatarEvent newAvatarEvent) {
-        avatarResourceOperator.updateAvatar((Integer) newAvatarEvent.getSource(),
+    @Override
+    public Object listen(NewAvatarEvent newAvatarEvent) {
+        avatarResourceOperator.updateAvatar((Integer) newAvatarEvent.getBody(),
                 newAvatarEvent.getImageType(), newAvatarEvent.getBase64(), newAvatarEvent.getImageSort());
+        return null;
     }
 }

@@ -18,11 +18,11 @@
 
 package io.innospots.libra.kernel.module.menu.listener;
 
-import io.innospots.libra.base.event.AppEvent;
+import io.innospots.base.events.IEventListener;
 import io.innospots.libra.base.extension.ExtensionStatus;
+import io.innospots.libra.kernel.events.ExtensionEvent;
 import io.innospots.libra.kernel.module.menu.operator.MenuManagementOperator;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 /**
@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class MenuStatusChangeListener {
+public class MenuStatusChangeListener implements IEventListener<ExtensionEvent> {
 
     private MenuManagementOperator menuManagementOperator;
 
@@ -44,27 +44,26 @@ public class MenuStatusChangeListener {
     /**
      * Application status change triggers application menu status change
      *
-     * @param appEvent
+     * @param extensionEvent
      */
-    @EventListener(AppEvent.class)
-    public void handleEvent(AppEvent appEvent) {
-        log.debug("handler event :{}", appEvent);
+    @Override
+    public Object listen(ExtensionEvent extensionEvent) {
+        log.debug("handler event :{}", extensionEvent);
         try {
             Boolean status = null;
-            if (appEvent.getStatus().equals(ExtensionStatus.AVAILABLE)) {
+            if (extensionEvent.getStatus().equals(ExtensionStatus.AVAILABLE)) {
                 status = true;
-            } else if (appEvent.getStatus().equals(ExtensionStatus.DISABLED)) {
+            } else if (extensionEvent.getStatus().equals(ExtensionStatus.DISABLED)) {
                 status = false;
             }
             if (status != null) {
-                long result = menuManagementOperator.updateMenuStatusByAppKey(appEvent.getAppKey(), status);
-                log.info("handler event :{} update menu status by appKey result:{}", appEvent, result);
+                long result = menuManagementOperator.updateMenuStatusByAppKey(extensionEvent.getExtensionKey(), status);
+                log.info("handler event :{} update menu status by appKey result:{}", extensionEvent, result);
             }
         } catch (Exception e) {
             log.error("MenuStatusChangeListener handleEvent AppEvent error ", e);
         }
 
-
+        return null;
     }
-
 }

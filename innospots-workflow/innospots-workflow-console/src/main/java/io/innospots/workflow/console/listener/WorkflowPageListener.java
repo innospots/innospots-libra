@@ -18,10 +18,10 @@
 
 package io.innospots.workflow.console.listener;
 
+import io.innospots.base.events.IEventListener;
 import io.innospots.libra.base.event.PageCreatedEvent;
 import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 /**
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class WorkflowPageListener {
+public class WorkflowPageListener implements IEventListener<PageCreatedEvent> {
 
     public static final String PAGE_TYPE = "workflow";
 
@@ -41,10 +41,12 @@ public class WorkflowPageListener {
         this.workflowInstanceOperator = workflowInstanceOperator;
     }
 
-    @EventListener(value = PageCreatedEvent.class)
-    public void handleEvent(PageCreatedEvent pageCreatedEvent) {
+
+    @Override
+    public Object listen(PageCreatedEvent pageCreatedEvent) {
         if (PAGE_TYPE.equals(pageCreatedEvent.getPageType())) {
             workflowInstanceOperator.bindPage(pageCreatedEvent.getPageId(), (Long) pageCreatedEvent.getSource());
         }
+        return null;
     }
 }

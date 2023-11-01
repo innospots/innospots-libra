@@ -52,10 +52,10 @@ public class SwaggerConfiguration {
                 .components(new Components().addSecuritySchemes("Authorization",
                         new SecurityScheme().type(SecurityScheme.Type.APIKEY).scheme("bearer").bearerFormat("JWT")
                                 .in(SecurityScheme.In.HEADER).name("Authorization")))
-                .info(new Info().title("Innospot Api Doc")
-                        .description("Innospot Api")
+                .info(new Info().title("Innospots Api Doc")
+                        .description("Innospots Api")
                         .version("Application Version: 1.0.0\n Spring Boot Version: " + SpringBootVersion.getVersion())
-                        .license(new License().name("Apache 2.0").url("http://innospots.io")))
+                        .license(new License().name("Apache 2.0").url("http://www.innospots.com")))
                 .addSecurityItem(
                         new SecurityRequirement().addList("Authorization", Arrays.asList("read", "write")))
                 .externalDocs(new ExternalDocumentation()

@@ -32,9 +32,9 @@ import java.util.Set;
  */
 public class PageAccessCheckInterceptor implements HandlerInterceptor {
 
-    private AccessPermissionInterceptor permissionInterceptor;
+    private final AccessPermissionInterceptor permissionInterceptor;
 
-    private Set<String> ignorePermissionPaths = new HashSet<>();
+    private final Set<String> ignorePermissionPaths = new HashSet<>();
 
     public PageAccessCheckInterceptor(AccessPermissionInterceptor permissionInterceptor) {
         this.permissionInterceptor = permissionInterceptor;

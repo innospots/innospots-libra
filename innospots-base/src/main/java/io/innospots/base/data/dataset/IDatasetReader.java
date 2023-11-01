@@ -32,7 +32,7 @@ public interface IDatasetReader {
 
     List<Dataset> listDatasets(String credentialKey);
 
-    List<Dataset> listDatasets(Set<String> keys);
+    List<Dataset> listDatasets(Set<Integer> keys);
 
 
 }

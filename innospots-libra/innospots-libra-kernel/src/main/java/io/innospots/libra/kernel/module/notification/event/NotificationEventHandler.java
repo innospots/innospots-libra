@@ -18,10 +18,9 @@
 
 package io.innospots.libra.kernel.module.notification.event;
 
-import io.innospots.libra.base.event.MessageEvent;
+import io.innospots.base.events.IEventListener;
+import io.innospots.libra.kernel.events.MessageEvent;
 import io.innospots.libra.kernel.module.notification.sender.NotificationSenderManager;
-import org.springframework.context.ApplicationListener;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 /**
@@ -29,19 +28,19 @@ import org.springframework.stereotype.Component;
  * @date 2021/12/2
  */
 @Component
-public class NotificationEventHandler implements ApplicationListener<MessageEvent> {
+public class NotificationEventHandler implements IEventListener<MessageEvent> {
 
     private final NotificationSenderManager notificationSenderManager;
 
-    private final ThreadPoolTaskExecutor messageExecutor;
 
-    public NotificationEventHandler(NotificationSenderManager notificationSenderManager, ThreadPoolTaskExecutor messageExecutor) {
+    public NotificationEventHandler(NotificationSenderManager notificationSenderManager) {
         this.notificationSenderManager = notificationSenderManager;
-        this.messageExecutor = messageExecutor;
     }
 
+
     @Override
-    public void onApplicationEvent(MessageEvent event) {
-        messageExecutor.execute(() -> notificationSenderManager.send(event));
+    public Object listen(MessageEvent event) {
+        notificationSenderManager.send(event);
+        return null;
     }
 }

@@ -22,24 +22,24 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.exception.ValidatorException;
-import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.StringConverter;
 import io.innospots.libra.base.extension.LibraClassPathExtPropertiesLoader;
 import io.innospots.libra.base.menu.BaseItem;
 import io.innospots.libra.base.menu.ItemType;
 import io.innospots.libra.base.menu.ResourceItem;
+import io.innospots.libra.kernel.events.MenuDelEvent;
+import io.innospots.libra.kernel.module.menu.converter.MenuResourceMapper;
 import io.innospots.libra.kernel.module.menu.dao.MenuResourceDao;
 import io.innospots.libra.kernel.module.menu.entity.MenuResourceEntity;
-import io.innospots.libra.kernel.module.menu.mapper.MenuResourceMapper;
-import io.innospots.libra.kernel.module.menu.model.MenuDelEvent;
 import io.innospots.libra.kernel.module.menu.model.MenuOrders;
 import io.innospots.libra.kernel.module.menu.model.MenuResourceItem;
 import io.innospots.libra.kernel.module.menu.model.NewMenuItem;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.MapUtils;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -130,7 +130,7 @@ public class MenuManagementOperator extends ServiceImpl<MenuResourceDao, MenuRes
         List<String> itemKeys = resourceEntities.stream().map(MenuResourceEntity::getItemKey).filter(StringUtils::isNotBlank).distinct().collect(Collectors.toList());
         Boolean result = this.deleteMenuByIds(resourceIds);
         if (result) {
-            BeanContextAware.applicationContext().publishEvent(new MenuDelEvent(resourceId, itemKeys));
+            EventBusCenter.async(new MenuDelEvent(resourceId, itemKeys));
         }
         return result;
     }

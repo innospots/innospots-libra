@@ -18,7 +18,11 @@
 
 package io.innospots.base.events;
 
+import cn.hutool.core.util.TypeUtil;
+
 import javax.annotation.PostConstruct;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 /**
  * @author Raydian
@@ -26,6 +30,7 @@ import javax.annotation.PostConstruct;
  */
 
 public interface IEventListener<T extends EventBody> {
+
 
     @PostConstruct
     default void register() {
@@ -43,7 +48,11 @@ public interface IEventListener<T extends EventBody> {
     /**
      * @return
      */
-    Class<? extends EventBody> eventBodyClass();
+    default Class<T> eventBodyClass(){
+        Type[] interfaces = getClass().getGenericInterfaces();
+        Type type = ((ParameterizedType) interfaces[0]).getActualTypeArguments()[0];
+        return (Class<T>) type;
+    }
 
     default String name() {
         return this.getClass().getSimpleName();

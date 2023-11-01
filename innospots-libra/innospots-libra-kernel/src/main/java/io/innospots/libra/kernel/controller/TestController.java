@@ -20,10 +20,9 @@ package io.innospots.libra.kernel.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.innospots.base.configuration.InnospotConfigProperties;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.base.re.function.HttpFunc;
-import io.innospots.libra.base.utils.ClassJarFileLoader;
+import io.innospots.libra.base.configuration.InnospotsConfigProperties;
 import io.innospots.libra.kernel.service.TestService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -50,14 +49,14 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 @Tag(name = "Test Case")
 public class TestController {
 
-    private InnospotConfigProperties innospotConfigProperties;
+    private InnospotsConfigProperties innospotsConfigProperties;
 
     private ObjectMapper jsonMapper;
 
     public TestService testService;
 
-    public TestController(InnospotConfigProperties innospotConfigProperties, ObjectMapper jsonMapper, TestService testService) {
-        this.innospotConfigProperties = innospotConfigProperties;
+    public TestController(InnospotsConfigProperties innospotsConfigProperties, ObjectMapper jsonMapper, TestService testService) {
+        this.innospotsConfigProperties = innospotsConfigProperties;
         this.jsonMapper = jsonMapper;
         this.testService = testService;
     }
@@ -103,8 +102,8 @@ public class TestController {
     @Operation(summary = "jar loader")
     public InnospotResponse<Boolean> LibLoader(@Parameter(name = "jarName") @RequestParam(value = "jarName", required = false, defaultValue = "innospots-extension-apps-1.0.0-SNAPSHOT.jar") String jarName) {
 
-        String jarUrl = "file://" + innospotConfigProperties.getExtLibPath() + jarName;
-        ClassJarFileLoader.loadJar(jarUrl);
+//        String jarUrl = "file://" + innospotsConfigProperties.getExtLibPath() + jarName;
+//        ClassJarFileLoader.loadJar(jarUrl);
         return InnospotResponse.success(true);
     }
 

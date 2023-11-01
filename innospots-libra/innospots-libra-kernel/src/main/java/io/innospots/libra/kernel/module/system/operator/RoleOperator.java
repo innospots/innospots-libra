@@ -33,7 +33,7 @@ import io.innospots.base.data.request.FormQuery;
 import io.innospots.libra.kernel.module.system.dao.RoleDao;
 import io.innospots.libra.kernel.module.system.entity.SysRoleEntity;
 import io.innospots.libra.kernel.module.system.enums.SystemRoleCode;
-import io.innospots.libra.kernel.module.system.mapper.RoleInfoMapper;
+import io.innospots.libra.kernel.module.system.converter.RoleInfoBeanConverter;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -63,11 +63,11 @@ public class RoleOperator extends ServiceImpl<RoleDao, SysRoleEntity> {
     public RoleInfo createRole(RoleInfo role) {
         this.checkDifferentRoleCode(role);
         this.checkDifferentRoleName(role);
-        RoleInfoMapper roleInfoMapper = RoleInfoMapper.INSTANCE;
-        SysRoleEntity entity = roleInfoMapper.model2Entity(role);
+        RoleInfoBeanConverter roleInfoBeanConverter = RoleInfoBeanConverter.INSTANCE;
+        SysRoleEntity entity = roleInfoBeanConverter.model2Entity(role);
 
         super.save(entity);
-        return roleInfoMapper.entity2Model(entity);
+        return roleInfoBeanConverter.entity2Model(entity);
     }
 
     /**
@@ -109,7 +109,7 @@ public class RoleOperator extends ServiceImpl<RoleDao, SysRoleEntity> {
      */
     public RoleInfo getRole(Integer roleId) {
         SysRoleEntity entity = this.getRoleEntity(roleId);
-        return RoleInfoMapper.INSTANCE.entity2Model(entity);
+        return RoleInfoBeanConverter.INSTANCE.entity2Model(entity);
     }
 
     /**
@@ -145,7 +145,7 @@ public class RoleOperator extends ServiceImpl<RoleDao, SysRoleEntity> {
             pageBody.setTotal(entityPage.getTotal());
             pageBody.setTotalPage(entityPage.getPages());
         }
-        List<RoleInfo> roleInfos = entities.stream().map(RoleInfoMapper.INSTANCE::entity2Model).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
+        List<RoleInfo> roleInfos = entities.stream().map(RoleInfoBeanConverter.INSTANCE::entity2Model).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
         pageBody.setList(roleInfos);
         return pageBody;
     }
@@ -161,7 +161,7 @@ public class RoleOperator extends ServiceImpl<RoleDao, SysRoleEntity> {
             return Collections.emptyList();
         }
         List<SysRoleEntity> entities = super.listByIds(roleIds);
-        return entities.stream().map(RoleInfoMapper.INSTANCE::entity2Model).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
+        return entities.stream().map(RoleInfoBeanConverter.INSTANCE::entity2Model).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
     }
 
     public boolean hasRoles(List<Integer> roleIds) {

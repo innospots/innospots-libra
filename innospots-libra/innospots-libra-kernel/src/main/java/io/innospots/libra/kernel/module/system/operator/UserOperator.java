@@ -35,12 +35,12 @@ import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.user.SimpleUser;
 import io.innospots.base.model.user.UserInfo;
 import io.innospots.libra.base.configuration.AuthProperties;
-import io.innospots.libra.base.event.NotificationAnnotation;
+import io.innospots.libra.kernel.events.NotificationAnnotation;
 import io.innospots.libra.base.menu.AuthMode;
 import io.innospots.base.data.request.FormQuery;
 import io.innospots.libra.kernel.module.system.dao.UserDao;
 import io.innospots.libra.kernel.module.system.entity.SysUserEntity;
-import io.innospots.libra.kernel.module.system.mapper.UserInfoMapper;
+import io.innospots.libra.kernel.module.system.converter.UserInfoBeanConverter;
 import io.innospots.libra.kernel.module.system.model.user.UserForm;
 import io.innospots.libra.kernel.module.system.model.user.UserPassword;
 import lombok.extern.slf4j.Slf4j;
@@ -90,11 +90,11 @@ public class UserOperator extends ServiceImpl<UserDao, SysUserEntity> {
         this.checkDifferentUserName(user.getUserName(), null);
         String password = RsaKeyManager.decrypt(user.getPassword(), authProperties.getPrivateKey());
         user.setPassword(passwordEncoder.encode(password));
-        UserInfoMapper userInfoMapper = UserInfoMapper.INSTANCE;
-        SysUserEntity sysUser = userInfoMapper.formModel2Entity(user);
+        UserInfoBeanConverter userInfoBeanConverter = UserInfoBeanConverter.INSTANCE;
+        SysUserEntity sysUser = userInfoBeanConverter.formModel2Entity(user);
         sysUser.setStatus(DataStatus.ONLINE);
         this.save(sysUser);
-        return userInfoMapper.entity2UserInfo(sysUser);
+        return userInfoBeanConverter.entity2UserInfo(sysUser);
     }
 
     /**
@@ -182,7 +182,7 @@ public class UserOperator extends ServiceImpl<UserDao, SysUserEntity> {
             return Collections.emptyList();
         }
         List<SysUserEntity> userEntities = super.listByIds(userIds);
-        return userEntities.stream().map(UserInfoMapper.INSTANCE::entity2UserInfo).collect(Collectors.toCollection(() -> new ArrayList<>(userEntities.size())));
+        return userEntities.stream().map(UserInfoBeanConverter.INSTANCE::entity2UserInfo).collect(Collectors.toCollection(() -> new ArrayList<>(userEntities.size())));
     }
 
     public List<SimpleUser> listByNames(List<String> userNames) {
@@ -193,7 +193,7 @@ public class UserOperator extends ServiceImpl<UserDao, SysUserEntity> {
         LambdaQueryWrapper<SysUserEntity> lambda = queryWrapper.lambda();
         lambda.in(SysUserEntity::getUserName, userNames);
         List<SysUserEntity> userEntities = super.list(queryWrapper);
-        return userEntities.stream().map(UserInfoMapper.INSTANCE::entity2UserInfo).collect(Collectors.toCollection(() -> new ArrayList<>(userEntities.size())));
+        return userEntities.stream().map(UserInfoBeanConverter.INSTANCE::entity2UserInfo).collect(Collectors.toCollection(() -> new ArrayList<>(userEntities.size())));
     }
 
     /**
@@ -209,7 +209,7 @@ public class UserOperator extends ServiceImpl<UserDao, SysUserEntity> {
             throw ResourceException.buildExistException(this.getClass(), "user does not exist");
         }
         user.setPassword("------");
-        return UserInfoMapper.INSTANCE.entity2UserInfo(user);
+        return UserInfoBeanConverter.INSTANCE.entity2UserInfo(user);
     }
 
 
@@ -245,7 +245,7 @@ public class UserOperator extends ServiceImpl<UserDao, SysUserEntity> {
         }
         entities.forEach(v -> v.setPassword(null));
 
-        pageBody.setList(entities.stream().map(UserInfoMapper.INSTANCE::entity2UserInfo).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size()))));
+        pageBody.setList(entities.stream().map(UserInfoBeanConverter.INSTANCE::entity2UserInfo).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size()))));
         return pageBody;
     }
 

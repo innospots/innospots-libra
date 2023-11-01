@@ -19,12 +19,9 @@
 package io.innospots.libra.kernel.configuration;
 
 
-import io.innospots.base.configuration.BaseServiceConfiguration;
-import io.innospots.base.configuration.DatasourceConfiguration;
 import io.innospots.base.constant.PathConstant;
 import io.innospots.base.crypto.BCryptPasswordEncoder;
 import io.innospots.base.crypto.PasswordEncoder;
-import io.innospots.base.utils.thread.ThreadPoolBuilder;
 import io.innospots.libra.base.configuration.LibraBaseConfiguration;
 import io.innospots.libra.base.configuration.WebConfiguration;
 import io.innospots.libra.base.model.swagger.SwaggerOpenApiBuilder;
@@ -35,10 +32,10 @@ import org.springdoc.core.GroupedOpenApi;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -49,7 +46,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EntityScan(basePackages = {"io.innospots.libra.kernel.module.**.entity"})
 @MapperScan(basePackages = "io.innospots.libra.kernel.module.**.dao")
-@Import({DatasourceConfiguration.class, BaseServiceConfiguration.class, LibraBaseConfiguration.class, WebConfiguration.class})
+@Import({LibraBaseConfiguration.class, WebConfiguration.class})
+@EnableConfigurationProperties({InnospotsConsoleProperties.class})
 public class LibraKernelConfiguration implements WebMvcConfigurer {
 
 
@@ -59,10 +57,6 @@ public class LibraKernelConfiguration implements WebMvcConfigurer {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean(name = "messageExecutor")
-    public ThreadPoolTaskExecutor messageExecutor() {
-        return ThreadPoolBuilder.build("message-executor", 2000);
-    }
 
     @Bean
     @ConditionalOnProperty(prefix = "innospots.config", name = "enable-swagger", havingValue = "true")

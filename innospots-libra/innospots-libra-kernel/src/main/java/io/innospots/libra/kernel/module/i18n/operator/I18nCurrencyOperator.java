@@ -30,7 +30,7 @@ import io.innospots.libra.kernel.module.i18n.dao.I18nCurrencyDao;
 import io.innospots.libra.kernel.module.i18n.dao.I18nLanguageDao;
 import io.innospots.libra.kernel.module.i18n.entity.I18nCurrencyEntity;
 import io.innospots.libra.kernel.module.i18n.entity.I18nLanguageEntity;
-import io.innospots.libra.kernel.module.i18n.mapper.I18NCurrencyBeanConverter;
+import io.innospots.libra.kernel.module.i18n.converter.I18NCurrencyBeanConverter;
 import io.innospots.libra.kernel.module.i18n.model.I18nCurrency;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

@@ -18,7 +18,8 @@
 
 package io.innospots.libra.kernel.module.menu.listener;
 
-import io.innospots.libra.kernel.module.menu.model.MenuDelEvent;
+import io.innospots.base.events.IEventListener;
+import io.innospots.libra.kernel.events.MenuDelEvent;
 import io.innospots.libra.kernel.module.system.operator.RoleResourceOperator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -33,7 +34,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class MenuDelListener {
+public class MenuDelListener implements IEventListener<MenuDelEvent> {
 
     private final RoleResourceOperator roleResourceOperator;
 
@@ -41,11 +42,12 @@ public class MenuDelListener {
         this.roleResourceOperator = roleResourceOperator;
     }
 
-    @EventListener(value = MenuDelEvent.class)
-    public void handleEvent(MenuDelEvent menuDelEvent) {
+    @Override
+    public Object listen(MenuDelEvent menuDelEvent) {
         if (CollectionUtils.isEmpty(menuDelEvent.getItemKeys())) {
-            return;
+            return null;
         }
         roleResourceOperator.deleteRoleResourceByItemKeys(menuDelEvent.getItemKeys());
+        return null;
     }
 }

@@ -19,23 +19,23 @@
 package io.innospots.libra.kernel.module.extension.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.innospots.base.configuration.InnospotConfigProperties;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.base.utils.ZipFileUtils;
+import io.innospots.base.utils.time.DateTimeUtils;
+import io.innospots.libra.base.configuration.InnospotsConfigProperties;
 import io.innospots.libra.base.extension.ExtensionStatus;
 import io.innospots.libra.base.extension.LibraExtensionInformation;
 import io.innospots.libra.base.extension.LibraExtensionProperties;
 import io.innospots.libra.kernel.module.extension.entity.ExtDefinitionEntity;
 import io.innospots.libra.kernel.module.extension.entity.ExtInstallmentEntity;
-import io.innospots.libra.kernel.module.extension.mapper.AppInstallmentBeanConverter;
+import io.innospots.libra.kernel.module.extension.converter.AppInstallmentBeanConverter;
 import io.innospots.libra.kernel.module.extension.model.ExtensionInstallInfo;
 import io.innospots.libra.kernel.module.extension.operator.ExtDefinitionOperator;
 import io.innospots.libra.kernel.module.extension.operator.ExtInstallmentOperator;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -55,14 +55,13 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 public class ExtensionService {
 
-    @Autowired
-    private InnospotConfigProperties innospotConfigProperties;
+    private InnospotsConfigProperties innospotsConfigProperties;
 
-    @Autowired
     private ExtDefinitionOperator extDefinitionOperator;
-    @Autowired
+
     private ExtInstallmentOperator extInstallmentOperator;
 
     //Application market usage status
@@ -88,7 +87,7 @@ public class ExtensionService {
         String[] arrs = fileName.substring(0, fileName.lastIndexOf(".")).split("_");
         appName = arrs[0];
         appVersion = arrs[1];
-        String downPath = innospotConfigProperties.getUploadFilePath() + File.separator + appName + File.separator + appVersion;
+        String downPath = innospotsConfigProperties.getUploadFilePath() + File.separator + appName + File.separator + appVersion;
         return downPath;
     }
 
@@ -272,12 +271,12 @@ public class ExtensionService {
         }
 
         //备份classPath中app的jar文件
-        File extLibDir = new File(innospotConfigProperties.getExtLibPath());
+        File extLibDir = new File(innospotsConfigProperties.getExtLibPath());
         if (!extLibDir.exists()) {
             extLibDir.mkdirs();
         }
         if (!extLibDir.isDirectory()) {
-            throw ResourceException.buildCreateException(this.getClass(), "extLibDir is not directory", innospotConfigProperties.getExtLibPath());
+            throw ResourceException.buildCreateException(this.getClass(), "extLibDir is not directory", innospotsConfigProperties.getExtLibPath());
         }
 
         File[] jarFileArr = extLibDir.listFiles((file, name) -> {

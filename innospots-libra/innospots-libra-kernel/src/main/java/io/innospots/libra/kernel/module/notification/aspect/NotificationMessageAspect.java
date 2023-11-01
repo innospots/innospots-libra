@@ -19,9 +19,9 @@
 package io.innospots.libra.kernel.module.notification.aspect;
 
 
-import io.innospots.base.utils.BeanContextAware;
-import io.innospots.libra.base.event.MessageEvent;
-import io.innospots.libra.base.event.NotificationAnnotation;
+import io.innospots.base.events.EventBusCenter;
+import io.innospots.libra.kernel.events.MessageEvent;
+import io.innospots.libra.kernel.events.NotificationAnnotation;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -42,7 +42,7 @@ import java.lang.reflect.Method;
 @Component
 public class NotificationMessageAspect {
 
-    @Pointcut("@annotation(io.innospots.libra.base.event.NotificationAnnotation)")
+    @Pointcut("@annotation(io.innospots.libra.kernel.events.NotificationAnnotation)")
     public void controllerAspect() {
 
     }
@@ -78,7 +78,8 @@ public class NotificationMessageAspect {
             if (notificationAnnotation == null) {
                 return;
             }
-            BeanContextAware.sendAppEvent(new MessageEvent(notificationAnnotation.code(), notificationAnnotation.title(),
+
+            EventBusCenter.async(new MessageEvent(notificationAnnotation.code(), notificationAnnotation.title(),
                     notificationAnnotation.content(), notificationAnnotation.name(), notificationAnnotation.extName(), notificationAnnotation.module()));
 
         } catch (Exception e) {

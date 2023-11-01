@@ -18,14 +18,14 @@
 
 package io.innospots.libra.kernel.module.i18n.listener;
 
-import io.innospots.libra.base.event.I18nDictEvent;
+import io.innospots.base.events.IEventListener;
+import io.innospots.libra.kernel.events.I18nDictEvent;
 import io.innospots.libra.kernel.module.i18n.model.I18nDictionary;
 import io.innospots.libra.kernel.module.i18n.model.I18nTransMessageGroup;
 import io.innospots.libra.kernel.module.i18n.operator.I18nDictionaryOperator;
 import io.innospots.libra.kernel.module.i18n.operator.I18nTransMessageOperator;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,18 +36,18 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class I18nDictEventListener {
+@AllArgsConstructor
+public class I18nDictEventListener implements IEventListener<I18nDictEvent> {
 
-    @Autowired
-    I18nDictionaryOperator i18nDictionaryOperator;
-    @Autowired
-    I18nTransMessageOperator i18nTransMessageOperator;
+    private I18nDictionaryOperator i18nDictionaryOperator;
 
-    @EventListener(value = I18nDictEvent.class)
-    public void i18nDictEventHandler(I18nDictEvent i18nDictEvent) {
+    private I18nTransMessageOperator i18nTransMessageOperator;
 
+
+    @Override
+    public Object listen(I18nDictEvent i18nDictEvent) {
         //TODO module info menu or opt
-        I18nDictionary i18nDictionary = new I18nDictionary(i18nDictEvent.getAppName(), i18nDictEvent.getModule(), i18nDictEvent.getCode(), "");
+        I18nDictionary i18nDictionary = new I18nDictionary(i18nDictEvent.getExtensionName(), i18nDictEvent.getModule(), i18nDictEvent.getCode(), "");
         boolean result = i18nDictionaryOperator.saveOrUpdate(i18nDictionary);
         if (result) {
             if (i18nDictEvent.getI18nNames() != null) {
@@ -56,6 +56,6 @@ public class I18nDictEventListener {
                 log.warn("I18nName is null, {}", i18nDictEvent);
             }
         }
-
+        return result;
     }
 }

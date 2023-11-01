@@ -20,6 +20,7 @@ package io.innospots.libra.kernel.interceptor;
 
 import io.innospots.base.exception.AuthenticationException;
 import io.innospots.base.utils.BeanContextAware;
+import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.base.utils.CCH;
 import io.innospots.libra.base.configuration.AuthProperties;
 import io.innospots.libra.base.extension.LibraClassPathExtPropertiesLoader;
@@ -203,10 +204,10 @@ public class AccessPermissionInterceptor implements HandlerInterceptor {
 
     private boolean isSuperAdminRole() {
         if (userResourceService == null) {
-            userResourceService = BeanContextAware.getBean(UserResourceService.class);
+            userResourceService = BeanContextAwareUtils.getBean(UserResourceService.class);
         }
         if (authProperties == null) {
-            authProperties = BeanContextAware.getBean(AuthProperties.class);
+            authProperties = BeanContextAwareUtils.getBean(AuthProperties.class);
         }
 
         return userResourceService.isSuperAdminRole();

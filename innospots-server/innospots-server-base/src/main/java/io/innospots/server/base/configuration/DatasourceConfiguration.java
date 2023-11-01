@@ -31,14 +31,14 @@ import javax.sql.DataSource;
  * @author Raydian
  * @date 2021/1/10
  */
-@EnableConfigurationProperties(InnospotDbProperties.class)
+@EnableConfigurationProperties(InnospotsDbProperties.class)
 @Configuration
 public class DatasourceConfiguration {
 
 
     @Bean
     @ConditionalOnMissingBean(DataSource.class)
-    public DataSource dataSource(InnospotDbProperties dbProperties) {
+    public DataSource dataSource(InnospotsDbProperties dbProperties) {
         return new HikariDataSource(dbProperties);
     }
 

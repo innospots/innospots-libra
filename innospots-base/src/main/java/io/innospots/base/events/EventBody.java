@@ -33,21 +33,12 @@ public class EventBody {
     protected long eventTime;
 
     /**
-     * event name
-     */
-    protected String name;
-
-    /**
      * event type
      */
     protected String eventType;
 
     protected Object body;
 
-    public EventBody(String name) {
-        this.name = name;
-        eventTime = System.currentTimeMillis();
-    }
 
     public EventBody() {
         eventTime = System.currentTimeMillis();

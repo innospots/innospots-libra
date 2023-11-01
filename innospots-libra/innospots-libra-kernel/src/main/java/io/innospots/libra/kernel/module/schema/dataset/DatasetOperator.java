@@ -115,7 +115,7 @@ public class DatasetOperator implements IDatasetReader {
     }
 
     @Override
-    public List<Dataset> listDatasets(Set<String> keys) {
+    public List<Dataset> listDatasets(Set<Integer> keys) {
         if (CollectionUtils.isEmpty(keys)) {
             return Collections.emptyList();
         }

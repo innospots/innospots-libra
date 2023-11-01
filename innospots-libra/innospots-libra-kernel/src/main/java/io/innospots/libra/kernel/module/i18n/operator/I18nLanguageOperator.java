@@ -26,7 +26,7 @@ import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.request.FormQuery;
 import io.innospots.libra.kernel.module.i18n.dao.I18nLanguageDao;
 import io.innospots.libra.kernel.module.i18n.entity.I18nLanguageEntity;
-import io.innospots.libra.kernel.module.i18n.mapper.I18NLanguageBeanConverter;
+import io.innospots.libra.kernel.module.i18n.converter.I18NLanguageBeanConverter;
 import io.innospots.libra.kernel.module.i18n.model.I18nLanguage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

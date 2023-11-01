@@ -31,7 +31,7 @@ import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.ResourceType;
 import io.innospots.libra.kernel.module.logger.dao.SysOperateLogDao;
 import io.innospots.libra.kernel.module.logger.entity.SysOperateLogEntity;
-import io.innospots.libra.kernel.module.logger.mapper.SysOperateLogMapper;
+import io.innospots.libra.kernel.module.logger.converter.SysOperateLogMapper;
 import io.innospots.libra.kernel.module.logger.model.LogFormQuery;
 import io.innospots.libra.kernel.module.logger.model.SysOperateLog;
 import io.innospots.libra.kernel.module.logger.model.UserLogInfo;

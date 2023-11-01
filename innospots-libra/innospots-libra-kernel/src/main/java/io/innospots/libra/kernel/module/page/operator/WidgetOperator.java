@@ -23,7 +23,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.libra.kernel.module.page.dao.WidgetDao;
 import io.innospots.libra.kernel.module.page.entity.WidgetEntity;
-import io.innospots.libra.kernel.module.page.mapper.WidgetMapper;
+import io.innospots.libra.kernel.module.page.converter.WidgetBeanConverter;
 import io.innospots.libra.kernel.module.page.model.Widget;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -47,7 +47,7 @@ public class WidgetOperator extends ServiceImpl<WidgetDao, WidgetEntity> {
                 new QueryWrapper<WidgetEntity>().lambda().eq(WidgetEntity::getPageId, pageId)
         );
         Map<Integer, WidgetEntity> entityMap = entities.stream().collect(Collectors.toMap(WidgetEntity::getWidgetId, Function.identity()));
-        List<Widget> widgets = WidgetMapper.INSTANCE.entitiesToModels(entities);
+        List<Widget> widgets = WidgetBeanConverter.INSTANCE.entitiesToModels(entities);
         if (CollectionUtils.isNotEmpty(widgets)) {
             for (Widget widget : widgets) {
                 WidgetEntity entity = entityMap.get(widget.getId());
@@ -72,7 +72,7 @@ public class WidgetOperator extends ServiceImpl<WidgetDao, WidgetEntity> {
     }
 
     public List<Widget> createOrUpdate(List<Widget> widgets) {
-        List<WidgetEntity> entities = WidgetMapper.INSTANCE.modelsToEntities(widgets);
+        List<WidgetEntity> entities = WidgetBeanConverter.INSTANCE.modelsToEntities(widgets);
         super.saveOrUpdateBatch(entities);
         for (int i = 0; i < entities.size(); i++) {
             widgets.get(i).setId(entities.get(i).getWidgetId());

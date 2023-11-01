@@ -30,25 +30,25 @@ public enum ExtensionStatus {
      */
     LOADED,
     /**
-     * the application registry in the system, save to applicationDefinitionEntity and move to classLoader
+     * the extension registry in the system, save to applicationDefinitionEntity and move to classLoader
      */
     AVAILABLE,
     /**
-     * application is expired and the classes in the jar will remove from classLoader
+     * extension is expired and the classes in the jar will remove from classLoader
      * Apps with status expired cannot be installed
      */
     EXPIRED,
     /**
-     * the application install in the system, save to applicationInstallmentEntity
+     * the extension install in the system, save to applicationInstallmentEntity
      * Application status must be available to install
      */
     INSTALLED,
     /**
-     * If the application status is enabled, the menu, page and API of the application can be used.
+     * If the extension status is enabled, the menu, page and API of the application can be used.
      */
     ENABLED,
     /**
-     * application is disabled, which the menu, page, api will not be used.
+     * extension is disabled, which the menu, page, api will not be used.
      */
     DISABLED,
     ;

@@ -25,7 +25,7 @@ import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.libra.kernel.module.notification.dao.NotificationChannelDao;
 import io.innospots.libra.kernel.module.notification.entity.NotificationChannelEntity;
-import io.innospots.libra.kernel.module.notification.mapper.NotificationChannelMapper;
+import io.innospots.libra.kernel.module.notification.converter.NotificationChannelMapper;
 import io.innospots.libra.kernel.module.notification.model.NotificationChannel;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;

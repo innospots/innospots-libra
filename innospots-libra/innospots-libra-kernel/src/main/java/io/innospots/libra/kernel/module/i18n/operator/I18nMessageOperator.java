@@ -20,6 +20,7 @@ package io.innospots.libra.kernel.module.i18n.operator;
 
 import io.innospots.libra.kernel.module.i18n.dao.I18nTransMessageDao;
 import io.innospots.libra.kernel.module.i18n.model.LocaleMessage;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,9 +32,9 @@ import java.util.Locale;
  * @date 2021/12/20
  */
 @Component
+@AllArgsConstructor
 public class I18nMessageOperator {
 
-    @Autowired
     I18nTransMessageDao i18nTransMessageDao;
 
     public List<LocaleMessage> localeMessages() {

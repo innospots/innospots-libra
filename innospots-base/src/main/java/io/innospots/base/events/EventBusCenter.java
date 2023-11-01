@@ -34,12 +34,12 @@ import java.util.Map;
 @Slf4j
 public class EventBusCenter {
 
-    private HashMap<Class<? extends EventBody>, List<IEventListener>> eventListeners =
+    private final HashMap<Class<? extends EventBody>, List<IEventListener<? extends EventBody>>> eventListeners =
             new HashMap<>();
 
     private static EventBusCenter eventBusCenter;
 
-    private ThreadTaskExecutor threadPoolTaskExecutor;
+    private final ThreadTaskExecutor threadPoolTaskExecutor;
 
     public EventBusCenter() {
         threadPoolTaskExecutor = ThreadPoolBuilder.build("event-bus", 10000);
@@ -52,15 +52,15 @@ public class EventBusCenter {
         return eventBusCenter;
     }
 
-    public void register(IEventListener eventListener) {
+    public <T extends EventBody> void register(IEventListener<T> eventListener) {
         log.info("register eventBusCenter listener: {}", eventListener.name());
-        List<IEventListener> listeners = eventListeners.computeIfAbsent(eventListener.eventBodyClass(), k -> new ArrayList<>());
+        List<IEventListener<? extends EventBody>> listeners = eventListeners.computeIfAbsent(eventListener.eventBodyClass(), k -> new ArrayList<>());
         listeners.add(eventListener);
 
     }
 
-    public void unRegister(IEventListener eventListener) {
-        List<IEventListener> listeners = eventListeners.get(eventListener.eventBodyClass());
+    public <T extends EventBody> void unRegister(IEventListener<T> eventListener) {
+        List<IEventListener<? extends EventBody>> listeners = eventListeners.get(eventListener.eventBodyClass());
         if (listeners != null) {
             listeners.remove(eventListener);
         }
@@ -72,15 +72,15 @@ public class EventBusCenter {
         });
     }
 
-    public Object post(EventBody event) {
+    public Object post(EventBody eventBody) {
         Object resp = null;
-        if (event == null) {
+        if (eventBody == null) {
             return resp;
         }
-        for (Map.Entry<Class<? extends EventBody>, List<IEventListener>> entry : eventListeners.entrySet()) {
-            if (event.getClass().equals(entry.getKey())) {
+        for (Map.Entry<Class<? extends EventBody>, List<IEventListener<? extends EventBody>>> entry : eventListeners.entrySet()) {
+            if (eventBody.getClass().equals(entry.getKey())) {
                 for (IEventListener listener : entry.getValue()) {
-                    resp =listener.listen(event);
+                    resp =listener.listen(eventBody);
                 }
             }
         }
@@ -89,6 +89,10 @@ public class EventBusCenter {
 
     public static void async(EventBody event) {
         getInstance().asyncPost(event);
+    }
+
+    public static Object postSync(EventBody event){
+        return getInstance().post(event);
     }
 
 }

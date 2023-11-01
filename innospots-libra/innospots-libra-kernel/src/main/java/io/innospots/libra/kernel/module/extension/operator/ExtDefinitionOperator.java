@@ -27,7 +27,7 @@ import io.innospots.libra.base.extension.LibraExtensionInformation;
 import io.innospots.libra.base.extension.LibraExtensionProperties;
 import io.innospots.libra.kernel.module.extension.dao.ExtDefinitionDao;
 import io.innospots.libra.kernel.module.extension.entity.ExtDefinitionEntity;
-import io.innospots.libra.kernel.module.extension.mapper.ExtDefinitionBeanConverter;
+import io.innospots.libra.kernel.module.extension.converter.ExtDefinitionBeanConverter;
 import io.innospots.libra.kernel.module.extension.model.ExtensionDefinition;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

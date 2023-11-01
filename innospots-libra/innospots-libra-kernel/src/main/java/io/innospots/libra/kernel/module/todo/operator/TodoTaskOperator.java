@@ -32,7 +32,7 @@ import io.innospots.base.utils.CCH;
 import io.innospots.libra.kernel.module.todo.dao.TodoTaskDao;
 import io.innospots.libra.kernel.module.todo.entity.TodoTaskEntity;
 import io.innospots.libra.kernel.module.todo.enums.TaskStatus;
-import io.innospots.libra.kernel.module.todo.mapper.TodoTaskBeanConverter;
+import io.innospots.libra.kernel.module.todo.converter.TodoTaskBeanConverter;
 import io.innospots.libra.kernel.module.todo.model.TodoTask;
 import io.innospots.libra.kernel.module.todo.model.TodoTaskForm;
 import org.apache.commons.collections4.CollectionUtils;

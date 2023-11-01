@@ -26,7 +26,7 @@ import io.innospots.libra.kernel.module.notification.entity.NotificationSettingE
 import io.innospots.libra.kernel.module.notification.event.NotificationDefinitionLoader;
 import io.innospots.libra.kernel.module.notification.event.NotificationGroup;
 import io.innospots.libra.kernel.module.notification.event.NotificationModule;
-import io.innospots.libra.kernel.module.notification.mapper.NotificationSettingMapper;
+import io.innospots.libra.kernel.module.notification.converter.NotificationSettingMapper;
 import io.innospots.libra.kernel.module.notification.model.NotificationSetting;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

@@ -18,6 +18,7 @@
 
 package io.innospots.libra.security.logger.event;
 
+import io.innospots.base.events.IEventListener;
 import io.innospots.base.model.user.UserInfo;
 import io.innospots.libra.base.event.LoginEvent;
 import io.innospots.libra.base.operator.SysUserReader;
@@ -27,7 +28,6 @@ import io.innospots.libra.security.logger.entity.LoginLogEntity;
 import io.innospots.libra.security.logger.operator.LoginLogOperator;
 import io.innospots.libra.security.operator.AuthUserOperator;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -40,7 +40,7 @@ import java.time.LocalDateTime;
  */
 @Slf4j
 @Component
-public class LoginEventListener {
+public class LoginEventListener implements IEventListener<LoginEvent> {
 
     private final LoginLogOperator loginLogOperator;
 
@@ -54,8 +54,9 @@ public class LoginEventListener {
         this.sysUserReader = sysUserReader;
     }
 
-    @EventListener(value = LoginEvent.class)
-    public void loginEventHandler(LoginEvent loginEvent) {
+
+    @Override
+    public Object listen(LoginEvent loginEvent) {
         LoginLogEntity loginLog = new LoginLogEntity();
         loginLog.setLoginTime(LocalDateTime.now());
         loginLog.setUserName(loginEvent.getUserName());
@@ -73,6 +74,7 @@ public class LoginEventListener {
         loginLog.setDetail(loginEvent.getDetail());
         loginLog.setStatus(loginEvent.getStatus());
         loginLogOperator.save(loginLog);
+        return loginLog;
     }
 
 }

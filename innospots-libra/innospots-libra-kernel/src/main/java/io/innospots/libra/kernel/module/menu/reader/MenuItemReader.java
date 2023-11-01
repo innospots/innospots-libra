@@ -23,11 +23,11 @@ import io.innospots.libra.base.extension.LibraClassPathExtPropertiesLoader;
 import io.innospots.libra.base.menu.ItemType;
 import io.innospots.libra.base.menu.OptElement;
 import io.innospots.libra.base.menu.ResourceItem;
+import io.innospots.libra.kernel.module.menu.converter.MenuResourceMapper;
 import io.innospots.libra.kernel.module.menu.dao.MenuResourceDao;
 import io.innospots.libra.kernel.module.menu.entity.MenuResourceEntity;
-import io.innospots.libra.kernel.module.menu.mapper.MenuResourceMapper;
-import org.apache.commons.collections.MapUtils;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
