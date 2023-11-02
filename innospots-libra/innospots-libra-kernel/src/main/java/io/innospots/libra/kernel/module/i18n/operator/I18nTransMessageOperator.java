@@ -21,20 +21,21 @@ package io.innospots.libra.kernel.module.i18n.operator;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.base.data.body.PageBody;
 import io.innospots.libra.base.entity.BaseEntity;
+import io.innospots.libra.kernel.module.i18n.converter.I18NLanguageBeanConverter;
+import io.innospots.libra.kernel.module.i18n.converter.I18nDictionaryConvertMapper;
 import io.innospots.libra.kernel.module.i18n.dao.I18nDictionaryDao;
 import io.innospots.libra.kernel.module.i18n.dao.I18nLanguageDao;
 import io.innospots.libra.kernel.module.i18n.dao.I18nTransMessageDao;
 import io.innospots.libra.kernel.module.i18n.entity.I18nDictionaryEntity;
 import io.innospots.libra.kernel.module.i18n.entity.I18nLanguageEntity;
 import io.innospots.libra.kernel.module.i18n.entity.I18nTransMessageEntity;
-import io.innospots.libra.kernel.module.i18n.converter.I18NLanguageBeanConverter;
-import io.innospots.libra.kernel.module.i18n.converter.I18nDictionaryConvertMapper;
 import io.innospots.libra.kernel.module.i18n.model.I18nTransMessageGroup;
 import io.innospots.libra.kernel.module.i18n.model.TransHeaderColumn;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
@@ -56,6 +57,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Component
+@AllArgsConstructor
 public class I18nTransMessageOperator {
 
     private I18nLanguageDao i18nLanguageDao;
@@ -64,11 +66,6 @@ public class I18nTransMessageOperator {
 
     private I18nTransMessageDao i18nTransMessageDao;
 
-    public I18nTransMessageOperator(I18nLanguageDao i18nLanguageDao, I18nDictionaryDao i18nDictionaryDao, I18nTransMessageDao i18nTransMessageDao) {
-        this.i18nLanguageDao = i18nLanguageDao;
-        this.i18nDictionaryDao = i18nDictionaryDao;
-        this.i18nTransMessageDao = i18nTransMessageDao;
-    }
 
     /**
      * get TransHeaderColumn List
@@ -77,7 +74,7 @@ public class I18nTransMessageOperator {
      */
     public List<TransHeaderColumn> transHeaderColumns() {
         QueryWrapper<I18nLanguageEntity> languageQueryWrapper = new QueryWrapper<>();
-        languageQueryWrapper.in("status", DataStatus.ONLINE.name(), DataStatus.OFFLINE.name());
+        languageQueryWrapper.lambda().in(I18nLanguageEntity::getStatus, DataStatus.ONLINE.name(), DataStatus.OFFLINE.name());
         languageQueryWrapper.orderByDesc(BaseEntity.F_UPDATED_TIME);
         List<I18nLanguageEntity> languageEntityList = i18nLanguageDao.selectList(languageQueryWrapper);
         List<TransHeaderColumn> result = new ArrayList<>();
@@ -98,7 +95,9 @@ public class I18nTransMessageOperator {
     @Transactional(rollbackForClassName = {"Exception"})
     public Boolean updateTransMessageGroup(I18nTransMessageGroup transMessages) {
         //先获取字典
-        I18nDictionaryEntity dictionaryEntity = i18nDictionaryDao.selectByCode(transMessages.getDictionary().getCode());
+        I18nDictionaryEntity dictionaryEntity = i18nDictionaryDao.selectOne(
+                new QueryWrapper<I18nDictionaryEntity>()
+                .lambda().eq(I18nDictionaryEntity::getCode, transMessages.getDictionary().getCode()));
         if (dictionaryEntity == null) {
             log.error("modify I18nTransMessageGroup {} is not exist", transMessages.getDictionary().getCode());
             throw ResourceException.buildUpdateException(this.getClass(), "modify I18nTransMessageGroup {} is not exist", transMessages.getDictionary().getCode());
@@ -151,9 +150,9 @@ public class I18nTransMessageOperator {
         Page<I18nDictionaryEntity> queryPage = new Page<>(page, size);
         queryPage.addOrder(OrderItem.desc(BaseEntity.F_UPDATED_TIME));
         QueryWrapper<I18nDictionaryEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(StringUtils.isNoneBlank(app), "app", app);
-        queryWrapper.eq(StringUtils.isNoneBlank(module), "module", module);
-        queryWrapper.like(StringUtils.isNoneBlank(code), "code", code);
+        queryWrapper.lambda().eq(StringUtils.isNoneBlank(app), I18nDictionaryEntity::getApp, app);
+        queryWrapper.lambda().eq(StringUtils.isNoneBlank(module), I18nDictionaryEntity::getModule, module);
+        queryWrapper.lambda().like(StringUtils.isNoneBlank(code), I18nDictionaryEntity::getCode, code);
 
         List<Integer> dictionaryIds = new ArrayList<>();
         queryPage = i18nDictionaryDao.selectPage(queryPage, queryWrapper);
@@ -168,7 +167,7 @@ public class I18nTransMessageOperator {
             result.setCurrent(queryPage.getCurrent());
             result.setPageSize(queryPage.getSize());
             result.setTotalPage(queryPage.getPages());
-            result.setList(CollectionUtils.isEmpty(queryPage.getRecords()) ? new ArrayList<I18nTransMessageGroup>() :
+            result.setList(CollectionUtils.isEmpty(queryPage.getRecords()) ? new ArrayList<>() :
                     list);
         }
 

@@ -139,21 +139,27 @@ public class SysLogOperator extends ServiceImpl<SysOperateLogDao, SysOperateLogE
         return null;
     }
 
-    public int deleteLogHis(Long logId, LocalDateTime operateTime) {
+    public int deleteLogHis(int maxCount, int keepDays) {
+        LocalDateTime deleteTime = LocalDateTime.now().plusDays(keepDays * -1);
+        //查询日志
+        SysOperateLogEntity entity = this.getLastByIndex(maxCount);
+        int deleteCount = 0;
         int maxTimes = 50;
         int total = 0;
         int count = 0;
         int times = 0;
-        do {
-            count = this.baseMapper.deleteByLtLogId(logId, operateTime);
-            total += count;
-            times++;
-            log.info("deleteByLtLogId logId:{} times: {} total:{} time:{}", logId, times, total, LocalDateTime.now());
-            if (times > maxTimes) {
-                break;
-            }
-        } while (count > 0);
-        log.info("deleteByLtLogId end logId:{} times: {} total:{} time:{}", logId, times, total, LocalDateTime.now());
+        if (entity != null) {
+            long logId = entity.getLogId();
+            do {
+                count = this.baseMapper.deleteByLtLogId(logId, deleteTime);
+                total += count;
+                times++;
+                log.info("deleteByLtLogId logId:{} times: {} total:{} time:{}", logId, times, total, LocalDateTime.now());
+                if (times > maxTimes) {
+                    break;
+                }
+            } while (count > 0);
+        }
         return total;
     }
 

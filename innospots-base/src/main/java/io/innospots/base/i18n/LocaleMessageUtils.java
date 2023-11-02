@@ -38,9 +38,9 @@ public class LocaleMessageUtils {
 
     private static TimeZone defaultTimeZone;
 
-    public static MessageSource messageSource() {
+    public static I18nMessageSource messageSource() {
         if(BeanContextAwareUtils.isLoaded()){
-            return BeanContextAwareUtils.getBean(MessageSource.class);
+            return BeanContextAwareUtils.getBean(I18nMessageSource.class);
         }
         return null;
     }
@@ -75,11 +75,11 @@ public class LocaleMessageUtils {
     }
 
     public static String message(String code, Object[] args, String defaultMessage, Locale locale) {
-        MessageSource messageSource = messageSource();
-        if(messageSource == null){
+        I18nMessageSource i18nMessageSource = messageSource();
+        if(i18nMessageSource == null){
             return code + ": " + Arrays.toString(args);
         }
-        String msg = messageSource.getMessage(code, args, defaultMessage, locale);
+        String msg = i18nMessageSource.getMessage(code, args, defaultMessage, locale);
         if (msg == null) {
             return code;
         }

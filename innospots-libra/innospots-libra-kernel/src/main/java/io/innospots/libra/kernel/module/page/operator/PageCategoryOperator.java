@@ -19,10 +19,13 @@
 package io.innospots.libra.kernel.module.page.operator;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import io.innospots.base.connector.schema.SchemaRegistryType;
 import io.innospots.libra.base.category.CategoryType;
 import io.innospots.libra.base.category.BaseCategory;
 import io.innospots.libra.base.category.BaseCategoryOperator;
 import io.innospots.libra.kernel.module.page.entity.PageEntity;
+import io.innospots.libra.kernel.module.schema.entity.SchemaRegistryEntity;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,9 +39,9 @@ import java.util.stream.Collectors;
  * @date 2022/1/21
  */
 @Service
+@AllArgsConstructor
 public class PageCategoryOperator extends BaseCategoryOperator {
 
-    @Autowired
     private PageOperator pageOperator;
 
     @Override
@@ -54,27 +57,14 @@ public class PageCategoryOperator extends BaseCategoryOperator {
     }
 
     public List<BaseCategory> listCategories() {
-        List<BaseCategory> list = super.listCategories(CategoryType.PAGE);
-
-        List<Map<String, Object>> groupList = pageOperator.listMaps(
-                new QueryWrapper<PageEntity>()
-                        .select("CATEGORY_ID,COUNT(1) CNT ")
-                        .groupBy("CATEGORY_ID")
-                        .eq("IS_DELETE", false)
-                        .eq("PAGE_TYPE", "normal"));
-
-        Map<Integer, Integer> groupMap = groupList.stream().collect(
-                Collectors.toMap(
-                        k -> Integer.valueOf(k.get("CATEGORY_ID").toString()),
-                        v -> Integer.valueOf(v.get("CNT").toString()))
-        );
-
-        // fill subsetTotal
-        for (BaseCategory category : list) {
-            Integer count = groupMap.get(category.getCategoryId());
-            category.setTotalCount(count == null ? 0 : count);
-        }
-
+        List<BaseCategory> list = this.listCategories(CategoryType.PAGE, () -> {
+            QueryWrapper<PageEntity> qw = new QueryWrapper<>();
+            qw.lambda().select(PageEntity::getCategoryId,PageEntity::getPageId)
+                    .eq(PageEntity::getIsDelete, false)
+                    .eq(PageEntity::getPageType,"normal");
+            List<PageEntity> entries = pageOperator.list(qw);
+            return entries.stream().collect(Collectors.groupingBy(PageEntity::getCategoryId,Collectors.counting()));
+        });
         BaseCategory recycle = getRecycleBinCategory();
         long count = pageOperator.count(
                 new QueryWrapper<PageEntity>().lambda()
@@ -84,5 +74,6 @@ public class PageCategoryOperator extends BaseCategoryOperator {
         list.add(recycle);
         return list;
     }
+
 
 }

@@ -23,7 +23,7 @@ import io.innospots.libra.base.extension.LibraClassPathExtPropertiesLoader;
 import io.innospots.libra.base.menu.ItemType;
 import io.innospots.libra.base.menu.OptElement;
 import io.innospots.libra.base.menu.ResourceItem;
-import io.innospots.libra.kernel.module.menu.converter.MenuResourceMapper;
+import io.innospots.libra.kernel.module.menu.converter.MenuResourceBeanConverter;
 import io.innospots.libra.kernel.module.menu.dao.MenuResourceDao;
 import io.innospots.libra.kernel.module.menu.entity.MenuResourceEntity;
 import org.apache.commons.collections4.CollectionUtils;
@@ -107,7 +107,7 @@ public class MenuItemReader {
     private List<ResourceItem> convertToMenuTree(List<MenuResourceEntity> resourceEntities, Map<String, List<OptElement>> optElementMap) {
         List<ResourceItem> resourceItems = resourceEntities.stream()
                 .filter(menuResource -> menuResource.getParentId() == null || menuResource.getParentId() == 0)
-                .map(MenuResourceMapper.INSTANCE::entityToItem).collect(Collectors.toList());
+                .map(MenuResourceBeanConverter.INSTANCE::entityToItem).collect(Collectors.toList());
 
         Map<Integer, List<MenuResourceEntity>> menuResourceMap = resourceEntities.stream().filter(menuResource -> menuResource.getParentId() != null)
                 .collect(Collectors.groupingBy(MenuResourceEntity::getParentId));
@@ -133,7 +133,7 @@ public class MenuItemReader {
                         .thenComparing(MenuResourceEntity::getCreatedTime));
 
                 List<ResourceItem> subItems = menuResourceEntities.stream().filter(menuResource -> menuResource.getItemType() == ItemType.CATEGORY)
-                        .map(MenuResourceMapper.INSTANCE::entityToItem).collect(Collectors.toList());
+                        .map(MenuResourceBeanConverter.INSTANCE::entityToItem).collect(Collectors.toList());
                 item.setItems(subItems);
 
                 if (CollectionUtils.isNotEmpty(subItems)) {
@@ -141,7 +141,7 @@ public class MenuItemReader {
                 }
                 item.getItems().addAll(menuResourceEntities.stream()
                         .filter(menuResourceEntity -> menuResourceEntity.getItemType() != ItemType.CATEGORY)
-                        .map(MenuResourceMapper.INSTANCE::entityToItem).collect(Collectors.toList()));
+                        .map(MenuResourceBeanConverter.INSTANCE::entityToItem).collect(Collectors.toList()));
                 if (CollectionUtils.isNotEmpty(item.getItems())) {
                     item.getItems().forEach(menuItem -> {
                         menuItem.setOpts(optElementMap.get(menuItem.getItemKey()));

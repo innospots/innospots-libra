@@ -34,18 +34,9 @@ public interface I18nDictionaryDao extends BaseMapper<I18nDictionaryEntity> {
 
 
     /**
-     * Query the dictionary according to code
-     *
-     * @param code
      * @return
      */
-    @Select("select * from " + I18nDictionaryEntity.TABLE_NAME + " where code=#{code}")
-    I18nDictionaryEntity selectByCode(String code);
-
-    /**
-     * @return
-     */
-    @Select("select distinct(app) from " + I18nDictionaryEntity.TABLE_NAME)
+    @Select("select DISTINCT(app) from " + I18nDictionaryEntity.TABLE_NAME)
     List<String> selectApps();
 
 

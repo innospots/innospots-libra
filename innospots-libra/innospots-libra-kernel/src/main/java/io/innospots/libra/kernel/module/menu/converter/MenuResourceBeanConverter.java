@@ -37,9 +37,9 @@ import java.util.Map;
  * @date 2022/1/12
  */
 @Mapper
-public interface MenuResourceMapper extends BaseBeanConverter {
+public interface MenuResourceBeanConverter extends BaseBeanConverter<MenuResourceItem,MenuResourceEntity> {
 
-    MenuResourceMapper INSTANCE = Mappers.getMapper(MenuResourceMapper.class);
+    MenuResourceBeanConverter INSTANCE = Mappers.getMapper(MenuResourceBeanConverter.class);
 
     @Mapping(target = "i18nNames", expression = "java(jsonStrToStringMap(menuResourceEntity.getI18nNames()))")
     MenuResourceItem entityToModel(MenuResourceEntity menuResourceEntity);
@@ -65,9 +65,6 @@ public interface MenuResourceMapper extends BaseBeanConverter {
     @Mapping(target = "i18nNames", expression = "java(jsonStrToStringMap(menuResourceEntity.getI18nNames()))")
     OptElement entityToOptItem(MenuResourceEntity menuResourceEntity);
 
-    OperateMenuResourceItem optItemToOperateModel(OptElement optElement);
-
-    OperateMenuResourceItem menuItemToOperateModel(ResourceItem resourceItem);
 
     /**
      * json string to map

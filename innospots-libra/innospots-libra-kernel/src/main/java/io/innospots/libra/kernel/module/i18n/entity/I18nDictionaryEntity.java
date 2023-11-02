@@ -37,7 +37,7 @@ import static io.innospots.libra.kernel.module.i18n.entity.I18nDictionaryEntity.
 @Getter
 @Setter
 @Entity
-@Table(name = TABLE_NAME)
+@Table(name = TABLE_NAME,indexes = {@Index(name ="idx_dict_code",columnList = "code")})
 @TableName(TABLE_NAME)
 public class I18nDictionaryEntity extends BaseEntity {
 

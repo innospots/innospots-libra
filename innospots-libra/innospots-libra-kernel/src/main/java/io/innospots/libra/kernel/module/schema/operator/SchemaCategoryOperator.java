@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -51,19 +52,12 @@ public class SchemaCategoryOperator extends BaseCategoryOperator {
     }
 
     public List<BaseCategory> listCategories() {
-        List<BaseCategory> list = this.listCategories(CategoryType.DATA_SET);
-        QueryWrapper<SchemaRegistryEntity> qw = new QueryWrapper<>();
-        qw.lambda().select(SchemaRegistryEntity::getCategoryId,SchemaRegistryEntity::getRegistryId)
-                .eq(SchemaRegistryEntity::getRegistryType,SchemaRegistryType.DATASET);
-        List<SchemaRegistryEntity> entries = schemaRegistryOperator.list(qw);
-        Map<Integer, Long> groupMap = entries.stream().collect(Collectors.groupingBy(SchemaRegistryEntity::getCategoryId,Collectors.counting()));
-
-        // fill subsetTotal
-        for (BaseCategory category : list) {
-            Long count = groupMap.get(category.getCategoryId());
-            category.setTotalCount(count.intValue());
-        }
-
-        return list;
+        return this.listCategories(CategoryType.DATA_SET, () -> {
+            QueryWrapper<SchemaRegistryEntity> qw = new QueryWrapper<>();
+            qw.lambda().select(SchemaRegistryEntity::getCategoryId,SchemaRegistryEntity::getRegistryId)
+                    .eq(SchemaRegistryEntity::getRegistryType,SchemaRegistryType.DATASET);
+            List<SchemaRegistryEntity> entries = schemaRegistryOperator.list(qw);
+            return entries.stream().collect(Collectors.groupingBy(SchemaRegistryEntity::getCategoryId,Collectors.counting()));
+        });
     }
 }

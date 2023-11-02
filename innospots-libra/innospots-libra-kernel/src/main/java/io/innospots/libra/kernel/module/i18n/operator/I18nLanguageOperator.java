@@ -50,7 +50,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @Component
 public class I18nLanguageOperator {
 
-    private I18nLanguageDao i18nLanguageDao;
+    private final I18nLanguageDao i18nLanguageDao;
 
     public I18nLanguageOperator(I18nLanguageDao i18nLanguageDao) {
         this.i18nLanguageDao = i18nLanguageDao;
@@ -88,7 +88,7 @@ public class I18nLanguageOperator {
             entity = I18NLanguageBeanConverter.INSTANCE.modelToEntity(i18nLanguage);
             num = i18nLanguageDao.insert(entity);
         } else {
-            if (entity == null && entityByLocale != null) {
+            if (entity == null) {
                 entity = entityByLocale;
             }
             I18NLanguageBeanConverter.INSTANCE.updateEntity4Model(entity, i18nLanguage);
@@ -151,9 +151,9 @@ public class I18nLanguageOperator {
         Page<I18nLanguageEntity> queryPage = new Page<>(page, size);
         QueryWrapper<I18nLanguageEntity> queryWrapper = new QueryWrapper<>();
         if (status != null) {
-            queryWrapper.eq("status", status);
+            queryWrapper.lambda().eq(I18nLanguageEntity::getStatus, status);
         } else {
-            queryWrapper.in("status", DataStatus.ONLINE, DataStatus.OFFLINE);
+            queryWrapper.lambda().in(I18nLanguageEntity::getStatus, DataStatus.ONLINE, DataStatus.OFFLINE);
         }
         queryWrapper.orderByDesc(I18nLanguageEntity.FIELD_DEFAULT_LAN);
         queryWrapper.orderByAsc(I18nLanguageEntity.F_CREATED_TIME);
@@ -184,9 +184,9 @@ public class I18nLanguageOperator {
     public List<I18nLanguage> list(DataStatus status) {
         QueryWrapper<I18nLanguageEntity> queryWrapper = new QueryWrapper<>();
         if (status != null) {
-            queryWrapper.eq("status", status);
+            queryWrapper.lambda().eq(I18nLanguageEntity::getStatus, status);
         } else {
-            queryWrapper.in("status", DataStatus.ONLINE, DataStatus.OFFLINE);
+            queryWrapper.lambda().in(I18nLanguageEntity::getStatus, DataStatus.ONLINE, DataStatus.OFFLINE);
         }
 
         List<I18nLanguageEntity> entityList = i18nLanguageDao.selectList(queryWrapper);

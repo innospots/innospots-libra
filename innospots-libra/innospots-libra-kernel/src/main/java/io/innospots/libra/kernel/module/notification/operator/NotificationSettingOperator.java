@@ -26,7 +26,7 @@ import io.innospots.libra.kernel.module.notification.entity.NotificationSettingE
 import io.innospots.libra.kernel.module.notification.event.NotificationDefinitionLoader;
 import io.innospots.libra.kernel.module.notification.event.NotificationGroup;
 import io.innospots.libra.kernel.module.notification.event.NotificationModule;
-import io.innospots.libra.kernel.module.notification.converter.NotificationSettingMapper;
+import io.innospots.libra.kernel.module.notification.converter.NotificationSettingConverter;
 import io.innospots.libra.kernel.module.notification.model.NotificationSetting;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +50,7 @@ public class NotificationSettingOperator extends ServiceImpl<NotificationSetting
         List<NotificationSetting> notificationSettings = new ArrayList<>();
         Map<String, NotificationGroup> groupMap = NotificationDefinitionLoader.load();
         for (NotificationSettingEntity entity : entities) {
-            NotificationSetting notificationSetting = NotificationSettingMapper.INSTANCE.entity2Model(entity);
+            NotificationSetting notificationSetting = NotificationSettingConverter.INSTANCE.entity2Model(entity);
             NotificationGroup notificationGroup = groupMap.get(entity.getExtKey());
             if (notificationGroup != null) {
                 notificationSetting.setExtName(notificationGroup.getExtName());
@@ -78,7 +78,7 @@ public class NotificationSettingOperator extends ServiceImpl<NotificationSetting
         List<Integer> removedSettings = new ArrayList<>(10);
 
         for (NotificationSetting setting : notificationSettings) {
-            NotificationSettingEntity entity = NotificationSettingMapper.INSTANCE.model2Entity(setting);
+            NotificationSettingEntity entity = NotificationSettingConverter.INSTANCE.model2Entity(setting);
             NotificationSettingEntity savedEntity = savedEventMap.get(entity.key());
             if (savedEntity == null) {
                 newSettings.add(entity);
@@ -113,6 +113,6 @@ public class NotificationSettingOperator extends ServiceImpl<NotificationSetting
         LambdaQueryWrapper<NotificationSettingEntity> lambda = query.lambda();
         lambda.eq(NotificationSettingEntity::getEventCode, eventCode);
         NotificationSettingEntity entity = super.getOne(query);
-        return NotificationSettingMapper.INSTANCE.entity2Model(entity);
+        return NotificationSettingConverter.INSTANCE.entity2Model(entity);
     }
 }

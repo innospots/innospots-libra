@@ -34,11 +34,11 @@ import java.time.LocalDateTime;
  * @date 2022/1/15
  */
 @Mapper
-public interface NotificationMessageMapper extends BaseBeanConverter {
+public interface NotificationMessageConverter extends BaseBeanConverter<NotificationMessage,NotificationMessageEntity> {
 
-    NotificationMessageMapper INSTANCE = Mappers.getMapper(NotificationMessageMapper.class);
+    NotificationMessageConverter INSTANCE = Mappers.getMapper(NotificationMessageConverter.class);
 
-    @Mapping(target = "recordTime", expression = "java(toTimeString(notificationMessageEntity.getRecordTime()))")
+//    @Mapping(target = "recordTime", expression = "java(toTimeString(notificationMessageEntity.getRecordTime()))")
     @Mapping(target = "time", expression = "java(toDateString(notificationMessageEntity.getRecordTime()))")
     NotificationMessage entity2Model(NotificationMessageEntity notificationMessageEntity);
 

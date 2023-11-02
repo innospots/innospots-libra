@@ -21,12 +21,17 @@ package io.innospots.libra.base.category;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.innospots.base.connector.schema.SchemaRegistryType;
 import io.innospots.base.exception.ResourceException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * @author Alfred
@@ -69,6 +74,17 @@ public class BaseCategoryOperator extends ServiceImpl<BaseCategoryDao, BaseCateg
         List<BaseCategory> list = new ArrayList<>();
         list.add(getNoCategory());
         list.addAll(this.listCategoriesByType(categoryType));
+        return list;
+    }
+
+    public List<BaseCategory> listCategories(CategoryType categoryType, Supplier<Map<Integer, Long>> queryOperator){
+        List<BaseCategory> list = this.listCategories(categoryType);
+        Map<Integer, Long> groupMap = queryOperator.get();
+        // fill subsetTotal
+        for (BaseCategory category : list) {
+            Long count = groupMap.get(category.getCategoryId());
+            category.setTotalCount(count.intValue());
+        }
         return list;
     }
 

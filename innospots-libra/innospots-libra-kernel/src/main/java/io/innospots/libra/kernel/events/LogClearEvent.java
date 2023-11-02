@@ -16,19 +16,25 @@
  * limitations under the License.
  */
 
-package io.innospots.base.i18n;
+package io.innospots.libra.kernel.events;
 
-import java.util.Locale;
+import io.innospots.base.events.EventBody;
+import lombok.Getter;
 
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2023/10/29
+ * @date 2023/11/3
  */
-public interface MessageSource {
+@Getter
+public class LogClearEvent extends EventBody {
 
-    String getMessage(String code, Object[] args, String defaultMessage, Locale locale);
+    private int maxCount;
 
-    String getMessage(String code, Object[] args, Locale locale);
+    private int keepDays;
 
+    public LogClearEvent(int maxCount, int keepDays) {
+        this.maxCount = maxCount;
+        this.keepDays = keepDays;
+    }
 }

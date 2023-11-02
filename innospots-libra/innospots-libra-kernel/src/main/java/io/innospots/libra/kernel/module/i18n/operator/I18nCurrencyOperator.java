@@ -51,9 +51,9 @@ import java.util.List;
 @Component
 public class I18nCurrencyOperator {
 
-    private I18nCurrencyDao i18nCurrencyDao;
+    private final I18nCurrencyDao i18nCurrencyDao;
 
-    private I18nLanguageDao i18nLanguageDao;
+    private final I18nLanguageDao i18nLanguageDao;
 
     public I18nCurrencyOperator(I18nCurrencyDao i18nCurrencyDao, I18nLanguageDao i18nLanguageDao) {
         this.i18nCurrencyDao = i18nCurrencyDao;
@@ -170,9 +170,9 @@ public class I18nCurrencyOperator {
     public List<I18nCurrency> listCurrencies(DataStatus status) {
         QueryWrapper<I18nCurrencyEntity> queryWrapper = new QueryWrapper<>();
         if (status != null) {
-            queryWrapper.eq("status", status);
+            queryWrapper.lambda().eq(I18nCurrencyEntity::getStatus, status);
         } else {
-            queryWrapper.in("status", DataStatus.ONLINE, DataStatus.OFFLINE);
+            queryWrapper.lambda().in(I18nCurrencyEntity::getStatus, DataStatus.ONLINE, DataStatus.OFFLINE);
         }
 
         List<I18nCurrencyEntity> entityList = i18nCurrencyDao.selectList(queryWrapper);

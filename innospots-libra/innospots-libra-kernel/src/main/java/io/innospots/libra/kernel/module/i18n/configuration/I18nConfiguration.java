@@ -18,6 +18,7 @@
 
 package io.innospots.libra.kernel.module.i18n.configuration;
 
+import io.innospots.base.i18n.I18nMessageSource;
 import io.innospots.libra.kernel.module.i18n.loader.I18nMessageSourceLoader;
 import io.innospots.libra.kernel.module.i18n.loader.LocaleContextLoader;
 import io.innospots.libra.kernel.module.i18n.operator.I18nMessageOperator;
@@ -51,6 +52,21 @@ public class I18nConfiguration implements WebMvcConfigurer {
         LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
         localeChangeInterceptor.setParamName(LocaleChangeInterceptor.DEFAULT_PARAM_NAME);
         return localeChangeInterceptor;
+    }
+
+    @Bean
+    public I18nMessageSource i18nMessageSource(MessageSource messageSource) {
+        return new I18nMessageSource(){
+            @Override
+            public String getMessage(String code, Object[] args, String defaultMessage, Locale locale) {
+                return messageSource.getMessage(code,args,defaultMessage,locale);
+            }
+
+            @Override
+            public String getMessage(String code, Object[] args, Locale locale) {
+                return messageSource.getMessage(code, args, locale);
+            }
+        };
     }
 
     @Bean

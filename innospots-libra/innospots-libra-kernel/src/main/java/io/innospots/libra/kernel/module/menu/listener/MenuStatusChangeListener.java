@@ -35,7 +35,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MenuStatusChangeListener implements IEventListener<ExtensionEvent> {
 
-    private MenuManagementOperator menuManagementOperator;
+    private final MenuManagementOperator menuManagementOperator;
 
     public MenuStatusChangeListener(MenuManagementOperator menuManagementOperator) {
         this.menuManagementOperator = menuManagementOperator;

@@ -31,7 +31,7 @@ import io.innospots.libra.base.menu.BaseItem;
 import io.innospots.libra.base.menu.ItemType;
 import io.innospots.libra.base.menu.ResourceItem;
 import io.innospots.libra.kernel.events.MenuDelEvent;
-import io.innospots.libra.kernel.module.menu.converter.MenuResourceMapper;
+import io.innospots.libra.kernel.module.menu.converter.MenuResourceBeanConverter;
 import io.innospots.libra.kernel.module.menu.dao.MenuResourceDao;
 import io.innospots.libra.kernel.module.menu.entity.MenuResourceEntity;
 import io.innospots.libra.kernel.module.menu.model.MenuOrders;
@@ -77,10 +77,10 @@ public class MenuManagementOperator extends ServiceImpl<MenuResourceDao, MenuRes
             }
         }
 
-        MenuResourceEntity menuResourceEntity = MenuResourceMapper.INSTANCE.newItemEntity(menuItem);
+        MenuResourceEntity menuResourceEntity = MenuResourceBeanConverter.INSTANCE.newItemEntity(menuItem);
         menuResourceEntity.setShowMenu(Boolean.TRUE);
         super.save(menuResourceEntity);
-        return MenuResourceMapper.INSTANCE.entityToModel(menuResourceEntity);
+        return MenuResourceBeanConverter.INSTANCE.entityToModel(menuResourceEntity);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -98,7 +98,7 @@ public class MenuManagementOperator extends ServiceImpl<MenuResourceDao, MenuRes
         if (!menuResourceEntity.getItemKey().equals(menuItem.getItemKey())) {
             throw ValidatorException.buildInvalidException(this.getClass(), menuItem.getResourceId(), "menuItemKey can't be changed");
         }
-        menuResourceEntity = MenuResourceMapper.INSTANCE.newItemEntity(menuItem);
+        menuResourceEntity = MenuResourceBeanConverter.INSTANCE.newItemEntity(menuItem);
         return super.updateById(menuResourceEntity);
     }
 
@@ -237,7 +237,7 @@ public class MenuManagementOperator extends ServiceImpl<MenuResourceDao, MenuRes
     }
 
     private List<MenuResourceItem> searchMenuResource(List<MenuResourceEntity> resourceEntities) {
-        List<MenuResourceItem> menuResourceItems = resourceEntities.stream().map(MenuResourceMapper.INSTANCE::entityToModel).collect(Collectors.toList());
+        List<MenuResourceItem> menuResourceItems = resourceEntities.stream().map(MenuResourceBeanConverter.INSTANCE::entityToModel).collect(Collectors.toList());
         Map<Integer, List<MenuResourceEntity>> menuResourceMap = resourceEntities.stream().filter(menuResource -> menuResource.getParentId() != null)
                 .collect(Collectors.groupingBy(MenuResourceEntity::getParentId));
 
@@ -269,7 +269,7 @@ public class MenuManagementOperator extends ServiceImpl<MenuResourceDao, MenuRes
                 .thenComparing(MenuResourceEntity::getCreatedTime));
         List<MenuResourceItem> menuResourceItems = resourceEntities.stream()
                 .filter(menuResource -> menuResource.getParentId() == null || menuResource.getParentId() == 0)
-                .map(MenuResourceMapper.INSTANCE::entityToModel).collect(Collectors.toList());
+                .map(MenuResourceBeanConverter.INSTANCE::entityToModel).collect(Collectors.toList());
         Map<Integer, List<MenuResourceEntity>> menuResourceMap = resourceEntities.stream().filter(menuResource -> menuResource.getParentId() != null)
                 .collect(Collectors.groupingBy(MenuResourceEntity::getParentId));
 
@@ -286,7 +286,7 @@ public class MenuManagementOperator extends ServiceImpl<MenuResourceDao, MenuRes
                         .thenComparing(MenuResourceEntity::getCreatedTime));
 
                 List<MenuResourceItem> subItems = menuResourceEntities.stream().filter(menuResource -> menuResource.getItemType() == ItemType.CATEGORY)
-                        .map(MenuResourceMapper.INSTANCE::entityToModel).collect(Collectors.toList());
+                        .map(MenuResourceBeanConverter.INSTANCE::entityToModel).collect(Collectors.toList());
                 item.setSubItems(subItems);
 
                 if (CollectionUtils.isNotEmpty(subItems)) {
@@ -295,7 +295,7 @@ public class MenuManagementOperator extends ServiceImpl<MenuResourceDao, MenuRes
 
                 item.getSubItems().addAll(menuResourceEntities.stream()
                         .filter(menuResourceEntity -> menuResourceEntity.getItemType() != ItemType.CATEGORY)
-                        .map(MenuResourceMapper.INSTANCE::entityToModel).collect(Collectors.toList()));
+                        .map(MenuResourceBeanConverter.INSTANCE::entityToModel).collect(Collectors.toList()));
 
                 if (CollectionUtils.isNotEmpty(item.getSubItems())) {
                     item.getSubItems().forEach(BaseItem::fillI18n);
@@ -381,7 +381,7 @@ public class MenuManagementOperator extends ServiceImpl<MenuResourceDao, MenuRes
 
         List<MenuResourceItem> resourceItems = new ArrayList<>();
         for (MenuResourceEntity menuResourceEntity : menuResourceEntities) {
-            MenuResourceItem menuResourceItem = MenuResourceMapper.INSTANCE.entityToModel(menuResourceEntity);
+            MenuResourceItem menuResourceItem = MenuResourceBeanConverter.INSTANCE.entityToModel(menuResourceEntity);
             menuResourceItem.fillI18n();
             resourceItems.add(menuResourceItem);
         }

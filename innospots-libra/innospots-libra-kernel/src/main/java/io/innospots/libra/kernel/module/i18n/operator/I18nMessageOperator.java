@@ -35,11 +35,8 @@ import java.util.Locale;
 @AllArgsConstructor
 public class I18nMessageOperator {
 
-    I18nTransMessageDao i18nTransMessageDao;
+    private I18nTransMessageDao i18nTransMessageDao;
 
-    public List<LocaleMessage> localeMessages() {
-        return null;
-    }
 
     public LocaleMessage getLocaleMessage(String code, Locale locale) {
         return i18nTransMessageDao.selectLocalMessageByCode(code, locale.toString());

@@ -30,7 +30,7 @@ import io.innospots.base.utils.CCH;
 import io.innospots.libra.kernel.events.MessageEvent;
 import io.innospots.libra.kernel.module.notification.dao.NotificationMessageDao;
 import io.innospots.libra.kernel.module.notification.entity.NotificationMessageEntity;
-import io.innospots.libra.kernel.module.notification.converter.NotificationMessageMapper;
+import io.innospots.libra.kernel.module.notification.converter.NotificationMessageConverter;
 import io.innospots.libra.kernel.module.notification.model.MessageFormQuery;
 import io.innospots.libra.kernel.module.notification.model.NotificationMessage;
 import org.apache.commons.collections4.CollectionUtils;
@@ -79,7 +79,7 @@ public class NotificationMessageOperator extends ServiceImpl<NotificationMessage
         pageBody.setTotal(entityPage.getTotal());
         pageBody.setTotalPage(entityPage.getPages());
 
-        List<NotificationMessage> messages = entities.stream().map(NotificationMessageMapper.INSTANCE::entity2Model).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
+        List<NotificationMessage> messages = entities.stream().map(NotificationMessageConverter.INSTANCE::entity2Model).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
         pageBody.setList(messages);
         return pageBody;
     }

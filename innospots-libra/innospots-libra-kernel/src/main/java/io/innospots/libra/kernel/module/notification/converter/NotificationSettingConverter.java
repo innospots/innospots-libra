@@ -18,11 +18,10 @@
 
 package io.innospots.libra.kernel.module.notification.converter;
 
-import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.model.field.ParamField;
-import io.innospots.libra.kernel.module.notification.entity.NotificationChannelEntity;
-import io.innospots.libra.kernel.module.notification.model.NotificationChannel;
+import io.innospots.base.converter.BaseBeanConverter;
+import io.innospots.libra.kernel.module.notification.entity.NotificationSettingEntity;
+import io.innospots.libra.kernel.module.notification.model.NotificationSetting;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -35,15 +34,17 @@ import java.util.List;
  * @date 2022/4/26
  */
 @Mapper
-public interface NotificationChannelMapper extends BaseBeanConverter {
+public interface NotificationSettingConverter extends BaseBeanConverter<NotificationSetting,NotificationSettingEntity> {
 
-    NotificationChannelMapper INSTANCE = Mappers.getMapper(NotificationChannelMapper.class);
+    NotificationSettingConverter INSTANCE = Mappers.getMapper(NotificationSettingConverter.class);
 
-    @Mapping(target = "params", expression = "java(jsonStringToList(entity.getParams()))")
-    NotificationChannel entity2Model(NotificationChannelEntity entity);
+    @Mapping(target = "channels", expression = "java(jsonStringToList(entity.getChannels()))")
+    @Mapping(target = "groups", expression = "java(jsonStringToList(entity.getRoleGroups()))")
+    NotificationSetting entity2Model(NotificationSettingEntity entity);
 
-    @Mapping(target = "params", expression = "java(jsonListToString(channel.getParams()))")
-    NotificationChannelEntity model2Entity(NotificationChannel channel);
+    @Mapping(target = "channels", expression = "java(jsonListToString(setting.getChannels()))")
+    @Mapping(target = "roleGroups", expression = "java(jsonListToString(setting.getGroups()))")
+    NotificationSettingEntity model2Entity(NotificationSetting setting);
 
     /**
      * json string to ParamField of list
@@ -51,8 +52,8 @@ public interface NotificationChannelMapper extends BaseBeanConverter {
      * @param jsonStr
      * @return List<String>
      */
-    default List<ParamField> jsonStringToList(String jsonStr) {
-        return JSONUtils.toList(jsonStr, ParamField.class);
+    default List<Integer> jsonStringToList(String jsonStr) {
+        return JSONUtils.toList(jsonStr, Integer.class);
     }
 
     /**
@@ -61,7 +62,7 @@ public interface NotificationChannelMapper extends BaseBeanConverter {
      * @param list
      * @return String
      */
-    default String jsonListToString(List<ParamField> list) {
+    default String jsonListToString(List<Integer> list) {
         return JSONUtils.toJsonString(list);
     }
 }

@@ -18,14 +18,14 @@
 
 package io.innospots.libra.kernel.module.page.operator;
 
-import io.innospots.base.configuration.InnospotConfigProperties;
 import io.innospots.base.enums.ImageType;
 import io.innospots.base.exception.InnospotException;
 import io.innospots.base.model.response.ResponseCode;
+import io.innospots.libra.base.configuration.InnospotsConfigProperties;
 import io.innospots.libra.base.utils.ImageFileUploader;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,12 +38,12 @@ import java.util.UUID;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 public class DashboardFileOperator {
 
     private static final String DASHBOARD_FILE_PATH = "/resources/image/dashboard/";
 
-    @Autowired
-    private InnospotConfigProperties innospotConfigProperties;
+    private InnospotsConfigProperties innospotsConfigProperties;
 
     public String uploadFile(MultipartFile file, String fileName) {
 
@@ -55,8 +55,8 @@ public class DashboardFileOperator {
             throw InnospotException.buildException(this.getClass(), ResponseCode.IMG_SUFFIX_ERROR, ResponseCode.IMG_SUFFIX_ERROR.info());
         }
 
-        String filePath = UUID.randomUUID().toString() + (StringUtils.isBlank(fileName) ? file.getOriginalFilename() : fileName);
-        String parentPath = innospotConfigProperties.getUploadFilePath() + DASHBOARD_FILE_PATH;
+        String filePath = UUID.randomUUID() + (StringUtils.isBlank(fileName) ? file.getOriginalFilename() : fileName);
+        String parentPath = innospotsConfigProperties.getUploadFilePath() + DASHBOARD_FILE_PATH;
 
         try {
             ImageFileUploader.upload(file, parentPath, filePath, ImageType.OTHER);

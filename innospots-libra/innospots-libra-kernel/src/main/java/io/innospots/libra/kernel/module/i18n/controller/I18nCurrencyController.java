@@ -52,7 +52,7 @@ import static io.innospots.libra.base.menu.ItemType.BUTTON;
 @Tag(name = "I18n Currency")
 public class I18nCurrencyController extends BaseController {
 
-    private I18nCurrencyOperator i18nCurrencyOperator;
+    private final I18nCurrencyOperator i18nCurrencyOperator;
 
     public I18nCurrencyController(I18nCurrencyOperator i18nCurrencyOperator) {
         this.i18nCurrencyOperator = i18nCurrencyOperator;

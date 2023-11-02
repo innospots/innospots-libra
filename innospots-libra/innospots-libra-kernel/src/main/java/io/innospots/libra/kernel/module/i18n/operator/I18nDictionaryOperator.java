@@ -46,7 +46,7 @@ import java.util.List;
 public class I18nDictionaryOperator {
 
 
-    private I18nDictionaryDao i18nDictionaryDao;
+    private final I18nDictionaryDao i18nDictionaryDao;
 
     public I18nDictionaryOperator(I18nDictionaryDao i18nDictionaryDao) {
         this.i18nDictionaryDao = i18nDictionaryDao;
@@ -59,7 +59,10 @@ public class I18nDictionaryOperator {
      * @return Boolean
      */
     public Boolean create(I18nDictionary i18nDictionary) {
-        I18nDictionaryEntity entity = i18nDictionaryDao.selectByCode(i18nDictionary.getCode());
+        I18nDictionaryEntity entity = i18nDictionaryDao.selectOne(
+                new QueryWrapper<I18nDictionaryEntity>()
+                        .lambda().eq(I18nDictionaryEntity::getCode,i18nDictionary.getCode())
+        );
         if (entity != null) {
             log.error("create I18nDictionary is exists, {} {}", i18nDictionary.getApp(), i18nDictionary.getCode());
             throw ResourceException.buildExistException(this.getClass(), "i18nDictionary", i18nDictionary);
@@ -76,7 +79,10 @@ public class I18nDictionaryOperator {
      * @return
      */
     public Boolean saveOrUpdate(I18nDictionary i18nDictionary) {
-        I18nDictionaryEntity entity = i18nDictionaryDao.selectByCode(i18nDictionary.getCode());
+        I18nDictionaryEntity entity = i18nDictionaryDao.selectOne(
+                new QueryWrapper<I18nDictionaryEntity>()
+                        .lambda().eq(I18nDictionaryEntity::getCode,i18nDictionary.getCode())
+        );
         int num = 0;
         if (entity == null) {
             entity = I18nDictionaryConvertMapper.INSTANCE.modelToEntity(i18nDictionary);
@@ -131,8 +137,8 @@ public class I18nDictionaryOperator {
         Page<I18nDictionaryEntity> queryPage = new Page<>(page, size);
         queryPage.addOrder(OrderItem.desc(BaseEntity.F_UPDATED_TIME));
         QueryWrapper<I18nDictionaryEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(StringUtils.isNoneBlank(app), "app", app);
-        queryWrapper.eq(StringUtils.isNoneBlank(module), "module", module);
+        queryWrapper.lambda().eq(StringUtils.isNoneBlank(app), I18nDictionaryEntity::getApp, app);
+        queryWrapper.lambda().eq(StringUtils.isNoneBlank(module), I18nDictionaryEntity::getModule, module);
 
         queryPage = i18nDictionaryDao.selectPage(queryPage, queryWrapper);
         if (queryPage != null) {
