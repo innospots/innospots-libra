@@ -23,11 +23,11 @@ import io.innospots.base.connector.minder.IDataConnectionMinder;
 import io.innospots.base.connector.schema.SchemaField;
 import io.innospots.base.connector.schema.SchemaRegistry;
 import io.innospots.base.model.response.InnospotResponse;
-import io.innospots.connector.schema.operator.SchemaFieldOperator;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
+import io.innospots.libra.kernel.module.schema.operator.SchemaFieldOperator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -68,10 +68,10 @@ public class SchemaFieldController extends BaseController {
     @GetMapping("list")
     @Operation(summary = "list schema fields", description = "support SourceType: QUEUE,JDBC Parameter. requirements: registryId is required when SourceType = QUEUE, tableName is required when SourceType = JDBC")
     public InnospotResponse<List<SchemaField>> listSchemaFields(
-            @Parameter(name = "credentialId") @RequestParam(value = "credentialId") Integer credentialId,
+            @Parameter(name = "credentialId") @RequestParam(value = "credentialId") String credentialKey,
             @Parameter(name = "tableName") @RequestParam(value = "tableName", required = false) String tableName,
             @Parameter(name = "registryId") @RequestParam(value = "registryId", required = false) Integer registryId) {
-        IDataConnectionMinder connectionMinder = dataConnectionMinderManager.getMinder(credentialId);
+        IDataConnectionMinder connectionMinder = dataConnectionMinderManager.getMinder(credentialKey);
         SchemaRegistry schemaRegistry = registryId != null ? connectionMinder.schemaRegistry(registryId) : connectionMinder.schemaRegistry(tableName);
         if (schemaRegistry != null) {
             return success(schemaRegistry.getSchemaFields());

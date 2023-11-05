@@ -49,10 +49,11 @@ import java.util.*;
  * @author Raydian
  * @date 2021/1/31
  */
-public class JdbcDataConnectionMinder extends BaseDataConnectionMinder<IDataOperator> {
+public class JdbcDataConnectionMinder extends BaseDataConnectionMinder {
 
     private static final Logger logger = LoggerFactory.getLogger(JdbcDataConnectionMinder.class);
 
+    public static final String MAX_POOL_SIZE = "5";
     public static final String SERVER_IP = "server_ip";
     public static final String DATABASE = "database";
     public static final String PORT = "port";
@@ -84,7 +85,7 @@ public class JdbcDataConnectionMinder extends BaseDataConnectionMinder<IDataOper
             return;
         }
         logger.info("open datasource: {}", connectionCredential);
-        this.dataSource = buildDataSource(connectionCredential, "5");
+        this.dataSource = buildDataSource(connectionCredential, MAX_POOL_SIZE);
     }
 
     @Override

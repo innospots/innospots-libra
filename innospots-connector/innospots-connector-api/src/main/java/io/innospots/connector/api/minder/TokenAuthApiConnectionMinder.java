@@ -83,7 +83,7 @@ public class TokenAuthApiConnectionMinder extends HttpDataConnectionMinder {
 
 
     @Override
-    public Object test(ConnectionCredential connectionCredential) {
+    public Object testConnect(ConnectionCredential connectionCredential) {
         TokenHolder holder = buildTokenHolder(connectionCredential);
         String token = holder.fetchToken(false);
         if(log.isDebugEnabled()){

@@ -39,12 +39,14 @@ public interface TodoTaskBeanConverter extends BaseBeanConverter<TodoTask,TodoTa
 
     TodoTaskBeanConverter INSTANCE = Mappers.getMapper(TodoTaskBeanConverter.class);
 
+
     /*
     TodoTaskEntity model2Entity(TodoTask todoTask);
 
     @Mapping(target = "createdTime", expression = "java(timeToString(todoTaskEntity.getCreatedTime()))")
     @Mapping(target = "updatedTime", expression = "java(timeToString(todoTaskEntity.getUpdatedTime()))")
     TodoTask entity2Model(TodoTaskEntity todoTaskEntity);
+     */
 
     @Mapping(target = "taskId", ignore = true)
     @Mapping(target = "createdTime", ignore = true)
@@ -55,6 +57,6 @@ public interface TodoTaskBeanConverter extends BaseBeanConverter<TodoTask,TodoTa
         return DateTimeUtils.formatLocalDateTime(time, null);
     }
 
-     */
+
 
 }

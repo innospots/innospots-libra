@@ -45,11 +45,10 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
  * @author Smars
  * @date 2021/6/21
  */
-@MapperScan(basePackages = {"io.innospots.base.registry", "io.innospots.base.function"})
-@EntityScan(basePackages = {"io.innospots.base.registry", "io.innospots.base.function"})
+@MapperScan(basePackages = {"io.innospots.server.base.registry"})
+@EntityScan(basePackages = {"io.innospots.server.base.registry"})
 @Configuration
 @Import({CCH.class})
-@EnableConfigurationProperties({InnospotConfigProperties.class})
 public class BaseServiceConfiguration {
 
 

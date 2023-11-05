@@ -34,6 +34,7 @@ import io.innospots.libra.kernel.module.schema.dao.SchemaRegistryDao;
 import io.innospots.libra.kernel.module.schema.entity.SchemaRegistryEntity;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
@@ -45,6 +46,7 @@ import java.util.stream.Collectors;
  * @author Alfred
  * @date 2021-02-10
  */
+@Component
 public class SchemaRegistryOperator extends ServiceImpl<SchemaRegistryDao, SchemaRegistryEntity> {
 
     private final SchemaFieldOperator schemaFieldOperator;

@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.schema.controller;
 
 import io.innospots.base.constant.PathConstant;
-import io.innospots.connector.schema.service.Oauth2CallbackService;
+import io.innospots.libra.kernel.module.schema.service.Oauth2CallbackService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

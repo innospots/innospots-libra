@@ -24,6 +24,7 @@ import io.innospots.libra.base.category.BaseCategory;
 import io.innospots.libra.base.category.BaseCategoryOperator;
 import io.innospots.libra.base.category.CategoryType;
 import io.innospots.libra.kernel.module.schema.entity.SchemaRegistryEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -35,6 +36,7 @@ import java.util.stream.Collectors;
  * @author Alfred
  * @date 2022/2/6
  */
+@Component
 public class SchemaCategoryOperator extends BaseCategoryOperator {
 
     private final SchemaRegistryOperator schemaRegistryOperator;

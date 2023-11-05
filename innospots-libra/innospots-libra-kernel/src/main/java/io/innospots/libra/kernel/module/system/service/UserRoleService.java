@@ -19,6 +19,7 @@
 package io.innospots.libra.kernel.module.system.service;
 
 import io.innospots.base.data.body.PageBody;
+import io.innospots.base.events.EventBusCenter;
 import io.innospots.libra.kernel.module.system.model.role.RoleInfo;
 import io.innospots.base.model.user.SimpleUser;
 import io.innospots.base.utils.BeanContextAware;
@@ -97,7 +98,7 @@ public class UserRoleService {
         Boolean result = roleOperator.deleteRole(roleId);
         // delete role user
         if (result) {
-            BeanContextAware.applicationContext().publishEvent(new RoleDelEvent(roleId));
+            EventBusCenter.postSync(new RoleDelEvent(roleId));
         }
         return result;
     }

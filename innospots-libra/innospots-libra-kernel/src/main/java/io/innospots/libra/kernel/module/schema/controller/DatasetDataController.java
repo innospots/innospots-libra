@@ -24,8 +24,8 @@ import datart.provider.StdSqlOperator;
 import io.innospots.base.data.dataset.DatasetExecuteParam;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.model.response.InnospotResponse;
-import io.innospots.connector.schema.operator.DataframeExecutor;
 import io.innospots.libra.base.menu.ModuleMenu;
+import io.innospots.libra.kernel.module.schema.dataset.DataframeExecutor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -59,11 +59,11 @@ public class DatasetDataController {
     @PostMapping("execute")
     @Operation(summary = "dataset execute")
     public InnospotResponse<Dataframe> execute(
-            @Parameter(name = "credentialId") @RequestParam("credentialId") Integer credentialId,
+            @Parameter(name = "credentialId") @RequestParam("credentialKey") String credentialKey,
             @Parameter(name = "page") @RequestParam("page") int page,
             @Parameter(name = "size") @RequestParam("size") int size,
             @Parameter(name = "datasetExecuteParam") @RequestBody DatasetExecuteParam datasetExecuteParam) {
-        Dataframe dataframe = dataframeExecutor.datasetData(credentialId, page, size, datasetExecuteParam);
+        Dataframe dataframe = dataframeExecutor.datasetData(credentialKey, page, size, datasetExecuteParam);
         return success(dataframe);
     }
 

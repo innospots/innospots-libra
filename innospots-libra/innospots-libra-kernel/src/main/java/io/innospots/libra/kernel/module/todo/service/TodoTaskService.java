@@ -103,7 +103,7 @@ public class TodoTaskService {
     }
 
     public TodoTask getTodoTask(Integer taskId) {
-        TodoTask task = TodoTaskBeanConverter.INSTANCE.entity2Model(todoTaskOperator.getTodoTask(taskId));
+        TodoTask task = TodoTaskBeanConverter.INSTANCE.entityToModel(todoTaskOperator.getTodoTask(taskId));
 
         List<TodoTaskTagEntity> entities = todoTaskTagOperator.listByTaskId(taskId);
         task.setTags(entities.stream().map(TodoTaskTagEntity::getTagName).collect(Collectors.toList()));
@@ -156,7 +156,7 @@ public class TodoTaskService {
         IPage<TodoTaskEntity> page = todoTaskOperator.pageTodoTasks(request);
         PageBody<TodoTask> pageBody = new PageBody<>();
         List<TodoTaskEntity> entities = page.getRecords();
-        List<TodoTask> todoTasks = entities.stream().map(TodoTaskBeanConverter.INSTANCE::entity2Model).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
+        List<TodoTask> todoTasks = entities.stream().map(TodoTaskBeanConverter.INSTANCE::entityToModel).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
         this.generateTasks(todoTasks);
         pageBody.setList(todoTasks);
         pageBody.setCurrent(page.getCurrent());

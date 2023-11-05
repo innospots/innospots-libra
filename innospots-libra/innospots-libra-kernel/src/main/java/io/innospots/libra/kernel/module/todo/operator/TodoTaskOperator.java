@@ -53,9 +53,9 @@ public class TodoTaskOperator extends ServiceImpl<TodoTaskDao, TodoTaskEntity> {
         this.checkDifferentTaskName(todoTask);
         todoTask.setTaskStatus(TaskStatus.Pending);
         TodoTaskBeanConverter mapper = TodoTaskBeanConverter.INSTANCE;
-        TodoTaskEntity entity = mapper.model2Entity(todoTask);
+        TodoTaskEntity entity = mapper.modelToEntity(todoTask);
         super.save(entity);
-        return mapper.entity2Model(entity);
+        return mapper.entityToModel(entity);
     }
 
     @Transactional(rollbackFor = Exception.class)

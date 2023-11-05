@@ -50,7 +50,7 @@ public class ConnectionMinderSchema {
 
     private String description;
 
-    private List<CredentialAuthOption> options;
+    private List<CredentialAuthOption> authOptions;
 
 
     @Override
@@ -60,7 +60,7 @@ public class ConnectionMinderSchema {
         sb.append(", icon='").append(icon).append('\'');
         sb.append(", order=").append(order);
         sb.append(", enabled=").append(enabled);
-        sb.append(", options=").append(options);
+        sb.append(", authOptions=").append(authOptions);
         sb.append('}');
         return sb.toString();
     }

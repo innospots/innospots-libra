@@ -21,6 +21,8 @@ package io.innospots.libra.kernel.module.schema.controller;
 import io.innospots.base.connector.credential.ConnectionCredential;
 import io.innospots.base.connector.credential.IConnectionCredentialReader;
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
+import io.innospots.base.connector.minder.IDataConnectionMinder;
+import io.innospots.base.data.operator.IQueueSender;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,26 +46,28 @@ public class DataSampleTestController extends BaseController {
 
     private final IConnectionCredentialReader connectionCredentialReader;
 
-    private final IDataSenderPoint dataSenderPoint;
+//    private final IDataSenderPoint dataSenderPoint;
 
     private DataConnectionMinderManager connectionMinderManager;
 
     public DataSampleTestController(IConnectionCredentialReader connectionCredentialReader,
-                                    DataConnectionMinderManager connectionMinderManager,
-                                    IDataSenderPoint dataSenderPoint) {
+                                    DataConnectionMinderManager connectionMinderManager) {
         this.connectionCredentialReader = connectionCredentialReader;
-        this.dataSenderPoint = dataSenderPoint;
+//        this.dataSenderPoint = dataSenderPoint;
         this.connectionMinderManager = connectionMinderManager;
     }
 
     @PostMapping("send/message/{code}")
     @Operation(summary = "send message to kafka datasource")
     public InnospotResponse<Boolean> sendMessage(
-            @Parameter(name = "code") @PathVariable String code,
+            @Parameter(name = "code") @PathVariable String credentialKey,
             @Parameter(name = "topic") @RequestParam(name = "topic") String topic,
             @Parameter(name = "data") @RequestBody Map<String, Object> data) {
-        ConnectionCredential connectionCredential = connectionCredentialReader.readCredential(code);
-        dataSenderPoint.send(connectionCredential.getCredentialId(), topic, data);
+        ConnectionCredential connectionCredential = connectionCredentialReader.readCredential(credentialKey);
+        IDataConnectionMinder connectionMinder =  connectionMinderManager.getMinder(credentialKey);
+        IQueueSender queueSender = (IQueueSender) connectionMinder.buildOperator();
+        queueSender.send(topic,data);
+        //dataSenderPoint.send(connectionCredential.getCredentialId(), topic, data);
         return success(true);
     }
 

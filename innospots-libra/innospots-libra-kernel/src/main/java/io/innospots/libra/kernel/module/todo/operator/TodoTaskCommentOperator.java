@@ -22,6 +22,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.innospots.base.enums.ImageType;
+import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.InnospotException;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.utils.BeanContextAware;
@@ -58,9 +59,9 @@ public class TodoTaskCommentOperator extends ServiceImpl<TodoTaskCommentDao, Tod
     @Transactional(rollbackFor = Exception.class)
     public TodoTaskComment createTodoTaskComment(TodoTaskComment todoTaskComment) {
         TodoTaskCommentBeanConverter mapper = TodoTaskCommentBeanConverter.INSTANCE;
-        TodoTaskCommentEntity entity = mapper.model2Entity(todoTaskComment);
+        TodoTaskCommentEntity entity = mapper.modelToEntity(todoTaskComment);
         super.save(entity);
-        return mapper.entity2Model(entity);
+        return mapper.entityToModel(entity);
     }
 
     public List<TodoTaskComment> getTodoTaskComments(Integer taskId) {
@@ -69,7 +70,7 @@ public class TodoTaskCommentOperator extends ServiceImpl<TodoTaskCommentDao, Tod
         lambda.eq(TodoTaskCommentEntity::getTaskId, taskId);
 
         List<TodoTaskCommentEntity> entities = super.list(queryWrapper);
-        return entities.stream().map(TodoTaskCommentBeanConverter.INSTANCE::entity2Model).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
+        return entities.stream().map(TodoTaskCommentBeanConverter.INSTANCE::entityToModel).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
     }
 
     public List<Map<String, Object>> selectCountByTaskId(List<Integer> taskIds) {
@@ -104,7 +105,7 @@ public class TodoTaskCommentOperator extends ServiceImpl<TodoTaskCommentDao, Tod
                 String imgPath = parentPath.toFile().getAbsolutePath() + File.separator + imgName;
                 String base64 = ImageFileUploader.readImageBase64(imgPath);
                 //TODO save to disk
-                BeanContextAware.sendAppEvent(new NewAvatarEvent(time, ImageType.COMMENT, i, "data:image/png;base64," + base64));
+                EventBusCenter.postSync(new NewAvatarEvent(time, ImageType.COMMENT, i, "data:image/png;base64," + base64));
                 imageUrls.add(BaseController.PATH_ROOT_ADMIN + "image/" + ImageType.COMMENT + "/" + time + "?imageSort=" + i);
 
             } catch (IOException e) {

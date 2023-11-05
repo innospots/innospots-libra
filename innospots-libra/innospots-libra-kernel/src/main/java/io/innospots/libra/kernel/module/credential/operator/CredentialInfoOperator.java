@@ -38,6 +38,7 @@ import io.innospots.libra.kernel.module.credential.model.SimpleCredentialInfo;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
@@ -49,6 +50,7 @@ import java.util.stream.Collectors;
  * @version 1.0.0
  * @date 2023/1/19
  */
+@Component
 public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, CredentialInfoEntity> {
 
     private final CredentialTypeDao credentialTypeDao;
@@ -99,6 +101,11 @@ public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, Crede
     @Transactional(rollbackFor = Exception.class)
     public Boolean deleteCredential(String credentialKey) {
         return  super.removeById(credentialKey);
+    }
+
+    public List<CredentialInfo> listCredentialInfos(Set<String> credentialKeys){
+        List<CredentialInfoEntity> entities = this.listByIds(credentialKeys);
+        return CredentialInfoConverter.INSTANCE.entitiesToModels(entities);
     }
 
     /**

@@ -64,7 +64,9 @@ public class DataframeExecutor {
 
     private final DatasetOperator datasetOperator;
 
-    public DataframeExecutor(IConnectionCredentialReader connectionCredentialReader, DataOperatorManager dataOperatorManager, DatasetOperator datasetOperator) {
+    public DataframeExecutor(IConnectionCredentialReader connectionCredentialReader,
+                             DataOperatorManager dataOperatorManager,
+                             DatasetOperator datasetOperator) {
         this.connectionCredentialReader = connectionCredentialReader;
         this.dataOperatorManager = dataOperatorManager;
         this.datasetOperator = datasetOperator;

@@ -24,6 +24,7 @@ import io.innospots.base.connector.credential.ConnectionCredential;
 import io.innospots.base.connector.schema.SchemaCatalog;
 import io.innospots.base.connector.schema.SchemaRegistry;
 import io.innospots.base.connector.schema.reader.ISchemaRegistryReader;
+import io.innospots.base.data.operator.IOperator;
 
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ import java.util.Map;
  * @author Raydian
  * @date 2021/1/31
  */
-public interface IDataConnectionMinder<Operator> {
+public interface IDataConnectionMinder {
 
 
     void initialize(ISchemaRegistryReader schemaRegistryReader, ConnectionCredential connectionCredential);
@@ -73,7 +74,7 @@ public interface IDataConnectionMinder<Operator> {
 
     String schemaName();
 
-    Operator buildOperator();
+    IOperator buildOperator();
 
     /**
      * test data connection

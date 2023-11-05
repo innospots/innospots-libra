@@ -48,7 +48,7 @@ public class RedisDataConnectionMinder extends BaseDataConnectionMinder {
     }
 
     @Override
-    public Object test(ConnectionCredential connectionCredential) {
+    public Object testConnect(ConnectionCredential connectionCredential) {
         String serverIp = connectionCredential.v(SERVER_IP);
         int port = Integer.parseInt(connectionCredential.v(PORT));
         Jedis jedis = new Jedis(serverIp, port);
@@ -62,6 +62,11 @@ public class RedisDataConnectionMinder extends BaseDataConnectionMinder {
         this.jedis.close();
     }
 
+    @Override
+    public String schemaName() {
+        return null;
+    }
+
 
     @Override
     public Object fetchSample(ConnectionCredential connectionCredential, String tableName) {
@@ -70,7 +75,8 @@ public class RedisDataConnectionMinder extends BaseDataConnectionMinder {
 
 
     @Override
-    public IOperator buildOperator() {
+    public RedisDataOperator buildOperator() {
         return new RedisDataOperator(this.jedis);
     }
+
 }

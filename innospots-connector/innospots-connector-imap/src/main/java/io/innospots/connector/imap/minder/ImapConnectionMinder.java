@@ -99,7 +99,7 @@ public class ImapConnectionMinder extends BaseDataConnectionMinder {
 
 
     @Override
-    public Object test(ConnectionCredential connectionCredential) {
+    public Object testConnect(ConnectionCredential connectionCredential) {
         Properties props = new Properties();
         props.putAll(connectionCredential.getConfig());
         Session session = Session.getDefaultInstance(props, new Authenticator() {
@@ -133,7 +133,7 @@ public class ImapConnectionMinder extends BaseDataConnectionMinder {
     }
 
     @Override
-    public String connector() {
+    public String schemaName() {
         return "email-imap";
     }
 

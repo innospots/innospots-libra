@@ -19,6 +19,9 @@
 package io.innospots.base.connector.credential;
 
 
+import java.util.List;
+import java.util.Set;
+
 /**
  * @author Smars
  * @version 1.0.0
@@ -27,6 +30,8 @@ package io.innospots.base.connector.credential;
 public interface IConnectionCredentialReader {
 
     ConnectionCredential readCredential(String credentialKey);
+
+    List<CredentialInfo> readCredentialInfos(Set<String> credentialKeys);
 
     ConnectionCredential fillCredential(CredentialInfo credentialInfo);
 }

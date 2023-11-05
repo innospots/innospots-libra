@@ -33,7 +33,7 @@ import java.util.List;
  * @version 1.0.0
  * @date 2022/9/14
  */
-public abstract class BaseDataConnectionMinder<Operator> implements IDataConnectionMinder<Operator> {
+public abstract class BaseDataConnectionMinder implements IDataConnectionMinder {
 
     protected ISchemaRegistryReader schemaRegistryReader;
 

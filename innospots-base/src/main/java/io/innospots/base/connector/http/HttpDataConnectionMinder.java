@@ -101,6 +101,11 @@ public class HttpDataConnectionMinder extends BaseDataConnectionMinder<IExecutio
         }
     }
 
+    @Override
+    public String schemaName() {
+        return "api_schema";
+    }
+
 
     @SneakyThrows
     public Object fetchSample(ConnectionCredential connectionCredential, ApiSchemaRegistry apiSchemaRegistry) {

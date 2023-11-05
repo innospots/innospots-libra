@@ -20,10 +20,7 @@ package io.innospots.connector.mysql.minder;
 
 
 import io.innospots.base.connector.jdbc.JdbcDataConnectionMinder;
-import io.innospots.base.data.operator.IDataOperator;
 import io.innospots.base.connector.credential.ConnectionCredential;
-import io.innospots.connector.mysql.operator.MysqlDataOperator;
-import io.innospots.connector.mysql.operator.MysqlSqlOperator;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -45,34 +42,19 @@ public class MysqlDataConnectionMinder extends JdbcDataConnectionMinder {
         Map<String, Object> config = this.connectionCredential.getConfig();
         config.put(DRIVER_CLASS_NAME, "com.mysql.cj.jdbc.Driver");
 
-        this.dataSource = buildDataSource(connectionCredential);
+        this.dataSource = buildDataSource(connectionCredential,MAX_POOL_SIZE);
     }
 
 
     @Override
-    public Object test(ConnectionCredential connectionCredential) {
+    public Object testConnect(ConnectionCredential connectionCredential) {
         connectionCredential.getConfig().put(DRIVER_CLASS_NAME, "com.mysql.cj.jdbc.Driver");
-        return super.test(connectionCredential);
+        return super.testConnect(connectionCredential);
     }
 
-    @Override
-    public IDataOperator dataOperator() {
-        if (this.dataOperator == null) {
-            this.dataOperator = new MysqlDataOperator(dataSource);
-        }
-        return dataOperator;
-    }
 
     @Override
-    public ISqlOperator sqlOperator() {
-        if (this.sqlOperator == null) {
-            this.sqlOperator = new MysqlSqlOperator(dataSource);
-        }
-        return sqlOperator;
-    }
-
-    @Override
-    public String connector() {
+    public String schemaName() {
         return "mysql";
     }
 }

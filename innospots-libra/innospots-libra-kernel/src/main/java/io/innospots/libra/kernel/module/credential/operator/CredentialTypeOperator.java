@@ -32,6 +32,7 @@ import io.innospots.libra.kernel.module.credential.entity.CredentialTypeEntity;
 import io.innospots.libra.kernel.module.credential.model.CredentialType;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
@@ -43,6 +44,7 @@ import java.util.List;
  * @vesion 2.0
  * @date 2023/10/29
  */
+@Component
 public class CredentialTypeOperator extends ServiceImpl<CredentialTypeDao, CredentialTypeEntity> {
 
 

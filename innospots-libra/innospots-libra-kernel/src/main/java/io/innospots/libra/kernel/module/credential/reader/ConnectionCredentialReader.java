@@ -33,14 +33,18 @@ import io.innospots.libra.kernel.module.credential.converter.CredentialInfoConve
 import io.innospots.libra.kernel.module.credential.operator.CredentialInfoOperator;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Smars
  * @version 1.2.0
  * @date 2023/2/4
  */
+@Component
 public class ConnectionCredentialReader implements IConnectionCredentialReader {
 
     private final IEncryptor encryptor;
@@ -58,6 +62,11 @@ public class ConnectionCredentialReader implements IConnectionCredentialReader {
     public ConnectionCredential readCredential(String credentialKey) {
         CredentialInfo credentialInfo = credentialOperator.getCredential(credentialKey);
         return this.fillCredential(credentialInfo);
+    }
+
+    @Override
+    public List<CredentialInfo> readCredentialInfos(Set<String> credentialKeys) {
+        return credentialOperator.listCredentialInfos(credentialKeys);
     }
 
 

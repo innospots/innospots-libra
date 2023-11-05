@@ -18,14 +18,14 @@
 
 package io.innospots.libra.kernel.module.system.model.role;
 
-import org.springframework.context.ApplicationEvent;
+import io.innospots.base.events.EventBody;
 
 /**
  * @author Jegy
  * @version 1.0.0
  * @date 2022/12/04
  */
-public class RoleDelEvent extends ApplicationEvent {
+public class RoleDelEvent extends EventBody {
 
     public RoleDelEvent(Object source) {
         super(source);

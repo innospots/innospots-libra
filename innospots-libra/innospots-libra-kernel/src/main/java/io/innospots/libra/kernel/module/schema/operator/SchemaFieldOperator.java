@@ -30,6 +30,7 @@ import io.innospots.libra.kernel.module.schema.converter.SchemaFieldBeanConverte
 import io.innospots.libra.kernel.module.schema.dao.SchemaFieldDao;
 import io.innospots.libra.kernel.module.schema.entity.SchemaFieldEntity;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
@@ -40,6 +41,7 @@ import java.util.stream.Collectors;
  * @author Alfred
  * @date 2021-02-10
  */
+@Component
 public class SchemaFieldOperator extends ServiceImpl<SchemaFieldDao, SchemaFieldEntity> {
 
     @Transactional(rollbackFor = Exception.class)

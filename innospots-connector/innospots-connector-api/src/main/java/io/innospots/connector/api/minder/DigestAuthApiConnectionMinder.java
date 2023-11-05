@@ -33,6 +33,8 @@ import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.protocol.HttpContext;
 
+import static io.innospots.base.connector.http.HttpConstant.*;
+
 /**
  * @author Smars
  * @version 1.2.0
@@ -42,18 +44,18 @@ public class DigestAuthApiConnectionMinder extends HttpDataConnectionMinder {
 
 
     protected HttpContext httpContext() {
-        HttpHost target = new HttpHost(connectionCredential.v(HttpDataExecutor.HTTP_API_URL));
+        HttpHost target = new HttpHost(connectionCredential.v(HTTP_API_URL));
         CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(new AuthScope(target.getHostName(), target.getPort()),
-                new UsernamePasswordCredentials(connectionCredential.v(HttpDataExecutor.KEY_USERNAME),
-                        connectionCredential.v(HttpDataExecutor.KEY_PASSWORD)));
+                new UsernamePasswordCredentials(connectionCredential.v(KEY_USERNAME),
+                        connectionCredential.v(KEY_PASSWORD)));
         // Create AuthCache instance
         AuthCache authCache = new BasicAuthCache();
         // Generate DIGEST scheme object, initialize it and add it to the local
         // auth cache
         DigestScheme digestAuth = new DigestScheme();
         // Suppose we already know the realm name
-        digestAuth.overrideParamter("realm", connectionCredential.v(HttpDataExecutor.KEY_DIGEST_REALM, connectionCredential.getConfigCode()));
+        digestAuth.overrideParamter("realm", connectionCredential.v(KEY_DIGEST_REALM, connectionCredential.getAuthOption()));
         // Suppose we already know the expected nonce value
         digestAuth.overrideParamter("nonce", Long.toString(RandomUtils.nextLong(), 36));
         authCache.put(target, digestAuth);
@@ -66,7 +68,7 @@ public class DigestAuthApiConnectionMinder extends HttpDataConnectionMinder {
     }
 
     @Override
-    public IExecutionOperator buildExecutionOperator() {
+    public IExecutionOperator buildOperator() {
         if(httpDataExecutor == null){
             httpDataExecutor = new HttpDataExecutor(httpConnection,httpContext());
         }

@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import static io.innospots.base.connector.http.HttpConstant.KEY_TOKEN;
+
 /**
  * @author Smars
  * @version 1.2.0
@@ -38,7 +40,7 @@ public class BearerTokenAuthConnectionMinder extends HttpDataConnectionMinder {
     protected Supplier<Map<String, String>> headers() {
         return ()->{
             HashMap<String, String> headers = new HashMap<>();
-            String token = this.connectionCredential.v(HttpDataExecutor.KEY_TOKEN);
+            String token = this.connectionCredential.v(KEY_TOKEN);
             HttpClientBuilder.fillBearerAuthHeader(token, headers);
             return headers;
         };

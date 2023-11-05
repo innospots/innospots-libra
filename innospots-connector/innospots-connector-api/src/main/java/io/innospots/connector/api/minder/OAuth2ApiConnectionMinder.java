@@ -80,19 +80,19 @@ public class OAuth2ApiConnectionMinder extends OAuth2ClientConnectionMinder {
 
         String redirectUrl = connectionCredential.v(REDIRECT_URI);
         if (StringUtils.isBlank(redirectUrl)) {
-            redirectUrl = redirectAddress != null ? redirectAddress + OAUTH_CALLBACK + connectionCredential.getAppNodeCode() : null;
+            redirectUrl = redirectAddress != null ? redirectAddress + OAUTH_CALLBACK + connectionCredential.getCredentialTypeCode() : null;
         }
 
         Map<String, Object> resp = null;
 
-        String tokenJson = CacheStoreManager.get(clientId + "_" + connectionCredential.getAppNodeCode());
+        String tokenJson = CacheStoreManager.get(clientId + "_" + connectionCredential.getCredentialTypeCode());
         if (tokenJson != null) {
             Map<String, Object> tokenBody = JSONUtils.toMap(tokenJson);
             return true;
         }
 
         if (code != null && redirectUrl != null) {
-            resp = fetchAccessToken(accessTokenUrl, clientId, clientSecret, code, redirectUrl, connectionCredential.getAppNodeCode(), akRequestMethod);
+            resp = fetchAccessToken(accessTokenUrl, clientId, clientSecret, code, redirectUrl, connectionCredential.getCredentialTypeCode(), akRequestMethod);
             if (ObjectUtils.allNotNull(resp.get(TOKEN_TS), resp.get(EXPIRES_IN))) {
                 return resp;
             }
@@ -103,7 +103,7 @@ public class OAuth2ApiConnectionMinder extends OAuth2ClientConnectionMinder {
         if (refreshToken != null && ts != null &&
                 Instant.ofEpochMilli(tokenTs).plusSeconds(expireSecond).isBefore(Instant.now())) {
 
-            refreshToken(connectionCredential.getAppNodeCode(), accessTokenUrl, refreshToken, clientId, clientSecret, akRequestMethod);
+            refreshToken(connectionCredential.getCredentialTypeCode(), accessTokenUrl, refreshToken, clientId, clientSecret, akRequestMethod);
             //TODO 判断
             return true;
         }

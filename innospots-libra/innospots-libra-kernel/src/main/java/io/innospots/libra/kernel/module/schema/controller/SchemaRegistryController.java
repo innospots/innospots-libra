@@ -22,9 +22,9 @@ import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.connector.minder.IDataConnectionMinder;
 import io.innospots.base.connector.schema.SchemaCatalog;
 import io.innospots.base.model.response.InnospotResponse;
-import io.innospots.connector.schema.operator.SchemaRegistryOperator;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.menu.ModuleMenu;
+import io.innospots.libra.kernel.module.schema.operator.SchemaRegistryOperator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -103,8 +103,8 @@ public class SchemaRegistryController extends BaseController {
     @GetMapping("catalog/list")
     @Operation(summary = "list schema catalog from middleware", description = "")
     public InnospotResponse<List<SchemaCatalog>> listSchemaRegistries(
-            @Parameter(name = "credentialId") @RequestParam(value = "credentialId") Integer credentialId) {
-        IDataConnectionMinder minder = dataConnectionMinderManager.getMinder(credentialId);
+            @Parameter(name = "credentialId") @RequestParam(value = "credentialKey") String credentialKey) {
+        IDataConnectionMinder minder = dataConnectionMinderManager.getMinder(credentialKey);
         List<SchemaCatalog> schemaCatalogs = minder.schemaCatalogs();
         return success(schemaCatalogs);
     }

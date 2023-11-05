@@ -52,7 +52,6 @@ public class KafkaQueueSender implements IQueueSender {
         this.keyField = properties.getProperty(KEY_FIELD);
     }
 
-    @Override
     public void openSender() {
         if (producer == null) {
             producer = new KafkaProducer<>(properties);

@@ -64,10 +64,10 @@ public class RoleOperator extends ServiceImpl<RoleDao, SysRoleEntity> {
         this.checkDifferentRoleCode(role);
         this.checkDifferentRoleName(role);
         RoleInfoBeanConverter roleInfoBeanConverter = RoleInfoBeanConverter.INSTANCE;
-        SysRoleEntity entity = roleInfoBeanConverter.model2Entity(role);
+        SysRoleEntity entity = roleInfoBeanConverter.modelToEntity(role);
 
         super.save(entity);
-        return roleInfoBeanConverter.entity2Model(entity);
+        return roleInfoBeanConverter.entityToModel(entity);
     }
 
     /**
@@ -109,7 +109,7 @@ public class RoleOperator extends ServiceImpl<RoleDao, SysRoleEntity> {
      */
     public RoleInfo getRole(Integer roleId) {
         SysRoleEntity entity = this.getRoleEntity(roleId);
-        return RoleInfoBeanConverter.INSTANCE.entity2Model(entity);
+        return RoleInfoBeanConverter.INSTANCE.entityToModel(entity);
     }
 
     /**
@@ -145,7 +145,7 @@ public class RoleOperator extends ServiceImpl<RoleDao, SysRoleEntity> {
             pageBody.setTotal(entityPage.getTotal());
             pageBody.setTotalPage(entityPage.getPages());
         }
-        List<RoleInfo> roleInfos = entities.stream().map(RoleInfoBeanConverter.INSTANCE::entity2Model).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
+        List<RoleInfo> roleInfos = entities.stream().map(RoleInfoBeanConverter.INSTANCE::entityToModel).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
         pageBody.setList(roleInfos);
         return pageBody;
     }
@@ -161,7 +161,7 @@ public class RoleOperator extends ServiceImpl<RoleDao, SysRoleEntity> {
             return Collections.emptyList();
         }
         List<SysRoleEntity> entities = super.listByIds(roleIds);
-        return entities.stream().map(RoleInfoBeanConverter.INSTANCE::entity2Model).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
+        return entities.stream().map(RoleInfoBeanConverter.INSTANCE::entityToModel).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
     }
 
     public boolean hasRoles(List<Integer> roleIds) {

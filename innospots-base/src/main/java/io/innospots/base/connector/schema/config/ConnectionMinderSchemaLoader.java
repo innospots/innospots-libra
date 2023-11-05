@@ -89,9 +89,9 @@ public class ConnectionMinderSchemaLoader {
             throw LoadConfigurationException.buildException(ConnectionMinderSchemaLoader.class, "connection minder schema is empty");
         }
         if(configCode == null){
-            return connectionMinderSchema.getOptions().stream().findFirst().orElse(null);
+            return connectionMinderSchema.getAuthOptions().stream().findFirst().orElse(null);
         }
-        return connectionMinderSchema.getOptions().stream().filter(f -> f.getCode().equals(configCode)).findFirst()
+        return connectionMinderSchema.getAuthOptions().stream().filter(f -> f.getCode().equals(configCode)).findFirst()
                 .orElseThrow(() -> LoadConfigurationException.buildException(ConnectionMinderSchemaLoader.class, "credential configuration can not found"));
     }
 

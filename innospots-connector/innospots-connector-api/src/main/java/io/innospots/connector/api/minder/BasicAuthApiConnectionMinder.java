@@ -27,6 +27,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import static io.innospots.base.connector.http.HttpConstant.KEY_PASSWORD;
+import static io.innospots.base.connector.http.HttpConstant.KEY_USERNAME;
+
 /**
  * @author Smars
  * @version 1.2.0
@@ -40,8 +43,8 @@ public class BasicAuthApiConnectionMinder extends HttpDataConnectionMinder {
     protected Supplier<Map<String, String>> headers() {
         return ()->{
             HashMap<String, String> headers = new HashMap<>();
-            String username = this.connectionCredential.v(HttpDataExecutor.KEY_USERNAME);
-            String password = this.connectionCredential.v(HttpDataExecutor.KEY_PASSWORD);
+            String username = this.connectionCredential.v(KEY_USERNAME);
+            String password = this.connectionCredential.v(KEY_PASSWORD);
             HttpClientBuilder.fillBasicAuthHeader(username, password, headers, StandardCharsets.UTF_8);
             return headers;
         };

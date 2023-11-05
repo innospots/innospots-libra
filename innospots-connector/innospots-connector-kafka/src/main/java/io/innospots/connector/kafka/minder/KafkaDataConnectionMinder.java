@@ -93,7 +93,7 @@ public class KafkaDataConnectionMinder extends BaseDataConnectionMinder implemen
     }
 
     @Override
-    public Object test(ConnectionCredential connectionCredential) {
+    public Object testConnect(ConnectionCredential connectionCredential) {
         String bootstrapServers = connectionCredential.v(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG);
         Properties properties = new Properties();
         properties.setProperty(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
@@ -137,7 +137,7 @@ public class KafkaDataConnectionMinder extends BaseDataConnectionMinder implemen
                 SchemaCatalog schemaCatalog = new SchemaCatalog();
                 schemaCatalog.setName(topic);
                 schemaCatalog.setCode(topic);
-                schemaCatalog.setCredentialId(this.connectionCredential.getCredentialId());
+                schemaCatalog.setCredentialKey(this.connectionCredential.getCredentialKey());
                 tableInfos.add(schemaCatalog);
             }
         } catch (Exception e) {
@@ -146,10 +146,9 @@ public class KafkaDataConnectionMinder extends BaseDataConnectionMinder implemen
         return tableInfos;
     }
 
-
     @Override
-    public IOperator buildOperator() {
-        return queueSender();
+    public KafkaQueueSender buildOperator() {
+        return (KafkaQueueSender) queueSender();
     }
 
     @Override
@@ -160,7 +159,7 @@ public class KafkaDataConnectionMinder extends BaseDataConnectionMinder implemen
         return dataSender;
     }
 
-    @Override
+
     public IOperator buildOperator(String... params) {
         return queueReceiver(params[0], params[1], params[2], params[3], Long.parseLong(params[4]), Integer.parseInt(params[5]));
     }
@@ -171,7 +170,7 @@ public class KafkaDataConnectionMinder extends BaseDataConnectionMinder implemen
         IQueueReceiver dataReceiver = receiverCache.getIfPresent(key);
         if (dataReceiver == null) {
             dataReceiver = new KafkaQueueReceiver(properties, topic, group, offset, format, pollSize, pollTimeout);
-            dataReceiver.openSubscribe();
+            dataReceiver.openSubscribe(group);
             receiverCache.put(key, dataReceiver);
         }
         return dataReceiver;
@@ -198,7 +197,6 @@ public class KafkaDataConnectionMinder extends BaseDataConnectionMinder implemen
         return innospotResponse.getBody();
     }
 
-    @Override
     public PageBody<Map<String, Object>> fetchSamples(ConnectionCredential connectionCredential, SchemaRegistry schemaRegistry, int page, int size) {
         if (MapUtils.isEmpty(schemaRegistry.getConfigs())) {
             throw DataSchemaException.buildException(this.getClass(), "kafka schemaRegistry configs can not be empty");
@@ -222,8 +220,10 @@ public class KafkaDataConnectionMinder extends BaseDataConnectionMinder implemen
         return dataReceiver.receive(size);
     }
 
+
     @Override
-    public String connector() {
+    public String schemaName() {
         return "kafka_queue";
     }
+
 }

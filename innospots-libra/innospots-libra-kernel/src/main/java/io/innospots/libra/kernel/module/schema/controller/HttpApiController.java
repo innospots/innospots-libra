@@ -25,11 +25,11 @@ import io.innospots.base.connector.http.HttpDataExecutor;
 import io.innospots.base.connector.schema.ApiSchemaRegistry;
 import io.innospots.base.data.request.ItemRequest;
 import io.innospots.base.model.response.InnospotResponse;
-import io.innospots.connector.schema.operator.HttpApiOperator;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ResourceItemOperation;
+import io.innospots.libra.kernel.module.schema.operator.HttpApiOperator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.validation.annotation.Validated;
@@ -111,7 +111,7 @@ public class HttpApiController extends BaseController {
     @PostMapping("fetch-sample")
     @Operation(summary = "http api fetch-sample")
     public InnospotResponse<Object> fetchSample(@Validated @RequestBody ApiSchemaRegistry apiSchemaRegistry) {
-        ConnectionCredential connectionCredential = connectionCredentialReader.readCredential(apiSchemaRegistry.getCredentialId());
+        ConnectionCredential connectionCredential = connectionCredentialReader.readCredential(apiSchemaRegistry.getCredentialKey());
         HttpConnection httpConnection = new HttpConnection(connectionCredential);
         HttpDataExecutor httpDataExecutor = new HttpDataExecutor(httpConnection);
 //        HttpDataExecutor httpDataExecutor = new HttpDataExecutor(httpConnection, apiSchemaRegistry);

@@ -18,6 +18,8 @@
 
 package io.innospots.libra.kernel.module.schema.dataset;
 
+import io.innospots.base.connector.credential.CredentialInfo;
+import io.innospots.base.connector.credential.IConnectionCredentialReader;
 import io.innospots.base.connector.schema.SchemaRegistry;
 import io.innospots.base.connector.schema.SchemaRegistryType;
 import io.innospots.base.connector.schema.config.ConnectionMinderSchema;
@@ -44,12 +46,12 @@ public class DatasetOperator implements IDatasetReader {
 
     private final SchemaRegistryOperator schemaRegistryOperator;
 
-    private final CredentialInfoOperator appCredentialOperator;
+    private final IConnectionCredentialReader connectionCredentialReader;
 
     public DatasetOperator(SchemaRegistryOperator schemaRegistryOperator,
-                           CredentialInfoOperator appCredentialOperator) {
+                           IConnectionCredentialReader connectionCredentialReader) {
         this.schemaRegistryOperator = schemaRegistryOperator;
-        this.appCredentialOperator = appCredentialOperator;
+        this.connectionCredentialReader = connectionCredentialReader;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -128,9 +130,9 @@ public class DatasetOperator implements IDatasetReader {
         if (CollectionUtils.isEmpty(keys)) {
             return;
         }
-        List<CredentialInfoEntity> credentials = appCredentialOperator.listByIds(keys);
+        List<CredentialInfo> credentials = connectionCredentialReader.readCredentialInfos(keys);
         Map<String, String> iconMap = new HashMap<>();
-        for (CredentialInfoEntity credential : credentials) {
+        for (CredentialInfo credential : credentials) {
             ConnectionMinderSchema minderSchema = ConnectionMinderSchemaLoader.getConnectionMinderSchema(credential.getCredentialTypeCode());
             iconMap.put(credential.getCredentialKey(), minderSchema.getIcon());
         }

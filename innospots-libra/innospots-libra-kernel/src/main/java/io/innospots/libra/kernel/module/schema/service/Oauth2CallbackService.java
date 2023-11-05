@@ -10,6 +10,7 @@ import io.innospots.libra.kernel.module.credential.reader.ConnectionCredentialRe
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import java.util.Map;
  * @date 2023/7/20
  */
 @Slf4j
+@Component
 public class Oauth2CallbackService {
 
     private ConnectionCredentialReader connectionCredentialReader;

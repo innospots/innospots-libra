@@ -34,6 +34,7 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.function.Consumer;
 
 /**
  * @author Smars
@@ -117,7 +118,6 @@ public class KafkaQueueReceiver implements IQueueReceiver {
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
     }
 
-    @Override
     public void openSubscribe() {
         openSubscribe(topic, group, pollTimeOut);
     }
@@ -292,6 +292,11 @@ public class KafkaQueueReceiver implements IQueueReceiver {
         Map<String, Object> body = pollLastData();
         DataBody<Map<String, Object>> dataBody = new DataBody<>(body);
         return dataBody;
+    }
+
+    @Override
+    public void listen(Consumer consumer) {
+        consumer.accept(receive());
     }
 
     @Override

@@ -28,6 +28,7 @@ import io.innospots.libra.kernel.module.schema.operator.SchemaFieldOperator;
 import io.innospots.libra.kernel.module.schema.operator.SchemaRegistryOperator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -36,6 +37,7 @@ import java.util.List;
  * @date 2021/2/14
  */
 @Slf4j
+@Component
 public class SchemaRegistryReader implements ISchemaRegistryReader {
 
     private final SchemaRegistryOperator schemaRegistryOperator;
