@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package io.innospots.libra.kernel.configuration;
+package io.innospots.libra.base.configuration;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -64,6 +64,38 @@ public class InnospotsConsoleProperties {
      * enable clean system operate log
      */
     private boolean enableCleanSysOperateLog = true;
+
+
+
+    /**
+     * enable swagger api
+     */
+    private boolean enableSwagger = true;
+
+    /**
+     * the directory store upload file
+     */
+    private String uploadFilePath;
+
+    /**
+     * open debug mode
+     */
+    private boolean debugMode = false;
+
+    /**
+     * check extended application
+     */
+    private boolean enableAppLoadCheck = true;
+
+
+    private Integer schemaCacheTimeoutSecond = 180;
+
+    /**
+     * the path of external jar lib
+     */
+    private String extLibPath;
+
+
 
 
 }

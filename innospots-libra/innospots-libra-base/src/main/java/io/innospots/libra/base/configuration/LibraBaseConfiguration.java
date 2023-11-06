@@ -45,7 +45,7 @@ import java.util.List;
 @Configuration
 @EntityScan(basePackages = {"io.innospots.libra.base.entity","io.innospots.libra.base.category"})
 @MapperScan(basePackages = {"io.innospots.libra.base.dao","io.innospots.libra.base.category"})
-@EnableConfigurationProperties({AuthProperties.class,InnospotsConfigProperties.class})
+@EnableConfigurationProperties({AuthProperties.class})
 public class LibraBaseConfiguration {
 
     private final static List<String> IGNORE_TABLES = ImmutableList.of(

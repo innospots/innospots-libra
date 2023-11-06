@@ -18,17 +18,18 @@
 
 package io.innospots.server.base.configuration;
 
+import cn.hutool.extra.spring.SpringUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.server.base.exception.GlobalExceptionHandler;
-import io.innospots.base.function.definition.FunctionDefinitionOperator;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.registry.ServiceRegistryDao;
-import io.innospots.base.registry.ServiceRegistryManager;
-import io.innospots.base.registry.ServiceRegistryStarter;
 import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.CCH;
 import io.innospots.base.utils.InnospotIdGenerator;
 import io.innospots.base.watcher.WatcherSupervisor;
+import io.innospots.server.base.registry.ServiceRegistryDao;
+import io.innospots.server.base.registry.ServiceRegistryManager;
+import io.innospots.server.base.registry.ServiceRegistryStarter;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -48,6 +49,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 @MapperScan(basePackages = {"io.innospots.server.base.registry"})
 @EntityScan(basePackages = {"io.innospots.server.base.registry"})
 @Configuration
+@EnableConfigurationProperties({InnospotsConfigProperties.class})
 @Import({CCH.class})
 public class BaseServiceConfiguration {
 
@@ -62,19 +64,15 @@ public class BaseServiceConfiguration {
         return new ServiceRegistryManager(serviceRegistryDao);
     }
 
-    @Bean
-    public FunctionDefinitionOperator functionDefinitionOperator() {
-        return new FunctionDefinitionOperator();
-    }
 
     @Bean
-    public ServiceRegistryStarter serviceRegistryStarter(InnospotConfigProperties configProperties, WatcherSupervisor watcherSupervisor, ServiceRegistryManager serviceRegistryManager) {
+    public ServiceRegistryStarter serviceRegistryStarter(InnospotsConfigProperties configProperties, WatcherSupervisor watcherSupervisor, ServiceRegistryManager serviceRegistryManager) {
         return new ServiceRegistryStarter(configProperties, watcherSupervisor, serviceRegistryManager);
     }
 
     @Bean
-    public WatcherSupervisor watcherSupervisor(InnospotConfigProperties innospotConfigProperties) {
-        return new WatcherSupervisor(innospotConfigProperties.getWatcherSize());
+    public WatcherSupervisor watcherSupervisor(InnospotsConfigProperties configProperties) {
+        return new WatcherSupervisor(configProperties.getWatcherSize());
     }
 
     @Bean
@@ -83,21 +81,24 @@ public class BaseServiceConfiguration {
     }
 
     @Bean
-    public BeanContextAware applicationContextUtils() {
-        return new BeanContextAware();
+    public SpringUtil springUtil(){
+        return new SpringUtil();
     }
 
     @Bean
-    public InnospotIdGenerator idGenerator(BeanContextAware beanContextAware) {
-        return InnospotIdGenerator.build(BeanContextAware.serverIpAddress(), BeanContextAware.serverPort());
+    public BeanContextAware applicationContextUtils(SpringUtil springUtil) {
+        return new SpringBeanAware(springUtil);
     }
 
+    @Bean
+    public InnospotIdGenerator idGenerator(BeanContextAware springBeanAware) {
+        return InnospotIdGenerator.build(SpringBeanAware.serverIpAddress(), SpringBeanAware.serverPort());
+    }
 
     @Bean
     @Primary
-    public Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
-
-        return JSONUtils.customBuilder();
+    public ObjectMapper jackson2ObjectMapper() {
+        return JSONUtils.customMapper();
     }
 
 

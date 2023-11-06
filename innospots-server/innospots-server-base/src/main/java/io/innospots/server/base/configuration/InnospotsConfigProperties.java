@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package io.innospots.libra.base.configuration;
+package io.innospots.server.base.configuration;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -71,6 +71,7 @@ public class InnospotsConfigProperties {
      * check extended application
      */
     private boolean enableAppLoadCheck = true;
+
 
     private Integer schemaCacheTimeoutSecond = 180;
 

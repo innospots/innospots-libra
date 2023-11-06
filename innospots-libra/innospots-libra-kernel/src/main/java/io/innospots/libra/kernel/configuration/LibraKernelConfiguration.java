@@ -22,6 +22,7 @@ package io.innospots.libra.kernel.configuration;
 import io.innospots.base.constant.PathConstant;
 import io.innospots.base.crypto.BCryptPasswordEncoder;
 import io.innospots.base.crypto.PasswordEncoder;
+import io.innospots.libra.base.configuration.InnospotsConsoleProperties;
 import io.innospots.libra.base.configuration.LibraBaseConfiguration;
 import io.innospots.libra.base.configuration.WebConfiguration;
 import io.innospots.libra.base.model.swagger.SwaggerOpenApiBuilder;

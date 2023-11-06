@@ -19,7 +19,7 @@
 package io.innospots.administration.schedule;
 
 import io.innospots.base.events.EventBusCenter;
-import io.innospots.libra.kernel.configuration.InnospotsConsoleProperties;
+import io.innospots.libra.base.configuration.InnospotsConsoleProperties;
 import io.innospots.libra.kernel.events.LogClearEvent;
 import io.innospots.server.base.registry.ServiceRegistryHolder;
 import lombok.AllArgsConstructor;

@@ -42,13 +42,6 @@ public class DatasourceConfiguration {
         return new HikariDataSource(dbProperties);
     }
 
-
-    @Bean
-    @ConditionalOnMissingBean(JdbcSqlOperator.class)
-    public JdbcSqlOperator defaultSqlOperator(DataSource dataSource) {
-        return new JdbcSqlOperator(dataSource);
-    }
-
     @Bean
     @ConditionalOnMissingBean(JdbcDataOperator.class)
     public JdbcDataOperator defaultDataOperator(DataSource dataSource) {
