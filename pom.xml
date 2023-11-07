@@ -12,7 +12,6 @@
         <module>innospots-workflow</module>
         <module>innospots-data-provider</module>
         <module>innospots-connector</module>
-        <module>innospots-connector-schema</module>
         <module>innospots-server/innospots-server-base</module>
     </modules>
 

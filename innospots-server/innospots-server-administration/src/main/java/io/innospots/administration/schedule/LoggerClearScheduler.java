@@ -41,21 +41,21 @@ import java.time.LocalDateTime;
 public class LoggerClearScheduler {
 
 
-    private InnospotsConsoleProperties inspectionProperties;
+    private InnospotsConsoleProperties consoleProperties;
 
     //sys_operation_log，同样可设置清理历史时长和最大保留记录。默认设置为不清理
 
     @Scheduled(cron = "0 10 4 * * ?")
     private void SysOperateLogCleanTask() {
         try {
-            if (ServiceRegistryHolder.isLeader() && inspectionProperties.isEnableCleanSysOperateLog()) {
-                int days = inspectionProperties.getSysOperateLogKeepDays();
-                int count = inspectionProperties.getSysLoginLogKeepAmount();
+            if (ServiceRegistryHolder.isLeader() && consoleProperties.isEnableCleanSysOperateLog()) {
+                int days = consoleProperties.getSysOperateLogKeepDays();
+                int count = consoleProperties.getSysLoginLogKeepAmount();
                 LogClearEvent logClearEvent = new LogClearEvent(count, days);
                 Object delCount = EventBusCenter.postSync(logClearEvent);
                 log.info("SysOperateLogCleanTask delete:{}, days:{} currTime:{}", delCount, days, LocalDateTime.now());
             } else {
-                log.info("SysOperateLogCleanTask not run!  curr service leader:{} enableCleanSysOperateLog:{} {}", ServiceRegistryHolder.isLeader(), inspectionProperties.isEnableCleanSysOperateLog(), ServiceRegistryHolder.getCurrentServer());
+                log.info("SysOperateLogCleanTask not run!  curr service leader:{} enableCleanSysOperateLog:{} {}", ServiceRegistryHolder.isLeader(), consoleProperties.isEnableCleanSysOperateLog(), ServiceRegistryHolder.getCurrentServer());
             }
         } catch (Exception e) {
             log.error("SysOperateLogCleanTask error:{}", e.getMessage(), e);

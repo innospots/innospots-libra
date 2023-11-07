@@ -18,7 +18,6 @@
 
 package io.innospots.libra.security.config;
 
-import io.innospots.base.configuration.InnospotDbProperties;
 import io.innospots.base.crypto.BCryptPasswordEncoder;
 import io.innospots.base.crypto.PasswordEncoder;
 import io.innospots.libra.base.configuration.AuthProperties;
@@ -27,6 +26,7 @@ import io.innospots.libra.security.auth.AuthenticationProvider;
 import io.innospots.libra.security.auth.basic.UserPasswordAuthenticationProvider;
 import io.innospots.libra.security.filter.AuthenticationFilter;
 import io.innospots.libra.security.jwt.JwtAuthManager;
+import io.innospots.libra.security.operator.AuthUserOperator;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -41,20 +41,28 @@ import javax.servlet.Filter;
  * @date 2021/2/15
  */
 @Configuration
-@EnableConfigurationProperties({AuthProperties.class, InnospotDbProperties.class})
+@EnableConfigurationProperties({AuthProperties.class})
 @MapperScan({"io.innospots.libra.security.auth.basic"})
 public class AuthenticationConfiguration {
 
     @ConditionalOnProperty(prefix = "innospots.security", name = "mode", havingValue = "BASIC")
     @Bean
-    public AuthenticationProvider userPasswordAuthenticationProvider() {
-        return new UserPasswordAuthenticationProvider();
+    public AuthenticationProvider userPasswordAuthenticationProvider(
+            PasswordEncoder passwordEncoder,
+            JwtAuthManager jwtAuthManager,
+            AuthUserOperator authUserOperator
+                                                                     ) {
+        return new UserPasswordAuthenticationProvider(passwordEncoder,jwtAuthManager,authUserOperator);
     }
 
     @ConditionalOnProperty(prefix = "innospots.security", name = "mode", havingValue = "EXHIBITION")
     @Bean
-    public AuthenticationProvider exhibitAuthenticationProvider() {
-        return new UserPasswordAuthenticationProvider();
+    public AuthenticationProvider exhibitAuthenticationProvider(
+            PasswordEncoder passwordEncoder,
+            JwtAuthManager jwtAuthManager,
+            AuthUserOperator authUserOperator
+    ) {
+        return new UserPasswordAuthenticationProvider(passwordEncoder,jwtAuthManager,authUserOperator);
     }
 
     @Bean

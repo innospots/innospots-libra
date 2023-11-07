@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package io.innospots.libra.kernel.events;
+package io.innospots.libra.base.events;
 
 import io.innospots.base.events.EventBody;
 import lombok.Getter;

@@ -40,12 +40,6 @@
 
             <dependency>
                 <groupId>io.innospots</groupId>
-                <artifactId>innospots-connector-schema</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.innospots</groupId>
                 <artifactId>innospots-server-base</artifactId>
                 <version>${project.version}</version>
             </dependency>

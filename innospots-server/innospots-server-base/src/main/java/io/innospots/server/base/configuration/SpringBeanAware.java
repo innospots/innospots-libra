@@ -19,10 +19,13 @@
 package io.innospots.server.base.configuration;
 
 import cn.hutool.core.io.resource.Resource;
+import cn.hutool.core.net.NetUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import io.innospots.base.utils.BeanContextAware;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.Environment;
+import org.springframework.util.Assert;
 
 import java.util.Map;
 
@@ -77,13 +80,33 @@ public class SpringBeanAware implements BeanContextAware {
         }
     }
 
-    public static String serverIpAddress(){
-        return null;
+    private static ApplicationContext applicationContext(){
+        return SpringUtil.getApplicationContext();
     }
 
-    public static int serverPort(){
+
+    public static Environment environment() {
+        Assert.notNull(applicationContext(), "application context is null.");
+        return applicationContext().getEnvironment();
+    }
+
+    public static String serverIpAddress() {
+        Environment environment = environment();
+        String ip = environment.getProperty("spring.cloud.client.ip-address");
+        if(ip!=null){
+            return ip;
+        }
+        return NetUtil.getLocalHostName();
+    }
+
+
+    public static Integer serverPort() {
+        Environment environment = environment();
+        String port = environment.getProperty("server.port");
+        if (port != null) {
+            return Integer.valueOf(port);
+        }
         return 0;
     }
-
 
 }

@@ -25,7 +25,7 @@ import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.AuthenticationException;
 import io.innospots.base.exception.InnospotException;
 import io.innospots.libra.base.enums.LoginStatus;
-import io.innospots.libra.base.event.LoginEvent;
+import io.innospots.libra.base.events.LoginEvent;
 import io.innospots.libra.security.auth.Authentication;
 import io.innospots.libra.security.auth.AuthenticationProvider;
 import io.innospots.libra.security.auth.model.AuthUser;
@@ -53,16 +53,16 @@ public class UserPasswordAuthenticationProvider implements AuthenticationProvide
         String userName = RsaKeyManager.decrypt(request.getUsername(), authManager.getPrivateKey());
         String password = RsaKeyManager.decrypt(request.getPassword(), authManager.getPrivateKey());
         if (userName == null || password == null) {
-            EventBusCenter.getInstance().asyncPost(new LoginEvent(userName, LoginStatus.FAILURE.name(), "${log.message.login.fail.empty}"));
+            EventBusCenter.async(new LoginEvent(userName, LoginStatus.FAILURE.name(), "${log.message.login.fail.empty}"));
             throw AuthenticationException.buildDecryptException(this.getClass(), "User name or password is empty, login failed");
         }
         AuthUser authUser = authUserOperator.view(AuthUser.builder().userName(userName).build());
         if (!DataStatus.ONLINE.equals(authUser.getStatus())) {
-            EventBusCenter.getInstance().asyncPost(new LoginEvent(userName, LoginStatus.FAILURE.name(), "${log.message.login.user.disabled}"));
+            EventBusCenter.async(new LoginEvent(userName, LoginStatus.FAILURE.name(), "${log.message.login.user.disabled}"));
             throw AuthenticationException.buildUserException(this.getClass(), "User disabled, login failed");
         }
         if (!passwordEncoder.matches(password, authUser.getPassword())) {
-            EventBusCenter.getInstance().asyncPost(new LoginEvent(userName, LoginStatus.FAILURE.name(), "${log.message.login.password.invalid}"));
+            EventBusCenter.async(new LoginEvent(userName, LoginStatus.FAILURE.name(), "${log.message.login.password.invalid}"));
             throw AuthenticationException.buildPasswordException(this.getClass(), "User name or password error, login failed");
         }
 
