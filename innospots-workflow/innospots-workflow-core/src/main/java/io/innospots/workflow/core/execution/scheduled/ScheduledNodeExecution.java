@@ -28,7 +28,8 @@ import org.apache.commons.lang3.RandomUtils;
 
 import java.time.LocalDateTime;
 
-import static io.innospots.base.registry.ServiceRegistryHolder.MAX_SHARDING_KEY;
+import static io.innospots.workflow.core.config.InnospotWorkflowProperties.MAX_SHARDING_KEY;
+
 
 /**
  * schedule node execution that will be execute when the schedule time arrives

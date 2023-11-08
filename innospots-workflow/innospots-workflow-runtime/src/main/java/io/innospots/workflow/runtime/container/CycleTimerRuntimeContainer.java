@@ -19,6 +19,7 @@
 package io.innospots.workflow.runtime.container;
 
 import io.innospots.base.utils.thread.ThreadPoolBuilder;
+import io.innospots.base.utils.thread.ThreadTaskExecutor;
 import io.innospots.workflow.core.runtime.FlowRuntimeRegistry;
 import io.innospots.workflow.node.app.trigger.CycleTimerNode;
 import org.slf4j.Logger;
@@ -40,7 +41,7 @@ public class CycleTimerRuntimeContainer extends BaseRuntimeContainer {
 
     private static final Logger logger = LoggerFactory.getLogger(CycleTimerRuntimeContainer.class);
 
-    private final ThreadPoolTaskExecutor taskExecutor;
+    private final ThreadTaskExecutor taskExecutor;
 
     /**
      * running timer thread

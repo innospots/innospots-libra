@@ -19,8 +19,6 @@
 package io.innospots.workflow.runtime.config;
 
 
-import io.innospots.base.configuration.BaseServiceConfiguration;
-import io.innospots.base.configuration.DatasourceConfiguration;
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.quartz.QuartzScheduleManager;
 import io.innospots.workflow.core.config.InnospotWorkflowProperties;
@@ -53,7 +51,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 import java.util.List;
 
@@ -63,7 +60,6 @@ import java.util.List;
  */
 @Configuration
 @EnableConfigurationProperties(WorkflowServerProperties.class)
-@Import({DatasourceConfiguration.class, BaseServiceConfiguration.class})
 public class WorkflowRuntimeConfiguration {
 
     @Bean

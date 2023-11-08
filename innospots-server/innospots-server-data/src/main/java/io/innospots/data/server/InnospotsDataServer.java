@@ -18,10 +18,11 @@
 
 package io.innospots.data.server;
 
-import io.innospots.base.configuration.BaseServiceConfiguration;
-import io.innospots.base.configuration.DatasourceConfiguration;
-import io.innospots.base.registry.ServiceRegistryHolder;
-import io.innospots.base.registry.enums.ServiceType;
+
+import io.innospots.server.base.configuration.BaseServiceConfiguration;
+import io.innospots.server.base.configuration.DatasourceConfiguration;
+import io.innospots.server.base.registry.ServiceRegistryHolder;
+import io.innospots.server.base.registry.enums.ServiceType;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -34,11 +35,11 @@ import org.springframework.context.annotation.Import;
  */
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, QuartzAutoConfiguration.class})
 @Import({DatasourceConfiguration.class, BaseServiceConfiguration.class})
-public class InnospotDataServer {
+public class InnospotsDataServer {
 
     public static void main(String[] args) {
         ServiceRegistryHolder.serverType(ServiceType.DATA);
-        SpringApplication.run(InnospotDataServer.class, args);
+        SpringApplication.run(InnospotsDataServer.class, args);
 //        DataConnectionMinderManager.getMinderClasses();
     }
 

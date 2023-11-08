@@ -22,7 +22,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.base.re.function.HttpFunc;
-import io.innospots.libra.base.configuration.InnospotsConfigProperties;
+import io.innospots.libra.base.configuration.InnospotsConsoleProperties;
 import io.innospots.libra.kernel.service.TestService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -49,14 +49,14 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 @Tag(name = "Test Case")
 public class TestController {
 
-    private InnospotsConfigProperties innospotsConfigProperties;
+    private InnospotsConsoleProperties innospotsConsoleProperties;
 
     private ObjectMapper jsonMapper;
 
     public TestService testService;
 
-    public TestController(InnospotsConfigProperties innospotsConfigProperties, ObjectMapper jsonMapper, TestService testService) {
-        this.innospotsConfigProperties = innospotsConfigProperties;
+    public TestController(InnospotsConsoleProperties innospotsConsoleProperties, ObjectMapper jsonMapper, TestService testService) {
+        this.innospotsConsoleProperties = innospotsConsoleProperties;
         this.jsonMapper = jsonMapper;
         this.testService = testService;
     }

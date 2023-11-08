@@ -23,6 +23,7 @@ import io.innospots.base.connector.minder.IQueueConnectionMinder;
 import io.innospots.base.data.operator.IQueueReceiver;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.base.utils.thread.ThreadPoolBuilder;
+import io.innospots.base.utils.thread.ThreadTaskExecutor;
 import io.innospots.workflow.core.context.WorkflowRuntimeContext;
 import io.innospots.workflow.core.runtime.FlowRuntimeRegistry;
 import io.innospots.workflow.node.app.trigger.QueueTriggerNode;
@@ -48,7 +49,7 @@ public class QueueRuntimeContainer extends BaseRuntimeContainer {
 
     private final DataConnectionMinderManager dataConnectionMinderManager;
 
-    private final ThreadPoolTaskExecutor taskExecutor;
+    private final ThreadTaskExecutor taskExecutor;
 
     /**
      * 已注册线程数量
@@ -139,7 +140,7 @@ public class QueueRuntimeContainer extends BaseRuntimeContainer {
             this.flowRuntimeRegistry = flowRuntimeRegistry;
             QueueTriggerNode triggerNode = (QueueTriggerNode) flowRuntimeRegistry.getRegistryNode();
             topic = triggerNode.topic();
-            IQueueConnectionMinder dataConnectionMinder = (IQueueConnectionMinder) dataConnectionMinderManager.getMinder(triggerNode.datasourceId());
+            IQueueConnectionMinder dataConnectionMinder = (IQueueConnectionMinder) dataConnectionMinderManager.getMinder(triggerNode.credentialKey());
             queueMsgReceiver = dataConnectionMinder.queueReceiver(triggerNode.topic(),
                     triggerNode.topicGroup(),
                     triggerNode.dataOffset(),

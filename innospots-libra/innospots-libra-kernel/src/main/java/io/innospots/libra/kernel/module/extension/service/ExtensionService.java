@@ -23,7 +23,7 @@ import io.innospots.base.exception.ResourceException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.ZipFileUtils;
 import io.innospots.base.utils.time.DateTimeUtils;
-import io.innospots.libra.base.configuration.InnospotsConfigProperties;
+import io.innospots.libra.base.configuration.InnospotsConsoleProperties;
 import io.innospots.libra.base.extension.ExtensionStatus;
 import io.innospots.libra.base.extension.LibraExtensionInformation;
 import io.innospots.libra.base.extension.LibraExtensionProperties;
@@ -58,7 +58,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ExtensionService {
 
-    private InnospotsConfigProperties innospotsConfigProperties;
+    private InnospotsConsoleProperties innospotsConsoleProperties;
 
     private ExtDefinitionOperator extDefinitionOperator;
 
@@ -87,7 +87,7 @@ public class ExtensionService {
         String[] arrs = fileName.substring(0, fileName.lastIndexOf(".")).split("_");
         appName = arrs[0];
         appVersion = arrs[1];
-        String downPath = innospotsConfigProperties.getUploadFilePath() + File.separator + appName + File.separator + appVersion;
+        String downPath = innospotsConsoleProperties.getUploadFilePath() + File.separator + appName + File.separator + appVersion;
         return downPath;
     }
 
@@ -271,12 +271,12 @@ public class ExtensionService {
         }
 
         //备份classPath中app的jar文件
-        File extLibDir = new File(innospotsConfigProperties.getExtLibPath());
+        File extLibDir = new File(innospotsConsoleProperties.getExtLibPath());
         if (!extLibDir.exists()) {
             extLibDir.mkdirs();
         }
         if (!extLibDir.isDirectory()) {
-            throw ResourceException.buildCreateException(this.getClass(), "extLibDir is not directory", innospotsConfigProperties.getExtLibPath());
+            throw ResourceException.buildCreateException(this.getClass(), "extLibDir is not directory", innospotsConsoleProperties.getExtLibPath());
         }
 
         File[] jarFileArr = extLibDir.listFiles((file, name) -> {

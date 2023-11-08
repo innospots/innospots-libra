@@ -170,7 +170,7 @@ public abstract class BaseAppNode implements INodeBuilder, INodeExecutor {
             before(nodeExecution);
             nodeExecution.setStatus(ExecutionStatus.STARTING);
             if (ni.isAsync()) {
-                ListenableFuture<?> listenableFuture = AsyncExecutors.execute(() -> innerExecute(nodeExecution, flowExecution));
+                AsyncExecutors.execute(() -> innerExecute(nodeExecution, flowExecution));
             } else {
                 innerExecute(nodeExecution, flowExecution);
             }

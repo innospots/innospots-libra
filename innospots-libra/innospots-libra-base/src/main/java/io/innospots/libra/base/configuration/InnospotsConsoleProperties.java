@@ -83,9 +83,9 @@ public class InnospotsConsoleProperties {
     private boolean debugMode = false;
 
     /**
-     * check extended application
+     * load extension from classpath
      */
-    private boolean enableAppLoadCheck = true;
+    private boolean extensionLoad = true;
 
 
     private Integer schemaCacheTimeoutSecond = 180;

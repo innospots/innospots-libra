@@ -19,6 +19,7 @@
 package io.innospots.workflow.runtime.flow;
 
 import io.innospots.base.utils.thread.ThreadPoolBuilder;
+import io.innospots.base.utils.thread.ThreadTaskExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -37,7 +38,7 @@ public class FlowPrepareExecutor implements Closeable {
 
     private static final Logger logger = LoggerFactory.getLogger(FlowPrepareExecutor.class);
 
-    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+    private ThreadTaskExecutor threadPoolTaskExecutor;
 
     private Map<String, FlowAsyncPreparer> loaderCache = new HashMap<>();
     private FlowManager flowManager;

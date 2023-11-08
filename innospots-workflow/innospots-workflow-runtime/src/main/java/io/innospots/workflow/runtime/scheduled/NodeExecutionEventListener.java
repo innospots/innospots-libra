@@ -96,7 +96,7 @@ public class NodeExecutionEventListener implements IEventListener<NodeExecutionE
     }
 
     @Override
-    public Class<? extends EventBody> eventBodyClass() {
+    public Class<NodeExecutionEventBody> eventBodyClass() {
         return NodeExecutionEventBody.class;
     }
 }

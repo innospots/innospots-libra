@@ -18,6 +18,8 @@
 
 package io.innospots.server.base.registry;
 
+import io.innospots.base.utils.BeanContextAwareUtils;
+import io.innospots.server.base.configuration.SpringBeanAware;
 import io.innospots.server.base.registry.enums.ServiceRole;
 import io.innospots.server.base.registry.enums.ServiceStatus;
 import io.innospots.server.base.registry.enums.ServiceType;
@@ -44,8 +46,6 @@ public class ServiceRegistryHolder {
     private static LocalDateTime startupTime;
 
     public static long maxValidTimeSecond = 55;
-
-    public static int MAX_SHARDING_KEY = 16;
 
     private static ServiceType serviceType;
 
@@ -100,13 +100,13 @@ public class ServiceRegistryHolder {
 
     public static ServiceInfo buildCurrentNewService() {
         ServiceInfo serviceInfo = new ServiceInfo();
-        serviceInfo.setDomainIp(BeanContextAware.serverIpAddress());
+        serviceInfo.setDomainIp(BeanContextAwareUtils.serverIpAddress());
         serviceInfo.setServiceType(serviceType);
-        serviceInfo.setPort(BeanContextAware.serverPort());
+        serviceInfo.setPort(BeanContextAwareUtils.serverPort());
         serviceInfo.setServiceRole(ServiceRole.FOLLOWER);
         serviceInfo.setServiceStatus(ServiceStatus.ONLINE);
         serviceInfo.setUpdatedTime(LocalDateTime.now());
-        serviceInfo.setServiceName(BeanContextAware.applicationId());
+        serviceInfo.setServiceName(BeanContextAwareUtils.applicationId());
         return serviceInfo;
     }
 

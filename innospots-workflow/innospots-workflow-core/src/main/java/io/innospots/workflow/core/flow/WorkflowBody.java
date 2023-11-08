@@ -26,6 +26,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
 
@@ -36,7 +37,7 @@ import java.util.stream.Collectors;
  * @author Raydian
  * @date 2020/11/28
  */
-@Log4j2
+@Slf4j
 @Getter
 @Setter
 public class WorkflowBody extends WorkflowBaseBody implements Initializer {

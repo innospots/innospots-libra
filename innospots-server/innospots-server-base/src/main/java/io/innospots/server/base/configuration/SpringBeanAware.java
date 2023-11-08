@@ -90,7 +90,7 @@ public class SpringBeanAware implements BeanContextAware {
         return applicationContext().getEnvironment();
     }
 
-    public static String serverIpAddress() {
+    public String serverIpAddress() {
         Environment environment = environment();
         String ip = environment.getProperty("spring.cloud.client.ip-address");
         if(ip!=null){
@@ -100,7 +100,7 @@ public class SpringBeanAware implements BeanContextAware {
     }
 
 
-    public static Integer serverPort() {
+    public Integer serverPort() {
         Environment environment = environment();
         String port = environment.getProperty("server.port");
         if (port != null) {

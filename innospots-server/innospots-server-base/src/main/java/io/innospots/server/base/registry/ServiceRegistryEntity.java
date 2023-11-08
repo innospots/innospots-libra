@@ -29,6 +29,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**
@@ -43,7 +44,7 @@ import java.time.LocalDateTime;
 @TableName(value = ServiceRegistryEntity.TABLE_NAME)
 @Setter
 @Getter
-public class ServiceRegistryEntity { //TODO 是否要继承BaseEntity？？
+public class ServiceRegistryEntity {
 
     public static final String TABLE_NAME = "sys_service_registry";
 

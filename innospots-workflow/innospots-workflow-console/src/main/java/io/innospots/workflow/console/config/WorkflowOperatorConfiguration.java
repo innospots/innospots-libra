@@ -18,11 +18,9 @@
 
 package io.innospots.workflow.console.config;
 
-import io.innospots.base.configuration.DatasourceConfiguration;
-import io.innospots.base.configuration.InnospotConfigProperties;
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.data.operator.IDataOperator;
-import io.innospots.base.re.GenericExpressionEngine;
+import io.innospots.libra.base.configuration.InnospotsConsoleProperties;
 import io.innospots.libra.base.configuration.LibraBaseConfiguration;
 import io.innospots.workflow.console.dao.apps.AppNodeDefinitionDao;
 import io.innospots.workflow.console.dao.apps.AppNodeGroupDao;
@@ -74,8 +72,8 @@ import java.io.File;
 @Configuration
 @ComponentScan(basePackages = {"io.innospots.workflow.console.listener","io.innospots.workflow.console.task"})
 @EnableCaching
-@EnableConfigurationProperties({InnospotConfigProperties.class, InnospotWorkflowProperties.class})
-@Import({DatasourceConfiguration.class, LibraBaseConfiguration.class})
+@EnableConfigurationProperties({InnospotsConsoleProperties.class, InnospotWorkflowProperties.class})
+@Import({LibraBaseConfiguration.class})
 @MapperScan(basePackages = {
         "io.innospots.workflow.console.dao.apps",
         "io.innospots.workflow.console.dao.execution",
@@ -87,16 +85,12 @@ import java.io.File;
 public class WorkflowOperatorConfiguration {
 
 
-    private final InnospotConfigProperties configProperties;
+    private final InnospotsConsoleProperties configProperties;
 
-    public WorkflowOperatorConfiguration(InnospotConfigProperties configProperties) {
+    public WorkflowOperatorConfiguration(InnospotsConsoleProperties configProperties) {
         this.configProperties = configProperties;
     }
 
-    @PostConstruct
-    public void buildPath() {
-        GenericExpressionEngine.setPath(configProperties.getScriptBuildPath() + File.separator + "src", configProperties.getScriptBuildPath());
-    }
 
 
     @Bean

@@ -19,6 +19,7 @@
 package io.innospots.base.utils;
 
 import cn.hutool.core.io.resource.Resource;
+import cn.hutool.core.net.NetUtil;
 
 import java.util.Map;
 
@@ -41,4 +42,9 @@ public interface BeanContextAware {
     String applicationId();
 
     void serviceShutdown();
+
+    String serverIpAddress();
+
+
+    Integer serverPort();
 }

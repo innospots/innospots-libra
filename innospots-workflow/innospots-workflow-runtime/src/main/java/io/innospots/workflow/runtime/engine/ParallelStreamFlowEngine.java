@@ -18,6 +18,7 @@
 
 package io.innospots.workflow.runtime.engine;
 
+import io.innospots.base.utils.thread.ThreadTaskExecutor;
 import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.base.utils.thread.ThreadPoolBuilder;
 import io.innospots.workflow.core.execution.ExecutionStatus;
@@ -47,7 +48,7 @@ import java.util.stream.Collectors;
 public class ParallelStreamFlowEngine extends BaseFlowEngine {
 
     public static final int MAX_TIMES = 1000;
-    private ThreadPoolTaskExecutor taskExecutor;
+    private ThreadTaskExecutor taskExecutor;
 //    private CompletionService<NodeExecution> completionService;
 
     public ParallelStreamFlowEngine(List<IFlowExecutionListener> flowExecutionListeners, FlowManager flowManager) {

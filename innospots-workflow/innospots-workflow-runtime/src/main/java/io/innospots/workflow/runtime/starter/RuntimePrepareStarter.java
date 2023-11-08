@@ -19,6 +19,7 @@
 package io.innospots.workflow.runtime.starter;
 
 import io.innospots.base.utils.BeanContextAware;
+import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.workflow.core.config.InnospotWorkflowProperties;
 import io.innospots.workflow.core.context.WorkflowRuntimeContext;
 import io.innospots.workflow.core.lisenter.WorkflowRuntimeListener;
@@ -66,7 +67,7 @@ public class RuntimePrepareStarter implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         WorkflowRuntimeContext.contextResourcePath = new File(workflowProperties.getExecutionStorePath()).getAbsolutePath();
         Map<String, WorkflowRuntimeListener> listeners =
-                BeanContextAware.getBeansOfType(WorkflowRuntimeListener.class);
+                BeanContextAwareUtils.getBeansOfType(WorkflowRuntimeListener.class);
         runTimeContainerManager.addListener(listeners.values());
         WorkflowUtils.initialize(workflowProperties);
         logger.info("server liveness state:{}", applicationAvailability.getLivenessState());

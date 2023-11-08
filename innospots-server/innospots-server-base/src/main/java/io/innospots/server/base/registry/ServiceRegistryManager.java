@@ -23,7 +23,7 @@ import io.innospots.server.base.registry.enums.ServiceRole;
 import io.innospots.server.base.registry.enums.ServiceStatus;
 import io.innospots.server.base.registry.enums.ServiceType;
 import io.innospots.base.utils.BeanUtils;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

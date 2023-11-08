@@ -21,6 +21,8 @@ package io.innospots.server.base.configuration;
 import cn.hutool.extra.spring.SpringUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.innospots.base.events.EventBusCenter;
+import io.innospots.base.re.GenericExpressionEngine;
+import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.server.base.exception.GlobalExceptionHandler;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.BeanContextAware;
@@ -39,6 +41,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
+import javax.annotation.PostConstruct;
+import java.io.File;
+
 
 /**
  * 应用服务基础配置bean
@@ -53,6 +58,10 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 @Import({CCH.class})
 public class BaseServiceConfiguration {
 
+    @PostConstruct
+    public void buildPath(InnospotsConfigProperties configProperties) {
+        GenericExpressionEngine.setPath(configProperties.getScriptBuildPath() + File.separator + "src", configProperties.getScriptBuildPath());
+    }
 
     @Bean
     public GlobalExceptionHandler globalExceptionHandler() {
@@ -92,7 +101,7 @@ public class BaseServiceConfiguration {
 
     @Bean
     public InnospotIdGenerator idGenerator(BeanContextAware springBeanAware) {
-        return InnospotIdGenerator.build(SpringBeanAware.serverIpAddress(), SpringBeanAware.serverPort());
+        return InnospotIdGenerator.build(BeanContextAwareUtils.serverIpAddress(), BeanContextAwareUtils.serverPort());
     }
 
     @Bean

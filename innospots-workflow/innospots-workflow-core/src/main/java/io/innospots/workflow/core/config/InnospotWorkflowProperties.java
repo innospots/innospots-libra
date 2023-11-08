@@ -41,6 +41,8 @@ public class InnospotWorkflowProperties {
      */
     public static final int WORKFLOW_EXECUTION_KEEP_AMOUNT = 100;
 
+    public static int MAX_SHARDING_KEY = 16;
+
     /**
      * the maximum amount number of versions
      */

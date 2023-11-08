@@ -32,6 +32,8 @@ public interface IQueueReceiver extends IOperator {
 
     void openSubscribe(String group);
 
+    void openSubscribe();
+
     void openSubscribe(String topic, String group, Long pollTimeOut);
 
     void assign(String topic, String group, Long pollTimeOut, Long seekOffset);

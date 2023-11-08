@@ -43,7 +43,7 @@ public class WorkflowRuntimeEventListener implements IEventListener<FlowEventBod
     }
 
     @Override
-    public Class<? extends EventBody> eventBodyClass() {
+    public Class<FlowEventBody> eventBodyClass() {
         return FlowEventBody.class;
     }
 }

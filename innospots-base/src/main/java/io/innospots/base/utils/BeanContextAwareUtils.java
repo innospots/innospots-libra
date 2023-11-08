@@ -20,6 +20,7 @@ package io.innospots.base.utils;
 
 import cn.hutool.core.io.resource.Resource;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.net.NetUtil;
 import io.innospots.base.events.EventBody;
 import io.innospots.base.events.EventBusCenter;
 
@@ -80,5 +81,14 @@ public class BeanContextAwareUtils {
 
     public static void serviceShutdown() {
         contextAware.serviceShutdown();
+    }
+
+    public static String serverIpAddress() {
+        return contextAware.serverIpAddress();
+    }
+
+
+    public static Integer serverPort() {
+        return contextAware.serverPort();
     }
 }

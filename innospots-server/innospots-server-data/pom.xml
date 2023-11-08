@@ -17,9 +17,10 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <groupId>io.innospots</groupId>
+            <artifactId>innospots-server-base</artifactId>
         </dependency>
+
 
         <dependency>
             <groupId>io.innospots</groupId>

@@ -22,7 +22,6 @@ import cn.hutool.crypto.digest.DigestUtil;
 import io.innospots.base.enums.ImageType;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.re.ExpressionEngineFactory;
-import io.innospots.base.utils.http.ImageFileUploader;
 import io.innospots.workflow.core.debug.AppDebugPayload;
 import io.innospots.workflow.core.debug.DebugInput;
 import io.innospots.workflow.core.execution.ExecutionInput;
@@ -72,9 +71,9 @@ public class AppNodeDebugger {
                 if(destFile.exists()){
                     destFile.delete();
                 }
-                destFile = ImageFileUploader.upload(uploadFile,destFile, ImageType.OTHER);
+                //destFile = ImageFileUploader.upload(uploadFile,destFile, ImageType.OTHER);
             }else if(!destFile.exists()){
-                destFile = ImageFileUploader.upload(uploadFile,destFile, ImageType.OTHER);
+                //destFile = ImageFileUploader.upload(uploadFile,destFile, ImageType.OTHER);
             }
             res.setResourceId(DigestUtil.sha1Hex(destFile));
         } catch (IOException e) {

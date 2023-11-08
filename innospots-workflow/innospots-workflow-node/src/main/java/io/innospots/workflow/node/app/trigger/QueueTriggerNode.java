@@ -40,7 +40,7 @@ import java.util.Map;
 @Slf4j
 public class QueueTriggerNode extends TriggerNode {
 
-    public static final String FIELD_CREDENTIAL_ID = "credential";
+    public static final String FIELD_CREDENTIAL_KEY = "credentialKey";
     //    public static final String FIELD_REGISTRY_ID = "registry_id";
     public static final String FIELD_TOPIC = "topic";
     public static final String FIELD_GROUP_ID = "group_id";
@@ -56,12 +56,12 @@ public class QueueTriggerNode extends TriggerNode {
     @Override
     protected void initialize(NodeInstance nodeInstance) {
         super.initialize(nodeInstance);
-        validFieldConfig(nodeInstance, FIELD_CREDENTIAL_ID);
+        validFieldConfig(nodeInstance, FIELD_CREDENTIAL_KEY);
 
         validFieldConfig(nodeInstance,FIELD_TOPIC);
         validFieldConfig(nodeInstance, FIELD_GROUP_ID);
 
-        Integer credentialId = nodeInstance.valueInteger(FIELD_CREDENTIAL_ID);
+        Integer credentialId = nodeInstance.valueInteger(FIELD_CREDENTIAL_KEY);
         String topic = nodeInstance.valueString(FIELD_TOPIC);
         String groupId = nodeInstance.valueString(FIELD_GROUP_ID);
         String messageFormat = nodeInstance.valueString(FIELD_MSG_FORMAT);
@@ -79,7 +79,7 @@ public class QueueTriggerNode extends TriggerNode {
             dataOffset = "latest";
         }
 
-        eventBody.put(FIELD_CREDENTIAL_ID, credentialId);
+        eventBody.put(FIELD_CREDENTIAL_KEY, credentialId);
         eventBody.put(FIELD_TOPIC, topic);
         eventBody.put(FIELD_GROUP_ID, groupId);
         eventBody.put(FIELD_MSG_FORMAT, messageFormat);
@@ -118,8 +118,8 @@ public class QueueTriggerNode extends TriggerNode {
         return (String) eventBody.get(FIELD_GROUP_ID);
     }
 
-    public Integer datasourceId() {
-        return (Integer) eventBody.get(FIELD_CREDENTIAL_ID);
+    public String credentialKey() {
+        return (String) eventBody.get(FIELD_CREDENTIAL_KEY);
     }
 
     public String messageFormat() {

@@ -118,6 +118,7 @@ public class KafkaQueueReceiver implements IQueueReceiver {
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
     }
 
+    @Override
     public void openSubscribe() {
         openSubscribe(topic, group, pollTimeOut);
     }

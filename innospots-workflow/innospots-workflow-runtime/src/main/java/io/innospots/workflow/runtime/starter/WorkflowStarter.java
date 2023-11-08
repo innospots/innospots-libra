@@ -19,6 +19,7 @@
 package io.innospots.workflow.runtime.starter;
 
 import io.innospots.base.utils.BeanContextAware;
+import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.workflow.core.execution.AsyncExecutors;
 import io.innospots.workflow.core.execution.listener.INodeExecutionListener;
 import io.innospots.workflow.runtime.flow.FlowManager;
@@ -48,7 +49,7 @@ public class WorkflowStarter implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         //register node execution listener to nodes
-        Map<String, INodeExecutionListener> listenerMap = BeanContextAware.getBeansOfType(INodeExecutionListener.class);
+        Map<String, INodeExecutionListener> listenerMap = BeanContextAwareUtils.getBeansOfType(INodeExecutionListener.class);
         if (MapUtils.isNotEmpty(listenerMap)) {
             flowManager.setNodeExecutionListeners(new ArrayList<>(listenerMap.values()));
         }

@@ -19,8 +19,11 @@
 package io.innospots.workflow.core.execution;
 
 import io.innospots.base.utils.thread.ThreadPoolBuilder;
+import io.innospots.base.utils.thread.ThreadTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.concurrent.ListenableFuture;
+
+import java.util.concurrent.Future;
 
 /**
  * @author Smars
@@ -28,7 +31,7 @@ import org.springframework.util.concurrent.ListenableFuture;
  */
 public class AsyncExecutors {
 
-    private static ThreadPoolTaskExecutor threadPoolTaskExecutor;
+    private static ThreadTaskExecutor threadPoolTaskExecutor;
 
     public static void initialize(int coreThreadSize, int queueCapacity) {
         if (threadPoolTaskExecutor == null) {
@@ -36,9 +39,9 @@ public class AsyncExecutors {
         }
     }
 
-    public static ListenableFuture execute(Runnable runner) {
+    public static Future execute(Runnable runner) {
         if (threadPoolTaskExecutor != null) {
-            return threadPoolTaskExecutor.submitListenable(runner);
+            return threadPoolTaskExecutor.submit(runner);
         }
         return null;
     }

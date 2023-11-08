@@ -19,6 +19,7 @@
 package io.innospots.workflow.core.engine;
 
 import io.innospots.base.utils.BeanContextAware;
+import io.innospots.base.utils.BeanContextAwareUtils;
 
 /**
  * @author Smars
@@ -33,7 +34,7 @@ public class FlowEngineManager {
     }
 
     public static IFlowEngine flowEngine(String engineName) {
-        return BeanContextAware.getBean(engineName, IFlowEngine.class);
+        return BeanContextAwareUtils.getBean(engineName, IFlowEngine.class);
     }
 
 

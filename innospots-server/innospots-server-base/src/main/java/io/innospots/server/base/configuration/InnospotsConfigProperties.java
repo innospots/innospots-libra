@@ -52,31 +52,14 @@ public class InnospotsConfigProperties {
      */
     private boolean enableRegistry = true;
 
-    /**
-     * enable swagger api
-     */
-    private boolean enableSwagger = true;
 
-    /**
-     * the directory store upload file
-     */
-    private String uploadFilePath;
 
     /**
      * open debug mode
      */
     private boolean debugMode = false;
 
-    /**
-     * check extended application
-     */
-    private boolean enableAppLoadCheck = true;
-
 
     private Integer schemaCacheTimeoutSecond = 180;
 
-    /**
-     * the path of external jar lib
-     */
-    private String extLibPath;
 }
