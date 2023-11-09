@@ -53,7 +53,7 @@ public class DataConnectionMinderManager {
 
     private static final Logger logger = LoggerFactory.getLogger(DataConnectionMinderManager.class);
 
-    private final LoadingCache<String, IDataConnectionMinder<?>> connectionPoolCache;
+    private final LoadingCache<String, IDataConnectionMinder> connectionPoolCache;
 
     private final IConnectionCredentialReader connectionCredentialReader;
 
@@ -68,7 +68,7 @@ public class DataConnectionMinderManager {
         connectionPoolCache = build(cacheTimeoutSecond);
     }
 
-    public static IDataConnectionMinder<?> getCredentialMinder(String credentialKey) {
+    public static IDataConnectionMinder getCredentialMinder(String credentialKey) {
         return BeanContextAwareUtils.getBean(DataConnectionMinderManager.class).getMinder(credentialKey);
     }
 
@@ -76,16 +76,16 @@ public class DataConnectionMinderManager {
         return (IQueueConnectionMinder) BeanContextAwareUtils.getBean(DataConnectionMinderManager.class).getMinder(credentialKey);
     }
 
-    public static <Operator> IDataConnectionMinder<Operator> newMinderInstance(ConnectionCredential connectionCredential) {
+    public static IDataConnectionMinder newMinderInstance(ConnectionCredential connectionCredential) {
         try {
             ConnectionMinderSchema minderSchema = ConnectionMinderSchemaLoader.getConnectionMinderSchema(connectionCredential.getConnectorName());
             if (minderSchema == null) {
                 return null;
             }
-            CredentialAuthOption config = minderSchema.getOptions().stream().filter(f -> Objects.equals(connectionCredential.getAuthOption(), f.getCode())).findFirst()
+            CredentialAuthOption config = minderSchema.getAuthOptions().stream().filter(f -> Objects.equals(connectionCredential.getAuthOption(), f.getCode())).findFirst()
                     .orElseThrow(() -> LoadConfigurationException.buildException(ConnectionMinderSchemaLoader.class, "dataConnectionMinder newInstance failed, configCode invalid."));
 
-            return (IDataConnectionMinder<Operator>) Class.forName(config.getMinder()).getConstructor().newInstance();
+            return (IDataConnectionMinder) Class.forName(config.getMinder()).getConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException |
                  InvocationTargetException e) {
             logger.error(e.getMessage(), e);
@@ -94,7 +94,7 @@ public class DataConnectionMinderManager {
     }
 
     public static Object testConnection(ConnectionCredential connectionCredential) {
-        IDataConnectionMinder<?> dataConnectionMinder = newMinderInstance(connectionCredential);
+        IDataConnectionMinder dataConnectionMinder = newMinderInstance(connectionCredential);
         if (dataConnectionMinder != null) {
             return dataConnectionMinder.testConnect(connectionCredential);
         }
@@ -106,7 +106,7 @@ public class DataConnectionMinderManager {
         if (formConfig == null) {
             return false;
         }
-        IDataConnectionMinder<?> dataConnectionMinder = newMinderInstance(connectionCredential);
+        IDataConnectionMinder dataConnectionMinder = newMinderInstance(connectionCredential);
         if (dataConnectionMinder != null) {
             dataConnectionMinder.open();
             return dataConnectionMinder.fetchSample(connectionCredential, null);
@@ -115,19 +115,19 @@ public class DataConnectionMinderManager {
     }
 
     public Object fetchSample(String credentialKey, String tableName) {
-        IDataConnectionMinder<?> minder = this.getMinder(credentialKey);
+        IDataConnectionMinder minder = this.getMinder(credentialKey);
         ConnectionCredential connectionCredential = connectionCredentialReader.readCredential(credentialKey);
         return minder.fetchSample(connectionCredential, tableName);
     }
 
     public PageBody<Map<String, Object>> fetchSamples(String credentialKey, Map<String, Object> config) {
-        IDataConnectionMinder<?> minder = this.getMinder(credentialKey);
+        IDataConnectionMinder minder = this.getMinder(credentialKey);
         ConnectionCredential connectionCredential = connectionCredentialReader.readCredential(credentialKey);
         return minder.fetchSamples(connectionCredential, config);
     }
 
-    private IDataConnectionMinder<?> buildMinder(ConnectionCredential connectionCredential) {
-        IDataConnectionMinder<?> dataConnectionMinder = connectionPoolCache.getIfPresent(connectionCredential.key());
+    private IDataConnectionMinder buildMinder(ConnectionCredential connectionCredential) {
+        IDataConnectionMinder dataConnectionMinder = connectionPoolCache.getIfPresent(connectionCredential.key());
         if (dataConnectionMinder != null) {
             dataConnectionMinder.open();
             return dataConnectionMinder;
@@ -161,14 +161,14 @@ public class DataConnectionMinderManager {
     }
 
     public IQueueConnectionMinder getQueueMinder(String credentialKey) {
-        IDataConnectionMinder<?> dataConnectionMinder = getMinder(credentialKey);
+        IDataConnectionMinder dataConnectionMinder = getMinder(credentialKey);
         if (dataConnectionMinder instanceof IQueueConnectionMinder) {
             return (IQueueConnectionMinder) dataConnectionMinder;
         }
         return null;
     }
 
-    public  IDataConnectionMinder<?> getMinder(String credentialKey) {
+    public  IDataConnectionMinder getMinder(String credentialKey) {
         return connectionPoolCache.getIfPresent(credentialKey);
     }
 
@@ -179,10 +179,10 @@ public class DataConnectionMinderManager {
         }
     }
 
-    private LoadingCache<String, IDataConnectionMinder<?>> build(int timeoutSecond) {
+    private LoadingCache<String, IDataConnectionMinder> build(int timeoutSecond) {
 
         return Caffeine.newBuilder()
-                .removalListener((RemovalListener<String, IDataConnectionMinder<?>>) (s, dataConnectionMinder, removalCause) -> {
+                .removalListener((RemovalListener<String, IDataConnectionMinder>) (s, dataConnectionMinder, removalCause) -> {
                     logger.warn("dataConnection is expired, close the data connection,key:{}", s);
                     if (dataConnectionMinder != null) {
                         dataConnectionMinder.close();
@@ -191,7 +191,7 @@ public class DataConnectionMinderManager {
                 .expireAfterAccess(timeoutSecond, TimeUnit.SECONDS)
                 .build(new CacheLoader<>() {
                     @Override
-                    public @Nullable IDataConnectionMinder<?> load(@NonNull String credentialKey) throws Exception {
+                    public @Nullable IDataConnectionMinder load(@NonNull String credentialKey) throws Exception {
                         ConnectionCredential connectionCredential = connectionCredentialReader.readCredential(credentialKey);
                         if (connectionCredential == null) {
                             logger.error("credential don't exist, {}", credentialKey);

@@ -1,0 +1,891 @@
+{
+  "name": "百度文字识别测试",
+  "flowKey": "ny56",
+  "description": "开始节点",
+  "templateCode": "APPS",
+  "categoryId": 134,
+  "triggerCode": "START",
+  "workflowInstanceId": 15,
+  "status": "ONLINE",
+  "revision": 2,
+  "datasourceCode": null,
+  "pageId": 291,
+  "edges": [
+    {
+      "edgeId": 285,
+      "name": null,
+      "source": "fnNcaIjbG",
+      "target": "fny4QX2p5",
+      "sourceAnchor": "A2IQ",
+      "targetAnchor": "WvwB",
+      "type": "flow-edge",
+      "style": null,
+      "startPoint": null,
+      "endPoint": null,
+      "data": {
+        "labels": [
+          {
+            "attrs": {
+              "text": {
+                "text": ""
+              }
+            },
+            "position": {
+              "distance": -50,
+              "options": {
+                "keepGradient": true,
+                "ensureLegibility": true,
+                "absoluteDistance": true
+              }
+            }
+          },
+          {
+            "attrs": {
+              "text": {
+                "text": ""
+              }
+            },
+            "position": {
+              "distance": 50,
+              "options": {
+                "keepGradient": true,
+                "ensureLegibility": true,
+                "absoluteDistance": true
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "edgeId": 286,
+      "name": null,
+      "source": "fny4QX2p5",
+      "target": "fnZZyvQ9K",
+      "sourceAnchor": "lASl",
+      "targetAnchor": "IEDk",
+      "type": "flow-edge",
+      "style": null,
+      "startPoint": null,
+      "endPoint": null,
+      "data": {
+        "labels": [
+          {
+            "attrs": {
+              "text": {
+                "text": "in"
+              }
+            },
+            "position": {
+              "distance": -50,
+              "options": {
+                "keepGradient": true,
+                "ensureLegibility": true,
+                "absoluteDistance": true
+              }
+            }
+          },
+          {
+            "attrs": {
+              "text": {
+                "text": ""
+              }
+            },
+            "position": {
+              "distance": 50,
+              "options": {
+                "keepGradient": true,
+                "ensureLegibility": true,
+                "absoluteDistance": true
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "edgeId": 287,
+      "name": null,
+      "source": "fny4QX2p5",
+      "target": "fnxTymZ8u",
+      "sourceAnchor": "lASl",
+      "targetAnchor": "QuYr",
+      "type": "flow-edge",
+      "style": null,
+      "startPoint": null,
+      "endPoint": null,
+      "data": {
+        "labels": [
+          {
+            "attrs": {
+              "text": {
+                "text": "data"
+              }
+            },
+            "position": {
+              "distance": -50,
+              "options": {
+                "keepGradient": true,
+                "ensureLegibility": true,
+                "absoluteDistance": true
+              }
+            }
+          },
+          {
+            "attrs": {
+              "text": {
+                "text": ""
+              }
+            },
+            "position": {
+              "distance": 50,
+              "options": {
+                "keepGradient": true,
+                "ensureLegibility": true,
+                "absoluteDistance": true
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "edgeId": 288,
+      "name": null,
+      "source": "fnZZyvQ9K",
+      "target": "fnxTymZ8u",
+      "sourceAnchor": "Uyxt",
+      "targetAnchor": "xdhk",
+      "type": "flow-edge",
+      "style": null,
+      "startPoint": null,
+      "endPoint": null,
+      "data": {
+        "labels": [
+          {
+            "attrs": {
+              "text": {
+                "text": "token"
+              }
+            },
+            "position": {
+              "distance": -50,
+              "options": {
+                "keepGradient": true,
+                "ensureLegibility": true,
+                "absoluteDistance": true
+              }
+            }
+          },
+          {
+            "attrs": {
+              "text": {
+                "text": "out"
+              }
+            },
+            "position": {
+              "distance": 50,
+              "options": {
+                "keepGradient": true,
+                "ensureLegibility": true,
+                "absoluteDistance": true
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "nodeId": null,
+      "name": "Start",
+      "code": "START",
+      "primitive": "trigger",
+      "nodeGroupId": null,
+      "icon": "start",
+      "description": "开始节点",
+      "used": null,
+      "appSource": null,
+      "nodeType": "io.innospots.workflow.node.app.StateNode",
+      "status": "ONLINE",
+      "connectorName": null,
+      "connectorConfigs": null,
+      "color": "",
+      "nodeDefinitionId": 7,
+      "displayName": "Start",
+      "width": 66,
+      "height": 66,
+      "x": 140,
+      "y": 120,
+      "data": {},
+      "pauseFlag": null,
+      "ports": [
+        {
+          "name": "A2IQ",
+          "attrs": {},
+          "data": {
+            "name": "A2IQ",
+            "count": 1
+          }
+        }
+      ],
+      "nodeInstanceId": 363,
+      "nodeKey": "fnNcaIjbG",
+      "outputFields": [],
+      "inputFields": [],
+      "continueOnFail": false,
+      "retryOnFail": false,
+      "maxTries": 0,
+      "retryWaitTimeMills": 0,
+      "async": false,
+      "failureBranch": false,
+      "nextNodeKeys": [
+        "fny4QX2p5"
+      ],
+      "prevNodeKeys": [],
+      "storeOutput": false,
+      "scriptTypes": null
+    },
+    {
+      "nodeId": null,
+      "name": "百度文字识别",
+      "code": "baidu_text_ocr",
+      "primitive": "normal",
+      "nodeGroupId": null,
+      "icon": "/image/APP/63?t=1685714335962",
+      "description": "1111",
+      "used": null,
+      "appSource": null,
+      "nodeType": "io.innospots.workflow.node.app.script.ScriptNode",
+      "status": "ONLINE",
+      "connectorName": null,
+      "connectorConfigs": null,
+      "color": null,
+      "nodeDefinitionId": 63,
+      "displayName": "百度文字识别",
+      "width": 66,
+      "height": 66,
+      "x": 880,
+      "y": 100,
+      "data": {
+        "displayName": "百度文字识别",
+        "method": "oauth2-client-credentials",
+        "credential": 29,
+        "address": [
+          "POST",
+          "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic"
+        ],
+        "input_iy_V09": "https://cdn.nlark.com/yuque/0/2023/png/1778735/1685715238563-833737d1-e00d-4bca-b9a2-b20f0a59d61a.png#averageHue=%23dde9f8&clientId=u8cde792a-933b-4&from=paste&height=191&id=u76b7e838&originHeight=382&originWidth=1460&originalType=binary&ratio=2&rotation=0&showTitle=false&size=256765&status=done&style=none&taskId=uc237b4c5-f51e-4ba4-94dc-80a6db15c0e&title=&width=730"
+      },
+      "pauseFlag": null,
+      "ports": [
+        {
+          "name": "ivAD",
+          "attrs": {},
+          "data": {
+            "name": "ivAD",
+            "label": "",
+            "count": 1
+          }
+        },
+        {
+          "name": "5DmW",
+          "attrs": {},
+          "data": {
+            "name": "5DmW",
+            "count": 1
+          }
+        }
+      ],
+      "nodeInstanceId": 364,
+      "nodeKey": "fnEjv5Rjh",
+      "outputFields": [],
+      "inputFields": [],
+      "continueOnFail": false,
+      "retryOnFail": false,
+      "maxTries": 0,
+      "retryWaitTimeMills": 0,
+      "async": false,
+      "failureBranch": false,
+      "nextNodeKeys": [],
+      "prevNodeKeys": [],
+      "storeOutput": false,
+      "scriptTypes": null
+    },
+    {
+      "nodeId": null,
+      "name": "REST API",
+      "code": "rest_api",
+      "primitive": "normal",
+      "nodeGroupId": null,
+      "icon": "/image/APP/64?t=1685545048109",
+      "description": "api接口数据",
+      "used": null,
+      "appSource": null,
+      "nodeType": "io.innospots.workflow.node.app.data.ApiDataNode",
+      "status": "ONLINE",
+      "connectorName": null,
+      "connectorConfigs": null,
+      "color": null,
+      "nodeDefinitionId": 64,
+      "displayName": "获取token",
+      "width": 66,
+      "height": 66,
+      "x": 460,
+      "y": 280,
+      "data": {
+        "displayName": "获取token",
+        "url_address": [
+          "POST",
+          "https://aip.baidubce.com/oauth/2.0/token"
+        ],
+        "request_params": [
+          {
+            "type": "query",
+            "values": [
+              {
+                "key": "uENo",
+                "name": "grant_type",
+                "value": "${grant_type}",
+                "nodeKey": "fny4QX2p5",
+                "dataType": "STRING"
+              },
+              {
+                "key": "NKtg",
+                "name": "client_id",
+                "value": "${client_id}",
+                "nodeKey": "fny4QX2p5",
+                "dataType": "STRING"
+              },
+              {
+                "key": "aqHA",
+                "name": "client_secret",
+                "value": "${client_secret}",
+                "nodeKey": "fny4QX2p5",
+                "dataType": "STRING"
+              }
+            ]
+          },
+          {
+            "type": "header",
+            "values": []
+          },
+          {
+            "type": "body",
+            "values": []
+          },
+          {
+            "type": "template",
+            "values": ""
+          }
+        ],
+        "output_payload": true,
+        "switch_cache": true,
+        "cache_second": 36000,
+        "extract_path": "$.body",
+        "output_field_type": "MAP",
+        "output_mode_list": "OVERWRITE"
+      },
+      "pauseFlag": null,
+      "ports": [
+        {
+          "name": "IEDk",
+          "attrs": {},
+          "data": {
+            "name": "IEDk",
+            "label": "in",
+            "count": 1
+          }
+        },
+        {
+          "name": "Uyxt",
+          "attrs": {},
+          "data": {
+            "name": "Uyxt",
+            "label": "out",
+            "count": 1
+          }
+        }
+      ],
+      "nodeInstanceId": 365,
+      "nodeKey": "fnZZyvQ9K",
+      "outputFields": [
+        {
+          "name": "refresh_token",
+          "code": "refresh_token",
+          "valueType": "STRING",
+          "value": null,
+          "parentCode": null
+        },
+        {
+          "name": "expires_in",
+          "code": "expires_in",
+          "valueType": "INTEGER",
+          "value": null,
+          "parentCode": null
+        },
+        {
+          "name": "session_key",
+          "code": "session_key",
+          "valueType": "STRING",
+          "value": null,
+          "parentCode": null
+        },
+        {
+          "name": "access_token",
+          "code": "access_token",
+          "valueType": "STRING",
+          "value": null,
+          "parentCode": null
+        },
+        {
+          "name": "scope",
+          "code": "scope",
+          "valueType": "STRING",
+          "value": null,
+          "parentCode": null
+        },
+        {
+          "name": "session_secret",
+          "code": "session_secret",
+          "valueType": "STRING",
+          "value": null,
+          "parentCode": null
+        }
+      ],
+      "inputFields": [],
+      "continueOnFail": false,
+      "retryOnFail": false,
+      "maxTries": 0,
+      "retryWaitTimeMills": 0,
+      "async": false,
+      "failureBranch": false,
+      "nextNodeKeys": [
+        "fnxTymZ8u"
+      ],
+      "prevNodeKeys": [
+        "fny4QX2p5"
+      ],
+      "storeOutput": false,
+      "scriptTypes": null
+    },
+    {
+      "nodeId": null,
+      "name": "HTTP API",
+      "code": "HTTPAPI",
+      "primitive": "normal",
+      "nodeGroupId": null,
+      "icon": "http-api",
+      "description": "HttpAPI节点",
+      "used": null,
+      "appSource": null,
+      "nodeType": "io.innospots.workflow.node.app.data.ApiDataNode",
+      "status": "ONLINE",
+      "connectorName": null,
+      "connectorConfigs": null,
+      "color": "",
+      "nodeDefinitionId": 11,
+      "displayName": "文字识别",
+      "width": 66,
+      "height": 66,
+      "x": 660,
+      "y": 140,
+      "data": {
+        "displayName": "文字识别",
+        "url_address": [
+          "POST",
+          "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic"
+        ],
+        "request_params": [
+          {
+            "type": "query",
+            "values": [
+              {
+                "key": "U5f0",
+                "name": "access_token",
+                "value": "${access_token}",
+                "nodeKey": "fnZZyvQ9K",
+                "dataType": "STRING"
+              }
+            ]
+          },
+          {
+            "type": "header",
+            "values": [
+              {
+                "key": "i34P",
+                "name": "Content-Type",
+                "value": "${content_type}",
+                "nodeKey": "fny4QX2p5",
+                "dataType": "STRING"
+              }
+            ]
+          },
+          {
+            "type": "body",
+            "values": [
+              {
+                "key": "We67",
+                "name": "url",
+                "value": "${url}",
+                "nodeKey": "fny4QX2p5",
+                "dataType": "STRING"
+              }
+            ]
+          },
+          {
+            "type": "template",
+            "values": ""
+          }
+        ],
+        "action": "return item;",
+        "output_payload": true,
+        "extract_path": "$",
+        "output_field_type": "MAP",
+        "output_mode_list": "OVERWRITE"
+      },
+      "pauseFlag": null,
+      "ports": [
+        {
+          "name": "QuYr",
+          "attrs": {},
+          "data": {
+            "name": "QuYr",
+            "label": "data",
+            "count": 1
+          }
+        },
+        {
+          "name": "xdhk",
+          "attrs": {},
+          "data": {
+            "name": "xdhk",
+            "label": "token",
+            "count": 1
+          }
+        },
+        {
+          "name": "bpEx",
+          "attrs": {},
+          "data": {
+            "name": "bpEx",
+            "count": 1
+          }
+        }
+      ],
+      "nodeInstanceId": 366,
+      "nodeKey": "fnxTymZ8u",
+      "outputFields": [
+        {
+          "name": "headers",
+          "code": "headers",
+          "valueType": "MAP",
+          "value": null,
+          "subFields": [
+            {
+              "name": "Access-Control-Allow-Headers",
+              "code": "Access-Control-Allow-Headers",
+              "valueType": "STRING",
+              "value": null,
+              "parentCode": "headers"
+            },
+            {
+              "name": "Access-Control-Allow-Methods",
+              "code": "Access-Control-Allow-Methods",
+              "valueType": "STRING",
+              "value": null,
+              "parentCode": "headers"
+            },
+            {
+              "name": "Access-Control-Allow-Origin",
+              "code": "Access-Control-Allow-Origin",
+              "valueType": "STRING",
+              "value": null,
+              "parentCode": "headers"
+            },
+            {
+              "name": "Appid",
+              "code": "Appid",
+              "valueType": "STRING",
+              "value": null,
+              "parentCode": "headers"
+            },
+            {
+              "name": "Connection",
+              "code": "Connection",
+              "valueType": "STRING",
+              "value": null,
+              "parentCode": "headers"
+            },
+            {
+              "name": "Content-Type",
+              "code": "Content-Type",
+              "valueType": "STRING",
+              "value": null,
+              "parentCode": "headers"
+            },
+            {
+              "name": "Date",
+              "code": "Date",
+              "valueType": "STRING",
+              "value": null,
+              "parentCode": "headers"
+            },
+            {
+              "name": "P3p",
+              "code": "P3p",
+              "valueType": "STRING",
+              "value": null,
+              "parentCode": "headers"
+            },
+            {
+              "name": "Server",
+              "code": "Server",
+              "valueType": "STRING",
+              "value": null,
+              "parentCode": "headers"
+            },
+            {
+              "name": "Set-Cookie",
+              "code": "Set-Cookie",
+              "valueType": "STRING",
+              "value": null,
+              "parentCode": "headers"
+            },
+            {
+              "name": "Vary",
+              "code": "Vary",
+              "valueType": "STRING",
+              "value": null,
+              "parentCode": "headers"
+            },
+            {
+              "name": "X-B3-Spanid",
+              "code": "X-B3-Spanid",
+              "valueType": "STRING",
+              "value": null,
+              "parentCode": "headers"
+            },
+            {
+              "name": "X-B3-Traceid",
+              "code": "X-B3-Traceid",
+              "valueType": "STRING",
+              "value": null,
+              "parentCode": "headers"
+            },
+            {
+              "name": "X-Baidu-Request-Id",
+              "code": "X-Baidu-Request-Id",
+              "valueType": "STRING",
+              "value": null,
+              "parentCode": "headers"
+            },
+            {
+              "name": "Content-Length",
+              "code": "Content-Length",
+              "valueType": "INTEGER",
+              "value": null,
+              "parentCode": "headers"
+            }
+          ],
+          "parentCode": null
+        },
+        {
+          "name": "params",
+          "code": "params",
+          "valueType": "MAP",
+          "value": null,
+          "subFields": [],
+          "parentCode": null
+        },
+        {
+          "name": "body",
+          "code": "body",
+          "valueType": "MAP",
+          "value": null,
+          "subFields": [
+            {
+              "name": "log_id",
+              "code": "log_id",
+              "valueType": "LONG",
+              "value": null,
+              "parentCode": "body"
+            },
+            {
+              "name": "error_msg",
+              "code": "error_msg",
+              "valueType": "STRING",
+              "value": null,
+              "parentCode": "body"
+            },
+            {
+              "name": "error_code",
+              "code": "error_code",
+              "valueType": "INTEGER",
+              "value": null,
+              "parentCode": "body"
+            }
+          ],
+          "parentCode": null
+        },
+        {
+          "name": "status",
+          "code": "status",
+          "valueType": "INTEGER",
+          "value": null,
+          "parentCode": null
+        },
+        {
+          "name": "message",
+          "code": "message",
+          "valueType": "STRING",
+          "value": null,
+          "parentCode": null
+        }
+      ],
+      "inputFields": [],
+      "continueOnFail": false,
+      "retryOnFail": false,
+      "maxTries": 0,
+      "retryWaitTimeMills": 0,
+      "async": false,
+      "failureBranch": false,
+      "nextNodeKeys": [],
+      "prevNodeKeys": [
+        "fny4QX2p5",
+        "fnZZyvQ9K"
+      ],
+      "storeOutput": false,
+      "scriptTypes": {
+        "pre_action": "JAVA",
+        "action": "JAVASCRIPT"
+      }
+    },
+    {
+      "nodeId": null,
+      "name": "Faker",
+      "code": "FAKER",
+      "primitive": "normal",
+      "nodeGroupId": null,
+      "icon": "",
+      "description": "Faker节点",
+      "used": null,
+      "appSource": null,
+      "nodeType": "io.innospots.workflow.node.app.data.FakeDataNode",
+      "status": "ONLINE",
+      "connectorName": null,
+      "connectorConfigs": null,
+      "color": null,
+      "nodeDefinitionId": 33,
+      "displayName": "Faker",
+      "width": 66,
+      "height": 66,
+      "x": 340,
+      "y": 120,
+      "data": {
+        "displayName": "Faker",
+        "fake_data": "{\"grant_type\":\"client_credentials\",\"client_id\":\"C3Vd9sGr5gzDGyTGzxfOLkGF\",\"client_secret\":\"NmwRv4XDRlFtHD6ZILEmi33osLYlEjTW\",\"url\":\"https://cdn.nlark.com/yuque/0/2023/png/1778735/1686735176630-9e7b7060-fa55-4a88-b911-c17de90772b1.png#averageHue=%23f7f7f7&clientId=u8cde792a-933b-4&from=paste&height=700&id=ue99e3992&originHeight=1400&originWidth=1316&originalType=binary&ratio=2&rotation=0&showTitle=false&size=218771&status=done&style=none&taskId=u3544fc0b-304a-4013-b77b-f4c223ccbdb&title=&width=658\",\"content_type\":\"application/x-www-form-urlencoded\"}",
+        "item_size": 3,
+        "request_params": [
+          {
+            "type": "query",
+            "values": []
+          },
+          {
+            "type": "header",
+            "values": []
+          },
+          {
+            "type": "body",
+            "values": []
+          },
+          {
+            "type": "template",
+            "values": ""
+          }
+        ],
+        "output_payload": false,
+        "switch_cache": false,
+        "cache_second": 300,
+        "extract_path": "$",
+        "output_field_type": "MAP"
+      },
+      "pauseFlag": null,
+      "ports": [
+        {
+          "name": "WvwB",
+          "attrs": {},
+          "data": {
+            "name": "WvwB",
+            "count": 1
+          }
+        },
+        {
+          "name": "lASl",
+          "attrs": {},
+          "data": {
+            "name": "lASl",
+            "count": 1
+          }
+        }
+      ],
+      "nodeInstanceId": 367,
+      "nodeKey": "fny4QX2p5",
+      "outputFields": [
+        {
+          "name": "content_type",
+          "code": "content_type",
+          "valueType": "STRING",
+          "value": null,
+          "parentCode": null
+        },
+        {
+          "name": "grant_type",
+          "code": "grant_type",
+          "valueType": "STRING",
+          "value": null,
+          "parentCode": null
+        },
+        {
+          "name": "client_secret",
+          "code": "client_secret",
+          "valueType": "STRING",
+          "value": null,
+          "parentCode": null
+        },
+        {
+          "name": "client_id",
+          "code": "client_id",
+          "valueType": "STRING",
+          "value": null,
+          "parentCode": null
+        },
+        {
+          "name": "url",
+          "code": "url",
+          "valueType": "STRING",
+          "value": null,
+          "parentCode": null
+        }
+      ],
+      "inputFields": [],
+      "continueOnFail": false,
+      "retryOnFail": false,
+      "maxTries": 0,
+      "retryWaitTimeMills": 0,
+      "async": false,
+      "failureBranch": false,
+      "nextNodeKeys": [
+        "fnZZyvQ9K",
+        "fnxTymZ8u"
+      ],
+      "prevNodeKeys": [
+        "fnNcaIjbG"
+      ],
+      "storeOutput": false,
+      "scriptTypes": null
+    }
+  ],
+  "empty": false
+}

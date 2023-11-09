@@ -34,11 +34,11 @@ public interface IOperator {
     default void open(){
     }
 
-    default <Body,D> DataBody<D> execute(BaseRequest<Body> itemRequest){
+    default <D> DataBody<D> execute(BaseRequest itemRequest){
         return null;
     }
 
-    default <Body,D> PageBody<D> executePage(BaseRequest<Body> itemRequest){
+    default <D> PageBody<D> executePage(BaseRequest itemRequest){
         return null;
     }
 

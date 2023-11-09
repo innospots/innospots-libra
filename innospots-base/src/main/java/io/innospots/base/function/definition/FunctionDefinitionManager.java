@@ -22,6 +22,7 @@ import com.github.benmanes.caffeine.cache.CacheLoader;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import io.innospots.base.utils.BeanContextAware;
+import io.innospots.base.utils.BeanContextAwareUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.slf4j.Logger;
@@ -58,7 +59,7 @@ public class FunctionDefinitionManager {
 
 
     public static Map<String, FunctionDefinition> loadFunctions(String functionType) {
-        IFunctionLoader functionLoader = BeanContextAware.getBean(IFunctionLoader.class);
+        IFunctionLoader functionLoader = BeanContextAwareUtils.getBean(IFunctionLoader.class);
         List<FunctionDefinition> functionDefinitionList = functionLoader.loadFunctions(functionType);
         return functionDefinitionList.stream().
                 collect(Collectors.toMap(FunctionDefinition::getName, Function.identity()));

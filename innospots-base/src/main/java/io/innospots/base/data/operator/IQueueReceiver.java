@@ -46,6 +46,7 @@ public interface IQueueReceiver extends IOperator {
 
     void listen(Consumer<?> consumer);
 
+    @Override
     void close();
 
     boolean hasCache();

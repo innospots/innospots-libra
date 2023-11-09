@@ -75,20 +75,6 @@ public class FunctionDefinition {
     private String functionType;
 
 
-    public FunctionDefinitionEntity toEntity() {
-        FunctionDefinitionEntity functionDefinitionEntity = new FunctionDefinitionEntity();
-        functionDefinitionEntity.setFunctionType(this.functionType);
-        functionDefinitionEntity.setCateName(cateName);
-        functionDefinitionEntity.setCateType(cateType);
-        functionDefinitionEntity.setDescription(description);
-        functionDefinitionEntity.setExpression(expression);
-        functionDefinitionEntity.setName(name);
-        functionDefinitionEntity.setReturnType(returnType);
-        functionDefinitionEntity.setParamTypes(paramTypes);
-        functionDefinitionEntity.setFunctionId(functionId);
-        return functionDefinitionEntity;
-    }
-
     public void addParamType(FieldValueType valueType, boolean must) {
         paramFieldTypes.add(valueType);
         musts.add(must);
@@ -105,10 +91,6 @@ public class FunctionDefinition {
         sb.append(", returnType=").append(returnType);
         sb.append(", paramsType=").append(paramFieldTypes);
         sb.append(", musts=").append(musts);
-//        sb.append(", aviatorExp='").append(aviatorExp).append('\'');
-//        sb.append(", javaExp='").append(javaExp).append('\'');
-//        sb.append(", sqlExp='").append(sqlExp).append('\'');
-//        sb.append(", flinkExp='").append(flinkExp).append('\'');
         sb.append('}');
         return sb.toString();
     }

@@ -40,7 +40,7 @@ import java.util.function.Supplier;
  * @date 2021-08-21
  */
 @Slf4j
-public class HttpDataConnectionMinder extends BaseDataConnectionMinder<IExecutionOperator> {
+public class HttpDataConnectionMinder extends BaseDataConnectionMinder {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpDataConnectionMinder.class);
 

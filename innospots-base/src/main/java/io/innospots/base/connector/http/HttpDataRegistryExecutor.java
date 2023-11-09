@@ -23,6 +23,7 @@ import io.innospots.base.connector.schema.SchemaField;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.enums.ApiMethod;
 import io.innospots.base.data.operator.IExecutionOperator;
+import io.innospots.base.data.request.BaseRequest;
 import io.innospots.base.data.request.ItemRequest;
 import io.innospots.base.enums.ScriptType;
 import io.innospots.base.exception.ValidatorException;
@@ -79,8 +80,13 @@ public class HttpDataRegistryExecutor implements IExecutionOperator {
     }
 
     @Override
-    public DataBody<?> execute(ItemRequest itemRequest) {
-        Map<String, Object> body = itemRequest.getBody();
+    public DataBody<?> execute(BaseRequest itemRequest) {
+        Map<String, Object> body =null;
+        Object reqBody = itemRequest.getBody();
+        if(reqBody instanceof Map){
+            body = (Map<String, Object>) reqBody;
+        }
+
         String url = this.schemaRegistry.getAddress();
 
         String httpBodyTemplate = this.schemaRegistry.getBodyTemplate();

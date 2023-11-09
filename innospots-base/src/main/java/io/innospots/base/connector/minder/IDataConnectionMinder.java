@@ -74,7 +74,7 @@ public interface IDataConnectionMinder {
 
     String schemaName();
 
-    IOperator buildOperator();
+    <Operator extends IOperator> Operator buildOperator();
 
     /**
      * test data connection

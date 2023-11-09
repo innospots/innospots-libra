@@ -21,7 +21,7 @@ package io.innospots.base.quartz;
 
 import io.innospots.base.exception.InnospotException;
 import io.innospots.base.model.response.ResponseCode;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.quartz.*;
 import org.quartz.impl.DirectSchedulerFactory;
 import org.quartz.impl.matchers.GroupMatcher;
