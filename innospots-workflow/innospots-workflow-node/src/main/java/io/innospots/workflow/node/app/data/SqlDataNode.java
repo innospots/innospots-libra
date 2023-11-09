@@ -23,6 +23,8 @@ import io.innospots.base.condition.Factor;
 import io.innospots.base.data.enums.DataOperation;
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.connector.minder.IDataConnectionMinder;
+import io.innospots.base.data.operator.DataOperatorManager;
+import io.innospots.base.data.operator.IDataOperator;
 import io.innospots.base.data.operator.jdbc.UpdateItem;
 import io.innospots.base.connector.schema.SchemaField;
 import io.innospots.base.exception.ConfigException;
@@ -30,6 +32,7 @@ import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.base.utils.BeanContextAware;
+import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.ExecutionInput;
 import io.innospots.workflow.core.execution.node.NodeExecution;
@@ -92,8 +95,6 @@ public class SqlDataNode extends DataNode {
 
     protected List<Factor> updateConditions;
 
-    private ISqlOperatorPoint sqlOperatorPoint;
-
     private String sqlQueryClause;
 
     @Override
@@ -118,9 +119,9 @@ public class SqlDataNode extends DataNode {
         keyColumn = nodeInstance.valueString(KEY_COLUMN);
 
         if (DataOperation.UPSERT == operation) {
-            IDataConnectionMinder connectionMinder = DataConnectionMinderManager.getCredentialMinder(credentialId);
+            IDataConnectionMinder connectionMinder = DataConnectionMinderManager.getCredentialMinder(credentialKey);
             if (connectionMinder != null) {
-                List<SchemaField> schemaFields = connectionMinder.schemaRegistryFields(tableName);
+                List<SchemaField> schemaFields = connectionMinder.schemaRegistry(tableName).getSchemaFields();
                 schemaFields = schemaFields.stream().filter(SchemaField::getPkey).collect(Collectors.toList());
                 keyColumn = "";
                 for (int i = 0; i < schemaFields.size(); i++) {
@@ -150,15 +151,15 @@ public class SqlDataNode extends DataNode {
             queryConditions = BeanUtils.toBean(queryConditionFields, Factor.class);
         }
 
-        sqlOperatorPoint = BeanContextAware.getBean(ISqlOperatorPoint.class);
+
         sqlQueryClause = nodeInstance.valueString(FIELD_SQL_CLAUSE);
         if (sqlQueryClause != null) {
             sqlQueryClause = sqlQueryClause.replaceAll("\\n", " ");
             if (operation == null) {
-                operation = DataOperation.GET_LIST;
+                operation = DataOperation.LIST;
             }
         }
-        if (operation == DataOperation.GET_LIST || operation == DataOperation.GET_ONE) {
+        if (operation == DataOperation.LIST || operation == DataOperation.GET) {
             fillOutputConfig(nodeInstance);
         }
     }
@@ -167,10 +168,10 @@ public class SqlDataNode extends DataNode {
     @Override
     public void invoke(NodeExecution nodeExecution) {
         switch (operation) {
-            case GET_ONE:
+            case GET:
                 fetchOne(nodeExecution);
                 break;
-            case GET_LIST:
+            case LIST:
                 query(nodeExecution);
                 break;
             case INSERT:
@@ -238,9 +239,10 @@ public class SqlDataNode extends DataNode {
                 fillOutput(nodeOutput, item);
             }// end for item
         }//end for input
-        InnospotResponse<Integer> resp = dataOperatorPoint.insertBatch(credentialId, tableName, insertList);
+        //TODO
+//        InnospotResponse<Integer> resp = dataOperatorPoint.insertBatch(credentialId, tableName, insertList);
 
-        nodeExecution.setMessage(resp.getMessage());
+//        nodeExecution.setMessage(resp.getMessage());
     }
 
 
@@ -266,8 +268,8 @@ public class SqlDataNode extends DataNode {
                 fillOutput(nodeOutput, item);
             }//end for item
         }//end for execution input
-        InnospotResponse<Integer> resp = dataOperatorPoint.updateForBatch(credentialId, tableName, updateItems);
-        nodeExecution.setMessage(resp.getMessage());
+//        InnospotResponse<Integer> resp = dataOperatorPoint.updateForBatch(credentialId, tableName, updateItems);
+//        nodeExecution.setMessage(resp.getMessage());
     }
 
 

@@ -21,13 +21,17 @@ package io.innospots.base.connector.http;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.enums.ApiMethod;
 import io.innospots.base.data.operator.IExecutionOperator;
+import io.innospots.base.data.request.BaseRequest;
 import io.innospots.base.data.request.ItemRequest;
+import io.innospots.base.data.request.SimpleRequest;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.http.HttpClientBuilder;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.protocol.HttpContext;
+
+import java.util.Map;
 
 import static io.innospots.base.connector.http.HttpConstant.HEADER_CONTENT_TYPE;
 import static io.innospots.base.connector.http.HttpConstant.HTTP_API_URL;
@@ -57,7 +61,8 @@ public class HttpDataExecutor implements IExecutionOperator {
 
 
     @Override
-    public DataBody<?> execute(ItemRequest itemRequest) {
+    public DataBody<?> execute(BaseRequest itemRequest) {
+        Object body = itemRequest.getBody();
         String url = itemRequest.getUri();
         if (url == null) {
             url = httpConnection.connectionCredential().v(HTTP_API_URL);
@@ -67,16 +72,23 @@ public class HttpDataExecutor implements IExecutionOperator {
         if (ApiMethod.POST.equals(ApiMethod.valueOf(itemRequest.getOperation()))) {
             if (itemRequest.getHeaders() != null &&
                     HttpClientBuilder.APPLICATION_FORM.equals(itemRequest.getHeaders().get(HEADER_CONTENT_TYPE))) {
-                data = httpConnection.postForm(url, itemRequest.getQuery(), itemRequest.getBody(), itemRequest.getHeaders());
+                Map<String,Object> mBody = (Map<String, Object>) body;
+                data = httpConnection.postForm(url, itemRequest.getQuery(), mBody, itemRequest.getHeaders());
 
             } else {
-                String cnt = itemRequest.getContent();
+                String cnt = null;
+                Map<String,Object> mBody =null;
+                if(body instanceof String){
+                    cnt = (String) body;
+                }else if(body instanceof Map){
+                    mBody = (Map<String, Object>) body;
+                }
                 if (StringUtils.isNotEmpty(cnt)) {
                     data = httpConnection.post(url, itemRequest.getQuery(),
                             JSONUtils.toMap(cnt), itemRequest.getHeaders(), httpContext);
-                } else {
+                } else if(mBody != null) {
                     data = httpConnection.post(url, itemRequest.getQuery(),
-                            itemRequest.getBody(), itemRequest.getHeaders(), httpContext);
+                            mBody, itemRequest.getHeaders(), httpContext);
                 }
             }
         } else if (ApiMethod.GET.equals(ApiMethod.valueOf(itemRequest.getOperation()))) {

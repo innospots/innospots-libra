@@ -19,9 +19,15 @@
 package io.innospots.workflow.node.app.script;
 
 import io.innospots.base.condition.Factor;
+import io.innospots.base.data.body.DataBody;
+import io.innospots.base.data.operator.DataOperatorManager;
+import io.innospots.base.data.operator.IDataOperator;
+import io.innospots.base.data.request.ItemRequest;
+import io.innospots.base.data.request.SimpleRequest;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.base.utils.BeanContextAware;
+import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.ExecutionInput;
 import io.innospots.workflow.core.execution.node.NodeExecution;
@@ -46,7 +52,7 @@ public class SqlScriptNode extends BaseAppNode {
     private static final Logger logger = LoggerFactory.getLogger(SqlScriptNode.class);
 
     public static final String FIELD_SQL_CLAUSE = "sql_clause";
-    public static final String FIELD_DATASOURCE_ID = "datasource_id";
+    public static final String FIELD_CREDENTIAL_KEY = "credential_key";
     public static final String FIELD_CONDITION_MAPPING = "condition_mapping";
     /**
      * store field variable name
@@ -59,12 +65,12 @@ public class SqlScriptNode extends BaseAppNode {
     private static final String SQL_PARAM_START = "${";
     private static final String SQL_PARAM_END = "}";
 
-    private ISqlOperatorPoint sqlOperatorPoint;
+    private IDataOperator dataOperator;
 
     private String sqlQueryClause;
 
 
-    protected Integer datasourceId;
+    protected String credentialKey;
 
     /**
      * where clause, when update operation
@@ -74,7 +80,7 @@ public class SqlScriptNode extends BaseAppNode {
     @Override
     protected void initialize(NodeInstance nodeInstance) {
         super.initialize(nodeInstance);
-        datasourceId = nodeInstance.valueInteger(FIELD_DATASOURCE_ID);
+        credentialKey = nodeInstance.valueString(FIELD_CREDENTIAL_KEY);
 
 
         List<Map<String, Object>> conditionFieldMapping = (List<Map<String, Object>>) nodeInstance.value(FIELD_CONDITION_MAPPING);
@@ -82,7 +88,8 @@ public class SqlScriptNode extends BaseAppNode {
             conditionFields = BeanUtils.toBean(conditionFieldMapping, Factor.class);
         }
 
-        sqlOperatorPoint = BeanContextAware.getBean(ISqlOperatorPoint.class);
+        DataOperatorManager dataOperatorManager = BeanContextAwareUtils.getBean(DataOperatorManager.class);
+        dataOperator = dataOperatorManager.buildDataOperator(credentialKey);
         sqlQueryClause = nodeInstance.valueString(FIELD_SQL_CLAUSE);
         if (sqlQueryClause != null) {
             sqlQueryClause = sqlQueryClause.replaceAll("\\n", " ");
@@ -123,9 +130,12 @@ public class SqlScriptNode extends BaseAppNode {
                 for (Map<String, Object> item : executionInput.getData()) {
                     String sql = parseSqlParam(sqlQueryClause, item, true);
                     logger.debug("execute sql:{}", sql);
-                    InnospotResponse<Integer> innospotResponse = sqlOperatorPoint.executeForSql(datasourceId, sql);
+                    SimpleRequest request = new SimpleRequest();
+                    request.setBody(sql);
+                    DataBody dataBody =  dataOperator.execute(request);
+//                    InnospotResponse<Integer> innospotResponse = sqlOperatorPoint.executeForSql(datasourceId, sql);
                     if (logger.isDebugEnabled()) {
-                        logger.debug("sql query:{}, response:{}", sql, innospotResponse);
+                        logger.debug("sql query:{}, response:{}", sql, request);
                     }
                     nodeOutput.addResult(item);
                 }//end item
@@ -133,9 +143,12 @@ public class SqlScriptNode extends BaseAppNode {
         } else {
             String sql = parseSqlParam(sqlQueryClause, null, true);
             logger.debug("execute sql:{}", sql);
-            InnospotResponse<Integer> innospotResponse = sqlOperatorPoint.executeForSql(datasourceId, sql);
+            SimpleRequest request = new SimpleRequest();
+            request.setBody(sql);
+            DataBody dataBody = dataOperator.execute(request);
+//            InnospotResponse<Integer> innospotResponse = sqlOperatorPoint.executeForSql(datasourceId, sql);
             if (logger.isDebugEnabled()) {
-                logger.debug("execute sql:{}, response:{}", sql, innospotResponse);
+                logger.debug("execute sql:{}, response:{}", sql, request);
             }
         }
     }

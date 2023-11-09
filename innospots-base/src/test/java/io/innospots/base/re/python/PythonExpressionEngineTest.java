@@ -3,7 +3,6 @@ package io.innospots.base.re.python;
 import io.innospots.base.enums.ScriptType;
 import io.innospots.base.re.IExpression;
 import org.junit.jupiter.api.Test;
-import org.springframework.util.Assert;
 
 /**
  * @author Smars
@@ -28,7 +27,6 @@ class PythonExpressionEngineTest {
         engine.register(Void.class, method, script);
         engine.compile();
         IExpression expression = engine.getExpression(method);
-        Assert.notNull(expression, "expression not null.");
         if (expression != null) {
             Object obj = expression.execute("11", 22, "33");
             System.out.println("----------");

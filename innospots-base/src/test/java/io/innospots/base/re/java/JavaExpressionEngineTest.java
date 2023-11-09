@@ -5,6 +5,7 @@ import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.base.re.IExpression;
 import io.innospots.base.utils.thread.ThreadPoolBuilder;
+import io.innospots.base.utils.thread.ThreadTaskExecutor;
 import javassist.*;
 import javassist.bytecode.CodeAttribute;
 import javassist.bytecode.LocalVariableAttribute;
@@ -12,7 +13,7 @@ import javassist.bytecode.MethodInfo;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
 
 import java.io.File;
 import java.util.concurrent.CountDownLatch;
@@ -220,7 +221,7 @@ public class JavaExpressionEngineTest {
         String mName = "call";
         engine.register(String.class, mName, src, p);
         long s = System.currentTimeMillis();
-        ThreadPoolTaskExecutor executor = ThreadPoolBuilder.build("test_engine", 30000);
+        ThreadTaskExecutor executor = ThreadPoolBuilder.build("test_engine", 30000);
         AtomicInteger counter = new AtomicInteger();
         CountDownLatch latch = new CountDownLatch(20000);
         for (int i = 1; i <= 20000; i++) {

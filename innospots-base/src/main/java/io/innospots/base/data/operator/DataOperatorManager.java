@@ -53,7 +53,7 @@ public class DataOperatorManager {
         return null;
     }
     public IExecutionOperator buildExecutionOperator(String credentialKey){
-        IDataConnectionMinder<?> dataConnectionMinder = dataConnectionMinderManager.getMinder(credentialKey);
+        IDataConnectionMinder dataConnectionMinder = dataConnectionMinderManager.getMinder(credentialKey);
         Object dataOperator = dataConnectionMinder.buildOperator();
         if(dataOperator instanceof IExecutionOperator){
             return (IExecutionOperator) dataOperator;

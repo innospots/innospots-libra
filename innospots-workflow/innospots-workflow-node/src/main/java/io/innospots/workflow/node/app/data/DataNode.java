@@ -18,8 +18,11 @@
 
 package io.innospots.workflow.node.app.data;
 
+import io.innospots.base.data.operator.DataOperatorManager;
+import io.innospots.base.data.operator.IDataOperator;
 import io.innospots.base.data.point.IDataOperatorPoint;
 import io.innospots.base.utils.BeanContextAware;
+import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.workflow.core.node.instance.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -34,18 +37,18 @@ public class DataNode extends BaseDataNode {
 
     private static final Logger logger = LoggerFactory.getLogger(DataNode.class);
 
-    protected IDataOperatorPoint dataOperatorPoint;
+    protected IDataOperator dataOperator;
 
-    public static final String FIELD_CREDENTIAL_ID = "credential";
+    public static final String FIELD_CREDENTIAL_KEY = "credential_key";
 
-    protected Integer credentialId;
+    protected String credentialKey;
 
 
     @Override
     protected void initialize(NodeInstance nodeInstance) {
         super.initialize(nodeInstance);
-        credentialId = nodeInstance.valueInteger(FIELD_CREDENTIAL_ID);
-        dataOperatorPoint = BeanContextAware.getBean(IDataOperatorPoint.class);
+        credentialKey = nodeInstance.valueString(FIELD_CREDENTIAL_KEY);
+        dataOperator = BeanContextAwareUtils.getBean(DataOperatorManager.class).buildDataOperator(credentialKey);
     }
 
 }

@@ -1,9 +1,9 @@
 package io.innospots.base.re.shell;
 
+import cn.hutool.core.lang.Assert;
 import io.innospots.base.enums.ScriptType;
 import io.innospots.base.re.IExpression;
 import org.junit.jupiter.api.Test;
-import org.springframework.util.Assert;
 
 /**
  * @author Smars
