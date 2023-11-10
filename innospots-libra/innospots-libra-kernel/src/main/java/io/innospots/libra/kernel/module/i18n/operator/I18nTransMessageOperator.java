@@ -25,8 +25,8 @@ import io.innospots.base.data.body.PageBody;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.libra.base.entity.BaseEntity;
-import io.innospots.libra.kernel.module.i18n.converter.I18NLanguageBeanConverter;
-import io.innospots.libra.kernel.module.i18n.converter.I18nDictionaryConvertMapper;
+import io.innospots.libra.kernel.module.i18n.converter.I18NLanguageConverter;
+import io.innospots.libra.kernel.module.i18n.converter.I18nDictionaryConverter;
 import io.innospots.libra.kernel.module.i18n.dao.I18nDictionaryDao;
 import io.innospots.libra.kernel.module.i18n.dao.I18nLanguageDao;
 import io.innospots.libra.kernel.module.i18n.dao.I18nTransMessageDao;
@@ -81,9 +81,9 @@ public class I18nTransMessageOperator {
         if (languageEntityList != null && !languageEntityList.isEmpty()) {
             languageEntityList.forEach(entity -> {
                 if (entity.isDefaultLan()) {
-                    result.add(0, I18NLanguageBeanConverter.INSTANCE.entityToTransHeaderColumn(entity));
+                    result.add(0, I18NLanguageConverter.INSTANCE.entityToTransHeaderColumn(entity));
                 } else {
-                    result.add(I18NLanguageBeanConverter.INSTANCE.entityToTransHeaderColumn(entity));
+                    result.add(I18NLanguageConverter.INSTANCE.entityToTransHeaderColumn(entity));
                 }
             });
         }
@@ -160,9 +160,9 @@ public class I18nTransMessageOperator {
             List<I18nTransMessageGroup> list = new ArrayList<>();
             for (I18nDictionaryEntity entity : queryPage.getRecords()) {
                 dictionaryIds.add(entity.getDictionaryId());
-                list.add(new I18nTransMessageGroup(I18nDictionaryConvertMapper.INSTANCE.entityToModel(entity), new HashMap<String, String>()));
+                list.add(new I18nTransMessageGroup(I18nDictionaryConverter.INSTANCE.entityToModel(entity), new HashMap<String, String>()));
             }
-            I18nDictionaryConvertMapper.INSTANCE.entityToModelList(queryPage.getRecords());
+            I18nDictionaryConverter.INSTANCE.entityToModelList(queryPage.getRecords());
             result.setTotal(queryPage.getTotal());
             result.setCurrent(queryPage.getCurrent());
             result.setPageSize(queryPage.getSize());

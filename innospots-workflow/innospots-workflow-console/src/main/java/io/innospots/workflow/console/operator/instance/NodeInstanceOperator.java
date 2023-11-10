@@ -28,7 +28,7 @@ import io.innospots.base.utils.CCH;
 import io.innospots.workflow.console.dao.instance.NodeInstanceDao;
 import io.innospots.workflow.console.entity.instance.NodeInstanceEntity;
 import io.innospots.workflow.console.enums.FlowVersion;
-import io.innospots.workflow.console.mapper.instance.NodeInstanceBeanConverter;
+import io.innospots.workflow.console.converter.instance.NodeInstanceConverter;
 import io.innospots.workflow.console.operator.apps.AppNodeDefinitionOperator;
 import io.innospots.workflow.core.node.apps.AppNodeDefinition;
 import io.innospots.workflow.core.node.instance.NodeInstance;
@@ -130,7 +130,7 @@ public class NodeInstanceOperator extends ServiceImpl<NodeInstanceDao, NodeInsta
     private List<NodeInstanceEntity> parseEntities(List<NodeInstance> nodeInstances) {
         List<NodeInstanceEntity> list = new ArrayList<>();
         if (nodeInstances != null) {
-            nodeInstances.forEach(nodeInstance -> list.add(NodeInstanceBeanConverter.INSTANCE.modelToEntity(nodeInstance)));
+            nodeInstances.forEach(nodeInstance -> list.add(NodeInstanceConverter.INSTANCE.modelToEntity(nodeInstance)));
         }
         return list;
     }
@@ -148,7 +148,7 @@ public class NodeInstanceOperator extends ServiceImpl<NodeInstanceDao, NodeInsta
             for (NodeInstanceEntity nodeInstanceEntity : nodeInstanceEntities) {
                 try {
                     AppNodeDefinition appNodeDefinition = appNodeDefinitionOperator.getNodeDefinition(nodeInstanceEntity.getNodeDefinitionId());
-                    list.add(NodeInstanceBeanConverter.INSTANCE.entityToModel(nodeInstanceEntity, appNodeDefinition));
+                    list.add(NodeInstanceConverter.INSTANCE.entityToModel(nodeInstanceEntity, appNodeDefinition));
                     if (appNodeDefinition == null) {
                         log.warn("node definition not exist,{} ", nodeInstanceEntity.getNodeInstanceId());
                     }
@@ -234,7 +234,7 @@ public class NodeInstanceOperator extends ServiceImpl<NodeInstanceDao, NodeInsta
         if (entityList == null) {
             return Collections.emptyList();
         }
-        return entityList.stream().map(NodeInstanceBeanConverter.INSTANCE::entityToModel).collect(Collectors.toList());
+        return entityList.stream().map(NodeInstanceConverter.INSTANCE::entityToModel).collect(Collectors.toList());
     }
 
     /**

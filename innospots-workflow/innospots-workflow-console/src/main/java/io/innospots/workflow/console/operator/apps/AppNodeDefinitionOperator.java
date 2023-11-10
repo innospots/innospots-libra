@@ -26,13 +26,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.enums.ImageType;
+import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.utils.BeanContextAware;
-import io.innospots.libra.base.event.AvatarRemoveEvent;
+import io.innospots.libra.base.events.AvatarRemoveEvent;
+import io.innospots.workflow.console.converter.apps.AppNodeDefinitionConverter;
 import io.innospots.workflow.console.dao.apps.AppNodeDefinitionDao;
 import io.innospots.workflow.console.entity.apps.AppNodeDefinitionEntity;
-import io.innospots.workflow.console.mapper.apps.AppNodeDefinitionBeanConverter;
 import io.innospots.workflow.console.model.AppQueryRequest;
 import io.innospots.workflow.core.enums.AppPrimitive;
 import io.innospots.workflow.core.node.AppInfo;
@@ -94,7 +94,7 @@ public class AppNodeDefinitionOperator extends ServiceImpl<AppNodeDefinitionDao,
                     if (entity.getUsed() == null) {
                         entity.setUsed(Boolean.TRUE);
                     }
-                    AppInfo appInfo = AppNodeDefinitionBeanConverter.INSTANCE.entityToSimple(entity);
+                    AppInfo appInfo = AppNodeDefinitionConverter.INSTANCE.entityToSimple(entity);
                     appInfos.add(appInfo);
                 }
 
@@ -113,7 +113,7 @@ public class AppNodeDefinitionOperator extends ServiceImpl<AppNodeDefinitionDao,
         if (primitive != null) {
             queryWrapper.lambda().eq(AppNodeDefinitionEntity::getPrimitive, primitive);
         }
-        return AppNodeDefinitionBeanConverter.INSTANCE.entityToModelList(this.list(queryWrapper));
+        return AppNodeDefinitionConverter.INSTANCE.entitiesToModels(this.list(queryWrapper));
     }
 
     public List<AppNodeDefinitionEntity> listByCodes(List<String> codes) {
@@ -135,7 +135,7 @@ public class AppNodeDefinitionOperator extends ServiceImpl<AppNodeDefinitionDao,
     public AppInfo createAppInfo(AppInfo appInfo) {
         this.checkDifferentName(appInfo);
         this.checkDifferentCode(appInfo);
-        AppNodeDefinitionEntity entity = AppNodeDefinitionBeanConverter.INSTANCE.infoToEntity(appInfo);
+        AppNodeDefinitionEntity entity = AppNodeDefinitionConverter.INSTANCE.infoToEntity(appInfo);
         entity.setIcon(null);
         boolean s = this.save(entity);
         if (!s) {
@@ -160,7 +160,7 @@ public class AppNodeDefinitionOperator extends ServiceImpl<AppNodeDefinitionDao,
         if (entity == null) {
             throw ResourceException.buildAbandonException(this.getClass(), "node definition not exits");
         }
-        AppNodeDefinitionBeanConverter.INSTANCE.infoToEntity(appInfo, entity);
+        AppNodeDefinitionConverter.INSTANCE.infoToEntity(appInfo, entity);
         if(StringUtils.isNotEmpty(appInfo.getIcon()) && appInfo.getIcon().startsWith(IMAGE_PREFIX)){
             entity.setIcon("/image/APP/" + appInfo.getNodeId() + "?t=" + RandomStringUtils.randomNumeric(5));
         }
@@ -171,7 +171,7 @@ public class AppNodeDefinitionOperator extends ServiceImpl<AppNodeDefinitionDao,
             throw ResourceException.buildCreateException(this.getClass(), "modify app node definition error");
         }
 
-        return AppNodeDefinitionBeanConverter.INSTANCE.entityToSimple(entity);
+        return AppNodeDefinitionConverter.INSTANCE.entityToSimple(entity);
     }
 
     /**
@@ -186,12 +186,12 @@ public class AppNodeDefinitionOperator extends ServiceImpl<AppNodeDefinitionDao,
         if (entity == null) {
             throw ResourceException.buildAbandonException(this.getClass(), "node definition not exits");
         }
-        AppNodeDefinitionBeanConverter.INSTANCE.modelToEntity(appNodeDefinition, entity);
+        AppNodeDefinitionConverter.INSTANCE.modelToEntity(appNodeDefinition, entity);
         boolean s = this.updateById(entity);
         if (!s) {
             throw ResourceException.buildCreateException(this.getClass(), "modify node definition error");
         }
-        return AppNodeDefinitionBeanConverter.INSTANCE.entityToModel(entity);
+        return AppNodeDefinitionConverter.INSTANCE.entityToModel(entity);
     }
 
     public Boolean updateAppUsed(List<Integer> nodeIds, Boolean used) {
@@ -213,7 +213,7 @@ public class AppNodeDefinitionOperator extends ServiceImpl<AppNodeDefinitionDao,
         if (entity == null) {
             throw ResourceException.buildAbandonException(this.getClass(), "get node definition not exits", nodeId);
         }
-        AppNodeDefinition appNodeDefinition = AppNodeDefinitionBeanConverter.INSTANCE.entityToModel(entity);
+        AppNodeDefinition appNodeDefinition = AppNodeDefinitionConverter.INSTANCE.entityToModel(entity);
         return appNodeDefinition;
     }
 
@@ -230,7 +230,7 @@ public class AppNodeDefinitionOperator extends ServiceImpl<AppNodeDefinitionDao,
     public Boolean deleteNodeDefinition(Integer nodeId) {
         boolean res = this.removeById(nodeId);
         if(res){
-            BeanContextAware.sendAppEvent(new AvatarRemoveEvent(nodeId, ImageType.APP));
+            EventBusCenter.async(new AvatarRemoveEvent(nodeId, ImageType.APP));
         }
         return res;
     }

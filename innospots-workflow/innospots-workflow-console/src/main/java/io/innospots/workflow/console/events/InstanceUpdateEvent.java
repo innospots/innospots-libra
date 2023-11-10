@@ -18,13 +18,14 @@
 
 package io.innospots.workflow.console.events;
 
+import io.innospots.base.events.EventBody;
 import org.springframework.context.ApplicationEvent;
 
 /**
  * @author Smars
  * @date 2023/5/16
  */
-public class InstanceUpdateEvent extends ApplicationEvent {
+public class InstanceUpdateEvent extends EventBody {
 
     private String appUseType;
 

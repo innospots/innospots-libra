@@ -21,10 +21,11 @@ package io.innospots.workflow.console.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.enums.ImageType;
+import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.utils.BeanContextAware;
-import io.innospots.libra.base.event.NewAvatarEvent;
+import io.innospots.libra.base.events.NewAvatarEvent;
 import io.innospots.workflow.console.entity.apps.AppNodeDefinitionEntity;
 import io.innospots.workflow.console.entity.apps.AppNodeGroupNodeEntity;
 import io.innospots.workflow.console.model.AppQueryRequest;
@@ -97,7 +98,7 @@ public class AppService {
             nodeIds.add(nodeId);
             appNodeGroupOperator.saveOrUpdateNodeGroupNode(1, appInfo.getNodeGroupId(), nodeIds);
             if (StringUtils.isNotEmpty(appInfo.getIcon()) && appInfo.getIcon().startsWith(IMAGE_PREFIX)) {
-                BeanContextAware.sendAppEvent(new NewAvatarEvent(nodeId, ImageType.APP, null, appInfo.getIcon()));
+                EventBusCenter.async(new NewAvatarEvent(nodeId, ImageType.APP, null, appInfo.getIcon()));
             }
             // update app icon
             appInfo = appNodeDefinitionOperator.updateAppInfo(appInfo);
@@ -116,7 +117,7 @@ public class AppService {
         String icon = appInfo.getIcon();
         Integer nodeId = appInfo.getNodeId();
         if (StringUtils.isNotEmpty(icon) && icon.startsWith(IMAGE_PREFIX)) {
-            BeanContextAware.sendAppEvent(new NewAvatarEvent(nodeId, ImageType.APP, null, icon));
+            EventBusCenter.async(new NewAvatarEvent(nodeId, ImageType.APP, null, icon));
         }
         appInfo = appNodeDefinitionOperator.updateAppInfo(appInfo);
         List<Integer> nodeIds = new ArrayList<>();

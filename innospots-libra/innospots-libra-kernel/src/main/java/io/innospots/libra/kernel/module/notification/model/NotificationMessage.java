@@ -40,8 +40,6 @@ public class NotificationMessage {
 
     private String recordTime;
 
-    private String time;
-
     private LocalDateTime readTime;
 
     private Boolean readFlag;

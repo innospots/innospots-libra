@@ -27,7 +27,7 @@ import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.console.entity.execution.NodeExecutionEntity;
-import io.innospots.workflow.console.mapper.execution.NodeExecutionMapper;
+import io.innospots.workflow.console.converter.execution.NodeExecutionConverter;
 import io.innospots.workflow.core.execution.ExecutionStatus;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;
@@ -112,7 +112,7 @@ public class JdbcNodeExecutionOperator implements INodeExecutionOperator {
     }
 
     private NodeExecution fillNodeExecution(Map<String, Object> data, boolean includeContext, int page, int size) {
-        NodeExecution nodeExecution = NodeExecutionMapper.INSTANCE.mapToModel(data, true);
+        NodeExecution nodeExecution = NodeExecutionConverter.INSTANCE.mapToModel(data, true);
         if (includeContext) {
             executionContextOperator.fillNodeExecution(nodeExecution, true, page, size);
         }//end context
@@ -139,7 +139,7 @@ public class JdbcNodeExecutionOperator implements INodeExecutionOperator {
 
     @Override
     public boolean insert(NodeExecution execution) {
-        dataOperator.insert(NodeExecutionEntity.TABLE_NAME, NodeExecutionMapper.INSTANCE.modelToMap(execution, true));
+        dataOperator.insert(NodeExecutionEntity.TABLE_NAME, NodeExecutionConverter.INSTANCE.modelToMap(execution, true));
         if(log.isDebugEnabled()){
             log.debug("node execution saved: {}",execution.getNodeExecutionId());
         }
@@ -162,7 +162,7 @@ public class JdbcNodeExecutionOperator implements INodeExecutionOperator {
     @Override
     public boolean update(NodeExecution execution) {
         UpdateItem updateItem = new UpdateItem();
-        Map<String, Object> data = NodeExecutionMapper.INSTANCE.modelToMap(execution, true);
+        Map<String, Object> data = NodeExecutionConverter.INSTANCE.modelToMap(execution, true);
         String nodeExecutionId = BeanUtils.getFieldName(NodeExecutionEntity::getNodeExecutionId, true);
         updateItem.addCondition(nodeExecutionId, Opt.EQUAL, data.get(nodeExecutionId), FieldValueType.STRING);
         data.remove(nodeExecutionId);

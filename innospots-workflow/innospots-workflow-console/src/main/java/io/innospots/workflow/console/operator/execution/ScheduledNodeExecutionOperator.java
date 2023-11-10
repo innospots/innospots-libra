@@ -29,7 +29,7 @@ import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.store.IDataStore;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.console.entity.execution.ScheduledNodeExecutionEntity;
-import io.innospots.workflow.console.mapper.execution.ScheduledNodeExecutionMapper;
+import io.innospots.workflow.console.converter.execution.ScheduledNodeExecutionConverter;
 import io.innospots.workflow.core.execution.ExecutionStatus;
 import io.innospots.workflow.core.execution.operator.IScheduledNodeExecutionOperator;
 import io.innospots.workflow.core.execution.scheduled.ScheduledNodeExecution;
@@ -83,7 +83,7 @@ public class ScheduledNodeExecutionOperator implements IDataStore<ScheduledNodeE
             return Collections.emptyList();
         }
         for (Map<String, Object> item : serverResp.getList()) {
-            scheduledNodeExecutions.add(ScheduledNodeExecutionMapper.INSTANCE.mapToModel(item, true));
+            scheduledNodeExecutions.add(ScheduledNodeExecutionConverter.INSTANCE.mapToModel(item, true));
         }
         return scheduledNodeExecutions;
     }
@@ -145,7 +145,7 @@ public class ScheduledNodeExecutionOperator implements IDataStore<ScheduledNodeE
 
     @Override
     public boolean insert(ScheduledNodeExecution execution) {
-        dataOperator.insert(ScheduledNodeExecutionEntity.TABLE_NAME, ScheduledNodeExecutionMapper.INSTANCE.modelToMap(execution, true));
+        dataOperator.insert(ScheduledNodeExecutionEntity.TABLE_NAME, ScheduledNodeExecutionConverter.INSTANCE.modelToMap(execution, true));
         return false;
     }
 
@@ -160,7 +160,7 @@ public class ScheduledNodeExecutionOperator implements IDataStore<ScheduledNodeE
     @Override
     public boolean update(ScheduledNodeExecution execution) {
         UpdateItem updateItem = new UpdateItem();
-        Map<String, Object> data = ScheduledNodeExecutionMapper.INSTANCE.modelToMap(execution, true);
+        Map<String, Object> data = ScheduledNodeExecutionConverter.INSTANCE.modelToMap(execution, true);
         String nodeExecutionId = BeanUtils.getFieldName(ScheduledNodeExecutionEntity::getNodeExecutionId, true);
         updateItem.addCondition(nodeExecutionId, Opt.EQUAL, data.get(nodeExecutionId), FieldValueType.STRING);
         data.remove(nodeExecutionId);

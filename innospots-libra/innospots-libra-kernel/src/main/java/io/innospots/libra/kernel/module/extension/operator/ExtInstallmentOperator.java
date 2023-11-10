@@ -33,7 +33,7 @@ import io.innospots.libra.kernel.module.extension.dao.ExtDefinitionDao;
 import io.innospots.libra.kernel.module.extension.dao.ExtInstallmentDao;
 import io.innospots.libra.kernel.module.extension.entity.ExtDefinitionEntity;
 import io.innospots.libra.kernel.module.extension.entity.ExtInstallmentEntity;
-import io.innospots.libra.kernel.module.extension.converter.AppInstallmentBeanConverter;
+import io.innospots.libra.kernel.module.extension.converter.AppInstallmentConverter;
 import io.innospots.libra.kernel.module.extension.model.ExtensionInstallInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -75,7 +75,7 @@ public class ExtInstallmentOperator extends ServiceImpl<ExtInstallmentDao, ExtIn
                 extInstallmentEntity.setExtKey(extDefinitionEntity.getExtKey());
             }
 
-            resList.add(AppInstallmentBeanConverter.INSTANCE.entityToModel(extInstallmentEntity, extDefinitionEntity));
+            resList.add(AppInstallmentConverter.INSTANCE.entityToModel(extInstallmentEntity, extDefinitionEntity));
         }
         return resList;
     }

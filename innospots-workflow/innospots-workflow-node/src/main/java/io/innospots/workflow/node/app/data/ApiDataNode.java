@@ -25,7 +25,9 @@ import com.google.common.base.Enums;
 import io.innospots.base.condition.Factor;
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.connector.minder.IDataConnectionMinder;
+import io.innospots.base.data.request.BaseRequest;
 import io.innospots.base.data.request.ItemRequest;
+import io.innospots.base.data.request.SimpleRequest;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.base.model.response.InnospotResponse;
@@ -84,7 +86,7 @@ public class ApiDataNode extends DataNode {
 
     private boolean dataCache;
 
-    private Cache<String, InnospotResponse<DataBody>> dataBodyCache;
+    private Cache<String, DataBody> dataBodyCache;
 
     @Override
     protected void initialize(NodeInstance nodeInstance) {
@@ -106,8 +108,8 @@ public class ApiDataNode extends DataNode {
             urlAddress = (String) ((List<?>) urlInfo).get(1);
         }
 
-        if (credentialId != null) {
-            IDataConnectionMinder connectorMinder = DataConnectionMinderManager.getCredentialMinder(credentialId);
+        if (credentialKey != null) {
+            IDataConnectionMinder connectorMinder = DataConnectionMinderManager.getCredentialMinder(credentialKey);
         }
 
         List<Map<String, Object>> fieldParams = nodeInstance.valueList(FIELD_REQUEST_PARAMS);
@@ -192,16 +194,16 @@ public class ApiDataNode extends DataNode {
 
     private void request(NodeOutput nodeOutput, Map<String, Object> item) {
         item = prevExecute(item);
-        InnospotResponse<DataBody> httpResponse = doRequest(item);
+        DataBody httpResponse = doRequest(item);
         if (!outputPayload) {
             fillOutput(nodeOutput, item);
             return;
         }
-        if (!httpResponse.hasData()) {
+        if (httpResponse!=null) {
             fillOutput(nodeOutput, item);
             return;
         }
-        Object body = httpResponse.getBody().getBody();
+        Object body = httpResponse.getBody();
         if (this.expression != null) {
             body = this.expression.execute(JSONUtils.objectToMap(body));
         }
@@ -244,21 +246,21 @@ public class ApiDataNode extends DataNode {
         return value;
     }
 
-    private InnospotResponse<DataBody> doRequest(Map<String, Object> item) {
+    private DataBody doRequest(Map<String, Object> item) {
         ItemRequest itemRequest = new ItemRequest();
-        itemRequest.setCredentialId(credentialId);
+        itemRequest.setCredentialKey(credentialKey);
         itemRequest.setOperation(operation);
         itemRequest.setUri(urlAddress);
         itemRequest.setConnectorName("Http");
         if (requestParam != null) {
             requestParam.fill(item, itemRequest);
         }
-        InnospotResponse<DataBody> dataBody = null;
+        DataBody dataBody = null;
         if (dataCache) {
             dataBody = dataBodyCache.getIfPresent(itemRequest.key());
         }
         if (dataBody == null) {
-            dataBody = dataOperatorPoint.execute(itemRequest);
+            dataBody = dataOperator.execute(itemRequest);
             if (dataCache) {
                 dataBodyCache.put(itemRequest.key(), dataBody);
             }
@@ -288,7 +290,7 @@ public class ApiDataNode extends DataNode {
         private String template;
 
 
-        public void fill(Map<String, Object> item, ItemRequest itemRequest) {
+        public void fill(Map<String, Object> item, BaseRequest itemRequest) {
             if (CollectionUtils.isNotEmpty(headers)) {
                 for (Factor factor : headers) {
                     Object v = factor.value(item);
@@ -333,9 +335,9 @@ public class ApiDataNode extends DataNode {
                 }//end for body
             }//end if body not empty
             if (StringUtils.isNotEmpty(template) && bValue.size() > 0) {
-                itemRequest.setContent(PlaceholderUtils.replacePlaceholders(template, bValue));
+                itemRequest.setBody(PlaceholderUtils.replacePlaceholders(template, bValue));
             } else if (bValue.size() > 0) {
-                itemRequest.add(bValue);
+                itemRequest.setBody(bValue);
             }//end if template
 
         }

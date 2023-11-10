@@ -38,21 +38,4 @@ public interface NotificationMessageConverter extends BaseBeanConverter<Notifica
 
     NotificationMessageConverter INSTANCE = Mappers.getMapper(NotificationMessageConverter.class);
 
-//    @Mapping(target = "recordTime", expression = "java(toTimeString(notificationMessageEntity.getRecordTime()))")
-    @Mapping(target = "time", expression = "java(toDateString(notificationMessageEntity.getRecordTime()))")
-    NotificationMessage entity2Model(NotificationMessageEntity notificationMessageEntity);
-
-    /**
-     * time to string
-     *
-     * @param recordTime
-     * @return String
-     */
-    default String toTimeString(LocalDateTime recordTime) {
-        return DateTimeUtils.formatLocalDateTime(recordTime, null);
-    }
-
-    default String toDateString(LocalDateTime recordTime) {
-        return DateTimeUtils.formatLocalDateTime(recordTime, DateTimeUtils.DEFAULT_DATE_PATTERN);
-    }
 }

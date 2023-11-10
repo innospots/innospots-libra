@@ -21,7 +21,7 @@ package io.innospots.libra.kernel.module.notification.aspect;
 
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.libra.kernel.events.MessageEvent;
-import io.innospots.libra.kernel.events.NotificationAnnotation;
+import io.innospots.libra.base.events.NotificationAnnotation;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -42,7 +42,7 @@ import java.lang.reflect.Method;
 @Component
 public class NotificationMessageAspect {
 
-    @Pointcut("@annotation(io.innospots.libra.kernel.events.NotificationAnnotation)")
+    @Pointcut("@annotation(io.innospots.libra.base.events.NotificationAnnotation)")
     public void controllerAspect() {
 
     }

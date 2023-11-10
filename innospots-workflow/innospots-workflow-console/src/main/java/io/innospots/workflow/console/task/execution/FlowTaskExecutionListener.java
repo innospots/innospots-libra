@@ -92,7 +92,7 @@ public class FlowTaskExecutionListener implements IEventListener<FlowExecutionTa
     }
 
     @Override
-    public Class<? extends EventBody> eventBodyClass() {
+    public Class<FlowExecutionTaskEvent> eventBodyClass() {
         return FlowExecutionTaskEvent.class;
     }
 }

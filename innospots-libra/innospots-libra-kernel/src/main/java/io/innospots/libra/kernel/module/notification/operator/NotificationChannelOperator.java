@@ -47,17 +47,17 @@ public class NotificationChannelOperator extends ServiceImpl<NotificationChannel
     @Transactional(rollbackFor = Exception.class)
     public NotificationChannel createChannel(NotificationChannel notificationChannel) {
         this.checkDifferentChannelName(notificationChannel);
-        NotificationChannelEntity entity = NotificationChannelConverter.INSTANCE.model2Entity(notificationChannel);
+        NotificationChannelEntity entity = NotificationChannelConverter.INSTANCE.modelToEntity(notificationChannel);
         entity.setStatus(DataStatus.ONLINE);
         super.save(entity);
-        return NotificationChannelConverter.INSTANCE.entity2Model(entity);
+        return NotificationChannelConverter.INSTANCE.entityToModel(entity);
     }
 
     @Transactional(rollbackFor = Exception.class)
     public Boolean updateChannel(NotificationChannel notificationChannel) {
         this.checkChannelExist(notificationChannel.getChannelId());
         this.checkDifferentChannelName(notificationChannel);
-        NotificationChannelEntity entity = NotificationChannelConverter.INSTANCE.model2Entity(notificationChannel);
+        NotificationChannelEntity entity = NotificationChannelConverter.INSTANCE.modelToEntity(notificationChannel);
         return super.updateById(entity);
     }
 
@@ -81,7 +81,7 @@ public class NotificationChannelOperator extends ServiceImpl<NotificationChannel
 
     public NotificationChannel getMessageChannel(Integer channelId) {
         NotificationChannelEntity entity = super.getById(channelId);
-        return NotificationChannelConverter.INSTANCE.entity2Model(entity);
+        return NotificationChannelConverter.INSTANCE.entityToModel(entity);
     }
 
     public List<NotificationChannel> getMessageChannels(List<Integer> messageChannelIds) {
@@ -89,7 +89,8 @@ public class NotificationChannelOperator extends ServiceImpl<NotificationChannel
             return Collections.emptyList();
         }
         List<NotificationChannelEntity> entities = super.listByIds(messageChannelIds);
-        return entities.stream().map(NotificationChannelConverter.INSTANCE::entity2Model).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
+        return NotificationChannelConverter.INSTANCE.entitiesToModels(entities);
+//        return entities.stream().map(NotificationChannelConverter.INSTANCE::entityToModel).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
     }
 
     public List<NotificationChannel> listChannels() {
@@ -98,7 +99,8 @@ public class NotificationChannelOperator extends ServiceImpl<NotificationChannel
         lambda.orderByAsc(NotificationChannelEntity::getCredentialId);
         lambda.orderByDesc(NotificationChannelEntity::getUpdatedTime);
         List<NotificationChannelEntity> entities = super.list(query);
-        return entities.stream().map(NotificationChannelConverter.INSTANCE::entity2Model).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
+        return NotificationChannelConverter.INSTANCE.entitiesToModels(entities);
+//        return entities.stream().map(NotificationChannelConverter.INSTANCE::entity2Model).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
     }
 
     /**

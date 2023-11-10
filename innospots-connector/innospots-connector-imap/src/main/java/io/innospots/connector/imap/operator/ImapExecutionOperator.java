@@ -20,7 +20,9 @@ package io.innospots.connector.imap.operator;
 
 import io.innospots.base.data.operator.IExecutionOperator;
 import io.innospots.base.data.body.DataBody;
+import io.innospots.base.data.request.BaseRequest;
 import io.innospots.base.data.request.ItemRequest;
+import io.innospots.base.utils.BeanUtils;
 import jakarta.mail.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,7 +36,7 @@ import java.util.*;
  * @date 2023/2/12
  */
 @Slf4j
-public class ImapExecutionOperator implements IExecutionOperator<Map<String, Object>> {
+public class ImapExecutionOperator implements IExecutionOperator {
 
     private final Store imapStore;
 
@@ -44,10 +46,12 @@ public class ImapExecutionOperator implements IExecutionOperator<Map<String, Obj
         this.imapStore = imapStore;
     }
 
+
     @Override
     public DataBody<Map<String, Object>> execute(ItemRequest itemRequest) {
+
         String folderName = (String) itemRequest.getBody().getOrDefault(KEY_FOLDER, "INBOX");
-        DataBody dataBody = new DataBody();
+        DataBody<Map<String, Object>> dataBody = new DataBody<>();
         try {
             Folder folder = imapStore.getFolder(folderName);
             // set message to read
@@ -111,7 +115,7 @@ public class ImapExecutionOperator implements IExecutionOperator<Map<String, Obj
             // encoding TODO
 
             folder.close();
-            dataBody.setBody(mailMessage);
+            dataBody.setBody(BeanUtils.toMap(mailMessage));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }

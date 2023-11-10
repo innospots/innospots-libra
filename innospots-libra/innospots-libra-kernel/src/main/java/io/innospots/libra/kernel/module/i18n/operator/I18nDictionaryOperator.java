@@ -26,7 +26,7 @@ import io.innospots.base.data.body.PageBody;
 import io.innospots.libra.base.entity.BaseEntity;
 import io.innospots.libra.kernel.module.i18n.dao.I18nDictionaryDao;
 import io.innospots.libra.kernel.module.i18n.entity.I18nDictionaryEntity;
-import io.innospots.libra.kernel.module.i18n.converter.I18nDictionaryConvertMapper;
+import io.innospots.libra.kernel.module.i18n.converter.I18nDictionaryConverter;
 import io.innospots.libra.kernel.module.i18n.model.I18nDictionary;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -67,7 +67,7 @@ public class I18nDictionaryOperator {
             log.error("create I18nDictionary is exists, {} {}", i18nDictionary.getApp(), i18nDictionary.getCode());
             throw ResourceException.buildExistException(this.getClass(), "i18nDictionary", i18nDictionary);
         }
-        entity = I18nDictionaryConvertMapper.INSTANCE.modelToEntity(i18nDictionary);
+        entity = I18nDictionaryConverter.INSTANCE.modelToEntity(i18nDictionary);
         int num = i18nDictionaryDao.insert(entity);
         return num == 1;
     }
@@ -85,12 +85,12 @@ public class I18nDictionaryOperator {
         );
         int num = 0;
         if (entity == null) {
-            entity = I18nDictionaryConvertMapper.INSTANCE.modelToEntity(i18nDictionary);
+            entity = I18nDictionaryConverter.INSTANCE.modelToEntity(i18nDictionary);
             num = i18nDictionaryDao.insert(entity);
             i18nDictionary.setDictionaryId(entity.getDictionaryId());
         } else {
             i18nDictionary.setDictionaryId(entity.getDictionaryId());
-            I18nDictionaryConvertMapper.INSTANCE.updateEntity4Model(entity, i18nDictionary);
+            I18nDictionaryConverter.INSTANCE.updateEntity4Model(entity, i18nDictionary);
             num = i18nDictionaryDao.updateById(entity);
         }
         return num == 1;
@@ -118,7 +118,7 @@ public class I18nDictionaryOperator {
             log.error("modify I18nDictionary {} {} is delete", i18nDictionary.getApp(), i18nDictionary.getCode());
             throw ResourceException.buildUpdateException(this.getClass(), "I18nDictionary is delete", i18nDictionary);
         }
-        I18nDictionaryConvertMapper.INSTANCE.updateEntity4Model(entity, i18nDictionary);
+        I18nDictionaryConverter.INSTANCE.updateEntity4Model(entity, i18nDictionary);
         int num = i18nDictionaryDao.updateById(entity);
         return num == 1;
     }
@@ -147,7 +147,7 @@ public class I18nDictionaryOperator {
             result.setPageSize(queryPage.getSize());
             result.setTotalPage(queryPage.getPages());
             result.setList(CollectionUtils.isEmpty(queryPage.getRecords()) ? new ArrayList<I18nDictionary>() :
-                    I18nDictionaryConvertMapper.INSTANCE.entityToModelList(queryPage.getRecords()));
+                    I18nDictionaryConverter.INSTANCE.entityToModelList(queryPage.getRecords()));
         }
         return result;
     }

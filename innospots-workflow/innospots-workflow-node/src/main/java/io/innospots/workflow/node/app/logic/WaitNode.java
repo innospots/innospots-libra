@@ -21,6 +21,7 @@ package io.innospots.workflow.node.app.logic;
 
 import io.innospots.base.quartz.TimePeriod;
 import io.innospots.base.utils.BeanContextAware;
+import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.workflow.core.execution.ExecutionInput;
 import io.innospots.workflow.core.execution.ExecutionStatus;
@@ -65,7 +66,7 @@ public class WaitNode extends BaseAppNode {
             runningDateTime = nodeInstance.valueString(FIELD_RUNNING_DATE_TIME);
         }
 
-        scheduledNodeExecutionOperator = BeanContextAware.getBean(IScheduledNodeExecutionOperator.class);
+        scheduledNodeExecutionOperator = BeanContextAwareUtils.getBean(IScheduledNodeExecutionOperator.class);
         //scheduledNodeContextRecordApiClient = ApplicationContextUtils.getBean(ScheduledNodeContextRecordApiClient.class);
     }
 

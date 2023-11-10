@@ -29,7 +29,7 @@ import io.innospots.base.store.IDataStore;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.console.entity.execution.ExecutionContextEntity;
 import io.innospots.workflow.console.entity.execution.FlowExecutionEntity;
-import io.innospots.workflow.console.mapper.execution.FlowExecutionMapper;
+import io.innospots.workflow.console.converter.execution.FlowExecutionConverter;
 import io.innospots.workflow.core.execution.ExecutionStatus;
 import io.innospots.workflow.core.execution.flow.FlowExecution;
 import io.innospots.workflow.core.execution.flow.FlowExecutionBase;
@@ -183,7 +183,7 @@ public class JdbcFlowExecutionOperator implements IDataStore<FlowExecution>, IFl
     }
 
     private FlowExecution fillFlowExecution(Map<String, Object> data, boolean includeContext) {
-        FlowExecution flowExecution = FlowExecutionMapper.INSTANCE.mapToModel(data, true);
+        FlowExecution flowExecution = FlowExecutionConverter.INSTANCE.mapToModel(data, true);
         flowExecution.initialize();
         if (includeContext) {
             executionContextOperator.fillFlowExecution(flowExecution, true);
@@ -195,7 +195,7 @@ public class JdbcFlowExecutionOperator implements IDataStore<FlowExecution>, IFl
 
     @Override
     public boolean insert(FlowExecution execution) {
-        dataOperator.insert(FlowExecutionEntity.TABLE_NAME, FlowExecutionMapper.INSTANCE.modelToMap(execution, true));
+        dataOperator.insert(FlowExecutionEntity.TABLE_NAME, FlowExecutionConverter.INSTANCE.modelToMap(execution, true));
         executionContextOperator.saveExecutionContext(execution);
 //        ExecutionContextEntity executionContextEntity = execution.toExecutionContextEntity();
 //        dataOperator.insert(ExecutionContextEntity.TABLE_NAME, execution.toExecutionContextMap(true));
@@ -215,7 +215,7 @@ public class JdbcFlowExecutionOperator implements IDataStore<FlowExecution>, IFl
     @Override
     public boolean update(FlowExecution execution) {
         UpdateItem updateItem = new UpdateItem();
-        Map<String, Object> data = FlowExecutionMapper.INSTANCE.modelToMap(execution, true);
+        Map<String, Object> data = FlowExecutionConverter.INSTANCE.modelToMap(execution, true);
         String flowExecutionId = BeanUtils.getFieldName(FlowExecutionEntity::getFlowExecutionId, true);
         updateItem.addCondition(flowExecutionId, Opt.EQUAL, data.get(flowExecutionId), FieldValueType.STRING);
         data.remove(flowExecutionId);

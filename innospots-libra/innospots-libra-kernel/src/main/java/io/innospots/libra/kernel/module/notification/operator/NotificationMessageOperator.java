@@ -79,7 +79,7 @@ public class NotificationMessageOperator extends ServiceImpl<NotificationMessage
         pageBody.setTotal(entityPage.getTotal());
         pageBody.setTotalPage(entityPage.getPages());
 
-        List<NotificationMessage> messages = entities.stream().map(NotificationMessageConverter.INSTANCE::entity2Model).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
+        List<NotificationMessage> messages = NotificationMessageConverter.INSTANCE.entitiesToModels(entities);
         pageBody.setList(messages);
         return pageBody;
     }

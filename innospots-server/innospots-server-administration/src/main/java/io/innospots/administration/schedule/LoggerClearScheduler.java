@@ -20,7 +20,7 @@ package io.innospots.administration.schedule;
 
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.libra.base.configuration.InnospotsConsoleProperties;
-import io.innospots.libra.kernel.events.LogClearEvent;
+import io.innospots.libra.base.events.LogClearEvent;
 import io.innospots.server.base.registry.ServiceRegistryHolder;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +51,7 @@ public class LoggerClearScheduler {
             if (ServiceRegistryHolder.isLeader() && consoleProperties.isEnableCleanSysOperateLog()) {
                 int days = consoleProperties.getSysOperateLogKeepDays();
                 int count = consoleProperties.getSysLoginLogKeepAmount();
-                LogClearEvent logClearEvent = new LogClearEvent(count, days);
+                LogClearEvent logClearEvent = new LogClearEvent(count, days,"operate");
                 Object delCount = EventBusCenter.postSync(logClearEvent);
                 log.info("SysOperateLogCleanTask delete:{}, days:{} currTime:{}", delCount, days, LocalDateTime.now());
             } else {
@@ -59,6 +59,27 @@ public class LoggerClearScheduler {
             }
         } catch (Exception e) {
             log.error("SysOperateLogCleanTask error:{}", e.getMessage(), e);
+        }
+
+    }
+
+
+    /**
+     * 定时清理登录日志，保留指定数量或是最近多少多少天的登录信息
+     */
+    @Scheduled(cron = "0 15 4 * * ?")
+    private void loginLogCleanTask() {
+        try {
+            if (ServiceRegistryHolder.isLeader() && consoleProperties.isEnableCleanSysLoginLog()) {
+                int days = consoleProperties.getSysLoginLogKeepDays();
+
+                int count = consoleProperties.getSysLoginLogKeepAmount();
+                LogClearEvent logClearEvent = new LogClearEvent(count, days,"login");
+                Object delCount = EventBusCenter.postSync(logClearEvent);
+                log.info("loginLogCleanTask delete:{}, currTime:{}", delCount, LocalDateTime.now());
+            }
+        } catch (Exception e) {
+            log.error("loginLogCleanTask error:{}", e.getMessage(), e);
         }
 
     }

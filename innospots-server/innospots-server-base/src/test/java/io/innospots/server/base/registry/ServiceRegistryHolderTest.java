@@ -37,7 +37,7 @@ class ServiceRegistryHolderTest {
             System.out.println("--------" + i + "--------");
             for (int j = 0; j < i; j++) {
                 ServiceRegistryHolder.setPosition(j);
-                Integer[] sks = ServiceRegistryHolder.currentShardingKeys();
+                Integer[] sks = ServiceRegistryHolder.currentShardingKeys(16);
                 System.out.println(i + "-" + j + ":" + Arrays.toString(sks));
             }
         }

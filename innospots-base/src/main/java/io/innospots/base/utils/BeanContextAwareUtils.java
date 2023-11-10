@@ -56,7 +56,7 @@ public class BeanContextAwareUtils {
      *
      * @param eventBody
      */
-    public static void sendAppEvent(EventBody eventBody) {
+    public static void sendEvent(EventBody eventBody) {
         EventBusCenter.getInstance().post(eventBody);
     }
 

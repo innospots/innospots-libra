@@ -11,10 +11,9 @@ import io.innospots.workflow.node.app.data.SqlDataNode;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.test.context.SpringBootTest;
+
 import org.springframework.context.annotation.Bean;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,15 +24,11 @@ import java.util.Map;
  * @author Smars
  * @date 2021/5/15
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = SqlDataNodeTest.TestConfiguration.class)
 public class SqlDataNodeTest {
 
     private DataNode dataNode;
 
 
-    @SpringBootConfiguration
-    @org.springframework.boot.test.context.TestConfiguration
     static class TestConfiguration {
 
         /*
@@ -83,10 +78,6 @@ public class SqlDataNodeTest {
 
          */
 
-        @Bean
-        public BeanContextAware applicationContextUtils() {
-            return new BeanContextAware();
-        }
     }
 
     @Before
@@ -116,7 +107,7 @@ public class SqlDataNodeTest {
         SqlDataNode dataNode = new SqlDataNode();
         String identifier = "Test_1";
         NodeInstance nodeInstance = nodeInstance();
-        nodeInstance.getData().put(SqlDataNode.FIELD_OPERATION, DataOperation.GET_ONE);
+        nodeInstance.getData().put(SqlDataNode.FIELD_OPERATION, DataOperation.GET);
         dataNode.build(identifier, nodeInstance);
         dataNode.invoke(nodeExecution());
         //System.out.println(result);
@@ -127,7 +118,7 @@ public class SqlDataNodeTest {
         SqlDataNode dataNode = new SqlDataNode();
         String identifier = "Test_1";
         NodeInstance nodeInstance = nodeInstance();
-        nodeInstance.getData().put(SqlDataNode.FIELD_OPERATION, DataOperation.GET_LIST);
+        nodeInstance.getData().put(SqlDataNode.FIELD_OPERATION, DataOperation.GET);
         dataNode.build(identifier, nodeInstance);
         dataNode.invoke(nodeExecution());
         //System.out.println(result);
@@ -195,10 +186,10 @@ public class SqlDataNodeTest {
 //        instance.setInputFields(inputFields);
         Map<String, Object> data = new HashMap<>();
 
-        data.put(SqlDataNode.FIELD_CREDENTIAL_ID, 12);
+        data.put(SqlDataNode.FIELD_CREDENTIAL_KEY, 12);
         data.put(SqlDataNode.FIELD_SQL_CLAUSE, "select user_name from user");
         data.put(SqlDataNode.FIELD_DB_NAME, "user_db");
-        data.put(SqlDataNode.FIELD_OPERATION, DataOperation.GET_ONE);
+        data.put(SqlDataNode.FIELD_OPERATION, DataOperation.GET);
         data.put(SqlDataNode.FIELD_TABLE_NAME, "user_table");
         List<Map<String, Object>> cl = new ArrayList<>();
         Map<String, Object> condition = new HashMap<>();

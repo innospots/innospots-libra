@@ -90,6 +90,10 @@ public class BeanUtils{
         return BeanUtil.beanToMap(object,underscore,ignoreNull);
     }
 
+    public static Map<String, Object> toMap(Object object) {
+        return BeanUtil.beanToMap(object,false,false);
+    }
+
 
     public static <T> List<T> toBean(Collection<Map<String, Object>> beanCollection, Class<T> targetClass) {
         List<T> targets = new ArrayList<>();

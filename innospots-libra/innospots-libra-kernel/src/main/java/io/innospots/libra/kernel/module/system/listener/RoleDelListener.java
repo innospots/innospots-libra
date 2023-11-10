@@ -18,6 +18,7 @@
 
 package io.innospots.libra.kernel.module.system.listener;
 
+import io.innospots.base.events.IEventListener;
 import io.innospots.libra.kernel.module.system.model.role.RoleDelEvent;
 import io.innospots.libra.kernel.module.system.operator.RoleResourceOperator;
 import io.innospots.libra.kernel.module.system.operator.UserRoleOperator;
@@ -35,7 +36,7 @@ import java.util.Collections;
  */
 @Slf4j
 @Component
-public class RoleDelListener {
+public class RoleDelListener implements IEventListener<RoleDelEvent> {
 
     private final UserRoleOperator userRoleOperator;
 
@@ -46,13 +47,15 @@ public class RoleDelListener {
         this.roleResourceOperator = roleResourceOperator;
     }
 
-    @EventListener(value = RoleDelEvent.class)
-    public void handleEvent(RoleDelEvent roleDelEvent) {
-        Object source = roleDelEvent.getSource();
+
+    @Override
+    public Object listen(RoleDelEvent event) {
+        Object source = event.getBody();
         if (source instanceof Integer) {
             Integer roleId = (Integer) source;
             userRoleOperator.deleteByRoleIds(Collections.singletonList(roleId));
             roleResourceOperator.deleteRoleResourceByRoleId(roleId);
         }
+        return event.getBody();
     }
 }

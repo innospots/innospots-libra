@@ -25,13 +25,12 @@ import io.innospots.base.enums.ImageType;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.InnospotException;
 import io.innospots.base.model.response.ResponseCode;
-import io.innospots.base.utils.BeanContextAware;
 import io.innospots.libra.base.controller.BaseController;
-import io.innospots.libra.kernel.events.NewAvatarEvent;
+import io.innospots.libra.base.events.NewAvatarEvent;
 import io.innospots.libra.base.utils.ImageFileUploader;
 import io.innospots.libra.kernel.module.todo.dao.TodoTaskCommentDao;
 import io.innospots.libra.kernel.module.todo.entity.TodoTaskCommentEntity;
-import io.innospots.libra.kernel.module.todo.converter.TodoTaskCommentBeanConverter;
+import io.innospots.libra.kernel.module.todo.converter.TodoTaskCommentConverter;
 import io.innospots.libra.kernel.module.todo.model.TodoTaskComment;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -58,7 +57,7 @@ public class TodoTaskCommentOperator extends ServiceImpl<TodoTaskCommentDao, Tod
 
     @Transactional(rollbackFor = Exception.class)
     public TodoTaskComment createTodoTaskComment(TodoTaskComment todoTaskComment) {
-        TodoTaskCommentBeanConverter mapper = TodoTaskCommentBeanConverter.INSTANCE;
+        TodoTaskCommentConverter mapper = TodoTaskCommentConverter.INSTANCE;
         TodoTaskCommentEntity entity = mapper.modelToEntity(todoTaskComment);
         super.save(entity);
         return mapper.entityToModel(entity);
@@ -70,7 +69,7 @@ public class TodoTaskCommentOperator extends ServiceImpl<TodoTaskCommentDao, Tod
         lambda.eq(TodoTaskCommentEntity::getTaskId, taskId);
 
         List<TodoTaskCommentEntity> entities = super.list(queryWrapper);
-        return entities.stream().map(TodoTaskCommentBeanConverter.INSTANCE::entityToModel).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
+        return entities.stream().map(TodoTaskCommentConverter.INSTANCE::entityToModel).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
     }
 
     public List<Map<String, Object>> selectCountByTaskId(List<Integer> taskIds) {

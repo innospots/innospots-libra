@@ -29,10 +29,10 @@ import io.innospots.base.exception.InnospotException;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.utils.CCH;
+import io.innospots.libra.kernel.module.todo.converter.TodoTaskConverter;
 import io.innospots.libra.kernel.module.todo.dao.TodoTaskDao;
 import io.innospots.libra.kernel.module.todo.entity.TodoTaskEntity;
 import io.innospots.libra.kernel.module.todo.enums.TaskStatus;
-import io.innospots.libra.kernel.module.todo.converter.TodoTaskBeanConverter;
 import io.innospots.libra.kernel.module.todo.model.TodoTask;
 import io.innospots.libra.kernel.module.todo.model.TodoTaskForm;
 import org.apache.commons.collections4.CollectionUtils;
@@ -52,7 +52,7 @@ public class TodoTaskOperator extends ServiceImpl<TodoTaskDao, TodoTaskEntity> {
     public TodoTask createTodoTask(TodoTask todoTask) {
         this.checkDifferentTaskName(todoTask);
         todoTask.setTaskStatus(TaskStatus.Pending);
-        TodoTaskBeanConverter mapper = TodoTaskBeanConverter.INSTANCE;
+        TodoTaskConverter mapper = TodoTaskConverter.INSTANCE;
         TodoTaskEntity entity = mapper.modelToEntity(todoTask);
         super.save(entity);
         return mapper.entityToModel(entity);
@@ -62,7 +62,7 @@ public class TodoTaskOperator extends ServiceImpl<TodoTaskDao, TodoTaskEntity> {
     public Boolean updateTodoTask(TodoTask todoTask) {
         this.checkDifferentTaskName(todoTask);
         TodoTaskEntity entity = this.getById(todoTask.getTaskId());
-        TodoTaskBeanConverter.INSTANCE.updateEntity2Model(entity, todoTask);
+        TodoTaskConverter.INSTANCE.updateEntity2Model(entity, todoTask);
         return super.updateById(entity);
     }
 

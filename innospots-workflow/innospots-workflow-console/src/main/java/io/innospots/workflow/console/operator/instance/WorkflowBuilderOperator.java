@@ -20,11 +20,13 @@ package io.innospots.workflow.console.operator.instance;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.innospots.base.enums.DataStatus;
+import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.base.utils.BeanContextAware;
+import io.innospots.workflow.console.converter.instance.WorkflowInstanceConverter;
 import io.innospots.workflow.console.dao.instance.WorkflowInstanceCacheDao;
 import io.innospots.workflow.console.dao.instance.WorkflowRevisionDao;
 import io.innospots.workflow.console.entity.instance.WorkflowInstanceCacheEntity;
@@ -34,7 +36,6 @@ import io.innospots.workflow.console.enums.FlowVersion;
 import io.innospots.workflow.console.events.InstanceUpdateEvent;
 import io.innospots.workflow.console.exception.WorkflowPublishException;
 import io.innospots.workflow.console.listener.AppUseListener;
-import io.innospots.workflow.console.mapper.instance.WorkflowInstanceBeanConverter;
 import io.innospots.workflow.core.config.InnospotWorkflowProperties;
 import io.innospots.workflow.core.engine.FlowEngineManager;
 import io.innospots.workflow.core.engine.IFlowEngine;
@@ -269,7 +270,7 @@ public class WorkflowBuilderOperator implements IWorkflowCacheDraftOperator {
     }
 
     private WorkflowBody getFlowInstance(WorkflowInstanceEntity entity, Integer revision, Boolean includeNodes) {
-        WorkflowBody flowInstance = WorkflowInstanceBeanConverter.INSTANCE.entityToFlowBody(entity);
+        WorkflowBody flowInstance = WorkflowInstanceConverter.INSTANCE.entityToFlowBody(entity);
         if (includeNodes) {
             //use current revision, if revision is null
             if (revision == null) {
@@ -299,7 +300,7 @@ public class WorkflowBuilderOperator implements IWorkflowCacheDraftOperator {
         if(CollectionUtils.isEmpty(entityList)){
             return Collections.emptyList();
         }
-        return entityList.stream().map(WorkflowInstanceBeanConverter.INSTANCE::entityToFlowBody).collect(Collectors.toList());
+        return entityList.stream().map(WorkflowInstanceConverter.INSTANCE::entityToFlowBody).collect(Collectors.toList());
     }
 
     /**
@@ -326,7 +327,7 @@ public class WorkflowBuilderOperator implements IWorkflowCacheDraftOperator {
         }
         up = this.nodeInstanceOperator.deleteNodes(workflowInstanceId) & up;
 
-        BeanContextAware.sendAppEvent(new InstanceUpdateEvent(workflowInstanceId, AppUseListener.APP_USE_DELETE));
+        EventBusCenter.postSync(new InstanceUpdateEvent(workflowInstanceId, AppUseListener.APP_USE_DELETE));
 
         up = this.edgeOperator.deleteEdges(workflowInstanceId) & up;
         QueryWrapper<WorkflowRevisionEntity> revisionQueryWrapper = new QueryWrapper<>();
@@ -378,7 +379,7 @@ public class WorkflowBuilderOperator implements IWorkflowCacheDraftOperator {
         workflowBaseBody = getWorkflowBody(workflowBaseBody.getWorkflowInstanceId(), FlowVersion.DRAFT.getVersion(), true);
         saveFlowInstanceToCache(workflowBaseBody);
 
-        BeanContextAware.sendAppEvent(new InstanceUpdateEvent(workflowBaseBody.getWorkflowInstanceId(), AppUseListener.APP_USE_ADD));
+        EventBusCenter.postSync(new InstanceUpdateEvent(workflowBaseBody.getWorkflowInstanceId(), AppUseListener.APP_USE_ADD));
         return workflowBaseBody;
     }
 

@@ -40,11 +40,6 @@ public interface NotificationChannelConverter extends BaseBeanConverter<Notifica
     NotificationChannelConverter INSTANCE = Mappers.getMapper(NotificationChannelConverter.class);
 
 
-    @Mapping(target = "params", expression = "java(jsonStringToList(entity.getParams()))")
-    NotificationChannel entity2Model(NotificationChannelEntity entity);
-
-    @Mapping(target = "params", expression = "java(jsonListToString(channel.getParams()))")
-    NotificationChannelEntity model2Entity(NotificationChannel channel);
 
     /**
      * json string to ParamField of list
@@ -52,7 +47,7 @@ public interface NotificationChannelConverter extends BaseBeanConverter<Notifica
      * @param jsonStr
      * @return List<String>
      */
-    default List<ParamField> jsonStringToList(String jsonStr) {
+    default List<ParamField> jsonStringToParamFields(String jsonStr) {
         return JSONUtils.toList(jsonStr, ParamField.class);
     }
 
@@ -62,7 +57,7 @@ public interface NotificationChannelConverter extends BaseBeanConverter<Notifica
      * @param list
      * @return String
      */
-    default String jsonListToString(List<ParamField> list) {
+    default String paramFieldsToJsonString(List<ParamField> list) {
         return JSONUtils.toJsonString(list);
     }
 }

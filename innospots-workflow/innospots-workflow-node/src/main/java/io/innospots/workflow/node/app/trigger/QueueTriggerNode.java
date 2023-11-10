@@ -61,7 +61,7 @@ public class QueueTriggerNode extends TriggerNode {
         validFieldConfig(nodeInstance,FIELD_TOPIC);
         validFieldConfig(nodeInstance, FIELD_GROUP_ID);
 
-        Integer credentialId = nodeInstance.valueInteger(FIELD_CREDENTIAL_KEY);
+        String credentialKey = nodeInstance.valueString(FIELD_CREDENTIAL_KEY);
         String topic = nodeInstance.valueString(FIELD_TOPIC);
         String groupId = nodeInstance.valueString(FIELD_GROUP_ID);
         String messageFormat = nodeInstance.valueString(FIELD_MSG_FORMAT);
@@ -79,7 +79,7 @@ public class QueueTriggerNode extends TriggerNode {
             dataOffset = "latest";
         }
 
-        eventBody.put(FIELD_CREDENTIAL_KEY, credentialId);
+        eventBody.put(FIELD_CREDENTIAL_KEY, credentialKey);
         eventBody.put(FIELD_TOPIC, topic);
         eventBody.put(FIELD_GROUP_ID, groupId);
         eventBody.put(FIELD_MSG_FORMAT, messageFormat);
@@ -87,7 +87,7 @@ public class QueueTriggerNode extends TriggerNode {
         eventBody.put(FIELD_DATA_OFFSET, dataOffset);
 
 //        DataConnectionMinderManager minderManager = ApplicationContextUtils.getBean(DataConnectionMinderManager.class);
-        IQueueConnectionMinder queueConnectionMinder = (IQueueConnectionMinder) DataConnectionMinderManager.getCredentialMinder(credentialId);
+        IQueueConnectionMinder queueConnectionMinder = (IQueueConnectionMinder) DataConnectionMinderManager.getCredentialMinder(credentialKey);
         dataReceiver = queueConnectionMinder.queueReceiver(topic,groupId,dataOffset,messageFormat,2000,10);
   //              minderManager.getMinder(credentialId);
 

@@ -25,9 +25,9 @@ import io.innospots.libra.base.extension.ExtensionStatus;
 import io.innospots.libra.base.extension.LibraClassPathExtPropertiesLoader;
 import io.innospots.libra.base.extension.LibraExtensionInformation;
 import io.innospots.libra.base.extension.LibraExtensionProperties;
+import io.innospots.libra.kernel.module.extension.converter.ExtDefinitionConverter;
 import io.innospots.libra.kernel.module.extension.dao.ExtDefinitionDao;
 import io.innospots.libra.kernel.module.extension.entity.ExtDefinitionEntity;
-import io.innospots.libra.kernel.module.extension.converter.ExtDefinitionBeanConverter;
 import io.innospots.libra.kernel.module.extension.model.ExtensionDefinition;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -57,12 +57,12 @@ public class ExtDefinitionOperator extends ServiceImpl<ExtDefinitionDao, ExtDefi
 
 
     public LibraExtensionProperties registryExtensionDefinition(LibraExtensionProperties libraAppProperties) {
-        ExtensionDefinition appDefinition = ExtDefinitionBeanConverter.INSTANCE.propertiesToModel(libraAppProperties);
+        ExtensionDefinition appDefinition = ExtDefinitionConverter.INSTANCE.propertiesToModel(libraAppProperties);
         boolean result = false;
         ExtDefinitionEntity entity = this.getBaseMapper().getLastVersion(appDefinition.getExtKey());
         if (entity == null) {
             //Judge whether the current application exists. If it does not exist, insert it directly into the database
-            entity = ExtDefinitionBeanConverter.INSTANCE.modelToEntity(appDefinition);
+            entity = ExtDefinitionConverter.INSTANCE.modelToEntity(appDefinition);
             entity.generateSignature();
             entity.setExtensionStatus(ExtensionStatus.AVAILABLE);
             result = save(entity);
@@ -70,7 +70,7 @@ public class ExtDefinitionOperator extends ServiceImpl<ExtDefinitionDao, ExtDefi
             int compare = appDefinition.getVersion().compareToIgnoreCase(entity.getExtVersion());
             if (compare > 0) {
                 //If it exists, and the version is inconsistent and large, insert the update,
-                entity = ExtDefinitionBeanConverter.INSTANCE.updateEntity4Model(entity, appDefinition);
+                entity = ExtDefinitionConverter.INSTANCE.updateEntity4Model(entity, appDefinition);
                 entity.generateSignature();
                 if (entity.getExtensionStatus() == ExtensionStatus.EXPIRED) {
                     entity.setExtensionStatus(ExtensionStatus.AVAILABLE);
@@ -104,7 +104,7 @@ public class ExtDefinitionOperator extends ServiceImpl<ExtDefinitionDao, ExtDefi
     public List<LibraExtensionInformation> listExtensions() {
         QueryWrapper<ExtDefinitionEntity> queryWrapper = new QueryWrapper<>();
         List<ExtDefinitionEntity> list = this.getBaseMapper().selectList(queryWrapper);
-        return list == null ? null : ExtDefinitionBeanConverter.INSTANCE.entityToAppInfoList(list);
+        return list == null ? null : ExtDefinitionConverter.INSTANCE.entityToAppInfoList(list);
     }
 
 

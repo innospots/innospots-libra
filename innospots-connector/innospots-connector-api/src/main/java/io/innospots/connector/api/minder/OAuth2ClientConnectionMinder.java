@@ -37,8 +37,8 @@ public class OAuth2ClientConnectionMinder extends TokenAuthApiConnectionMinder {
 
 
     @Override
-    public Object test(ConnectionCredential connectionCredential) {
-        return super.test(connectionCredential);
+    public Object testConnect(ConnectionCredential connectionCredential) {
+        return super.testConnect(connectionCredential);
     }
 
     @Override

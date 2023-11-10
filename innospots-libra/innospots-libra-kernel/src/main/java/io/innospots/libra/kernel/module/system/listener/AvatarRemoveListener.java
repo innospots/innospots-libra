@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.system.listener;
 
 import io.innospots.base.events.IEventListener;
-import io.innospots.libra.kernel.events.AvatarRemoveEvent;
+import io.innospots.libra.base.events.AvatarRemoveEvent;
 import io.innospots.libra.kernel.module.system.operator.AvatarResourceOperator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

@@ -20,7 +20,7 @@ package io.innospots.libra.security.logger.event;
 
 import io.innospots.base.events.IEventListener;
 import io.innospots.base.model.user.UserInfo;
-import io.innospots.libra.base.event.LoginEvent;
+import io.innospots.libra.base.events.LoginEvent;
 import io.innospots.libra.base.operator.SysUserReader;
 import io.innospots.libra.base.terminal.TerminalRequestContextHolder;
 import io.innospots.libra.security.auth.model.AuthUser;

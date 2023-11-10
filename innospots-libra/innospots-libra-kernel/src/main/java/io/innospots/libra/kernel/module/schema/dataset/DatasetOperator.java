@@ -28,9 +28,7 @@ import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.dataset.Dataset;
 import io.innospots.base.data.dataset.IDatasetReader;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.libra.kernel.module.credential.entity.CredentialInfoEntity;
-import io.innospots.libra.kernel.module.credential.operator.CredentialInfoOperator;
-import io.innospots.libra.kernel.module.schema.converter.SchemaRegistryBeanConverter;
+import io.innospots.libra.kernel.module.schema.converter.SchemaRegistryConverter;
 import io.innospots.libra.kernel.module.schema.operator.SchemaRegistryOperator;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,8 +62,8 @@ public class DatasetOperator implements IDatasetReader {
             dataset.setCategoryId(0);
         }
 
-        SchemaRegistry schemaRegistry = schemaRegistryOperator.createSchemaRegistry(SchemaRegistryBeanConverter.INSTANCE.datasetToSchemaRegistry(dataset));
-        return SchemaRegistryBeanConverter.INSTANCE.schemaRegistryToDataset(schemaRegistry);
+        SchemaRegistry schemaRegistry = schemaRegistryOperator.createSchemaRegistry(SchemaRegistryConverter.INSTANCE.datasetToSchemaRegistry(dataset));
+        return SchemaRegistryConverter.INSTANCE.schemaRegistryToDataset(schemaRegistry);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -77,8 +75,8 @@ public class DatasetOperator implements IDatasetReader {
         if (dataset.getCategoryId() == null) {
             dataset.setCategoryId(0);
         }
-        SchemaRegistry schemaRegistry = schemaRegistryOperator.updateSchemaRegistry(SchemaRegistryBeanConverter.INSTANCE.datasetToSchemaRegistry(dataset));
-        return SchemaRegistryBeanConverter.INSTANCE.schemaRegistryToDataset(schemaRegistry);
+        SchemaRegistry schemaRegistry = schemaRegistryOperator.updateSchemaRegistry(SchemaRegistryConverter.INSTANCE.datasetToSchemaRegistry(dataset));
+        return SchemaRegistryConverter.INSTANCE.schemaRegistryToDataset(schemaRegistry);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -87,19 +85,19 @@ public class DatasetOperator implements IDatasetReader {
     }
 
     public Dataset getDatasetById(Integer registryId) {
-        return SchemaRegistryBeanConverter.INSTANCE.schemaRegistryToDataset(schemaRegistryOperator.getSchemaRegistryById(registryId, true));
+        return SchemaRegistryConverter.INSTANCE.schemaRegistryToDataset(schemaRegistryOperator.getSchemaRegistryById(registryId, true));
     }
 
     public List<Dataset> listDatasets(Integer categoryId, String queryCode, String sort) {
         List<SchemaRegistry> schemaRegistries = schemaRegistryOperator.listSchemaRegistries(queryCode, sort, categoryId, SchemaRegistryType.DATASET);
-        List<Dataset> datasets = SchemaRegistryBeanConverter.INSTANCE.schemaRegistriesToDatasets(schemaRegistries);
+        List<Dataset> datasets = SchemaRegistryConverter.INSTANCE.schemaRegistriesToDatasets(schemaRegistries);
         this.fillDatasetIcon(datasets);
         return datasets;
     }
 
     public PageBody<Dataset> pageDatasets(Integer categoryId, Integer page, Integer size, String queryCode, String sort) {
         PageBody<SchemaRegistry> schemaRegistryPageBody = schemaRegistryOperator.pageSchemaRegistries(queryCode, sort, categoryId, SchemaRegistryType.DATASET, page, size);
-        List<Dataset> datasets = SchemaRegistryBeanConverter.INSTANCE.schemaRegistriesToDatasets(schemaRegistryPageBody.getList());
+        List<Dataset> datasets = SchemaRegistryConverter.INSTANCE.schemaRegistriesToDatasets(schemaRegistryPageBody.getList());
         PageBody<Dataset> pageBody = new PageBody<>();
         this.fillDatasetIcon(datasets);
         pageBody.setList(datasets);
@@ -113,7 +111,7 @@ public class DatasetOperator implements IDatasetReader {
     @Override
     public List<Dataset> listDatasets(String credentialKey) {
         List<SchemaRegistry> schemaRegistries = schemaRegistryOperator.listSchemaRegistries(credentialKey);
-        return SchemaRegistryBeanConverter.INSTANCE.schemaRegistriesToDatasets(schemaRegistries);
+        return SchemaRegistryConverter.INSTANCE.schemaRegistriesToDatasets(schemaRegistries);
     }
 
     @Override
@@ -122,7 +120,7 @@ public class DatasetOperator implements IDatasetReader {
             return Collections.emptyList();
         }
         List<SchemaRegistry> schemaRegistries = schemaRegistryOperator.listByRegistryIds(keys);
-        return SchemaRegistryBeanConverter.INSTANCE.schemaRegistriesToDatasets(schemaRegistries);
+        return SchemaRegistryConverter.INSTANCE.schemaRegistriesToDatasets(schemaRegistries);
     }
 
     private void fillDatasetIcon(List<Dataset> datasets){

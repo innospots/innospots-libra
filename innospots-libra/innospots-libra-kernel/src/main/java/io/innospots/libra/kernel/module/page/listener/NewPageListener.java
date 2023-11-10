@@ -20,8 +20,8 @@ package io.innospots.libra.kernel.module.page.listener;
 
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.events.IEventListener;
-import io.innospots.libra.kernel.events.NewPageEvent;
-import io.innospots.libra.kernel.events.PageCreatedEvent;
+import io.innospots.libra.base.events.NewPageEvent;
+import io.innospots.libra.base.events.PageCreatedEvent;
 import io.innospots.libra.kernel.module.page.enums.PageOperationType;
 import io.innospots.libra.kernel.module.page.model.PageDetail;
 import io.innospots.libra.kernel.module.page.operator.PageOperator;

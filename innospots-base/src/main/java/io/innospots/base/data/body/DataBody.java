@@ -40,6 +40,8 @@ public class DataBody<T> {
     @Schema(title = "consume")
     protected int consume;
 
+    protected String message;
+
     public DataBody() {
         startTime = System.currentTimeMillis();
     }

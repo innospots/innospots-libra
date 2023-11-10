@@ -38,31 +38,12 @@ public interface NotificationSettingConverter extends BaseBeanConverter<Notifica
 
     NotificationSettingConverter INSTANCE = Mappers.getMapper(NotificationSettingConverter.class);
 
-    @Mapping(target = "channels", expression = "java(jsonStringToList(entity.getChannels()))")
-    @Mapping(target = "groups", expression = "java(jsonStringToList(entity.getRoleGroups()))")
-    NotificationSetting entity2Model(NotificationSettingEntity entity);
 
-    @Mapping(target = "channels", expression = "java(jsonListToString(setting.getChannels()))")
-    @Mapping(target = "roleGroups", expression = "java(jsonListToString(setting.getGroups()))")
-    NotificationSettingEntity model2Entity(NotificationSetting setting);
+    @Mapping(target = "groups", source = "roleGroups")
+    NotificationSetting entityToModel(NotificationSettingEntity entity);
 
-    /**
-     * json string to ParamField of list
-     *
-     * @param jsonStr
-     * @return List<String>
-     */
-    default List<Integer> jsonStringToList(String jsonStr) {
-        return JSONUtils.toList(jsonStr, Integer.class);
-    }
 
-    /**
-     * ParamField of list to json string
-     *
-     * @param list
-     * @return String
-     */
-    default String jsonListToString(List<Integer> list) {
-        return JSONUtils.toJsonString(list);
-    }
+    @Mapping(target = "roleGroups", source = "groups")
+    NotificationSettingEntity modelToEntity(NotificationSetting setting);
+
 }

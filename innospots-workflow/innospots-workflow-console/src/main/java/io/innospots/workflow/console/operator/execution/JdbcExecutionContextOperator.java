@@ -23,7 +23,7 @@ import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.console.entity.execution.ExecutionContextEntity;
-import io.innospots.workflow.console.mapper.execution.ExecutionContextMapper;
+import io.innospots.workflow.console.converter.execution.ExecutionContextConverter;
 import io.innospots.workflow.core.execution.flow.FlowExecution;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeOutput;
@@ -100,7 +100,7 @@ public class JdbcExecutionContextOperator implements IExecutionContextOperator {
 
     @Override
     public void saveExecutionContext(NodeExecution nodeExecution) {
-        ExecutionContextEntity executionContextEntity = ExecutionContextMapper.toExecutionContextEntity(nodeExecution);
+        ExecutionContextEntity executionContextEntity = ExecutionContextConverter.toExecutionContextEntity(nodeExecution);
         dataOperator.insert(ExecutionContextEntity.TABLE_NAME, BeanUtils.toMap(executionContextEntity, true, true));
         if(logger.isDebugEnabled()){
             logger.debug("save node execution context,{}",nodeExecution.getNodeExecutionId());
@@ -111,7 +111,7 @@ public class JdbcExecutionContextOperator implements IExecutionContextOperator {
 
     @Override
     public void saveExecutionContext(FlowExecution flowExecution) {
-        dataOperator.insert(ExecutionContextEntity.TABLE_NAME, ExecutionContextMapper.flowExecutionContextToMap(flowExecution, true));
+        dataOperator.insert(ExecutionContextEntity.TABLE_NAME, ExecutionContextConverter.flowExecutionContextToMap(flowExecution, true));
     }
 
     @Override

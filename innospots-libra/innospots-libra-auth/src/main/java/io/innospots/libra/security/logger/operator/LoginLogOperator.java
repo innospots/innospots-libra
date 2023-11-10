@@ -214,13 +214,37 @@ public class LoginLogOperator extends ServiceImpl<LoginLogDao, LoginLogEntity> {
         return oses;
     }
 
+    public int deleteLogHis(int maxCount, int keepDays) {
+        LocalDateTime deleteTime = LocalDateTime.now().plusDays(keepDays * -1);
+        //查询日志
+        LoginLogEntity entity = this.getLastByIndex(maxCount);
+        int deleteCount = 0;
+        int maxTimes = 50;
+        int total = 0;
+        int count = 0;
+        int times = 0;
+        if (entity != null) {
+            long logId = entity.getLogId();
+            do {
+                count = this.baseMapper.deleteByLtLogId(logId, deleteTime);
+                total += count;
+                times++;
+                log.info("deleteByLtLogId logId:{} times: {} total:{} time:{}", logId, times, total, LocalDateTime.now());
+                if (times > maxTimes) {
+                    break;
+                }
+            } while (count > 0);
+        }
+        return total;
+    }
+
     /**
      * get last LoginLogEntity by index
      *
      * @param index
      * @return
      */
-    public LoginLogEntity getLastByIndex(int index) {
+    private LoginLogEntity getLastByIndex(int index) {
         QueryWrapper<LoginLogEntity> query = new QueryWrapper<>();
         query.lambda().orderByDesc(LoginLogEntity::getLogId);
         query.last("limit " + index + ", 1");
@@ -229,25 +253,6 @@ public class LoginLogOperator extends ServiceImpl<LoginLogDao, LoginLogEntity> {
             return logEntities.get(0);
         }
         return null;
-    }
-
-
-    public int deleteLogHis(Long logId, LocalDateTime operateTime) {
-        int maxTimes = 50;
-        int total = 0;
-        int count = 0;
-        int times = 0;
-        do {
-            count = this.baseMapper.deleteByLtLogId(logId, operateTime);
-            total += count;
-            times++;
-            log.info("LoginLogEntity deleteByLtLogId logId:{} times: {} total:{} time:{}", logId, times, total, LocalDateTime.now());
-            if (times > maxTimes) {
-                break;
-            }
-        } while (count > 0);
-        log.info("LoginLogEntity deleteByLtLogId end logId:{} times: {} total:{} time:{}", logId, times, total, LocalDateTime.now());
-        return total;
     }
 
 }

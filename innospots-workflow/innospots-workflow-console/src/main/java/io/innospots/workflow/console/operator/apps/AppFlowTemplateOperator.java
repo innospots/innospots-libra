@@ -25,9 +25,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.data.body.PageBody;
+import io.innospots.workflow.console.converter.apps.AppFlowTemplateConverter;
 import io.innospots.workflow.console.dao.apps.AppFlowTemplateDao;
 import io.innospots.workflow.console.entity.apps.AppFlowTemplateEntity;
-import io.innospots.workflow.console.mapper.apps.AppFlowTemplateBeanConverter;
 import io.innospots.workflow.core.node.apps.AppFlowTemplate;
 import io.innospots.workflow.core.node.apps.AppFlowTemplateBase;
 import io.innospots.workflow.core.node.apps.AppNodeGroup;
@@ -67,13 +67,13 @@ public class AppFlowTemplateOperator extends ServiceImpl<AppFlowTemplateDao, App
         if (checkCode) {
             throw ResourceException.buildDuplicateException(this.getClass(), "template code is exists");
         }
-        AppFlowTemplateEntity appFlowTemplateEntity = AppFlowTemplateBeanConverter.INSTANCE.baseModelToEntity(appFlowTemplateBase);
+        AppFlowTemplateEntity appFlowTemplateEntity = AppFlowTemplateConverter.INSTANCE.baseModelToEntity(appFlowTemplateBase);
         boolean row = this.save(appFlowTemplateEntity);
         if (!row) {
             throw ResourceException.buildCreateException(this.getClass(), "flow template create fail");
         }
 
-        return AppFlowTemplateBeanConverter.INSTANCE.entityToModel(appFlowTemplateEntity);
+        return AppFlowTemplateConverter.INSTANCE.entityToModel(appFlowTemplateEntity);
     }
 
     /**
@@ -93,7 +93,7 @@ public class AppFlowTemplateOperator extends ServiceImpl<AppFlowTemplateDao, App
                 throw ResourceException.buildDuplicateException(this.getClass(), "template code is exists");
             }
         }
-        AppFlowTemplateEntity appFlowTemplateEntity = AppFlowTemplateBeanConverter.INSTANCE.baseModelToEntity(appFlowTemplateBase);
+        AppFlowTemplateEntity appFlowTemplateEntity = AppFlowTemplateConverter.INSTANCE.baseModelToEntity(appFlowTemplateBase);
 
 
         boolean row = this.updateById(appFlowTemplateEntity);
@@ -182,7 +182,7 @@ public class AppFlowTemplateOperator extends ServiceImpl<AppFlowTemplateDao, App
     }
 
     private AppFlowTemplate getTemplate(AppFlowTemplateEntity entity, boolean includeNodes, boolean onlyConnector, boolean excludeTrigger) {
-        AppFlowTemplate appFlowTemplate = AppFlowTemplateBeanConverter.INSTANCE.entityToModel(entity);
+        AppFlowTemplate appFlowTemplate = AppFlowTemplateConverter.INSTANCE.entityToModel(entity);
         List<AppNodeGroup> nodeGroups = appNodeGroupOperator.getGroupByFlowTplId(entity.getFlowTplId(), includeNodes);
         if (includeNodes && onlyConnector) {
             nodeGroups.forEach(group -> group.setNodes(group.getNodes()
@@ -225,7 +225,7 @@ public class AppFlowTemplateOperator extends ServiceImpl<AppFlowTemplateDao, App
             result.setCurrent(queryPage.getCurrent());
             result.setPageSize(queryPage.getSize());
             result.setList(CollectionUtils.isEmpty(queryPage.getRecords()) ? new ArrayList<AppFlowTemplateBase>() :
-                    AppFlowTemplateBeanConverter.INSTANCE.entityToBaseModelList(queryPage.getRecords()));
+                    AppFlowTemplateConverter.INSTANCE.entityToBaseModelList(queryPage.getRecords()));
         }
         return result;
     }
@@ -233,7 +233,7 @@ public class AppFlowTemplateOperator extends ServiceImpl<AppFlowTemplateDao, App
     public List<AppFlowTemplateBase> listOnlineFlowTemplates() {
         QueryWrapper<AppFlowTemplateEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("status", DataStatus.ONLINE);
-        return AppFlowTemplateBeanConverter.INSTANCE.entityToBaseModelList(this.list(queryWrapper));
+        return AppFlowTemplateConverter.INSTANCE.entityToBaseModelList(this.list(queryWrapper));
     }
 
 }

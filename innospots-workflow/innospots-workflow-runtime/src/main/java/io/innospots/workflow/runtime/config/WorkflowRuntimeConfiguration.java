@@ -43,12 +43,10 @@ import io.innospots.workflow.runtime.flow.FlowNodeSimpleDebugger;
 import io.innospots.workflow.runtime.scheduled.NodeExecutionEventListener;
 import io.innospots.workflow.runtime.server.WorkflowWebhookServer;
 import io.innospots.workflow.runtime.starter.RuntimePrepareStarter;
-import io.innospots.workflow.runtime.starter.WatcherStarter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.availability.ApplicationAvailability;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -59,7 +57,7 @@ import java.util.List;
  * @date 2021/3/15
  */
 @Configuration
-@EnableConfigurationProperties(WorkflowServerProperties.class)
+@EnableConfigurationProperties(WorkflowRuntimeProperties.class)
 public class WorkflowRuntimeConfiguration {
 
     @Bean
@@ -77,15 +75,11 @@ public class WorkflowRuntimeConfiguration {
     public WorkflowManagementEndpoint managementEndpoint(FlowManager flowManager,
                                                          RunTimeContainerManager runTimeContainerManager,
                                                          QuartzScheduleManager quartzScheduleManager,
-                                                         WorkflowServerProperties serverProperties
+                                                         WorkflowRuntimeProperties serverProperties
     ) {
         return new WorkflowManagementEndpoint(flowManager, runTimeContainerManager, quartzScheduleManager, serverProperties);
     }
 
-    @Bean
-    public WatcherStarter watcherStarter(ApplicationContext applicationContext) {
-        return new WatcherStarter(applicationContext);
-    }
 
     @Bean
     public FlowManager flowManager(IWorkflowLoader workflowLoader) {
@@ -116,9 +110,9 @@ public class WorkflowRuntimeConfiguration {
     @Bean
     public QueueRuntimeContainer queueRuntimeContainer(
             DataConnectionMinderManager dataConnectionMinderManager,
-            WorkflowServerProperties workflowServerProperties
+            WorkflowRuntimeProperties workflowRuntimeProperties
     ) {
-        return new QueueRuntimeContainer(dataConnectionMinderManager, workflowServerProperties.getQueueThreadCapacity());
+        return new QueueRuntimeContainer(dataConnectionMinderManager, workflowRuntimeProperties.getQueueThreadCapacity());
     }
 
 
@@ -138,8 +132,8 @@ public class WorkflowRuntimeConfiguration {
     }
 
     @Bean
-    public CycleTimerRuntimeContainer cycleTimerRuntimeContainer(WorkflowServerProperties workflowServerProperties) {
-        return new CycleTimerRuntimeContainer(workflowServerProperties.getMaxCycleFlow());
+    public CycleTimerRuntimeContainer cycleTimerRuntimeContainer(WorkflowRuntimeProperties workflowRuntimeProperties) {
+        return new CycleTimerRuntimeContainer(workflowRuntimeProperties.getMaxCycleFlow());
     }
 
     @Bean
@@ -165,7 +159,7 @@ public class WorkflowRuntimeConfiguration {
     }
 
     @Bean
-    public WorkflowWebhookServer webhookServer(WorkflowServerProperties eventProperties,
+    public WorkflowWebhookServer webhookServer(WorkflowRuntimeProperties eventProperties,
                                                ServerProperties serverProperties,
                                                WebhookRuntimeContainer webhookRuntimeContainer) {
         Integer port = eventProperties.getPort();

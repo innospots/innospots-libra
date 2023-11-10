@@ -72,7 +72,7 @@ public class EmailTriggerNode extends CycleTimerNode {
             attachPrefix = nodeInstance.valueString(FIELD_ATTACH_PREFIX);
         }
 
-        IDataConnectionMinder connectionMinder = DataConnectionMinderManager.getCredentialMinder(connectionCredential.getCredentialId());
+        IDataConnectionMinder connectionMinder = DataConnectionMinderManager.getCredentialMinder(connectionCredential.getCredentialKey());
         executionOperator = (IExecutionOperator) connectionMinder.buildOperator();
 
     }

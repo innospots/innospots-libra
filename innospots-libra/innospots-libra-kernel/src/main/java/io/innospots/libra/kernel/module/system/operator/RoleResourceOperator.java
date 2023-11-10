@@ -23,7 +23,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.libra.kernel.module.system.dao.RoleResourceDao;
 import io.innospots.libra.kernel.module.system.entity.RoleResourceEntity;
-import io.innospots.libra.kernel.module.system.converter.RoleResourceInfoBeanConverter;
+import io.innospots.libra.kernel.module.system.converter.RoleResourceInfoConverter;
 import io.innospots.libra.kernel.module.system.model.role.resource.RoleResourceInfo;
 import io.innospots.libra.kernel.module.system.model.role.resource.RoleResourceRequest;
 import org.apache.commons.collections4.CollectionUtils;
@@ -78,7 +78,7 @@ public class RoleResourceOperator extends ServiceImpl<RoleResourceDao, RoleResou
         QueryWrapper<RoleResourceEntity> query = new QueryWrapper<>();
         query.lambda().isNotNull(RoleResourceEntity::getItemKey);
         List<RoleResourceEntity> entities = super.list(query);
-        return entities.stream().map(RoleResourceInfoBeanConverter.INSTANCE::entityToModel).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
+        return entities.stream().map(RoleResourceInfoConverter.INSTANCE::entityToModel).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
     }
 
     public List<RoleResourceInfo> listMenuAuthorities(String itemKey) {
@@ -89,7 +89,7 @@ public class RoleResourceOperator extends ServiceImpl<RoleResourceDao, RoleResou
             query.lambda().eq(RoleResourceEntity::getItemKey, itemKey);
         }
         List<RoleResourceEntity> entities = super.list(query);
-        return entities.stream().map(RoleResourceInfoBeanConverter.INSTANCE::entityToModel).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
+        return entities.stream().map(RoleResourceInfoConverter.INSTANCE::entityToModel).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
     }
 
     public List<RoleResourceInfo> listOperateAuthorities(Integer roleId) {
@@ -98,7 +98,7 @@ public class RoleResourceOperator extends ServiceImpl<RoleResourceDao, RoleResou
                 .eq(RoleResourceEntity::getRoleId, roleId)
                 .eq(RoleResourceEntity::getResourceType, RoleResourceInfo.RoleResourceType.OPERATION.name());
         List<RoleResourceEntity> entities = super.list(query);
-        return entities.stream().map(RoleResourceInfoBeanConverter.INSTANCE::entityToModel).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
+        return entities.stream().map(RoleResourceInfoConverter.INSTANCE::entityToModel).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
     }
 
     @Transactional(rollbackFor = Exception.class)

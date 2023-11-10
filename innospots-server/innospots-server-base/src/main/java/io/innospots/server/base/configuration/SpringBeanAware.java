@@ -69,7 +69,22 @@ public class SpringBeanAware implements BeanContextAware {
 
     @Override
     public String applicationId() {
-        return SpringUtil.getApplicationContext().getId();
+        return applicationContext().getId();
+    }
+
+    @Override
+    public String getApplicationName() {
+        return applicationContext().getApplicationName();
+    }
+
+    @Override
+    public long getStartupDate() {
+        return applicationContext().getStartupDate();
+    }
+
+    @Override
+    public String[] activeProfiles() {
+        return environment().getActiveProfiles();
     }
 
     @Override

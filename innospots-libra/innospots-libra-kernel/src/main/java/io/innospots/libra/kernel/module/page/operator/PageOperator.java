@@ -33,7 +33,7 @@ import io.innospots.libra.kernel.module.page.dao.PageDao;
 import io.innospots.libra.kernel.module.page.entity.PageEntity;
 import io.innospots.libra.kernel.module.page.entity.WidgetEntity;
 import io.innospots.libra.kernel.module.page.enums.PageOperationType;
-import io.innospots.libra.kernel.module.page.converter.PageBeanConverter;
+import io.innospots.libra.kernel.module.page.converter.PageConverter;
 import io.innospots.libra.kernel.module.page.model.Page;
 import io.innospots.libra.kernel.module.page.model.PageDetail;
 import io.innospots.libra.kernel.module.page.model.Widget;
@@ -105,7 +105,7 @@ public class PageOperator extends ServiceImpl<PageDao, PageEntity> {
                 pageDetail.setCategoryId(0);
             }
         }
-        PageEntity entity = PageBeanConverter.INSTANCE.modelToEntity(pageDetail);
+        PageEntity entity = PageConverter.INSTANCE.modelToEntity(pageDetail);
         super.saveOrUpdate(entity);
         pageDetail.setId(entity.getPageId());
 
@@ -150,10 +150,10 @@ public class PageOperator extends ServiceImpl<PageDao, PageEntity> {
 
     public PageDetail getPageDetail(Integer pageId) {
         PageEntity entity = super.getById(pageId);
-        Page page = PageBeanConverter.INSTANCE.entityToModel(entity);
+        Page page = PageConverter.INSTANCE.entityToModel(entity);
         List<Widget> widgets = widgetOperator.list(pageId);
 
-        PageDetail pageDetail = PageBeanConverter.INSTANCE.modelToDetail(page);
+        PageDetail pageDetail = PageConverter.INSTANCE.modelToDetail(page);
         pageDetail.setWidgets(widgets);
 
         Set<Integer> viewIds = new HashSet<>();
@@ -190,7 +190,7 @@ public class PageOperator extends ServiceImpl<PageDao, PageEntity> {
 
         List<PageEntity> entities = this.list(query);
 
-        return PageBeanConverter.INSTANCE.entitiesToModels(entities);
+        return PageConverter.INSTANCE.entitiesToModels(entities);
     }
 
     public PageBody<Page> pagePages(Integer pageCategoryId, String queryCode, int page, int size) {
@@ -215,7 +215,7 @@ public class PageOperator extends ServiceImpl<PageDao, PageEntity> {
 
         IPage<PageEntity> entityPage = super.page(PageDTO.of(page, size), query);
 
-        List<Page> pages = PageBeanConverter.INSTANCE.entitiesToModels(entityPage.getRecords());
+        List<Page> pages = PageConverter.INSTANCE.entitiesToModels(entityPage.getRecords());
         PageBody<Page> pageBody = new PageBody<>();
         pageBody.setList(pages);
         pageBody.setPageSize(entityPage.getSize());

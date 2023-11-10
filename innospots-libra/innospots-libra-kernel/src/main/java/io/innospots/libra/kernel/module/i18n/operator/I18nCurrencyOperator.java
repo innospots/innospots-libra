@@ -26,11 +26,11 @@ import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.request.FormQuery;
+import io.innospots.libra.kernel.module.i18n.converter.I18NCurrencyConverter;
 import io.innospots.libra.kernel.module.i18n.dao.I18nCurrencyDao;
 import io.innospots.libra.kernel.module.i18n.dao.I18nLanguageDao;
 import io.innospots.libra.kernel.module.i18n.entity.I18nCurrencyEntity;
 import io.innospots.libra.kernel.module.i18n.entity.I18nLanguageEntity;
-import io.innospots.libra.kernel.module.i18n.converter.I18NCurrencyBeanConverter;
 import io.innospots.libra.kernel.module.i18n.model.I18nCurrency;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -62,7 +62,7 @@ public class I18nCurrencyOperator {
 
     public I18nCurrency getCurrency(int currencyId) {
         I18nCurrencyEntity entity = i18nCurrencyDao.selectById(currencyId);
-        return entity == null ? null : I18NCurrencyBeanConverter.INSTANCE.entityToModel(entity);
+        return entity == null ? null : I18NCurrencyConverter.INSTANCE.entityToModel(entity);
     }
 
     public Boolean createCurrency(I18nCurrency i18nCurrency) {
@@ -78,10 +78,10 @@ public class I18nCurrencyOperator {
         }
         int num = 0;
         if (entity == null) {
-            entity = I18NCurrencyBeanConverter.INSTANCE.modelToEntity(i18nCurrency);
+            entity = I18NCurrencyConverter.INSTANCE.modelToEntity(i18nCurrency);
             num = i18nCurrencyDao.insert(entity);
         } else {
-            I18NCurrencyBeanConverter.INSTANCE.updateEntity4Model(entity, i18nCurrency);
+            I18NCurrencyConverter.INSTANCE.updateEntity4Model(entity, i18nCurrency);
             num = i18nCurrencyDao.updateById(entity);
         }
         return num == 1;
@@ -111,7 +111,7 @@ public class I18nCurrencyOperator {
             }
         }
 
-        I18NCurrencyBeanConverter.INSTANCE.updateEntity4Model(entity, i18nCurrency);
+        I18NCurrencyConverter.INSTANCE.updateEntity4Model(entity, i18nCurrency);
         int num = i18nCurrencyDao.updateById(entity);
         return num == 1;
     }
@@ -162,7 +162,7 @@ public class I18nCurrencyOperator {
             result.setPageSize(queryPage.getSize());
             result.setTotalPage(queryPage.getPages());
             result.setList(CollectionUtils.isEmpty(queryPage.getRecords()) ? new ArrayList<I18nCurrency>() :
-                    I18NCurrencyBeanConverter.INSTANCE.entityToModelList(queryPage.getRecords()));
+                    I18NCurrencyConverter.INSTANCE.entitiesToModels(queryPage.getRecords()));
         }
         return result;
     }
@@ -176,7 +176,7 @@ public class I18nCurrencyOperator {
         }
 
         List<I18nCurrencyEntity> entityList = i18nCurrencyDao.selectList(queryWrapper);
-        return I18NCurrencyBeanConverter.INSTANCE.entityToModelList(entityList);
+        return I18NCurrencyConverter.INSTANCE.entitiesToModels(entityList);
     }
 
 }

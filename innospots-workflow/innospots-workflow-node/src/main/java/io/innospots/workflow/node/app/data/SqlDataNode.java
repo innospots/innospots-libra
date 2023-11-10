@@ -27,6 +27,7 @@ import io.innospots.base.data.operator.DataOperatorManager;
 import io.innospots.base.data.operator.IDataOperator;
 import io.innospots.base.data.operator.jdbc.UpdateItem;
 import io.innospots.base.connector.schema.SchemaField;
+import io.innospots.base.data.request.SimpleRequest;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.body.PageBody;
@@ -282,25 +283,24 @@ public class SqlDataNode extends DataNode {
                 for (Map<String, Object> item : executionInput.getData()) {
                     String sql = parseSqlParam(item);
 
-                    InnospotResponse<DataBody<Map<String, Object>>> innospotResponse = sqlOperatorPoint.queryForObject(credentialId, sql);
+                    DataBody<Map<String, Object>> dataBody = dataOperator.execute(buildRequest(sql));
                     if (logger.isDebugEnabled()) {
-                        logger.debug("sql query:{}, response:{}", sql, innospotResponse);
+                        logger.debug("sql query:{}, response:{}", sql, dataBody);
                     }
-                    Object data = innospotResponse.getBody().getBody();
+                    Object data = dataBody.getBody();
                     fillOutput(nodeOutput, item, data);
                 }//end item
             }//end execution input
         } else {
             String sql = parseSqlParam(null);
 
-            InnospotResponse<DataBody<Map<String, Object>>> innospotResponse = sqlOperatorPoint.queryForObject(credentialId, sql);
+            DataBody<Map<String, Object>> dataBody = dataOperator.execute(buildRequest(sql));
             if (logger.isDebugEnabled()) {
-                logger.debug("sql query:{}, response:{}", sql, innospotResponse);
+                logger.debug("sql query:{}, response:{}", sql, dataBody);
             }
-            Object data = innospotResponse.getBody().getBody();
+            Object data = dataBody.getBody();
             fillOutput(nodeOutput, null, data);
         }
-
     }
 
 
@@ -313,20 +313,20 @@ public class SqlDataNode extends DataNode {
             for (ExecutionInput executionInput : nodeExecution.getInputs()) {
                 for (Map<String, Object> item : executionInput.getData()) {
                     String sql = parseSqlParam(item);
-                    InnospotResponse<PageBody> innospotResponse = sqlOperatorPoint.queryForList(credentialId, sql);
+                    PageBody body = dataOperator.executePage(buildRequest(sql));
                     if (logger.isDebugEnabled()) {
-                        logger.debug("sql query:{}, response:{}", sql, innospotResponse);
+                        logger.debug("sql query:{}, response:{}", sql, body);
                     }
-                    fillOutput(nodeOutput, item, innospotResponse.getBody().getList());
+                    fillOutput(nodeOutput, item, body.getList());
                 }//end item
             }//end execution input
         } else {
             String sql = parseSqlParam(null);
-            InnospotResponse<PageBody> innospotResponse = sqlOperatorPoint.queryForList(credentialId, sql);
+            PageBody pageBody = dataOperator.executePage(buildRequest(sql));
             if (logger.isDebugEnabled()) {
-                logger.debug("sql query:{}, response:{}", sql, innospotResponse);
+                logger.debug("sql query:{}, response:{}", sql, pageBody);
             }
-            fillOutput(nodeOutput, null, innospotResponse.getBody().getList());
+            fillOutput(nodeOutput, null, pageBody.getList());
         }
     }
 
@@ -348,9 +348,15 @@ public class SqlDataNode extends DataNode {
                 fillOutput(nodeOutput, item);
             }// end for item
         }//end for input
-        InnospotResponse<Integer> resp = dataOperatorPoint.upsertForBatch(credentialId, tableName, keyColumn, insertList);
+        int resp = dataOperator.upsertBatch(tableName, keyColumn, insertList);
 
-        nodeExecution.setMessage(resp.getMessage());
+        nodeExecution.setMessage("");
+    }
+
+    private SimpleRequest buildRequest(String sql) {
+        SimpleRequest simpleRequest = new SimpleRequest(sql);
+
+        return simpleRequest;
     }
 
 

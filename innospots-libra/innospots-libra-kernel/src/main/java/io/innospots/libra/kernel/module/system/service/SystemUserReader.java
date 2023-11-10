@@ -23,7 +23,7 @@ import io.innospots.base.model.user.SimpleUser;
 import io.innospots.base.model.user.UserInfo;
 import io.innospots.libra.base.operator.SysUserReader;
 import io.innospots.libra.kernel.module.system.entity.UserRoleEntity;
-import io.innospots.libra.kernel.module.system.converter.UserInfoBeanConverter;
+import io.innospots.libra.kernel.module.system.converter.UserInfoConverter;
 import io.innospots.libra.kernel.module.system.operator.RoleOperator;
 import io.innospots.libra.kernel.module.system.operator.UserOperator;
 import io.innospots.libra.kernel.module.system.operator.UserRoleOperator;
@@ -57,13 +57,13 @@ public class SystemUserReader implements SysUserReader {
     @Override
     public List<UserInfo> listUsersByIds(List<Integer> userIds) {
         List<SimpleUser> simpleUsers = userOperator.listByIds(userIds);
-        return simpleUsers.stream().map(UserInfoBeanConverter.INSTANCE::simple2Info).collect(Collectors.toCollection(() -> new ArrayList<>(simpleUsers.size())));
+        return simpleUsers.stream().map(UserInfoConverter.INSTANCE::simple2Info).collect(Collectors.toCollection(() -> new ArrayList<>(simpleUsers.size())));
     }
 
     @Override
     public List<UserInfo> listUsersByNames(List<String> userNames) {
         List<SimpleUser> simpleUsers = userOperator.listByNames(userNames);
-        return simpleUsers.stream().map(UserInfoBeanConverter.INSTANCE::simple2Info).collect(Collectors.toCollection(() -> new ArrayList<>(simpleUsers.size())));
+        return simpleUsers.stream().map(UserInfoConverter.INSTANCE::simple2Info).collect(Collectors.toCollection(() -> new ArrayList<>(simpleUsers.size())));
     }
 
     @Override

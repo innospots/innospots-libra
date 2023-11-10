@@ -26,7 +26,7 @@ import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.request.FormQuery;
 import io.innospots.libra.kernel.module.i18n.dao.I18nLanguageDao;
 import io.innospots.libra.kernel.module.i18n.entity.I18nLanguageEntity;
-import io.innospots.libra.kernel.module.i18n.converter.I18NLanguageBeanConverter;
+import io.innospots.libra.kernel.module.i18n.converter.I18NLanguageConverter;
 import io.innospots.libra.kernel.module.i18n.model.I18nLanguage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -58,12 +58,12 @@ public class I18nLanguageOperator {
 
     public I18nLanguage getLanguage(Integer languageId) {
         I18nLanguageEntity entity = i18nLanguageDao.selectById(languageId);
-        return entity == null ? null : I18NLanguageBeanConverter.INSTANCE.entityToModel(entity);
+        return entity == null ? null : I18NLanguageConverter.INSTANCE.entityToModel(entity);
     }
 
     public I18nLanguage getLanguage(String locale) {
         I18nLanguageEntity entity = i18nLanguageDao.selectByLocale(locale);
-        return entity == null ? null : I18NLanguageBeanConverter.INSTANCE.entityToModel(entity);
+        return entity == null ? null : I18NLanguageConverter.INSTANCE.entityToModel(entity);
     }
 
     public Boolean hasExist(String locale) {
@@ -85,13 +85,13 @@ public class I18nLanguageOperator {
         }
         int num = 0;
         if (entity == null && entityByLocale == null) {
-            entity = I18NLanguageBeanConverter.INSTANCE.modelToEntity(i18nLanguage);
+            entity = I18NLanguageConverter.INSTANCE.modelToEntity(i18nLanguage);
             num = i18nLanguageDao.insert(entity);
         } else {
             if (entity == null) {
                 entity = entityByLocale;
             }
-            I18NLanguageBeanConverter.INSTANCE.updateEntity4Model(entity, i18nLanguage);
+            I18NLanguageConverter.INSTANCE.updateEntity4Model(entity, i18nLanguage);
             entity.setCreatedTime(LocalDateTime.now());
             entity.setUpdatedTime(LocalDateTime.now());
             num = i18nLanguageDao.updateById(entity);
@@ -119,7 +119,7 @@ public class I18nLanguageOperator {
         }
 
 
-        I18NLanguageBeanConverter.INSTANCE.updateEntity4Model(entity, i18nLanguage);
+        I18NLanguageConverter.INSTANCE.updateEntity4Model(entity, i18nLanguage);
         entity.setUpdatedTime(LocalDateTime.now());
         int num = i18nLanguageDao.updateById(entity);
         return num == 1;
@@ -166,7 +166,7 @@ public class I18nLanguageOperator {
                 result.setPageSize(queryPage.getSize());
                 result.setTotalPage(queryPage.getPages());
                 result.setList(CollectionUtils.isEmpty(queryPage.getRecords()) ? new ArrayList<I18nLanguage>() :
-                        I18NLanguageBeanConverter.INSTANCE.entityToModelList(queryPage.getRecords()));
+                        I18NLanguageConverter.INSTANCE.entitiesToModels(queryPage.getRecords()));
             }
         } else {
             List<I18nLanguageEntity> languageEntities = i18nLanguageDao.selectList(queryWrapper);
@@ -174,7 +174,7 @@ public class I18nLanguageOperator {
             result.setPageSize((long) languageEntities.size());
             result.setCurrent(1L);
             result.setTotalPage(1L);
-            result.setList(I18NLanguageBeanConverter.INSTANCE.entityToModelList(languageEntities));
+            result.setList(I18NLanguageConverter.INSTANCE.entitiesToModels(languageEntities));
         }
 
 
@@ -190,6 +190,6 @@ public class I18nLanguageOperator {
         }
 
         List<I18nLanguageEntity> entityList = i18nLanguageDao.selectList(queryWrapper);
-        return I18NLanguageBeanConverter.INSTANCE.entityToModelList(entityList);
+        return I18NLanguageConverter.INSTANCE.entitiesToModels(entityList);
     }
 }

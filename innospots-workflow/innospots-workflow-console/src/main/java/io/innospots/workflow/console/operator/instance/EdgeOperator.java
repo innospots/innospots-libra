@@ -21,10 +21,10 @@ package io.innospots.workflow.console.operator.instance;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.innospots.base.exception.ResourceException;
+import io.innospots.workflow.console.converter.instance.EdgeInstanceConverter;
 import io.innospots.workflow.console.dao.instance.EdgeInstanceDao;
 import io.innospots.workflow.console.entity.instance.EdgeInstanceEntity;
 import io.innospots.workflow.console.enums.FlowVersion;
-import io.innospots.workflow.console.mapper.instance.EdgeInstanceBeanConverter;
 import io.innospots.workflow.core.node.instance.Edge;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -68,7 +68,7 @@ public class EdgeOperator extends ServiceImpl<EdgeInstanceDao, EdgeInstanceEntit
                 deleteIds = new ArrayList<>(entityMap.keySet());
             }
         } else {
-            List<EdgeInstanceEntity> requestEntities = EdgeInstanceBeanConverter.INSTANCE.modelToEntityList(edges);
+            List<EdgeInstanceEntity> requestEntities = EdgeInstanceConverter.INSTANCE.modelsToEntities(edges);
             for (EdgeInstanceEntity newEntity : requestEntities) {
                 newEntity.setRevision(FlowVersion.DRAFT.getVersion());
                 if (newEntity.getEdgeId() != null && newEntity.getEdgeId() > 0) {
@@ -107,7 +107,7 @@ public class EdgeOperator extends ServiceImpl<EdgeInstanceDao, EdgeInstanceEntit
     public List<Edge> getEdgeByFlowInstanceId(Long flowInstanceId, Integer revision) {
         QueryWrapper<EdgeInstanceEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(EdgeInstanceEntity::getWorkflowInstanceId, flowInstanceId).eq(EdgeInstanceEntity::getRevision, revision);
-        return EdgeInstanceBeanConverter.INSTANCE.entityToModelList(this.list(queryWrapper));
+        return EdgeInstanceConverter.INSTANCE.entitiesToModels(this.list(queryWrapper));
     }
 
     public Set<String> selectSourceNodeKey(Long flowInstanceId, Integer revision, String targetKey) {

@@ -50,7 +50,7 @@ public class NotificationSettingOperator extends ServiceImpl<NotificationSetting
         List<NotificationSetting> notificationSettings = new ArrayList<>();
         Map<String, NotificationGroup> groupMap = NotificationDefinitionLoader.load();
         for (NotificationSettingEntity entity : entities) {
-            NotificationSetting notificationSetting = NotificationSettingConverter.INSTANCE.entity2Model(entity);
+            NotificationSetting notificationSetting = NotificationSettingConverter.INSTANCE.entityToModel(entity);
             NotificationGroup notificationGroup = groupMap.get(entity.getExtKey());
             if (notificationGroup != null) {
                 notificationSetting.setExtName(notificationGroup.getExtName());
@@ -78,7 +78,7 @@ public class NotificationSettingOperator extends ServiceImpl<NotificationSetting
         List<Integer> removedSettings = new ArrayList<>(10);
 
         for (NotificationSetting setting : notificationSettings) {
-            NotificationSettingEntity entity = NotificationSettingConverter.INSTANCE.model2Entity(setting);
+            NotificationSettingEntity entity = NotificationSettingConverter.INSTANCE.modelToEntity(setting);
             NotificationSettingEntity savedEntity = savedEventMap.get(entity.key());
             if (savedEntity == null) {
                 newSettings.add(entity);
@@ -113,6 +113,6 @@ public class NotificationSettingOperator extends ServiceImpl<NotificationSetting
         LambdaQueryWrapper<NotificationSettingEntity> lambda = query.lambda();
         lambda.eq(NotificationSettingEntity::getEventCode, eventCode);
         NotificationSettingEntity entity = super.getOne(query);
-        return NotificationSettingConverter.INSTANCE.entity2Model(entity);
+        return NotificationSettingConverter.INSTANCE.entityToModel(entity);
     }
 }

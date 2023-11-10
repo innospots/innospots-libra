@@ -59,7 +59,7 @@ public class OAuth2ApiConnectionMinder extends OAuth2ClientConnectionMinder {
 
 
     @Override
-    public Object test(ConnectionCredential connectionCredential) {
+    public Object testConnect(ConnectionCredential connectionCredential) {
 
         String clientId = connectionCredential.v(CLIENT_ID);
         String clientSecret = connectionCredential.v(CLIENT_SECRET);

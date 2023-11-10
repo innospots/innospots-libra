@@ -67,6 +67,6 @@ public class CredentialInfo {
     protected Map<String, Object> formValues = new LinkedHashMap<>();
 
     @Schema(title = "props")
-    protected Map<String,Object> props;
+    protected Map<String,String> props;
 
 }

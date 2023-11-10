@@ -18,13 +18,13 @@
 
 package io.innospots.workflow.console.listener;
 
+import io.innospots.base.events.IEventListener;
 import io.innospots.workflow.console.entity.instance.NodeInstanceEntity;
 import io.innospots.workflow.console.events.InstanceUpdateEvent;
 import io.innospots.workflow.console.operator.apps.AppNodeDefinitionOperator;
 import io.innospots.workflow.console.operator.instance.NodeInstanceOperator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Component
-public class AppUseListener {
+public class AppUseListener implements IEventListener<InstanceUpdateEvent> {
 
     public static final String APP_USE_ADD = "ADD";
 
@@ -52,14 +52,15 @@ public class AppUseListener {
         this.nodeDefinitionOperator = nodeDefinitionOperator;
     }
 
-    @EventListener(InstanceUpdateEvent.class)
-    public void handleEvent(InstanceUpdateEvent event) {
-        Long workflowInstanceId = (Long) event.getSource();
+
+    @Override
+    public Object listen(InstanceUpdateEvent event) {
+        Long workflowInstanceId = (Long) event.getBody();
         // 先distinct 获取flow_instance_node表中的 应用节点id集合
         List<NodeInstanceEntity> nodeInstanceEntities = nodeInstanceOperator.getInstanceNodeByFlowInstanceId(workflowInstanceId);
         List<Integer> nodeDefinitionIds = nodeInstanceEntities.stream().map(NodeInstanceEntity::getNodeDefinitionId).distinct().collect(Collectors.toList());
         if (CollectionUtils.isEmpty(nodeDefinitionIds)) {
-            return;
+            return workflowInstanceId;
         }
         // 更新节点应用定义表，所有的不再此应用节点集合中的应用节点，not in and used = true， used设置为false
         // 更新节点应用定义表，所有在此应用节点集合并且used为false的节点，used更新为true
@@ -69,5 +70,6 @@ public class AppUseListener {
         } else if (APP_USE_DELETE.equalsIgnoreCase(event.getAppUseType())) {
             nodeDefinitionOperator.updateAppUsed(nodeDefinitionIds, Boolean.FALSE);
         }
+        return workflowInstanceId;
     }
 }

@@ -32,7 +32,7 @@ Step 1/6 : From innospots-base:latest
 Step 2/6 : ENV APPLICATION_NAME innospots-server-administration
  ---> Using cache
  ---> 7f079007bbbe
-Step 3/6 : ENV SERVER_MAIN_CLASS io.innospots.administration.server.InnospotAdministrationServer
+Step 3/6 : ENV SERVER_MAIN_CLASS io.innospots.administration.server.InnospotsAdministrationServer
  ---> Using cache
  ---> aece1431267d
 Step 4/6 : ENV INNOSPOTS_HOME /innospots/$APPLICATION_NAME
@@ -100,8 +100,8 @@ innospots-server-administration:1.1.0-SNAPSHOT
 > -e ENV_PROFILE=dockerH2 \
 > innospots-server-administration:1.1.0-SNAPSHOT
 ================================================================================================================
-Starting application io.innospots.administration.server.InnospotAdministrationServer, working directory:/innospots/innospots-server-administration
-/usr/lib/jvm/default-jvm/bin/java -Xms128m -Xmx1g -Xss256k -XX:MaxMetaspaceSize=192m -XX:MetaspaceSize=192m -Djava.ext.dirs=/usr/lib/jvm/default-jvm/jre/lib/ext:/usr/lib/jvm/default-jvm/lib/ext -Xloggc:/innospots/innospots-server-administration/logs/innospots_gc.log -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=100M -XX:-OmitStackTraceInFastThrow -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/innospots/innospots-server-administration/logs/java_heapdump.hprof -XX:-UseLargePages -Dspring.profiles.active=dockerH2 -cp /usr/lib/jvm/default-jvm/lib/dt.jar:/usr/lib/jvm/default-jvm/lib/tools.jar:/usr/lib/jvm/default-jvm/jre/lib/rt.jar:/innospots/innospots-server-administration/config:/innospots/innospots-server-administration/lib/* io.innospots.administration.server.InnospotAdministrationServer
+Starting application io.innospots.administration.server.InnospotsAdministrationServer, working directory:/innospots/innospots-server-administration
+/usr/lib/jvm/default-jvm/bin/java -Xms128m -Xmx1g -Xss256k -XX:MaxMetaspaceSize=192m -XX:MetaspaceSize=192m -Djava.ext.dirs=/usr/lib/jvm/default-jvm/jre/lib/ext:/usr/lib/jvm/default-jvm/lib/ext -Xloggc:/innospots/innospots-server-administration/logs/innospots_gc.log -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=100M -XX:-OmitStackTraceInFastThrow -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/innospots/innospots-server-administration/logs/java_heapdump.hprof -XX:-UseLargePages -Dspring.profiles.active=dockerH2 -cp /usr/lib/jvm/default-jvm/lib/dt.jar:/usr/lib/jvm/default-jvm/lib/tools.jar:/usr/lib/jvm/default-jvm/jre/lib/rt.jar:/innospots/innospots-server-administration/config:/innospots/innospots-server-administration/lib/* io.innospots.administration.server.InnospotsAdministrationServer
 
   ___ _   _ _   _  ___  ____  ____   ___ _____     _     ___ ____  ____      _
  |_ _| \ | | \ | |/ _ \/ ___||  _ \ / _ \_   _|   | |   |_ _| __ )|  _ \    / \

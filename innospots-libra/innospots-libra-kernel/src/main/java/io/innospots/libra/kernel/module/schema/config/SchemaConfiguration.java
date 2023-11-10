@@ -23,7 +23,7 @@ import io.innospots.base.connector.credential.IConnectionCredentialReader;
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.connector.schema.reader.CachedSchemaRegistryReader;
 import io.innospots.base.data.operator.DataOperatorManager;
-import io.innospots.libra.base.configuration.InnospotsConfigProperties;
+import io.innospots.libra.base.configuration.InnospotsConsoleProperties;
 import io.innospots.libra.kernel.module.schema.dataset.DataframeExecutor;
 import io.innospots.libra.kernel.module.schema.dataset.DatasetOperator;
 import io.innospots.libra.kernel.module.schema.operator.SchemaRegistryOperator;
@@ -56,8 +56,8 @@ public class SchemaConfiguration {
     @Bean
     public CachedSchemaRegistryReader cachedSchemaRegistryReader(
             SchemaRegistryReader schemaRegistryReader,
-            InnospotsConfigProperties innospotsConfigProperties) {
-        return new CachedSchemaRegistryReader(schemaRegistryReader, innospotsConfigProperties.getSchemaCacheTimeoutSecond());
+            InnospotsConsoleProperties innospotsConsoleProperties) {
+        return new CachedSchemaRegistryReader(schemaRegistryReader, innospotsConsoleProperties.getSchemaCacheTimeoutSecond());
     }
 
 
@@ -65,8 +65,8 @@ public class SchemaConfiguration {
     public DataConnectionMinderManager dataConnectionMinderManager(
             IConnectionCredentialReader connectionCredentialReader,
             SchemaRegistryReader schemaRegistryReader,
-            InnospotsConfigProperties configProperties) {
-        return new DataConnectionMinderManager(connectionCredentialReader, schemaRegistryReader, configProperties.getSchemaCacheTimeoutSecond());
+            InnospotsConsoleProperties innospotsConsoleProperties) {
+        return new DataConnectionMinderManager(connectionCredentialReader, schemaRegistryReader, innospotsConsoleProperties.getSchemaCacheTimeoutSecond());
     }
 
     @Bean

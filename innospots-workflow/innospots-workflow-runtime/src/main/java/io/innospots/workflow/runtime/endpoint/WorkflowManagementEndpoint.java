@@ -21,9 +21,8 @@ package io.innospots.workflow.runtime.endpoint;
 import io.innospots.base.constant.PathConstant;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.base.quartz.QuartzScheduleManager;
-import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.BeanContextAwareUtils;
-import io.innospots.workflow.runtime.config.WorkflowServerProperties;
+import io.innospots.workflow.runtime.config.WorkflowRuntimeProperties;
 import io.innospots.workflow.runtime.container.RunTimeContainerManager;
 import io.innospots.workflow.runtime.flow.Flow;
 import io.innospots.workflow.runtime.flow.FlowManager;
@@ -54,14 +53,14 @@ public class WorkflowManagementEndpoint {
 
     private QuartzScheduleManager quartzScheduleManager;
 
-    private WorkflowServerProperties workflowServerProperties;
+    private WorkflowRuntimeProperties workflowRuntimeProperties;
 
     public WorkflowManagementEndpoint(FlowManager flowManager, RunTimeContainerManager containerManager, QuartzScheduleManager quartzScheduleManager,
-                                      WorkflowServerProperties workflowServerProperties) {
+                                      WorkflowRuntimeProperties workflowRuntimeProperties) {
         this.flowManager = flowManager;
         this.containerManager = containerManager;
         this.quartzScheduleManager = quartzScheduleManager;
-        this.workflowServerProperties = workflowServerProperties;
+        this.workflowRuntimeProperties = workflowRuntimeProperties;
     }
 
     @PostMapping("load/{workInstanceId}/{revision}")
@@ -119,7 +118,7 @@ public class WorkflowManagementEndpoint {
     @Operation(summary = "webhook address")
     public InnospotResponse<Map<String, String>> apiAddress() {
         Map<String, String> flowInfo = new LinkedHashMap<>();
-        String host = workflowServerProperties.getHost();
+        String host = workflowRuntimeProperties.getHost();
         if (StringUtils.isEmpty(host)) {
             host = BeanContextAwareUtils.serverIpAddress();
         }
@@ -133,7 +132,7 @@ public class WorkflowManagementEndpoint {
         flowInfo.put("webhookApiServer",
                 "http://" +
                         host +
-                        ":" + workflowServerProperties.getPort() +
+                        ":" + workflowRuntimeProperties.getPort() +
                         PathConstant.ROOT_PATH + PathConstant.RUNTIME_PATH
         );
         return InnospotResponse.success(flowInfo);

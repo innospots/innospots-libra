@@ -35,6 +35,8 @@ public class PageBody<T> {
 
     private int consume;
 
+    private String message;
+
     private final Pagination pagination;
 
     public PageBody() {

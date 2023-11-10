@@ -23,6 +23,7 @@ import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.request.BaseRequest;
 import io.innospots.base.data.request.BatchRequest;
 import io.innospots.base.data.request.ItemRequest;
+import io.innospots.base.data.request.SimpleRequest;
 
 /**
  * @author Smars
@@ -34,11 +35,23 @@ public interface IOperator {
     default void open(){
     }
 
-    default DataBody<?> execute(BaseRequest<?> itemRequest){
+    default <D> DataBody<D> execute(BaseRequest<?> itemRequest){
         return null;
     }
 
-    default  PageBody<?> executePage(BaseRequest<?> itemRequest){
+    default <D> DataBody<D> execute(ItemRequest itemRequest){
+        return execute((BaseRequest<?>)itemRequest);
+    }
+
+    default <D> DataBody<D> execute(SimpleRequest simpleRequest){
+        return execute((BaseRequest<?>)simpleRequest);
+    }
+
+    default <D> DataBody<D> execute(BatchRequest batchRequest){
+        return execute((BaseRequest<?>)batchRequest);
+    }
+
+    default <D> PageBody<D> executePage(BaseRequest<?> itemRequest){
         return null;
     }
 

@@ -41,6 +41,12 @@ public interface BeanContextAware {
 
     String applicationId();
 
+    String getApplicationName();
+
+    long getStartupDate();
+
+    String[] activeProfiles();
+
     void serviceShutdown();
 
     String serverIpAddress();

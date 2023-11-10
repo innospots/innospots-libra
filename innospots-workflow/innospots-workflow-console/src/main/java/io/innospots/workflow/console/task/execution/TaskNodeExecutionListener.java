@@ -83,7 +83,7 @@ public class TaskNodeExecutionListener implements IEventListener<NodeExecutionTa
     }
 
     @Override
-    public Class<? extends EventBody> eventBodyClass() {
+    public Class<NodeExecutionTaskEvent> eventBodyClass() {
         return NodeExecutionTaskEvent.class;
     }
 }

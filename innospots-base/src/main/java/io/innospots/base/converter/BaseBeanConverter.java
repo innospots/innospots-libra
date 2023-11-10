@@ -19,7 +19,10 @@
 package io.innospots.base.converter;
 
 import io.innospots.base.json.JSONUtils;
+import io.innospots.base.utils.time.DateTimeUtils;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -60,6 +63,21 @@ public interface BaseBeanConverter<Model,Entity> {
         return JSONUtils.toJsonString(map);
     }
 
+    default Map<String, String> jsonStrToMapStr(String jsonStr) {
+        return JSONUtils.toMap(jsonStr, String.class, String.class);
+    }
+
+
+    /**
+     * map to json string
+     *
+     * @param map
+     * @return String
+     */
+    default String mapStrToJsonStr(Map<String, String> map) {
+        return JSONUtils.toJsonString(map);
+    }
+
     /**
      * json string to String of list
      *
@@ -88,4 +106,39 @@ public interface BaseBeanConverter<Model,Entity> {
         return JSONUtils.toJsonString(list);
     }
 
+
+    /**
+     * json string to ParamField of list
+     *
+     * @param jsonStr
+     * @return List<String>
+     */
+    default List<Integer> jsonToIntList(String jsonStr) {
+        return JSONUtils.toList(jsonStr, Integer.class);
+    }
+
+    /**
+     * ParamField of list to json string
+     *
+     * @param list
+     * @return String
+     */
+    default String jsonIntToString(List<Integer> list) {
+        return JSONUtils.toJsonString(list);
+    }
+
+
+    default String localDateTimeToStr(LocalDateTime localDateTime) {
+        if (localDateTime == null) {
+            return null;
+        }
+        return DateTimeUtils.formatLocalDateTime(localDateTime, DateTimeUtils.DATETIME_MS_PATTERN);
+    }
+
+    default LocalDateTime strToLocalDateTime(String localDateTimeStr) {
+        if (localDateTimeStr == null) {
+            return null;
+        }
+        return LocalDateTime.parse(localDateTimeStr, DateTimeFormatter.ofPattern(DateTimeUtils.DATETIME_MS_PATTERN));
+    }
 }

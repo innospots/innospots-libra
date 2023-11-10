@@ -63,15 +63,15 @@ public class ServiceRegistryHolder {
         ServiceRegistryHolder.serviceType = serviceType;
     }
 
-    public static Integer[] currentShardingKeys() {
+    public static Integer[] currentShardingKeys(int maxShardingKeys) {
         if (position < 0 || availableServicesSize <= 0) {
             return null;
         }
-        int cap = Math.round(MAX_SHARDING_KEY * 1f / availableServicesSize);
+        int cap = Math.round(maxShardingKeys * 1f / availableServicesSize);
 
         List<Integer> shardingKeys = new ArrayList<>();
         int s = position * cap;
-        int e = (position + 1) == availableServicesSize ? MAX_SHARDING_KEY : (position + 1) * cap;
+        int e = (position + 1) == availableServicesSize ? maxShardingKeys : (position + 1) * cap;
         for (int i = s; i < e; i++) {
             shardingKeys.add(i);
         }

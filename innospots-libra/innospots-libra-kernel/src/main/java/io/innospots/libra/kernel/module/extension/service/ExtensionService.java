@@ -27,9 +27,9 @@ import io.innospots.libra.base.configuration.InnospotsConsoleProperties;
 import io.innospots.libra.base.extension.ExtensionStatus;
 import io.innospots.libra.base.extension.LibraExtensionInformation;
 import io.innospots.libra.base.extension.LibraExtensionProperties;
+import io.innospots.libra.kernel.module.extension.converter.AppInstallmentConverter;
 import io.innospots.libra.kernel.module.extension.entity.ExtDefinitionEntity;
 import io.innospots.libra.kernel.module.extension.entity.ExtInstallmentEntity;
-import io.innospots.libra.kernel.module.extension.converter.AppInstallmentBeanConverter;
 import io.innospots.libra.kernel.module.extension.model.ExtensionInstallInfo;
 import io.innospots.libra.kernel.module.extension.operator.ExtDefinitionOperator;
 import io.innospots.libra.kernel.module.extension.operator.ExtInstallmentOperator;
@@ -220,7 +220,7 @@ public class ExtensionService {
         copyToClassPath(extDefinitionEntity);
         //保存或是更新应用安装信息
         extInstallmentEntity = extInstallmentOperator.saveInstallInfo(extInstallmentEntity);
-        ExtensionInstallInfo appInstallInfo = AppInstallmentBeanConverter.INSTANCE.entityToModel(extInstallmentEntity, extDefinitionEntity);
+        ExtensionInstallInfo appInstallInfo = AppInstallmentConverter.INSTANCE.entityToModel(extInstallmentEntity, extDefinitionEntity);
         //TODO 通知服务重启
 
         return appInstallInfo;

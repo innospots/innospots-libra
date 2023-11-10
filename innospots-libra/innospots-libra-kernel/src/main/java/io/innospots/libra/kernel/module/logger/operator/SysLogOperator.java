@@ -31,7 +31,7 @@ import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.ResourceType;
 import io.innospots.libra.kernel.module.logger.dao.SysOperateLogDao;
 import io.innospots.libra.kernel.module.logger.entity.SysOperateLogEntity;
-import io.innospots.libra.kernel.module.logger.converter.SysOperateLogMapper;
+import io.innospots.libra.kernel.module.logger.converter.SysOperateLogConverter;
 import io.innospots.libra.kernel.module.logger.model.LogFormQuery;
 import io.innospots.libra.kernel.module.logger.model.SysOperateLog;
 import io.innospots.libra.kernel.module.logger.model.UserLogInfo;
@@ -94,7 +94,7 @@ public class SysLogOperator extends ServiceImpl<SysOperateLogDao, SysOperateLogE
         IPage<SysOperateLogEntity> iPage = new Page<>(request.getPage(), request.getSize());
         IPage<SysOperateLogEntity> page = super.page(iPage, query);
         List<SysOperateLogEntity> entities = page.getRecords();
-        List<SysOperateLog> operateLogs = entities.stream().map(SysOperateLogMapper.INSTANCE::modelToEntity).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
+        List<SysOperateLog> operateLogs = SysOperateLogConverter.INSTANCE.entitiesToModels(entities);
         pageBody.setList(operateLogs);
         pageBody.setCurrent(page.getCurrent());
         pageBody.setPageSize(page.getSize());
@@ -175,7 +175,7 @@ public class SysLogOperator extends ServiceImpl<SysOperateLogDao, SysOperateLogE
         if (log == null) {
             throw ResourceException.buildExistException(this.getClass(), "log does not exist");
         }
-        return SysOperateLogMapper.INSTANCE.modelToEntity(log);
+        return SysOperateLogConverter.INSTANCE.entityToModel(log);
     }
 
     /**

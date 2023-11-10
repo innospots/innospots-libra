@@ -57,7 +57,7 @@ public class KafkaDataNode extends DataNode {
     @Override
     protected void initialize(NodeInstance nodeInstance) {
         //this.fillNodeInfo(nodeInstance);
-        credentialId = nodeInstance.valueInteger(FIELD_CREDENTIAL_ID);
+        credentialKey = nodeInstance.valueString(FIELD_CREDENTIAL_KEY);
         topic = nodeInstance.valueString(FIELD_REGISTRY_TOPIC);
         hasConfigField = nodeInstance.valueBoolean(FIELD_CONFIG_FIELD);
         if(hasConfigField){
@@ -66,7 +66,7 @@ public class KafkaDataNode extends DataNode {
             columnFields = BeanUtils.toBean(columnFieldMapping, Factor.class);
         }
 
-        IDataConnectionMinder connectionMinder = DataConnectionMinderManager.getCredentialMinder(credentialId);
+        IDataConnectionMinder connectionMinder = DataConnectionMinderManager.getCredentialMinder(credentialKey);
         if(connectionMinder instanceof IQueueConnectionMinder){
             dataQueueSender = ((IQueueConnectionMinder) connectionMinder).queueSender();
         }
@@ -80,7 +80,7 @@ public class KafkaDataNode extends DataNode {
          */
 
         if (topic == null) {
-            throw ConfigException.buildMissingException(this.getClass(), "credentialId: " + credentialId  + " , topic is null");
+            throw ConfigException.buildMissingException(this.getClass(), "credentialId: " + credentialKey  + " , topic is null");
         }
     }
 

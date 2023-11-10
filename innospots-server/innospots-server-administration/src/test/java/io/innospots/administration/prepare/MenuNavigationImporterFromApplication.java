@@ -9,7 +9,7 @@ import io.innospots.libra.base.menu.ResourceItem;
 import io.innospots.libra.kernel.LibraKernelImporter;
 import io.innospots.libra.kernel.module.menu.dao.MenuResourceDao;
 import io.innospots.libra.kernel.module.menu.entity.MenuResourceEntity;
-import io.innospots.libra.kernel.module.menu.converter.MenuResourceBeanConverter;
+import io.innospots.libra.kernel.module.menu.converter.MenuResourceConverter;
 import io.innospots.libra.kernel.module.menu.operator.MenuManagementOperator;
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.jupiter.api.Test;
@@ -76,7 +76,7 @@ public class MenuNavigationImporterFromApplication {
     }
 
     private MenuResourceEntity newMenuItem(OptElement optElement, MenuResourceEntity parentItem) {
-        MenuResourceEntity newMenuItem = MenuResourceBeanConverter.INSTANCE.optItemEntity(optElement);
+        MenuResourceEntity newMenuItem = MenuResourceConverter.INSTANCE.optItemEntity(optElement);
         newMenuItem.setParentId(parentItem.getResourceId());
         newMenuItem.setMenuGroup(parentItem.getMenuGroup());
         newMenuItem.setShowMenu(false);
@@ -88,7 +88,7 @@ public class MenuNavigationImporterFromApplication {
     }
 
     private MenuResourceEntity newMenuItem(ResourceItem resourceItem, MenuResourceEntity parentItem) {
-        MenuResourceEntity newMenuItem = MenuResourceBeanConverter.INSTANCE.menuItemToEntity(resourceItem);
+        MenuResourceEntity newMenuItem = MenuResourceConverter.INSTANCE.menuItemToEntity(resourceItem);
         newMenuItem.setOpenMode(BaseItem.OpenMode.INTERNAL);
         newMenuItem.setStatus(true);
         newMenuItem.setItemType(ItemType.MENU);
