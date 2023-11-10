@@ -25,7 +25,7 @@ import io.innospots.base.model.user.UserInfo;
 import io.innospots.base.utils.CCH;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
-import io.innospots.libra.base.operator.SysUserReader;
+import io.innospots.libra.base.user.SysUserReader;
 import io.innospots.libra.base.terminal.TerminalRequestContextHolder;
 import io.innospots.libra.kernel.module.logger.entity.SysOperateLogEntity;
 import io.innospots.libra.kernel.module.logger.operator.SysLogOperator;

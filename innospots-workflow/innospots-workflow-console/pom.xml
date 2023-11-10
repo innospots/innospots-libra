@@ -11,27 +11,17 @@
 
     <artifactId>innospots-workflow-console</artifactId>
 
-
     <dependencies>
-        <!--
-        <dependency>
-            <groupId>io.innospots</groupId>
-            <artifactId>innospots-libra-datasource</artifactId>
-        </dependency>-->
         <dependency>
             <groupId>io.innospots</groupId>
             <artifactId>innospots-libra-base</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>net.datafaker</groupId>
-            <artifactId>datafaker</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>io.innospots</groupId>
             <artifactId>innospots-workflow-core</artifactId>
         </dependency>
+
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>

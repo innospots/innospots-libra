@@ -52,14 +52,6 @@
                 <artifactId>innospots-data-provider</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
-            <dependency>
-                <groupId>io.innospots</groupId>
-                <artifactId>innospots-libra</artifactId>
-                <version>${project.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 

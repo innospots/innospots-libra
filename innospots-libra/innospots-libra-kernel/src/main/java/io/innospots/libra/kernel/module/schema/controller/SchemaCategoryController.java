@@ -27,7 +27,7 @@ import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
 import io.innospots.libra.base.category.BaseCategory;
-import io.innospots.libra.kernel.module.schema.operator.SchemaCategoryOperator;
+import io.innospots.libra.base.schema.operator.SchemaCategoryOperator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,8 +47,8 @@ import static io.innospots.libra.base.menu.ItemType.BUTTON;
  * @date 2022/1/27
  */
 @RestController
-@RequestMapping(PATH_ROOT_ADMIN + "apps/schema/category")
-@ModuleMenu(menuKey = "libra-apps-dataset")
+@RequestMapping(PATH_ROOT_ADMIN + "schema/category")
+@ModuleMenu(menuKey = "libra-dataset")
 @Tag(name = "Schema Registry Category")
 public class SchemaCategoryController {
 

@@ -25,7 +25,6 @@ import io.innospots.base.exception.ResourceException;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.field.ParamField;
-import io.innospots.base.utils.BeanContextAware;
 import io.innospots.workflow.console.converter.instance.WorkflowInstanceConverter;
 import io.innospots.workflow.console.dao.instance.WorkflowInstanceCacheDao;
 import io.innospots.workflow.console.dao.instance.WorkflowRevisionDao;
@@ -35,7 +34,7 @@ import io.innospots.workflow.console.entity.instance.WorkflowRevisionEntity;
 import io.innospots.workflow.console.enums.FlowVersion;
 import io.innospots.workflow.console.events.InstanceUpdateEvent;
 import io.innospots.workflow.console.exception.WorkflowPublishException;
-import io.innospots.workflow.console.listener.AppUseListener;
+import io.innospots.workflow.console.listener.NodeReferenceListener;
 import io.innospots.workflow.core.config.InnospotWorkflowProperties;
 import io.innospots.workflow.core.engine.FlowEngineManager;
 import io.innospots.workflow.core.engine.IFlowEngine;
@@ -327,7 +326,7 @@ public class WorkflowBuilderOperator implements IWorkflowCacheDraftOperator {
         }
         up = this.nodeInstanceOperator.deleteNodes(workflowInstanceId) & up;
 
-        EventBusCenter.postSync(new InstanceUpdateEvent(workflowInstanceId, AppUseListener.APP_USE_DELETE));
+        EventBusCenter.postSync(new InstanceUpdateEvent(workflowInstanceId, NodeReferenceListener.APP_USE_DELETE));
 
         up = this.edgeOperator.deleteEdges(workflowInstanceId) & up;
         QueryWrapper<WorkflowRevisionEntity> revisionQueryWrapper = new QueryWrapper<>();
@@ -379,7 +378,7 @@ public class WorkflowBuilderOperator implements IWorkflowCacheDraftOperator {
         workflowBaseBody = getWorkflowBody(workflowBaseBody.getWorkflowInstanceId(), FlowVersion.DRAFT.getVersion(), true);
         saveFlowInstanceToCache(workflowBaseBody);
 
-        EventBusCenter.postSync(new InstanceUpdateEvent(workflowBaseBody.getWorkflowInstanceId(), AppUseListener.APP_USE_ADD));
+        EventBusCenter.postSync(new InstanceUpdateEvent(workflowBaseBody.getWorkflowInstanceId(), NodeReferenceListener.APP_USE_ADD));
         return workflowBaseBody;
     }
 

@@ -28,9 +28,10 @@ import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.dataset.Dataset;
 import io.innospots.base.data.dataset.IDatasetReader;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.libra.kernel.module.schema.converter.SchemaRegistryConverter;
-import io.innospots.libra.kernel.module.schema.operator.SchemaRegistryOperator;
+import io.innospots.libra.base.schema.converter.SchemaRegistryConverter;
+import io.innospots.libra.base.schema.operator.SchemaRegistryOperator;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
@@ -40,6 +41,7 @@ import java.util.stream.Collectors;
  * @author Alfred
  * @date 2022/1/31
  */
+@Component
 public class DatasetOperator implements IDatasetReader {
 
     private final SchemaRegistryOperator schemaRegistryOperator;

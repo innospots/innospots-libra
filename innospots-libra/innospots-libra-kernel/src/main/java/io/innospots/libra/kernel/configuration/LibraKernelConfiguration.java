@@ -45,10 +45,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @date 2021/1/10
  */
 @Configuration
-@EntityScan(basePackages = {"io.innospots.libra.kernel.module.**.entity"})
-@MapperScan(basePackages = "io.innospots.libra.kernel.module.**.dao")
+@EntityScan(basePackages = {"io.innospots.libra.kernel.module.**.entity","io.innospots.libra.base.category"})
+@MapperScan(basePackages = {"io.innospots.libra.kernel.module.**.dao","io.innospots.libra.base.category"})
 @Import({LibraBaseConfiguration.class, WebConfiguration.class})
-@EnableConfigurationProperties({InnospotsConsoleProperties.class})
 public class LibraKernelConfiguration implements WebMvcConfigurer {
 
 

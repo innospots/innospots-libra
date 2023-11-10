@@ -29,7 +29,7 @@ import io.innospots.workflow.console.dao.instance.NodeInstanceDao;
 import io.innospots.workflow.console.entity.instance.NodeInstanceEntity;
 import io.innospots.workflow.console.enums.FlowVersion;
 import io.innospots.workflow.console.converter.instance.NodeInstanceConverter;
-import io.innospots.workflow.console.operator.apps.AppNodeDefinitionOperator;
+import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
 import io.innospots.workflow.core.node.apps.AppNodeDefinition;
 import io.innospots.workflow.core.node.instance.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
@@ -47,10 +47,10 @@ import java.util.stream.Collectors;
 public class NodeInstanceOperator extends ServiceImpl<NodeInstanceDao, NodeInstanceEntity> {
 
 
-    private final AppNodeDefinitionOperator appNodeDefinitionOperator;
+    private final FlowNodeDefinitionOperator flowNodeDefinitionOperator;
 
-    public NodeInstanceOperator(AppNodeDefinitionOperator appNodeDefinitionOperator) {
-        this.appNodeDefinitionOperator = appNodeDefinitionOperator;
+    public NodeInstanceOperator(FlowNodeDefinitionOperator flowNodeDefinitionOperator) {
+        this.flowNodeDefinitionOperator = flowNodeDefinitionOperator;
     }
 
     public boolean deleteNodes(Long workflowInstanceId) {
@@ -147,7 +147,7 @@ public class NodeInstanceOperator extends ServiceImpl<NodeInstanceDao, NodeInsta
 
             for (NodeInstanceEntity nodeInstanceEntity : nodeInstanceEntities) {
                 try {
-                    AppNodeDefinition appNodeDefinition = appNodeDefinitionOperator.getNodeDefinition(nodeInstanceEntity.getNodeDefinitionId());
+                    AppNodeDefinition appNodeDefinition = flowNodeDefinitionOperator.getNodeDefinition(nodeInstanceEntity.getNodeDefinitionId());
                     list.add(NodeInstanceConverter.INSTANCE.entityToModel(nodeInstanceEntity, appNodeDefinition));
                     if (appNodeDefinition == null) {
                         log.warn("node definition not exist,{} ", nodeInstanceEntity.getNodeInstanceId());

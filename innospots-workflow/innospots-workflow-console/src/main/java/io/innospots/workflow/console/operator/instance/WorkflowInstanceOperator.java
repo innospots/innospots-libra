@@ -38,7 +38,7 @@ import io.innospots.workflow.console.dao.instance.WorkflowInstanceDao;
 import io.innospots.workflow.console.entity.instance.WorkflowInstanceEntity;
 import io.innospots.workflow.console.enums.FlowVersion;
 import io.innospots.workflow.console.listener.WorkflowPageListener;
-import io.innospots.workflow.console.operator.apps.AppFlowTemplateOperator;
+import io.innospots.workflow.console.operator.node.FlowTemplateOperator;
 import io.innospots.workflow.core.flow.WorkflowBaseInfo;
 import io.innospots.workflow.core.flow.WorkflowInfo;
 import io.innospots.workflow.core.flow.instance.WorkflowInstance;
@@ -66,10 +66,10 @@ import static io.innospots.workflow.console.operator.instance.WorkflowBuilderOpe
 public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, WorkflowInstanceEntity> {
 
 
-    private AppFlowTemplateOperator appFlowTemplateOperator;
+    private FlowTemplateOperator flowTemplateOperator;
 
-    public WorkflowInstanceOperator(AppFlowTemplateOperator appFlowTemplateOperator) {
-        this.appFlowTemplateOperator = appFlowTemplateOperator;
+    public WorkflowInstanceOperator(FlowTemplateOperator flowTemplateOperator) {
+        this.flowTemplateOperator = flowTemplateOperator;
     }
 
     /**
@@ -84,7 +84,7 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
             title = "${event.create.workflow.title}", content = "${event.create.workflow.content}")
     public WorkflowInstance createWorkflow(WorkflowInfo workflowInfo) {
 
-        boolean check = appFlowTemplateOperator.checkTemplate(workflowInfo.getTemplateCode());
+        boolean check = flowTemplateOperator.checkTemplate(workflowInfo.getTemplateCode());
         if (!check) {
             throw ResourceException.buildNotExistException(this.getClass(), "workflow template is not exist, code: " + workflowInfo.getTemplateCode());
         }
@@ -159,7 +159,7 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
         if (entity == null || (StringUtils.isNotBlank(workflowInstance.getFlowKey()) && !workflowInstance.getFlowKey().equals(entity.getFlowKey()))) {
             throw ResourceException.buildAbandonException(this.getClass(), "illegal request, " + workflowInstance.getName());
         }
-        boolean check = appFlowTemplateOperator.checkTemplate(workflowInstance.getTemplateCode());
+        boolean check = flowTemplateOperator.checkTemplate(workflowInstance.getTemplateCode());
         if (!check) {
             throw ResourceException.buildNotExistException(this.getClass(), "workflow template is not exist, code: " + workflowInstance.getTemplateCode());
         }

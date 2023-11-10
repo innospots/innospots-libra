@@ -1,5 +1,6 @@
 package io.innospots.workflow.console.task.operate;
 
+import io.innospots.base.events.IEventListener;
 import io.innospots.libra.base.task.TaskEvent;
 import io.innospots.workflow.core.debug.FlowNodeDebuggerBuilder;
 import org.springframework.context.event.EventListener;
@@ -15,10 +16,10 @@ import java.util.Map;
  * @date 2023/8/8
  */
 @Component
-public class FlowTaskScheduleListener {
+public class FlowTaskScheduleListener implements IEventListener<TaskEvent> {
 
-    @EventListener(TaskEvent.class)
-    public void stop(TaskEvent taskEvent) {
+
+    private void stop(TaskEvent taskEvent) {
         if (taskEvent.taskAction() != TaskEvent.TaskAction.STOP) {
             return;
         }
@@ -29,8 +30,7 @@ public class FlowTaskScheduleListener {
         }
     }
 
-    @EventListener(TaskEvent.class)
-    public void reRun(TaskEvent taskEvent) {
+    private void reRun(TaskEvent taskEvent) {
         if (taskEvent.taskAction() != TaskEvent.TaskAction.RERUN) {
             return;
         }
@@ -39,5 +39,18 @@ public class FlowTaskScheduleListener {
             Long workflowInstanceId = Long.parseLong(param.get("workflowInstanceId").toString());
             FlowNodeDebuggerBuilder.build("nodeDebugger").execute(workflowInstanceId, null, new ArrayList<>());
         }
+    }
+
+    @Override
+    public Object listen(TaskEvent event) {
+        if(event.taskAction() == TaskEvent.TaskAction.STOP){
+            stop(event);
+        }
+
+        if(event.taskAction() == TaskEvent.TaskAction.RERUN){
+            reRun(event);
+        }
+
+        return null;
     }
 }

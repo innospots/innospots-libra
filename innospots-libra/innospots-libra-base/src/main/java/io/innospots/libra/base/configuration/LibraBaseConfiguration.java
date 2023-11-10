@@ -26,8 +26,9 @@ import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerIntercept
 import com.google.common.collect.ImmutableList;
 import io.innospots.base.store.CacheStoreManager;
 import io.innospots.base.utils.CCH;
-import io.innospots.libra.base.dao.handler.EntityMetaObjectHandler;
-import io.innospots.libra.base.operator.SystemTempCacheOperator;
+import io.innospots.libra.base.credential.config.CredentialConfiguration;
+import io.innospots.libra.base.handler.EntityMetaObjectHandler;
+import io.innospots.libra.base.temp.SystemTempCacheOperator;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
 import org.mybatis.spring.annotation.MapperScan;
@@ -35,6 +36,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 import java.util.List;
 
@@ -43,9 +45,10 @@ import java.util.List;
  * @date 2022/2/10
  */
 @Configuration
-@EntityScan(basePackages = {"io.innospots.libra.base.entity","io.innospots.libra.base.category"})
-@MapperScan(basePackages = {"io.innospots.libra.base.dao","io.innospots.libra.base.category"})
-@EnableConfigurationProperties({AuthProperties.class})
+@EntityScan(basePackages = {"io.innospots.libra.base.temp","io.innospots.libra.base.function"})
+@MapperScan(basePackages = {"io.innospots.libra.base.temp","io.innospots.libra.base.function"})
+@Import({CredentialConfiguration.class,CredentialConfiguration.class})
+@EnableConfigurationProperties({AuthProperties.class,InnospotsConsoleProperties.class})
 public class LibraBaseConfiguration {
 
     private final static List<String> IGNORE_TABLES = ImmutableList.of(
@@ -65,10 +68,10 @@ public class LibraBaseConfiguration {
             "sys_user",
             "sys_user_role",
             "ext_definition",
-            "app_flow_template",
-            "app_node_definition",
-            "app_node_group",
-            "app_node_group_node",
+            "flow_template",
+            "flow_node_definition",
+            "flow_node_group",
+            "flow_node_group_node",
             "sys_todo_task",
             "sys_todo_task_comment",
             "sys_todo_task_tag",

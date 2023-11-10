@@ -45,8 +45,8 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
  * @date 2022/2/24
  */
 @RestController
-@RequestMapping(PATH_ROOT_ADMIN + "apps/schema/data")
-@ModuleMenu(menuKey = "libra-apps-dataset")
+@RequestMapping(PATH_ROOT_ADMIN + "schema/data")
+@ModuleMenu(menuKey = "libra-dataset")
 @Tag(name = "Schema Dataset Data")
 public class DatasetDataController {
 

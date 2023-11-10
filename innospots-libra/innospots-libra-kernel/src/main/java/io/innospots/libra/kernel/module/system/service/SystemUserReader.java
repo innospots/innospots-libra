@@ -21,7 +21,7 @@ package io.innospots.libra.kernel.module.system.service;
 import io.innospots.libra.kernel.module.system.model.role.RoleInfo;
 import io.innospots.base.model.user.SimpleUser;
 import io.innospots.base.model.user.UserInfo;
-import io.innospots.libra.base.operator.SysUserReader;
+import io.innospots.libra.base.user.SysUserReader;
 import io.innospots.libra.kernel.module.system.entity.UserRoleEntity;
 import io.innospots.libra.kernel.module.system.converter.UserInfoConverter;
 import io.innospots.libra.kernel.module.system.operator.RoleOperator;

@@ -95,7 +95,4 @@ public class InnospotsConsoleProperties {
      */
     private String extLibPath;
 
-
-
-
 }

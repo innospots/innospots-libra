@@ -44,8 +44,8 @@ import static io.innospots.libra.base.menu.ItemType.BUTTON;
  * @date 2022/1/27
  */
 @RestController
-@RequestMapping(PATH_ROOT_ADMIN + "apps/schema/data-set")
-@ModuleMenu(menuKey = "libra-apps-dataset")
+@RequestMapping(PATH_ROOT_ADMIN + "schema/data-set")
+@ModuleMenu(menuKey = "libra-dataset")
 @Tag(name = "Schema Dataset")
 public class DatasetController {
 

@@ -43,7 +43,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-@Import(LibraAuthImporter.InnospotAuthConfiguration.class)
+@Import(LibraAuthImporter.InnospotsAuthConfiguration.class)
 public @interface LibraAuthImporter {
 
     @ConditionalOnProperty(prefix = "innospots.security", name = "enabled", havingValue = "true")
@@ -51,7 +51,7 @@ public @interface LibraAuthImporter {
     @MapperScan(basePackages = {"io.innospots.libra.security.logger.dao"})
     @EntityScan(basePackages = "io.innospots.libra.security.logger.entity")
     @ComponentScan(basePackages = "io.innospots.libra.security")
-    class InnospotAuthConfiguration implements WebMvcConfigurer {
+    class InnospotsAuthConfiguration implements WebMvcConfigurer {
 
         @Bean
         @ConditionalOnProperty(prefix = "innospots.config", name = "enable-swagger", havingValue = "true")

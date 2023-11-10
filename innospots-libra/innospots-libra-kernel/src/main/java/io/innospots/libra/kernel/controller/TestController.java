@@ -61,42 +61,6 @@ public class TestController {
         this.testService = testService;
     }
 
-    @PostMapping("http/third/test/{applyKey}/credit")
-    @Operation(summary = "授信额度接口", description = "credit")
-    public Object credit(@Parameter(name = "applyKey") @PathVariable Integer applyKey,
-                         @Parameter(name = "callName") @RequestParam("callName") String callName,
-                         @Parameter(name = "body") @RequestBody Map<String, Object> body) {
-//        Map<String, Object> body = new HashMap<>();
-        body.put("apply_key", applyKey);
-        body.put("id", 1);
-        body.put("education", "本科");
-        body.put("marriage", "未婚1111");
-        body.put("nation", "汉");
-        body.put("credit_limit", 150000);
-        return body;
-    }
-
-    @GetMapping("http/third/test/stock")
-    @Operation(summary = "股票测试接口")
-    public Object stock() throws IOException {
-//        URL resource = this.getClass().getResource("/stock.txt");
-//        String str = FileUtils.readFileToString(new File(resource.getPath()));
-
-        Map<String, Object> rep = (Map<String, Object>) HttpFunc.httpGet(
-                "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=wwb8d813c40829fd8a&corpsecret=YOJ_LCS7qFcSFBiB9N218AQsCnsFilSvRfWq7g5U3UY", new HashMap<>(), new HashMap<>());
-        String accessToken = "";
-        Map<String, Object> preResult = new HashMap<>();
-        if (rep.get("errmsg") != null && rep.get("access_token") != null) {
-            if ("ok".equals(rep.get("errmsg"))) {
-                accessToken = rep.get("access_token").toString();
-                preResult.put("access_token", accessToken);
-            }
-        }
-        System.out.println(preResult);
-
-        return null;
-//        return str;
-    }
 
     @GetMapping("jar/loader")
     @Operation(summary = "jar loader")

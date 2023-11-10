@@ -22,11 +22,11 @@ import io.innospots.base.data.body.PageBody;
 import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.base.data.request.FormQuery;
 import io.innospots.workflow.console.dao.instance.WorkflowInstanceCacheDao;
-import io.innospots.workflow.console.entity.apps.AppNodeDefinitionEntity;
+import io.innospots.workflow.console.entity.node.FlowNodeDefinitionEntity;
 import io.innospots.workflow.console.entity.instance.WorkflowInstanceEntity;
 import io.innospots.workflow.console.model.flow.WorkflowChart;
 import io.innospots.workflow.console.model.flow.WorkflowStatistics;
-import io.innospots.workflow.console.operator.apps.AppNodeDefinitionOperator;
+import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
 import io.innospots.workflow.console.operator.execution.ExecutionManagerOperator;
 import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
 import io.innospots.workflow.core.config.InnospotWorkflowProperties;
@@ -70,20 +70,20 @@ public class WorkflowService {
 
     private final InnospotWorkflowProperties innospotWorkflowProperties;
 
-    private final AppNodeDefinitionOperator appNodeDefinitionOperator;
+    private final FlowNodeDefinitionOperator flowNodeDefinitionOperator;
 
     public WorkflowService(WorkflowInstanceOperator workflowInstanceOperator,
                            IFlowExecutionOperator IFlowExecutionOperator,
                            WorkflowInstanceCacheDao workflowInstanceCacheDao,
                            InnospotWorkflowProperties innospotWorkflowProperties,
                            ExecutionManagerOperator executionManagerOperator,
-                           AppNodeDefinitionOperator appNodeDefinitionOperator) {
+                           FlowNodeDefinitionOperator flowNodeDefinitionOperator) {
         this.workflowInstanceOperator = workflowInstanceOperator;
         this.IFlowExecutionOperator = IFlowExecutionOperator;
         this.innospotWorkflowProperties = innospotWorkflowProperties;
         this.workflowInstanceCacheDao = workflowInstanceCacheDao;
         this.executionManagerOperator = executionManagerOperator;
-        this.appNodeDefinitionOperator = appNodeDefinitionOperator;
+        this.flowNodeDefinitionOperator = flowNodeDefinitionOperator;
     }
 
     public PageBody<WorkflowInstance> getWorkflows(FormQuery request) {
@@ -91,9 +91,9 @@ public class WorkflowService {
         List<WorkflowInstance> workflowInstances = results.getList();
         if (CollectionUtils.isNotEmpty(workflowInstances)) {
             List<String> triggerCodes = workflowInstances.stream().map(WorkflowInstance::getTriggerCode).distinct().collect(Collectors.toList());
-            List<AppNodeDefinitionEntity> appNodeDefinitionEntities = appNodeDefinitionOperator.listByCodes(triggerCodes);
-            Map<String, AppNodeDefinitionEntity> appNodeDefinitionEntityMap = appNodeDefinitionEntities.stream()
-                    .collect(Collectors.toMap(AppNodeDefinitionEntity::getCode, Function.identity()));
+            List<FlowNodeDefinitionEntity> appNodeDefinitionEntities = flowNodeDefinitionOperator.listByCodes(triggerCodes);
+            Map<String, FlowNodeDefinitionEntity> appNodeDefinitionEntityMap = appNodeDefinitionEntities.stream()
+                    .collect(Collectors.toMap(FlowNodeDefinitionEntity::getCode, Function.identity()));
             for (WorkflowInstance workflowInstance : workflowInstances) {
                 workflowInstance.setIcon(appNodeDefinitionEntityMap.get(workflowInstance.getTriggerCode()).getIcon());
             }

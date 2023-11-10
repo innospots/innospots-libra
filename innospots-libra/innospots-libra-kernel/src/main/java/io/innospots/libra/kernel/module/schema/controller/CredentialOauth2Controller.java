@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Slf4j
 @Controller
-@RequestMapping(PathConstant.ROOT_PATH + "oauth2")
+@RequestMapping(PathConstant.ROOT_PATH + "schema/oauth2")
 @Tag(name = "App Credential Oauth2")
 public class CredentialOauth2Controller {
 

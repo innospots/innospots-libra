@@ -30,7 +30,6 @@ import org.springframework.stereotype.Component;
  * @date 2022/5/23
  */
 @Slf4j
-@Component
 public class WorkflowPageListener implements IEventListener<PageCreatedEvent> {
 
     public static final String PAGE_TYPE = "workflow";

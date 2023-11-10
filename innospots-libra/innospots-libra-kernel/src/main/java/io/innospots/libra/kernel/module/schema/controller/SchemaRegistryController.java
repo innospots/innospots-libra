@@ -24,7 +24,7 @@ import io.innospots.base.connector.schema.SchemaCatalog;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.menu.ModuleMenu;
-import io.innospots.libra.kernel.module.schema.operator.SchemaRegistryOperator;
+import io.innospots.libra.base.schema.operator.SchemaRegistryOperator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -42,8 +42,8 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
  */
 @Slf4j
 @RestController
-@RequestMapping(PATH_ROOT_ADMIN + "apps/schema/registry")
-@ModuleMenu(menuKey = "libra-apps-schema")
+@RequestMapping(PATH_ROOT_ADMIN + "schema/registry")
+@ModuleMenu(menuKey = "libra-schema")
 @Tag(name = "Schema Registry")
 public class SchemaRegistryController extends BaseController {
 

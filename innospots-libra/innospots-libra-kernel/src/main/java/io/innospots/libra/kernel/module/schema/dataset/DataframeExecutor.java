@@ -48,6 +48,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
@@ -56,6 +57,7 @@ import java.util.*;
  * @date 2022/1/16
  */
 @Slf4j
+@Component
 public class DataframeExecutor {
 
     private final IConnectionCredentialReader connectionCredentialReader;

@@ -40,8 +40,8 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
  */
 
 @RestController
-@RequestMapping(PATH_ROOT_ADMIN + "apps/schema/connector")
-@ModuleMenu(menuKey = "libra-apps")
+@RequestMapping(PATH_ROOT_ADMIN + "schema/connector")
+@ModuleMenu(menuKey = "libra-schema")
 @Tag(name = "App Schema Connector Config")
 public class ConnectorSchemaController {
 

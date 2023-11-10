@@ -29,7 +29,7 @@ import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ResourceItemOperation;
-import io.innospots.libra.kernel.module.schema.operator.HttpApiOperator;
+import io.innospots.libra.base.schema.operator.HttpApiOperator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.validation.annotation.Validated;

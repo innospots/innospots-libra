@@ -27,7 +27,7 @@ import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
-import io.innospots.libra.kernel.module.schema.operator.SchemaFieldOperator;
+import io.innospots.libra.base.schema.operator.SchemaFieldOperator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,8 +46,8 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
  * @date 2021-02-04
  */
 @RestController
-@RequestMapping(PATH_ROOT_ADMIN + "apps/schema/fields")
-@ModuleMenu(menuKey = "libra-apps")
+@RequestMapping(PATH_ROOT_ADMIN + "schema/fields")
+@ModuleMenu(menuKey = "libra-schema")
 @Tag(name = "Schema Field")
 public class SchemaFieldController extends BaseController {
 

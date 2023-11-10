@@ -24,13 +24,12 @@ import io.innospots.base.enums.ImageType;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.utils.BeanContextAware;
 import io.innospots.libra.base.events.NewAvatarEvent;
-import io.innospots.workflow.console.entity.apps.AppNodeDefinitionEntity;
-import io.innospots.workflow.console.entity.apps.AppNodeGroupNodeEntity;
+import io.innospots.workflow.console.entity.node.FlowNodeDefinitionEntity;
+import io.innospots.workflow.console.entity.node.FlowNodeGroupNodeEntity;
 import io.innospots.workflow.console.model.AppQueryRequest;
-import io.innospots.workflow.console.operator.apps.AppNodeDefinitionOperator;
-import io.innospots.workflow.console.operator.apps.AppNodeGroupOperator;
+import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
+import io.innospots.workflow.console.operator.node.FlowNodeGroupOperator;
 import io.innospots.workflow.console.operator.instance.NodeInstanceOperator;
 import io.innospots.workflow.core.enums.AppPrimitive;
 import io.innospots.workflow.core.enums.AppSource;
@@ -45,7 +44,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static io.innospots.workflow.console.operator.apps.AppNodeDefinitionOperator.IMAGE_PREFIX;
+import static io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator.IMAGE_PREFIX;
 
 /**
  * @author chenc
@@ -57,25 +56,25 @@ import static io.innospots.workflow.console.operator.apps.AppNodeDefinitionOpera
 public class AppService {
 
 
-    private final AppNodeDefinitionOperator appNodeDefinitionOperator;
+    private final FlowNodeDefinitionOperator flowNodeDefinitionOperator;
 
-    private final AppNodeGroupOperator appNodeGroupOperator;
+    private final FlowNodeGroupOperator flowNodeGroupOperator;
 
     private final NodeInstanceOperator nodeInstanceOperator;
 
-    public AppService(AppNodeGroupOperator appNodeGroupOperator, AppNodeDefinitionOperator appNodeDefinitionOperator, NodeInstanceOperator nodeInstanceOperator) {
-        this.appNodeGroupOperator = appNodeGroupOperator;
+    public AppService(FlowNodeGroupOperator flowNodeGroupOperator, FlowNodeDefinitionOperator flowNodeDefinitionOperator, NodeInstanceOperator nodeInstanceOperator) {
+        this.flowNodeGroupOperator = flowNodeGroupOperator;
         this.nodeInstanceOperator = nodeInstanceOperator;
-        this.appNodeDefinitionOperator = appNodeDefinitionOperator;
+        this.flowNodeDefinitionOperator = flowNodeDefinitionOperator;
     }
 
     public PageBody<AppInfo> pageAppInfos(AppQueryRequest request) {
-        PageBody<AppInfo> body = appNodeDefinitionOperator.pageAppDefinitions(request);
+        PageBody<AppInfo> body = flowNodeDefinitionOperator.pageAppDefinitions(request);
         List<AppInfo> appInfos = body.getList();
         if (!CollectionUtils.isEmpty(appInfos)) {
             List<Integer> nodeIds = appInfos.stream().map(AppInfo::getNodeId).collect(Collectors.toList());
-            List<AppNodeGroupNodeEntity> entityList = appNodeGroupOperator.getGroupNodeByNodeIds(1, nodeIds);
-            Map<Integer, Integer> entityMap = entityList.stream().collect(Collectors.toMap(AppNodeGroupNodeEntity::getNodeId, AppNodeGroupNodeEntity::getNodeGroupId));
+            List<FlowNodeGroupNodeEntity> entityList = flowNodeGroupOperator.getGroupNodeByNodeIds(1, nodeIds);
+            Map<Integer, Integer> entityMap = entityList.stream().collect(Collectors.toMap(FlowNodeGroupNodeEntity::getNodeId, FlowNodeGroupNodeEntity::getNodeGroupId));
             for (AppInfo appInfo : appInfos) {
                 appInfo.setNodeGroupId(entityMap.get(appInfo.getNodeId()));
             }
@@ -84,24 +83,24 @@ public class AppService {
     }
 
     public List<AppNodeDefinition> listOnlineNodes(AppPrimitive primitive) {
-        return appNodeDefinitionOperator.listOnlineNodes(primitive);
+        return flowNodeDefinitionOperator.listOnlineNodes(primitive);
     }
 
     @Transactional(rollbackFor = Exception.class)
     public AppInfo createAppInfo(AppInfo appInfo) {
         appInfo.setUsed(Boolean.FALSE);
         appInfo.setAppSource(AppSource.non_system);
-        appInfo = appNodeDefinitionOperator.createAppInfo(appInfo);
+        appInfo = flowNodeDefinitionOperator.createAppInfo(appInfo);
         Integer nodeId = appInfo.getNodeId();
         if (nodeId != null) {
             List<Integer> nodeIds = new ArrayList<>();
             nodeIds.add(nodeId);
-            appNodeGroupOperator.saveOrUpdateNodeGroupNode(1, appInfo.getNodeGroupId(), nodeIds);
+            flowNodeGroupOperator.saveOrUpdateNodeGroupNode(1, appInfo.getNodeGroupId(), nodeIds);
             if (StringUtils.isNotEmpty(appInfo.getIcon()) && appInfo.getIcon().startsWith(IMAGE_PREFIX)) {
                 EventBusCenter.async(new NewAvatarEvent(nodeId, ImageType.APP, null, appInfo.getIcon()));
             }
             // update app icon
-            appInfo = appNodeDefinitionOperator.updateAppInfo(appInfo);
+            appInfo = flowNodeDefinitionOperator.updateAppInfo(appInfo);
         }
         return appInfo;
     }
@@ -119,10 +118,10 @@ public class AppService {
         if (StringUtils.isNotEmpty(icon) && icon.startsWith(IMAGE_PREFIX)) {
             EventBusCenter.async(new NewAvatarEvent(nodeId, ImageType.APP, null, icon));
         }
-        appInfo = appNodeDefinitionOperator.updateAppInfo(appInfo);
+        appInfo = flowNodeDefinitionOperator.updateAppInfo(appInfo);
         List<Integer> nodeIds = new ArrayList<>();
         nodeIds.add(nodeId);
-        appNodeGroupOperator.saveOrUpdateNodeGroupNode(1, appInfo.getNodeGroupId(), nodeIds);
+        flowNodeGroupOperator.saveOrUpdateNodeGroupNode(1, appInfo.getNodeGroupId(), nodeIds);
 
         return appInfo;
     }
@@ -134,7 +133,7 @@ public class AppService {
                 throw ResourceException.buildUpdateException(this.getClass(), "This App has been referenced by the workflow and cannot be offline!");
             }
         }
-        return appNodeDefinitionOperator.updateNodeDefinitionStatus(nodeId, status);
+        return flowNodeDefinitionOperator.updateNodeDefinitionStatus(nodeId, status);
     }
 
     public Boolean deleteNodeDefinition(Integer nodeId) {
@@ -142,16 +141,16 @@ public class AppService {
         if (count > 0) {
             throw ResourceException.buildUpdateException(this.getClass(), "This App has been referenced by the workflow and cannot be deleted!");
         }
-        return appNodeDefinitionOperator.deleteNodeDefinition(nodeId);
+        return flowNodeDefinitionOperator.deleteNodeDefinition(nodeId);
     }
 
     public AppNodeDefinition updateAppNodeDefinition(AppNodeDefinition appNodeDefinition) {
-        return appNodeDefinitionOperator.updateNodeDefinition(appNodeDefinition);
+        return flowNodeDefinitionOperator.updateNodeDefinition(appNodeDefinition);
     }
 
     public AppNodeDefinition getAppNodeDefinitionById(Integer nodeId) {
-        AppNodeDefinition appNodeDefinition = appNodeDefinitionOperator.getNodeDefinition(nodeId);
-        List<AppNodeGroupNodeEntity> entityList = appNodeGroupOperator.getGroupNodeByNodeIds(1, Collections.singletonList(nodeId));
+        AppNodeDefinition appNodeDefinition = flowNodeDefinitionOperator.getNodeDefinition(nodeId);
+        List<FlowNodeGroupNodeEntity> entityList = flowNodeGroupOperator.getGroupNodeByNodeIds(1, Collections.singletonList(nodeId));
         if (!CollectionUtils.isEmpty(entityList)) {
             appNodeDefinition.setNodeGroupId(entityList.get(0).getNodeGroupId());
         }
@@ -159,13 +158,13 @@ public class AppService {
     }
 
     public Map<String, String> getAppNodeIcons() {
-        List<AppNodeDefinitionEntity> entityList = appNodeDefinitionOperator.list(
-                new QueryWrapper<AppNodeDefinitionEntity>().lambda().eq(AppNodeDefinitionEntity::getStatus, DataStatus.ONLINE)
+        List<FlowNodeDefinitionEntity> entityList = flowNodeDefinitionOperator.list(
+                new QueryWrapper<FlowNodeDefinitionEntity>().lambda().eq(FlowNodeDefinitionEntity::getStatus, DataStatus.ONLINE)
         );
 
         Map<String, String> iconMap = new HashMap<>();
-        for (AppNodeDefinitionEntity appNodeDefinitionEntity : entityList) {
-            iconMap.put(appNodeDefinitionEntity.getCode(), appNodeDefinitionEntity.getIcon());
+        for (FlowNodeDefinitionEntity flowNodeDefinitionEntity : entityList) {
+            iconMap.put(flowNodeDefinitionEntity.getCode(), flowNodeDefinitionEntity.getIcon());
         }
         return iconMap;
     }

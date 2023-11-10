@@ -22,9 +22,9 @@ import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.data.operator.IDataOperator;
 import io.innospots.libra.base.configuration.InnospotsConsoleProperties;
 import io.innospots.libra.base.configuration.LibraBaseConfiguration;
-import io.innospots.workflow.console.dao.apps.AppNodeDefinitionDao;
-import io.innospots.workflow.console.dao.apps.AppNodeGroupDao;
-import io.innospots.workflow.console.dao.apps.AppNodeGroupNodeDao;
+import io.innospots.workflow.console.dao.node.FlowNodeDefinitionDao;
+import io.innospots.workflow.console.dao.node.FlowNodeGroupDao;
+import io.innospots.workflow.console.dao.node.FlowNodeGroupNodeDao;
 import io.innospots.workflow.console.dao.execution.ExecutionContextDao;
 import io.innospots.workflow.console.dao.execution.FlowExecutionDao;
 import io.innospots.workflow.console.dao.execution.NodeExecutionDao;
@@ -33,10 +33,10 @@ import io.innospots.workflow.console.dao.instance.WorkflowInstanceCacheDao;
 import io.innospots.workflow.console.dao.instance.WorkflowRevisionDao;
 import io.innospots.workflow.console.loader.WorkflowDBLoader;
 import io.innospots.workflow.console.operator.WorkflowCategoryOperator;
-import io.innospots.workflow.console.operator.apps.AppCategoryOperator;
-import io.innospots.workflow.console.operator.apps.AppFlowTemplateOperator;
-import io.innospots.workflow.console.operator.apps.AppNodeDefinitionOperator;
-import io.innospots.workflow.console.operator.apps.AppNodeGroupOperator;
+import io.innospots.workflow.console.operator.node.FlowCategoryOperator;
+import io.innospots.workflow.console.operator.node.FlowTemplateOperator;
+import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
+import io.innospots.workflow.console.operator.node.FlowNodeGroupOperator;
 import io.innospots.workflow.console.operator.execution.*;
 import io.innospots.workflow.console.operator.instance.EdgeOperator;
 import io.innospots.workflow.console.operator.instance.NodeInstanceOperator;
@@ -62,15 +62,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import javax.annotation.PostConstruct;
-import java.io.File;
-
 /**
  * @author Smars
  * @date 2021/3/16
  */
 @Configuration
-@ComponentScan(basePackages = {"io.innospots.workflow.console.listener","io.innospots.workflow.console.task"})
+@ComponentScan(basePackages = {"io.innospots.workflow.console.task"})
 @EnableCaching
 @EnableConfigurationProperties({InnospotsConsoleProperties.class, InnospotWorkflowProperties.class})
 @Import({LibraBaseConfiguration.class})
@@ -94,9 +91,9 @@ public class WorkflowOperatorConfiguration {
 
 
     @Bean
-    public AppNodeGroupOperator nodeGroupOperator(AppNodeGroupDao appNodeGroupDao, AppNodeGroupNodeDao appNodeGroupNodeDao,
-                                                  AppNodeDefinitionDao appNodeDefinitionDao) {
-        return new AppNodeGroupOperator(appNodeGroupDao, appNodeGroupNodeDao, appNodeDefinitionDao);
+    public FlowNodeGroupOperator nodeGroupOperator(FlowNodeGroupDao flowNodeGroupDao, FlowNodeGroupNodeDao flowNodeGroupNodeDao,
+                                                   FlowNodeDefinitionDao flowNodeDefinitionDao) {
+        return new FlowNodeGroupOperator(flowNodeGroupDao, flowNodeGroupNodeDao, flowNodeDefinitionDao);
     }
 
     @Bean
@@ -106,19 +103,19 @@ public class WorkflowOperatorConfiguration {
     }
 
     @Bean
-    public AppCategoryOperator appCategoryOperator() {
-        return new AppCategoryOperator();
+    public FlowCategoryOperator appCategoryOperator() {
+        return new FlowCategoryOperator();
     }
 
 
     @Bean
-    public AppNodeDefinitionOperator nodeDefinitionOperator() {
-        return new AppNodeDefinitionOperator();
+    public FlowNodeDefinitionOperator nodeDefinitionOperator() {
+        return new FlowNodeDefinitionOperator();
     }
 
     @Bean
-    public AppFlowTemplateOperator workFlowTemplateOperator(AppNodeGroupOperator appNodeGroupOperator) {
-        return new AppFlowTemplateOperator(appNodeGroupOperator);
+    public FlowTemplateOperator workFlowTemplateOperator(FlowNodeGroupOperator flowNodeGroupOperator) {
+        return new FlowTemplateOperator(flowNodeGroupOperator);
     }
 
     @Bean
@@ -127,8 +124,8 @@ public class WorkflowOperatorConfiguration {
     }
 
     @Bean
-    public NodeInstanceOperator nodeInstanceOperator(AppNodeDefinitionOperator appNodeDefinitionOperator) {
-        return new NodeInstanceOperator(appNodeDefinitionOperator);
+    public NodeInstanceOperator nodeInstanceOperator(FlowNodeDefinitionOperator flowNodeDefinitionOperator) {
+        return new NodeInstanceOperator(flowNodeDefinitionOperator);
     }
 
     @Bean
@@ -137,8 +134,8 @@ public class WorkflowOperatorConfiguration {
     }
 
     @Bean
-    public WorkflowInstanceOperator workflowInstanceOperator(AppFlowTemplateOperator appFlowTemplateOperator) {
-        return new WorkflowInstanceOperator(appFlowTemplateOperator);
+    public WorkflowInstanceOperator workflowInstanceOperator(FlowTemplateOperator flowTemplateOperator) {
+        return new WorkflowInstanceOperator(flowTemplateOperator);
     }
 
     @Bean

@@ -21,7 +21,7 @@ package io.innospots.libra.kernel.module.todo.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.user.UserInfo;
-import io.innospots.libra.base.operator.SysUserReader;
+import io.innospots.libra.base.user.SysUserReader;
 import io.innospots.libra.kernel.module.todo.converter.TodoTaskConverter;
 import io.innospots.libra.kernel.module.todo.entity.TodoTaskEntity;
 import io.innospots.libra.kernel.module.todo.entity.TodoTaskTagEntity;

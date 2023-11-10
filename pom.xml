@@ -33,7 +33,7 @@
         <aviator.version>5.3.0</aviator.version>
         <beanutils.version>1.9.4</beanutils.version>
         <caffeine.version>2.9.3</caffeine.version>
-        <calcite.version>1.26.0</calcite.version>
+        <calcite.version>1.32.0</calcite.version>
         <oshi.version>5.6.1</oshi.version>
         <commons-text.version>1.10.0</commons-text.version>
         <commons-math3.version>3.6.1</commons-math3.version>
