@@ -18,7 +18,7 @@
 
 package io.innospots.workflow.node.app.trigger;
 
-import io.innospots.workflow.core.webhook.FlowWebhookConfig;
+import io.innospots.workflow.core.runtime.webhook.FlowWebhookConfig;
 
 
 /**

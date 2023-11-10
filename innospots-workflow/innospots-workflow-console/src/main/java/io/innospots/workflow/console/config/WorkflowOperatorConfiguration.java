@@ -52,7 +52,7 @@ import io.innospots.workflow.core.execution.reader.NodeExecutionReader;
 import io.innospots.workflow.core.execution.store.FlowExecutionStoreListener;
 import io.innospots.workflow.core.execution.store.NodeExecutionStoreListener;
 import io.innospots.workflow.core.flow.instance.IWorkflowCacheDraftOperator;
-import io.innospots.workflow.core.loader.IWorkflowLoader;
+import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

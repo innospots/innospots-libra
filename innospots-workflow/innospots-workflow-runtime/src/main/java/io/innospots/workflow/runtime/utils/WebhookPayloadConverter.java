@@ -18,8 +18,8 @@
 
 package io.innospots.workflow.runtime.utils;
 
-import io.innospots.workflow.core.webhook.FlowWebhookConfig;
-import io.innospots.workflow.core.webhook.WebhookPayload;
+import io.innospots.workflow.core.runtime.webhook.FlowWebhookConfig;
+import io.innospots.workflow.core.runtime.webhook.WebhookPayload;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.core.io.InputStreamSource;
 import org.springframework.web.multipart.MultipartFile;

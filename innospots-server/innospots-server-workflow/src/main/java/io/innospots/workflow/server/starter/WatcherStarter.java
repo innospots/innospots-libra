@@ -22,7 +22,7 @@ package io.innospots.workflow.server.starter;
 import io.innospots.base.watcher.WatcherSupervisor;
 import io.innospots.server.base.registry.ServiceRegistryHolder;
 import io.innospots.workflow.core.execution.operator.IScheduledNodeExecutionOperator;
-import io.innospots.workflow.core.loader.IWorkflowLoader;
+import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
 import io.innospots.base.utils.ServiceActionHolder;
 import io.innospots.workflow.runtime.container.RunTimeContainerManager;
 import io.innospots.workflow.runtime.flow.FlowManager;

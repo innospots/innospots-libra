@@ -20,7 +20,7 @@ package io.innospots.workflow.core.execution.flow;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.workflow.core.context.WorkflowRuntimeContext;
+import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
 import io.innospots.workflow.core.execution.ExecutionInput;
 import io.innospots.workflow.core.execution.ExecutionResource;
 import io.innospots.workflow.core.execution.ExecutionStatus;

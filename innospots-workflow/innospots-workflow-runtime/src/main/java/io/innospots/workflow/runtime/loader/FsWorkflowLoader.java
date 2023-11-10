@@ -22,8 +22,8 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import io.innospots.workflow.core.flow.WorkflowBody;
-import io.innospots.workflow.core.loader.BaseWorkflowLoader;
-import io.innospots.workflow.core.loader.IWorkflowLoader;
+import io.innospots.workflow.core.flow.loader.BaseWorkflowLoader;
+import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

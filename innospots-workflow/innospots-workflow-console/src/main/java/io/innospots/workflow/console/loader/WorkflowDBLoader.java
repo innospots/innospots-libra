@@ -1,9 +1,8 @@
 package io.innospots.workflow.console.loader;
 
 import io.innospots.workflow.console.operator.instance.WorkflowBuilderOperator;
-import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
 import io.innospots.workflow.core.flow.WorkflowBody;
-import io.innospots.workflow.core.loader.IWorkflowLoader;
+import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
 
 import java.util.List;
 

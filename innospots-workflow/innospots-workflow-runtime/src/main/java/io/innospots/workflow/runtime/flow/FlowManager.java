@@ -23,7 +23,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import io.innospots.workflow.core.execution.listener.INodeExecutionListener;
 import io.innospots.workflow.core.flow.BuildProcessInfo;
 import io.innospots.workflow.core.flow.WorkflowBody;
-import io.innospots.workflow.core.loader.IWorkflowLoader;
+import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
 import io.innospots.workflow.core.node.app.BaseAppNode;
 import io.innospots.workflow.core.node.app.TriggerNode;
 import io.innospots.workflow.core.runtime.FlowRuntimeRegistry;

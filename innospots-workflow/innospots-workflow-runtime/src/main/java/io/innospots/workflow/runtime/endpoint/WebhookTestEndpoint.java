@@ -22,7 +22,7 @@ package io.innospots.workflow.runtime.endpoint;
 import io.innospots.base.constant.PathConstant;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.workflow.core.debug.FlowNodeDebugger;
-import io.innospots.workflow.core.webhook.WorkflowResponse;
+import io.innospots.workflow.core.runtime.webhook.WorkflowResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

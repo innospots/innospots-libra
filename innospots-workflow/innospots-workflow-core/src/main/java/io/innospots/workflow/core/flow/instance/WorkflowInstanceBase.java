@@ -20,7 +20,7 @@ package io.innospots.workflow.core.flow.instance;
 
 import io.innospots.base.enums.DataStatus;
 import io.innospots.workflow.core.flow.WorkflowBaseInfo;
-import io.innospots.workflow.core.loader.IWorkflowLoader;
+import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;

@@ -24,13 +24,12 @@ import io.innospots.base.data.operator.IQueueReceiver;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.base.utils.thread.ThreadPoolBuilder;
 import io.innospots.base.utils.thread.ThreadTaskExecutor;
-import io.innospots.workflow.core.context.WorkflowRuntimeContext;
+import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
 import io.innospots.workflow.core.runtime.FlowRuntimeRegistry;
 import io.innospots.workflow.node.app.trigger.QueueTriggerNode;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.List;
 import java.util.Map;

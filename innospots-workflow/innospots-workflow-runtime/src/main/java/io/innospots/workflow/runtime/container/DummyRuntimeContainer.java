@@ -1,10 +1,9 @@
 package io.innospots.workflow.runtime.container;
 
-import io.innospots.workflow.core.context.WorkflowRuntimeContext;
+import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
 import io.innospots.workflow.core.runtime.FlowRuntimeRegistry;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

@@ -18,7 +18,7 @@
 
 package io.innospots.workflow.runtime.container;
 
-import io.innospots.workflow.core.lisenter.WorkflowRuntimeListener;
+import io.innospots.workflow.core.runtime.lisenter.WorkflowRuntimeListener;
 import io.innospots.workflow.core.runtime.FlowRuntimeRegistry;
 
 import java.util.*;

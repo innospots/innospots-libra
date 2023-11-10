@@ -20,8 +20,8 @@ package io.innospots.workflow.runtime.endpoint;
 
 
 import io.innospots.base.constant.PathConstant;
-import io.innospots.workflow.core.webhook.WebhookPayload;
-import io.innospots.workflow.core.webhook.WorkflowResponse;
+import io.innospots.workflow.core.runtime.webhook.WebhookPayload;
+import io.innospots.workflow.core.runtime.webhook.WorkflowResponse;
 import io.innospots.workflow.runtime.container.WebhookRuntimeContainer;
 import io.innospots.workflow.runtime.utils.WebhookPayloadConverter;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
