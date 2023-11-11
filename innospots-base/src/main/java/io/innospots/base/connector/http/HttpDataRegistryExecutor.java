@@ -18,14 +18,12 @@
 
 package io.innospots.base.connector.http;
 
-import io.innospots.base.connector.schema.ApiSchemaRegistry;
-import io.innospots.base.connector.schema.SchemaField;
+import io.innospots.base.connector.schema.model.ApiSchemaRegistry;
+import io.innospots.base.connector.schema.model.SchemaField;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.enums.ApiMethod;
 import io.innospots.base.data.operator.IExecutionOperator;
-import io.innospots.base.data.request.BaseRequest;
 import io.innospots.base.data.request.ItemRequest;
-import io.innospots.base.data.request.SimpleRequest;
 import io.innospots.base.enums.ScriptType;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.exception.data.HttpConnectionException;

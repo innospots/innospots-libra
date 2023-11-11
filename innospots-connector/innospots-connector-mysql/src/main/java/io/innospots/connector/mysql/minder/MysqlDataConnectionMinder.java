@@ -20,7 +20,7 @@ package io.innospots.connector.mysql.minder;
 
 
 import io.innospots.base.connector.jdbc.JdbcDataConnectionMinder;
-import io.innospots.base.connector.credential.ConnectionCredential;
+import io.innospots.base.connector.credential.model.ConnectionCredential;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;

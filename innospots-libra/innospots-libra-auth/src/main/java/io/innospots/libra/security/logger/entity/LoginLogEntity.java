@@ -21,7 +21,7 @@ package io.innospots.libra.security.logger.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.innospots.libra.base.entity.BaseEntity;
+import io.innospots.base.entity.BaseEntity;
 import io.innospots.libra.base.terminal.TerminalInfo;
 import lombok.Getter;
 import lombok.Setter;

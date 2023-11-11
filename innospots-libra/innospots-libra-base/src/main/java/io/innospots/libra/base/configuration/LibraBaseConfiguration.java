@@ -24,9 +24,11 @@ import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
 import com.google.common.collect.ImmutableList;
+import io.innospots.base.config.CredentialConfiguration;
+import io.innospots.base.connector.schema.operator.SchemaRegistryOperator;
 import io.innospots.base.store.CacheStoreManager;
 import io.innospots.base.utils.CCH;
-import io.innospots.libra.base.credential.config.CredentialConfiguration;
+import io.innospots.libra.base.category.SchemaCategoryOperator;
 import io.innospots.libra.base.handler.EntityMetaObjectHandler;
 import io.innospots.libra.base.temp.SystemTempCacheOperator;
 import net.sf.jsqlparser.expression.Expression;
@@ -48,7 +50,7 @@ import java.util.List;
 @EntityScan(basePackages = {"io.innospots.libra.base.temp","io.innospots.libra.base.function"})
 @MapperScan(basePackages = {"io.innospots.libra.base.temp","io.innospots.libra.base.function"})
 @Import({CredentialConfiguration.class,CredentialConfiguration.class})
-@EnableConfigurationProperties({AuthProperties.class,InnospotsConsoleProperties.class})
+@EnableConfigurationProperties({AuthProperties.class, InnospotsConsoleProperties.class})
 public class LibraBaseConfiguration {
 
     private final static List<String> IGNORE_TABLES = ImmutableList.of(
@@ -122,5 +124,10 @@ public class LibraBaseConfiguration {
         SystemTempCacheOperator cacheOperator =  new SystemTempCacheOperator();
         CacheStoreManager.set(cacheOperator);
         return cacheOperator;
+    }
+
+    @Bean
+    public SchemaCategoryOperator schemaCategoryOperator(SchemaRegistryOperator schemaRegistryOperator) {
+        return new SchemaCategoryOperator(schemaRegistryOperator);
     }
 }

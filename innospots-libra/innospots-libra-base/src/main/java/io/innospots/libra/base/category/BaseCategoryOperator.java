@@ -21,7 +21,6 @@ package io.innospots.libra.base.category;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import io.innospots.base.connector.schema.SchemaRegistryType;
 import io.innospots.base.exception.ResourceException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,9 +28,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * @author Alfred

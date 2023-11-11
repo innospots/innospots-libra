@@ -19,8 +19,7 @@
 package io.innospots.connector.redis.minder;
 
 import io.innospots.base.connector.minder.BaseDataConnectionMinder;
-import io.innospots.base.data.operator.IOperator;
-import io.innospots.base.connector.credential.ConnectionCredential;
+import io.innospots.base.connector.credential.model.ConnectionCredential;
 import io.innospots.connector.redis.operator.RedisDataOperator;
 import redis.clients.jedis.Jedis;
 

@@ -21,7 +21,7 @@ package io.innospots.connector.api.minder;
 import cn.hutool.core.net.url.UrlBuilder;
 import io.innospots.base.constant.PathConstant;
 import io.innospots.base.data.enums.ApiMethod;
-import io.innospots.base.connector.credential.ConnectionCredential;
+import io.innospots.base.connector.credential.model.ConnectionCredential;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.store.CacheStoreManager;
 import org.apache.commons.collections4.MapUtils;

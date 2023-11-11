@@ -1,7 +1,7 @@
 package io.innospots.base.function;
 
-import io.innospots.base.function.definition.FunctionDefinition;
-import io.innospots.base.function.definition.FunctionDefinitionManager;
+import io.innospots.base.function.definition.model.FunctionDefinition;
+import io.innospots.base.function.definition.manager.FunctionDefinitionManager;
 import io.innospots.base.model.field.FieldValueType;
 import org.junit.Test;
 

@@ -23,7 +23,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.enums.OnOff;
-import io.innospots.libra.base.entity.BaseEntity;
+import io.innospots.base.entity.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 

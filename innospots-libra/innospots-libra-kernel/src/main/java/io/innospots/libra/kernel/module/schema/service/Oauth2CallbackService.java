@@ -1,12 +1,12 @@
 package io.innospots.libra.kernel.module.schema.service;
 
-import io.innospots.base.connector.credential.ConnectionCredential;
-import io.innospots.base.connector.credential.CredentialInfo;
+import io.innospots.base.connector.credential.model.ConnectionCredential;
+import io.innospots.base.connector.credential.model.CredentialInfo;
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.store.CacheStoreManager;
-import io.innospots.libra.base.credential.reader.ConnectionCredentialReader;
+import io.innospots.base.connector.credential.reader.ConnectionCredentialReader;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;

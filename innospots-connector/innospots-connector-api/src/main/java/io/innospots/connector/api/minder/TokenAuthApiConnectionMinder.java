@@ -19,7 +19,7 @@
 package io.innospots.connector.api.minder;
 
 import io.innospots.base.connector.http.HttpDataConnectionMinder;
-import io.innospots.base.connector.credential.ConnectionCredential;
+import io.innospots.base.connector.credential.model.ConnectionCredential;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;

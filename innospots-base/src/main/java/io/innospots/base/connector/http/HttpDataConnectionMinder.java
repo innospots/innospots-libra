@@ -21,10 +21,9 @@ package io.innospots.base.connector.http;
 
 import io.innospots.base.connector.minder.BaseDataConnectionMinder;
 import io.innospots.base.data.operator.IExecutionOperator;
-import io.innospots.base.data.operator.IOperator;
 import io.innospots.base.data.request.ItemRequest;
-import io.innospots.base.connector.schema.ApiSchemaRegistry;
-import io.innospots.base.connector.credential.ConnectionCredential;
+import io.innospots.base.connector.schema.model.ApiSchemaRegistry;
+import io.innospots.base.connector.credential.model.ConnectionCredential;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;

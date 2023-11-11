@@ -39,7 +39,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
@@ -54,12 +53,12 @@ import java.io.File;
 @MapperScan(basePackages = {"io.innospots.server.base.registry"})
 @EntityScan(basePackages = {"io.innospots.server.base.registry"})
 @Configuration
-@EnableConfigurationProperties({InnospotsConfigProperties.class})
+@EnableConfigurationProperties({InnospotsServerProperties.class})
 @Import({CCH.class})
 public class BaseServiceConfiguration {
 
     @PostConstruct
-    public void buildPath(InnospotsConfigProperties configProperties) {
+    public void buildPath(InnospotsServerProperties configProperties) {
         GenericExpressionEngine.setPath(configProperties.getScriptBuildPath() + File.separator + "src", configProperties.getScriptBuildPath());
     }
 
@@ -75,12 +74,12 @@ public class BaseServiceConfiguration {
 
 
     @Bean
-    public ServiceRegistryStarter serviceRegistryStarter(InnospotsConfigProperties configProperties, WatcherSupervisor watcherSupervisor, ServiceRegistryManager serviceRegistryManager) {
+    public ServiceRegistryStarter serviceRegistryStarter(InnospotsServerProperties configProperties, WatcherSupervisor watcherSupervisor, ServiceRegistryManager serviceRegistryManager) {
         return new ServiceRegistryStarter(configProperties, watcherSupervisor, serviceRegistryManager);
     }
 
     @Bean
-    public WatcherSupervisor watcherSupervisor(InnospotsConfigProperties configProperties) {
+    public WatcherSupervisor watcherSupervisor(InnospotsServerProperties configProperties) {
         return new WatcherSupervisor(configProperties.getWatcherSize());
     }
 

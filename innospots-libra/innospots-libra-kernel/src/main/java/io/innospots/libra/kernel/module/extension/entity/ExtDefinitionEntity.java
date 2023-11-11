@@ -21,7 +21,7 @@ package io.innospots.libra.kernel.module.extension.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.innospots.libra.base.entity.BaseEntity;
+import io.innospots.base.entity.BaseEntity;
 import io.innospots.libra.base.extension.ExtensionSource;
 import io.innospots.libra.base.extension.ExtensionStatus;
 import lombok.Getter;

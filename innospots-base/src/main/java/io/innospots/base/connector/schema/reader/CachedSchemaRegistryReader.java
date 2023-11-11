@@ -20,7 +20,7 @@ package io.innospots.base.connector.schema.reader;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import io.innospots.base.connector.schema.SchemaRegistry;
+import io.innospots.base.connector.schema.model.SchemaRegistry;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 

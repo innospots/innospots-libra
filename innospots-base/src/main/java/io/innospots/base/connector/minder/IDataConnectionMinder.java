@@ -20,9 +20,9 @@ package io.innospots.base.connector.minder;
 
 
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.connector.credential.ConnectionCredential;
-import io.innospots.base.connector.schema.SchemaCatalog;
-import io.innospots.base.connector.schema.SchemaRegistry;
+import io.innospots.base.connector.credential.model.ConnectionCredential;
+import io.innospots.base.connector.schema.model.SchemaCatalog;
+import io.innospots.base.connector.schema.model.SchemaRegistry;
 import io.innospots.base.connector.schema.reader.ISchemaRegistryReader;
 import io.innospots.base.data.operator.IOperator;
 

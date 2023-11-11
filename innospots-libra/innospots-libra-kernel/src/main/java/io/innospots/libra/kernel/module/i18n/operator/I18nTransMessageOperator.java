@@ -24,7 +24,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.libra.base.entity.BaseEntity;
+import io.innospots.base.entity.BaseEntity;
 import io.innospots.libra.kernel.module.i18n.converter.I18NLanguageConverter;
 import io.innospots.libra.kernel.module.i18n.converter.I18nDictionaryConverter;
 import io.innospots.libra.kernel.module.i18n.dao.I18nDictionaryDao;

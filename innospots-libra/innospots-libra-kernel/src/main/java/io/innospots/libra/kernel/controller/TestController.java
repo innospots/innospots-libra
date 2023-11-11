@@ -21,7 +21,6 @@ package io.innospots.libra.kernel.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.innospots.base.model.response.InnospotResponse;
-import io.innospots.base.re.function.HttpFunc;
 import io.innospots.libra.base.configuration.InnospotsConsoleProperties;
 import io.innospots.libra.kernel.service.TestService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,7 +29,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;

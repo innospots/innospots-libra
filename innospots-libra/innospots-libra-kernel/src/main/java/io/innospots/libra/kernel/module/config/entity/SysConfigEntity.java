@@ -23,7 +23,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.innospots.base.crypto.EncryptType;
 import io.innospots.base.model.field.FieldValueType;
-import io.innospots.libra.base.entity.PBaseEntity;
+import io.innospots.base.entity.PBaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 

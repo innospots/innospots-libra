@@ -18,8 +18,8 @@
 
 package io.innospots.libra.kernel.module.schema.controller;
 
-import io.innospots.base.connector.credential.ConnectionCredential;
-import io.innospots.base.connector.credential.IConnectionCredentialReader;
+import io.innospots.base.connector.credential.model.ConnectionCredential;
+import io.innospots.base.connector.credential.reader.IConnectionCredentialReader;
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.connector.minder.IDataConnectionMinder;
 import io.innospots.base.data.operator.IQueueSender;

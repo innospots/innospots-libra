@@ -18,18 +18,18 @@
 
 package io.innospots.libra.kernel.module.schema.controller;
 
-import io.innospots.base.connector.credential.ConnectionCredential;
-import io.innospots.base.connector.credential.IConnectionCredentialReader;
+import io.innospots.base.connector.credential.model.ConnectionCredential;
+import io.innospots.base.connector.credential.reader.IConnectionCredentialReader;
 import io.innospots.base.connector.http.HttpConnection;
 import io.innospots.base.connector.http.HttpDataExecutor;
-import io.innospots.base.connector.schema.ApiSchemaRegistry;
+import io.innospots.base.connector.schema.model.ApiSchemaRegistry;
 import io.innospots.base.data.request.ItemRequest;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ResourceItemOperation;
-import io.innospots.libra.base.schema.operator.HttpApiOperator;
+import io.innospots.base.connector.schema.operator.HttpApiOperator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.validation.annotation.Validated;

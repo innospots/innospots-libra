@@ -20,11 +20,11 @@ package io.innospots.libra.kernel.module.schema.controller;
 
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.connector.minder.IDataConnectionMinder;
-import io.innospots.base.connector.schema.SchemaCatalog;
+import io.innospots.base.connector.schema.model.SchemaCatalog;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.menu.ModuleMenu;
-import io.innospots.libra.base.schema.operator.SchemaRegistryOperator;
+import io.innospots.base.connector.schema.operator.SchemaRegistryOperator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -1,7 +1,7 @@
 package io.innospots.connector;
 
-import io.innospots.base.connector.schema.config.ConnectionMinderSchema;
-import io.innospots.base.connector.schema.config.ConnectionMinderSchemaLoader;
+import io.innospots.base.connector.schema.meta.ConnectionMinderSchema;
+import io.innospots.base.connector.schema.meta.ConnectionMinderSchemaLoader;
 import org.junit.jupiter.api.Test;
 
 /**

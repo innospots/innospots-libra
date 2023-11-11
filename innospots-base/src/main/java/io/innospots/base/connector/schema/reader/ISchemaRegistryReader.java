@@ -18,7 +18,7 @@
 
 package io.innospots.base.connector.schema.reader;
 
-import io.innospots.base.connector.schema.SchemaRegistry;
+import io.innospots.base.connector.schema.model.SchemaRegistry;
 
 import java.util.List;
 

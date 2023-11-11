@@ -3,7 +3,7 @@ package io.innospots.libra.kernel.module.task.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.innospots.libra.base.entity.BaseEntity;
+import io.innospots.base.entity.BaseEntity;
 import io.innospots.libra.base.task.TaskExecutionStatus;
 import lombok.Getter;
 import lombok.Setter;

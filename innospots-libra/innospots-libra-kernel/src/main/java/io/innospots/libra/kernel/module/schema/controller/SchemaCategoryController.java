@@ -27,7 +27,7 @@ import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
 import io.innospots.libra.base.category.BaseCategory;
-import io.innospots.libra.base.schema.operator.SchemaCategoryOperator;
+import io.innospots.libra.base.category.SchemaCategoryOperator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

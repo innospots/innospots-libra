@@ -72,15 +72,6 @@ public class AuthProperties {
      */
     private Integer tokenExpTimeMinute = 180;
 
-    private String publicKey;
-
-    private String privateKey;
-
-    /**
-     * Symmetric encryption key
-     */
-    private String secretKey;
-
     /**
      * these paths can be access in public, not be login
      */

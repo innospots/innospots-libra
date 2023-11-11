@@ -23,7 +23,7 @@ import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.connector.minder.IDataConnectionMinder;
 import io.innospots.base.connector.minder.IQueueConnectionMinder;
 import io.innospots.base.data.operator.IQueueSender;
-import io.innospots.base.connector.schema.SchemaRegistry;
+import io.innospots.base.connector.schema.model.SchemaRegistry;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.ExecutionInput;

@@ -22,7 +22,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.innospots.base.enums.DataStatus;
-import io.innospots.libra.base.entity.PBaseEntity;
+import io.innospots.base.entity.PBaseEntity;
 import io.innospots.libra.kernel.module.notification.model.NotificationChannel;
 import lombok.Getter;
 import lombok.Setter;

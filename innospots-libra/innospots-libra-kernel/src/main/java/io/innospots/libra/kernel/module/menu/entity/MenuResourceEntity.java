@@ -21,7 +21,7 @@ package io.innospots.libra.kernel.module.menu.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.innospots.libra.base.entity.PBaseEntity;
+import io.innospots.base.entity.PBaseEntity;
 import io.innospots.libra.base.menu.BaseItem;
 import io.innospots.libra.base.menu.ItemType;
 import io.innospots.libra.base.menu.OptElement;

@@ -12,57 +12,9 @@
     <artifactId>innospots-base</artifactId>
 
     <dependencies>
-
-        <!--
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-autoconfigure</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-
-        <dependency>
-            <groupId>jakarta.persistence</groupId>
-            <artifactId>jakarta.persistence-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-                -->
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-        </dependency>
-
-
-        <dependency>
-            <groupId>io.swagger.core.v3</groupId>
-            <artifactId>swagger-core</artifactId>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -154,6 +106,49 @@
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!--
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        -->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <!--

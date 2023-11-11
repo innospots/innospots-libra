@@ -20,7 +20,7 @@ package io.innospots.server.base.registry;
 
 import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.base.watcher.WatcherSupervisor;
-import io.innospots.server.base.configuration.InnospotsConfigProperties;
+import io.innospots.server.base.configuration.InnospotsServerProperties;
 import io.innospots.server.base.registry.enums.ServiceRole;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
@@ -43,13 +43,13 @@ public class ServiceRegistryStarter implements ApplicationRunner {
 
     private WatcherSupervisor watcherSupervisor;
 
-    private InnospotsConfigProperties configProperties;
+    private InnospotsServerProperties configProperties;
 
     private static ApplicationContext applicationContext;
 
 
     public ServiceRegistryStarter(
-            InnospotsConfigProperties configProperties,
+            InnospotsServerProperties configProperties,
             WatcherSupervisor watcherSupervisor,
             ServiceRegistryManager serviceRegistryManager) {
         this.watcherSupervisor = watcherSupervisor;

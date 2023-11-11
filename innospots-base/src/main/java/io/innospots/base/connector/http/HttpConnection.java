@@ -18,7 +18,7 @@
 
 package io.innospots.base.connector.http;
 
-import io.innospots.base.connector.credential.ConnectionCredential;
+import io.innospots.base.connector.credential.model.ConnectionCredential;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.http.HttpClientBuilder;
 import lombok.extern.slf4j.Slf4j;
