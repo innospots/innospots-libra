@@ -19,7 +19,7 @@
 package io.innospots.workflow.console.model;
 
 import io.innospots.base.enums.DataStatus;
-import io.innospots.workflow.core.enums.AppPrimitive;
+import io.innospots.workflow.core.enums.NodePrimitive;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,6 +42,6 @@ public class AppQueryRequest {
     @Schema(title = "number of entries per page")
     protected int size = 20;
 
-    protected AppPrimitive primitive;
+    protected NodePrimitive primitive;
 
 }

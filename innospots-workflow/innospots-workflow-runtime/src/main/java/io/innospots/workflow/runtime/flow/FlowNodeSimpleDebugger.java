@@ -24,7 +24,7 @@ import com.google.common.collect.Lists;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
-import io.innospots.workflow.core.debug.AppDebugPayload;
+import io.innospots.workflow.core.debug.DebugPayload;
 import io.innospots.workflow.core.engine.FlowEngineManager;
 import io.innospots.workflow.core.engine.IFlowEngine;
 import io.innospots.workflow.core.enums.FlowStatus;
@@ -40,8 +40,8 @@ import io.innospots.workflow.core.execution.operator.IFlowExecutionOperator;
 import io.innospots.workflow.core.execution.reader.NodeExecutionReader;
 import io.innospots.workflow.core.flow.BuildProcessInfo;
 import io.innospots.workflow.core.flow.WorkflowBaseBody;
-import io.innospots.workflow.core.flow.instance.IWorkflowCacheDraftOperator;
-import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.flow.reader.IWorkflowReader;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.core.runtime.webhook.DefaultResponseBuilder;
 import io.innospots.workflow.core.runtime.webhook.WorkflowResponse;
 import io.innospots.workflow.node.app.trigger.ApiTriggerNode;
@@ -68,11 +68,11 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
 
     private IFlowExecutionOperator flowExecutionOperator;
 
-    private IWorkflowCacheDraftOperator workflowCacheDraftOperator;
+    private IWorkflowReader workflowCacheDraftOperator;
 
     private Cache<Long, String> executionCache = Caffeine.newBuilder().build();
 
-    public FlowNodeSimpleDebugger(IWorkflowCacheDraftOperator workFlowBuilderOperator,
+    public FlowNodeSimpleDebugger(IWorkflowReader workFlowBuilderOperator,
                                   NodeExecutionReader nodeExecutionReader,
                                   IFlowExecutionOperator flowExecutionOperator) {
         this.workflowCacheDraftOperator = workFlowBuilderOperator;
@@ -216,8 +216,8 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
     }
 
     @Override
-    public NodeExecutionDisplay execute(AppDebugPayload appDebugPayload) {
-        return AppNodeDebugger.execute(appDebugPayload);
+    public NodeExecutionDisplay execute(DebugPayload debugPayload) {
+        return AppNodeDebugger.execute(debugPayload);
     }
 
     @Override

@@ -18,44 +18,32 @@
 
 package io.innospots.workflow.console.config;
 
-import io.innospots.base.connector.minder.DataConnectionMinderManager;
-import io.innospots.base.data.operator.IDataOperator;
-import io.innospots.libra.base.configuration.InnospotsConsoleProperties;
-import io.innospots.libra.base.configuration.LibraBaseConfiguration;
-import io.innospots.workflow.console.dao.node.FlowNodeDefinitionDao;
-import io.innospots.workflow.console.dao.node.FlowNodeGroupDao;
-import io.innospots.workflow.console.dao.node.FlowNodeGroupNodeDao;
-import io.innospots.workflow.console.dao.execution.ExecutionContextDao;
-import io.innospots.workflow.console.dao.execution.FlowExecutionDao;
-import io.innospots.workflow.console.dao.execution.NodeExecutionDao;
-import io.innospots.workflow.console.dao.execution.ScheduledNodeExecutionDao;
-import io.innospots.workflow.console.dao.instance.WorkflowInstanceCacheDao;
-import io.innospots.workflow.console.dao.instance.WorkflowRevisionDao;
-import io.innospots.workflow.console.loader.WorkflowDBLoader;
 import io.innospots.workflow.console.operator.WorkflowCategoryOperator;
-import io.innospots.workflow.console.operator.node.FlowCategoryOperator;
-import io.innospots.workflow.console.operator.node.FlowTemplateOperator;
-import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
-import io.innospots.workflow.console.operator.node.FlowNodeGroupOperator;
-import io.innospots.workflow.console.operator.execution.*;
+import io.innospots.workflow.console.operator.execution.ExecutionManagerOperator;
 import io.innospots.workflow.console.operator.instance.EdgeOperator;
 import io.innospots.workflow.console.operator.instance.NodeInstanceOperator;
 import io.innospots.workflow.console.operator.instance.WorkflowBuilderOperator;
 import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
-import io.innospots.workflow.core.config.InnospotWorkflowProperties;
-import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;
+import io.innospots.workflow.console.operator.node.FlowCategoryOperator;
+import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
+import io.innospots.workflow.console.operator.node.FlowNodeGroupOperator;
+import io.innospots.workflow.console.operator.node.FlowTemplateOperator;
+import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
+import io.innospots.workflow.core.config.WorkflowCoreConfiguration;
+import io.innospots.workflow.core.execution.dao.ExecutionContextDao;
+import io.innospots.workflow.core.execution.dao.FlowExecutionDao;
+import io.innospots.workflow.core.execution.dao.NodeExecutionDao;
+import io.innospots.workflow.core.execution.dao.ScheduledNodeExecutionDao;
 import io.innospots.workflow.core.execution.operator.IFlowExecutionOperator;
 import io.innospots.workflow.core.execution.operator.INodeExecutionOperator;
-import io.innospots.workflow.core.execution.operator.IScheduledNodeExecutionOperator;
 import io.innospots.workflow.core.execution.reader.FlowExecutionReader;
 import io.innospots.workflow.core.execution.reader.NodeExecutionReader;
-import io.innospots.workflow.core.execution.store.FlowExecutionStoreListener;
-import io.innospots.workflow.core.execution.store.NodeExecutionStoreListener;
-import io.innospots.workflow.core.flow.instance.IWorkflowCacheDraftOperator;
-import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import io.innospots.workflow.core.flow.reader.IWorkflowReader;
+import io.innospots.workflow.core.instance.dao.WorkflowInstanceCacheDao;
+import io.innospots.workflow.core.instance.dao.WorkflowRevisionDao;
+import io.innospots.workflow.core.node.definition.dao.FlowNodeDefinitionDao;
+import io.innospots.workflow.core.node.definition.dao.FlowNodeGroupDao;
+import io.innospots.workflow.core.node.definition.dao.FlowNodeGroupNodeDao;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -69,26 +57,8 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @ComponentScan(basePackages = {"io.innospots.workflow.console.task"})
 @EnableCaching
-@EnableConfigurationProperties({InnospotsConsoleProperties.class, InnospotWorkflowProperties.class})
-@Import({LibraBaseConfiguration.class})
-@MapperScan(basePackages = {
-        "io.innospots.workflow.console.dao.apps",
-        "io.innospots.workflow.console.dao.execution",
-        "io.innospots.workflow.console.dao.instance"})
-@EntityScan(basePackages = {
-        "io.innospots.workflow.console.entity.apps",
-        "io.innospots.workflow.console.entity.execution",
-        "io.innospots.workflow.console.entity.instance"})
+@Import({WorkflowCoreConfiguration.class})
 public class WorkflowOperatorConfiguration {
-
-
-    private final InnospotsConsoleProperties configProperties;
-
-    public WorkflowOperatorConfiguration(InnospotsConsoleProperties configProperties) {
-        this.configProperties = configProperties;
-    }
-
-
 
     @Bean
     public FlowNodeGroupOperator nodeGroupOperator(FlowNodeGroupDao flowNodeGroupDao, FlowNodeGroupNodeDao flowNodeGroupNodeDao,
@@ -138,45 +108,20 @@ public class WorkflowOperatorConfiguration {
         return new WorkflowInstanceOperator(flowTemplateOperator);
     }
 
-    @Bean
-    public IWorkflowLoader workflowInstanceLoader(WorkflowBuilderOperator workflowBuilderOperator){
-        return new WorkflowDBLoader(workflowBuilderOperator);
-    }
 
     @Bean
     public WorkflowBuilderOperator workflowBuilderOperator(WorkflowRevisionDao workflowRevisionDao,
                                                            WorkflowInstanceCacheDao instanceCacheDao,
                                                            WorkflowInstanceOperator workflowInstanceOperator,
                                                            NodeInstanceOperator nodeInstanceOperator, EdgeOperator edgeOperator,
-                                                           InnospotWorkflowProperties innospotWorkflowProperties) {
-        return new WorkflowBuilderOperator(workflowRevisionDao, instanceCacheDao, workflowInstanceOperator, nodeInstanceOperator, edgeOperator, innospotWorkflowProperties);
-    }
-
-    @Bean
-    public IExecutionContextOperator executionContextOperator(IDataOperator dataOperator, InnospotWorkflowProperties workflowProperties) {
-        return new JdbcExecutionContextOperator(dataOperator, workflowProperties.getExecutionStorePath());
-    }
-
-    @Bean
-    public IFlowExecutionOperator flowExecutionOperator(IDataOperator dataOperator, IExecutionContextOperator executionContextOperator) {
-        return new JdbcFlowExecutionOperator(dataOperator, executionContextOperator);
-    }
-
-    @Bean
-    public INodeExecutionOperator nodeExecutionOperator(IDataOperator dataOperator, IExecutionContextOperator executionContextOperator) {
-        return new JdbcNodeExecutionOperator(dataOperator, executionContextOperator);
-    }
-
-    @Bean
-    public IScheduledNodeExecutionOperator ScheduledNodeExecutionOperator(DataConnectionMinderManager dataConnectionMinderManager,
-                                                                          IDataOperator defaultDataOperator) {
-        return new ScheduledNodeExecutionOperator(dataConnectionMinderManager, defaultDataOperator);
+                                                           InnospotsWorkflowProperties innospotsWorkflowProperties) {
+        return new WorkflowBuilderOperator(workflowRevisionDao, instanceCacheDao, workflowInstanceOperator, nodeInstanceOperator, edgeOperator, innospotsWorkflowProperties);
     }
 
 
     @Bean
     public NodeExecutionReader nodeExecutionDisplayReader(
-            IWorkflowCacheDraftOperator workflowCacheDraftOperator,
+            IWorkflowReader workflowCacheDraftOperator,
             INodeExecutionOperator nodeExecutionOperator,
             IFlowExecutionOperator flowExecutionOperator
     ) {
@@ -188,14 +133,5 @@ public class WorkflowOperatorConfiguration {
         return new FlowExecutionReader(IFlowExecutionOperator, INodeExecutionOperator);
     }
 
-    @Bean
-    public FlowExecutionStoreListener flowExecutionStoreListener(IFlowExecutionOperator flowExecutionOperator) {
-        return new FlowExecutionStoreListener(flowExecutionOperator);
-    }
-
-    @Bean
-    public NodeExecutionStoreListener nodeExecutionStoreListener(INodeExecutionOperator nodeExecutionOperator) {
-        return new NodeExecutionStoreListener(nodeExecutionOperator);
-    }
 
 }

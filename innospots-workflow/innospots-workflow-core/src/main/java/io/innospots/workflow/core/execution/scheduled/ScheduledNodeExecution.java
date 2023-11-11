@@ -28,7 +28,7 @@ import org.apache.commons.lang3.RandomUtils;
 
 import java.time.LocalDateTime;
 
-import static io.innospots.workflow.core.config.InnospotWorkflowProperties.MAX_SHARDING_KEY;
+import static io.innospots.workflow.core.config.InnospotsWorkflowProperties.MAX_SHARDING_KEY;
 
 
 /**

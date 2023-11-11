@@ -25,12 +25,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.data.body.PageBody;
-import io.innospots.workflow.console.converter.node.FlowTemplateConverter;
-import io.innospots.workflow.console.dao.node.FlowTemplateDao;
-import io.innospots.workflow.console.entity.node.FlowTemplateEntity;
-import io.innospots.workflow.core.node.apps.AppFlowTemplate;
-import io.innospots.workflow.core.node.apps.AppFlowTemplateBase;
-import io.innospots.workflow.core.node.apps.AppNodeGroup;
+import io.innospots.workflow.core.node.definition.converter.FlowTemplateConverter;
+import io.innospots.workflow.core.node.definition.dao.FlowTemplateDao;
+import io.innospots.workflow.core.node.definition.entity.FlowTemplateEntity;
+import io.innospots.workflow.core.node.definition.model.FlowTemplate;
+import io.innospots.workflow.core.node.definition.model.FlowTemplateBase;
+import io.innospots.workflow.core.node.definition.model.AppNodeGroup;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
@@ -61,13 +61,13 @@ public class FlowTemplateOperator extends ServiceImpl<FlowTemplateDao, FlowTempl
      * @return WorkflowTemplate
      */
     @CacheEvict(value = CACHE_NAME, allEntries = true)
-    public AppFlowTemplateBase createTemplate(AppFlowTemplateBase appFlowTemplateBase) {
+    public FlowTemplateBase createTemplate(FlowTemplateBase flowTemplateBase) {
 
-        boolean checkCode = this.checkTemplate(appFlowTemplateBase.getTplCode());
+        boolean checkCode = this.checkTemplate(flowTemplateBase.getTplCode());
         if (checkCode) {
             throw ResourceException.buildDuplicateException(this.getClass(), "template code is exists");
         }
-        FlowTemplateEntity flowTemplateEntity = FlowTemplateConverter.INSTANCE.baseModelToEntity(appFlowTemplateBase);
+        FlowTemplateEntity flowTemplateEntity = FlowTemplateConverter.INSTANCE.baseModelToEntity(flowTemplateBase);
         boolean row = this.save(flowTemplateEntity);
         if (!row) {
             throw ResourceException.buildCreateException(this.getClass(), "flow template create fail");
@@ -81,9 +81,9 @@ public class FlowTemplateOperator extends ServiceImpl<FlowTemplateDao, FlowTempl
      *
      * @return Boolean
      */
-    public Boolean updateTemplate(AppFlowTemplateBase appFlowTemplateBase) {
-        String code = appFlowTemplateBase.getTplCode();
-        Integer flowTplId = appFlowTemplateBase.getFlowTplId();
+    public Boolean updateTemplate(FlowTemplateBase flowTemplateBase) {
+        String code = flowTemplateBase.getTplCode();
+        Integer flowTplId = flowTemplateBase.getFlowTplId();
         if (StringUtils.isNotEmpty(code)) {
             QueryWrapper<FlowTemplateEntity> checkQuery = new QueryWrapper<>();
             checkQuery.lambda().eq(FlowTemplateEntity::getTplCode, code)
@@ -93,7 +93,7 @@ public class FlowTemplateOperator extends ServiceImpl<FlowTemplateDao, FlowTempl
                 throw ResourceException.buildDuplicateException(this.getClass(), "template code is exists");
             }
         }
-        FlowTemplateEntity flowTemplateEntity = FlowTemplateConverter.INSTANCE.baseModelToEntity(appFlowTemplateBase);
+        FlowTemplateEntity flowTemplateEntity = FlowTemplateConverter.INSTANCE.baseModelToEntity(flowTemplateBase);
 
 
         boolean row = this.updateById(flowTemplateEntity);
@@ -153,7 +153,7 @@ public class FlowTemplateOperator extends ServiceImpl<FlowTemplateDao, FlowTempl
      * @param includeNodes include nodes flag
      * @return WorkflowTemplate
      */
-    public AppFlowTemplate getTemplate(Integer flowTplId, boolean includeNodes, boolean onlyConnector, boolean excludeTrigger) {
+    public FlowTemplate getTemplate(Integer flowTplId, boolean includeNodes, boolean onlyConnector, boolean excludeTrigger) {
         FlowTemplateEntity entity = this.getById(flowTplId);
         if (entity == null) {
             throw ResourceException.buildAbandonException(this.getClass(), "flow template " + flowTplId + " not exits");
@@ -167,11 +167,11 @@ public class FlowTemplateOperator extends ServiceImpl<FlowTemplateDao, FlowTempl
      * @param includeNodes
      * @return
      */
-    public AppFlowTemplate getTemplate(Integer flowTplId, boolean includeNodes) {
+    public FlowTemplate getTemplate(Integer flowTplId, boolean includeNodes) {
         return getTemplate(flowTplId, includeNodes, false, true);
     }
 
-    public AppFlowTemplate getTemplate(String templateCode, boolean includeNodes) {
+    public FlowTemplate getTemplate(String templateCode, boolean includeNodes) {
         QueryWrapper<FlowTemplateEntity> query = new QueryWrapper<>();
         query.lambda().eq(FlowTemplateEntity::getTplCode, templateCode);
         FlowTemplateEntity entity = this.getOne(query);
@@ -181,8 +181,8 @@ public class FlowTemplateOperator extends ServiceImpl<FlowTemplateDao, FlowTempl
         return getTemplate(entity, includeNodes, false, true);
     }
 
-    private AppFlowTemplate getTemplate(FlowTemplateEntity entity, boolean includeNodes, boolean onlyConnector, boolean excludeTrigger) {
-        AppFlowTemplate appFlowTemplate = FlowTemplateConverter.INSTANCE.entityToModel(entity);
+    private FlowTemplate getTemplate(FlowTemplateEntity entity, boolean includeNodes, boolean onlyConnector, boolean excludeTrigger) {
+        FlowTemplate appFlowTemplate = FlowTemplateConverter.INSTANCE.entityToModel(entity);
         List<AppNodeGroup> nodeGroups = flowNodeGroupOperator.getGroupByFlowTplId(entity.getFlowTplId(), includeNodes);
         if (includeNodes && onlyConnector) {
             nodeGroups.forEach(group -> group.setNodes(group.getNodes()
@@ -209,8 +209,8 @@ public class FlowTemplateOperator extends ServiceImpl<FlowTemplateDao, FlowTempl
      * @param size   size
      * @return Page<WorkflowTemplate>
      */
-    public PageBody<AppFlowTemplateBase> pageTemplates(String name, DataStatus status, Integer page, Integer size) {
-        PageBody<AppFlowTemplateBase> result = new PageBody<>();
+    public PageBody<FlowTemplateBase> pageTemplates(String name, DataStatus status, Integer page, Integer size) {
+        PageBody<FlowTemplateBase> result = new PageBody<>();
         Page<FlowTemplateEntity> queryPage = new Page<>(page, size);
         QueryWrapper<FlowTemplateEntity> queryWrapper = new QueryWrapper<>();
         if (StringUtils.isNotEmpty(name)) {
@@ -224,13 +224,13 @@ public class FlowTemplateOperator extends ServiceImpl<FlowTemplateDao, FlowTempl
             result.setTotal(queryPage.getTotal());
             result.setCurrent(queryPage.getCurrent());
             result.setPageSize(queryPage.getSize());
-            result.setList(CollectionUtils.isEmpty(queryPage.getRecords()) ? new ArrayList<AppFlowTemplateBase>() :
+            result.setList(CollectionUtils.isEmpty(queryPage.getRecords()) ? new ArrayList<FlowTemplateBase>() :
                     FlowTemplateConverter.INSTANCE.entityToBaseModelList(queryPage.getRecords()));
         }
         return result;
     }
 
-    public List<AppFlowTemplateBase> listOnlineFlowTemplates() {
+    public List<FlowTemplateBase> listOnlineFlowTemplates() {
         QueryWrapper<FlowTemplateEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("status", DataStatus.ONLINE);
         return FlowTemplateConverter.INSTANCE.entityToBaseModelList(this.list(queryWrapper));

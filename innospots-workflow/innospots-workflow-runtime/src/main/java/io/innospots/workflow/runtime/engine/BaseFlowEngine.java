@@ -31,7 +31,7 @@ import io.innospots.workflow.core.execution.flow.FlowExecution;
 import io.innospots.workflow.core.execution.listener.IFlowExecutionListener;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.flow.BuildProcessInfo;
-import io.innospots.workflow.core.node.app.BaseAppNode;
+import io.innospots.workflow.core.node.executor.BaseAppNode;
 import io.innospots.workflow.runtime.flow.Flow;
 import io.innospots.workflow.runtime.flow.FlowManager;
 import org.apache.commons.collections4.CollectionUtils;

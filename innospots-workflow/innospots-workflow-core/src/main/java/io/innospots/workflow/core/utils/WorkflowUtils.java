@@ -21,7 +21,7 @@ package io.innospots.workflow.core.utils;
 import io.innospots.base.crypto.EncryptType;
 import io.innospots.base.crypto.EncryptorBuilder;
 import io.innospots.base.crypto.IEncryptor;
-import io.innospots.workflow.core.config.InnospotWorkflowProperties;
+import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 
 /**
  * @author Smars
@@ -31,7 +31,7 @@ public class WorkflowUtils  {
 
     public static IEncryptor encryptor;
 
-    public static void initialize(InnospotWorkflowProperties innospotWorkflowProperties){
-        encryptor = EncryptorBuilder.build(EncryptType.BLOWFISH,innospotWorkflowProperties.getResourceSecretKey());
+    public static void initialize(InnospotsWorkflowProperties innospotsWorkflowProperties){
+        encryptor = EncryptorBuilder.build(EncryptType.BLOWFISH, innospotsWorkflowProperties.getResourceSecretKey());
     }
 }

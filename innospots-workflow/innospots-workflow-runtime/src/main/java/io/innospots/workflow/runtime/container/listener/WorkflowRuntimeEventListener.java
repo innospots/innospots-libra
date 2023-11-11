@@ -3,7 +3,7 @@ package io.innospots.workflow.runtime.container.listener;
 import io.innospots.base.events.IEventListener;
 import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
 import io.innospots.workflow.core.runtime.FlowEventBody;
-import io.innospots.workflow.core.runtime.webhook.WebhookPayload;
+import io.innospots.workflow.runtime.webhook.WebhookPayload;
 import io.innospots.workflow.runtime.container.DummyRuntimeContainer;
 import io.innospots.workflow.runtime.container.WebhookRuntimeContainer;
 

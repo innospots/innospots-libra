@@ -25,16 +25,16 @@ import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.libra.base.events.NewAvatarEvent;
-import io.innospots.workflow.console.entity.node.FlowNodeDefinitionEntity;
-import io.innospots.workflow.console.entity.node.FlowNodeGroupNodeEntity;
+import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
+import io.innospots.workflow.core.node.definition.entity.FlowNodeGroupNodeEntity;
 import io.innospots.workflow.console.model.AppQueryRequest;
 import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
 import io.innospots.workflow.console.operator.node.FlowNodeGroupOperator;
 import io.innospots.workflow.console.operator.instance.NodeInstanceOperator;
-import io.innospots.workflow.core.enums.AppPrimitive;
-import io.innospots.workflow.core.enums.AppSource;
-import io.innospots.workflow.core.node.AppInfo;
-import io.innospots.workflow.core.node.apps.AppNodeDefinition;
+import io.innospots.workflow.core.enums.NodePrimitive;
+import io.innospots.workflow.core.enums.NodeSource;
+import io.innospots.workflow.core.node.NodeInfo;
+import io.innospots.workflow.core.node.definition.model.NodeNodeDefinition;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -68,62 +68,62 @@ public class AppService {
         this.flowNodeDefinitionOperator = flowNodeDefinitionOperator;
     }
 
-    public PageBody<AppInfo> pageAppInfos(AppQueryRequest request) {
-        PageBody<AppInfo> body = flowNodeDefinitionOperator.pageAppDefinitions(request);
-        List<AppInfo> appInfos = body.getList();
-        if (!CollectionUtils.isEmpty(appInfos)) {
-            List<Integer> nodeIds = appInfos.stream().map(AppInfo::getNodeId).collect(Collectors.toList());
+    public PageBody<NodeInfo> pageAppInfos(AppQueryRequest request) {
+        PageBody<NodeInfo> body = flowNodeDefinitionOperator.pageAppDefinitions(request);
+        List<NodeInfo> nodeInfos = body.getList();
+        if (!CollectionUtils.isEmpty(nodeInfos)) {
+            List<Integer> nodeIds = nodeInfos.stream().map(NodeInfo::getNodeId).collect(Collectors.toList());
             List<FlowNodeGroupNodeEntity> entityList = flowNodeGroupOperator.getGroupNodeByNodeIds(1, nodeIds);
             Map<Integer, Integer> entityMap = entityList.stream().collect(Collectors.toMap(FlowNodeGroupNodeEntity::getNodeId, FlowNodeGroupNodeEntity::getNodeGroupId));
-            for (AppInfo appInfo : appInfos) {
-                appInfo.setNodeGroupId(entityMap.get(appInfo.getNodeId()));
+            for (NodeInfo nodeInfo : nodeInfos) {
+                nodeInfo.setNodeGroupId(entityMap.get(nodeInfo.getNodeId()));
             }
         }
         return body;
     }
 
-    public List<AppNodeDefinition> listOnlineNodes(AppPrimitive primitive) {
+    public List<NodeNodeDefinition> listOnlineNodes(NodePrimitive primitive) {
         return flowNodeDefinitionOperator.listOnlineNodes(primitive);
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public AppInfo createAppInfo(AppInfo appInfo) {
-        appInfo.setUsed(Boolean.FALSE);
-        appInfo.setAppSource(AppSource.non_system);
-        appInfo = flowNodeDefinitionOperator.createAppInfo(appInfo);
-        Integer nodeId = appInfo.getNodeId();
+    public NodeInfo createAppInfo(NodeInfo nodeInfo) {
+        nodeInfo.setUsed(Boolean.FALSE);
+        nodeInfo.setNodeSource(NodeSource.non_system);
+        nodeInfo = flowNodeDefinitionOperator.createAppInfo(nodeInfo);
+        Integer nodeId = nodeInfo.getNodeId();
         if (nodeId != null) {
             List<Integer> nodeIds = new ArrayList<>();
             nodeIds.add(nodeId);
-            flowNodeGroupOperator.saveOrUpdateNodeGroupNode(1, appInfo.getNodeGroupId(), nodeIds);
-            if (StringUtils.isNotEmpty(appInfo.getIcon()) && appInfo.getIcon().startsWith(IMAGE_PREFIX)) {
-                EventBusCenter.async(new NewAvatarEvent(nodeId, ImageType.APP, null, appInfo.getIcon()));
+            flowNodeGroupOperator.saveOrUpdateNodeGroupNode(1, nodeInfo.getNodeGroupId(), nodeIds);
+            if (StringUtils.isNotEmpty(nodeInfo.getIcon()) && nodeInfo.getIcon().startsWith(IMAGE_PREFIX)) {
+                EventBusCenter.async(new NewAvatarEvent(nodeId, ImageType.APP, null, nodeInfo.getIcon()));
             }
             // update app icon
-            appInfo = flowNodeDefinitionOperator.updateAppInfo(appInfo);
+            nodeInfo = flowNodeDefinitionOperator.updateAppInfo(nodeInfo);
         }
-        return appInfo;
+        return nodeInfo;
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public AppInfo updateAppInfo(AppInfo appInfo) {
+    public NodeInfo updateAppInfo(NodeInfo nodeInfo) {
         /*
         long count = nodeInstanceOperator.countByNodeDefinitionId(appInfo.getNodeId());
         if (count > 0) {
             throw ResourceException.buildUpdateException(this.getClass(), "This App has been referenced by the workflow and cannot be edited!");
         }
          */
-        String icon = appInfo.getIcon();
-        Integer nodeId = appInfo.getNodeId();
+        String icon = nodeInfo.getIcon();
+        Integer nodeId = nodeInfo.getNodeId();
         if (StringUtils.isNotEmpty(icon) && icon.startsWith(IMAGE_PREFIX)) {
             EventBusCenter.async(new NewAvatarEvent(nodeId, ImageType.APP, null, icon));
         }
-        appInfo = flowNodeDefinitionOperator.updateAppInfo(appInfo);
+        nodeInfo = flowNodeDefinitionOperator.updateAppInfo(nodeInfo);
         List<Integer> nodeIds = new ArrayList<>();
         nodeIds.add(nodeId);
-        flowNodeGroupOperator.saveOrUpdateNodeGroupNode(1, appInfo.getNodeGroupId(), nodeIds);
+        flowNodeGroupOperator.saveOrUpdateNodeGroupNode(1, nodeInfo.getNodeGroupId(), nodeIds);
 
-        return appInfo;
+        return nodeInfo;
     }
 
     public Boolean updateNodeDefinitionStatus(Integer nodeId, DataStatus status) {
@@ -144,12 +144,12 @@ public class AppService {
         return flowNodeDefinitionOperator.deleteNodeDefinition(nodeId);
     }
 
-    public AppNodeDefinition updateAppNodeDefinition(AppNodeDefinition appNodeDefinition) {
+    public NodeNodeDefinition updateAppNodeDefinition(NodeNodeDefinition appNodeDefinition) {
         return flowNodeDefinitionOperator.updateNodeDefinition(appNodeDefinition);
     }
 
-    public AppNodeDefinition getAppNodeDefinitionById(Integer nodeId) {
-        AppNodeDefinition appNodeDefinition = flowNodeDefinitionOperator.getNodeDefinition(nodeId);
+    public NodeNodeDefinition getAppNodeDefinitionById(Integer nodeId) {
+        NodeNodeDefinition appNodeDefinition = flowNodeDefinitionOperator.getNodeDefinition(nodeId);
         List<FlowNodeGroupNodeEntity> entityList = flowNodeGroupOperator.getGroupNodeByNodeIds(1, Collections.singletonList(nodeId));
         if (!CollectionUtils.isEmpty(entityList)) {
             appNodeDefinition.setNodeGroupId(entityList.get(0).getNodeGroupId());

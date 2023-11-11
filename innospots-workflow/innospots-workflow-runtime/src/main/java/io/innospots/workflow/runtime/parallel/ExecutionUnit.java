@@ -23,7 +23,7 @@ import io.innospots.base.model.response.ResponseCode;
 import io.innospots.workflow.core.execution.ExecutionStatus;
 import io.innospots.workflow.core.execution.flow.FlowExecution;
 import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.node.app.BaseAppNode;
+import io.innospots.workflow.core.node.executor.BaseAppNode;
 import io.innospots.workflow.runtime.flow.Flow;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;

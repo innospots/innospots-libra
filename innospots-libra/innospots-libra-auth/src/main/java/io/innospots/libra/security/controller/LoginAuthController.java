@@ -18,6 +18,7 @@
 
 package io.innospots.libra.security.controller;
 
+import io.innospots.base.config.InnospotsConfigProperties;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.security.auth.AuthToken;
@@ -42,11 +43,11 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 public class LoginAuthController extends BaseController {
 
     private final AuthenticationProvider authenticationProvider;
-    private final JwtAuthManager authManager;
+    private final InnospotsConfigProperties innospotsConfigProperties;
 
-    public LoginAuthController(AuthenticationProvider authenticationProvider, JwtAuthManager authManager) {
+    public LoginAuthController(AuthenticationProvider authenticationProvider, InnospotsConfigProperties innospotsConfigProperties) {
         this.authenticationProvider = authenticationProvider;
-        this.authManager = authManager;
+        this.innospotsConfigProperties = innospotsConfigProperties;
     }
 
 
@@ -61,7 +62,7 @@ public class LoginAuthController extends BaseController {
     @GetMapping(path = "public-key")
     @Operation(summary = "get public key", description = "get public key")
     public InnospotResponse<String> getPublicKey() {
-        return success(authManager.getPublicKey());
+        return success(innospotsConfigProperties.getPublicKey());
     }
 
 }

@@ -1,15 +1,13 @@
 package io.innospots.workflow.node.app.execute;
 
-import io.innospots.base.json.JSONUtils;
 import io.innospots.workflow.core.execution.ExecutionInput;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.app.BaseAppNode;
+import io.innospots.workflow.core.node.executor.BaseAppNode;
 import io.innospots.workflow.core.node.field.ExtendField;
 import io.innospots.workflow.core.node.field.ValueParamField;
-import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.utils.NodeInstanceUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 

@@ -39,7 +39,7 @@ public interface FlowNodeDebugger {
     Map<String, NodeExecutionDisplay> execute(Long workflowInstanceId, String nodeKey,
                                               List<Map<String, Object>> inputs);
 
-    NodeExecutionDisplay execute(AppDebugPayload appDebugPayload);
+    NodeExecutionDisplay execute(DebugPayload debugPayload);
 
     ExecutionResource updateTestFile(MultipartFile uploadFile, boolean force);
 

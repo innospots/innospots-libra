@@ -1,7 +1,7 @@
 package io.innospots.workflow.console;
 
 import io.innospots.workflow.core.flow.WorkflowBaseBody;
-import io.innospots.workflow.core.node.instance.Edge;
+import io.innospots.workflow.core.instance.model.Edge;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 

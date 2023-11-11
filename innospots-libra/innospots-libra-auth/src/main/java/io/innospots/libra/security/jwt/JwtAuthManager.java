@@ -232,6 +232,7 @@ public class JwtAuthManager {
         return authProperties;
     }
 
+    /*
     public String getPublicKey() {
         return authProperties.getPublicKey();
     }
@@ -239,5 +240,7 @@ public class JwtAuthManager {
     public String getPrivateKey() {
         return authProperties.getPrivateKey();
     }
+
+     */
 
 }

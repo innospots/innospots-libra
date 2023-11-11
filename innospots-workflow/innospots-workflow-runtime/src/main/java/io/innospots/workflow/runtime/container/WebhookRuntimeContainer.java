@@ -23,7 +23,7 @@ import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
 import io.innospots.workflow.core.execution.flow.FlowExecution;
 import io.innospots.workflow.core.runtime.FlowRuntimeRegistry;
 import io.innospots.workflow.core.runtime.webhook.FlowWebhookConfig;
-import io.innospots.workflow.core.runtime.webhook.WebhookPayload;
+import io.innospots.workflow.runtime.webhook.WebhookPayload;
 import io.innospots.workflow.core.runtime.webhook.WorkflowResponse;
 import io.innospots.workflow.core.runtime.webhook.WorkflowResponseBuilder;
 import io.innospots.workflow.node.app.trigger.ApiTriggerNode;

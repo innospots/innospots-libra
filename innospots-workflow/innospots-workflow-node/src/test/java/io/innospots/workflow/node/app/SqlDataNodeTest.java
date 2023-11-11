@@ -3,16 +3,12 @@ package io.innospots.workflow.node.app;
 import io.innospots.base.data.enums.DataOperation;
 import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.model.field.ParamField;
-import io.innospots.base.utils.BeanContextAware;
 import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.data.DataNode;
 import io.innospots.workflow.node.app.data.SqlDataNode;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import org.springframework.context.annotation.Bean;
 
 
 import java.util.ArrayList;

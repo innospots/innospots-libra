@@ -25,13 +25,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.utils.CCH;
-import io.innospots.workflow.console.dao.instance.NodeInstanceDao;
-import io.innospots.workflow.console.entity.instance.NodeInstanceEntity;
+import io.innospots.workflow.core.instance.dao.NodeInstanceDao;
+import io.innospots.workflow.core.instance.entity.NodeInstanceEntity;
 import io.innospots.workflow.console.enums.FlowVersion;
-import io.innospots.workflow.console.converter.instance.NodeInstanceConverter;
+import io.innospots.workflow.core.instance.converter.NodeInstanceConverter;
 import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
-import io.innospots.workflow.core.node.apps.AppNodeDefinition;
-import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.node.definition.model.NodeNodeDefinition;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -147,7 +147,7 @@ public class NodeInstanceOperator extends ServiceImpl<NodeInstanceDao, NodeInsta
 
             for (NodeInstanceEntity nodeInstanceEntity : nodeInstanceEntities) {
                 try {
-                    AppNodeDefinition appNodeDefinition = flowNodeDefinitionOperator.getNodeDefinition(nodeInstanceEntity.getNodeDefinitionId());
+                    NodeNodeDefinition appNodeDefinition = flowNodeDefinitionOperator.getNodeDefinition(nodeInstanceEntity.getNodeDefinitionId());
                     list.add(NodeInstanceConverter.INSTANCE.entityToModel(nodeInstanceEntity, appNodeDefinition));
                     if (appNodeDefinition == null) {
                         log.warn("node definition not exist,{} ", nodeInstanceEntity.getNodeInstanceId());

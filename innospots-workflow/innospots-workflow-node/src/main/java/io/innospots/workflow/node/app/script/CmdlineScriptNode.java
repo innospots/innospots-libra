@@ -20,16 +20,12 @@ package io.innospots.workflow.node.app.script;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
-import io.innospots.base.exception.ScriptException;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.re.ExpressionEngineFactory;
-import io.innospots.base.re.IExpression;
-import io.innospots.base.re.IExpressionEngine;
 import io.innospots.workflow.core.execution.ExecutionInput;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.app.BaseAppNode;
-import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;

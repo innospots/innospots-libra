@@ -2,7 +2,7 @@ package io.innospots.workflow.node.app;
 
 
 import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.node.app.BaseAppNode;
+import io.innospots.workflow.core.node.executor.BaseAppNode;
 import org.junit.Test;
 
 import java.util.HashMap;

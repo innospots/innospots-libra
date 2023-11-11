@@ -48,9 +48,7 @@ public class SqlNodeUtils {
                                                   List<SqlNode> sqlNodes,
                                                   SqlLiteral functionQualifier) {
         return new SqlBasicCall(sqlOperator, sqlNodes.toArray(new SqlNode[0]),
-                SqlParserPos.ZERO,
-                false,
-                functionQualifier);
+                SqlParserPos.ZERO,false, functionQualifier);
 
 //        return (SqlBasicCall) new SqlBasicCall(sqlOperator, sqlNodes.toArray(new SqlNode[0]),
 //                SqlParserPos.ZERO,

@@ -18,8 +18,10 @@
 
 package io.innospots.libra.kernel.controller;
 
+import io.innospots.base.config.InnospotsConfigProperties;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.configuration.AuthProperties;
+import io.innospots.libra.base.configuration.InnospotsConsoleProperties;
 import io.innospots.libra.base.controller.BaseController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,15 +41,15 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 @Tag(name = "Secret Key")
 public class SecretKeyController extends BaseController {
 
-    private AuthProperties authProperties;
+    private InnospotsConfigProperties configProperties;
 
-    public SecretKeyController(AuthProperties authProperties) {
-        this.authProperties = authProperties;
+    public SecretKeyController(InnospotsConfigProperties configProperties) {
+        this.configProperties = configProperties;
     }
 
     @GetMapping
     @Operation(summary = "get secret Key")
     public InnospotResponse<String> secretKey() {
-        return InnospotResponse.success(authProperties.getSecretKey());
+        return InnospotResponse.success(configProperties.getSecretKey());
     }
 }

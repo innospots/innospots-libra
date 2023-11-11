@@ -2,21 +2,17 @@ package io.innospots.workflow.node.app.compute;
 
 import io.innospots.base.function.moving.IMovingFunction;
 import io.innospots.base.function.moving.MovingFunctionBuilder;
-import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.Pair;
 import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.ExecutionStatus;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.app.BaseAppNode;
-import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import static io.innospots.workflow.node.app.compute.FunctionField.buildFuncFields;
 import static io.innospots.workflow.node.app.compute.ShiftFunctionField.buildShiftFuncFields;

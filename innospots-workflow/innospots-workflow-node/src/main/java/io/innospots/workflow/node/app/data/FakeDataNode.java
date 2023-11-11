@@ -22,8 +22,8 @@ import io.innospots.base.json.JSONUtils;
 import io.innospots.base.i18n.LocaleMessageUtils;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.app.BaseAppNode;
-import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;
 

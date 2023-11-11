@@ -23,7 +23,7 @@ import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
-import io.innospots.workflow.core.debug.AppDebugPayload;
+import io.innospots.workflow.core.debug.DebugPayload;
 import io.innospots.workflow.core.debug.FlowNodeDebuggerBuilder;
 import io.innospots.workflow.core.execution.ExecutionResource;
 import io.innospots.workflow.core.execution.node.NodeExecutionDisplay;
@@ -62,7 +62,7 @@ public class FlowNodeDebugController {
     @Operation(summary = "debug app node")
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.execute}")
     public InnospotResponse<NodeExecutionDisplay> execute(
-            @RequestBody AppDebugPayload debugPayload){
+            @RequestBody DebugPayload debugPayload){
 
         return InnospotResponse.success(
                 FlowNodeDebuggerBuilder.build("nodeDebugger").execute(debugPayload));

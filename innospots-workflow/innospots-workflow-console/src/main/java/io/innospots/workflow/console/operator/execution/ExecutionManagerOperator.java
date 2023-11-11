@@ -19,11 +19,11 @@
 package io.innospots.workflow.console.operator.execution;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.innospots.workflow.console.dao.execution.ExecutionContextDao;
-import io.innospots.workflow.console.dao.execution.FlowExecutionDao;
-import io.innospots.workflow.console.dao.execution.NodeExecutionDao;
-import io.innospots.workflow.console.dao.execution.ScheduledNodeExecutionDao;
-import io.innospots.workflow.console.entity.execution.FlowExecutionEntity;
+import io.innospots.workflow.core.execution.dao.ExecutionContextDao;
+import io.innospots.workflow.core.execution.dao.FlowExecutionDao;
+import io.innospots.workflow.core.execution.dao.NodeExecutionDao;
+import io.innospots.workflow.core.execution.dao.ScheduledNodeExecutionDao;
+import io.innospots.workflow.core.execution.entity.FlowExecutionEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;

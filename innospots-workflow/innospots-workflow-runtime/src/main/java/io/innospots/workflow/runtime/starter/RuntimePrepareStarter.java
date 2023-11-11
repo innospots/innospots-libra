@@ -19,7 +19,7 @@
 package io.innospots.workflow.runtime.starter;
 
 import io.innospots.base.utils.BeanContextAwareUtils;
-import io.innospots.workflow.core.config.InnospotWorkflowProperties;
+import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
 import io.innospots.workflow.core.runtime.lisenter.WorkflowRuntimeListener;
 import io.innospots.workflow.core.utils.WorkflowUtils;
@@ -47,13 +47,13 @@ public class RuntimePrepareStarter implements ApplicationRunner {
 
     private RunTimeContainerManager runTimeContainerManager;
     private WorkflowWebhookServer workflowWebhookServer;
-    private InnospotWorkflowProperties workflowProperties;
+    private InnospotsWorkflowProperties workflowProperties;
     private ApplicationAvailability applicationAvailability;
 
     public RuntimePrepareStarter(
             WorkflowWebhookServer workflowWebhookServer
             , RunTimeContainerManager runTimeContainerManager,
-            InnospotWorkflowProperties workflowProperties,
+            InnospotsWorkflowProperties workflowProperties,
             ApplicationAvailability applicationAvailability
     ) {
         this.runTimeContainerManager = runTimeContainerManager;

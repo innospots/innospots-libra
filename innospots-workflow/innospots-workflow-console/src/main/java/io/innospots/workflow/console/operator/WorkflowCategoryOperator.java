@@ -24,7 +24,7 @@ import io.innospots.base.enums.DataStatus;
 import io.innospots.libra.base.category.CategoryType;
 import io.innospots.libra.base.category.BaseCategory;
 import io.innospots.libra.base.category.BaseCategoryOperator;
-import io.innospots.workflow.console.entity.instance.WorkflowInstanceEntity;
+import io.innospots.workflow.core.instance.entity.WorkflowInstanceEntity;
 import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -20,12 +20,11 @@ package io.innospots.workflow.core.flow;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.innospots.base.utils.Initializer;
-import io.innospots.workflow.core.node.instance.Edge;
-import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.instance.model.Edge;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;

@@ -23,7 +23,6 @@ import io.innospots.libra.base.category.CategoryType;
 import io.innospots.libra.base.category.BaseCategory;
 import io.innospots.libra.base.category.BaseCategoryOperator;
 import io.innospots.libra.kernel.module.page.entity.PageEntity;
-import io.innospots.libra.kernel.module.schema.entity.SchemaRegistryEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

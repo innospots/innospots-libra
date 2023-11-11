@@ -25,6 +25,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.CaseFormat;
+import io.innospots.base.config.InnospotsConfigProperties;
 import io.innospots.base.crypto.PasswordEncoder;
 import io.innospots.base.crypto.RsaKeyManager;
 import io.innospots.base.enums.DataStatus;
@@ -68,9 +69,12 @@ public class UserOperator extends ServiceImpl<UserDao, SysUserEntity> {
 
     private final AuthProperties authProperties;
 
-    public UserOperator(PasswordEncoder passwordEncoder, AuthProperties authProperties) {
+    public final InnospotsConfigProperties innospotsConfigProperties;
+
+    public UserOperator(PasswordEncoder passwordEncoder, AuthProperties authProperties, InnospotsConfigProperties innospotsConfigProperties) {
         this.passwordEncoder = passwordEncoder;
         this.authProperties = authProperties;
+        this.innospotsConfigProperties = innospotsConfigProperties;
     }
 
     /**
@@ -88,7 +92,7 @@ public class UserOperator extends ServiceImpl<UserDao, SysUserEntity> {
             throw ValidatorException.buildMissingException(this.getClass(), "password must not be null");
         }
         this.checkDifferentUserName(user.getUserName(), null);
-        String password = RsaKeyManager.decrypt(user.getPassword(), authProperties.getPrivateKey());
+        String password = RsaKeyManager.decrypt(user.getPassword(), innospotsConfigProperties.getPrivateKey());
         user.setPassword(passwordEncoder.encode(password));
         UserInfoConverter userInfoConverter = UserInfoConverter.INSTANCE;
         SysUserEntity sysUser = userInfoConverter.formModel2Entity(user);
@@ -157,7 +161,7 @@ public class UserOperator extends ServiceImpl<UserDao, SysUserEntity> {
         }
         this.checkUserExist(userPassword.getUserId());
         SysUserEntity user = this.getById(userPassword.getUserId());
-        String password = RsaKeyManager.decrypt(userPassword.getNewPassword(), authProperties.getPrivateKey());
+        String password = RsaKeyManager.decrypt(userPassword.getNewPassword(), innospotsConfigProperties.getPrivateKey());
         user.setPassword(passwordEncoder.encode(password));
         return this.updateById(user);
     }

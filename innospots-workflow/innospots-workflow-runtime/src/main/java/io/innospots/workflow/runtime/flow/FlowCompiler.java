@@ -29,8 +29,8 @@ import io.innospots.base.re.GenericExpressionEngine;
 import io.innospots.base.re.IExpressionEngine;
 import io.innospots.base.re.jit.MethodBody;
 import io.innospots.workflow.core.flow.WorkflowBaseBody;
-import io.innospots.workflow.core.node.app.BaseAppNode;
-import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;

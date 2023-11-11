@@ -21,19 +21,19 @@ package io.innospots.workflow.console.service;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.base.data.request.FormQuery;
-import io.innospots.workflow.console.dao.instance.WorkflowInstanceCacheDao;
-import io.innospots.workflow.console.entity.node.FlowNodeDefinitionEntity;
-import io.innospots.workflow.console.entity.instance.WorkflowInstanceEntity;
+import io.innospots.workflow.core.instance.dao.WorkflowInstanceCacheDao;
+import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
+import io.innospots.workflow.core.instance.entity.WorkflowInstanceEntity;
 import io.innospots.workflow.console.model.flow.WorkflowChart;
 import io.innospots.workflow.console.model.flow.WorkflowStatistics;
 import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
 import io.innospots.workflow.console.operator.execution.ExecutionManagerOperator;
 import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
-import io.innospots.workflow.core.config.InnospotWorkflowProperties;
+import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.execution.ExecutionStatus;
 import io.innospots.workflow.core.execution.flow.FlowExecutionBase;
 import io.innospots.workflow.core.execution.operator.IFlowExecutionOperator;
-import io.innospots.workflow.core.flow.instance.WorkflowInstance;
+import io.innospots.workflow.core.instance.model.WorkflowInstance;
 import io.innospots.base.utils.ServiceActionHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -68,19 +68,19 @@ public class WorkflowService {
 
     private final ExecutionManagerOperator executionManagerOperator;
 
-    private final InnospotWorkflowProperties innospotWorkflowProperties;
+    private final InnospotsWorkflowProperties innospotsWorkflowProperties;
 
     private final FlowNodeDefinitionOperator flowNodeDefinitionOperator;
 
     public WorkflowService(WorkflowInstanceOperator workflowInstanceOperator,
                            IFlowExecutionOperator IFlowExecutionOperator,
                            WorkflowInstanceCacheDao workflowInstanceCacheDao,
-                           InnospotWorkflowProperties innospotWorkflowProperties,
+                           InnospotsWorkflowProperties innospotsWorkflowProperties,
                            ExecutionManagerOperator executionManagerOperator,
                            FlowNodeDefinitionOperator flowNodeDefinitionOperator) {
         this.workflowInstanceOperator = workflowInstanceOperator;
         this.IFlowExecutionOperator = IFlowExecutionOperator;
-        this.innospotWorkflowProperties = innospotWorkflowProperties;
+        this.innospotsWorkflowProperties = innospotsWorkflowProperties;
         this.workflowInstanceCacheDao = workflowInstanceCacheDao;
         this.executionManagerOperator = executionManagerOperator;
         this.flowNodeDefinitionOperator = flowNodeDefinitionOperator;
@@ -239,7 +239,7 @@ public class WorkflowService {
     private void workflowInstanceCacheCleanTask() {
         try {
             if (ServiceActionHolder.isCleanTask()) {
-                int seconds = innospotWorkflowProperties.getWorkflowInstanceCacheKeepSeconds();
+                int seconds = innospotsWorkflowProperties.getWorkflowInstanceCacheKeepSeconds();
                 LocalDateTime updateTime = LocalDateTime.now();
                 updateTime.plusSeconds(seconds);
                 int count = workflowInstanceCacheDao.deleteByUpdateTime(updateTime);
@@ -258,16 +258,16 @@ public class WorkflowService {
     private void workFlowExecutionLogCleanTask() {
         try {
             if (ServiceActionHolder.isCleanTask()) {
-                int days = innospotWorkflowProperties.getWorkFlowExecutionKeepDays();
-                if (days < InnospotWorkflowProperties.WORKFLOW_EXECUTION_KEEP_DAYS) {
-                    log.warn("workFlowExecutionLogCleanTask param error, days: " + days + " set default:" + InnospotWorkflowProperties.WORKFLOW_EXECUTION_KEEP_DAYS);
-                    days = InnospotWorkflowProperties.WORKFLOW_EXECUTION_KEEP_DAYS;
+                int days = innospotsWorkflowProperties.getWorkFlowExecutionKeepDays();
+                if (days < InnospotsWorkflowProperties.WORKFLOW_EXECUTION_KEEP_DAYS) {
+                    log.warn("workFlowExecutionLogCleanTask param error, days: " + days + " set default:" + InnospotsWorkflowProperties.WORKFLOW_EXECUTION_KEEP_DAYS);
+                    days = InnospotsWorkflowProperties.WORKFLOW_EXECUTION_KEEP_DAYS;
 
                 }
-                int keepAmount = innospotWorkflowProperties.getWorkFlowExecutionKeepAmount();
-                if (keepAmount < InnospotWorkflowProperties.WORKFLOW_EXECUTION_KEEP_AMOUNT) {
-                    log.warn("workFlowExecutionLogCleanTask param error, keepAmount: " + keepAmount + " set default:" + InnospotWorkflowProperties.WORKFLOW_EXECUTION_KEEP_AMOUNT);
-                    keepAmount = InnospotWorkflowProperties.WORKFLOW_EXECUTION_KEEP_AMOUNT;
+                int keepAmount = innospotsWorkflowProperties.getWorkFlowExecutionKeepAmount();
+                if (keepAmount < InnospotsWorkflowProperties.WORKFLOW_EXECUTION_KEEP_AMOUNT) {
+                    log.warn("workFlowExecutionLogCleanTask param error, keepAmount: " + keepAmount + " set default:" + InnospotsWorkflowProperties.WORKFLOW_EXECUTION_KEEP_AMOUNT);
+                    keepAmount = InnospotsWorkflowProperties.WORKFLOW_EXECUTION_KEEP_AMOUNT;
 
                 }
                 LocalDateTime deleteTime = LocalDateTime.now().plusDays(days * -1);

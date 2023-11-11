@@ -19,6 +19,7 @@
 package io.innospots.administration.server;
 
 
+import io.innospots.administration.schedule.LoggerClearScheduler;
 import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.base.utils.time.DateTimeUtils;
@@ -34,6 +35,7 @@ import org.springframework.boot.actuate.info.InfoContributor;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration;
 import org.springframework.boot.autoconfigure.quartz.QuartzAutoConfiguration;
+import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
 
@@ -50,10 +52,9 @@ import java.util.Map;
 //        HibernateJpaAutoConfiguration.class,
         FreeMarkerAutoConfiguration.class})
 //@EnableAutoConfiguration
+@Import(LoggerClearScheduler.class)
 @LibraAuthImporter
 @LibraKernelImporter
-@WorkflowRuntimeImporter
-//@WorkflowApiImporter
 @EnableScheduling
 public class InnospotsAdministrationServer {
 

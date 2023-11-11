@@ -21,8 +21,8 @@ package io.innospots.base.function.definition.operator;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.innospots.base.exception.ResourceException;
+import io.innospots.base.function.definition.converter.FunctionConverter;
 import io.innospots.base.function.definition.model.FunctionDefinition;
-import io.innospots.base.function.definition.converter.FunctionBeanConverter;
 import io.innospots.base.function.definition.dao.FunctionDefinitionDao;
 import io.innospots.base.function.definition.entity.FunctionDefinitionEntity;
 import org.apache.commons.collections4.CollectionUtils;
@@ -48,14 +48,14 @@ public class FunctionDefinitionOperator extends ServiceImpl<FunctionDefinitionDa
             throw ResourceException.buildExistException(this.getClass(), functionDefinition.getName(), functionDefinition.getFunctionType());
         }
 
-        return this.save(FunctionBeanConverter.INSTANCE.modelToEntity(functionDefinition));
+        return this.save(FunctionConverter.INSTANCE.modelToEntity(functionDefinition));
     }
 
     public boolean updateFunction(FunctionDefinition functionDefinition) {
         if (functionDefinition.getFunctionId() == null) {
             throw ResourceException.buildUpdateException(this.getClass(), "functionId is missing");
         }
-        return this.updateById(FunctionBeanConverter.INSTANCE.modelToEntity(functionDefinition));
+        return this.updateById(FunctionConverter.INSTANCE.modelToEntity(functionDefinition));
     }
 
     public boolean deleteFunction(Integer functionId) {

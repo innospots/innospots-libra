@@ -18,9 +18,9 @@
 
 package io.innospots.workflow.core.flow;
 
-import io.innospots.workflow.core.flow.instance.WorkflowInstanceBase;
-import io.innospots.workflow.core.node.instance.Edge;
-import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.instance.model.WorkflowInstanceBase;
+import io.innospots.workflow.core.instance.model.Edge;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;

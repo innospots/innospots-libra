@@ -19,7 +19,7 @@
 package io.innospots.workflow.core.node.builder;
 
 
-import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 
 /**
  * build node data structure

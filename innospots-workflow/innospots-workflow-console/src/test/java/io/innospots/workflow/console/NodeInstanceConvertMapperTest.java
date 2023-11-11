@@ -2,9 +2,9 @@ package io.innospots.workflow.console;
 
 
 import io.innospots.base.model.field.ParamField;
-import io.innospots.workflow.console.converter.instance.NodeInstanceConverter;
-import io.innospots.workflow.console.entity.instance.NodeInstanceEntity;
-import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.instance.converter.NodeInstanceConverter;
+import io.innospots.workflow.core.instance.entity.NodeInstanceEntity;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 

@@ -33,7 +33,7 @@ import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
 import io.innospots.workflow.console.service.WorkflowService;
 import io.innospots.workflow.core.flow.WorkflowBaseInfo;
 import io.innospots.workflow.core.flow.WorkflowInfo;
-import io.innospots.workflow.core.flow.instance.WorkflowInstance;
+import io.innospots.workflow.core.instance.model.WorkflowInstance;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

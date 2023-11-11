@@ -20,15 +20,13 @@ package io.innospots.workflow.node.app.logic;
 
 
 import io.innospots.base.condition.EmbedCondition;
-import io.innospots.base.condition.Mode;
 import io.innospots.base.exception.ConfigException;
-import io.innospots.base.json.JSONUtils;
 import io.innospots.base.re.aviator.AviatorExpression;
 import io.innospots.workflow.core.execution.ExecutionInput;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.app.BaseAppNode;
-import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.utils.NodeInstanceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

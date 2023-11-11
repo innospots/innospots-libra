@@ -21,10 +21,10 @@ package io.innospots.workflow.console.controller.node;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.menu.ModuleMenu;
-import io.innospots.workflow.console.converter.node.FlowNodeGroupConverter;
+import io.innospots.workflow.core.node.definition.converter.FlowNodeGroupConverter;
 import io.innospots.workflow.console.operator.node.FlowTemplateOperator;
-import io.innospots.workflow.core.node.apps.AppFlowTemplate;
-import io.innospots.workflow.core.node.apps.AppNodeGroupBaseInfo;
+import io.innospots.workflow.core.node.definition.model.FlowTemplate;
+import io.innospots.workflow.core.node.definition.model.NodeGroupBaseInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
@@ -53,7 +53,7 @@ public class FlowCategoryController extends BaseController {
 
     @GetMapping("list")
     @Operation(summary = "flow node category list")
-    public InnospotResponse<List<AppNodeGroupBaseInfo>> listCategories(
+    public InnospotResponse<List<NodeGroupBaseInfo>> listCategories(
             @RequestParam(required = false, defaultValue = "true") boolean onlyConnector) {
         return InnospotResponse.success(
                 FlowNodeGroupConverter.INSTANCE.modelToBaseList(
@@ -64,13 +64,13 @@ public class FlowCategoryController extends BaseController {
 
     @GetMapping("def-list/{templateCode}")
     @Operation(summary = "list flow node definition")
-    public InnospotResponse<AppFlowTemplate> getTemplate(@PathVariable String templateCode) {
+    public InnospotResponse<FlowTemplate> getTemplate(@PathVariable String templateCode) {
         return success(flowTemplateOperator.getTemplate(1, true));
     }
 
     @GetMapping("def-list")
     @Operation(summary = "list flow node definition")
-    public InnospotResponse<AppFlowTemplate> getTemplate() {
+    public InnospotResponse<FlowTemplate> getTemplate() {
         return success(flowTemplateOperator.getTemplate(1, true));
     }
 }

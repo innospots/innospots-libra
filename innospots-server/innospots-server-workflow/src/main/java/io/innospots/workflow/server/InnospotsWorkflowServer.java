@@ -19,6 +19,7 @@
 package io.innospots.workflow.server;
 
 
+import io.innospots.server.base.ServerConfigImporter;
 import io.innospots.server.base.registry.ServiceRegistryHolder;
 import io.innospots.server.base.registry.enums.ServiceType;
 import io.innospots.workflow.runtime.WorkflowRuntimeImporter;
@@ -41,6 +42,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 //@WorkflowOperatorImporter
 @WorkflowRuntimeImporter
 @EnableScheduling
+@ServerConfigImporter
 public class InnospotsWorkflowServer {
 
     public static void main(String[] args) {

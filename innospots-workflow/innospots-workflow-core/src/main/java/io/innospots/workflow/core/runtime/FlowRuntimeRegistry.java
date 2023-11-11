@@ -20,7 +20,7 @@ package io.innospots.workflow.core.runtime;
 
 
 import io.innospots.workflow.core.enums.FlowStatus;
-import io.innospots.workflow.core.node.app.BaseAppNode;
+import io.innospots.workflow.core.node.executor.BaseAppNode;
 import lombok.Getter;
 import lombok.Setter;
 

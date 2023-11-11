@@ -19,6 +19,7 @@
 package io.innospots.libra.kernel.module.extension.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.innospots.base.config.InnospotsConfigProperties;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.ZipFileUtils;
@@ -58,7 +59,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ExtensionService {
 
-    private InnospotsConsoleProperties innospotsConsoleProperties;
+    private InnospotsConfigProperties innospotsConfigProperties;
 
     private ExtDefinitionOperator extDefinitionOperator;
 
@@ -87,7 +88,7 @@ public class ExtensionService {
         String[] arrs = fileName.substring(0, fileName.lastIndexOf(".")).split("_");
         appName = arrs[0];
         appVersion = arrs[1];
-        String downPath = innospotsConsoleProperties.getUploadFilePath() + File.separator + appName + File.separator + appVersion;
+        String downPath = innospotsConfigProperties.getUploadFilePath() + File.separator + appName + File.separator + appVersion;
         return downPath;
     }
 
@@ -271,12 +272,12 @@ public class ExtensionService {
         }
 
         //备份classPath中app的jar文件
-        File extLibDir = new File(innospotsConsoleProperties.getExtLibPath());
+        File extLibDir = new File(innospotsConfigProperties.getExtLibPath());
         if (!extLibDir.exists()) {
             extLibDir.mkdirs();
         }
         if (!extLibDir.isDirectory()) {
-            throw ResourceException.buildCreateException(this.getClass(), "extLibDir is not directory", innospotsConsoleProperties.getExtLibPath());
+            throw ResourceException.buildCreateException(this.getClass(), "extLibDir is not directory", innospotsConfigProperties.getExtLibPath());
         }
 
         File[] jarFileArr = extLibDir.listFiles((file, name) -> {

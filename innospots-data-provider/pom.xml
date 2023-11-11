@@ -11,10 +11,12 @@
 
     <artifactId>innospots-data-provider</artifactId>
 
+    <!--
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
+    -->
 
 
     <dependencies>
@@ -23,6 +25,7 @@
             <artifactId>innospots-base</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.calcite</groupId>
             <artifactId>calcite-core</artifactId>

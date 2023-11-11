@@ -20,7 +20,6 @@ package io.innospots.workflow.node.app.logic;
 
 
 import io.innospots.base.quartz.TimePeriod;
-import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.workflow.core.execution.ExecutionInput;
@@ -31,8 +30,8 @@ import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeOutput;
 import io.innospots.workflow.core.execution.operator.IScheduledNodeExecutionOperator;
 import io.innospots.workflow.core.execution.scheduled.ScheduledNodeExecution;
-import io.innospots.workflow.core.node.app.BaseAppNode;
-import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 
 import java.time.LocalDateTime;
 

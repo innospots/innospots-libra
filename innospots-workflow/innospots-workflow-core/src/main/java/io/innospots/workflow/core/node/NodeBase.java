@@ -18,14 +18,13 @@
 
 package io.innospots.workflow.core.node;
 
-import io.innospots.workflow.core.node.apps.AppConnectorConfig;
+import io.innospots.workflow.core.node.definition.model.AppConnectorConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -35,7 +34,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  */
 @Getter
 @Setter
-public class NodeBase extends AppInfo {
+public class NodeBase extends NodeInfo {
 
     private static final Logger logger = getLogger(NodeBase.class);
 

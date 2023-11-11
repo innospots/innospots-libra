@@ -23,12 +23,11 @@ import io.innospots.base.exception.ResourceException;
 import io.innospots.base.model.Pair;
 import io.innospots.workflow.core.exception.FlowRuntimeException;
 import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.ExecutionStatus;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeOutput;
 import io.innospots.workflow.core.node.field.NodeParamField;
-import io.innospots.workflow.core.node.app.BaseAppNode;
-import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 
 import java.util.HashSet;
 import java.util.List;

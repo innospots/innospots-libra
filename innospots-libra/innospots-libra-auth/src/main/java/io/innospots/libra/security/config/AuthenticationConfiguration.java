@@ -18,6 +18,7 @@
 
 package io.innospots.libra.security.config;
 
+import io.innospots.base.config.InnospotsConfigProperties;
 import io.innospots.base.crypto.BCryptPasswordEncoder;
 import io.innospots.base.crypto.PasswordEncoder;
 import io.innospots.libra.base.configuration.AuthProperties;
@@ -50,9 +51,10 @@ public class AuthenticationConfiguration {
     public AuthenticationProvider userPasswordAuthenticationProvider(
             PasswordEncoder passwordEncoder,
             JwtAuthManager jwtAuthManager,
-            AuthUserOperator authUserOperator
+            AuthUserOperator authUserOperator,
+            InnospotsConfigProperties innospotsConfigProperties
                                                                      ) {
-        return new UserPasswordAuthenticationProvider(passwordEncoder,jwtAuthManager,authUserOperator);
+        return new UserPasswordAuthenticationProvider(passwordEncoder,jwtAuthManager,authUserOperator,innospotsConfigProperties);
     }
 
     @ConditionalOnProperty(prefix = "innospots.security", name = "mode", havingValue = "EXHIBITION")
@@ -60,9 +62,10 @@ public class AuthenticationConfiguration {
     public AuthenticationProvider exhibitAuthenticationProvider(
             PasswordEncoder passwordEncoder,
             JwtAuthManager jwtAuthManager,
-            AuthUserOperator authUserOperator
+            AuthUserOperator authUserOperator,
+            InnospotsConfigProperties innospotsConfigProperties
     ) {
-        return new UserPasswordAuthenticationProvider(passwordEncoder,jwtAuthManager,authUserOperator);
+        return new UserPasswordAuthenticationProvider(passwordEncoder,jwtAuthManager,authUserOperator,innospotsConfigProperties);
     }
 
     @Bean

@@ -1,6 +1,5 @@
 package io.innospots.workflow.node.app.compute;
 
-import io.innospots.base.condition.Factor;
 import io.innospots.base.function.StatisticFunctionType;
 import io.innospots.base.function.moving.IMovingFunction;
 import io.innospots.base.function.moving.MovingFunctionBuilder;
@@ -11,7 +10,7 @@ import io.innospots.workflow.core.execution.ExecutionInput;
 import io.innospots.workflow.core.execution.ExecutionStatus;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;

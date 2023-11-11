@@ -18,6 +18,7 @@
 
 package io.innospots.libra.security.auth.basic;
 
+import io.innospots.base.config.InnospotsConfigProperties;
 import io.innospots.base.crypto.PasswordEncoder;
 import io.innospots.base.crypto.RsaKeyManager;
 import io.innospots.base.enums.DataStatus;
@@ -48,10 +49,12 @@ public class UserPasswordAuthenticationProvider implements AuthenticationProvide
 
     private AuthUserOperator authUserOperator;
 
+    private InnospotsConfigProperties configProperties;
+
     @Override
     public Authentication authenticate(LoginRequest request) throws InnospotException {
-        String userName = RsaKeyManager.decrypt(request.getUsername(), authManager.getPrivateKey());
-        String password = RsaKeyManager.decrypt(request.getPassword(), authManager.getPrivateKey());
+        String userName = RsaKeyManager.decrypt(request.getUsername(), configProperties.getPrivateKey());
+        String password = RsaKeyManager.decrypt(request.getPassword(), configProperties.getPrivateKey());
         if (userName == null || password == null) {
             EventBusCenter.async(new LoginEvent(userName, LoginStatus.FAILURE.name(), "${log.message.login.fail.empty}"));
             throw AuthenticationException.buildDecryptException(this.getClass(), "User name or password is empty, login failed");

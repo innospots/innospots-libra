@@ -18,18 +18,16 @@
 
 package io.innospots.workflow.core.execution.node;
 
-import cn.hutool.core.collection.CollectionUtil;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static io.innospots.base.model.field.FieldValueType.convertJavaTypeByValue;
 

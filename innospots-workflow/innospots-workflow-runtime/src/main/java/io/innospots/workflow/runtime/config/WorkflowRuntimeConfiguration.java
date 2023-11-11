@@ -21,14 +21,16 @@ package io.innospots.workflow.runtime.config;
 
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.quartz.QuartzScheduleManager;
-import io.innospots.workflow.core.config.InnospotWorkflowProperties;
+import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.debug.FlowNodeDebugger;
 import io.innospots.workflow.core.execution.listener.IFlowExecutionListener;
 import io.innospots.workflow.core.execution.operator.IFlowExecutionOperator;
 import io.innospots.workflow.core.execution.operator.INodeExecutionOperator;
 import io.innospots.workflow.core.execution.operator.IScheduledNodeExecutionOperator;
 import io.innospots.workflow.core.execution.reader.NodeExecutionReader;
-import io.innospots.workflow.core.flow.instance.IWorkflowCacheDraftOperator;
+import io.innospots.workflow.core.execution.store.FlowExecutionStoreListener;
+import io.innospots.workflow.core.execution.store.NodeExecutionStoreListener;
+import io.innospots.workflow.core.flow.reader.IWorkflowReader;
 import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
 import io.innospots.workflow.core.runtime.webhook.DefaultResponseBuilder;
 import io.innospots.workflow.runtime.container.*;
@@ -59,6 +61,18 @@ import java.util.List;
 @Configuration
 @EnableConfigurationProperties(WorkflowRuntimeProperties.class)
 public class WorkflowRuntimeConfiguration {
+
+
+
+    @Bean
+    public FlowExecutionStoreListener flowExecutionStoreListener(IFlowExecutionOperator flowExecutionOperator) {
+        return new FlowExecutionStoreListener(flowExecutionOperator);
+    }
+
+    @Bean
+    public NodeExecutionStoreListener nodeExecutionStoreListener(INodeExecutionOperator nodeExecutionOperator) {
+        return new NodeExecutionStoreListener(nodeExecutionOperator);
+    }
 
     @Bean
     public WebhookRuntimeEndpoint webhookRuntimeEndpoint(WebhookRuntimeContainer webhookRuntimeContainer) {
@@ -153,7 +167,7 @@ public class WorkflowRuntimeConfiguration {
     @Bean
     public FlowNodeDebugger nodeDebugger(NodeExecutionReader nodeExecutionReader,
                                          IFlowExecutionOperator flowExecutionOperator,
-                                         IWorkflowCacheDraftOperator workFlowBuilderOperator
+                                         IWorkflowReader workFlowBuilderOperator
     ) {
         return new FlowNodeSimpleDebugger(workFlowBuilderOperator, nodeExecutionReader, flowExecutionOperator);
     }
@@ -189,7 +203,7 @@ public class WorkflowRuntimeConfiguration {
 
     @Bean
     public RuntimePrepareStarter runtimePrepareStarter(WorkflowWebhookServer workflowWebhookServer,
-                                                       InnospotWorkflowProperties workflowProperties,
+                                                       InnospotsWorkflowProperties workflowProperties,
                                                        RunTimeContainerManager runTimeContainerManager,
                                                        ApplicationAvailability applicationAvailability
     ) {

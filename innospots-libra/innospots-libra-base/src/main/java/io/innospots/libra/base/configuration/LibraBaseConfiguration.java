@@ -25,6 +25,7 @@ import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerIntercept
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
 import com.google.common.collect.ImmutableList;
 import io.innospots.base.config.CredentialConfiguration;
+import io.innospots.base.config.InnospotsBaseImporter;
 import io.innospots.base.connector.schema.operator.SchemaRegistryOperator;
 import io.innospots.base.store.CacheStoreManager;
 import io.innospots.base.utils.CCH;
@@ -47,9 +48,9 @@ import java.util.List;
  * @date 2022/2/10
  */
 @Configuration
-@EntityScan(basePackages = {"io.innospots.libra.base.temp","io.innospots.libra.base.function"})
-@MapperScan(basePackages = {"io.innospots.libra.base.temp","io.innospots.libra.base.function"})
-@Import({CredentialConfiguration.class,CredentialConfiguration.class})
+@EntityScan(basePackages = {"io.innospots.libra.base.temp"})
+@MapperScan(basePackages = {"io.innospots.libra.base.temp"})
+@InnospotsBaseImporter
 @EnableConfigurationProperties({AuthProperties.class, InnospotsConsoleProperties.class})
 public class LibraBaseConfiguration {
 

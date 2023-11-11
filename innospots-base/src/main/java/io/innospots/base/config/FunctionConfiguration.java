@@ -18,10 +18,32 @@
 
 package io.innospots.base.config;
 
+import io.innospots.base.function.definition.loader.FunctionDbLoader;
+import io.innospots.base.function.definition.operator.FunctionDefinitionOperator;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
+
 /**
  * @author Smars
  * @vesion 2.0
  * @date 2023/11/11
  */
+@Component
+@Configuration
+@EntityScan(basePackages = "io.innospots.base.function.definition.entity")
+@MapperScan(basePackages = "io.innospots.base.function.definition.dao")
 public class FunctionConfiguration {
+
+    @Bean
+    public FunctionDefinitionOperator functionDefinitionOperator() {
+        return new FunctionDefinitionOperator();
+    }
+
+    @Bean
+    public FunctionDbLoader functionDbLoader(FunctionDefinitionOperator functionDefinitionOperator) {
+        return new FunctionDbLoader(functionDefinitionOperator);
+    }
 }

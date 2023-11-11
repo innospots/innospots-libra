@@ -18,8 +18,8 @@
 
 package io.innospots.workflow.node.app.trigger;
 
-import io.innospots.workflow.core.node.app.TriggerNode;
-import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.node.executor.TriggerNode;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 
 import java.util.concurrent.TimeUnit;
 

@@ -19,6 +19,7 @@
 package io.innospots.libra.kernel.module.extension.registry;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import io.innospots.base.config.InnospotsConfigProperties;
 import io.innospots.libra.base.configuration.InnospotsConsoleProperties;
 import io.innospots.libra.base.extension.ExtensionStatus;
 import io.innospots.libra.base.extension.LibraClassPathExtPropertiesLoader;
@@ -48,18 +49,18 @@ public class LibraExtensionRegistryStarter implements ApplicationRunner {
 
     private ExtInstallmentOperator extInstallmentOperator;
 
-    private InnospotsConsoleProperties innospotsConsoleProperties;
+    private InnospotsConfigProperties innospotsConfigProperties;
 
     public LibraExtensionRegistryStarter(ExtInstallmentOperator extInstallmentOperator,
-                                         InnospotsConsoleProperties innospotsConsoleProperties) {
+                                         InnospotsConfigProperties innospotsConfigProperties) {
         this.extInstallmentOperator = extInstallmentOperator;
-        this.innospotsConsoleProperties = innospotsConsoleProperties;
+        this.innospotsConfigProperties = innospotsConfigProperties;
     }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        if (!innospotsConsoleProperties.isExtensionLoad()) {
+        if (!innospotsConfigProperties.isExtensionLoad()) {
             log.info("skip application check");
             return;
         }

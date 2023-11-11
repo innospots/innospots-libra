@@ -25,25 +25,25 @@ import io.innospots.base.exception.ResourceException;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.field.ParamField;
-import io.innospots.workflow.console.converter.instance.WorkflowInstanceConverter;
-import io.innospots.workflow.console.dao.instance.WorkflowInstanceCacheDao;
-import io.innospots.workflow.console.dao.instance.WorkflowRevisionDao;
-import io.innospots.workflow.console.entity.instance.WorkflowInstanceCacheEntity;
-import io.innospots.workflow.console.entity.instance.WorkflowInstanceEntity;
-import io.innospots.workflow.console.entity.instance.WorkflowRevisionEntity;
+import io.innospots.workflow.core.instance.converter.WorkflowInstanceConverter;
+import io.innospots.workflow.core.instance.dao.WorkflowInstanceCacheDao;
+import io.innospots.workflow.core.instance.dao.WorkflowRevisionDao;
+import io.innospots.workflow.core.instance.entity.WorkflowInstanceCacheEntity;
+import io.innospots.workflow.core.instance.entity.WorkflowInstanceEntity;
+import io.innospots.workflow.core.instance.entity.WorkflowRevisionEntity;
 import io.innospots.workflow.console.enums.FlowVersion;
 import io.innospots.workflow.console.events.InstanceUpdateEvent;
 import io.innospots.workflow.console.exception.WorkflowPublishException;
 import io.innospots.workflow.console.listener.NodeReferenceListener;
-import io.innospots.workflow.core.config.InnospotWorkflowProperties;
+import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.engine.FlowEngineManager;
 import io.innospots.workflow.core.engine.IFlowEngine;
 import io.innospots.workflow.core.flow.BuildProcessInfo;
 import io.innospots.workflow.core.flow.WorkflowBaseBody;
 import io.innospots.workflow.core.flow.WorkflowBody;
-import io.innospots.workflow.core.flow.instance.IWorkflowCacheDraftOperator;
-import io.innospots.workflow.core.node.instance.Edge;
-import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.flow.reader.IWorkflowReader;
+import io.innospots.workflow.core.instance.model.Edge;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -60,12 +60,12 @@ import java.util.stream.Collectors;
  * @date 2021/3/16
  */
 @Slf4j
-public class WorkflowBuilderOperator implements IWorkflowCacheDraftOperator {
+public class WorkflowBuilderOperator implements IWorkflowReader {
 
     public static final String CACHE_NAME = "CACHE_FLOW_INSTANCE";
 
 
-    private InnospotWorkflowProperties innospotWorkflowProperties;
+    private InnospotsWorkflowProperties innospotsWorkflowProperties;
 
     private WorkflowRevisionDao workflowRevisionDao;
 
@@ -81,13 +81,13 @@ public class WorkflowBuilderOperator implements IWorkflowCacheDraftOperator {
                                    WorkflowInstanceCacheDao workflowInstanceCacheDao,
                                    WorkflowInstanceOperator workflowInstanceOperator,
                                    NodeInstanceOperator nodeInstanceOperator, EdgeOperator edgeOperator,
-                                   InnospotWorkflowProperties innospotWorkflowProperties) {
+                                   InnospotsWorkflowProperties innospotsWorkflowProperties) {
         this.workflowRevisionDao = workflowRevisionDao;
         this.workflowInstanceCacheDao = workflowInstanceCacheDao;
         this.workflowInstanceOperator = workflowInstanceOperator;
         this.nodeInstanceOperator = nodeInstanceOperator;
         this.edgeOperator = edgeOperator;
-        this.innospotWorkflowProperties = innospotWorkflowProperties;
+        this.innospotsWorkflowProperties = innospotsWorkflowProperties;
     }
 
 
@@ -450,8 +450,8 @@ public class WorkflowBuilderOperator implements IWorkflowCacheDraftOperator {
                 .orderByDesc(WorkflowRevisionEntity::getRevision);
         List<WorkflowRevisionEntity> revisionEntities = workflowRevisionDao.selectList(allRevisionQuery);
 
-        if (revisionEntities != null && revisionEntities.size() > innospotWorkflowProperties.getWorkFlowInstanceKeepVersionAmount()) {
-            for (int i = innospotWorkflowProperties.getWorkFlowInstanceKeepVersionAmount(); i < revisionEntities.size(); i++) {
+        if (revisionEntities != null && revisionEntities.size() > innospotsWorkflowProperties.getWorkFlowInstanceKeepVersionAmount()) {
+            for (int i = innospotsWorkflowProperties.getWorkFlowInstanceKeepVersionAmount(); i < revisionEntities.size(); i++) {
                 WorkflowRevisionEntity existingRevision = revisionEntities.get(i);
                 log.info("delete workflow revision, instanceId: {}, revisionId:{}", workflowInstanceId, existingRevision.getRevision());
                 workflowRevisionDao.deleteById(existingRevision.getFlowRevisionId());

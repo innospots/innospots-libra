@@ -18,6 +18,7 @@
 
 package io.innospots.libra.kernel.module.page.operator;
 
+import io.innospots.base.config.InnospotsConfigProperties;
 import io.innospots.base.enums.ImageType;
 import io.innospots.base.exception.InnospotException;
 import io.innospots.base.model.response.ResponseCode;
@@ -43,7 +44,7 @@ public class DashboardFileOperator {
 
     private static final String DASHBOARD_FILE_PATH = "/resources/image/dashboard/";
 
-    private InnospotsConsoleProperties innospotsConsoleProperties;
+    private InnospotsConfigProperties innospotsConfigProperties;
 
     public String uploadFile(MultipartFile file, String fileName) {
 
@@ -56,7 +57,7 @@ public class DashboardFileOperator {
         }
 
         String filePath = UUID.randomUUID() + (StringUtils.isBlank(fileName) ? file.getOriginalFilename() : fileName);
-        String parentPath = innospotsConsoleProperties.getUploadFilePath() + DASHBOARD_FILE_PATH;
+        String parentPath = innospotsConfigProperties.getUploadFilePath() + DASHBOARD_FILE_PATH;
 
         try {
             ImageFileUploader.upload(file, parentPath, filePath, ImageType.OTHER);

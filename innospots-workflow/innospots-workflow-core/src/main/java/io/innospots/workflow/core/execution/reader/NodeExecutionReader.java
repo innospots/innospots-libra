@@ -26,8 +26,8 @@ import io.innospots.workflow.core.execution.operator.IFlowExecutionOperator;
 import io.innospots.workflow.core.execution.operator.INodeExecutionOperator;
 import io.innospots.workflow.core.flow.WorkflowBaseBody;
 import io.innospots.workflow.core.flow.WorkflowBody;
-import io.innospots.workflow.core.flow.instance.IWorkflowCacheDraftOperator;
-import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.flow.reader.IWorkflowReader;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.*;
@@ -45,10 +45,10 @@ public class NodeExecutionReader {
 
     private IFlowExecutionOperator flowExecutionOperator;
 
-    private IWorkflowCacheDraftOperator workflowCacheDraftOperator;
+    private IWorkflowReader workflowCacheDraftOperator;
 
     public NodeExecutionReader(
-            IWorkflowCacheDraftOperator workflowCacheDraftOperator,
+            IWorkflowReader workflowCacheDraftOperator,
             INodeExecutionOperator nodeExecutionOperator,
                                IFlowExecutionOperator flowExecutionOperator) {
         this.nodeExecutionOperator = nodeExecutionOperator;

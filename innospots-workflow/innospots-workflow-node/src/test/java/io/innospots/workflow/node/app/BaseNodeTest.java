@@ -8,11 +8,9 @@ import io.innospots.base.re.ExpressionEngineFactory;
 import io.innospots.base.re.GenericExpressionEngine;
 import io.innospots.base.re.IExpressionEngine;
 import io.innospots.base.re.jit.MethodBody;
-import io.innospots.workflow.core.node.app.BaseAppNode;
-import io.innospots.workflow.core.node.instance.NodeInstance;
-import lombok.extern.log4j.Log4j2;
+import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -23,7 +21,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

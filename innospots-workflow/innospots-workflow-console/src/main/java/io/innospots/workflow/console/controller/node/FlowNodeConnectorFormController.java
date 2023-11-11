@@ -25,8 +25,8 @@ import io.innospots.base.exception.ConfigException;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
-import io.innospots.workflow.core.node.apps.AppConnectorConfig;
-import io.innospots.workflow.core.node.apps.AppNodeDefinition;
+import io.innospots.workflow.core.node.definition.model.AppConnectorConfig;
+import io.innospots.workflow.core.node.definition.model.NodeNodeDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -66,7 +66,7 @@ public class FlowNodeConnectorFormController {
     public InnospotResponse<List<CredentialAuthOption>> selectAppNodeConnectorFormConfig(
             @Parameter(name = "appNodeId") @PathVariable Integer appNodeId
     ) {
-        AppNodeDefinition definition = flowNodeDefinitionOperator.getNodeDefinition(appNodeId);
+        NodeNodeDefinition definition = flowNodeDefinitionOperator.getNodeDefinition(appNodeId);
         List<CredentialAuthOption> configs = new ArrayList<>();
 
         CredentialAuthOption formConfig = null;

@@ -21,7 +21,7 @@ package io.innospots.workflow.node.app.script;
 import io.innospots.workflow.core.execution.ExecutionInput;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.app.BaseAppNode;
+import io.innospots.workflow.core.node.executor.BaseAppNode;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;

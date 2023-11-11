@@ -40,9 +40,10 @@ import java.util.Set;
  * @date 2021-03-12
  */
 
-@Slf4j
-@Aspect
-@Component
+//@Slf4j
+//@Aspect
+//@Component
+@Deprecated
 public class ValidatorAspect {
 
     @Pointcut(

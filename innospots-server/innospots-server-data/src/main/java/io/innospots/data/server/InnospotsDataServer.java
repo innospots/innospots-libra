@@ -19,22 +19,20 @@
 package io.innospots.data.server;
 
 
-import io.innospots.server.base.configuration.BaseServiceConfiguration;
-import io.innospots.server.base.configuration.DatasourceConfiguration;
+import io.innospots.server.base.ServerConfigImporter;
 import io.innospots.server.base.registry.ServiceRegistryHolder;
 import io.innospots.server.base.registry.enums.ServiceType;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.quartz.QuartzAutoConfiguration;
-import org.springframework.context.annotation.Import;
 
 /**
  * @author Raydian
  * @date 2021/1/30
  */
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, QuartzAutoConfiguration.class})
-@Import({DatasourceConfiguration.class, BaseServiceConfiguration.class})
+@ServerConfigImporter
 public class InnospotsDataServer {
 
     public static void main(String[] args) {

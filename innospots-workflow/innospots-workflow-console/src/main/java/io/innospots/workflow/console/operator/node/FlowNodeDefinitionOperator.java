@@ -30,13 +30,13 @@ import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.libra.base.events.AvatarRemoveEvent;
-import io.innospots.workflow.console.converter.node.FlowNodeDefinitionConverter;
-import io.innospots.workflow.console.dao.node.FlowNodeDefinitionDao;
-import io.innospots.workflow.console.entity.node.FlowNodeDefinitionEntity;
+import io.innospots.workflow.core.node.NodeInfo;
+import io.innospots.workflow.core.node.definition.converter.FlowNodeDefinitionConverter;
+import io.innospots.workflow.core.node.definition.dao.FlowNodeDefinitionDao;
+import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
 import io.innospots.workflow.console.model.AppQueryRequest;
-import io.innospots.workflow.core.enums.AppPrimitive;
-import io.innospots.workflow.core.node.AppInfo;
-import io.innospots.workflow.core.node.apps.AppNodeDefinition;
+import io.innospots.workflow.core.enums.NodePrimitive;
+import io.innospots.workflow.core.node.definition.model.NodeNodeDefinition;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
@@ -64,7 +64,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
      * @param queryRequest
      * @return Page<NodeDefinition>
      */
-    public PageBody<AppInfo> pageAppDefinitions(AppQueryRequest queryRequest) {
+    public PageBody<NodeInfo> pageAppDefinitions(AppQueryRequest queryRequest) {
         QueryWrapper<FlowNodeDefinitionEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("t.FLOW_TPL_ID", 1);
         if (queryRequest.getDataStatus() != null) {
@@ -81,31 +81,31 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
 
         IPage<FlowNodeDefinitionEntity> queryPage = new Page<>(queryRequest.getPage(), queryRequest.getSize());
         queryPage = this.baseMapper.selectAppPage(queryPage, queryWrapper);
-        PageBody<AppInfo> result = new PageBody<>();
+        PageBody<NodeInfo> result = new PageBody<>();
         if (queryPage != null) {
             result.setTotal(queryPage.getTotal());
             result.setTotalPage(queryPage.getPages());
             result.setCurrent(queryPage.getCurrent());
             result.setPageSize(queryPage.getSize());
-            List<AppInfo> appInfos = new ArrayList<>();
+            List<NodeInfo> nodeInfos = new ArrayList<>();
             if (!CollectionUtils.isEmpty(queryPage.getRecords())) {
                 List<FlowNodeDefinitionEntity> entities = queryPage.getRecords();
                 for (FlowNodeDefinitionEntity entity : entities) {
                     if (entity.getUsed() == null) {
                         entity.setUsed(Boolean.TRUE);
                     }
-                    AppInfo appInfo = FlowNodeDefinitionConverter.INSTANCE.entityToSimple(entity);
-                    appInfos.add(appInfo);
+                    NodeInfo nodeInfo = FlowNodeDefinitionConverter.INSTANCE.entityToSimple(entity);
+                    nodeInfos.add(nodeInfo);
                 }
 
 
             }
-            result.setList(appInfos);
+            result.setList(nodeInfos);
         }
         return result;
     }
 
-    public List<AppNodeDefinition> listOnlineNodes(AppPrimitive primitive) {
+    public List<NodeNodeDefinition> listOnlineNodes(NodePrimitive primitive) {
         QueryWrapper<FlowNodeDefinitionEntity> queryWrapper = new QueryWrapper<>();
 
         queryWrapper.lambda()
@@ -128,41 +128,41 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
     /**
      * create app info
      *
-     * @param appInfo app info
+     * @param nodeInfo app info
      * @return AppInfo
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppInfo createAppInfo(AppInfo appInfo) {
-        this.checkDifferentName(appInfo);
-        this.checkDifferentCode(appInfo);
-        FlowNodeDefinitionEntity entity = FlowNodeDefinitionConverter.INSTANCE.infoToEntity(appInfo);
+    public NodeInfo createAppInfo(NodeInfo nodeInfo) {
+        this.checkDifferentName(nodeInfo);
+        this.checkDifferentCode(nodeInfo);
+        FlowNodeDefinitionEntity entity = FlowNodeDefinitionConverter.INSTANCE.infoToEntity(nodeInfo);
         entity.setIcon(null);
         boolean s = this.save(entity);
         if (!s) {
             throw ResourceException.buildCreateException(this.getClass(), "create app node definition error");
         }
-        appInfo.setNodeId(entity.getNodeId());
-        return appInfo;
+        nodeInfo.setNodeId(entity.getNodeId());
+        return nodeInfo;
     }
 
     /**
      * modify app info
      *
-     * @param appInfo app info
+     * @param nodeInfo app info
      * @return AppInfo
      */
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(cacheNames = CACHE_NAME, key = "#appInfo.nodeId")
-    public AppInfo updateAppInfo(AppInfo appInfo) {
-        this.checkDifferentName(appInfo);
-        this.checkDifferentCode(appInfo);
-        FlowNodeDefinitionEntity entity = this.getById(appInfo.getNodeId());
+    @CacheEvict(cacheNames = CACHE_NAME, key = "#nodeInfo.nodeId")
+    public NodeInfo updateAppInfo(NodeInfo nodeInfo) {
+        this.checkDifferentName(nodeInfo);
+        this.checkDifferentCode(nodeInfo);
+        FlowNodeDefinitionEntity entity = this.getById(nodeInfo.getNodeId());
         if (entity == null) {
             throw ResourceException.buildAbandonException(this.getClass(), "node definition not exits");
         }
-        FlowNodeDefinitionConverter.INSTANCE.infoToEntity(appInfo, entity);
-        if(StringUtils.isNotEmpty(appInfo.getIcon()) && appInfo.getIcon().startsWith(IMAGE_PREFIX)){
-            entity.setIcon("/image/APP/" + appInfo.getNodeId() + "?t=" + RandomStringUtils.randomNumeric(5));
+        FlowNodeDefinitionConverter.INSTANCE.infoToEntity(nodeInfo, entity);
+        if(StringUtils.isNotEmpty(nodeInfo.getIcon()) && nodeInfo.getIcon().startsWith(IMAGE_PREFIX)){
+            entity.setIcon("/image/APP/" + nodeInfo.getNodeId() + "?t=" + RandomStringUtils.randomNumeric(5));
         }
 
         entity.setUpdatedTime(LocalDateTime.now());
@@ -181,7 +181,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
      * @return NodeDefinition
      */
     @CacheEvict(cacheNames = CACHE_NAME, key = "#appNodeDefinition.nodeId")
-    public AppNodeDefinition updateNodeDefinition(AppNodeDefinition appNodeDefinition) {
+    public NodeNodeDefinition updateNodeDefinition(NodeNodeDefinition appNodeDefinition) {
         FlowNodeDefinitionEntity entity = this.getById(appNodeDefinition.getNodeId());
         if (entity == null) {
             throw ResourceException.buildAbandonException(this.getClass(), "node definition not exits");
@@ -208,12 +208,12 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
      * @return NodeDefinition
      */
     @Cacheable(cacheNames = CACHE_NAME, key = "#nodeId")
-    public AppNodeDefinition getNodeDefinition(Integer nodeId) {
+    public NodeNodeDefinition getNodeDefinition(Integer nodeId) {
         FlowNodeDefinitionEntity entity = getById(nodeId);
         if (entity == null) {
             throw ResourceException.buildAbandonException(this.getClass(), "get node definition not exits", nodeId);
         }
-        AppNodeDefinition appNodeDefinition = FlowNodeDefinitionConverter.INSTANCE.entityToModel(entity);
+        NodeNodeDefinition appNodeDefinition = FlowNodeDefinitionConverter.INSTANCE.entityToModel(entity);
         return appNodeDefinition;
     }
 
@@ -238,36 +238,36 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
     /**
      * check different app have the same name
      *
-     * @param appInfo
+     * @param nodeInfo
      */
-    private void checkDifferentName(AppInfo appInfo) {
+    private void checkDifferentName(NodeInfo nodeInfo) {
         QueryWrapper<FlowNodeDefinitionEntity> queryWrapper = new QueryWrapper<>();
         LambdaQueryWrapper<FlowNodeDefinitionEntity> lambda = queryWrapper.lambda();
-        lambda.eq(FlowNodeDefinitionEntity::getName, appInfo.getName());
-        if (appInfo.getNodeId() != null) {
-            lambda.ne(FlowNodeDefinitionEntity::getNodeId, appInfo.getNodeId());
+        lambda.eq(FlowNodeDefinitionEntity::getName, nodeInfo.getName());
+        if (nodeInfo.getNodeId() != null) {
+            lambda.ne(FlowNodeDefinitionEntity::getNodeId, nodeInfo.getNodeId());
         }
         long count = super.count(queryWrapper);
         if (count > 0) {
-            throw ResourceException.buildExistException(this.getClass(), "app name", appInfo.getName());
+            throw ResourceException.buildExistException(this.getClass(), "app name", nodeInfo.getName());
         }
     }
 
     /**
      * check different app have the same code
      *
-     * @param appInfo
+     * @param nodeInfo
      */
-    private void checkDifferentCode(AppInfo appInfo) {
+    private void checkDifferentCode(NodeInfo nodeInfo) {
         QueryWrapper<FlowNodeDefinitionEntity> queryWrapper = new QueryWrapper<>();
         LambdaQueryWrapper<FlowNodeDefinitionEntity> lambda = queryWrapper.lambda();
-        lambda.eq(FlowNodeDefinitionEntity::getCode, appInfo.getCode());
-        if (appInfo.getNodeId() != null) {
-            lambda.ne(FlowNodeDefinitionEntity::getNodeId, appInfo.getNodeId());
+        lambda.eq(FlowNodeDefinitionEntity::getCode, nodeInfo.getCode());
+        if (nodeInfo.getNodeId() != null) {
+            lambda.ne(FlowNodeDefinitionEntity::getNodeId, nodeInfo.getNodeId());
         }
         long count = super.count(queryWrapper);
         if (count > 0) {
-            throw ResourceException.buildExistException(this.getClass(), "app code", appInfo.getCode());
+            throw ResourceException.buildExistException(this.getClass(), "app code", nodeInfo.getCode());
         }
     }
 }

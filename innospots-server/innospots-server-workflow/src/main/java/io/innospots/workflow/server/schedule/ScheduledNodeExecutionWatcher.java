@@ -21,7 +21,7 @@ package io.innospots.workflow.server.schedule;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.watcher.AbstractWatcher;
 import io.innospots.server.base.registry.ServiceRegistryHolder;
-import io.innospots.workflow.core.config.InnospotWorkflowProperties;
+import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.execution.operator.IScheduledNodeExecutionOperator;
 import io.innospots.workflow.core.execution.scheduled.ScheduledNodeExecution;
 import io.innospots.workflow.runtime.scheduled.NodeExecutionEventBody;
@@ -52,7 +52,7 @@ public class ScheduledNodeExecutionWatcher extends AbstractWatcher {
         String serverKey = ServiceRegistryHolder.getCurrentServer().getServerKey();
 
         List<ScheduledNodeExecution> scheduledNodeExecutions = scheduledNodeExecutionOperator.scanArrivalTimeExecutions(
-                null, serverKey, ServiceRegistryHolder.currentShardingKeys(InnospotWorkflowProperties.MAX_SHARDING_KEY));
+                null, serverKey, ServiceRegistryHolder.currentShardingKeys(InnospotsWorkflowProperties.MAX_SHARDING_KEY));
 
         if (CollectionUtils.isEmpty(scheduledNodeExecutions)) {
             return 15;

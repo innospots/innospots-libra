@@ -19,18 +19,17 @@
 package io.innospots.workflow.runtime.flow;
 
 import cn.hutool.crypto.digest.DigestUtil;
-import io.innospots.base.enums.ImageType;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.re.ExpressionEngineFactory;
-import io.innospots.workflow.core.debug.AppDebugPayload;
+import io.innospots.workflow.core.debug.DebugPayload;
 import io.innospots.workflow.core.debug.DebugInput;
 import io.innospots.workflow.core.execution.ExecutionInput;
 import io.innospots.workflow.core.execution.ExecutionResource;
 import io.innospots.workflow.core.execution.flow.FlowExecution;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeExecutionDisplay;
-import io.innospots.workflow.core.node.app.BaseAppNode;
-import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.script.ScriptNode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -83,7 +82,7 @@ public class AppNodeDebugger {
         return res;
     }
 
-    public static NodeExecutionDisplay execute(AppDebugPayload debugPayload){
+    public static NodeExecutionDisplay execute(DebugPayload debugPayload){
         Integer id = debugPayload.getNi().getNodeDefinitionId();
         NodeInstance ni = debugPayload.getNi();
         if(StringUtils.isEmpty(ni.getNodeKey())){

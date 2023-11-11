@@ -22,16 +22,16 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.workflow.console.converter.node.FlowNodeGroupConverter;
-import io.innospots.workflow.console.converter.node.FlowNodeDefinitionConverter;
-import io.innospots.workflow.console.dao.node.FlowNodeDefinitionDao;
-import io.innospots.workflow.console.dao.node.FlowNodeGroupDao;
-import io.innospots.workflow.console.dao.node.FlowNodeGroupNodeDao;
-import io.innospots.workflow.console.entity.node.FlowNodeDefinitionEntity;
-import io.innospots.workflow.console.entity.node.FlowNodeGroupEntity;
-import io.innospots.workflow.console.entity.node.FlowNodeGroupNodeEntity;
-import io.innospots.workflow.core.node.apps.AppNodeDefinition;
-import io.innospots.workflow.core.node.apps.AppNodeGroup;
+import io.innospots.workflow.core.node.definition.converter.FlowNodeGroupConverter;
+import io.innospots.workflow.core.node.definition.converter.FlowNodeDefinitionConverter;
+import io.innospots.workflow.core.node.definition.dao.FlowNodeDefinitionDao;
+import io.innospots.workflow.core.node.definition.dao.FlowNodeGroupDao;
+import io.innospots.workflow.core.node.definition.dao.FlowNodeGroupNodeDao;
+import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
+import io.innospots.workflow.core.node.definition.entity.FlowNodeGroupEntity;
+import io.innospots.workflow.core.node.definition.entity.FlowNodeGroupNodeEntity;
+import io.innospots.workflow.core.node.definition.model.NodeNodeDefinition;
+import io.innospots.workflow.core.node.definition.model.AppNodeGroup;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -196,7 +196,7 @@ public class FlowNodeGroupOperator {
         if (CollectionUtils.isEmpty(list)) {
             return null;
         }
-        Map<Integer, List<AppNodeDefinition>> ndMap = new HashMap<>();
+        Map<Integer, List<NodeNodeDefinition>> ndMap = new HashMap<>();
         if (includeNodes) {
             List<FlowNodeDefinitionEntity> ndList = flowNodeDefinitionDao.getNodeDefinitionByFlowTplIdAndStatus(flowTplId, DataStatus.ONLINE);
             if (CollectionUtils.isNotEmpty(ndList)) {

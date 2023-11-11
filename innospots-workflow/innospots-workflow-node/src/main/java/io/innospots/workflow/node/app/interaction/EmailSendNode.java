@@ -20,8 +20,8 @@ package io.innospots.workflow.node.app.interaction;
 
 
 import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.node.app.BaseAppNode;
-import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 
 import java.util.List;
 

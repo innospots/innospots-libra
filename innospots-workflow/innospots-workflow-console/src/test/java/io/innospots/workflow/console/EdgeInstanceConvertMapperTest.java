@@ -1,9 +1,9 @@
 package io.innospots.workflow.console;
 
 
-import io.innospots.workflow.console.entity.instance.EdgeInstanceEntity;
-import io.innospots.workflow.console.converter.instance.EdgeInstanceConverter;
-import io.innospots.workflow.core.node.instance.Edge;
+import io.innospots.workflow.core.instance.entity.EdgeInstanceEntity;
+import io.innospots.workflow.core.instance.converter.EdgeInstanceConverter;
+import io.innospots.workflow.core.instance.model.Edge;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 

@@ -18,12 +18,11 @@
 
 package io.innospots.workflow.node.app.file;
 
-import io.innospots.base.json.JSONUtils;
 import io.innospots.workflow.core.execution.ExecutionResource;
 import io.innospots.workflow.core.execution.node.NodeExecution;
 import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.app.BaseAppNode;
-import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;

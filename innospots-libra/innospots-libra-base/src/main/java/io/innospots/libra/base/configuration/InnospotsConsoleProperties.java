@@ -67,32 +67,4 @@ public class InnospotsConsoleProperties {
 
 
 
-    /**
-     * enable swagger api
-     */
-    private boolean enableSwagger = true;
-
-    /**
-     * the directory store upload file
-     */
-    private String uploadFilePath;
-
-    /**
-     * open debug mode
-     */
-    private boolean debugMode = false;
-
-    /**
-     * load extension from classpath
-     */
-    private boolean extensionLoad = true;
-
-
-    private Integer schemaCacheTimeoutSecond = 180;
-
-    /**
-     * the path of external jar lib
-     */
-    private String extLibPath;
-
 }

@@ -1,6 +1,5 @@
 package io.innospots.workflow.console.task.execution;
 
-import io.innospots.base.events.EventBody;
 import io.innospots.base.events.IEventListener;
 import io.innospots.libra.base.task.ITaskExecutionExplore;
 import io.innospots.libra.base.task.TaskExecution;
@@ -9,7 +8,7 @@ import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
 import io.innospots.workflow.core.execution.ExecutionStatus;
 import io.innospots.workflow.core.execution.FlowExecutionTaskEvent;
 import io.innospots.workflow.core.execution.flow.FlowExecution;
-import io.innospots.workflow.core.flow.instance.WorkflowInstance;
+import io.innospots.workflow.core.instance.model.WorkflowInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

@@ -25,8 +25,8 @@ import io.innospots.base.quartz.TimePeriod;
 import io.innospots.base.utils.time.CronUtils;
 import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.node.app.TriggerNode;
-import io.innospots.workflow.core.node.instance.NodeInstance;
+import io.innospots.workflow.core.node.executor.TriggerNode;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
