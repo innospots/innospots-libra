@@ -2,11 +2,8 @@ innospots:
   security:
     enabled: true
     mode: EXHIBITION
-    secretKey: Q2K9aOslSxDv3wM5
-    publicKey: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCV0BmhCv/TVA6du/ku9kMuU7J6a1CZwwSyNUHHcDpnr0/FwJucEzcpwrkcI98uv2JVqSV+cf9BfyKAYc3pLOI6roVMNW7ah3i3sW0wKuLE00YjSsz3EbtCpxmg22+CruWFCDX3Jk0rkLiqNVTByppfEAzfMBHXS1nHstfBV+/TgQIDAQAB
-    privateKey: MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAJXQGaEK/9NUDp27+S72Qy5TsnprUJnDBLI1QcdwOmevT8XAm5wTNynCuRwj3y6/YlWpJX5x/0F/IoBhzeks4jquhUw1btqHeLexbTAq4sTTRiNKzPcRu0KnGaDbb4Ku5YUINfcmTSuQuKo1VMHKml8QDN8wEddLWcey18FX79OBAgMBAAECgYEAgHCAeJRQjmLjgRIWac/R+xbgzpnQ6XLMROjp803hlOE1mEowXxgOVCxQvbJ3dsG4Uc6JiaW8fO+9qamwerfzX5tgjhc7ryqTHBE50Xe5ITJkLVt8BhTSvpNixG9CufBderhjY/Q1657NwYrbbTtCjZNKnVM842hAf/sX5Pwt+UECQQDv6LtVEx639BfPKRMqZVHHR2Apo48PRGAKd0alGU0mqAdSwgRuSHF3EdoKk+n6F4Z9wZTV1EWJ0P0XbmfpnrcZAkEAn9xnzG0JTAZDnnYE1nz2VhrWuQluyRDlp6Geof6rbtQKqRK8NJ4prI0le99NCJzeBXqYRNydX6rTRlx6SRMUqQJAJkTDjSCNp95B5gOxUPP0hYs3Ja03ZsILZ9/63t8YVXA8KtFUD5tyrgGk/Eb37bLO+0Rjz3Aa3478sD4mSTfOEQJANPkfeFFldEjbHWZ0YfMU2iGYp8ZlbMFpqKvY2kt+2YHwamhn73O90Y0QL8UmTMVWmTAvxxnoGGyOCFHav95PyQJBANquqvB2JC9AIHLkGfdl48fYDrM4W+l0Gp44/Q4xvBrRdrOq6+auV79LWjsi3A13hRF6Q7IK7A91kU/g1WRegS0=
     tokenSigningKey: innospots-sign-key
-    tokenIssuer: innospot
+    tokenIssuer: innospots
     tokenExpTimeMinute: 180
     open-super-admin-permission: true
     ignore-auth-paths:

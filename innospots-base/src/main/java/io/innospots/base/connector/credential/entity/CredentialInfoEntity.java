@@ -43,7 +43,7 @@ public class CredentialInfoEntity extends PBaseEntity {
 
     @Id
     @TableId(type = IdType.INPUT)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(length = 8)
     private String credentialKey;
 

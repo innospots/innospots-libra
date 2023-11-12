@@ -57,7 +57,7 @@ public class InnospotsWorkflowProperties {
     /**
      * the path use to store execution context
      */
-    private String executionStorePath;
+    private String executionStorePath=".execution_contexts";
 
     private String resourceSecretKey="InnosKey99!@";
 

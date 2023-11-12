@@ -65,12 +65,10 @@ public class ExtensionService {
 
     private ExtInstallmentOperator extInstallmentOperator;
 
-    //Application market usage status
-    private boolean appMarketEnabled = false;
 
     public List<LibraExtensionInformation> listLibraAppInformation(ExtensionStatus status) {
         List<LibraExtensionInformation> resList = new ArrayList<>();
-        if (appMarketEnabled) {
+        if (false) {
             //query app info from market
             //Query the defined application information of this service
             //Merge information

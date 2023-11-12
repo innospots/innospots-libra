@@ -52,14 +52,10 @@ public class InnospotsServerProperties {
      */
     private boolean enableRegistry = true;
 
-
-
     /**
      * open debug mode
      */
     private boolean debugMode = false;
 
-
-    private Integer schemaCacheTimeoutSecond = 180;
 
 }

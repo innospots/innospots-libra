@@ -19,6 +19,7 @@
 package io.innospots.server.base.registry;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import io.innospots.server.base.registry.enums.ServiceRole;
 import io.innospots.server.base.registry.enums.ServiceStatus;
 import io.innospots.server.base.registry.enums.ServiceType;
@@ -114,9 +115,15 @@ public class ServiceRegistryManager {
             return null;
         }
         LocalDateTime now = LocalDateTime.now();
-        serviceRegistryDao.updateTime(serviceId, ServiceStatus.ONLINE, now);
-        registryEntity.setUpdatedTime(now);
-        registryEntity.setServiceStatus(ServiceStatus.ONLINE);
+        UpdateWrapper<ServiceRegistryEntity> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.lambda().eq(ServiceRegistryEntity::getServerId,serviceId)
+                        .set(ServiceRegistryEntity::getServiceStatus,ServiceStatus.ONLINE)
+                                .set(ServiceRegistryEntity::getUpdatedTime,now);
+        int up = serviceRegistryDao.update(updateWrapper);
+        if(up > 0){
+            registryEntity.setUpdatedTime(now);
+            registryEntity.setServiceStatus(ServiceStatus.ONLINE);
+        }
         return BeanUtils.copyProperties(registryEntity, ServiceInfo.class);
     }
 

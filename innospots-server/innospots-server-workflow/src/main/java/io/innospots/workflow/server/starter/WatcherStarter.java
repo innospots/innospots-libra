@@ -26,7 +26,7 @@ import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
 import io.innospots.base.utils.ServiceActionHolder;
 import io.innospots.workflow.runtime.container.RunTimeContainerManager;
 import io.innospots.workflow.runtime.flow.FlowManager;
-import io.innospots.workflow.server.schedule.ScheduledNodeExecutionWatcher;
+import io.innospots.workflow.server.watcher.ScheduledNodeExecutionWatcher;
 import io.innospots.workflow.server.watcher.TriggerRegistryWatcher;
 import io.innospots.workflow.runtime.watcher.WorkflowStatusWatcher;
 import org.springframework.boot.ApplicationArguments;

@@ -41,9 +41,9 @@ import static io.innospots.libra.base.menu.ItemType.BUTTON;
  * @date 2023/4/23
  */
 @RestController
-@RequestMapping(PATH_ROOT_ADMIN + "flow/node-definition/debug")
-@ModuleMenu(menuKey = "application")
-@Tag(name = "Apps Node debug")
+@RequestMapping(PATH_ROOT_ADMIN + "flow-node/debug")
+@ModuleMenu(menuKey = "node-management")
+@Tag(name = "Node debug")
 public class FlowNodeDebugController {
 
 

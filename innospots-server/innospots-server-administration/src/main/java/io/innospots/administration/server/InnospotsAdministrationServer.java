@@ -25,8 +25,10 @@ import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.libra.kernel.LibraKernelImporter;
 import io.innospots.libra.security.LibraAuthImporter;
+import io.innospots.server.base.ServerConfigImporter;
 import io.innospots.server.base.registry.ServiceRegistryHolder;
 import io.innospots.server.base.registry.enums.ServiceType;
+import io.innospots.workflow.console.WorkflowConsoleImporter;
 import io.innospots.workflow.runtime.WorkflowRuntimeImporter;
 import io.innospots.workflow.server.configuration.WorkflowServerImporter;
 import org.apache.commons.lang3.StringUtils;
@@ -55,6 +57,8 @@ import java.util.Map;
 @Import(LoggerClearScheduler.class)
 @LibraAuthImporter
 @LibraKernelImporter
+@ServerConfigImporter
+//@WorkflowConsoleImporter
 //@WorkflowServerImporter
 @EnableScheduling
 public class InnospotsAdministrationServer {

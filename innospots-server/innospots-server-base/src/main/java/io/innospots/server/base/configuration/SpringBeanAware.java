@@ -22,6 +22,7 @@ import cn.hutool.core.io.resource.Resource;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import io.innospots.base.utils.BeanContextAware;
+import io.innospots.base.utils.BeanContextAwareUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
@@ -36,10 +37,9 @@ import java.util.Map;
  */
 public class SpringBeanAware implements BeanContextAware {
 
-    private SpringUtil springUtil;
 
     public SpringBeanAware(SpringUtil springUtil) {
-        this.springUtil = springUtil;
+        BeanContextAwareUtils.setContextAware(this);
     }
 
     @Override

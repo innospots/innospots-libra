@@ -7,9 +7,6 @@ spring:
     open-in-view: false
 
 innospots:
-  data:
-    schemaCacheTimeoutSecond: 30
-    recordStoreType: mysql
   db:
     driver-class-name: ${DB_DRIVER:com.mysql.cj.jdbc.Driver}
     jdbc-url: jdbc:mysql://${DB_IP}:${DB_PORT:3306}/${DB_NAME}?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=${DB_TIMEZONE:GMT%2B8}&zeroDateTimeBehavior=CONVERT_TO_NULL
@@ -20,7 +17,3 @@ innospots:
     pool-name: innospots-pool
     max-lifetime: 1800000
     idle-timeout: 600000 # millisecond,default ten minute
-
-  workflow:
-    server:
-      port: ${innosports.workflow.server.port:19876}

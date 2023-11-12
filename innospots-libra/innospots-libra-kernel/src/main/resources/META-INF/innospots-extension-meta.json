@@ -12,8 +12,6 @@
   "description": "Libra Kernel System Extension",
   "basePackages": [
     "io.innospots.libra.kernel",
-    "io.innospots.libra.logger",
-    "io.innospots.connector.schema",
     "io.innospots.libra.security"
   ],
   "modules": [
@@ -95,7 +93,7 @@
       }
     },
     {
-      "itemKey": "libra-apps",
+      "itemKey": "libra-credential",
       "uri": "/metadata/credential",
       "i18nNames": {
         "en_US": "Credential",
@@ -103,7 +101,7 @@
       }
     },
     {
-      "itemKey": "libra-apps-dataset",
+      "itemKey": "libra-dataset",
       "uri": "/metadata/dataset",
       "i18nNames": {
         "en_US": "Datasets",
@@ -223,6 +221,16 @@
       "i18nNames": {
         "en_US": "System Setting",
         "zh_CN": "系统设置"
+      }
+    },
+    {
+      "name": "${schedule-task}",
+      "itemKey": "libra-schedule-task",
+      "uri": "/schedule-task",
+      "icon": "schedule-task",
+      "i18nNames": {
+        "en_US": "Schedule Task",
+        "zh_CN": "调度任务管理"
       }
     }
   ]

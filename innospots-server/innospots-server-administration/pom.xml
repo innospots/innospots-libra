@@ -52,6 +52,10 @@
             <groupId>io.innospots</groupId>
             <artifactId>innospots-server-workflow</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.innospots</groupId>
+            <artifactId>innospots-workflow-console</artifactId>
+        </dependency>
 
     </dependencies>
 

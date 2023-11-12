@@ -44,11 +44,6 @@ public class InnospotsConfigProperties {
     private String uploadFilePath;
 
     /**
-     * open debug mode
-     */
-    private boolean debugMode = false;
-
-    /**
      * load extension from classpath
      */
     private boolean extensionLoad = true;
@@ -65,7 +60,6 @@ public class InnospotsConfigProperties {
      * Symmetric encryption key
      */
     private String secretKey;
-
 
     private String publicKey;
 

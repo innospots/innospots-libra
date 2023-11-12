@@ -47,7 +47,7 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
  */
 @RestController
 @RequestMapping(PATH_ROOT_ADMIN + "schema/fields")
-@ModuleMenu(menuKey = "libra-schema")
+@ModuleMenu(menuKey = "libra-dataset")
 @Tag(name = "Schema Field")
 public class SchemaFieldController extends BaseController {
 

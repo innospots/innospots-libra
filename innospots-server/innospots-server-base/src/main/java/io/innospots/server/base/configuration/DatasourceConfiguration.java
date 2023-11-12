@@ -37,7 +37,7 @@ public class DatasourceConfiguration {
 
 
     @Bean
-    @ConditionalOnMissingBean(DataSource.class)
+    //@ConditionalOnMissingBean(DataSource.class)
     public DataSource dataSource(InnospotsDbProperties dbProperties) {
         return new HikariDataSource(dbProperties);
     }

@@ -1,5 +1,5 @@
 {
-  "name": "${strategy-app-name}",
+  "name": "${workflow-name}",
   "i18nNames": {
     "en_US": "Workflow",
     "zh_CN": "工作流程"
@@ -25,22 +25,13 @@
       "uri": "/workflow/index"
     },
     {
-      "name": "${application}",
-      "itemKey": "application",
-      "uri": "/app",
-      "icon": "application",
+      "name": "${node-management}",
+      "itemKey": "node-management",
+      "uri": "/flow-node",
+      "icon": "node-management",
       "i18nNames": {
-        "en_US": "Application",
-        "zh_CN": "应用管理"
-      },
-    {
-      "name": "${schedule-task}",
-      "itemKey": "schedule-task",
-      "uri": "/schedule-task",
-      "icon": "schedule-task",
-      "i18nNames": {
-        "en_US": "Schedule Task",
-        "zh_CN": "调度任务管理"
+        "en_US": "Nodes",
+        "zh_CN": "节点管理"
       }
     }
   ]

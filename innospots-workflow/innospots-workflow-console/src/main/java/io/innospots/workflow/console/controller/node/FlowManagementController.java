@@ -49,9 +49,9 @@ import static io.innospots.libra.base.menu.ItemType.BUTTON;
  * @author Smars
  */
 @RestController
-@RequestMapping(PATH_ROOT_ADMIN + "flow/node-definition")
-@ModuleMenu(menuKey = "application")
-@Tag(name = "Apps Management Definition")
+@RequestMapping(PATH_ROOT_ADMIN + "flow-node/management")
+@ModuleMenu(menuKey = "node-management")
+@Tag(name = "Node Definition")
 public class FlowManagementController extends BaseController {
 
 

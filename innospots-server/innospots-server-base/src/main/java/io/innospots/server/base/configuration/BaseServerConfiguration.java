@@ -107,7 +107,7 @@ public class BaseServerConfiguration {
 
     @Bean
     public InnospotIdGenerator idGenerator(BeanContextAware springBeanAware) {
-        return InnospotIdGenerator.build(BeanContextAwareUtils.serverIpAddress(), BeanContextAwareUtils.serverPort());
+        return InnospotIdGenerator.build(springBeanAware.serverIpAddress(), springBeanAware.serverPort());
     }
 
     @Bean

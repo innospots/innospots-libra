@@ -40,9 +40,9 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
  * @date 2023/2/3
  */
 @RestController
-@RequestMapping(PATH_ROOT_ADMIN + "flow/node/category")
-@ModuleMenu(menuKey = "application")
-@Tag(name = "App Node Category")
+@RequestMapping(PATH_ROOT_ADMIN + "flow-node/category")
+@ModuleMenu(menuKey = "node-management")
+@Tag(name = "Node Category")
 public class FlowCategoryController extends BaseController {
 
     private FlowTemplateOperator flowTemplateOperator;

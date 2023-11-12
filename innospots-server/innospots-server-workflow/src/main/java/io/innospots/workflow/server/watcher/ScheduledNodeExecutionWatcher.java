@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package io.innospots.workflow.server.schedule;
+package io.innospots.workflow.server.watcher;
 
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.watcher.AbstractWatcher;

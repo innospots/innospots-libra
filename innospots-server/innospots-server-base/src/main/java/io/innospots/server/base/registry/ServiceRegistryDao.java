@@ -33,17 +33,4 @@ import java.time.LocalDateTime;
  **/
 public interface ServiceRegistryDao extends BaseMapper<ServiceRegistryEntity> {
 
-
-    /**
-     * update 更新时间
-     *
-     * @param serverId    serverId
-     * @param updatedTime updatedTime
-     * @return int
-     */
-    @Update({"update sys_service_registry", "set updated_time = #{updatedTime,jdbcType=TIMESTAMP},",
-            "service_status = #{serviceStatus,jdbcType=VARCHAR}",
-            "where server_id = #{serverId,jdbcType=NUMERIC}"})
-    int updateTime(Long serverId, ServiceStatus serviceStatus, LocalDateTime updatedTime);
-
 }

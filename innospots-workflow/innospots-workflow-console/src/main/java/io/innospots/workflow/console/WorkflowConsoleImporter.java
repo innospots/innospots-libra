@@ -19,6 +19,7 @@
 package io.innospots.workflow.console;
 
 import io.innospots.libra.base.model.swagger.SwaggerOpenApiBuilder;
+import io.innospots.workflow.console.config.WorkflowOperatorConfiguration;
 import io.innospots.workflow.console.listener.NodeReferenceListener;
 import io.innospots.workflow.console.listener.WorkflowPageListener;
 import io.innospots.workflow.console.operator.instance.NodeInstanceOperator;
@@ -43,9 +44,8 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-@WorkflowOperatorImporter
-@Import({WorkflowApiImporter.WorkflowApiConfiguration.class})
-public @interface WorkflowApiImporter {
+@Import({WorkflowOperatorConfiguration.class, WorkflowConsoleImporter.WorkflowApiConfiguration.class})
+public @interface WorkflowConsoleImporter {
 
 
     @ComponentScan(basePackages = {"io.innospots.workflow.console"})

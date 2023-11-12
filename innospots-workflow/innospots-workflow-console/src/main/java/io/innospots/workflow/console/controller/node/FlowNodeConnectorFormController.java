@@ -40,9 +40,9 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
  * @date 2023/3/17
  */
 @RestController
-@RequestMapping(PATH_ROOT_ADMIN + "flow/connector/form")
-@ModuleMenu(menuKey = "application")
-@Tag(name = "Apps Node Connector")
+@RequestMapping(PATH_ROOT_ADMIN + "flow-node/connector/form")
+@ModuleMenu(menuKey = "node-management")
+@Tag(name = "Node Connector")
 public class FlowNodeConnectorFormController {
 
     private final FlowNodeDefinitionOperator flowNodeDefinitionOperator;
