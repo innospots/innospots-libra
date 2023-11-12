@@ -18,8 +18,8 @@
 
 package io.innospots.workflow.core.execution.operator;
 
-import io.innospots.workflow.core.execution.ExecutionStatus;
-import io.innospots.workflow.core.execution.scheduled.ScheduledNodeExecution;
+import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.workflow.core.execution.model.scheduled.ScheduledNodeExecution;
 
 import java.util.List;
 

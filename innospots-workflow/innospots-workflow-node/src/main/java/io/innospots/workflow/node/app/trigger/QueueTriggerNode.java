@@ -23,8 +23,8 @@ import io.innospots.base.connector.minder.IQueueConnectionMinder;
 import io.innospots.base.data.operator.IQueueReceiver;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.data.body.DataBody;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.TriggerNode;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
@@ -54,27 +54,21 @@ public class QueueTriggerNode extends TriggerNode {
 
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
-        validFieldConfig(nodeInstance, FIELD_CREDENTIAL_KEY);
-
-        validFieldConfig(nodeInstance,FIELD_TOPIC);
-        validFieldConfig(nodeInstance, FIELD_GROUP_ID);
-
-        String credentialKey = nodeInstance.valueString(FIELD_CREDENTIAL_KEY);
-        String topic = nodeInstance.valueString(FIELD_TOPIC);
-        String groupId = nodeInstance.valueString(FIELD_GROUP_ID);
-        String messageFormat = nodeInstance.valueString(FIELD_MSG_FORMAT);
+    protected void initialize() {
+        String credentialKey = validString(FIELD_CREDENTIAL_KEY);
+        String topic = validString(FIELD_TOPIC);
+        String groupId = validString(FIELD_GROUP_ID);
+        String messageFormat = valueString(FIELD_MSG_FORMAT);
 
         if (topic == null) {
             throw ConfigException.buildMissingException(this.getClass(), "nodeKey: " + nodeKey() + " , topic is missing.");
         }
 
-        Integer parallelNum = nodeInstance.valueInteger(FIELD_PARALLEL_NUM);
+        Integer parallelNum = valueInteger(FIELD_PARALLEL_NUM);
         if (parallelNum == null) {
             parallelNum = 1;
         }
-        String dataOffset = nodeInstance.valueString(FIELD_DATA_OFFSET);
+        String dataOffset = valueString(FIELD_DATA_OFFSET);
         if (dataOffset == null) {
             dataOffset = "latest";
         }

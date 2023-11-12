@@ -74,4 +74,5 @@ public class NodeInfo {
 
     @Schema(title = "credential type code")
     protected String credentialTypeCode;
+
 }

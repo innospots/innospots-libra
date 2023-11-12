@@ -18,10 +18,10 @@
 
 package io.innospots.workflow.node.app.logic;
 
-import io.innospots.workflow.core.execution.flow.FlowExecution;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 
 import java.util.ArrayList;
@@ -33,16 +33,15 @@ import java.util.List;
  * @version 1.0.0
  * @date 2022/10/7
  */
-public class CombineNode extends BaseAppNode {
+public class CombineNode extends BaseNodeExecutor {
 
     public static final String FIELD_OUTPUT = "output_setting";
 
     private OutputSetting outputSetting;
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
-        outputSetting = OutputSetting.valueOf(nodeInstance.valueString(FIELD_OUTPUT));
+    protected void initialize() {
+        outputSetting = OutputSetting.valueOf(valueString(FIELD_OUTPUT));
     }
 
     @Override

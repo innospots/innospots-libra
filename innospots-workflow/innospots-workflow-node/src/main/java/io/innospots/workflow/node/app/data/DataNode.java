@@ -43,9 +43,9 @@ public class DataNode extends BaseDataNode {
 
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
-        credentialKey = nodeInstance.valueString(FIELD_CREDENTIAL_KEY);
+    protected void initialize() {
+        super.initialize();
+        credentialKey = valueString(FIELD_CREDENTIAL_KEY);
         dataOperator = BeanContextAwareUtils.getBean(DataOperatorManager.class).buildDataOperator(credentialKey);
     }
 

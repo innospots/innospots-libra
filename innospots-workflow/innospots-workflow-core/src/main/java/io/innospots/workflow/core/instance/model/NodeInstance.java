@@ -19,14 +19,11 @@
 package io.innospots.workflow.core.instance.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.innospots.base.enums.ScriptType;
 import io.innospots.base.model.field.ParamField;
-import io.innospots.base.re.jit.MethodBody;
-import io.innospots.workflow.core.node.NodeBase;
+import io.innospots.workflow.core.node.NodeInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
@@ -43,16 +40,9 @@ import static org.slf4j.LoggerFactory.getLogger;
  */
 @Getter
 @Setter
-public class NodeInstance extends NodeBase {
+public class NodeInstance extends NodeInfo {
 
     private static final Logger logger = getLogger(NodeInstance.class);
-
-    //    public static final String FIELD_ACTION_SCRIPT_TYPE = "actionScriptType";
-    public static final String FIELD_DEFAULT_ACTION = "action";
-//    public static final String FIELD_FUNCTIONS = "functions";
-
-//    @Schema(title = "database primary id")
-//    protected Long nodeInstanceId;
 
     @NotNull
     @Schema(title = "node definition id")
@@ -84,11 +74,6 @@ public class NodeInstance extends NodeBase {
 
     @Schema(title = "node ports")
     protected List<Map<String, Object>> ports;
-
-//    @JsonInclude(NON_NULL)
-//    @Schema(title = "test mock data")
-//    protected Map<String, Object> mock;
-
 
     @Schema(title = "nodeInstance primary key")
     protected Long nodeInstanceId;
@@ -133,16 +118,21 @@ public class NodeInstance extends NodeBase {
     @JsonIgnore
     protected Map<String, List<String>> nodeAnchors;
 
-    @Schema(title = "key is form name, value is the code editor codeType")
-    protected Map<String, ScriptType> scriptTypes;
+//    @Schema(title = "key is form name, value is the code editor codeType")
+//    protected Map<String, ScriptType> scriptTypes;
 
+    @Schema(title = "node color")
+    protected String color;
 
+    /*
     public void addScriptType(String name, ScriptType type) {
         if (this.scriptTypes == null) {
             this.scriptTypes = new HashMap<String, ScriptType>();
         }
         this.scriptTypes.put(name, type);
     }
+
+     */
 
     public String expName() {
         return "$" + nodeKey;
@@ -272,6 +262,7 @@ public class NodeInstance extends NodeBase {
      * @return
      */
 
+    /*
     public List<MethodBody> expMethods() {
         List<MethodBody> methodBodyList = new ArrayList<>();
         if (MapUtils.isEmpty(this.scriptTypes)) {
@@ -291,6 +282,8 @@ public class NodeInstance extends NodeBase {
         }
         return methodBodyList;
     }
+
+     */
 
 
     /**
@@ -323,6 +316,7 @@ public class NodeInstance extends NodeBase {
         return null;
     }
     */
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{");

@@ -26,10 +26,10 @@ import io.innospots.base.json.JSONUtils;
 import io.innospots.base.re.IExpression;
 import io.innospots.base.re.aviator.AviatorExpression;
 import io.innospots.base.utils.Initializer;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.Getter;
 import lombok.Setter;
@@ -49,7 +49,7 @@ import java.util.Map;
  * @date 2020/11/3
  */
 @Slf4j
-public class SwitchNode extends BaseAppNode {
+public class SwitchNode extends BaseNodeExecutor {
 
     public static final String FIELD_CONDITIONS = "conditions";
     public static final String FIELD_CONDITION_FIELD = "conditionField";
@@ -59,9 +59,8 @@ public class SwitchNode extends BaseAppNode {
     private List<String> defaultNextNodeKeys = new ArrayList<>();
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
-        switchConditions = buildConditions(nodeInstance);
+    protected void initialize() {
+        switchConditions = buildConditions(ni);
         List<String> nextNodes = new ArrayList<>(this.nextNodeKeys());
         for (SwitchCondition switchCondition : switchConditions) {
             if (switchCondition.getBranch() == null) {

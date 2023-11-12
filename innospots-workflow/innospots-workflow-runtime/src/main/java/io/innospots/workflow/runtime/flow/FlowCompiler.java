@@ -29,8 +29,9 @@ import io.innospots.base.re.GenericExpressionEngine;
 import io.innospots.base.re.IExpressionEngine;
 import io.innospots.base.re.jit.MethodBody;
 import io.innospots.workflow.core.flow.WorkflowBaseBody;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
+import io.innospots.workflow.core.node.executor.NodeExecutorFactory;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -114,16 +115,17 @@ public class FlowCompiler {
      * @param nodeInstance
      * @return
      */
-    public BaseAppNode registerToEngine(NodeInstance nodeInstance) {
-        BaseAppNode appNode = null;
+    public BaseNodeExecutor registerToEngine(NodeInstance nodeInstance) {
+        BaseNodeExecutor appNode = null;
         try {
-            appNode = BaseAppNode.newInstance(nodeInstance);
+            appNode = NodeExecutorFactory.newInstance(nodeInstance);
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException |
                  InvocationTargetException e) {
             log.error(e.getMessage());
-            throw InnospotException.buildException(BaseAppNode.class, ResponseCode.INITIALIZING, e);
+            throw InnospotException.buildException(BaseNodeExecutor.class, ResponseCode.INITIALIZING, e);
         }
-        List<MethodBody> methodBodies = nodeInstance.expMethods();
+        List<MethodBody> methodBodies = null;
+//                nodeInstance.expMethods();
 
         for (MethodBody methodBody : methodBodies) {
             ScriptType scriptType = methodBody.getScriptType();

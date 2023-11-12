@@ -18,26 +18,18 @@
 
 package io.innospots.workflow.console.controller.node;
 
-import io.innospots.base.connector.schema.meta.ConnectionMinderSchemaLoader;
 import io.innospots.base.connector.schema.meta.CredentialAuthOption;
-import io.innospots.base.connector.schema.meta.FormElement;
-import io.innospots.base.exception.ConfigException;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
-import io.innospots.workflow.core.node.definition.model.AppConnectorConfig;
-import io.innospots.workflow.core.node.definition.model.NodeNodeDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static io.innospots.base.model.response.InnospotResponse.success;
@@ -66,7 +58,8 @@ public class FlowNodeConnectorFormController {
     public InnospotResponse<List<CredentialAuthOption>> selectAppNodeConnectorFormConfig(
             @Parameter(name = "appNodeId") @PathVariable Integer appNodeId
     ) {
-        NodeNodeDefinition definition = flowNodeDefinitionOperator.getNodeDefinition(appNodeId);
+        /*
+        NodeDefinition definition = flowNodeDefinitionOperator.getNodeDefinition(appNodeId);
         List<CredentialAuthOption> configs = new ArrayList<>();
 
         CredentialAuthOption formConfig = null;
@@ -103,6 +96,8 @@ public class FlowNodeConnectorFormController {
             configs.add(formConfig);
         }
 
-        return success(configs);
+         */
+
+        return success(null);
     }
 }

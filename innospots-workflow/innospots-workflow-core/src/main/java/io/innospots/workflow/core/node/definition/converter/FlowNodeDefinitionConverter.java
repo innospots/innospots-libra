@@ -23,7 +23,7 @@ import io.innospots.base.json.JSONUtils;
 import io.innospots.workflow.core.node.NodeInfo;
 import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
 import io.innospots.workflow.core.node.definition.model.AppConnectorConfig;
-import io.innospots.workflow.core.node.definition.model.NodeNodeDefinition;
+import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -37,17 +37,17 @@ import java.util.List;
  * @date 2021-12-25 17:49:00
  */
 @Mapper
-public interface FlowNodeDefinitionConverter extends BaseBeanConverter<NodeNodeDefinition, FlowNodeDefinitionEntity> {
+public interface FlowNodeDefinitionConverter extends BaseBeanConverter<NodeDefinition, FlowNodeDefinitionEntity> {
 
     FlowNodeDefinitionConverter INSTANCE = Mappers.getMapper(FlowNodeDefinitionConverter.class);
 
     FlowNodeDefinitionEntity infoToEntity(NodeInfo nodeInfo);
 
-    NodeInfo modelToSimple(NodeNodeDefinition model);
+    NodeInfo modelToSimple(NodeDefinition model);
 
     NodeInfo entityToSimple(FlowNodeDefinitionEntity entity);
 
-    List<NodeInfo> modelToInfoList(List<NodeNodeDefinition> appNodeDefinitionList);
+    List<NodeInfo> modelToInfoList(List<NodeDefinition> appNodeDefinitionList);
 
     /**
      * NodeDefinition fill to FlowNodeDefinitionEntity
@@ -60,7 +60,7 @@ public interface FlowNodeDefinitionConverter extends BaseBeanConverter<NodeNodeD
     @Mapping(target = "primitive", ignore = true)
     @Mapping(target = "icon", ignore = true)
     @Mapping(target = "description", ignore = true)
-    void modelToEntity(NodeNodeDefinition model, @MappingTarget FlowNodeDefinitionEntity entity);
+    void modelToEntity(NodeDefinition model, @MappingTarget FlowNodeDefinitionEntity entity);
 
     @Mapping(target = "icon", ignore = true)
     void infoToEntity(NodeInfo nodeInfo, @MappingTarget FlowNodeDefinitionEntity entity);

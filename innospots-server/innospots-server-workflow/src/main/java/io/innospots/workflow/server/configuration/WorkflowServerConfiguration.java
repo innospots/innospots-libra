@@ -19,6 +19,7 @@
 package io.innospots.workflow.server.configuration;
 
 
+import io.innospots.workflow.runtime.WorkflowRuntimeImporter;
 import io.innospots.workflow.server.starter.WatcherStarter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +30,7 @@ import org.springframework.context.annotation.Configuration;
  * @date 2021/3/15
  */
 @Configuration
+@WorkflowRuntimeImporter
 public class WorkflowServerConfiguration {
 
 

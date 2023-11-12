@@ -1,6 +1,6 @@
 package io.innospots.workflow.console.model.task;
 
-import io.innospots.workflow.core.execution.node.NodeExecutionBase;
+import io.innospots.workflow.core.execution.model.node.NodeExecutionBase;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +14,7 @@ import lombok.Setter;
 @Schema(title = "")
 public class TaskNodeExecution extends NodeExecutionBase {
 
-    @Schema(title = "app node definition name")
+    @Schema(title = "node definition name")
     private String nodeName;
 
     @Schema(title = "execution mode: manual or trigger")

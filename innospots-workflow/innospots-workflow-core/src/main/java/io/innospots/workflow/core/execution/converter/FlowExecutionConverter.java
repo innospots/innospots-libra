@@ -22,8 +22,8 @@ import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.base.utils.CCH;
 import io.innospots.workflow.core.execution.entity.FlowExecutionEntity;
-import io.innospots.workflow.core.execution.flow.FlowExecution;
-import io.innospots.workflow.core.execution.flow.FlowExecutionBase;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.flow.FlowExecutionBase;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

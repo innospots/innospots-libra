@@ -22,9 +22,9 @@ import io.innospots.base.condition.Factor;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.BeanUtils;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -41,7 +41,7 @@ import java.util.Map;
  * @date 2021/3/16
  */
 @Slf4j
-public class BaseDataNode extends BaseAppNode {
+public class BaseDataNode extends BaseNodeExecutor {
 
     private static final Logger logger = LoggerFactory.getLogger(BaseDataNode.class);
 
@@ -67,32 +67,30 @@ public class BaseDataNode extends BaseAppNode {
 
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
+    protected void initialize() {
+
     }
 
-    protected void fillOutputConfig(NodeInstance nodeInstance) {
-        validFieldConfig(nodeInstance, FIELD_OUTPUT_TYPE);
-        this.outputFieldType = OutputFieldType.valueOf(nodeInstance.valueString(FIELD_OUTPUT_TYPE));
+    protected void fillOutputConfig() {
+        this.outputFieldType = OutputFieldType.valueOf(validString(FIELD_OUTPUT_TYPE));
 
         if(this.outputFieldType != OutputFieldType.NONE){
-            if (!nodeInstance.containsKey(FIELD_OUTPUT_MODE_MAP) && !nodeInstance.containsKey(FIELD_OUTPUT_MODE_LIST)) {
+            if (!ni.containsKey(FIELD_OUTPUT_MODE_MAP) && !ni.containsKey(FIELD_OUTPUT_MODE_LIST)) {
                 throw ConfigException.buildMissingException(this.getClass(), "nodeKey:" + nodeKey() + ", field:" + FIELD_OUTPUT_MODE_LIST+" or "+FIELD_OUTPUT_MODE_MAP);
             }
         }
 
-        String outMode = nodeInstance.valueString(FIELD_OUTPUT_MODE_MAP);
+        String outMode = valueString(FIELD_OUTPUT_MODE_MAP);
         if (StringUtils.isNotEmpty(outMode)) {
             this.outputFieldMode = OutputFieldMode.valueOf(outMode);
         }
 
         if (this.outputFieldMode == null) {
-            this.outputFieldMode = OutputFieldMode.valueOf(nodeInstance.valueString(FIELD_OUTPUT_MODE_LIST));
+            this.outputFieldMode = OutputFieldMode.valueOf(valueString(FIELD_OUTPUT_MODE_LIST));
         }
 
         if (this.outputFieldMode == OutputFieldMode.FIELD) {
-            validFieldConfig(nodeInstance, FIELD_VARIABLE);
-            this.outputField = nodeInstance.valueString(FIELD_VARIABLE);
+            this.outputField = validString(FIELD_VARIABLE);
         }
     }
 

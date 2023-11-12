@@ -19,8 +19,9 @@
 package io.innospots.workflow.core.execution.store;
 
 import io.innospots.base.store.AsyncDataStore;
+import io.innospots.workflow.core.execution.enums.RecordMode;
 import io.innospots.workflow.core.execution.listener.INodeExecutionListener;
-import io.innospots.workflow.core.execution.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.operator.INodeExecutionOperator;
 import lombok.extern.slf4j.Slf4j;
 
@@ -53,9 +54,9 @@ public class NodeExecutionStoreListener implements INodeExecutionListener {
     public void complete(NodeExecution nodeExecution) {
         log.debug("node execution complete time:{} {}", LocalDateTime.now(), nodeExecution);
         if (!nodeExecution.isSkipNodeExecution()) {
-            if(nodeExecution.isSaveSync()){
+            if (nodeExecution.getRecordMode() == RecordMode.SYNC) {
                 nodeExecutionOperator.insert(nodeExecution);
-            }else{
+            } else {
                 nodeExecutionAsyncDataStore.insert(nodeExecution);
             }
 
@@ -68,9 +69,9 @@ public class NodeExecutionStoreListener implements INodeExecutionListener {
     public void fail(NodeExecution nodeExecution) {
         log.debug("node execution fail time:{} {}", LocalDateTime.now(), nodeExecution);
         if (!nodeExecution.isSkipNodeExecution()) {
-            if(nodeExecution.isSaveSync()){
+            if (nodeExecution.getRecordMode() == RecordMode.SYNC) {
                 nodeExecutionOperator.insert(nodeExecution);
-            }else{
+            } else {
                 nodeExecutionAsyncDataStore.insert(nodeExecution);
             }
         } else {

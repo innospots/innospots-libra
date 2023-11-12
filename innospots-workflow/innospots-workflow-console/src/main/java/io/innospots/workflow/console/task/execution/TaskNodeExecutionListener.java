@@ -1,14 +1,13 @@
 package io.innospots.workflow.console.task.execution;
 
-import io.innospots.base.events.EventBody;
 import io.innospots.base.events.IEventListener;
 import io.innospots.libra.base.task.ITaskExecutionExplore;
 import io.innospots.libra.base.task.TaskExecution;
 import io.innospots.libra.base.task.TaskExecutionStatus;
-import io.innospots.workflow.core.execution.ExecutionStatus;
-import io.innospots.workflow.core.execution.NodeExecutionTaskEvent;
-import io.innospots.workflow.core.execution.flow.FlowExecution;
-import io.innospots.workflow.core.execution.node.NodeExecution;
+import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.workflow.core.execution.events.NodeExecutionTaskEvent;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

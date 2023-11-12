@@ -3,10 +3,10 @@ package io.innospots.workflow.node.app.compute;
 import io.innospots.base.function.moving.IMovingFunction;
 import io.innospots.base.function.moving.MovingFunctionBuilder;
 import io.innospots.base.model.Pair;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ import static io.innospots.workflow.node.app.compute.ShiftFunctionField.buildShi
  * @author Smars
  * @date 2023/9/2
  */
-public class WindowComputeNode extends BaseAppNode {
+public class WindowComputeNode extends BaseNodeExecutor {
 
     private static final Logger logger = LoggerFactory.getLogger(WindowComputeNode.class);
 
@@ -49,15 +49,15 @@ public class WindowComputeNode extends BaseAppNode {
     private List<ShiftFunctionField> shiftFields;
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
+    protected void initialize() {
         funcType = FuncType.valueOf(valueString(FUNC_TYPE));
-        outputRestricted = nodeInstance.valueBoolean(FIELD_OUTPUT_RESTRICTED);
+        outputRestricted = valueBoolean(FIELD_OUTPUT_RESTRICTED);
         if (funcType == FuncType.ROLLING) {
-            rollingFields = buildFuncFields(nodeInstance,ROLLING_FIELDS);
+            rollingFields = buildFuncFields(ni,ROLLING_FIELDS);
         } else if (funcType == FuncType.ACCUM) {
-            accumFields = buildFuncFields(nodeInstance,ACCUM_FIELDS);
+            accumFields = buildFuncFields(ni,ACCUM_FIELDS);
         } else if (funcType == FuncType.COLUMN) {
-            shiftFields = buildShiftFuncFields(nodeInstance);
+            shiftFields = buildShiftFuncFields(ni);
         }
     }
 

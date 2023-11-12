@@ -19,7 +19,8 @@
 package io.innospots.workflow.core.execution.store;
 
 import io.innospots.base.store.AsyncDataStore;
-import io.innospots.workflow.core.execution.flow.FlowExecution;
+import io.innospots.workflow.core.execution.enums.RecordMode;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.listener.IFlowExecutionListener;
 import io.innospots.workflow.core.execution.operator.IFlowExecutionOperator;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +48,7 @@ public class FlowExecutionStoreListener implements IFlowExecutionListener {
     public void start(FlowExecution flowExecution) {
         log.debug("runtime content store start time:{}", LocalDateTime.now());
         if (!flowExecution.isSkipFlowExecution()) {
-            if(flowExecution.isSaveSync()){
+            if(flowExecution.getRecordMode() == RecordMode.SYNC){
                 flowExecutionOperator.insert(flowExecution);
             }else{
                 flowExecutionAsyncDataStore.insert(flowExecution);
@@ -65,7 +66,7 @@ public class FlowExecutionStoreListener implements IFlowExecutionListener {
 
     @Override
     public void update(FlowExecution flowExecution) {
-        if(flowExecution.isSaveSync()){
+        if(flowExecution.getRecordMode() == RecordMode.SYNC){
             flowExecutionOperator.update(flowExecution);
         }else{
             flowExecutionAsyncDataStore.update(flowExecution);

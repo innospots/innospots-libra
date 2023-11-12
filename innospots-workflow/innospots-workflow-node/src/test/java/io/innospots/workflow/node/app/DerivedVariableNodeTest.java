@@ -1,8 +1,8 @@
 package io.innospots.workflow.node.app;
 
 
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -18,7 +18,7 @@ public class DerivedVariableNodeTest extends BaseNodeTest {
     public void buildExpression() {
 
         NodeExecution nodeExecution = nodeExecution();
-        BaseAppNode appNode = baseAppNode(DerivedVariableNodeTest.class.getSimpleName());
+        BaseNodeExecutor appNode = baseAppNode(DerivedVariableNodeTest.class.getSimpleName());
 
         appNode.invoke(nodeExecution);
         //System.out.println(v);

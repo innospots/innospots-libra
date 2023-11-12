@@ -24,9 +24,9 @@ import io.innospots.base.data.body.PageBody;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.entity.ExecutionContextEntity;
 import io.innospots.workflow.core.execution.converter.ExecutionContextConverter;
-import io.innospots.workflow.core.execution.flow.FlowExecution;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;
 
 import java.util.Collections;

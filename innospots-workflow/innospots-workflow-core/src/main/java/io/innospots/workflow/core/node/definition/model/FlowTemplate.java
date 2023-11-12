@@ -39,32 +39,32 @@ import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 @Schema(title = "the template define the node group")
 public class FlowTemplate extends FlowTemplateBase {
 
-    private List<AppNodeGroup> appNodeGroups;
+    private List<NodeGroup> nodeGroups;
 
     /**
      * key: nodeCode ,value: nodeDefinition
      */
     @JsonIgnore
-    private Map<String, NodeNodeDefinition> nodeCache = new HashMap<>();
+    private Map<String, NodeDefinition> nodeCache = new HashMap<>();
 
     private void initialize() {
-        if (isNotEmpty(appNodeGroups)) {
-            for (AppNodeGroup appNodeGroup : appNodeGroups) {
-                for (NodeNodeDefinition node : appNodeGroup.getNodes()) {
+        if (isNotEmpty(nodeGroups)) {
+            for (NodeGroup nodeGroup : nodeGroups) {
+                for (NodeDefinition node : nodeGroup.getNodes()) {
                     nodeCache.put(node.getCode(), node);
                 }
             }
         }
     }
 
-    public Map<String, NodeNodeDefinition> nodes() {
-        if (nodeCache.isEmpty() && !appNodeGroups.isEmpty()) {
+    public Map<String, NodeDefinition> nodes() {
+        if (nodeCache.isEmpty() && !nodeGroups.isEmpty()) {
             initialize();
         }
         return nodeCache;
     }
 
-    public NodeNodeDefinition getNode(String nodeCode) {
+    public NodeDefinition getNode(String nodeCode) {
         return nodes().get(nodeCode);
     }
 

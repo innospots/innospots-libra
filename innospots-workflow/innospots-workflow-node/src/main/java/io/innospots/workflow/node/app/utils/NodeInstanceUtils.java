@@ -10,7 +10,7 @@ import io.innospots.base.re.aviator.AviatorExpression;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.base.utils.Initializer;
 import io.innospots.workflow.core.node.field.NodeParamField;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.execute.AggregationComputeField;
 import org.apache.commons.collections4.CollectionUtils;
@@ -75,7 +75,7 @@ public class NodeInstanceUtils {
     }
 
 
-    public static <T> IExpression<T> buildExpression(NodeInstance nodeInstance, String fieldName, BaseAppNode appNode) {
+    public static <T> IExpression<T> buildExpression(NodeInstance nodeInstance, String fieldName, BaseNodeExecutor appNode) {
         EmbedCondition embedCondition = buildCondition(nodeInstance, fieldName, appNode);
         IExpression expression = null;
         if (embedCondition != null) {
@@ -87,7 +87,7 @@ public class NodeInstanceUtils {
         return expression;
     }
 
-    public static EmbedCondition buildCondition(NodeInstance nodeInstance, String fieldName, BaseAppNode appNode) {
+    public static EmbedCondition buildCondition(NodeInstance nodeInstance, String fieldName, BaseNodeExecutor appNode) {
         Object v = nodeInstance.getData().get(fieldName);
         EmbedCondition condition = null;
         if (v == null) {

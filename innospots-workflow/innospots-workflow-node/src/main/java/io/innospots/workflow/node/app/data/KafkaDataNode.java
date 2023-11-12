@@ -26,9 +26,9 @@ import io.innospots.base.data.operator.IQueueSender;
 import io.innospots.base.connector.schema.model.SchemaRegistry;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.utils.BeanUtils;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 
@@ -55,14 +55,14 @@ public class KafkaDataNode extends DataNode {
     private String topic;
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
+    protected void initialize() {
         //this.fillNodeInfo(nodeInstance);
-        credentialKey = nodeInstance.valueString(FIELD_CREDENTIAL_KEY);
-        topic = nodeInstance.valueString(FIELD_REGISTRY_TOPIC);
-        hasConfigField = nodeInstance.valueBoolean(FIELD_CONFIG_FIELD);
+        credentialKey = valueString(FIELD_CREDENTIAL_KEY);
+        topic = valueString(FIELD_REGISTRY_TOPIC);
+        hasConfigField = valueBoolean(FIELD_CONFIG_FIELD);
         if(hasConfigField){
-            validFieldConfig(nodeInstance, FIELD_COLUMN_MAPPING);
-            List<Map<String, Object>> columnFieldMapping = (List<Map<String, Object>>) nodeInstance.value(FIELD_COLUMN_MAPPING);
+            validFieldConfig(FIELD_COLUMN_MAPPING);
+            List<Map<String, Object>> columnFieldMapping = valueMapList(FIELD_COLUMN_MAPPING);
             columnFields = BeanUtils.toBean(columnFieldMapping, Factor.class);
         }
 

@@ -24,12 +24,12 @@ import cn.hutool.http.HttpStatus;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.utils.BeanUtils;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.ExecutionResource;
-import io.innospots.workflow.core.execution.ExecutionStatus;
-import io.innospots.workflow.core.execution.flow.FlowExecution;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.ExecutionResource;
+import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;
 import io.innospots.workflow.core.node.executor.TriggerNode;
 import io.innospots.workflow.core.instance.model.NodeInstance;
@@ -65,23 +65,22 @@ public class ApiTriggerNode extends TriggerNode {
 
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
-        validFieldConfig(nodeInstance, FIELD_API_PATH);
-        validFieldConfig(nodeInstance, FIELD_AUTH_TYPE);
-        validFieldConfig(nodeInstance, FIELD_RESPONSE_CODE);
-        validFieldConfig(nodeInstance, FIELD_REQUEST_TYPE);
-        validFieldConfig(nodeInstance, FIELD_RESPONSE_MODE);
-        validFieldConfig(nodeInstance, FIELD_RESPONSE_DATA);
+    protected void initialize() {
+        validFieldConfig(FIELD_API_PATH);
+        validFieldConfig(FIELD_AUTH_TYPE);
+        validFieldConfig(FIELD_RESPONSE_CODE);
+        validFieldConfig(FIELD_REQUEST_TYPE);
+        validFieldConfig(FIELD_RESPONSE_MODE);
+        validFieldConfig(FIELD_RESPONSE_DATA);
         eventBody.put("node_key", this.nodeKey());
         flowWebhookConfig = new FlowWebhookConfig();
-        flowWebhookConfig.setRequestMethod(FlowWebhookConfig.RequestMethod.valueOf(nodeInstance.valueString(FIELD_REQUEST_TYPE)));
-        flowWebhookConfig.setPath(nodeInstance.valueString(FIELD_API_PATH));
-        flowWebhookConfig.setAuthType(FlowWebhookConfig.AuthType.valueOf(nodeInstance.valueString(FIELD_AUTH_TYPE)));
-        flowWebhookConfig.setResponseMode(FlowWebhookConfig.ResponseMode.valueOf(nodeInstance.valueString(FIELD_RESPONSE_MODE)));
-        flowWebhookConfig.setResponseCode(nodeInstance.valueString(FIELD_RESPONSE_CODE));
+        flowWebhookConfig.setRequestMethod(FlowWebhookConfig.RequestMethod.valueOf(valueString(FIELD_REQUEST_TYPE)));
+        flowWebhookConfig.setPath(valueString(FIELD_API_PATH));
+        flowWebhookConfig.setAuthType(FlowWebhookConfig.AuthType.valueOf(valueString(FIELD_AUTH_TYPE)));
+        flowWebhookConfig.setResponseMode(FlowWebhookConfig.ResponseMode.valueOf(valueString(FIELD_RESPONSE_MODE)));
+        flowWebhookConfig.setResponseCode(ni.valueString(FIELD_RESPONSE_CODE));
 
-        List<Map<String, Object>> responseField = (List<Map<String, Object>>) nodeInstance.value("responseFields");
+        List<Map<String, Object>> responseField = (List<Map<String, Object>>) value("responseFields");
         if (responseField != null) {
             List<ParamField> params = BeanUtils.toBean(responseField, ParamField.class);
             flowWebhookConfig.setResponseFields(params);
@@ -109,6 +108,7 @@ public class ApiTriggerNode extends TriggerNode {
         super.invoke(nodeExecution, flowExecution);
     }
 
+    /*
     @Override
     public void invoke(NodeExecution nodeExecution) {
         List<ExecutionInput> inputs = nodeExecution.getInputs();
@@ -127,6 +127,7 @@ public class ApiTriggerNode extends TriggerNode {
         nodeOutput.addNextKey(this.nextNodeKeys());
         nodeExecution.addOutput(nodeOutput);
     }
+     */
 
     private boolean validateAuthentication(NodeExecution nodeExecution) {
         if(flowWebhookConfig.getAuthType() == FlowWebhookConfig.AuthType.NONE){

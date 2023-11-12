@@ -26,11 +26,11 @@ import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
-import io.innospots.workflow.console.model.AppQueryRequest;
-import io.innospots.workflow.console.service.AppService;
+import io.innospots.workflow.console.model.NodeQueryRequest;
+import io.innospots.workflow.console.service.NodeDefinitionService;
 import io.innospots.workflow.core.enums.NodePrimitive;
 import io.innospots.workflow.core.node.NodeInfo;
-import io.innospots.workflow.core.node.definition.model.NodeNodeDefinition;
+import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -55,10 +55,10 @@ import static io.innospots.libra.base.menu.ItemType.BUTTON;
 public class FlowManagementController extends BaseController {
 
 
-    private final AppService appService;
+    private final NodeDefinitionService nodeDefinitionService;
 
-    public FlowManagementController(AppService appService) {
-        this.appService = appService;
+    public FlowManagementController(NodeDefinitionService nodeDefinitionService) {
+        this.nodeDefinitionService = nodeDefinitionService;
     }
 
     /**
@@ -70,17 +70,17 @@ public class FlowManagementController extends BaseController {
     @GetMapping("page")
     @Operation(summary = "node definition page info")
     public InnospotResponse<PageBody<NodeInfo>> pageNodeDefinitions(
-            AppQueryRequest queryRequest) {
-        return success(appService.pageAppInfos(queryRequest));
+            NodeQueryRequest queryRequest) {
+        return success(nodeDefinitionService.pageAppInfos(queryRequest));
     }
 
 
     @GetMapping("list/online")
     @Operation(summary = "list online nodes")
-    public InnospotResponse<List<NodeNodeDefinition>> listOnlineNodeDefinitions(
+    public InnospotResponse<List<NodeDefinition>> listOnlineNodeDefinitions(
             @Parameter(name = "primitive") @RequestParam(required = false, name = "primitive")
             NodePrimitive primitive) {
-        return success(appService.listOnlineNodes(primitive));
+        return success(nodeDefinitionService.listOnlineNodes(primitive));
     }
 
     /**
@@ -94,7 +94,7 @@ public class FlowManagementController extends BaseController {
     @Operation(summary = "create app info")
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
     public InnospotResponse<NodeInfo> createAppInfo(@Parameter(name = "app node info", required = true) @Validated @RequestBody NodeInfo nodeInfo) {
-        return success(appService.createAppInfo(nodeInfo));
+        return success(nodeDefinitionService.createAppInfo(nodeInfo));
     }
 
     /**
@@ -108,7 +108,7 @@ public class FlowManagementController extends BaseController {
     @Operation(summary = "update app info")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.save}")
     public InnospotResponse<NodeInfo> updateAppInfo(@Parameter(name = "app node info", required = true) @Validated @RequestBody NodeInfo nodeInfo) {
-        return success(appService.updateAppInfo(nodeInfo));
+        return success(nodeDefinitionService.updateAppInfo(nodeInfo));
     }
 
     /**
@@ -121,8 +121,8 @@ public class FlowManagementController extends BaseController {
     @PutMapping
     @Operation(summary = "update app node definition")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.save}")
-    public InnospotResponse<NodeNodeDefinition> updateAppNodeDefinition(@Parameter(name = "node definition", required = true) @Validated @RequestBody NodeNodeDefinition appNodeDefinition) {
-        return success(appService.updateAppNodeDefinition(appNodeDefinition));
+    public InnospotResponse<NodeDefinition> updateAppNodeDefinition(@Parameter(name = "node definition", required = true) @Validated @RequestBody NodeDefinition appNodeDefinition) {
+        return success(nodeDefinitionService.updateAppNodeDefinition(appNodeDefinition));
     }
 
     /**
@@ -133,9 +133,9 @@ public class FlowManagementController extends BaseController {
      */
     @GetMapping("/{nodeId}")
     @Operation(summary = "node definition detail info")
-    public InnospotResponse<NodeNodeDefinition> getAppNodeDefinitionById(@Parameter(name = "nodeId", required = true) @PathVariable Integer nodeId) {
+    public InnospotResponse<NodeDefinition> getAppNodeDefinitionById(@Parameter(name = "nodeId", required = true) @PathVariable Integer nodeId) {
 
-        return success(appService.getAppNodeDefinitionById(nodeId));
+        return success(nodeDefinitionService.getAppNodeDefinitionById(nodeId));
     }
 
 
@@ -153,7 +153,7 @@ public class FlowManagementController extends BaseController {
             @Parameter(name = "nodeId", required = true) @PathVariable Integer nodeId,
             @Parameter(name = "status", required = true) @PathVariable DataStatus status
     ) {
-        return success(appService.updateNodeDefinitionStatus(nodeId, status));
+        return success(nodeDefinitionService.updateNodeDefinitionStatus(nodeId, status));
     }
 
 
@@ -170,13 +170,13 @@ public class FlowManagementController extends BaseController {
     public InnospotResponse<Boolean> deleteNode(
             @Parameter(name = "nodeId", required = true) @PathVariable Integer nodeId
     ) {
-        return success(appService.deleteNodeDefinition(nodeId));
+        return success(nodeDefinitionService.deleteNodeDefinition(nodeId));
     }
 
     @GetMapping("icons")
     @Operation(summary = "app node icons")
     public InnospotResponse<Map<String,String>> getAppNodeIcon() {
-        return success(appService.getAppNodeIcons());
+        return success(nodeDefinitionService.getAppNodeIcons());
     }
 
 }

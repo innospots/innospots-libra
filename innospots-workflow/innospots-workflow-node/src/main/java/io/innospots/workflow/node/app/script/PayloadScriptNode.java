@@ -18,10 +18,10 @@
 
 package io.innospots.workflow.node.app.script;
 
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ import java.util.Map;
  * @date 2021/4/20
  */
 @Slf4j
-public class PayloadScriptNode extends BaseAppNode {
+public class PayloadScriptNode extends ScriptBaseNode {
 
 
     @Override

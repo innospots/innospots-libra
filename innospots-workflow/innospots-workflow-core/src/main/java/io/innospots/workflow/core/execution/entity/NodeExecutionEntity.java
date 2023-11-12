@@ -22,7 +22,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.innospots.base.entity.PBaseEntity;
-import io.innospots.workflow.core.execution.ExecutionStatus;
+import io.innospots.workflow.core.execution.enums.ExecMode;
+import io.innospots.workflow.core.execution.enums.ExecutionStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -106,6 +107,10 @@ public class NodeExecutionEntity extends PBaseEntity {
 
     @Column(length = 32)
     private String nodeCode;
+
+    @Column(length = 16)
+    @Enumerated(EnumType.STRING)
+    private ExecMode execMode;
 
 
 }

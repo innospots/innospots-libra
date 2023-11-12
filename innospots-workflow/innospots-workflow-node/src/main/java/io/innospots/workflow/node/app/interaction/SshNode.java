@@ -19,15 +19,15 @@
 package io.innospots.workflow.node.app.interaction;
 
 
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 
 /**
  * @author Smars
  * @date 2021/3/16
  */
-public class SshNode extends BaseAppNode {
+public class SshNode extends BaseNodeExecutor {
 
 
     @Override
@@ -36,8 +36,8 @@ public class SshNode extends BaseAppNode {
     }
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
+    protected void initialize() {
+
         //TODO
     }
 }

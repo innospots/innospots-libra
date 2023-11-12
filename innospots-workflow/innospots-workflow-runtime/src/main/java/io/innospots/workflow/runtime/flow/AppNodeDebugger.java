@@ -23,12 +23,13 @@ import io.innospots.base.json.JSONUtils;
 import io.innospots.base.re.ExpressionEngineFactory;
 import io.innospots.workflow.core.debug.DebugPayload;
 import io.innospots.workflow.core.debug.DebugInput;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.ExecutionResource;
-import io.innospots.workflow.core.execution.flow.FlowExecution;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeExecutionDisplay;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.enums.RecordMode;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.ExecutionResource;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeExecutionDisplay;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.script.ScriptNode;
 import lombok.extern.slf4j.Slf4j;
@@ -96,13 +97,13 @@ public class AppNodeDebugger {
             ni.setNodeType(ScriptNode.class.getName());
         }
         FlowCompiler flowCompiler = FlowCompiler.build(identifier);
-        BaseAppNode appNode = flowCompiler.registerToEngine(debugPayload.getNi());
+        BaseNodeExecutor appNode = flowCompiler.registerToEngine(debugPayload.getNi());
         flowCompiler.compile();
         //        BaseAppNode appNode = FlowCompiler.registerToEngine(genericExpressionEngine,debugPayload.getNi());
 //        genericExpressionEngine.compile();
-        appNode.build(identifier,ni);
+        appNode.build();
         FlowExecution flowExecution = FlowExecution.buildNewFlowExecution(1L,0);
-        flowExecution.setSaveSync(true);
+        flowExecution.setRecordMode(RecordMode.SYNC);
         NodeExecution nodeExecution = NodeExecution.buildNewNodeExecution(ni.getNodeKey(),flowExecution);
         List<ExecutionInput> inputs = new ArrayList<>();
         for (DebugInput input : debugPayload.getInputs()) {

@@ -19,7 +19,7 @@
 package io.innospots.workflow.core.runtime;
 
 
-import io.innospots.workflow.core.execution.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;

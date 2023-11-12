@@ -21,10 +21,10 @@ package io.innospots.workflow.core.execution.converter;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.entity.ExecutionContextEntity;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.flow.FlowExecution;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

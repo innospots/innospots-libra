@@ -28,8 +28,9 @@ import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.entity.NodeExecutionEntity;
 import io.innospots.workflow.core.execution.converter.NodeExecutionConverter;
-import io.innospots.workflow.core.execution.ExecutionStatus;
-import io.innospots.workflow.core.execution.node.NodeExecution;
+import io.innospots.workflow.core.execution.enums.ExecMode;
+import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;
 import io.innospots.workflow.core.execution.operator.INodeExecutionOperator;
 import lombok.extern.slf4j.Slf4j;
@@ -145,7 +146,7 @@ public class JdbcNodeExecutionOperator implements INodeExecutionOperator {
         }
         executionContextOperator.saveExecutionContext(execution);
         execution.clearInput();
-        if (!execution.isMemoryMode()) {
+        if (execution.getExecMode()!= ExecMode.MEMORY) {
             execution.clearOutput();
         }
         return true;

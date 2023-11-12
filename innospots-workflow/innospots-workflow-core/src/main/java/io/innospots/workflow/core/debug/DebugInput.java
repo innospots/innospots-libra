@@ -18,13 +18,11 @@
 
 package io.innospots.workflow.core.debug;
 
-import io.innospots.workflow.core.execution.ExecutionResource;
+import io.innospots.workflow.core.execution.model.ExecutionResource;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Smars

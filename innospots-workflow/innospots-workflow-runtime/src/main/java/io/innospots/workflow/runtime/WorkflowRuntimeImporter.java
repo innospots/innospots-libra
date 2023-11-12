@@ -38,7 +38,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-//@WorkflowOperatorImporter
 @Import({WorkflowRuntimeImporter.StreamFlowEngineConfiguration.class, WorkflowRuntimeConfiguration.class})
 public @interface WorkflowRuntimeImporter {
 

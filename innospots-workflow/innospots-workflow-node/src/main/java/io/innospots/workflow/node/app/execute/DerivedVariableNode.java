@@ -22,11 +22,11 @@ import io.innospots.base.exception.ScriptException;
 import io.innospots.base.model.field.ComputeField;
 import io.innospots.base.model.field.compute.ComputeItem;
 import io.innospots.base.utils.BeanUtils;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.ExecutionStatus;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
@@ -41,7 +41,7 @@ import java.util.Map;
  * @author Smars
  * @date 2021/8/22
  */
-public class DerivedVariableNode extends BaseAppNode {
+public class DerivedVariableNode extends BaseNodeExecutor {
 
     private static final Logger logger = LoggerFactory.getLogger(DerivedVariableNode.class);
 
@@ -61,21 +61,17 @@ public class DerivedVariableNode extends BaseAppNode {
 
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
-        validFieldConfig(nodeInstance, FIELD_COMPUTE);
-        computeFields = buildFields(nodeInstance);
-        outputRestricted = nodeInstance.valueBoolean(FIELD_OUTPUT_RESTRICTED);
-    }
-
-    @Override
-    protected void buildExpression(String flowIdentifier, NodeInstance nodeInstance) throws ScriptException {
+    protected void initialize() {
+        validFieldConfig(FIELD_COMPUTE);
+        computeFields = buildFields(ni);
         if (CollectionUtils.isNotEmpty(computeFields)) {
             for (ComputeField computeField : computeFields) {
                 computeField.initialize();
             }//end for
         }
+        outputRestricted = valueBoolean(FIELD_OUTPUT_RESTRICTED);
     }
+
 
     @Override
     public void invoke(NodeExecution nodeExecution) {

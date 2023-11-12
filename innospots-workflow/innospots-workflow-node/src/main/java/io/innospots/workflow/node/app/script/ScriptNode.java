@@ -18,7 +18,7 @@
 
 package io.innospots.workflow.node.app.script;
 
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 
 /**
  * script execute node
@@ -26,7 +26,7 @@ import io.innospots.workflow.core.node.executor.BaseAppNode;
  * @author Smars
  * @date 2021/4/20
  */
-public class ScriptNode extends BaseAppNode {
+public class ScriptNode extends ScriptBaseNode {
 
 
 }

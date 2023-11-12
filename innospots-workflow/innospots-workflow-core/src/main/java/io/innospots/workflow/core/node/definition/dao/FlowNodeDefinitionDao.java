@@ -55,5 +55,5 @@ public interface FlowNodeDefinitionDao extends BaseMapper<FlowNodeDefinitionEnti
      * 使用@Select注解，将SQL的where条件部分用${ew.customSqlSegment}代替
      */
     @Select("select s.* from app_node_definition s left join app_node_group_node t on s.node_id = t.node_id ${ew.customSqlSegment}")
-    IPage<FlowNodeDefinitionEntity> selectAppPage(IPage<FlowNodeDefinitionEntity> page, @Param(Constants.WRAPPER) Wrapper queryWrapper);
+    IPage<FlowNodeDefinitionEntity> selectNodePage(IPage<FlowNodeDefinitionEntity> page, @Param(Constants.WRAPPER) Wrapper queryWrapper);
 }

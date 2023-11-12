@@ -28,8 +28,10 @@ import io.innospots.workflow.core.execution.operator.jdbc.JdbcExecutionContextOp
 import io.innospots.workflow.core.execution.operator.jdbc.JdbcFlowExecutionOperator;
 import io.innospots.workflow.core.execution.operator.jdbc.JdbcNodeExecutionOperator;
 import io.innospots.workflow.core.execution.operator.jdbc.ScheduledNodeExecutionOperator;
+import io.innospots.workflow.core.flow.draft.WorkflowDraftDbOperator;
 import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
 import io.innospots.workflow.core.flow.loader.WorkflowDBLoader;
+import io.innospots.workflow.core.flow.reader.WorkflowDbReader;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -79,6 +81,16 @@ public class WorkflowCoreConfiguration {
     public IScheduledNodeExecutionOperator ScheduledNodeExecutionOperator(DataConnectionMinderManager dataConnectionMinderManager,
                                                                           IDataOperator defaultDataOperator) {
         return new ScheduledNodeExecutionOperator(dataConnectionMinderManager, defaultDataOperator);
+    }
+
+    @Bean
+    public WorkflowDraftDbOperator workflowDraftDbOperator() {
+        return new WorkflowDraftDbOperator();
+    }
+
+    @Bean
+    public WorkflowDbReader workflowDbReader() {
+        return new WorkflowDbReader();
     }
 
 }

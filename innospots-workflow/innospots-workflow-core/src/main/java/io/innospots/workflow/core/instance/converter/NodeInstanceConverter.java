@@ -23,7 +23,7 @@ import io.innospots.base.json.JSONUtils;
 import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.workflow.core.instance.entity.NodeInstanceEntity;
-import io.innospots.workflow.core.node.definition.model.NodeNodeDefinition;
+import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import org.apache.commons.collections4.MapUtils;
 import org.mapstruct.Mapper;
@@ -48,13 +48,13 @@ public interface NodeInstanceConverter extends BaseBeanConverter<NodeInstance,No
     String WIDGET_CODE_EDITOR = "CodeEditor";
 
 
-    default NodeInstance entityToModel(NodeInstanceEntity entity, NodeNodeDefinition appNodeDefinition){
+    default NodeInstance entityToModel(NodeInstanceEntity entity, NodeDefinition appNodeDefinition){
         NodeInstance ni = entityToModel(entity);
         ni.setCode(appNodeDefinition.getCode());
         ni.setPrimitive(appNodeDefinition.getPrimitive());
         ni.setIcon(appNodeDefinition.getIcon());
         ni.setNodeType(appNodeDefinition.getNodeType());
-        ni.setColor(appNodeDefinition.getColor());
+//        ni.setColor(appNodeDefinition.getColor());
         if(MapUtils.isNotEmpty(appNodeDefinition.getConfig()) && appNodeDefinition.getConfig().containsKey(PROPS)){
             Map<String,Object> elements = (Map<String, Object>) appNodeDefinition.getConfig().get(PROPS);
             for (Map.Entry<String, Object> entry : elements.entrySet()) {
@@ -64,7 +64,7 @@ public interface NodeInstanceConverter extends BaseBeanConverter<NodeInstance,No
                     String widgetName = (String) props.get(ELEMENT_WIDGET);
                     if(WIDGET_CODE_EDITOR.equals(widgetName)){
                         String codeType = (String) props.get(ELEMENT_CODE_TYPE);
-                        ni.addScriptType(elementName, ScriptType.valueOf(codeType));
+//                        ni.addScriptType(elementName, ScriptType.valueOf(codeType));
                     }
 
                 }//end widget and codeType

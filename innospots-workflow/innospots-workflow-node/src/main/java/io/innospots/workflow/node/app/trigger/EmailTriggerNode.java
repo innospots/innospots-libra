@@ -24,7 +24,7 @@ import io.innospots.base.data.operator.IExecutionOperator;
 import io.innospots.base.data.request.ItemRequest;
 import io.innospots.base.connector.credential.model.ConnectionCredential;
 import io.innospots.base.data.body.DataBody;
-import io.innospots.workflow.core.execution.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 
 import java.util.Map;
@@ -59,17 +59,14 @@ public class EmailTriggerNode extends CycleTimerNode {
     private IExecutionOperator executionOperator;
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
-        validFieldConfig(nodeInstance, FIELD_CREDENTIAL_ID);
-        validFieldConfig(nodeInstance, FIELD_MAIL_BOX);
-        credentialId = nodeInstance.valueInteger(FIELD_CREDENTIAL_ID);
-        mailBoxName = nodeInstance.valueString(FIELD_MAIL_BOX);
-        actionName = nodeInstance.valueString(FIELD_ACTION);
-        hasAttachments = nodeInstance.valueBoolean(FIELD_HAS_ATTACH);
+    protected void initialize() {
+        credentialId = validInteger(FIELD_CREDENTIAL_ID);
+        mailBoxName = validString(FIELD_MAIL_BOX);
+        actionName = valueString(FIELD_ACTION);
+        hasAttachments = valueBoolean(FIELD_HAS_ATTACH);
 
         if (hasAttachments) {
-            attachPrefix = nodeInstance.valueString(FIELD_ATTACH_PREFIX);
+            attachPrefix = valueString(FIELD_ATTACH_PREFIX);
         }
 
         IDataConnectionMinder connectionMinder = DataConnectionMinderManager.getCredentialMinder(connectionCredential.getCredentialKey());

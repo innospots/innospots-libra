@@ -21,7 +21,7 @@ package io.innospots.workflow.runtime.container;
 import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
 import io.innospots.workflow.core.engine.FlowEngineManager;
 import io.innospots.workflow.core.engine.IFlowEngine;
-import io.innospots.workflow.core.execution.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.runtime.lisenter.WorkflowRuntimeListener;
 import io.innospots.workflow.core.runtime.FlowRuntimeRegistry;
 import io.innospots.workflow.core.runtime.RuntimeContainer;

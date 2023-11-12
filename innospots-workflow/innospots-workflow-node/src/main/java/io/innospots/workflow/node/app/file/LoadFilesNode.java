@@ -18,10 +18,10 @@
 
 package io.innospots.workflow.node.app.file;
 
-import io.innospots.workflow.core.execution.ExecutionResource;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.model.ExecutionResource;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import org.apache.commons.lang3.StringUtils;
 
@@ -36,7 +36,7 @@ import java.util.Map;
  * @version 1.2.0
  * @date 2023/2/22
  */
-public class LoadFilesNode extends BaseAppNode {
+public class LoadFilesNode extends BaseNodeExecutor {
 
     public static final String FIELD_SOURCE_FILES = "source_files";
     public static final String FIELD_FILE_VAR = "file_var";
@@ -45,12 +45,12 @@ public class LoadFilesNode extends BaseAppNode {
     private String fileVar;
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
+    protected void initialize() {
+
         validFieldConfig(FIELD_SOURCE_FILES);
         //validFieldConfig(FIELD_FILE_VAR);
-        sourceFiles = nodeInstance.valueString(FIELD_SOURCE_FILES);
-        fileVar = nodeInstance.valueString(FIELD_FILE_VAR);
+        sourceFiles = valueString(FIELD_SOURCE_FILES);
+        fileVar = valueString(FIELD_FILE_VAR);
     }
 
     @Override

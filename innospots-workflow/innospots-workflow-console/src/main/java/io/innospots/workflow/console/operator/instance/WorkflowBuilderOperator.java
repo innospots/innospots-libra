@@ -25,6 +25,7 @@ import io.innospots.base.exception.ResourceException;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.field.ParamField;
+import io.innospots.workflow.core.flow.draft.IWorkflowDraftOperator;
 import io.innospots.workflow.core.instance.converter.WorkflowInstanceConverter;
 import io.innospots.workflow.core.instance.dao.WorkflowInstanceCacheDao;
 import io.innospots.workflow.core.instance.dao.WorkflowRevisionDao;
@@ -60,7 +61,7 @@ import java.util.stream.Collectors;
  * @date 2021/3/16
  */
 @Slf4j
-public class WorkflowBuilderOperator implements IWorkflowReader {
+public class WorkflowBuilderOperator implements IWorkflowReader, IWorkflowDraftOperator {
 
     public static final String CACHE_NAME = "CACHE_FLOW_INSTANCE";
 
@@ -89,6 +90,7 @@ public class WorkflowBuilderOperator implements IWorkflowReader {
         this.edgeOperator = edgeOperator;
         this.innospotsWorkflowProperties = innospotsWorkflowProperties;
     }
+
 
 
     /**
@@ -146,6 +148,11 @@ public class WorkflowBuilderOperator implements IWorkflowReader {
             flow = this.saveDraft(flow);
         }
         return flow;
+    }
+
+    @Override
+    public WorkflowBaseBody getWorkflowBodyByKey(String flowKey, boolean includeNode) {
+        return getWorkflowBodyByKey(flowKey,0,includeNode);
     }
 
     public List<Map<String, Object>> selectNodeInputFields(Long workflowInstanceId, String nodeKey, Set<String> sourceNodeKeys) {

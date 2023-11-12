@@ -21,7 +21,7 @@ package io.innospots.workflow.console.controller;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.menu.ModuleMenu;
-import io.innospots.workflow.core.execution.node.NodeExecutionDisplay;
+import io.innospots.workflow.core.execution.model.node.NodeExecutionDisplay;
 import io.innospots.workflow.core.execution.reader.NodeExecutionReader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

@@ -34,9 +34,9 @@ import io.innospots.workflow.core.node.NodeInfo;
 import io.innospots.workflow.core.node.definition.converter.FlowNodeDefinitionConverter;
 import io.innospots.workflow.core.node.definition.dao.FlowNodeDefinitionDao;
 import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
-import io.innospots.workflow.console.model.AppQueryRequest;
+import io.innospots.workflow.console.model.NodeQueryRequest;
 import io.innospots.workflow.core.enums.NodePrimitive;
-import io.innospots.workflow.core.node.definition.model.NodeNodeDefinition;
+import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
@@ -64,7 +64,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
      * @param queryRequest
      * @return Page<NodeDefinition>
      */
-    public PageBody<NodeInfo> pageAppDefinitions(AppQueryRequest queryRequest) {
+    public PageBody<NodeInfo> pageAppDefinitions(NodeQueryRequest queryRequest) {
         QueryWrapper<FlowNodeDefinitionEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("t.FLOW_TPL_ID", 1);
         if (queryRequest.getDataStatus() != null) {
@@ -80,7 +80,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
         queryWrapper.orderBy(true, true, "UPDATED_TIME");
 
         IPage<FlowNodeDefinitionEntity> queryPage = new Page<>(queryRequest.getPage(), queryRequest.getSize());
-        queryPage = this.baseMapper.selectAppPage(queryPage, queryWrapper);
+        queryPage = this.baseMapper.selectNodePage(queryPage, queryWrapper);
         PageBody<NodeInfo> result = new PageBody<>();
         if (queryPage != null) {
             result.setTotal(queryPage.getTotal());
@@ -105,7 +105,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
         return result;
     }
 
-    public List<NodeNodeDefinition> listOnlineNodes(NodePrimitive primitive) {
+    public List<NodeDefinition> listOnlineNodes(NodePrimitive primitive) {
         QueryWrapper<FlowNodeDefinitionEntity> queryWrapper = new QueryWrapper<>();
 
         queryWrapper.lambda()
@@ -181,7 +181,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
      * @return NodeDefinition
      */
     @CacheEvict(cacheNames = CACHE_NAME, key = "#appNodeDefinition.nodeId")
-    public NodeNodeDefinition updateNodeDefinition(NodeNodeDefinition appNodeDefinition) {
+    public NodeDefinition updateNodeDefinition(NodeDefinition appNodeDefinition) {
         FlowNodeDefinitionEntity entity = this.getById(appNodeDefinition.getNodeId());
         if (entity == null) {
             throw ResourceException.buildAbandonException(this.getClass(), "node definition not exits");
@@ -208,12 +208,12 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
      * @return NodeDefinition
      */
     @Cacheable(cacheNames = CACHE_NAME, key = "#nodeId")
-    public NodeNodeDefinition getNodeDefinition(Integer nodeId) {
+    public NodeDefinition getNodeDefinition(Integer nodeId) {
         FlowNodeDefinitionEntity entity = getById(nodeId);
         if (entity == null) {
             throw ResourceException.buildAbandonException(this.getClass(), "get node definition not exits", nodeId);
         }
-        NodeNodeDefinition appNodeDefinition = FlowNodeDefinitionConverter.INSTANCE.entityToModel(entity);
+        NodeDefinition appNodeDefinition = FlowNodeDefinitionConverter.INSTANCE.entityToModel(entity);
         return appNodeDefinition;
     }
 

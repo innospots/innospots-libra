@@ -20,9 +20,9 @@ package io.innospots.workflow.node.app.data;
 
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.i18n.LocaleMessageUtils;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;
@@ -35,7 +35,7 @@ import java.util.*;
  * @date 2022/12/19
  */
 @Slf4j
-public class FakeDataNode extends BaseAppNode {
+public class FakeDataNode extends BaseNodeExecutor {
 
     public static final String FIELD_FAKE_DATA = "fake_data";
     public static final String FIELD_ITEM_SIZE = "item_size";
@@ -45,13 +45,11 @@ public class FakeDataNode extends BaseAppNode {
     private Faker faker;
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
-        validFieldConfig(nodeInstance, FIELD_FAKE_DATA);
-        String fakeString = nodeInstance.valueString(FIELD_FAKE_DATA);
+    protected void initialize() {
+        String fakeString = validString(FIELD_FAKE_DATA);
 
         fakeData = JSONUtils.toMap(fakeString);
-        itemSize = nodeInstance.valueInteger(FIELD_ITEM_SIZE);
+        itemSize = valueInteger(FIELD_ITEM_SIZE);
         if (itemSize == null) {
             itemSize = 1;
         }

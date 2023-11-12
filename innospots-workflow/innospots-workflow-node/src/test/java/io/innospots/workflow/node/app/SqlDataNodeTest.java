@@ -3,7 +3,7 @@ package io.innospots.workflow.node.app;
 import io.innospots.base.data.enums.DataOperation;
 import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.model.field.ParamField;
-import io.innospots.workflow.core.execution.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.data.DataNode;
 import io.innospots.workflow.node.app.data.SqlDataNode;
@@ -95,7 +95,7 @@ public class SqlDataNodeTest {
         SqlDataNode dataNode = new SqlDataNode();
         String identifier = "Test_1";
         NodeInstance nodeInstance = nodeInstance();
-        dataNode.build(identifier, nodeInstance);
+//        dataNode.build(identifier, nodeInstance);
     }
 
     @Test
@@ -104,7 +104,7 @@ public class SqlDataNodeTest {
         String identifier = "Test_1";
         NodeInstance nodeInstance = nodeInstance();
         nodeInstance.getData().put(SqlDataNode.FIELD_OPERATION, DataOperation.GET);
-        dataNode.build(identifier, nodeInstance);
+//        dataNode.build(identifier, nodeInstance);
         dataNode.invoke(nodeExecution());
         //System.out.println(result);
     }
@@ -115,7 +115,7 @@ public class SqlDataNodeTest {
         String identifier = "Test_1";
         NodeInstance nodeInstance = nodeInstance();
         nodeInstance.getData().put(SqlDataNode.FIELD_OPERATION, DataOperation.GET);
-        dataNode.build(identifier, nodeInstance);
+//        dataNode.build(identifier, nodeInstance);
         dataNode.invoke(nodeExecution());
         //System.out.println(result);
     }
@@ -126,7 +126,7 @@ public class SqlDataNodeTest {
         String identifier = "Test_1";
         NodeInstance nodeInstance = nodeInstance();
         nodeInstance.getData().put(SqlDataNode.FIELD_OPERATION, DataOperation.UPDATE);
-        dataNode.build(identifier, nodeInstance);
+//        dataNode.build(identifier, nodeInstance);
         dataNode.invoke(nodeExecution());
         //System.out.println(result);
     }
@@ -137,7 +137,7 @@ public class SqlDataNodeTest {
         String identifier = "Test_1";
         NodeInstance nodeInstance = nodeInstance();
         nodeInstance.getData().put(SqlDataNode.FIELD_OPERATION, DataOperation.INSERT);
-        dataNode.build(identifier, nodeInstance);
+//        dataNode.build(identifier, nodeInstance);
         dataNode.invoke(nodeExecution());
         //System.out.println(result);
     }

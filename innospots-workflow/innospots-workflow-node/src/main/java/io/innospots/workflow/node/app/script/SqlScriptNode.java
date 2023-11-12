@@ -26,10 +26,10 @@ import io.innospots.base.data.request.SimpleRequest;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.base.utils.BeanUtils;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
@@ -43,7 +43,7 @@ import java.util.Map;
  * @version 1.0.0
  * @date 2022/12/18
  */
-public class SqlScriptNode extends BaseAppNode {
+public class SqlScriptNode extends ScriptBaseNode {
 
 
     private static final Logger logger = LoggerFactory.getLogger(SqlScriptNode.class);
@@ -75,19 +75,18 @@ public class SqlScriptNode extends BaseAppNode {
     protected List<Factor> conditionFields;
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
-        credentialKey = nodeInstance.valueString(FIELD_CREDENTIAL_KEY);
+    protected void initialize() {
+        credentialKey = valueString(FIELD_CREDENTIAL_KEY);
 
 
-        List<Map<String, Object>> conditionFieldMapping = (List<Map<String, Object>>) nodeInstance.value(FIELD_CONDITION_MAPPING);
+        List<Map<String, Object>> conditionFieldMapping = valueMapList(FIELD_CONDITION_MAPPING);
         if (conditionFieldMapping != null) {
             conditionFields = BeanUtils.toBean(conditionFieldMapping, Factor.class);
         }
 
         DataOperatorManager dataOperatorManager = BeanContextAwareUtils.getBean(DataOperatorManager.class);
         dataOperator = dataOperatorManager.buildDataOperator(credentialKey);
-        sqlQueryClause = nodeInstance.valueString(FIELD_SQL_CLAUSE);
+        sqlQueryClause = valueString(FIELD_SQL_CLAUSE);
         if (sqlQueryClause != null) {
             sqlQueryClause = sqlQueryClause.replaceAll("\\n", " ");
         }

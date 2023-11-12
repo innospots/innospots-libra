@@ -19,7 +19,7 @@
 package io.innospots.workflow.core.execution.listener;
 
 
-import io.innospots.workflow.core.execution.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 
 /**
  * @author Raydian

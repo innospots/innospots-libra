@@ -20,11 +20,11 @@ package io.innospots.workflow.node.app.execute;
 
 import io.innospots.base.model.Pair;
 import io.innospots.base.utils.BeanUtils;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.field.NodeParamField;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,7 +37,7 @@ import static io.innospots.workflow.node.app.execute.FilterNode.splitSet;
  * @date 2021/3/16
  */
 @Slf4j
-public class JoinNode extends BaseAppNode {
+public class JoinNode extends BaseNodeExecutor {
 
 
     private JoinType joinType;
@@ -54,27 +54,20 @@ public class JoinNode extends BaseAppNode {
     private List<Pair<NodeParamField, NodeParamField>> joinFields;
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
-        validFieldConfig(nodeInstance, FIELD_JOIN_TYPE);
-
-        joinType = JoinType.valueOf(nodeInstance.valueString(FIELD_JOIN_TYPE));
+    protected void initialize() {
+        joinType = JoinType.valueOf(validString(FIELD_JOIN_TYPE));
         if(joinType!=JoinType.CROSS_JOIN){
-            validFieldConfig(nodeInstance, FIELD_JOIN_FIELDS);
-            joinFields = convertJoinFactor(nodeInstance, FIELD_JOIN_FIELDS);
+            validFieldConfig(FIELD_JOIN_FIELDS);
+            joinFields = convertJoinFactor(ni, FIELD_JOIN_FIELDS);
             mainSourceNodeKey = joinFields.get(0).getLeft().getNodeKey();
         }
-
-
         log.debug("build node:{}, {}, {}", this.nodeKey(), joinType, joinFields);
     }
 
 
     @Override
     public void invoke(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = new NodeOutput();
-        nodeOutput.addNextKey(this.nextNodeKeys());
-        nodeExecution.addOutput(nodeOutput);
+        NodeOutput nodeOutput = buildOutput(nodeExecution);
 
         Pair<ExecutionInput, ExecutionInput> pair = splitSet(nodeExecution, mainSourceNodeKey);
         ExecutionInput mainInput = pair.getLeft();

@@ -65,6 +65,7 @@ public enum ResponseCode {
     RESOURCE_NOT_EXIST("20010", "resource not exist"),
     RESOURCE_INSTALL_ERROR("20011", "resource install error"),
     RESOURCE_PREPARE_ERROR("20012", "resource prepare error"),
+    RESOURCE_BUILD_ERROR("20013", "resource build error"),
     PARAM_NULL("30000", "parameter is null"),
     PARAM_INVALID("30001", "parameter is invalid"),
     PARAM_COUNT_ERROR("30002", "the number of parameter is not match"),

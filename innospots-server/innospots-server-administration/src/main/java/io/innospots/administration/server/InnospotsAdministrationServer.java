@@ -28,6 +28,7 @@ import io.innospots.libra.security.LibraAuthImporter;
 import io.innospots.server.base.registry.ServiceRegistryHolder;
 import io.innospots.server.base.registry.enums.ServiceType;
 import io.innospots.workflow.runtime.WorkflowRuntimeImporter;
+import io.innospots.workflow.server.configuration.WorkflowServerImporter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.info.Info;
@@ -51,10 +52,10 @@ import java.util.Map;
 @SpringBootApplication(exclude = {QuartzAutoConfiguration.class,
 //        HibernateJpaAutoConfiguration.class,
         FreeMarkerAutoConfiguration.class})
-//@EnableAutoConfiguration
 @Import(LoggerClearScheduler.class)
 @LibraAuthImporter
 @LibraKernelImporter
+//@WorkflowServerImporter
 @EnableScheduling
 public class InnospotsAdministrationServer {
 
@@ -63,21 +64,4 @@ public class InnospotsAdministrationServer {
         SpringApplication.run(InnospotsAdministrationServer.class, args);
     }
 
-
-    /**
-     * /actuator/info config
-     */
-    @Component
-    class MyInfo implements InfoContributor {
-        @Override
-        public void contribute(Info.Builder builder) {
-            BeanContextAware context = BeanContextAwareUtils.beanContextAware();
-            Map<String, String> runInfo = new LinkedHashMap<>();
-            runInfo.put("applicationId", context.applicationId());
-            runInfo.put("applicationName", context.getApplicationName());
-            runInfo.put("upTime", DateTimeUtils.consume(context.getStartupDate()));
-            runInfo.put("activeProFiles", StringUtils.join(context.activeProfiles(), "|"));
-            builder.withDetail("info", runInfo);
-        }
-    }
 }

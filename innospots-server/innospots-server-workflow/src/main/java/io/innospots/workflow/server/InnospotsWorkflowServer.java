@@ -39,8 +39,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication(exclude = {QuartzAutoConfiguration.class,
         HibernateJpaAutoConfiguration.class,
         FreeMarkerAutoConfiguration.class})
-//@WorkflowOperatorImporter
-@WorkflowRuntimeImporter
 @EnableScheduling
 @ServerConfigImporter
 public class InnospotsWorkflowServer {

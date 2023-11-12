@@ -23,7 +23,7 @@ import io.innospots.base.watcher.AbstractWatcher;
 import io.innospots.server.base.registry.ServiceRegistryHolder;
 import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.execution.operator.IScheduledNodeExecutionOperator;
-import io.innospots.workflow.core.execution.scheduled.ScheduledNodeExecution;
+import io.innospots.workflow.core.execution.model.scheduled.ScheduledNodeExecution;
 import io.innospots.workflow.runtime.scheduled.NodeExecutionEventBody;
 import org.apache.commons.collections4.CollectionUtils;
 

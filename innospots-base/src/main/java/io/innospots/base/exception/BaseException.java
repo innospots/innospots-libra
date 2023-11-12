@@ -19,6 +19,7 @@
 package io.innospots.base.exception;
 
 
+import cn.hutool.core.exceptions.ExceptionUtil;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.i18n.LocaleMessageUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -92,6 +93,7 @@ public class BaseException extends RuntimeException {
             if (cause.getMessage() != null) {
                 this.message += ", throwable:" + cause.getMessage();
             }
+            this.detail = ExceptionUtil.stacktraceToString(cause, 2048);
         }
     }
 

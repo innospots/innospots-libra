@@ -1,9 +1,9 @@
 package io.innospots.workflow.node.app;
 
 import io.innospots.base.exception.ScriptException;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.script.ScriptNode;
 import lombok.extern.slf4j.Slf4j;
@@ -58,7 +58,7 @@ public class ScriptNodeTest extends BaseNodeTest {
         //System.out.println(v);
     }*/
 
-    private NodeExecution nodeExecution(BaseAppNode appNode) {
+    private NodeExecution nodeExecution(BaseNodeExecutor appNode) {
         NodeExecution execution = NodeExecution.buildNewNodeExecution(appNode.nodeKey(), 22L, 1, "113", true);
         Map<String, Object> data = new HashMap<>();
         data.put("i1", "hello ");

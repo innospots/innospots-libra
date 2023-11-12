@@ -58,7 +58,7 @@ public class FlowCategoryController extends BaseController {
         return InnospotResponse.success(
                 FlowNodeGroupConverter.INSTANCE.modelToBaseList(
                         flowTemplateOperator.getTemplate(1, true, onlyConnector,false)
-                                .getAppNodeGroups())
+                                .getNodeGroups())
         );
     }
 

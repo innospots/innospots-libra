@@ -19,11 +19,12 @@
 package io.innospots.workflow.core.node.executor;
 
 
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.flow.FlowExecution;
-import io.innospots.workflow.core.execution.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Raydian
@@ -42,10 +43,14 @@ public interface INodeExecutor {
      */
     NodeExecution execute(FlowExecution execution);
 
-    //void processResult(List<Object> results,NodeExecution nodeExecution,FlowExecution flowExecution);
-
     List<ExecutionInput> buildExecutionInput(FlowExecution flowExecution);
 
     void processNextKeys(NodeExecution nodeExecution);
+
+    List<String> nextNodeKeys();
+
+    List<String> prevNodeKeys();
+
+    Map<String, List<String>> nodeAnchors();
 
 }

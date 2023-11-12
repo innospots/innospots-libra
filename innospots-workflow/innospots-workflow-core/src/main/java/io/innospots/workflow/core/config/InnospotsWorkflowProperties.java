@@ -31,15 +31,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "innospots.workflow")
 public class InnospotsWorkflowProperties {
 
-    /**
-     * the default days for keeping workflow execution
-     */
-    public static final int WORKFLOW_EXECUTION_KEEP_DAYS = 30;
-
-    /**
-     * the default amount for keeping workflow execution
-     */
-    public static final int WORKFLOW_EXECUTION_KEEP_AMOUNT = 100;
 
     public static int MAX_SHARDING_KEY = 16;
 
@@ -56,12 +47,12 @@ public class InnospotsWorkflowProperties {
     /**
      * workflowExecution log keep time of seconds
      */
-    private int workFlowExecutionKeepDays = WORKFLOW_EXECUTION_KEEP_DAYS;
+    private int workFlowExecutionKeepDays = 30;
 
     /**
      * the amount for keeping workflow execution
      */
-    private int workFlowExecutionKeepAmount = WORKFLOW_EXECUTION_KEEP_AMOUNT;
+    private int workFlowExecutionKeepAmount = 100;
 
     /**
      * the path use to store execution context

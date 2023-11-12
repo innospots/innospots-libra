@@ -30,8 +30,8 @@ import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
 import io.innospots.workflow.console.operator.execution.ExecutionManagerOperator;
 import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
 import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
-import io.innospots.workflow.core.execution.ExecutionStatus;
-import io.innospots.workflow.core.execution.flow.FlowExecutionBase;
+import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.workflow.core.execution.model.flow.FlowExecutionBase;
 import io.innospots.workflow.core.execution.operator.IFlowExecutionOperator;
 import io.innospots.workflow.core.instance.model.WorkflowInstance;
 import io.innospots.base.utils.ServiceActionHolder;
@@ -259,17 +259,9 @@ public class WorkflowService {
         try {
             if (ServiceActionHolder.isCleanTask()) {
                 int days = innospotsWorkflowProperties.getWorkFlowExecutionKeepDays();
-                if (days < InnospotsWorkflowProperties.WORKFLOW_EXECUTION_KEEP_DAYS) {
-                    log.warn("workFlowExecutionLogCleanTask param error, days: " + days + " set default:" + InnospotsWorkflowProperties.WORKFLOW_EXECUTION_KEEP_DAYS);
-                    days = InnospotsWorkflowProperties.WORKFLOW_EXECUTION_KEEP_DAYS;
 
-                }
                 int keepAmount = innospotsWorkflowProperties.getWorkFlowExecutionKeepAmount();
-                if (keepAmount < InnospotsWorkflowProperties.WORKFLOW_EXECUTION_KEEP_AMOUNT) {
-                    log.warn("workFlowExecutionLogCleanTask param error, keepAmount: " + keepAmount + " set default:" + InnospotsWorkflowProperties.WORKFLOW_EXECUTION_KEEP_AMOUNT);
-                    keepAmount = InnospotsWorkflowProperties.WORKFLOW_EXECUTION_KEEP_AMOUNT;
 
-                }
                 LocalDateTime deleteTime = LocalDateTime.now().plusDays(days * -1);
                 //只删除workFlow为ONLINE和OFFLINE的记录
                 List<WorkflowInstanceEntity> list = workflowInstanceOperator.selectUsedInstance();

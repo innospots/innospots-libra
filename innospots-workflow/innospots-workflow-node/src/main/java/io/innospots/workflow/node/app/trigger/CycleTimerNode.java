@@ -40,12 +40,10 @@ public class CycleTimerNode extends TriggerNode {
     private Integer timeInterval;
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
-        validFieldConfig(nodeInstance, FIELD_TIME_INTERVAL);
-        validFieldConfig(nodeInstance, FIELD_TIME_UNIT);
-        this.timeInterval = nodeInstance.valueInteger(FIELD_TIME_INTERVAL);
-        timeUnit = TimeUnit.valueOf(nodeInstance.valueString(FIELD_TIME_UNIT));
+    protected void initialize() {
+        validFieldConfig(FIELD_TIME_UNIT);
+        this.timeInterval = validInteger(FIELD_TIME_INTERVAL);
+        timeUnit = TimeUnit.valueOf(validString(FIELD_TIME_UNIT));
         eventBody.put(FIELD_TIME_INTERVAL, timeInterval);
         eventBody.put(FIELD_TIME_UNIT, timeUnit);
     }

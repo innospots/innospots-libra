@@ -19,11 +19,11 @@
 package io.innospots.workflow.node.app.file;
 
 import cn.hutool.core.io.FileUtil;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.ExecutionResource;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.ExecutionResource;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -37,7 +37,7 @@ import java.nio.file.StandardCopyOption;
  * @version 1.2.0
  * @date 2023/2/22
  */
-public class OutputFilesNode extends BaseAppNode {
+public class OutputFilesNode extends BaseNodeExecutor {
 
     public static final String FIELD_FILE_PATTERN = "file_pattern";
 
@@ -45,8 +45,7 @@ public class OutputFilesNode extends BaseAppNode {
 
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
+    protected void initialize() {
     }
 
     @Override

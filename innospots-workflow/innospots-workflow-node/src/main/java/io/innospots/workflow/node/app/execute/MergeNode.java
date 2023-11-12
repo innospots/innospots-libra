@@ -19,10 +19,10 @@
 package io.innospots.workflow.node.app.execute;
 
 import io.innospots.base.model.Pair;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,7 +38,7 @@ import static io.innospots.workflow.node.app.execute.FilterNode.splitSet;
  * @date 2021/3/16
  */
 @Slf4j
-public class MergeNode extends BaseAppNode {
+public class MergeNode extends BaseNodeExecutor {
 
 
     private MergeMode mergeMode;
@@ -49,23 +49,20 @@ public class MergeNode extends BaseAppNode {
 
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
-        validFieldConfig(nodeInstance, FIELD_MERGE_MODE);
+    protected void initialize() {
+        validFieldConfig(FIELD_MERGE_MODE);
         validSourceNodeSize(2);
-        mainSourceNodeKey = nodeInstance.valueString(MAIN_SOURCE_NODE);
+        mainSourceNodeKey = valueString(MAIN_SOURCE_NODE);
         if (mainSourceNodeKey == null) {
-            mainSourceNodeKey = nodeInstance.getPrevNodeKeys().get(0);
+            mainSourceNodeKey = ni.getPrevNodeKeys().get(0);
         }
-        mergeMode = MergeMode.valueOf(nodeInstance.valueString(FIELD_MERGE_MODE));
+        mergeMode = MergeMode.valueOf(valueString(FIELD_MERGE_MODE));
         log.debug("build node:{}, {}", this.nodeKey(), mergeMode);
     }
 
     @Override
     public void invoke(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = new NodeOutput();
-        nodeOutput.addNextKey(this.nextNodeKeys());
-        nodeExecution.addOutput(nodeOutput);
+        NodeOutput nodeOutput = buildOutput(nodeExecution);
         validInputs(nodeExecution.getInputs(), 2);
 
         Pair<ExecutionInput, ExecutionInput> pair = splitSet(nodeExecution, mainSourceNodeKey);

@@ -30,7 +30,7 @@ import io.innospots.workflow.core.node.definition.dao.FlowTemplateDao;
 import io.innospots.workflow.core.node.definition.entity.FlowTemplateEntity;
 import io.innospots.workflow.core.node.definition.model.FlowTemplate;
 import io.innospots.workflow.core.node.definition.model.FlowTemplateBase;
-import io.innospots.workflow.core.node.definition.model.AppNodeGroup;
+import io.innospots.workflow.core.node.definition.model.NodeGroup;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
@@ -106,10 +106,10 @@ public class FlowTemplateOperator extends ServiceImpl<FlowTemplateDao, FlowTempl
 
     @Transactional(rollbackFor = Exception.class)
     public boolean deleteTemplate(Integer flowTplId) {
-        List<AppNodeGroup> appNodeGroups = this.flowNodeGroupOperator.getGroupByFlowTplId(flowTplId, false);
-        if (CollectionUtils.isNotEmpty(appNodeGroups)) {
-            for (AppNodeGroup appNodeGroup : appNodeGroups) {
-                flowNodeGroupOperator.removeNodeGroup(appNodeGroup.getNodeGroupId());
+        List<NodeGroup> nodeGroups = this.flowNodeGroupOperator.getGroupByFlowTplId(flowTplId, false);
+        if (CollectionUtils.isNotEmpty(nodeGroups)) {
+            for (NodeGroup nodeGroup : nodeGroups) {
+                flowNodeGroupOperator.removeNodeGroup(nodeGroup.getNodeGroupId());
             }
         }
         return this.removeById(flowTplId);
@@ -183,11 +183,14 @@ public class FlowTemplateOperator extends ServiceImpl<FlowTemplateDao, FlowTempl
 
     private FlowTemplate getTemplate(FlowTemplateEntity entity, boolean includeNodes, boolean onlyConnector, boolean excludeTrigger) {
         FlowTemplate appFlowTemplate = FlowTemplateConverter.INSTANCE.entityToModel(entity);
-        List<AppNodeGroup> nodeGroups = flowNodeGroupOperator.getGroupByFlowTplId(entity.getFlowTplId(), includeNodes);
+        List<NodeGroup> nodeGroups = flowNodeGroupOperator.getGroupByFlowTplId(entity.getFlowTplId(), includeNodes);
         if (includeNodes && onlyConnector) {
+            /*
             nodeGroups.forEach(group -> group.setNodes(group.getNodes()
                     .stream().filter(appNode -> StringUtils.isNotEmpty(appNode.getConnectorName()) && !"None".equals(appNode.getConnectorName()))
                     .collect(Collectors.toList())));
+
+             */
         }
         nodeGroups.forEach(appNodeGroup -> {
                     if("trigger".equals(appNodeGroup.getCode())){
@@ -195,7 +198,7 @@ public class FlowTemplateOperator extends ServiceImpl<FlowTemplateDao, FlowTempl
                     }
                 }
         );
-        appFlowTemplate.setAppNodeGroups(nodeGroups);
+        appFlowTemplate.setNodeGroups(nodeGroups);
         return appFlowTemplate;
     }
 

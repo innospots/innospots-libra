@@ -22,11 +22,11 @@ import io.innospots.base.exception.ConfigException;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.model.Pair;
 import io.innospots.workflow.core.exception.FlowRuntimeException;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.field.NodeParamField;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 
 import java.util.HashSet;
@@ -38,7 +38,7 @@ import java.util.Set;
  * @author Smars
  * @date 2021/3/16
  */
-public class FilterNode extends BaseAppNode {
+public class FilterNode extends BaseNodeExecutor {
 
 
     private FilterMode filterMode;
@@ -54,13 +54,11 @@ public class FilterNode extends BaseAppNode {
     private List<Pair<NodeParamField, NodeParamField>> filterFields;
 
     @Override
-    public void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
-        validFieldConfig(nodeInstance, FIELD_MERGE_MODE);
-        validFieldConfig(nodeInstance, FIELD_FILTER_FIELDS);
-        mainSourceNodeKey = nodeInstance.valueString(MAIN_SOURCE_NODE);
-        filterMode = FilterMode.valueOf(nodeInstance.valueString(FIELD_MERGE_MODE));
-        filterFields = JoinNode.convertJoinFactor(nodeInstance, FIELD_FILTER_FIELDS);
+    public void initialize() {
+        validFieldConfig(FIELD_FILTER_FIELDS);
+        mainSourceNodeKey = valueString(MAIN_SOURCE_NODE);
+        filterMode = FilterMode.valueOf(validString(FIELD_MERGE_MODE));
+        filterFields = JoinNode.convertJoinFactor(ni, FIELD_FILTER_FIELDS);
         mainSourceNodeKey = filterFields.get(0).getLeft().getNodeKey();
 
         if (mainSourceNodeKey == null) {

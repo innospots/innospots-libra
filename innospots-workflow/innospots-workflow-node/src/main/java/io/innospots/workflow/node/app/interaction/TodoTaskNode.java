@@ -18,20 +18,20 @@
 
 package io.innospots.workflow.node.app.interaction;
 
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 
 /**
  * @author Smars
  * @date 2023/5/12
  */
-public class TodoTaskNode extends BaseAppNode {
+public class TodoTaskNode extends BaseNodeExecutor {
 
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
+    protected void initialize() {
+
     }
 
     @Override

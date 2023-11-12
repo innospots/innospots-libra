@@ -21,10 +21,10 @@ package io.innospots.workflow.node.app.script;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -40,7 +40,7 @@ import java.util.Map;
  * @date 2022/11/11
  */
 @Slf4j
-public class CmdlineScriptNode extends BaseAppNode {
+public class CmdlineScriptNode extends ScriptBaseNode {
 
     protected static final String FIELD_OUTPUT_MODE = "output_mode";
     protected static final String FIELD_VARIABLE_NAME = "variable_name";
@@ -50,13 +50,10 @@ public class CmdlineScriptNode extends BaseAppNode {
     protected String outputField;
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
-        validFieldConfig(nodeInstance, FIELD_OUTPUT_MODE);
-        outputMode = OutputMode.valueOf(nodeInstance.valueString(FIELD_OUTPUT_MODE));
+    protected void initialize() {
+        outputMode = OutputMode.valueOf(validString(FIELD_OUTPUT_MODE));
         if (outputMode == OutputMode.FIELD) {
-            validFieldConfig(nodeInstance, FIELD_VARIABLE_NAME);
-            outputField = nodeInstance.valueString(FIELD_VARIABLE_NAME);
+            outputField = validString(FIELD_VARIABLE_NAME);
         }
     }
 

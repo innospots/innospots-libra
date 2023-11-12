@@ -20,11 +20,12 @@ package io.innospots.workflow.node.app.execute;
 
 import cn.hutool.core.builder.CompareToBuilder;
 import cn.hutool.core.comparator.ComparatorChain;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
+import io.innospots.base.re.IExpression;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.field.NodeParamField;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.utils.NodeInstanceUtils;
 import org.apache.commons.collections4.CollectionUtils;
@@ -35,7 +36,7 @@ import java.util.*;
  * @author Smars
  * @date 2021/3/16
  */
-public class FiltrateOrderNode extends BaseAppNode {
+public class FiltrateOrderNode extends BaseNodeExecutor {
 
     public static final String FIELD_ASC = "asc_fields";
     public static final String FIELD_DESC = "desc_fields";
@@ -48,23 +49,23 @@ public class FiltrateOrderNode extends BaseAppNode {
 
     private Integer lineCount;
 
+    private IExpression expression;
+
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
-        this.expression = NodeInstanceUtils.buildExpression(nodeInstance,FILTER_CONDITION,this);
-        lineCount = nodeInstance.valueInteger(LINE_COUNT);
+    protected void initialize() {
+
+        this.expression = NodeInstanceUtils.buildExpression(ni,FILTER_CONDITION,this);
+        lineCount = valueInteger(LINE_COUNT);
         if(lineCount==null || lineCount ==0){
             lineCount = Integer.MAX_VALUE;
         }
-        descFields = NodeInstanceUtils.buildParamFields(nodeInstance,FIELD_DESC);
-        ascFields = NodeInstanceUtils.buildParamFields(nodeInstance,FIELD_ASC);
+        descFields = NodeInstanceUtils.buildParamFields(ni,FIELD_DESC);
+        ascFields = NodeInstanceUtils.buildParamFields(ni,FIELD_ASC);
     }
 
     @Override
     public void invoke(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = new NodeOutput();
-        nodeOutput.addNextKey(this.nextNodeKeys());
-        nodeExecution.addOutput(nodeOutput);
+        NodeOutput nodeOutput = buildOutput(nodeExecution);
         List<Map<String,Object>> items = new ArrayList<>();
         for (ExecutionInput executionInput : nodeExecution.getInputs()) {
             for (Map<String, Object> item : executionInput.getData()) {

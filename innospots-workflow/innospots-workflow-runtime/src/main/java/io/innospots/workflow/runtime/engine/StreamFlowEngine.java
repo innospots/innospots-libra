@@ -20,10 +20,10 @@ package io.innospots.workflow.runtime.engine;
 
 import io.innospots.base.exception.InnospotException;
 import io.innospots.base.model.response.ResponseCode;
-import io.innospots.workflow.core.execution.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.listener.IFlowExecutionListener;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.runtime.flow.Flow;
 import io.innospots.workflow.runtime.flow.FlowManager;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +51,7 @@ public class StreamFlowEngine extends BaseFlowEngine {
 
     @Override
     protected void execute(Flow flow, FlowExecution flowExecution) {
-        List<BaseAppNode> nodeExecutors = null;
+        List<BaseNodeExecutor> nodeExecutors = null;
         if (CollectionUtils.isEmpty(flowExecution.getCurrentNodeKeys())) {
             nodeExecutors = flow.startNodes();
         } else {
@@ -68,11 +68,11 @@ public class StreamFlowEngine extends BaseFlowEngine {
      * @param flow
      * @param flowExecution
      */
-    private void traverseExecuteNode(List<BaseAppNode> nodeExecutors, Flow flow, FlowExecution flowExecution) {
+    private void traverseExecuteNode(List<BaseNodeExecutor> nodeExecutors, Flow flow, FlowExecution flowExecution) {
         List<String> nextNodes = new ArrayList<>();
 
         //依次执行节点，宽度优先执行
-        for (BaseAppNode nodeExecutor : nodeExecutors) {
+        for (BaseNodeExecutor nodeExecutor : nodeExecutors) {
             if (!flowExecution.isNotExecute(nodeExecutor.nodeKey())) {
                 continue;
             }
@@ -180,9 +180,9 @@ public class StreamFlowEngine extends BaseFlowEngine {
         }//end unDoneList
 
         if (flowExecution.isNotExecute(shouldExecuteNode)) {
-            BaseAppNode baseAppNode = flow.findNode(shouldExecuteNode);
+            BaseNodeExecutor baseAppNode = flow.findNode(shouldExecuteNode);
             //add to executable node list
-            List<BaseAppNode> nodeExecutors = new ArrayList<>();
+            List<BaseNodeExecutor> nodeExecutors = new ArrayList<>();
             nodeExecutors.add(baseAppNode);
             traverseExecuteNode(nodeExecutors, flow, flowExecution);
         }

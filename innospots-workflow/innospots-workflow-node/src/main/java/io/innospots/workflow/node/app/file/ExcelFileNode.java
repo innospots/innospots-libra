@@ -10,17 +10,19 @@ import com.alibaba.excel.write.builder.ExcelWriterSheetBuilder;
 import com.google.common.collect.Lists;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.base.utils.BeanUtils;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.ExecutionResource;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
-import io.innospots.workflow.core.instance.model.NodeInstance;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.ExecutionResource;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -28,7 +30,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @date 2023/9/1
  */
 @Slf4j
-public class ExcelFileNode extends BaseAppNode {
+public class ExcelFileNode extends BaseNodeExecutor {
 
     private static final String FILE_OPT = "operation";
 
@@ -87,19 +89,18 @@ public class ExcelFileNode extends BaseAppNode {
 
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
+    protected void initialize() {
         this.fileOperation = FileOperation.valueOf(this.valueString(FILE_OPT));
         this.filePath = this.valueString(FILE_PATH);
         this.fileFormat = ExcelTypeEnum.valueOf(this.valueString(FILE_FORMAT).toUpperCase());
         if (fileFormat == ExcelTypeEnum.CSV) {
             this.lineSeparator = this.valueString(LINE_SEPARATOR);
         }
-        encoding = Charset.forName(nodeInstance.valueString(ENCODING));
-        this.selectColumn = nodeInstance.valueBoolean(IS_SELECT_COLUMN);
-        maxReadLines = nodeInstance.valueInteger(MAX_READ_LINE);
-        firstHeader = nodeInstance.valueBoolean(HAS_FIRST_HEADER);
-        List<Map<String, Object>> v = (List<Map<String, Object>>) nodeInstance.value(SELECT_FIELDS);
+        encoding = Charset.forName(valueString(ENCODING));
+        this.selectColumn = valueBoolean(IS_SELECT_COLUMN);
+        maxReadLines = valueInteger(MAX_READ_LINE);
+        firstHeader = valueBoolean(HAS_FIRST_HEADER);
+        List<Map<String, Object>> v = valueMapList(SELECT_FIELDS);
         if (v != null) {
             selectedFields = BeanUtils.toBean(v, ParamField.class);
         }

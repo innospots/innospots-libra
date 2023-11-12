@@ -22,15 +22,15 @@ package io.innospots.workflow.node.app.logic;
 import io.innospots.base.quartz.TimePeriod;
 import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.base.utils.time.DateTimeUtils;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.ExecutionStatus;
-import io.innospots.workflow.core.execution.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.listener.INodeExecutionListener;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.execution.operator.IScheduledNodeExecutionOperator;
-import io.innospots.workflow.core.execution.scheduled.ScheduledNodeExecution;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.model.scheduled.ScheduledNodeExecution;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 
 import java.time.LocalDateTime;
@@ -39,7 +39,7 @@ import java.time.LocalDateTime;
  * @author Smars
  * @date 2021/4/24
  */
-public class WaitNode extends BaseAppNode {
+public class WaitNode extends BaseNodeExecutor {
 
     public static final String FIELD_PERIOD_UNIT = "time_period";
     public static final String FIELD_PERIOD_TIME = "interval_time";
@@ -55,14 +55,13 @@ public class WaitNode extends BaseAppNode {
     private IScheduledNodeExecutionOperator scheduledNodeExecutionOperator;
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
-        delayMode = DelayMode.valueOf(nodeInstance.valueString(FIELD_DELAY_MODE));
+    protected void initialize() {
+        delayMode = DelayMode.valueOf(valueString(FIELD_DELAY_MODE));
         if (delayMode == DelayMode.PERIOD) {
-            timePeriod = TimePeriod.valueOf(nodeInstance.valueString(FIELD_PERIOD_UNIT));
-            intervalTime = nodeInstance.valueInteger(FIELD_PERIOD_TIME);
+            timePeriod = TimePeriod.valueOf(valueString(FIELD_PERIOD_UNIT));
+            intervalTime = valueInteger(FIELD_PERIOD_TIME);
         } else {
-            runningDateTime = nodeInstance.valueString(FIELD_RUNNING_DATE_TIME);
+            runningDateTime = valueString(FIELD_RUNNING_DATE_TIME);
         }
 
         scheduledNodeExecutionOperator = BeanContextAwareUtils.getBean(IScheduledNodeExecutionOperator.class);

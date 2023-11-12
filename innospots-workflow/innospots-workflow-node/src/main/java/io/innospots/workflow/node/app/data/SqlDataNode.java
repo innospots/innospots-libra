@@ -30,9 +30,9 @@ import io.innospots.base.exception.ConfigException;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.utils.BeanUtils;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
@@ -94,13 +94,13 @@ public class SqlDataNode extends DataNode {
     private String sqlQueryClause;
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
-        operation = Enums.getIfPresent(DataOperation.class, nodeInstance.containsKey(FIELD_OPERATION) ? nodeInstance.valueString(FIELD_OPERATION) : "").orNull();
-        tableName = nodeInstance.valueString(FIELD_TABLE_NAME);
+    protected void initialize() {
+        super.initialize();
+        operation = Enums.getIfPresent(DataOperation.class, ni.containsKey(FIELD_OPERATION) ? ni.valueString(FIELD_OPERATION) : "").orNull();
+        tableName = valueString(FIELD_TABLE_NAME);
 
         //solve enum key not exits or key is null
-        List<Map<String, Object>> columnFieldMapping = (List<Map<String, Object>>) nodeInstance.value(FIELD_COLUMN_MAPPING);
+        List<Map<String, Object>> columnFieldMapping = valueMapList(FIELD_COLUMN_MAPPING);
         if ((operation == DataOperation.INSERT || operation == DataOperation.UPSERT) && columnFieldMapping == null) {
             throw ConfigException.buildMissingException(this.getClass(), this.nodeKey(), FIELD_COLUMN_MAPPING);
         }
@@ -112,7 +112,7 @@ public class SqlDataNode extends DataNode {
             columnFields = columnFields.stream().filter(f -> !f.checkNull()).collect(Collectors.toList());
         }
 
-        keyColumn = nodeInstance.valueString(KEY_COLUMN);
+        keyColumn = valueString(KEY_COLUMN);
 
         if (DataOperation.UPSERT == operation) {
             IDataConnectionMinder connectionMinder = DataConnectionMinderManager.getCredentialMinder(credentialKey);
@@ -131,9 +131,9 @@ public class SqlDataNode extends DataNode {
 
         logger.info("table name:{}, primary name:{}",tableName,keyColumn);
 
-        updateTimeColumn = nodeInstance.valueString(COLUMN_UPDATE_TIME);
+        updateTimeColumn = valueString(COLUMN_UPDATE_TIME);
 
-        List<Map<String, Object>> updateConditionFields = (List<Map<String, Object>>) nodeInstance.value(FIELD_UPDATE_CONDITION);
+        List<Map<String, Object>> updateConditionFields = valueMapList(FIELD_UPDATE_CONDITION);
         if (operation == DataOperation.UPDATE) {
             if (updateConditionFields == null) {
                 throw ConfigException.buildMissingException(this.getClass(), this.nodeKey(), FIELD_UPDATE_CONDITION);
@@ -141,14 +141,14 @@ public class SqlDataNode extends DataNode {
             updateConditions = BeanUtils.toBean(updateConditionFields, Factor.class);
         }
 
-        List<Map<String, Object>> queryConditionFields = (List<Map<String, Object>>) nodeInstance.value(FIELD_QUERY_CONDITION);
+        List<Map<String, Object>> queryConditionFields = valueMapList(FIELD_QUERY_CONDITION);
 
         if (queryConditionFields != null) {
             queryConditions = BeanUtils.toBean(queryConditionFields, Factor.class);
         }
 
 
-        sqlQueryClause = nodeInstance.valueString(FIELD_SQL_CLAUSE);
+        sqlQueryClause = valueString(FIELD_SQL_CLAUSE);
         if (sqlQueryClause != null) {
             sqlQueryClause = sqlQueryClause.replaceAll("\\n", " ");
             if (operation == null) {
@@ -156,7 +156,7 @@ public class SqlDataNode extends DataNode {
             }
         }
         if (operation == DataOperation.LIST || operation == DataOperation.GET) {
-            fillOutputConfig(nodeInstance);
+            fillOutputConfig();
         }
     }
 

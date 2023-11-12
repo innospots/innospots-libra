@@ -20,10 +20,10 @@ package io.innospots.workflow.runtime.parallel;
 
 import io.innospots.base.exception.InnospotException;
 import io.innospots.base.model.response.ResponseCode;
-import io.innospots.workflow.core.execution.ExecutionStatus;
-import io.innospots.workflow.core.execution.flow.FlowExecution;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.runtime.flow.Flow;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ExecutionUnit {
 
-    private final BaseAppNode nodeExecutor;
+    private final BaseNodeExecutor nodeExecutor;
 
     private final FlowExecution flowExecution;
 
@@ -65,7 +65,7 @@ public class ExecutionUnit {
 
     private String threadName;
 
-    private ExecutionUnit(BaseAppNode nodeExecutor, Map<String, ExecutionUnit> executionUnits, FlowExecution flowExecution, Flow flow, Executor executor) {
+    private ExecutionUnit(BaseNodeExecutor nodeExecutor, Map<String, ExecutionUnit> executionUnits, FlowExecution flowExecution, Flow flow, Executor executor) {
         this.nodeExecutor = nodeExecutor;
         this.flowExecution = flowExecution;
         this.threadExecutor = executor;
@@ -75,11 +75,11 @@ public class ExecutionUnit {
         this.executionUnits.put(this.nodeKey(), this);
     }
 
-    public static ExecutionUnit build(BaseAppNode nodeExecutor, Map<String, ExecutionUnit> executionUnits, FlowExecution flowExecution, Flow flow, Executor threadExecutor) {
+    public static ExecutionUnit build(BaseNodeExecutor nodeExecutor, Map<String, ExecutionUnit> executionUnits, FlowExecution flowExecution, Flow flow, Executor threadExecutor) {
         return new ExecutionUnit(nodeExecutor, executionUnits, flowExecution, flow, threadExecutor);
     }
 
-    private ExecutionUnit build(BaseAppNode nodeExecutor) {
+    private ExecutionUnit build(BaseNodeExecutor nodeExecutor) {
         return new ExecutionUnit(nodeExecutor, executionUnits, flowExecution, flow, threadExecutor);
     }
 
@@ -230,7 +230,7 @@ public class ExecutionUnit {
             log.warn("node has executed, nodeKey:{}",nodeKey);
             return;
         }
-        BaseAppNode baseAppNode = flow.findNode(nodeKey);
+        BaseNodeExecutor baseAppNode = flow.findNode(nodeKey);
         ExecutionUnit nodeUnit = executionUnits.get(nodeKey);
         if (nodeUnit == null) {
             nodeUnit = build(baseAppNode);

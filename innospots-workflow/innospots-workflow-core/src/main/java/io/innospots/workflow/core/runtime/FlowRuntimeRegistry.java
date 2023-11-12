@@ -20,7 +20,7 @@ package io.innospots.workflow.core.runtime;
 
 
 import io.innospots.workflow.core.enums.FlowStatus;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,7 +37,7 @@ import java.util.Map;
 @Setter
 public class FlowRuntimeRegistry {
 
-    private BaseAppNode registryNode;
+    private BaseNodeExecutor registryNode;
 
     private Long workflowInstanceId;
 

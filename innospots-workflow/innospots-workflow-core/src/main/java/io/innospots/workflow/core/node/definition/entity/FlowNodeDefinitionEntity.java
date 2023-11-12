@@ -25,7 +25,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.entity.BaseEntity;
 import io.innospots.workflow.core.enums.NodePrimitive;
-import io.innospots.workflow.core.node.definition.model.NodeNodeDefinition;
+import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -98,7 +98,7 @@ public class FlowNodeDefinitionEntity extends BaseEntity {
 
     @Column(length = 16)
     @Enumerated(value = EnumType.STRING)
-    private NodeNodeDefinition.RunMethod runMethod;
+    private NodeDefinition.RunMethod runMethod;
 
     @Column(length = 512)
     private String inPorts;

@@ -18,56 +18,32 @@
 
 package io.innospots.workflow.core.node.executor;
 
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.instance.model.NodeInstance;
-
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 /**
- * triggerNode是否相同判断eventBody内容是否一致，一致则认为TriggerNode相同
- *
  * @author Smars
  * @date 2021/5/8
  */
-public class TriggerNode extends BaseAppNode {
+public class TriggerNode extends BaseNodeExecutor {
 
     protected Map<String, Object> eventBody = new HashMap<>();
 
     public static final String FIELD_NEXT_NODES = "next_nodes";
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
+    protected void initialize() {
         eventBody.put(FIELD_NEXT_NODES, ni.getNextNodeKeys());
         eventBody.put("node_key", this.nodeKey());
         eventBody.put("node_instance_id", ni.getNodeInstanceId());
         eventBody.put("node_code", ni.getCode());
     }
 
-
     @Override
-    public void invoke(NodeExecution nodeExecution) {
-        //output the data that input
-        List<ExecutionInput> inputs = nodeExecution.getInputs();
-        NodeOutput nodeOutput = new NodeOutput();
-        for (ExecutionInput input : inputs) {
-            for (Map<String, Object> item : input.getData()) {
-                nodeOutput.addResult(item);
-            }
-        }
-        nodeOutput.addNextKey(ni.getNextNodeKeys());
-        nodeExecution.addOutput(nodeOutput);
+    protected Object processItem(Map<String, Object> item) {
+        return item;
     }
-
-    public Map<String, Object> getEventBody() {
-        return eventBody;
-    }
-
 
     @Override
     public boolean equals(Object o) {

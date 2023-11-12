@@ -20,9 +20,9 @@ package io.innospots.workflow.core.execution.reader;
 
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.utils.BeanUtils;
-import io.innospots.workflow.core.execution.flow.FlowExecution;
-import io.innospots.workflow.core.execution.flow.FlowExecutionBase;
-import io.innospots.workflow.core.execution.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.flow.FlowExecutionBase;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.operator.IFlowExecutionOperator;
 import io.innospots.workflow.core.execution.operator.INodeExecutionOperator;
 import org.apache.commons.collections4.CollectionUtils;

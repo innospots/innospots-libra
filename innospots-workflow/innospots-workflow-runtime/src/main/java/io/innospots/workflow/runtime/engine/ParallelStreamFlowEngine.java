@@ -21,10 +21,10 @@ package io.innospots.workflow.runtime.engine;
 import io.innospots.base.utils.thread.ThreadTaskExecutor;
 import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.base.utils.thread.ThreadPoolBuilder;
-import io.innospots.workflow.core.execution.ExecutionStatus;
-import io.innospots.workflow.core.execution.flow.FlowExecution;
+import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.listener.IFlowExecutionListener;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.node.executor.TriggerNode;
 import io.innospots.workflow.runtime.flow.Flow;
 import io.innospots.workflow.runtime.flow.FlowManager;
@@ -59,7 +59,7 @@ public class ParallelStreamFlowEngine extends BaseFlowEngine {
 
     @Override
     protected void execute(Flow flow, FlowExecution flowExecution) {
-        List<BaseAppNode> nodeExecutors = null;
+        List<BaseNodeExecutor> nodeExecutors = null;
         Map<String, ExecutionUnit> executionUnits = new ConcurrentHashMap<>();
         if (CollectionUtils.isEmpty(flowExecution.getCurrentNodeKeys())) {
             nodeExecutors = flow.startNodes();
@@ -75,7 +75,7 @@ public class ParallelStreamFlowEngine extends BaseFlowEngine {
             ExecutionUnit executionUnit = ExecutionUnit.build(nodeExecutors.get(0), executionUnits, flowExecution, flow, taskExecutor);
             executionUnit.run(false);
         } else {
-            for (BaseAppNode nodeExecutor : nodeExecutors) {
+            for (BaseNodeExecutor nodeExecutor : nodeExecutors) {
                 if (!flowExecution.shouldExecute(nodeExecutor.nodeKey())) {
                     continue;
                 }

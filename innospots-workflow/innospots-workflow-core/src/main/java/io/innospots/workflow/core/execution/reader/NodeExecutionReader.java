@@ -19,9 +19,9 @@
 package io.innospots.workflow.core.execution.reader;
 
 import io.innospots.base.data.body.PageBody;
-import io.innospots.workflow.core.execution.flow.FlowExecutionBase;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeExecutionDisplay;
+import io.innospots.workflow.core.execution.model.flow.FlowExecutionBase;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeExecutionDisplay;
 import io.innospots.workflow.core.execution.operator.IFlowExecutionOperator;
 import io.innospots.workflow.core.execution.operator.INodeExecutionOperator;
 import io.innospots.workflow.core.flow.WorkflowBaseBody;

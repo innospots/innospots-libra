@@ -29,8 +29,9 @@ import io.innospots.workflow.core.execution.listener.INodeExecutionListener;
 import io.innospots.workflow.core.flow.BuildProcessInfo;
 import io.innospots.workflow.core.flow.WorkflowBody;
 import io.innospots.workflow.core.instance.model.WorkflowInstance;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
+import io.innospots.workflow.core.node.executor.NodeExecutorFactory;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
 import org.slf4j.Logger;
@@ -55,9 +56,9 @@ public class Flow extends WorkflowInstance {
 
     private HashSetValuedHashMap<String, String> sourceNodeCache = new HashSetValuedHashMap<>();
 
-    private List<BaseAppNode> startNodes;
+    private List<BaseNodeExecutor> startNodes;
 
-    private Map<String, BaseAppNode> nodeCache = new HashMap<>();
+    private Map<String, BaseNodeExecutor> nodeCache = new HashMap<>();
 
     private List<INodeExecutionListener> nodeExecutionListeners;
 
@@ -82,7 +83,7 @@ public class Flow extends WorkflowInstance {
         if (loadStatus == FlowStatus.UNLOAD && nextNodeCache.isEmpty()) {
             buildProcessInfo.setStartTime(System.currentTimeMillis());
             loadStatus = FlowStatus.LOADING;
-            Map<String, BaseAppNode> tmpNodeCache = new HashMap<>();
+            Map<String, BaseNodeExecutor> tmpNodeCache = new HashMap<>();
             FlowCompiler flowCompiler = FlowCompiler.build(workflowBody);
             if (force) {
                 flowCompiler.clear();
@@ -102,11 +103,12 @@ public class Flow extends WorkflowInstance {
                 }
             }
 
-            List<BaseAppNode> tmpStartNodes = new ArrayList<>();
+            List<BaseNodeExecutor> tmpStartNodes = new ArrayList<>();
             for (NodeInstance nodeInstance : workflowBody.getStarts()) {
                 try {
 //                    BaseAppNode appNode = BaseAppNode.buildAppNode(identifier(), nodeInstance, buildProcessInfo);
-                    BaseAppNode appNode = BaseAppNode.buildAppNode(workflowBody.identifier(), nodeInstance);
+                    BaseNodeExecutor appNode = NodeExecutorFactory.build(workflowBody.identifier(),nodeInstance);
+//                    BaseNodeExecutor appNode = BaseNodeExecutor.buildAppNode(workflowBody.identifier(), nodeInstance);
                     if (appNode.getBuildStatus() == BuildStatus.FAIL) {
                         buildProcessInfo.incrementFail();
                         buildProcessInfo.addNodeProcess(nodeInstance.getNodeKey(), appNode.getBuildException());
@@ -146,10 +148,11 @@ public class Flow extends WorkflowInstance {
                             logger.warn("nextNode is null, sourceNode:{}", node.getNodeKey());
                             continue;
                         }
-                        BaseAppNode appNode = tmpNodeCache.get(nextNode.getNodeKey());
+                        BaseNodeExecutor appNode = tmpNodeCache.get(nextNode.getNodeKey());
                         if (appNode == null) {
                             try {
-                                appNode = BaseAppNode.buildAppNode(workflowBody.identifier(), nextNode);
+                                appNode = NodeExecutorFactory.build(workflowBody.identifier(),nextNode);
+//                                appNode = BaseNodeExecutor.buildAppNode(workflowBody.identifier(), nextNode);
                                 appNode.addNodeExecutionListener(nodeExecutionListeners);
                                 tmpNodeCache.put(appNode.nodeKey(), appNode);
                                 if (appNode.getBuildException() != null) {
@@ -187,7 +190,7 @@ public class Flow extends WorkflowInstance {
         return buildProcessInfo;
     }
 
-    public List<BaseAppNode> startNodes() {
+    public List<BaseNodeExecutor> startNodes() {
         if (CollectionUtils.isNotEmpty(startNodes)) {
             return startNodes;
         }
@@ -216,12 +219,12 @@ public class Flow extends WorkflowInstance {
 
      */
 
-    public BaseAppNode findNode(String nodeKey) {
+    public BaseNodeExecutor findNode(String nodeKey) {
         return nodeCache.get(nodeKey);
     }
 
-    public List<BaseAppNode> findNodes(List<String> nodeKeys) {
-        List<BaseAppNode> nodes = new ArrayList<>();
+    public List<BaseNodeExecutor> findNodes(List<String> nodeKeys) {
+        List<BaseNodeExecutor> nodes = new ArrayList<>();
         for (String nodeKey : nodeKeys) {
             nodes.add(findNode(nodeKey));
         }

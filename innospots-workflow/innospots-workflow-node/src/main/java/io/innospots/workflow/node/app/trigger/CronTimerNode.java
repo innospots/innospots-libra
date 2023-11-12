@@ -24,7 +24,7 @@ import io.innospots.base.quartz.ScheduleMode;
 import io.innospots.base.quartz.TimePeriod;
 import io.innospots.base.utils.time.CronUtils;
 import io.innospots.base.utils.time.DateTimeUtils;
-import io.innospots.workflow.core.execution.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.node.executor.TriggerNode;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
@@ -83,49 +83,48 @@ public class CronTimerNode extends TriggerNode {
 
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
+    protected void initialize() {
 
-        String scheduleModeStr = nodeInstance.valueString(FIELD_SCHEDULE_MODE);
+        String scheduleModeStr = valueString(FIELD_SCHEDULE_MODE);
         ScheduleMode scheduleMode = scheduleModeStr != null ? Enums.getIfPresent(ScheduleMode.class, scheduleModeStr).orNull() : null;
         String runDateTime = null;
         eventBody.put(FIELD_SCHEDULE_MODE, scheduleMode);
 
         if (scheduleMode == ScheduleMode.ONCE) {
-            validFieldConfig(nodeInstance, FIELD_RUN_DATE_TIME);
-            runDateTime = nodeInstance.valueString(FIELD_RUN_DATE_TIME);
+            validFieldConfig(FIELD_RUN_DATE_TIME);
+            runDateTime = valueString(FIELD_RUN_DATE_TIME);
             eventBody.put(FIELD_RUN_TIME, runDateTime);
             return;
         }
 
 
 
-        String periodUnitStr = nodeInstance.valueString(FIELD_PERIOD_UNIT);
+        String periodUnitStr = valueString(FIELD_PERIOD_UNIT);
         TimePeriod timePeriod = periodUnitStr != null ? Enums.getIfPresent(TimePeriod.class, periodUnitStr).orNull() : null;
         if (timePeriod == null) {
             throw ConfigException.buildMissingException(this.getClass(), FIELD_PERIOD_UNIT);
         }
         String periodTimesStr = null;
-        String runTime = nodeInstance.valueString(FIELD_RUN_TIME);
+        String runTime = valueString(FIELD_RUN_TIME);
         List<String> periodTimes = null;
         switch (timePeriod) {
             case MONTH:
-                periodTimesStr = nodeInstance.valueString(FIELD_PERIOD_MONTH_TIME);
-                validFieldConfig(nodeInstance, FIELD_RUN_TIME);
+                periodTimesStr = valueString(FIELD_PERIOD_MONTH_TIME);
+                validFieldConfig(FIELD_RUN_TIME);
                 break;
             case WEEK:
-                periodTimesStr = nodeInstance.valueString(FIELD_PERIOD_WEEK_TIME);
-                validFieldConfig(nodeInstance, FIELD_RUN_TIME);
+                periodTimesStr = valueString(FIELD_PERIOD_WEEK_TIME);
+                validFieldConfig(FIELD_RUN_TIME);
                 break;
             case DAY:
-                periodTimesStr = nodeInstance.valueString(FIELD_PERIOD_DAY_TIME);
-                validFieldConfig(nodeInstance, FIELD_RUN_TIME);
+                periodTimesStr = valueString(FIELD_PERIOD_DAY_TIME);
+                validFieldConfig(FIELD_RUN_TIME);
                 break;
             case HOUR:
-                periodTimesStr = nodeInstance.valueString(FIELD_PERIOD_HOUR_TIME);
+                periodTimesStr = valueString(FIELD_PERIOD_HOUR_TIME);
                 break;
             case MINUTE:
-                periodTimesStr = nodeInstance.valueString(FIELD_PERIOD_MINUTE_TIME);
+                periodTimesStr = valueString(FIELD_PERIOD_MINUTE_TIME);
                 break;
             default:
                 break;

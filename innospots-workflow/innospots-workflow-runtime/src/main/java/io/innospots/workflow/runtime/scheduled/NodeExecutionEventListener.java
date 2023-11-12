@@ -18,18 +18,17 @@
 
 package io.innospots.workflow.runtime.scheduled;
 
-import io.innospots.base.events.EventBody;
 import io.innospots.base.events.IEventListener;
 import io.innospots.workflow.core.engine.FlowEngineManager;
 import io.innospots.workflow.core.engine.IFlowEngine;
 import io.innospots.workflow.core.enums.FlowStatus;
-import io.innospots.workflow.core.execution.ExecutionStatus;
-import io.innospots.workflow.core.execution.flow.FlowExecution;
-import io.innospots.workflow.core.execution.node.NodeExecution;
+import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.operator.IFlowExecutionOperator;
 import io.innospots.workflow.core.execution.operator.INodeExecutionOperator;
 import io.innospots.workflow.core.execution.operator.IScheduledNodeExecutionOperator;
-import io.innospots.workflow.core.execution.scheduled.ScheduledNodeExecution;
+import io.innospots.workflow.core.execution.model.scheduled.ScheduledNodeExecution;
 import io.innospots.workflow.core.flow.BuildProcessInfo;
 import lombok.extern.slf4j.Slf4j;
 

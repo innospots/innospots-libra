@@ -19,9 +19,9 @@
 package io.innospots.workflow.core.debug;
 
 
-import io.innospots.workflow.core.execution.ExecutionResource;
-import io.innospots.workflow.core.execution.flow.FlowExecution;
-import io.innospots.workflow.core.execution.node.NodeExecutionDisplay;
+import io.innospots.workflow.core.execution.model.ExecutionResource;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.node.NodeExecutionDisplay;
 import io.innospots.workflow.core.runtime.webhook.WorkflowResponse;
 import org.springframework.web.multipart.MultipartFile;
 

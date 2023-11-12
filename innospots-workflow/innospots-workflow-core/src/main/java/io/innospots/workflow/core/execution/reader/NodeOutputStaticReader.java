@@ -18,9 +18,8 @@
 
 package io.innospots.workflow.core.execution.reader;
 
-import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.BeanContextAwareUtils;
-import io.innospots.workflow.core.execution.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;
 
 import java.util.List;

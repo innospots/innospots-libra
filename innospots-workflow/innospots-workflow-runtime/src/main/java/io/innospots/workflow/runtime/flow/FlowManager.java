@@ -24,7 +24,7 @@ import io.innospots.workflow.core.execution.listener.INodeExecutionListener;
 import io.innospots.workflow.core.flow.BuildProcessInfo;
 import io.innospots.workflow.core.flow.WorkflowBody;
 import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.node.executor.TriggerNode;
 import io.innospots.workflow.core.runtime.FlowRuntimeRegistry;
 import io.innospots.workflow.node.app.StateNode;
@@ -209,7 +209,7 @@ public class FlowManager implements Closeable {
     public List<FlowRuntimeRegistry> currentFlowTriggers() {
         List<FlowRuntimeRegistry> triggerInfos = new ArrayList<>();
         for (Flow flow : this.flowCache.values()) {
-            for (BaseAppNode startNode : flow.startNodes()) {
+            for (BaseNodeExecutor startNode : flow.startNodes()) {
                 FlowRuntimeRegistry flowRuntimeRegistry = new FlowRuntimeRegistry();
                 flowRuntimeRegistry.setFlowKey(flow.getFlowKey());
                 flowRuntimeRegistry.setFlowStatus(flow.getFlowStatus());

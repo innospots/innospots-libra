@@ -30,8 +30,8 @@ import io.innospots.workflow.core.node.definition.dao.FlowNodeGroupNodeDao;
 import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
 import io.innospots.workflow.core.node.definition.entity.FlowNodeGroupEntity;
 import io.innospots.workflow.core.node.definition.entity.FlowNodeGroupNodeEntity;
-import io.innospots.workflow.core.node.definition.model.NodeNodeDefinition;
-import io.innospots.workflow.core.node.definition.model.AppNodeGroup;
+import io.innospots.workflow.core.node.definition.model.NodeDefinition;
+import io.innospots.workflow.core.node.definition.model.NodeGroup;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,7 +68,7 @@ public class FlowNodeGroupOperator {
      * @param position
      * @return NodeGroup
      */
-    public AppNodeGroup createNodeGroup(Integer flowTplId, String name, String code, Integer position) {
+    public NodeGroup createNodeGroup(Integer flowTplId, String name, String code, Integer position) {
         //check name and code exits
         QueryWrapper<FlowNodeGroupEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(FlowNodeGroupEntity::getFlowTplId, flowTplId)
@@ -188,7 +188,7 @@ public class FlowNodeGroupOperator {
     }
 
 
-    public List<AppNodeGroup> getGroupByFlowTplId(Integer flowTplId, boolean includeNodes) {
+    public List<NodeGroup> getGroupByFlowTplId(Integer flowTplId, boolean includeNodes) {
         QueryWrapper<FlowNodeGroupEntity> ngEntityQuery = new QueryWrapper<>();
         ngEntityQuery.lambda().eq(FlowNodeGroupEntity::getFlowTplId, flowTplId).orderByAsc(FlowNodeGroupEntity::getPosition);
 
@@ -196,7 +196,7 @@ public class FlowNodeGroupOperator {
         if (CollectionUtils.isEmpty(list)) {
             return null;
         }
-        Map<Integer, List<NodeNodeDefinition>> ndMap = new HashMap<>();
+        Map<Integer, List<NodeDefinition>> ndMap = new HashMap<>();
         if (includeNodes) {
             List<FlowNodeDefinitionEntity> ndList = flowNodeDefinitionDao.getNodeDefinitionByFlowTplIdAndStatus(flowTplId, DataStatus.ONLINE);
             if (CollectionUtils.isNotEmpty(ndList)) {
@@ -208,11 +208,11 @@ public class FlowNodeGroupOperator {
                 }
             }
         }
-        List<AppNodeGroup> resultList = new ArrayList<>();
+        List<NodeGroup> resultList = new ArrayList<>();
         for (FlowNodeGroupEntity nodeGroupEntity : list) {
-            AppNodeGroup appNodeGroup = FlowNodeGroupConverter.INSTANCE.entityToModel(nodeGroupEntity);
-            appNodeGroup.setNodes(ndMap.getOrDefault(appNodeGroup.getNodeGroupId(), new ArrayList<>()));
-            resultList.add(appNodeGroup);
+            NodeGroup nodeGroup = FlowNodeGroupConverter.INSTANCE.entityToModel(nodeGroupEntity);
+            nodeGroup.setNodes(ndMap.getOrDefault(nodeGroup.getNodeGroupId(), new ArrayList<>()));
+            resultList.add(nodeGroup);
         }
         return resultList;
     }

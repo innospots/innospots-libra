@@ -22,7 +22,7 @@ import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.base.utils.CCH;
 import io.innospots.workflow.core.execution.entity.ScheduledNodeExecutionEntity;
-import io.innospots.workflow.core.execution.scheduled.ScheduledNodeExecution;
+import io.innospots.workflow.core.execution.model.scheduled.ScheduledNodeExecution;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

@@ -20,9 +20,9 @@ package io.innospots.workflow.node.app.logic;
 
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.utils.BeanUtils;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.field.InputField;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.core.runtime.FlowEventBody;
@@ -60,11 +60,10 @@ public class FlowNode extends BaseDataNode {
 
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
-        syncSwitch = nodeInstance.valueBoolean(SYNC_SWITCH);
+    protected void initialize() {
+        syncSwitch = valueBoolean(SYNC_SWITCH);
         flowKey = this.valueString(SUB_FLOW_KEY);
-        inputFields = NodeInstanceUtils.convertToList(nodeInstance,INPUT_FIELDS,InputField.class);
+        inputFields = NodeInstanceUtils.convertToList(ni,INPUT_FIELDS,InputField.class);
     }
 
     @Override

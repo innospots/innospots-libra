@@ -30,7 +30,7 @@ import io.innospots.workflow.core.instance.entity.NodeInstanceEntity;
 import io.innospots.workflow.console.enums.FlowVersion;
 import io.innospots.workflow.core.instance.converter.NodeInstanceConverter;
 import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
-import io.innospots.workflow.core.node.definition.model.NodeNodeDefinition;
+import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -147,7 +147,7 @@ public class NodeInstanceOperator extends ServiceImpl<NodeInstanceDao, NodeInsta
 
             for (NodeInstanceEntity nodeInstanceEntity : nodeInstanceEntities) {
                 try {
-                    NodeNodeDefinition appNodeDefinition = flowNodeDefinitionOperator.getNodeDefinition(nodeInstanceEntity.getNodeDefinitionId());
+                    NodeDefinition appNodeDefinition = flowNodeDefinitionOperator.getNodeDefinition(nodeInstanceEntity.getNodeDefinitionId());
                     list.add(NodeInstanceConverter.INSTANCE.entityToModel(nodeInstanceEntity, appNodeDefinition));
                     if (appNodeDefinition == null) {
                         log.warn("node definition not exist,{} ", nodeInstanceEntity.getNodeInstanceId());

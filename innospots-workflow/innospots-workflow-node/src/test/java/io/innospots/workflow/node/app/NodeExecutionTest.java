@@ -1,8 +1,8 @@
 package io.innospots.workflow.node.app;
 
 import io.innospots.base.json.JSONUtils;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

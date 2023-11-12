@@ -19,11 +19,11 @@
 package io.innospots.workflow.node.app.logic;
 
 import com.google.common.base.Enums;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.flow.FlowExecution;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.node.field.NodeParamField;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.utils.NodeInstanceUtils;
@@ -39,7 +39,7 @@ import java.util.Map;
  * @author Smars
  * @date 2021/9/19
  */
-public class EndNode extends BaseAppNode {
+public class EndNode extends BaseNodeExecutor {
 
     private ReturnValueType returnValueType;
 
@@ -51,13 +51,11 @@ public class EndNode extends BaseAppNode {
 
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
-        validFieldConfig(nodeInstance, RETURN_VALUE_TYPE);
-        returnValueType = Enums.getIfPresent(ReturnValueType.class, nodeInstance.valueString(RETURN_VALUE_TYPE)).orNull();
+    protected void initialize() {
+        returnValueType = Enums.getIfPresent(ReturnValueType.class, validString(RETURN_VALUE_TYPE)).orNull();
 
         if (returnValueType == ReturnValueType.FIELD) {
-            responseFields = NodeInstanceUtils.buildParamFields(nodeInstance, RESPONSE_FIELD);
+            responseFields = NodeInstanceUtils.buildParamFields(ni, RESPONSE_FIELD);
         }
     }
 

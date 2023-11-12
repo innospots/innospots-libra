@@ -1,8 +1,8 @@
 package io.innospots.workflow.node.app;
 
 import io.innospots.base.exception.ScriptException;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.logic.ConditionNode;
 import lombok.extern.slf4j.Slf4j;

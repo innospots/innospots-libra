@@ -25,13 +25,13 @@ import io.innospots.base.exception.ResourceException;
 import io.innospots.workflow.core.engine.IFlowEngine;
 import io.innospots.workflow.core.enums.FlowStatus;
 import io.innospots.workflow.core.exception.FlowPrepareException;
-import io.innospots.workflow.core.execution.ExecutionStatus;
-import io.innospots.workflow.core.execution.FlowExecutionTaskEvent;
-import io.innospots.workflow.core.execution.flow.FlowExecution;
+import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.workflow.core.execution.events.FlowExecutionTaskEvent;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.listener.IFlowExecutionListener;
-import io.innospots.workflow.core.execution.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.flow.BuildProcessInfo;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.runtime.flow.Flow;
 import io.innospots.workflow.runtime.flow.FlowManager;
 import org.apache.commons.collections4.CollectionUtils;
@@ -139,7 +139,7 @@ public abstract class BaseFlowEngine implements IFlowEngine {
         }
 
         try {
-            BaseAppNode appNode = flow.findNode(flowExecution.getCurrentNodeKeys().get(0));
+            BaseNodeExecutor appNode = flow.findNode(flowExecution.getCurrentNodeKeys().get(0));
             flowExecution.setCurrentNodeKeys(appNode.nextNodeKeys());
             execute(flow, flowExecution);
         } catch (Exception e) {

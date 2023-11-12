@@ -22,12 +22,13 @@ import cn.hutool.core.builder.CompareToBuilder;
 import cn.hutool.core.comparator.ComparatorChain;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.model.field.ParamField;
+import io.innospots.base.re.IExpression;
 import io.innospots.base.utils.BeanUtils;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.field.NodeParamField;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.utils.NodeInstanceUtils;
 import org.apache.commons.collections4.CollectionUtils;
@@ -40,7 +41,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Smars
  * @date 2021/3/16
  */
-public class ExtractNode extends BaseAppNode {
+public class ExtractNode extends BaseNodeExecutor {
 
 
     private ExtractMode extractMode;
@@ -69,23 +70,23 @@ public class ExtractNode extends BaseAppNode {
 
     private Integer endLine;
 
+    private IExpression expression;
+
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
-        validFieldConfig(nodeInstance, FIELD_EXTRACT_MODE);
-        extractMode = ExtractMode.valueOf(nodeInstance.valueString(FIELD_EXTRACT_MODE));
+    protected void initialize() {
+        extractMode = ExtractMode.valueOf(validString(FIELD_EXTRACT_MODE));
         if (extractMode == ExtractMode.FIELD) {
-            validFieldConfig(nodeInstance, FIELD_EXTRACT_FIELDS);
-            List<Map<String, Object>> v = (List<Map<String, Object>>) nodeInstance.value(FIELD_EXTRACT_FIELDS);
+            validFieldConfig(FIELD_EXTRACT_FIELDS);
+            List<Map<String, Object>> v = valueMapList(FIELD_EXTRACT_FIELDS);
             extractFields = BeanUtils.toBean(v, ParamField.class);
         } else if (extractMode == ExtractMode.EMBED) {
-            validFieldConfig(nodeInstance, FIELD_EMBED_FIELDS);
-            List<Map<String, Object>> v = (List<Map<String, Object>>) nodeInstance.value(FIELD_EMBED_FIELDS);
+            validFieldConfig(FIELD_EMBED_FIELDS);
+            List<Map<String, Object>> v = valueMapList(FIELD_EMBED_FIELDS);
             extractFields = BeanUtils.toBean(v, ParamField.class);
         }
-        this.expression = NodeInstanceUtils.buildExpression(nodeInstance,EXTRACT_CONDITION,this);
-        orderFields = NodeInstanceUtils.buildParamFields(nodeInstance,FIELD_ORDER);
-        String oType = nodeInstance.valueString(ORDER_TYPE);
+        this.expression = NodeInstanceUtils.buildExpression(ni,EXTRACT_CONDITION,this);
+        orderFields = NodeInstanceUtils.buildParamFields(ni,FIELD_ORDER);
+        String oType = valueString(ORDER_TYPE);
         if(orderFields!=null){
             if(oType != null){
                 orderType = OrderType.valueOf(oType);
@@ -94,13 +95,13 @@ public class ExtractNode extends BaseAppNode {
             }
 
         }
-        lineCount = nodeInstance.valueInteger(LINE_COUNT);
+        lineCount = valueInteger(LINE_COUNT);
         if(lineCount==null || lineCount ==0){
             lineCount = Integer.MAX_VALUE;
         }
         if(extractMode == ExtractMode.RANGE){
-            startLine = nodeInstance.valueInteger(START_LINE);
-            endLine = nodeInstance.valueInteger(END_LINE);
+            startLine = valueInteger(START_LINE);
+            endLine = valueInteger(END_LINE);
             if(startLine!=null && endLine!=null && startLine > endLine){
                 throw ConfigException.buildParamException(this.getClass(),"startLine greater than endLine,",startLine,endLine);
             }

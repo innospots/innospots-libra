@@ -21,11 +21,12 @@ package io.innospots.workflow.node.app.logic;
 
 import io.innospots.base.condition.EmbedCondition;
 import io.innospots.base.exception.ConfigException;
+import io.innospots.base.re.IExpression;
 import io.innospots.base.re.aviator.AviatorExpression;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.utils.NodeInstanceUtils;
 import org.slf4j.Logger;
@@ -41,7 +42,7 @@ import java.util.Map;
  * @version 1.0.0
  * @date 2020/11/3
  */
-public class ConditionNode extends BaseAppNode {
+public class ConditionNode extends BaseNodeExecutor {
 
 
     private static final Logger logger = LoggerFactory.getLogger(ConditionNode.class);
@@ -53,13 +54,13 @@ public class ConditionNode extends BaseAppNode {
     public static final String FIELD_TRUE_ANCHOR_KEY = "true-out";
     public static final String FIELD_FALSE_ANCHOR_KEY = "false-out";
     public static final String FIELD_CONDITIONS = "conditions";
+    private IExpression expression;
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
-        this.trueNextNodeKeys = nodeInstance.findNodeKeysByAnchor(FIELD_TRUE_ANCHOR_KEY);
-        this.falseNextNodeKeys = nodeInstance.findNodeKeysByAnchor(FIELD_FALSE_ANCHOR_KEY);
-        EmbedCondition embedCondition = NodeInstanceUtils.buildCondition(nodeInstance,FIELD_CONDITIONS,this);
+    protected void initialize() {
+        this.trueNextNodeKeys = ni.findNodeKeysByAnchor(FIELD_TRUE_ANCHOR_KEY);
+        this.falseNextNodeKeys = ni.findNodeKeysByAnchor(FIELD_FALSE_ANCHOR_KEY);
+        EmbedCondition embedCondition = NodeInstanceUtils.buildCondition(ni,FIELD_CONDITIONS,this);
         if(embedCondition==null){
             throw ConfigException.buildMissingException(this.getClass(), "nodeKey:" + this.nodeKey() + ", field:" + FIELD_CONDITIONS);
         }

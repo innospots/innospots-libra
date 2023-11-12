@@ -32,9 +32,9 @@ import io.innospots.base.data.body.DataBody;
 import io.innospots.base.re.IExpression;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.base.utils.PlaceholderUtils;
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.core.utils.WorkflowUtils;
 import lombok.Getter;
@@ -86,20 +86,19 @@ public class ApiDataNode extends DataNode {
     private Cache<String, DataBody> dataBodyCache;
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
-        this.outputPayload = nodeInstance.valueBoolean(FIELD_PAYLOAD);
+    protected void initialize() {
+        super.initialize();
+        this.outputPayload = valueBoolean(FIELD_PAYLOAD);
         if (this.outputPayload) {
-            fillOutputConfig(nodeInstance);
-            validFieldConfig(nodeInstance, FIELD_JSON_PATH);
-            this.extractJsonPath = nodeInstance.valueString(FIELD_JSON_PATH);
-            dataCache = nodeInstance.valueBoolean(FIELD_SWITCH_CACHE);
+            fillOutputConfig();
+            this.extractJsonPath = validString(FIELD_JSON_PATH);
+            dataCache = valueBoolean(FIELD_SWITCH_CACHE);
             if (dataCache) {
                 dataBodyCache = Caffeine.newBuilder().expireAfterWrite(
-                        nodeInstance.valueInteger(FIELD_CACHE_SECOND), TimeUnit.SECONDS).build();
+                        valueInteger(FIELD_CACHE_SECOND), TimeUnit.SECONDS).build();
             }
         }
-        Object urlInfo = nodeInstance.value(FIELD_URL);
+        Object urlInfo = value(FIELD_URL);
         if (urlInfo instanceof List) {
             operation = (String) ((List<?>) urlInfo).get(0);
             urlAddress = (String) ((List<?>) urlInfo).get(1);
@@ -109,7 +108,7 @@ public class ApiDataNode extends DataNode {
             IDataConnectionMinder connectorMinder = DataConnectionMinderManager.getCredentialMinder(credentialKey);
         }
 
-        List<Map<String, Object>> fieldParams = nodeInstance.valueList(FIELD_REQUEST_PARAMS);
+        List<Map<String, Object>> fieldParams = valueMapList(FIELD_REQUEST_PARAMS);
 
         if (CollectionUtils.isNotEmpty(fieldParams)) {
             requestParam = new RequestParam();
@@ -201,14 +200,15 @@ public class ApiDataNode extends DataNode {
             return;
         }
         Object body = httpResponse.getBody();
-        if (this.expression != null) {
-            body = this.expression.execute(JSONUtils.objectToMap(body));
-        }
+//        if (this.expression != null) {
+//            body = this.expression.execute(JSONUtils.objectToMap(body));
+//        }
         body = extract(body);
         fillOutput(nodeOutput, item, body);
     }
 
     private Map<String, Object> prevExecute(Map<String, Object> item) {
+        /*
         if (this.actionScripts == null) {
             return item;
         }
@@ -217,6 +217,8 @@ public class ApiDataNode extends DataNode {
             return item;
         }
         return (Map<String, Object>) exp.execute(item);
+         */
+        return item;
     }
 
 

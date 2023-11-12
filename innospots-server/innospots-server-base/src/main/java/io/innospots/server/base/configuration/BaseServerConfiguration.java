@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.re.GenericExpressionEngine;
 import io.innospots.base.utils.BeanContextAwareUtils;
+import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.server.base.exception.GlobalExceptionHandler;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.BeanContextAware;
@@ -32,16 +33,22 @@ import io.innospots.base.watcher.WatcherSupervisor;
 import io.innospots.server.base.registry.ServiceRegistryDao;
 import io.innospots.server.base.registry.ServiceRegistryManager;
 import io.innospots.server.base.registry.ServiceRegistryStarter;
+import org.apache.commons.lang3.StringUtils;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.actuate.info.Info;
+import org.springframework.boot.actuate.info.InfoContributor;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 /**
@@ -108,6 +115,5 @@ public class BaseServerConfiguration {
     public ObjectMapper jackson2ObjectMapper() {
         return JSONUtils.customMapper();
     }
-
 
 }

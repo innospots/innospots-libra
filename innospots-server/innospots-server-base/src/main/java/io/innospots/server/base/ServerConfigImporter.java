@@ -18,11 +18,20 @@
 
 package io.innospots.server.base;
 
+import io.innospots.base.utils.BeanContextAware;
+import io.innospots.base.utils.BeanContextAwareUtils;
+import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.server.base.configuration.BaseServerConfiguration;
 import io.innospots.server.base.configuration.DatasourceConfiguration;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.boot.actuate.info.Info;
+import org.springframework.boot.actuate.info.InfoContributor;
 import org.springframework.context.annotation.Import;
+import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author Smars
@@ -33,6 +42,24 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-@Import({DatasourceConfiguration.class, BaseServerConfiguration.class})
+@Import({DatasourceConfiguration.class, BaseServerConfiguration.class, ServerConfigImporter.MyInfo.class})
 public @interface ServerConfigImporter {
+
+    /**
+     * /actuator/info config
+     */
+    class MyInfo implements InfoContributor {
+        @Override
+        public void contribute(Info.Builder builder) {
+            BeanContextAware context = BeanContextAwareUtils.beanContextAware();
+            Map<String, String> runInfo = new LinkedHashMap<>();
+            runInfo.put("applicationId", context.applicationId());
+            runInfo.put("applicationName", context.getApplicationName());
+            runInfo.put("upTime", DateTimeUtils.consume(context.getStartupDate()));
+            runInfo.put("activeProFiles", StringUtils.join(context.activeProfiles(), "|"));
+            builder.withDetail("info", runInfo);
+        }
+    }
 }
+
+

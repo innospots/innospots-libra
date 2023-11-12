@@ -18,10 +18,10 @@
 
 package io.innospots.workflow.node.app.execute;
 
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.node.field.NodeParamField;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.utils.NodeInstanceUtils;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  * @date 2021/3/16
  */
 @Slf4j
-public class GroupTransformNode extends BaseAppNode {
+public class GroupTransformNode extends BaseNodeExecutor {
 
 
     private List<NodeParamField> dimensionFields;
@@ -61,19 +61,17 @@ public class GroupTransformNode extends BaseAppNode {
 
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
-        validFieldConfig(nodeInstance, FIELD_SOURCE_TYPE);
-        validFieldConfig(nodeInstance, FIELD_AGGREGATE);
-        sourceFieldType = nodeInstance.valueString(FIELD_SOURCE_TYPE);
+    protected void initialize() {
+        validFieldConfig(FIELD_SOURCE_TYPE);
+        validFieldConfig(FIELD_AGGREGATE);
+        sourceFieldType = valueString(FIELD_SOURCE_TYPE);
         if("payload".equals(sourceFieldType)){
-            dimensionFields = NodeInstanceUtils.buildParamFields(nodeInstance,FIELD_DIMENSION_PAYLOAD);
+            dimensionFields = NodeInstanceUtils.buildParamFields(ni,FIELD_DIMENSION_PAYLOAD);
         }else if("list".equals(sourceFieldType)){
-            dimensionFields = NodeInstanceUtils.buildParamFields(nodeInstance,FIELD_DIMENSION_LIST);
-            listField = NodeInstanceUtils.buildParamField(nodeInstance,FIELD_PARENT_LIST);
+            dimensionFields = NodeInstanceUtils.buildParamFields(ni,FIELD_DIMENSION_LIST);
+            listField = NodeInstanceUtils.buildParamField(ni,FIELD_PARENT_LIST);
         }
-
-        computeFields = NodeInstanceUtils.buildAggregationComputeFields(nodeInstance,FIELD_AGGREGATE);
+        computeFields = NodeInstanceUtils.buildAggregationComputeFields(ni,FIELD_AGGREGATE);
 
     }
 

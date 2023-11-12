@@ -21,9 +21,9 @@ package io.innospots.workflow.node.app.logic;
 import io.innospots.base.model.field.ComputeField;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.workflow.node.app.data.OutputFieldMode;
-import io.innospots.workflow.core.execution.flow.FlowExecution;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 
 import java.util.List;
@@ -33,7 +33,7 @@ import java.util.List;
  * @version 1.0.0
  * @date 2022/10/7
  */
-public class LoopNode extends BaseAppNode {
+public class LoopNode extends BaseNodeExecutor {
     private ParamField aggregateField;
 
     private List<ComputeField> computeFields;
@@ -49,8 +49,7 @@ public class LoopNode extends BaseAppNode {
 
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
+    protected void initialize() {
     }
 
     @Override

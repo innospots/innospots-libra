@@ -21,7 +21,7 @@ package io.innospots.workflow.core.node.definition.converter;
 import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.workflow.core.node.NodeInfo;
 import io.innospots.workflow.core.node.definition.entity.FlowNodeGroupEntity;
-import io.innospots.workflow.core.node.definition.model.AppNodeGroup;
+import io.innospots.workflow.core.node.definition.model.NodeGroup;
 import io.innospots.workflow.core.node.definition.model.NodeGroupBaseInfo;
 import org.apache.commons.collections4.CollectionUtils;
 import org.mapstruct.Mapper;
@@ -38,21 +38,21 @@ import java.util.List;
  * @date 2021-12-25 17:49:00
  */
 @Mapper
-public interface FlowNodeGroupConverter extends BaseBeanConverter<AppNodeGroup, FlowNodeGroupEntity> {
+public interface FlowNodeGroupConverter extends BaseBeanConverter<NodeGroup, FlowNodeGroupEntity> {
 
     FlowNodeGroupConverter INSTANCE = Mappers.getMapper(FlowNodeGroupConverter.class);
 
 
-    default List<NodeGroupBaseInfo> modelToBaseList(List<AppNodeGroup> appNodeGroups) {
-        if (appNodeGroups == null) {
+    default List<NodeGroupBaseInfo> modelToBaseList(List<NodeGroup> nodeGroups) {
+        if (nodeGroups == null) {
             return Collections.emptyList();
         }
         List<NodeGroupBaseInfo> groupBaseInfos = new ArrayList<>();
         List<NodeInfo> nodes = new ArrayList<>();
         NodeGroupBaseInfo allGroupInfo = null;
-        for (AppNodeGroup appNodeGroup : appNodeGroups) {
-            NodeGroupBaseInfo nodeGroupBaseInfo = modelToBase(appNodeGroup);
-            if ("all".equals(appNodeGroup.getCode())) {
+        for (NodeGroup nodeGroup : nodeGroups) {
+            NodeGroupBaseInfo nodeGroupBaseInfo = modelToBase(nodeGroup);
+            if ("all".equals(nodeGroup.getCode())) {
                 allGroupInfo = nodeGroupBaseInfo;
             }
             groupBaseInfos.add(nodeGroupBaseInfo);
@@ -66,7 +66,7 @@ public interface FlowNodeGroupConverter extends BaseBeanConverter<AppNodeGroup, 
         return groupBaseInfos;
     }
 
-    default NodeGroupBaseInfo modelToBase(AppNodeGroup nodeGroup) {
+    default NodeGroupBaseInfo modelToBase(NodeGroup nodeGroup) {
         if (nodeGroup == null) {
             return null;
         }
@@ -87,6 +87,6 @@ public interface FlowNodeGroupConverter extends BaseBeanConverter<AppNodeGroup, 
      * @param model
      * @param entity
      */
-    void modelToEntity(AppNodeGroup model, @MappingTarget FlowNodeGroupEntity entity);
+    void modelToEntity(NodeGroup model, @MappingTarget FlowNodeGroupEntity entity);
 
 }

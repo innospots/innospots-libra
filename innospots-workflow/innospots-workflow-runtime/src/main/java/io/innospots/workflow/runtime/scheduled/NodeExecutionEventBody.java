@@ -19,7 +19,7 @@
 package io.innospots.workflow.runtime.scheduled;
 
 import io.innospots.base.events.EventBody;
-import io.innospots.workflow.core.execution.scheduled.ScheduledNodeExecution;
+import io.innospots.workflow.core.execution.model.scheduled.ScheduledNodeExecution;
 import lombok.Getter;
 import lombok.Setter;
 

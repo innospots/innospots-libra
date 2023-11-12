@@ -18,13 +18,10 @@
 
 package io.innospots.workflow.node.app;
 
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.ExecutionStatus;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.node.field.NodeParamField;
-import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.utils.NodeInstanceUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,7 +40,7 @@ import java.util.Map;
 @Getter
 @Setter
 @Slf4j
-public class StateNode extends BaseAppNode {
+public class StateNode extends BaseNodeExecutor {
 
 
     private static final String FIELDS = "fields";
@@ -57,17 +54,17 @@ public class StateNode extends BaseAppNode {
     private boolean hasInputField;
 
     @Override
-    protected void initialize(NodeInstance nodeInstance) {
-        super.initialize(nodeInstance);
+    protected void initialize() {
         stateNodeType = StateNodeType.valueOf(this.ni.getCode());
         if(stateNodeType == StateNodeType.START){
-            hasInputField = nodeInstance.valueBoolean(HAS_INPUT_FIELD);
+            hasInputField = ni.valueBoolean(HAS_INPUT_FIELD);
             if(hasInputField){
-                inputFields = NodeInstanceUtils.buildParamFields(nodeInstance,FIELDS);
+                inputFields = NodeInstanceUtils.buildParamFields(ni,FIELDS);
             }
         }
     }
 
+    /*
     @Override
     public void invoke(NodeExecution nodeExecution) {
         if(stateNodeType == StateNodeType.START){
@@ -110,6 +107,26 @@ public class StateNode extends BaseAppNode {
         }else{
             super.invoke(nodeExecution);
         }
+    }
+
+     */
+
+    @Override
+    protected Object processItem(Map<String, Object> item) {
+        if(hasInputField && CollectionUtils.isEmpty(inputFields)){
+            return item;
+        }
+        Map<String,Object> nItem = new LinkedHashMap<>();
+        for (NodeParamField inputField : inputFields) {
+            Object v = item != null? item.getOrDefault(inputField.getCode(),inputField.getValue()) : inputField.getValue();
+            if(v!=null &&StringUtils.isNotEmpty(v.toString())){
+                nItem.put(inputField.getCode(),v);
+            }
+        }//end inputFields
+        if(log.isDebugEnabled()){
+            log.debug("start node input:{}",nItem);
+        }
+        return nItem;
     }
 
     @Override

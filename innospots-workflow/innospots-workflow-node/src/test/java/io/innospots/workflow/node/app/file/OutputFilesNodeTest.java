@@ -1,11 +1,11 @@
 package io.innospots.workflow.node.app.file;
 
-import io.innospots.workflow.core.execution.ExecutionInput;
-import io.innospots.workflow.core.execution.ExecutionResource;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeExecutionDisplay;
-import io.innospots.workflow.core.execution.node.NodeOutput;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.ExecutionResource;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeExecutionDisplay;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.BaseNodeTest;
 import io.innospots.workflow.node.app.NodeExecutionTest;
@@ -26,7 +26,7 @@ class OutputFilesNodeTest {
         NodeInstance nodeInstance = BaseNodeTest.build(OutputFilesNodeTest.class.getSimpleName()+".json");
         System.out.println(nodeInstance);
         System.out.println(System.getenv("HOME"));
-        BaseAppNode appNode = BaseNodeTest.baseAppNode(OutputFilesNodeTest.class.getSimpleName());
+        BaseNodeExecutor appNode = BaseNodeTest.baseAppNode(OutputFilesNodeTest.class.getSimpleName());
         NodeExecution ne2 = LoadFilesNodeTest.readExecution();
         NodeExecution nodeExecution = NodeExecutionTest.build("key12345");
 

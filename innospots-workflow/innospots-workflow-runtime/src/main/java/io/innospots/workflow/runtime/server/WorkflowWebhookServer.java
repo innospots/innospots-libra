@@ -21,7 +21,7 @@ package io.innospots.workflow.runtime.server;
 import io.innospots.base.exception.BaseException;
 import io.innospots.base.exception.ErrorResponse;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.workflow.core.execution.flow.FlowExecutionBase;
+import io.innospots.workflow.core.execution.model.flow.FlowExecutionBase;
 import io.innospots.workflow.core.runtime.webhook.WorkflowResponse;
 import io.innospots.workflow.runtime.container.WebhookRuntimeContainer;
 import io.netty.channel.ChannelOption;

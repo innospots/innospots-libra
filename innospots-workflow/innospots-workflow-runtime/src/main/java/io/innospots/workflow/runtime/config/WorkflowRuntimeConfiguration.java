@@ -22,6 +22,7 @@ package io.innospots.workflow.runtime.config;
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.quartz.QuartzScheduleManager;
 import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
+import io.innospots.workflow.core.config.WorkflowCoreConfiguration;
 import io.innospots.workflow.core.debug.FlowNodeDebugger;
 import io.innospots.workflow.core.execution.listener.IFlowExecutionListener;
 import io.innospots.workflow.core.execution.operator.IFlowExecutionOperator;
@@ -30,7 +31,7 @@ import io.innospots.workflow.core.execution.operator.IScheduledNodeExecutionOper
 import io.innospots.workflow.core.execution.reader.NodeExecutionReader;
 import io.innospots.workflow.core.execution.store.FlowExecutionStoreListener;
 import io.innospots.workflow.core.execution.store.NodeExecutionStoreListener;
-import io.innospots.workflow.core.flow.reader.IWorkflowReader;
+import io.innospots.workflow.core.flow.draft.IWorkflowDraftOperator;
 import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
 import io.innospots.workflow.core.runtime.webhook.DefaultResponseBuilder;
 import io.innospots.workflow.runtime.container.*;
@@ -51,6 +52,7 @@ import org.springframework.boot.availability.ApplicationAvailability;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 import java.util.List;
 
@@ -59,10 +61,9 @@ import java.util.List;
  * @date 2021/3/15
  */
 @Configuration
+@Import({WorkflowCoreConfiguration.class})
 @EnableConfigurationProperties(WorkflowRuntimeProperties.class)
 public class WorkflowRuntimeConfiguration {
-
-
 
     @Bean
     public FlowExecutionStoreListener flowExecutionStoreListener(IFlowExecutionOperator flowExecutionOperator) {
@@ -167,9 +168,9 @@ public class WorkflowRuntimeConfiguration {
     @Bean
     public FlowNodeDebugger nodeDebugger(NodeExecutionReader nodeExecutionReader,
                                          IFlowExecutionOperator flowExecutionOperator,
-                                         IWorkflowReader workFlowBuilderOperator
+                                         IWorkflowDraftOperator workflowDraftOperator
     ) {
-        return new FlowNodeSimpleDebugger(workFlowBuilderOperator, nodeExecutionReader, flowExecutionOperator);
+        return new FlowNodeSimpleDebugger(workflowDraftOperator, nodeExecutionReader, flowExecutionOperator);
     }
 
     @Bean

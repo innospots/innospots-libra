@@ -1,8 +1,8 @@
 package io.innospots.workflow.node.app.file;
 
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeExecutionDisplay;
-import io.innospots.workflow.core.node.executor.BaseAppNode;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeExecutionDisplay;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.BaseNodeTest;
 import io.innospots.workflow.node.app.NodeExecutionTest;
@@ -30,7 +30,7 @@ class LoadFilesNodeTest {
         NodeInstance nodeInstance = BaseNodeTest.build(LoadFilesNodeTest.class.getSimpleName()+".json");
         System.out.println(nodeInstance);
         System.out.println(System.getenv("HOME"));
-        BaseAppNode appNode = BaseNodeTest.baseAppNode(LoadFilesNodeTest.class.getSimpleName());
+        BaseNodeExecutor appNode = BaseNodeTest.baseAppNode(LoadFilesNodeTest.class.getSimpleName());
         NodeExecution nodeExecution = NodeExecutionTest.build("key12345");
         appNode.invoke(nodeExecution);
         return nodeExecution;

@@ -23,24 +23,25 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.collect.Lists;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.utils.time.DateTimeUtils;
+import io.innospots.workflow.core.execution.enums.RecordMode;
+import io.innospots.workflow.core.flow.draft.IWorkflowDraftOperator;
 import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
 import io.innospots.workflow.core.debug.DebugPayload;
 import io.innospots.workflow.core.engine.FlowEngineManager;
 import io.innospots.workflow.core.engine.IFlowEngine;
 import io.innospots.workflow.core.enums.FlowStatus;
-import io.innospots.workflow.core.execution.ExecutionResource;
-import io.innospots.workflow.core.execution.ExecutionStatus;
+import io.innospots.workflow.core.execution.model.ExecutionResource;
+import io.innospots.workflow.core.execution.enums.ExecutionStatus;
 import io.innospots.workflow.core.debug.FlowNodeDebugger;
-import io.innospots.workflow.core.execution.FlowExecutionTaskEvent;
-import io.innospots.workflow.core.execution.flow.FlowExecution;
-import io.innospots.workflow.core.execution.node.NodeExecution;
-import io.innospots.workflow.core.execution.node.NodeExecutionBase;
-import io.innospots.workflow.core.execution.node.NodeExecutionDisplay;
+import io.innospots.workflow.core.execution.events.FlowExecutionTaskEvent;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeExecutionBase;
+import io.innospots.workflow.core.execution.model.node.NodeExecutionDisplay;
 import io.innospots.workflow.core.execution.operator.IFlowExecutionOperator;
 import io.innospots.workflow.core.execution.reader.NodeExecutionReader;
 import io.innospots.workflow.core.flow.BuildProcessInfo;
 import io.innospots.workflow.core.flow.WorkflowBaseBody;
-import io.innospots.workflow.core.flow.reader.IWorkflowReader;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.core.runtime.webhook.DefaultResponseBuilder;
 import io.innospots.workflow.core.runtime.webhook.WorkflowResponse;
@@ -68,14 +69,14 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
 
     private IFlowExecutionOperator flowExecutionOperator;
 
-    private IWorkflowReader workflowCacheDraftOperator;
+    private IWorkflowDraftOperator workflowCacheDraftOperator;
 
     private Cache<Long, String> executionCache = Caffeine.newBuilder().build();
 
-    public FlowNodeSimpleDebugger(IWorkflowReader workFlowBuilderOperator,
+    public FlowNodeSimpleDebugger(IWorkflowDraftOperator workflowCacheDraftOperator,
                                   NodeExecutionReader nodeExecutionReader,
                                   IFlowExecutionOperator flowExecutionOperator) {
-        this.workflowCacheDraftOperator = workFlowBuilderOperator;
+        this.workflowCacheDraftOperator = workflowCacheDraftOperator;
         this.nodeExecutionReader = nodeExecutionReader;
         this.flowExecutionOperator = flowExecutionOperator;
     }
@@ -155,6 +156,7 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
                 nodeInstance.setOutputFields(executionDisplay.getOutputFields());
             }
             workflowCacheDraftOperator.saveFlowInstanceToCache(workflowBaseBody);
+
             workflowCacheDraftOperator.saveCacheToDraft(workflowInstanceId);
         }
         try {
@@ -248,7 +250,7 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
 
     @Override
     public WorkflowResponse testWebhook(String flowKey, List<Map<String, Object>> inputs) {
-        WorkflowBaseBody workflowBaseBody = workflowCacheDraftOperator.getWorkflowBodyByKey(flowKey, 0, false);
+        WorkflowBaseBody workflowBaseBody = workflowCacheDraftOperator.getWorkflowBodyByKey(flowKey, false);
         BaseFlowEngine flowEngine = (BaseFlowEngine) FlowEngineManager.eventFlowEngine();
         Long workflowInstanceId = workflowBaseBody.getWorkflowInstanceId();
         BuildProcessInfo buildProcessInfo = flowEngine.prepare(workflowInstanceId, 0, false);
@@ -263,7 +265,7 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
         }
 
         FlowExecution flowExecution = fillFlowExecution(inputs, workflowInstanceId);
-        flowExecution.setSaveSync(false);
+        flowExecution.setRecordMode(RecordMode.ASYNC);
 
         WorkflowRuntimeContext workflowRuntimeContext = WorkflowRuntimeContext.build(flowExecution);
 
@@ -309,7 +311,7 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
             flowExecution = FlowExecution.buildNewFlowExecution(
                     workflowInstanceId, 0, false, false, inputs);
         }
-        flowExecution.setSaveSync(true);
+        flowExecution.setRecordMode(RecordMode.SYNC);
         return flowExecution;
     }
 }
