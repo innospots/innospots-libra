@@ -19,9 +19,15 @@
 package io.innospots.base.connector.schema.meta;
 
 import io.innospots.base.exception.LoadConfigurationException;
+import io.innospots.base.json.JSONUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.annotation.PostConstruct;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -51,7 +57,7 @@ public class ConnectionMinderSchemaLoader {
         // A member variable is already initialized when it is defined
         connectionMinderSchemas.clear();
 
-        /*
+
         try {
             Resource[] resources = new PathMatchingResourcePatternResolver()
                     .getResources("classpath*:META-SOURCE/*.*");
@@ -70,7 +76,7 @@ public class ConnectionMinderSchemaLoader {
         } catch (Exception e) {
             throw LoadConfigurationException.buildException(ConnectionMinderSchemaLoader.class, e, "meta_source configuration load error");
         }
-         */
+
         connectionMinderSchemas.sort(Comparator.comparing(ConnectionMinderSchema::getOrder).reversed());
     }
 
