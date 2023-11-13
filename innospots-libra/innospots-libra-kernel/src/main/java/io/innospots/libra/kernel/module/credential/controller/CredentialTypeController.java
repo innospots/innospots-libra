@@ -99,7 +99,7 @@ public class CredentialTypeController {
     }
 
     @GetMapping("list")
-    @Operation(summary = "page list")
+    @Operation(summary = "list")
     public InnospotResponse<List<CredentialType>> listCredentialTypes(@Parameter(name = "connectorName") @RequestParam(required = false) String connectorName) {
         List<CredentialType> list = credentialTypeOperator.listCredentialTypes(connectorName);
         return success(list);

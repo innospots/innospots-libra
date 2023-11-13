@@ -56,7 +56,7 @@ public class CredentialTypeEntity extends PBaseEntity {
     @Column(length = 32)
     private String connectorName;
 
-    @Column(length = 128)
+    @Column(columnDefinition = "TEXT")
     private String authOption;
 
     @Column(length = 2048)

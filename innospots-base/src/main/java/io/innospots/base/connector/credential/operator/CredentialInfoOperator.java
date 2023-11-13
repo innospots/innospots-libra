@@ -138,8 +138,8 @@ public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, Crede
         if (StringUtils.isNotBlank(formQuery.getQueryInput())) {
             query.lambda().like(CredentialInfoEntity::getName, formQuery.getQueryInput());
         }
-        if(MapUtils.isNotEmpty(formQuery.getParams())){
-            String credentialTypeCode = formQuery.getParams().get("credentialTypeCode");
+        if(MapUtils.isNotEmpty(formQuery.getParamMap())){
+            String credentialTypeCode = formQuery.getParamMap().get("credentialTypeCode");
             if(credentialTypeCode!=null){
                 query.lambda().eq(CredentialInfoEntity::getCredentialTypeCode,credentialTypeCode);
             }

@@ -18,10 +18,13 @@
 
 package io.innospots.base.data.request;
 
+import io.innospots.base.json.JSONUtils;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -35,7 +38,7 @@ public class FormQuery {
 
     protected Integer categoryId;
 
-    protected Map<String,String> params;
+    protected String params;
 
     @Schema(title = "query input something")
     protected String queryInput;
@@ -54,4 +57,11 @@ public class FormQuery {
 
     @Schema(title = "collation (ASC for ascending, DESC for descending)")
     protected Boolean asc = true;
+
+    public Map<String,String> getParamMap(){
+        if (StringUtils.isBlank(this.params)) {
+            return Collections.emptyMap();
+        }
+        return JSONUtils.toStrMap(this.params);
+    }
 }

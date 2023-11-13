@@ -98,8 +98,8 @@ public class CredentialTypeOperator extends ServiceImpl<CredentialTypeDao, Crede
         if(StringUtils.isNotBlank(formQuery.getQueryInput())){
             qw.lambda().like(CredentialTypeEntity::getName,formQuery.getQueryInput());
         }
-        if(MapUtils.isNotEmpty(formQuery.getParams())){
-            String connector = formQuery.getParams().get("connectorName");
+        if(MapUtils.isNotEmpty(formQuery.getParamMap())){
+            String connector = formQuery.getParamMap().get("connectorName");
             if(connector!=null){
                 qw.lambda().eq(CredentialTypeEntity::getConnectorName,connector);
             }
