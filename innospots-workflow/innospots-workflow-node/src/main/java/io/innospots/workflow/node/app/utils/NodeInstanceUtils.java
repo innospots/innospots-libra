@@ -5,8 +5,8 @@ import io.innospots.base.condition.Factor;
 import io.innospots.base.condition.Mode;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.re.IExpression;
-import io.innospots.base.re.aviator.AviatorExpression;
+import io.innospots.base.script.IScriptExecutor;
+import io.innospots.base.script.aviator.AviatorScriptExecutor;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.base.utils.Initializer;
 import io.innospots.workflow.core.node.field.NodeParamField;
@@ -75,13 +75,13 @@ public class NodeInstanceUtils {
     }
 
 
-    public static <T> IExpression<T> buildExpression(NodeInstance nodeInstance, String fieldName, BaseNodeExecutor appNode) {
+    public static IScriptExecutor buildExpression(NodeInstance nodeInstance, String fieldName, BaseNodeExecutor appNode) {
         EmbedCondition embedCondition = buildCondition(nodeInstance, fieldName, appNode);
-        IExpression expression = null;
+        IScriptExecutor expression = null;
         if (embedCondition != null) {
             String exp = embedCondition.getStatement();
             if (StringUtils.isNotEmpty(exp)) {
-                expression = new AviatorExpression(exp, null);
+                expression = new AviatorScriptExecutor(exp, null);
             }
         }
         return expression;

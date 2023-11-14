@@ -19,6 +19,7 @@
 package io.innospots.server.base.exception;
 
 import io.innospots.base.exception.*;
+import io.innospots.base.exception.ScriptException;
 import io.innospots.base.i18n.LocaleMessageUtils;
 import io.innospots.base.model.response.ResponseCode;
 import org.apache.commons.lang3.StringUtils;

@@ -18,7 +18,6 @@
 
 package io.innospots.workflow.node.app.execute;
 
-import io.innospots.base.exception.ScriptException;
 import io.innospots.base.model.field.ComputeField;
 import io.innospots.base.model.field.compute.ComputeItem;
 import io.innospots.base.utils.BeanUtils;

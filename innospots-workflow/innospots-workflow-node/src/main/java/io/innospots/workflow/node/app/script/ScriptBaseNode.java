@@ -19,32 +19,11 @@
 package io.innospots.workflow.node.app.script;
 
 
-import cn.hutool.core.exceptions.ExceptionUtil;
-import io.innospots.base.events.EventBusCenter;
-import io.innospots.base.exception.ConfigException;
-import io.innospots.base.exception.ScriptException;
-import io.innospots.base.model.field.ParamField;
-import io.innospots.base.re.ExpressionEngineFactory;
-import io.innospots.base.re.IExpression;
-import io.innospots.base.re.IExpressionEngine;
-import io.innospots.base.re.jit.MethodBody;
-import io.innospots.workflow.core.enums.BuildStatus;
-import io.innospots.workflow.core.execution.AsyncExecutors;
-import io.innospots.workflow.core.execution.model.ExecutionInput;
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
-import io.innospots.workflow.core.execution.events.NodeExecutionTaskEvent;
-import io.innospots.workflow.core.execution.model.flow.FlowExecution;
-import io.innospots.workflow.core.execution.listener.INodeExecutionListener;
-import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
-import io.innospots.workflow.core.instance.model.NodeInstance;
+import io.innospots.base.script.IScriptExecutor;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
-import io.innospots.workflow.core.node.executor.INodeExecutor;
-import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 /**
@@ -58,9 +37,9 @@ public abstract class ScriptBaseNode extends BaseNodeExecutor {
     private static final Logger logger = LoggerFactory.getLogger(ScriptBaseNode.class);
 
 
-    protected IExpression<Object> expression;
+    protected IScriptExecutor expression;
 
-    protected Map<String, IExpression<Object>> actionScripts;
+    protected Map<String, IScriptExecutor> actionScripts;
 
     protected void initialize() {
     }

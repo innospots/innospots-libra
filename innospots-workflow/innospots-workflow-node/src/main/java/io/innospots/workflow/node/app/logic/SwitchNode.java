@@ -23,8 +23,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.innospots.base.condition.BaseCondition;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.re.IExpression;
-import io.innospots.base.re.aviator.AviatorExpression;
+import io.innospots.base.script.IScriptExecutor;
+import io.innospots.base.script.aviator.AviatorScriptExecutor;
 import io.innospots.base.utils.Initializer;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
@@ -148,7 +148,7 @@ public class SwitchNode extends BaseNodeExecutor {
         private String desc;
 
         @JsonIgnore
-        private IExpression<Object> expression;
+        private IScriptExecutor expression;
 
         public String name(int pos) {
             return desc != null ? desc : "#" + pos;
@@ -160,7 +160,7 @@ public class SwitchNode extends BaseNodeExecutor {
                 branch.initialize();
                 this.condition = branch.getStatement();
                 if (condition != null) {
-                    expression = new AviatorExpression(this.condition, null);
+                    expression = new AviatorScriptExecutor(this.condition, null);
                 }
             }
         }

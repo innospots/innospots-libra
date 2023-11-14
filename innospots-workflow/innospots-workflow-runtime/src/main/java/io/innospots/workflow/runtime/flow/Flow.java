@@ -21,7 +21,7 @@ package io.innospots.workflow.runtime.flow;
 
 import io.innospots.base.exception.ScriptException;
 import io.innospots.base.exception.ValidatorException;
-import io.innospots.base.re.ExpressionEngineFactory;
+import io.innospots.base.script.ExpressionEngineFactory;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.enums.BuildStatus;
 import io.innospots.workflow.core.enums.FlowStatus;

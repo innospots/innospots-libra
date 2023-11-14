@@ -1,7 +1,7 @@
 package io.innospots.base.function;
 
 import io.innospots.base.model.field.ParamField;
-import io.innospots.base.re.IExpression;
+import io.innospots.base.script.IScriptExecutor;
 
 import java.util.Collection;
 import java.util.Map;
@@ -23,7 +23,7 @@ public interface IStatisticFunction<I> {
         return null;
     }
 
-    void initialize(ParamField summaryField, ParamField weightField, IExpression<?> condition);
+    void initialize(ParamField summaryField, ParamField weightField, IScriptExecutor condition);
 
 
     default double[] toDoubleArray(Collection<Map<String, Object>> items) {

@@ -1,8 +1,6 @@
 package io.innospots.base.function.aggregation;
 
 import io.innospots.base.function.AbstractStatisticFunction;
-import io.innospots.base.model.field.ParamField;
-import io.innospots.base.re.IExpression;
 import org.apache.commons.math3.stat.descriptive.AbstractStorelessUnivariateStatistic;
 
 import java.util.Collection;

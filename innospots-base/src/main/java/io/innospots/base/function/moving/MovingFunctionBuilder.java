@@ -1,9 +1,8 @@
 package io.innospots.base.function.moving;
 
 import io.innospots.base.function.StatisticFunctionType;
-import io.innospots.base.function.aggregation.IAggregationFunction;
 import io.innospots.base.model.field.ParamField;
-import io.innospots.base.re.IExpression;
+import io.innospots.base.script.IScriptExecutor;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -18,7 +17,7 @@ public class MovingFunctionBuilder {
                                              int window,
                                              ParamField summaryField,
                                              ParamField weightField,
-                                             IExpression<?> condition){
+                                             IScriptExecutor condition){
         IMovingFunction function = null;
         try {
             Constructor<? extends IMovingFunction> constructor = functionType.movingFuncClass().getDeclaredConstructor(int.class);

@@ -29,8 +29,8 @@ import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.exception.data.HttpConnectionException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.field.FieldScope;
-import io.innospots.base.re.GenericExpressionEngine;
-import io.innospots.base.re.IExpression;
+import io.innospots.base.script.GenericScriptExecutorManager;
+import io.innospots.base.script.IScriptExecutor;
 import io.innospots.base.utils.PlaceholderUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -55,9 +55,9 @@ public class HttpDataRegistryExecutor implements IExecutionOperator {
 
     private HttpContext httpContext;
 
-    private IExpression preScriptExpression;
+    private IScriptExecutor preScriptExpression;
 
-    private IExpression postScriptExpression;
+    private IScriptExecutor postScriptExpression;
 
     public HttpDataRegistryExecutor(HttpConnection httpConnection, ApiSchemaRegistry schemaRegistry) {
         this.httpConnection = httpConnection;
@@ -196,7 +196,8 @@ public class HttpDataRegistryExecutor implements IExecutionOperator {
             return;
         }
 
-        GenericExpressionEngine engine = GenericExpressionEngine.build("HttpApiScript" + "_" + this.schemaRegistry.getCode());
+        /*
+        GenericScriptExecutorManager engine = GenericScriptExecutorManager.build("HttpApiScript" + "_" + this.schemaRegistry.getCode());
         if (StringUtils.isNotEmpty(preScript)) {
             engine.register(ScriptType.JAVA, Map.class, "preCall", preScript);
         }
@@ -204,8 +205,10 @@ public class HttpDataRegistryExecutor implements IExecutionOperator {
             engine.register(ScriptType.JAVA, Map.class, "postCall", preScript);
         }
         engine.compile();
-        this.preScriptExpression = engine.getExpression("preCall");
-        this.postScriptExpression = engine.getExpression("postCall");
+        this.preScriptExpression = engine.getExecutor("preCall");
+        this.postScriptExpression = engine.getExecutor("postCall");
+
+         */
     }
 
 

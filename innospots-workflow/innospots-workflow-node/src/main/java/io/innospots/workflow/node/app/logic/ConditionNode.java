@@ -21,13 +21,12 @@ package io.innospots.workflow.node.app.logic;
 
 import io.innospots.base.condition.EmbedCondition;
 import io.innospots.base.exception.ConfigException;
-import io.innospots.base.re.IExpression;
-import io.innospots.base.re.aviator.AviatorExpression;
+import io.innospots.base.script.IScriptExecutor;
+import io.innospots.base.script.aviator.AviatorScriptExecutor;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
-import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.utils.NodeInstanceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +53,7 @@ public class ConditionNode extends BaseNodeExecutor {
     public static final String FIELD_TRUE_ANCHOR_KEY = "true-out";
     public static final String FIELD_FALSE_ANCHOR_KEY = "false-out";
     public static final String FIELD_CONDITIONS = "conditions";
-    private IExpression expression;
+    private IScriptExecutor expression;
 
     @Override
     protected void initialize() {
@@ -65,7 +64,7 @@ public class ConditionNode extends BaseNodeExecutor {
             throw ConfigException.buildMissingException(this.getClass(), "nodeKey:" + this.nodeKey() + ", field:" + FIELD_CONDITIONS);
         }
         this.conditionExpression =embedCondition.getStatement();
-        this.expression = new AviatorExpression(this.conditionExpression, null);
+        this.expression = new AviatorScriptExecutor(this.conditionExpression, null);
 
     }
 

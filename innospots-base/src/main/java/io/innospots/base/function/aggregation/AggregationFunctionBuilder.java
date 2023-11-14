@@ -2,7 +2,7 @@ package io.innospots.base.function.aggregation;
 
 import io.innospots.base.function.StatisticFunctionType;
 import io.innospots.base.model.field.ParamField;
-import io.innospots.base.re.IExpression;
+import io.innospots.base.script.IScriptExecutor;
 
 /**
  * @author Smars
@@ -13,7 +13,7 @@ public class AggregationFunctionBuilder {
     public static IAggregationFunction build(StatisticFunctionType functionType,
                                              ParamField summaryField,
                                              ParamField weightField,
-                                             IExpression<?> condition){
+                                             IScriptExecutor condition){
         IAggregationFunction function = null;
         try {
             function = functionType.aggFuncClass().newInstance();

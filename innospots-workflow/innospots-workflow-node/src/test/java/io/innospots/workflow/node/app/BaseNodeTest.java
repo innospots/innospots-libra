@@ -1,20 +1,15 @@
 package io.innospots.workflow.node.app;
 
-import io.innospots.base.exception.InnospotException;
 import io.innospots.base.exception.ScriptException;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.model.response.ResponseCode;
-import io.innospots.base.re.ExpressionEngineFactory;
-import io.innospots.base.re.GenericExpressionEngine;
-import io.innospots.base.re.IExpressionEngine;
-import io.innospots.base.re.jit.MethodBody;
+import io.innospots.base.script.GenericScriptExecutorManager;
+import io.innospots.base.script.IScriptExecutorManager;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -43,14 +38,14 @@ public class BaseNodeTest {
         NodeInstance instance = build(fileName + ".json");
         System.out.println(instance);
 
-        GenericExpressionEngine.setPath("target/classes", "target/classes");
+        GenericScriptExecutorManager.setPath("target/classes", "target/classes");
 
 
-        System.out.println(GenericExpressionEngine.getClassPath());
+        System.out.println(GenericScriptExecutorManager.getClassPath());
         //BaseAppNode baseNode = instance.registerToEngine(engine,instance);
 
         BaseNodeExecutor appNode = null;
-        Map<String,IExpressionEngine> engines = new HashMap<>();
+        Map<String, IScriptExecutorManager> engines = new HashMap<>();
         /*
         for (MethodBody methodBody : instance.expMethods()) {
             String key = "Test_"+ fileName + "_" + methodBody.getScriptType().name();
@@ -67,7 +62,7 @@ public class BaseNodeTest {
          */
 
         try {
-            engines.values().forEach(IExpressionEngine::compile);
+            engines.values().forEach(IScriptExecutorManager::build);
         }catch (Exception e){
             System.err.println(e.getMessage());
         }

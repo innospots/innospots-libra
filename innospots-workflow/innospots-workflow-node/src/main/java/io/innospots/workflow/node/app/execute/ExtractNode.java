@@ -22,14 +22,13 @@ import cn.hutool.core.builder.CompareToBuilder;
 import cn.hutool.core.comparator.ComparatorChain;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.model.field.ParamField;
-import io.innospots.base.re.IExpression;
+import io.innospots.base.script.IScriptExecutor;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.field.NodeParamField;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
-import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.utils.NodeInstanceUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -70,7 +69,7 @@ public class ExtractNode extends BaseNodeExecutor {
 
     private Integer endLine;
 
-    private IExpression expression;
+    private IScriptExecutor expression;
 
     @Override
     protected void initialize() {

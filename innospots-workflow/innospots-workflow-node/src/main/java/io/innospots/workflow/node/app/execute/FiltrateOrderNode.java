@@ -20,13 +20,12 @@ package io.innospots.workflow.node.app.execute;
 
 import cn.hutool.core.builder.CompareToBuilder;
 import cn.hutool.core.comparator.ComparatorChain;
-import io.innospots.base.re.IExpression;
+import io.innospots.base.script.IScriptExecutor;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.field.NodeParamField;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
-import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.utils.NodeInstanceUtils;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -49,7 +48,7 @@ public class FiltrateOrderNode extends BaseNodeExecutor {
 
     private Integer lineCount;
 
-    private IExpression expression;
+    private IScriptExecutor expression;
 
     @Override
     protected void initialize() {

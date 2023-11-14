@@ -1,6 +1,6 @@
 package io.innospots.base.utils;
 
-import io.innospots.base.re.java.ParamName;
+import io.innospots.base.script.java.ParamName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

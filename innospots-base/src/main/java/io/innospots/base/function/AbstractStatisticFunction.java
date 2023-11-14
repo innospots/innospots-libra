@@ -1,7 +1,7 @@
 package io.innospots.base.function;
 
 import io.innospots.base.model.field.ParamField;
-import io.innospots.base.re.IExpression;
+import io.innospots.base.script.IScriptExecutor;
 
 import java.util.Map;
 
@@ -15,10 +15,10 @@ public abstract class AbstractStatisticFunction<I> implements IStatisticFunction
 
     protected ParamField weightField;
 
-    protected IExpression<?> condition;
+    protected IScriptExecutor condition;
 
     @Override
-    public void initialize(ParamField summaryField, ParamField weightField, IExpression<?> condition) {
+    public void initialize(ParamField summaryField, ParamField weightField, IScriptExecutor condition) {
         this.summaryField = summaryField;
         this.weightField = weightField;
         this.condition = condition;

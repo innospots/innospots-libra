@@ -24,10 +24,10 @@ import io.innospots.base.exception.InnospotException;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.exception.ScriptException;
 import io.innospots.base.model.response.ResponseCode;
-import io.innospots.base.re.ExpressionEngineFactory;
-import io.innospots.base.re.GenericExpressionEngine;
-import io.innospots.base.re.IExpressionEngine;
-import io.innospots.base.re.jit.MethodBody;
+import io.innospots.base.script.ExpressionEngineFactory;
+import io.innospots.base.script.GenericScriptExecutorManager;
+import io.innospots.base.script.IScriptExecutorManager;
+import io.innospots.base.script.jit.MethodBody;
 import io.innospots.workflow.core.flow.WorkflowBaseBody;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
@@ -55,9 +55,9 @@ public class FlowCompiler {
 
     private WorkflowBaseBody workflowInstance;
 
-    private GenericExpressionEngine genericExpressionEngine;
+    private GenericScriptExecutorManager genericExpressionEngine;
 
-    public Map<String, IExpressionEngine> scriptEngines = new HashMap<>();
+    public Map<String, IScriptExecutorManager> scriptEngines = new HashMap<>();
 
     private FlowCompiler(WorkflowBaseBody workflowInstance) {
         this(workflowInstance.identifier());
@@ -66,7 +66,7 @@ public class FlowCompiler {
 
     private FlowCompiler(String identifier){
         genericExpressionEngine = ExpressionEngineFactory.build(identifier);
-        genericExpressionEngine.prepare();
+//        genericExpressionEngine.prepare();
     }
 
     public static FlowCompiler build(String identifier){
@@ -78,9 +78,9 @@ public class FlowCompiler {
     }
 
     public void clear() {
-        genericExpressionEngine.deleteBuildFile();
-        for (IExpressionEngine expressionEngine : scriptEngines.values()) {
-            expressionEngine.deleteBuildFile();
+        genericExpressionEngine.clear();
+        for (IScriptExecutorManager expressionEngine : scriptEngines.values()) {
+            expressionEngine.clear();
             ExpressionEngineFactory.clear(expressionEngine.identifier());
         }
         scriptEngines.clear();
@@ -103,9 +103,9 @@ public class FlowCompiler {
                 registerToEngine(node);
             }//end for
         }
-        genericExpressionEngine.compile();
-        scriptEngines.values().stream().filter(Objects::nonNull).forEach(IExpressionEngine::compile);
-        outputFlowFile(GenericExpressionEngine.getClassPath() + File.separator + DIR_FLOW_CONFIG);
+        genericExpressionEngine.build();
+        scriptEngines.values().stream().filter(Objects::nonNull).forEach(IScriptExecutorManager::build);
+        outputFlowFile(GenericScriptExecutorManager.getClassPath() + File.separator + DIR_FLOW_CONFIG);
     }
 
 
@@ -129,7 +129,7 @@ public class FlowCompiler {
 
         for (MethodBody methodBody : methodBodies) {
             ScriptType scriptType = methodBody.getScriptType();
-            IExpressionEngine expressionEngine;
+            IScriptExecutorManager expressionEngine;
             if (scriptType == null || scriptType == ScriptType.JAVA || scriptType == ScriptType.JAVASCRIPT) {
                 expressionEngine = genericExpressionEngine;
             }else{
