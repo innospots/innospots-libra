@@ -63,6 +63,14 @@ public class PageBody<T> {
         this.list.add(item);
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public void setList(List<T> list) {
         this.list = list;
         this.consume = Math.toIntExact(System.currentTimeMillis() - startTime);
@@ -74,6 +82,12 @@ public class PageBody<T> {
 
     public int getConsume() {
         return consume;
+    }
+
+    public void end(){
+        if(consume==0){
+            this.consume = Math.toIntExact(System.currentTimeMillis() - startTime);
+        }
     }
 
     public void setPageSize(Long pageSize) {

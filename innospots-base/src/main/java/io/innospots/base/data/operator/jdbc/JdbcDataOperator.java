@@ -26,6 +26,7 @@ import cn.hutool.db.sql.Condition;
 import cn.hutool.db.sql.Direction;
 import cn.hutool.db.sql.Order;
 import cn.hutool.db.sql.SqlBuilder;
+import com.google.common.base.Enums;
 import io.innospots.base.condition.Factor;
 import io.innospots.base.condition.Mode;
 import io.innospots.base.condition.Opt;
@@ -35,6 +36,8 @@ import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.enums.DataOperation;
 import io.innospots.base.data.operator.IDataOperator;
+import io.innospots.base.data.request.BaseRequest;
+import io.innospots.base.data.request.SimpleRequest;
 import io.innospots.base.exception.data.DataOperationException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -275,7 +278,7 @@ public class JdbcDataOperator implements IDataOperator {
         } catch (Exception e) {
             throw DataOperationException.buildException(this.getClass(), DataOperation.INSERT, "Data insert batch fail", e);
         }
-        return insertBatch.length;
+        return Arrays.stream(insertBatch).sum();
 
     }
 
@@ -352,10 +355,11 @@ public class JdbcDataOperator implements IDataOperator {
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("INSERT INTO ").append(tableName).append(" (");
         Map<String, Object> firstData = data.get(0);
-        sqlBuilder.append(String.join(", ", firstData.keySet())).append(")");
+        Set<String> columns = new HashSet<>(firstData.keySet());
+        sqlBuilder.append(String.join(", ", columns)).append(")");
         sqlBuilder.append(" VALUES (");
-        for (int i = 0; i < firstData.size(); i++) {
-            if (i < firstData.size() - 1) {
+        for (int i = 0; i < columns.size(); i++) {
+            if (i < columns.size() - 1) {
                 sqlBuilder.append("?, ");
             } else {
                 sqlBuilder.append("?");
@@ -363,7 +367,6 @@ public class JdbcDataOperator implements IDataOperator {
         }//end for
         sqlBuilder.append(") ON DUPLICATE KEY UPDATE ");
 
-        Set<String> columns = new HashSet<>(firstData.keySet());
         Arrays.stream(keyColumn.split(",")).collect(Collectors.toList()).forEach(columns::remove);
 
         int i = 0;
@@ -387,6 +390,52 @@ public class JdbcDataOperator implements IDataOperator {
 
         if (log.isDebugEnabled()) {
             log.debug("upsert primary:{}, size:{}, sql:{}", keyColumn, inData.size(), sqlBuilder);
+        }
+
+        int upsert = 0;
+        try {
+            int[] ups = db.executeBatch(sqlBuilder.toString(), inData);
+//            int[] ups = jdbcTemplate.batchUpdate(sqlBuilder.toString(), inData);
+            upsert = Arrays.stream(ups).sum();
+        } catch (SQLException e) {
+            log.error(e.getMessage(), e);
+        }
+
+        return upsert;
+    }
+
+    public Integer eachBatchUpdate(String tableName, String keyColumn, List<Map<String, Object>> data) {
+        if (CollectionUtils.isEmpty(data)) {
+            return 0;
+        }
+
+        StringBuilder sqlBuilder = new StringBuilder();
+        sqlBuilder.append("UPDATE ").append(tableName).append(" SET");
+        Map<String, Object> firstData = data.get(0);
+        Set<String> columns = new HashSet<>(firstData.keySet());
+        String[] keys = keyColumn.split(",");
+        Arrays.stream(keys).collect(Collectors.toList()).forEach(columns::remove);
+
+        sqlBuilder.append(String.join(" = ?, ", columns)).append(" = ?");
+        sqlBuilder.append(" WHERE ").append(String.join(" = ?",keys)).append(" = ?");
+
+        int i = 0;
+
+        List<Object[]> inData = new ArrayList<>();
+        for (Map<String, Object> item : data) {
+            Object[] obj = new Object[item.size()];
+            int j = 0;
+            for (String column : columns) {
+                obj[j++] = item.get(column);
+            }
+            for (String key : keys) {
+                obj[j++] = item.get(key);
+            }
+            inData.add(obj);
+        }
+
+        if (log.isDebugEnabled()) {
+            log.debug("update by primary:{}, size:{}, sql:{}", keyColumn, inData.size(), sqlBuilder);
         }
 
         int upsert = 0;
@@ -429,6 +478,27 @@ public class JdbcDataOperator implements IDataOperator {
             throw DataOperationException.buildException(this.getClass(), DataOperation.UPDATE, "data update batch fail, sql: " + Arrays.toString(sqlList), e);
         }
         return updateBatch.length;
+    }
+
+    @Override
+    public Integer updateForBatch(String tableName, String keyColumn, List<Map<String, Object>> data) {
+        if (data.size() <= max_batch_size) {
+            return eachBatchUpdate(tableName, keyColumn, data);
+        }
+        int count = 0;
+        List<Map<String, Object>> items = new ArrayList<>();
+        for (Map<String, Object> item : data) {
+            if (items.size() < max_batch_size) {
+                items.add(item);
+            } else {
+                count += eachBatchUpdate(tableName, keyColumn, items);
+                items.clear();
+            }
+        }//end for
+        if (items.size() > 0) {
+            count += eachBatchUpdate(tableName, keyColumn, items);
+        }
+        return count;
     }
 
     @Override
@@ -476,4 +546,32 @@ public class JdbcDataOperator implements IDataOperator {
         return conditions;
     }
 
+    @Override
+    public <D> DataBody<D> execute(SimpleRequest simpleRequest) {
+        DataOperation operation = Enums.getIfPresent(DataOperation.class, simpleRequest.getOperation()).orNull();
+        if(operation == DataOperation.EXECUTE){
+            DataBody dataBody = new DataBody<>();
+            try {
+                int count = db.execute(simpleRequest.getBody());
+                dataBody.setBody(count);
+            } catch (SQLException e) {
+                log.error(e.getMessage(),e);
+                dataBody.setMessage(e.getMessage());
+            }
+            dataBody.end();
+            return dataBody;
+        }else{
+            return execute((BaseRequest<?>) simpleRequest);
+        }
+    }
+
+    @Override
+    public int execute(String scripts) {
+        try {
+            return db.execute(scripts);
+        } catch (SQLException e) {
+            log.error(e.getMessage(),e);
+        }
+        return 0;
+    }
 }
