@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-SERVER_MAIN_CLASS="io.innospots.administration.server.InnospotAdministrationServer"
+SERVER_MAIN_CLASS="io.innospots.administration.server.InnospotsAdministrationServer"
 APP_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd | sed 's/\/bin//')
 PID_FILE=${APP_DIR}/proc_pid
 
