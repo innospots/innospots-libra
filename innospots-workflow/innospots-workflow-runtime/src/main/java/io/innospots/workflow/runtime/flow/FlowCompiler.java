@@ -128,8 +128,9 @@ public class FlowCompiler {
 //                nodeInstance.expMethods();
 
         for (MethodBody methodBody : methodBodies) {
-            ScriptType scriptType = methodBody.getScriptType();
+            String scriptType = methodBody.getScriptType();
             IScriptExecutorManager expressionEngine;
+            /*
             if (scriptType == null || scriptType == ScriptType.JAVA || scriptType == ScriptType.JAVASCRIPT) {
                 expressionEngine = genericExpressionEngine;
             }else{
@@ -139,9 +140,11 @@ public class FlowCompiler {
                     scriptEngines.put(scriptType.name(),expressionEngine);
                 }
             }
+
+
             if (expressionEngine != null) {
                 expressionEngine.register(methodBody);
-            }
+            }             */
         }//end for methodBody
 
         return appNode;

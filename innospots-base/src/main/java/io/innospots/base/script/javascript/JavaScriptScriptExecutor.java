@@ -21,6 +21,7 @@ package io.innospots.base.script.javascript;
 import io.innospots.base.enums.ScriptType;
 import io.innospots.base.exception.ScriptException;
 import io.innospots.base.json.JSONUtils;
+import io.innospots.base.script.ExecuteMode;
 import io.innospots.base.script.IScriptExecutor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.script.Bindings;
 import javax.script.CompiledScript;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,6 +53,26 @@ public class JavaScriptScriptExecutor implements IScriptExecutor {
     public JavaScriptScriptExecutor(CompiledScript compiledScript, String[] arguments) {
         this.compiledScript = compiledScript;
         this.arguments = arguments;
+    }
+
+    @Override
+    public void initialize(Method method) {
+
+    }
+
+    @Override
+    public ExecuteMode executeMode() {
+        return null;
+    }
+
+    @Override
+    public String scriptType() {
+        return null;
+    }
+
+    @Override
+    public String suffix() {
+        return null;
     }
 
     @Override

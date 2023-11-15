@@ -20,8 +20,10 @@ package io.innospots.base.script.aviator;
 
 import com.googlecode.aviator.AviatorEvaluator;
 import com.googlecode.aviator.Expression;
+import io.innospots.base.script.ExecuteMode;
 import io.innospots.base.script.IScriptExecutor;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,6 +44,26 @@ public class AviatorScriptExecutor implements IScriptExecutor {
     public AviatorScriptExecutor(String statement, String[] arguments) {
         expression = AviatorEvaluator.compile(statement, true);
         this.arguments = arguments;
+    }
+
+    @Override
+    public void initialize(Method method) {
+
+    }
+
+    @Override
+    public ExecuteMode executeMode() {
+        return null;
+    }
+
+    @Override
+    public String scriptType() {
+        return null;
+    }
+
+    @Override
+    public String suffix() {
+        return null;
     }
 
     @Override

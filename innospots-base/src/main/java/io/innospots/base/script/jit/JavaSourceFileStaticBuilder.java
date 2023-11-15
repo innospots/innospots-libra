@@ -19,19 +19,18 @@
 package io.innospots.base.script.jit;
 
 import io.innospots.base.enums.ScriptType;
+import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.base.script.SourceFileBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Smars
@@ -54,6 +53,10 @@ public class JavaSourceFileStaticBuilder implements SourceFileBuilder {
     private File sourceFile;
 
     private String identifier;
+
+    private Map<String, String> scripts = new LinkedHashMap<>();
+
+    private String sourcePath;
 
 
     public static JavaSourceFileStaticBuilder newBuilder(String className, String packageName, Path sourcePath) {
@@ -99,32 +102,58 @@ public class JavaSourceFileStaticBuilder implements SourceFileBuilder {
         return this;
     }
 
+    public JavaSourceFileStaticBuilder addCmdMethod(MethodBody methodBody) {
+        StringBuilder buf = new StringBuilder();
+        buf.append("public static ");
+        if (methodBody.getReturnType() == null || methodBody.getReturnType().equals(Void.class)) {
+            buf.append("void");
+        } else {
+            buf.append(methodBody.getReturnType().getName());
+        }
+        buf.append(" ");
+        buf.append(methodBody.getMethodName());
+
+        return this;
+    }
+
     /**
      * 脚本方法
      *
-     * @param methodName
-     * @param script
+     * @param methodBody
      * @return
      */
-    public JavaSourceFileStaticBuilder addScriptMethod(String scriptType, String methodName, String script) {
+    public JavaSourceFileStaticBuilder addScriptMethod(MethodBody methodBody) {
         StringBuilder buf = new StringBuilder();
         buf.append("public static String");
         buf.append(" _");
-        buf.append(scriptType);
+        buf.append(methodBody.getScriptType());
         buf.append("_");
-        buf.append(methodName);
+        buf.append(methodBody.getMethodName());
         buf.append("() {\n");
         buf.append("String script =\"");
-        buf.append(script);
+        buf.append(methodBody.getSrcBody());
         buf.append("\";");
         buf.append("\nreturn script;");
         buf.append("}");
-        return addMethod(methodName, buf.toString());
+        return addMethod(methodBody.getMethodName(), buf.toString());
     }
 
+    public void addMethod(MethodBody methodBody) {
+        if (CollectionUtils.isEmpty(methodBody.getParams())) {
+            ParamField paramField = new ParamField();
+            paramField.setCode("item");
+            paramField.setName("item");
+            paramField.setValueType(FieldValueType.MAP);
+            paramField.setComment("inputParam");
+            List<ParamField> pm = new ArrayList<>();
+            pm.add(paramField);
+            methodBody.setParams(pm);
+        }
+        ParamField[] paramFields = methodBody.getParams().toArray(new ParamField[0]);
+        addMethod(methodBody.getReturnType(), methodBody.getSrcBody(), methodBody.getMethodName(), paramFields);
+    }
 
-    @Override
-    public void addMethod(Class<?> returnType, String body, String methodName, ParamField... params) {
+    private void addMethod(Class<?> returnType, String body, String methodName, ParamField... params) {
         StringBuilder buf = new StringBuilder();
         buf.append("public static ");
         if (returnType == null || returnType.equals(Void.class)) {

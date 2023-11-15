@@ -20,6 +20,7 @@ package io.innospots.base.script;
 
 import io.innospots.base.exception.ScriptException;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
@@ -27,6 +28,26 @@ import java.util.Map;
  * @date 2023/11/13
  */
 public class Jsr223ScriptExecutor implements IScriptExecutor {
+
+    @Override
+    public void initialize(Method method) {
+
+    }
+
+    @Override
+    public ExecuteMode executeMode() {
+        return null;
+    }
+
+    @Override
+    public String scriptType() {
+        return null;
+    }
+
+    @Override
+    public String suffix() {
+        return null;
+    }
 
     @Override
     public Object execute(Map<String, Object> env) throws ScriptException {

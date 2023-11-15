@@ -19,8 +19,10 @@
 package io.innospots.base.script.groovy;
 
 import io.innospots.base.exception.ScriptException;
+import io.innospots.base.script.ExecuteMode;
 import io.innospots.base.script.IScriptExecutor;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
@@ -30,6 +32,26 @@ import java.util.Map;
  */
 public class GroovyScriptExecutor implements IScriptExecutor {
 
+
+    @Override
+    public void initialize(Method method) {
+
+    }
+
+    @Override
+    public ExecuteMode executeMode() {
+        return null;
+    }
+
+    @Override
+    public String scriptType() {
+        return null;
+    }
+
+    @Override
+    public String suffix() {
+        return null;
+    }
 
     @Override
     public Object execute(Map<String, Object> env) throws ScriptException {

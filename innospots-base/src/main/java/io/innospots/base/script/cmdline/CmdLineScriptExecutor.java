@@ -20,10 +20,12 @@ package io.innospots.base.script.cmdline;
 
 import cn.hutool.core.util.RuntimeUtil;
 import io.innospots.base.exception.ScriptException;
+import io.innospots.base.script.ExecuteMode;
 import io.innospots.base.script.IScriptExecutor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +52,26 @@ public class CmdLineScriptExecutor implements IScriptExecutor {
     public CmdLineScriptExecutor(String cmdPath, String scriptPath) {
         this.cmdPath = cmdPath;
         this.scriptPath = scriptPath;
+    }
+
+    @Override
+    public void initialize(Method method) {
+
+    }
+
+    @Override
+    public ExecuteMode executeMode() {
+        return null;
+    }
+
+    @Override
+    public String scriptType() {
+        return null;
+    }
+
+    @Override
+    public String suffix() {
+        return null;
     }
 
     @Override

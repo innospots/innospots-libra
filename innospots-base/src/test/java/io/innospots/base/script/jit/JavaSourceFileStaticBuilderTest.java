@@ -20,7 +20,7 @@ public class JavaSourceFileStaticBuilderTest {
         pf.setCode("p1");
         pf.setValueType(FieldValueType.INTEGER);
         pf.setName("pf");
-        builder.addMethod(Boolean.class, "boolean b = true;return b;", "callB", pf);
+//        builder.addMethod(Boolean.class, "boolean b = true;return b;", "callB", pf);
         src = builder.toSource();
 
         System.out.println(src);

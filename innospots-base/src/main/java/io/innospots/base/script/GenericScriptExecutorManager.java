@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -89,94 +90,80 @@ public class GenericScriptExecutorManager implements IScriptExecutorManager {
         sourceBuilder();
     }
 
-    @Override
-    public void reload() throws ScriptException {
-        try {
-//            classLoader(true);
-            Class<?> clazz = classForName();
-            Map<String, IScriptExecutor> tmpExp = new HashMap<>(5);
-            for (Method method : clazz.getDeclaredMethods()) {
-                String methodName = method.getName();
-                if (!methodName.startsWith("_")) {
-                    tmpExp.put(methodName, new JavaScriptExecutor(method));
-                } else if (methodName.startsWith("_" + ScriptType.JAVASCRIPT)) {
-                    tmpExp.put(methodName.replace("_" + ScriptType.JAVASCRIPT + "_", ""),
-                            JavaScriptScriptExecutorManager.scriptExpression(method));
-                } else if (methodName.startsWith("_" + ScriptType.FORMULA)) {
-                    tmpExp.put(methodName.replace("_" + ScriptType.FORMULA + "_", ""),
-                            AviatorScriptScriptExecutorManager.scriptExpression(method));
-                } else {
-                    logger.warn("script expression not support:{}", methodName);
-                }
-            }
-            this.executors = tmpExp;
-            logger.debug("engine:{} , loaded expression size:{}", className(), executors.size());
-        } catch (ClassNotFoundException | MalformedURLException e) {
-            logger.warn("engine:{}  reload exception:{}", className(), e.getMessage());
-            //throw new ScriptException(ScriptType.JAVA,e.getMessage(),e);
-        }
-    }
-
-    /*
-    @Override
-    public void reload() throws ScriptException {
-        try {
-            classLoader(true);
-            Class<?> clazz = classForName();
-            Map<String, IScriptExecutor> tmpExp = new HashMap<>();
-            for (Method method : clazz.getDeclaredMethods()) {
-                if (!method.getName().startsWith("_")) {
-                    tmpExp.put(method.getName(), new JavaScriptExecutor(method));
-                }
-            }
-            this.executors = tmpExp;
-            logger.debug("engine:{} , loaded expresion size:{}", className(), executors.size());
-        } catch (ClassNotFoundException | MalformedURLException e) {
-            throw ScriptException.buildCompileException(this.getClass(), ScriptType.JAVA, e, e.getMessage());
-        }
-    }
-
-     */
-
 
     @Override
     public synchronized void register(MethodBody methodBody) {
         if (methodBody.getScriptType() == null) {
-            logger.warn("script type is null, method:{}, src:{} ", methodBody);
+            logger.warn("script type is null, method:{} ", methodBody);
             return;
         }
-
-        /*
-        switch (scriptType) {
-            case JAVASCRIPT:
-                String src = null;
-                if (params != null) {
-                    src = JavaScriptScriptExecutorManager.buildMethodBody(returnType, methodName, srcBody, params.toArray(new ParamField[]{}));
-                } else {
-                    src = JavaScriptScriptExecutorManager.buildMethodBody(returnType, methodName, srcBody);
-                }
-                registerScriptMethod(scriptType, methodName, src);
+        IScriptExecutor executor = newScriptExecutor(methodBody.getScriptType());
+        methodBody.setSuffix(executor.suffix());
+        switch (executor.executeMode()){
+            case NATIVE:
+                this.sourceBuilder.addMethod(methodBody);
                 break;
-            case SCALA:
-                //TODO coming soon
+            case CMD:
+                this.sourceBuilder.addCmdMethod(methodBody);
                 break;
-            case GROOVY:
-                //TODO coming soon
-                break;
-            case PYTHON:
-                //TODO coming soon
-                break;
-            case FORMULA:
-                registerScriptMethod(scriptType, methodName, srcBody);
-                break;
-            case CONDITION:
-            case JAVA:
-            default:
-                super.register(returnType, methodName, srcBody, params);
+            case SCRIPT:
+                this.sourceBuilder.addScriptMethod(methodBody);
                 break;
         }
-         */
+        executors.put(methodBody.getMethodName(),executor);
+    }
 
+
+
+    @Override
+    public boolean build() throws ScriptException {
+        JavaSourceFileCompiler compiler = new JavaSourceFileCompiler(classPath());
+        if (this.sourceBuilder.hasSourceBody()) {
+            try {
+                logger.info("compile engine:{}, write source file:{}", className(), sourceBuilder.getSourceFile());
+                this.sourceBuilder.writeToFile();
+            } catch (IOException e) {
+                throw ScriptException.buildCompileException(this.getClass(), ScriptType.JAVA, e, e.getMessage());
+            }
+        }
+
+        if (sourceBuilder.sourceFileExists()) {
+            compiler.addSourceFile(sourceBuilder.getSourceFile());
+            try {
+                compiler.compile();
+                reload();
+                logger.info("engine class file write complete, classFile:{} , loaded expresion size:{}", className(), executors.size());
+                return true;
+            } catch (IOException e) {
+                throw ScriptException.buildCompileException(this.getClass(), ScriptType.JAVA, e, e.getMessage());
+            }
+        }
+
+        return false;
+    }
+
+
+    @Override
+    public void reload() throws ScriptException {
+        try {
+            Class<?> clazz = classForName();
+            for (Method method : clazz.getDeclaredMethods()) {
+                String methodName = method.getName();
+                if (methodName.startsWith("_")) {
+                    String[] ms = methodName.split("_");
+                    methodName = ms[ms.length-1];
+                }
+                IScriptExecutor executor = this.executors.get(methodName);
+                if(executor!=null){
+                    executor.initialize(method);
+                }else{
+                    logger.warn("script executor not be defined: {}", methodName);
+                }
+            }
+            logger.debug("executorManager:{} , loaded executor size:{}", className(), executors.size());
+        } catch (ClassNotFoundException | MalformedURLException e) {
+            logger.warn("executorManager:{}  reload executor:{}", className(), e.getMessage());
+        }
     }
 
 
@@ -243,7 +230,6 @@ public class GenericScriptExecutorManager implements IScriptExecutorManager {
 
     public Class<?> classForName() throws ClassNotFoundException, MalformedURLException {
         classPath();
-//        return classLoader(false).loadClass(className());
         return classPath == null ?
                 Class.forName(className()) :
                 Class.forName(className(), true, new URLClassLoader(new URL[]{classPath.toUri().toURL()}));
@@ -297,90 +283,6 @@ public class GenericScriptExecutorManager implements IScriptExecutorManager {
 
      */
 
-    public void clearSrcFile() {
-        this.sourceBuilder().deleteSourceFile();
-        /*
-        Path sourceFile = Paths.get(sourcePath().toAbsolutePath().toString(),identifier+".java");
-        if(sourceFile.toFile().exists()){
-            sourceFile.toFile().delete();
-        }
-         */
-    }
-
-    @Override
-    public boolean build() throws ScriptException {
-        JavaSourceFileCompiler compiler = new JavaSourceFileCompiler(classPath());
-//        if (this.compiler == null) {
-//            this.compiler = new JavaSourceFileCompiler(classPath());
-//        }
-        this.sourceBuilder = sourceBuilder();
-        if (this.sourceBuilder.hasSourceBody()) {
-            try {
-                logger.info("compile engine:{}, write source file:{}", className(), sourceBuilder.getSourceFile());
-                this.sourceBuilder.writeToFile();
-            } catch (IOException e) {
-                throw ScriptException.buildCompileException(this.getClass(), ScriptType.JAVA, e, e.getMessage());
-            }
-        }
-
-        if (sourceBuilder.sourceFileExists()) {
-            compiler.addSourceFile(sourceBuilder.getSourceFile());
-            try {
-                compiler.compile();
-                reload();
-                logger.info("engine class file write complete, classFile:{} , loaded expresion size:{}", className(), executors.size());
-                return true;
-            } catch (IOException e) {
-                throw ScriptException.buildCompileException(this.getClass(), ScriptType.JAVA, e, e.getMessage());
-            }
-        }
-
-        if (this.executors == null && sourceBuilder.sourceFileExists()) {
-            reload();
-            return true;
-        }
-        /*
-        Path sourceFile = Paths.get(sourcePath().toAbsolutePath().toString(),identifier+".java");
-        if (sourceBuilder != null) {
-            Map<String, IExpression<Object>> tmpExp = new HashMap<>();
-            try {
-                logger.info("compile engine:{}, write source file:{}", className(), sourceFile);
-                this.sourceBuilder.writeToFile();
-                this.compiler.addSourceFile(sourceFile.toFile());
-                this.compiler.compile();
-                reload();
-                logger.info("engine class file write complete, classFile:{} , loaded expresion size:{}", className(), expressions.size());
-                sourceBuilder.clear();
-                sourceBuilder = null;
-                return true;
-            } catch (IOException e) {
-                throw ScriptException.buildCompileException(this.getClass(),ScriptType.JAVA,e,e.getMessage());
-            }
-        }else if(sourceFile.toFile().exists()){
-            this.compiler.addSourceFile(sourceFile.toFile());
-            try {
-                this.compiler.compile();
-                reload();
-                logger.info("engine class file write complete, classFile:{} , loaded expresion size:{}", className(), expressions.size());
-                return true;
-            } catch (IOException e) {
-                throw ScriptException.buildCompileException(this.getClass(),ScriptType.JAVA,e,e.getMessage());
-            }
-        } else if (this.expressions == null) {
-            reload();
-            return true;
-        }
-
-         */
-
-        return false;
-    }
-
-
-    public synchronized void registerScriptMethod(MethodBody methodBody) {
-        sourceBuilder.addScriptMethod(methodBody.getScriptType(), methodBody.getMethodName(), methodBody.getSrcBody());
-    }
-
 
     private JavaSourceFileStaticBuilder sourceBuilder() {
         if (sourceBuilder == null) {
@@ -391,6 +293,15 @@ public class GenericScriptExecutorManager implements IScriptExecutorManager {
             }
         }//end if
         return sourceBuilder;
+    }
+
+    private IScriptExecutor newScriptExecutor(String scriptType) {
+        Class<IScriptExecutor> seClass = executorClasses.get(scriptType);
+        try {
+            return seClass.getConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

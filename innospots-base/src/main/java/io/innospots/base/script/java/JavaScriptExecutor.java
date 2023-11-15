@@ -20,6 +20,7 @@ package io.innospots.base.script.java;
 
 import io.innospots.base.enums.ScriptType;
 import io.innospots.base.exception.ScriptException;
+import io.innospots.base.script.ExecuteMode;
 import io.innospots.base.script.IScriptExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,6 +61,26 @@ public class JavaScriptExecutor implements IScriptExecutor {
                 this.arguments[i] = method.getParameters()[i].getName();
             }
         }
+    }
+
+    @Override
+    public void initialize(Method method) {
+
+    }
+
+    @Override
+    public ExecuteMode executeMode() {
+        return null;
+    }
+
+    @Override
+    public String scriptType() {
+        return null;
+    }
+
+    @Override
+    public String suffix() {
+        return null;
     }
 
     @Override

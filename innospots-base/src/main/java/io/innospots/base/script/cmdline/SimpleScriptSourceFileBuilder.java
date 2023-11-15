@@ -51,10 +51,10 @@ public class SimpleScriptSourceFileBuilder implements SourceFileBuilder {
 
     }
 
-    @Override
-    public void addMethod(Class<?> returnType, String body, String methodName, ParamField... params) {
-        scripts.put(methodName, body);
-    }
+//    @Override
+//    public void addMethod(Class<?> returnType, String body, String methodName, ParamField... params) {
+//        scripts.put(methodName, body);
+//    }
 
     @Override
     public void writeToFile() throws IOException {

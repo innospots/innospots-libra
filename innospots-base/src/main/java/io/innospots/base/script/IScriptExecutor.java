@@ -18,6 +18,7 @@
 
 package io.innospots.base.script;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
@@ -26,9 +27,14 @@ import java.util.Map;
  */
 public interface IScriptExecutor {
 
+
+    void initialize(Method method);
+
     ExecuteMode executeMode();
 
     String scriptType();
+
+    String suffix();
 
     Object execute(Map<String, Object> env);
 

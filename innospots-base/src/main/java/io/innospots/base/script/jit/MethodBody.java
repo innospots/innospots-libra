@@ -60,6 +60,11 @@ public class MethodBody {
      */
     private String scriptType;
 
+    /**
+     * file type suffix
+     */
+    private String suffix;
+
 
     public MethodBody() {
     }

@@ -18,10 +18,15 @@
 
 package io.innospots.base.script;
 
+import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.model.field.ParamField;
+import io.innospots.base.script.jit.MethodBody;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Smars
@@ -31,7 +36,9 @@ import java.io.IOException;
 public interface SourceFileBuilder {
 
 
-    void addMethod(Class<?> returnType, String body, String methodName, ParamField... params);
+    default void addMethod(MethodBody methodBody) {
+
+    }
 
 
     default void writeToFile() throws IOException {
