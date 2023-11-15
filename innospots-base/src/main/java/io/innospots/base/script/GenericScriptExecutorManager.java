@@ -72,6 +72,11 @@ public class GenericScriptExecutorManager implements IScriptExecutorManager {
 
     protected Map<String, IScriptExecutor> executors;
 
+    /**
+     * spi loader, key: scriptType, value: class
+     */
+    private static Map<String, Class<IScriptExecutor>> executorClasses = new HashMap<>();
+
 //    protected FileClassLoader classLoader;
 
 
@@ -140,6 +145,7 @@ public class GenericScriptExecutorManager implements IScriptExecutorManager {
             logger.warn("script type is null, method:{}, src:{} ", methodBody);
             return;
         }
+
         /*
         switch (scriptType) {
             case JAVASCRIPT:

@@ -58,13 +58,13 @@ public class MethodBody {
     /**
      * script type
      */
-    private ScriptType scriptType;
+    private String scriptType;
 
 
     public MethodBody() {
     }
 
-    public MethodBody(ScriptType scriptType) {
+    public MethodBody(String scriptType) {
         this.scriptType = scriptType;
     }
 }

@@ -26,6 +26,9 @@ import java.util.Map;
  */
 public interface IScriptExecutor {
 
+    ExecuteMode executeMode();
+
+    String scriptType();
 
     Object execute(Map<String, Object> env);
 

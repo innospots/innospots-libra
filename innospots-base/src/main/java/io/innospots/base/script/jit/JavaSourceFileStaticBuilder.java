@@ -106,7 +106,7 @@ public class JavaSourceFileStaticBuilder implements SourceFileBuilder {
      * @param script
      * @return
      */
-    public JavaSourceFileStaticBuilder addScriptMethod(ScriptType scriptType, String methodName, String script) {
+    public JavaSourceFileStaticBuilder addScriptMethod(String scriptType, String methodName, String script) {
         StringBuilder buf = new StringBuilder();
         buf.append("public static String");
         buf.append(" _");
