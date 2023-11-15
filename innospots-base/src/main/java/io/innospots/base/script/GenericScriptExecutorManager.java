@@ -65,7 +65,6 @@ public class GenericScriptExecutorManager implements IScriptExecutorManager {
 
     protected String identifier;
 
-    protected JavaSourceFileCompiler compiler;
 
     protected JavaSourceFileStaticBuilder sourceBuilder;
 
@@ -73,7 +72,7 @@ public class GenericScriptExecutorManager implements IScriptExecutorManager {
 
     protected Map<String, IScriptExecutor> executors;
 
-    protected FileClassLoader classLoader;
+//    protected FileClassLoader classLoader;
 
 
     public static GenericScriptExecutorManager newInstance(String identifier) {
@@ -88,7 +87,7 @@ public class GenericScriptExecutorManager implements IScriptExecutorManager {
     @Override
     public void reload() throws ScriptException {
         try {
-            classLoader(true);
+//            classLoader(true);
             Class<?> clazz = classForName();
             Map<String, IScriptExecutor> tmpExp = new HashMap<>(5);
             for (Method method : clazz.getDeclaredMethods()) {
@@ -282,12 +281,15 @@ public class GenericScriptExecutorManager implements IScriptExecutorManager {
         return classPath;
     }
 
+    /*
     protected FileClassLoader classLoader(boolean update) {
         if (this.classLoader == null || update) {
             this.classLoader = new FileClassLoader(classPath());
         }
         return new FileClassLoader(classPath);
     }
+
+     */
 
     public void clearSrcFile() {
         this.sourceBuilder().deleteSourceFile();
@@ -301,9 +303,10 @@ public class GenericScriptExecutorManager implements IScriptExecutorManager {
 
     @Override
     public boolean build() throws ScriptException {
-        if (this.compiler == null) {
-            this.compiler = new JavaSourceFileCompiler(classPath());
-        }
+        JavaSourceFileCompiler compiler = new JavaSourceFileCompiler(classPath());
+//        if (this.compiler == null) {
+//            this.compiler = new JavaSourceFileCompiler(classPath());
+//        }
         this.sourceBuilder = sourceBuilder();
         if (this.sourceBuilder.hasSourceBody()) {
             try {
@@ -315,9 +318,9 @@ public class GenericScriptExecutorManager implements IScriptExecutorManager {
         }
 
         if (sourceBuilder.sourceFileExists()) {
-            this.compiler.addSourceFile(sourceBuilder.getSourceFile());
+            compiler.addSourceFile(sourceBuilder.getSourceFile());
             try {
-                this.compiler.compile();
+                compiler.compile();
                 reload();
                 logger.info("engine class file write complete, classFile:{} , loaded expresion size:{}", className(), executors.size());
                 return true;

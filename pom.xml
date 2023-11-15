@@ -12,6 +12,7 @@
         <module>innospots-libra</module>
         <module>innospots-server</module>
         <module>innospots-workflow</module>
+        <module>innospots-scripts</module>
 
     </modules>
 

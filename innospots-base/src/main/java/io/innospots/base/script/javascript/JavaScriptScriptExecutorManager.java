@@ -112,6 +112,42 @@ public class JavaScriptScriptExecutorManager implements IScriptExecutorManager {
         register(returnType, methodName, srcBody, new ParamField[0]);
     }
 
+
+    @Override
+    public synchronized void register(Class<?> returnType, String methodName, String srcBody, List<ParamField> params) {
+        if (CollectionUtils.isNotEmpty(params)) {
+            register(returnType, methodName, srcBody, params.toArray(new ParamField[]{}));
+        } else {
+            register(returnType, methodName, srcBody);
+        }
+
+    }
+
+    @Override
+    public synchronized void register(Class<?> returnType, String methodName, String srcBody, ParamField... params) {
+        sourceBuilder();
+        sourceBuilder.addMethod(returnType, srcBody, methodName, params);
+    }
+
+
+    public synchronized void registerScriptMethod(ScriptType scriptType, String methodName, String srcMethodBody) {
+        sourceBuilder();
+        sourceBuilder.addScriptMethod(scriptType, methodName, srcMethodBody);
+    public synchronized void registerScriptMethod(MethodBody methodBody) {
+        sourceBuilder.addScriptMethod(methodBody.getScriptType(), methodBody.getMethodName(), methodBody.getSrcBody());
+    }
+
+    @Override
+    public void register(Class<?> returnType, String methodName, String srcBody) {
+        register(returnType, methodName, srcBody, new ParamField("item", "item", FieldValueType.MAP));
+    }
+
+    @Override
+    public void register(MethodBody methodBody) {
+        register(methodBody.getReturnType(), methodBody.getMethodName(), methodBody.getSrcBody(), methodBody.getParams());
+    }
+
+
      */
 
     @Override
