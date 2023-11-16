@@ -109,6 +109,7 @@ public class GenericScriptExecutorManager implements IScriptExecutorManager {
             case SCRIPT:
                 this.sourceBuilder.addScriptMethod(methodBody);
                 break;
+                default:
         }
         executors.put(methodBody.getMethodName(),executor);
     }
@@ -131,7 +132,8 @@ public class GenericScriptExecutorManager implements IScriptExecutorManager {
             compiler.addSourceFile(sourceBuilder.getSourceFile());
             try {
                 compiler.compile();
-                reload();
+                //reload();
+                sourceBuilder.clear();
                 logger.info("engine class file write complete, classFile:{} , loaded expresion size:{}", className(), executors.size());
                 return true;
             } catch (IOException e) {
@@ -194,15 +196,8 @@ public class GenericScriptExecutorManager implements IScriptExecutorManager {
         if (clsFile.exists()) {
             clsFile.delete();
         }
-        sourceBuilder().deleteSourceFile();
-        /*
-        File sourceFile = new File(sourcePath().toFile(),identifier+".java");
-        logger.debug("remove source file:{}",sourceFile);
-        if(sourceFile.exists()){
-            sourceFile.delete();
-        }
-
-         */
+        sourceBuilder.clear();
+        sourceBuilder.deleteSourceFile();
     }
 
     @Override
@@ -272,17 +267,6 @@ public class GenericScriptExecutorManager implements IScriptExecutorManager {
         }
         return classPath;
     }
-
-    /*
-    protected FileClassLoader classLoader(boolean update) {
-        if (this.classLoader == null || update) {
-            this.classLoader = new FileClassLoader(classPath());
-        }
-        return new FileClassLoader(classPath);
-    }
-
-     */
-
 
     private JavaSourceFileStaticBuilder sourceBuilder() {
         if (sourceBuilder == null) {

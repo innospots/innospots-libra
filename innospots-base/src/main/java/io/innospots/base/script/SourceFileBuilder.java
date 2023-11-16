@@ -56,7 +56,5 @@ public interface SourceFileBuilder {
     void clear();
 
 
-    default String tab(int size) {
-        return StringUtils.leftPad("", size);
-    }
+
 }

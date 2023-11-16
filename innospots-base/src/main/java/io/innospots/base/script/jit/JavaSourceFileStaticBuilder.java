@@ -24,6 +24,7 @@ import io.innospots.base.model.field.ParamField;
 import io.innospots.base.script.SourceFileBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +38,7 @@ import java.util.*;
  * @date 2021/5/24
  */
 @Slf4j
-public class JavaSourceFileStaticBuilder implements SourceFileBuilder {
+public class JavaSourceFileStaticBuilder {
 
 
     private String packageName;
@@ -55,6 +56,8 @@ public class JavaSourceFileStaticBuilder implements SourceFileBuilder {
     private String identifier;
 
     private Map<String, String> scripts = new LinkedHashMap<>();
+
+    private File sourceDirectory;
 
     private String sourcePath;
 
@@ -97,23 +100,13 @@ public class JavaSourceFileStaticBuilder implements SourceFileBuilder {
         return this;
     }
 
-    public JavaSourceFileStaticBuilder addMethod(String methodName, String srcMethod) {
+
+    private void addMethod(String methodName, String srcMethod) {
         this.methods.put(methodName, srcMethod);
-        return this;
     }
 
-    public JavaSourceFileStaticBuilder addCmdMethod(MethodBody methodBody) {
-        StringBuilder buf = new StringBuilder();
-        buf.append("public static ");
-        if (methodBody.getReturnType() == null || methodBody.getReturnType().equals(Void.class)) {
-            buf.append("void");
-        } else {
-            buf.append(methodBody.getReturnType().getName());
-        }
-        buf.append(" ");
-        buf.append(methodBody.getMethodName());
-
-        return this;
+    public void addCmdMethod(MethodBody methodBody) {
+        this.addScriptMethod(methodBody);
     }
 
     /**
@@ -122,7 +115,7 @@ public class JavaSourceFileStaticBuilder implements SourceFileBuilder {
      * @param methodBody
      * @return
      */
-    public JavaSourceFileStaticBuilder addScriptMethod(MethodBody methodBody) {
+    public void addScriptMethod(MethodBody methodBody) {
         StringBuilder buf = new StringBuilder();
         buf.append("public static String");
         buf.append(" _");
@@ -135,8 +128,9 @@ public class JavaSourceFileStaticBuilder implements SourceFileBuilder {
         buf.append("\";");
         buf.append("\nreturn script;");
         buf.append("}");
-        return addMethod(methodBody.getMethodName(), buf.toString());
+        addMethod(methodBody.getMethodName(), buf.toString());
     }
+
 
     public void addMethod(MethodBody methodBody) {
         if (CollectionUtils.isEmpty(methodBody.getParams())) {
@@ -228,7 +222,7 @@ public class JavaSourceFileStaticBuilder implements SourceFileBuilder {
         return this;
     }
 
-    @Override
+
     public void writeToFile() throws IOException {
         Files.write(sourceFile.toPath(), toSource().getBytes());
     }
@@ -241,12 +235,14 @@ public class JavaSourceFileStaticBuilder implements SourceFileBuilder {
         return sourceFile.exists();
     }
 
-    @Override
+
     public void deleteSourceFile() {
         log.debug("remove source file:{}", sourceFile);
         if (sourceFile.exists()) {
             sourceFile.delete();
         }
+        //clear file
+        sourceDirectory.delete();
     }
 
     public boolean hasSourceBody() {
@@ -262,7 +258,6 @@ public class JavaSourceFileStaticBuilder implements SourceFileBuilder {
      *
      * @return
      */
-    @Override
     public String toSource() {
         StringBuilder src = new StringBuilder("package ");
         src.append(packageName);
@@ -301,12 +296,18 @@ public class JavaSourceFileStaticBuilder implements SourceFileBuilder {
         return src.toString();
     }
 
-    @Override
+
     public void clear() {
         this.varFields.clear();
         this.methods.clear();
         this.imports.clear();
+        this.scripts.clear();
         this.initialize();
+    }
+
+
+    private String tab(int size) {
+        return StringUtils.leftPad("", size);
     }
 
 
