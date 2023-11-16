@@ -18,45 +18,35 @@
 
 package io.innospots.base.script;
 
-import cn.hutool.core.annotation.AnnotationUtil;
-import io.innospots.base.script.java.ParamName;
-import io.innospots.base.script.java.ScriptMeta;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.Map;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import io.innospots.base.exception.ScriptException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Raydian
  * @date 2020/12/31
  */
-public interface IScriptExecutor {
-
-    void initialize(Method method);
-
-    ExecuteMode executeMode();
-
-    String scriptType();
-
-    String suffix();
-
-    Object execute(Map<String, Object> env);
-
-    Object execute(Object... args);
-
-    String[] arguments();
+public class ExecutorManagerFactory {
 
 
-    default boolean executeBoolean(Map<String,Object> env){
-        Object v = execute(env);
-        boolean o = false;
-        if (v instanceof String) {
-            o = Boolean.parseBoolean((String) v);
+    private static Cache<String, ScriptExecutorManager> executorManagerCache =
+            Caffeine.newBuilder()
+                    .expireAfterAccess(3, TimeUnit.HOURS)
+                    .build();
+
+    public static void clear(String identifier) {
+        executorManagerCache.invalidate(identifier);
+    }
+
+    public static ScriptExecutorManager getInstance(String identifier) throws ScriptException {
+        ScriptExecutorManager manager =  executorManagerCache.getIfPresent(identifier);
+        if (manager == null) {
+            manager = ScriptExecutorManager.newInstance(identifier);
+//            engine.reload();
+            executorManagerCache.put(identifier, manager);
         }
-        if (v instanceof Boolean) {
-            o = (Boolean) v;
-        }//end if
-        return o;
+        return manager;
     }
 
 }

@@ -19,13 +19,12 @@
 package io.innospots.workflow.runtime.flow;
 
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import io.innospots.base.enums.ScriptType;
 import io.innospots.base.exception.InnospotException;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.exception.ScriptException;
 import io.innospots.base.model.response.ResponseCode;
-import io.innospots.base.script.ExpressionEngineFactory;
-import io.innospots.base.script.GenericScriptExecutorManager;
+import io.innospots.base.script.ExecutorManagerFactory;
+import io.innospots.base.script.ScriptExecutorManager;
 import io.innospots.base.script.IScriptExecutorManager;
 import io.innospots.base.script.jit.MethodBody;
 import io.innospots.workflow.core.flow.WorkflowBaseBody;
@@ -55,7 +54,7 @@ public class FlowCompiler {
 
     private WorkflowBaseBody workflowInstance;
 
-    private GenericScriptExecutorManager genericExpressionEngine;
+    private ScriptExecutorManager genericExpressionEngine;
 
     public Map<String, IScriptExecutorManager> scriptEngines = new HashMap<>();
 
@@ -65,7 +64,8 @@ public class FlowCompiler {
     }
 
     private FlowCompiler(String identifier){
-        genericExpressionEngine = ExpressionEngineFactory.build(identifier);
+        genericExpressionEngine = null;
+//                ExecutorManagerFactory.build(identifier);
 //        genericExpressionEngine.prepare();
     }
 
@@ -81,10 +81,10 @@ public class FlowCompiler {
         genericExpressionEngine.clear();
         for (IScriptExecutorManager expressionEngine : scriptEngines.values()) {
             expressionEngine.clear();
-            ExpressionEngineFactory.clear(expressionEngine.identifier());
+            ExecutorManagerFactory.clear(expressionEngine.identifier());
         }
         scriptEngines.clear();
-        ExpressionEngineFactory.clear(genericExpressionEngine.identifier());
+        ExecutorManagerFactory.clear(genericExpressionEngine.identifier());
     }
 
     public boolean isCompiled() {
@@ -105,7 +105,7 @@ public class FlowCompiler {
         }
         genericExpressionEngine.build();
         scriptEngines.values().stream().filter(Objects::nonNull).forEach(IScriptExecutorManager::build);
-        outputFlowFile(GenericScriptExecutorManager.getClassPath() + File.separator + DIR_FLOW_CONFIG);
+        outputFlowFile(ScriptExecutorManager.getClassPath() + File.separator + DIR_FLOW_CONFIG);
     }
 
 

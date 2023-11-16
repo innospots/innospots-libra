@@ -16,45 +16,28 @@
  *  limitations under the License.
  */
 
-package io.innospots.base.script;
+package io.innospots.base.script.java;
 
-import io.innospots.base.model.field.FieldValueType;
-import io.innospots.base.model.field.ParamField;
-import io.innospots.base.script.jit.MethodBody;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
+ * 方法参数信息注解
+ *
  * @author Smars
- * @version 1.0.0
- * @date 2022/11/5
+ * @date 2021/5/21
  */
-public interface SourceFileBuilder {
+@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ScriptMeta {
 
+    String scriptType() default "";
 
-    default void addMethod(MethodBody methodBody) {
+    String suffix() default "";
 
-    }
+    String path() default "";
 
-
-    default void writeToFile() throws IOException {
-    }
-
-    void deleteSourceFile();
-
-    /**
-     * build script source
-     *
-     * @return
-     */
-    String toSource();
-
-    void clear();
-
-
-
+    String[] args() default {};
 }

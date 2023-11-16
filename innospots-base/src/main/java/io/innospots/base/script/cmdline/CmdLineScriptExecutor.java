@@ -37,22 +37,14 @@ import java.util.Optional;
  * @date 2022/11/5
  */
 @Slf4j
-public class CmdLineScriptExecutor implements IScriptExecutor {
+public abstract class CmdLineScriptExecutor implements IScriptExecutor {
 
-    protected String cmdPath;
     protected String scriptPath;
     protected String[] arguments;
 
-    public CmdLineScriptExecutor(String cmdPath, String scriptPath, String[] arguments) {
-        this.cmdPath = cmdPath;
-        this.scriptPath = scriptPath;
-        this.arguments = arguments;
+    public CmdLineScriptExecutor() {
     }
 
-    public CmdLineScriptExecutor(String cmdPath, String scriptPath) {
-        this.cmdPath = cmdPath;
-        this.scriptPath = scriptPath;
-    }
 
     @Override
     public void initialize(Method method) {
@@ -61,17 +53,7 @@ public class CmdLineScriptExecutor implements IScriptExecutor {
 
     @Override
     public ExecuteMode executeMode() {
-        return null;
-    }
-
-    @Override
-    public String scriptType() {
-        return null;
-    }
-
-    @Override
-    public String suffix() {
-        return null;
+        return ExecuteMode.CMD;
     }
 
     @Override
@@ -83,13 +65,13 @@ public class CmdLineScriptExecutor implements IScriptExecutor {
         for (int i = 0; i < this.arguments.length; i++) {
             values[i] = Optional.ofNullable(arguments[i]).orElse(null);
         }
-        return values;
+        return execute(values);
     }
 
     @Override
     public Object execute(Object... args) throws ScriptException {
         List<String> params = new ArrayList<>();
-        params.add(cmdPath);
+        params.add(cmdPath());
         params.add(scriptPath);
         for (int i = 0; i < args.length; i++) {
             String value = args[i] != null ? String.valueOf(args[i]) : null;
@@ -107,5 +89,9 @@ public class CmdLineScriptExecutor implements IScriptExecutor {
     @Override
     public String[] arguments() {
         return arguments;
+    }
+
+    protected String cmdPath() {
+        return System.getenv(this.scriptType() + ".path");
     }
 }

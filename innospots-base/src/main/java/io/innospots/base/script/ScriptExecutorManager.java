@@ -20,10 +20,6 @@ package io.innospots.base.script;
 
 import io.innospots.base.enums.ScriptType;
 import io.innospots.base.exception.ScriptException;
-import io.innospots.base.script.aviator.AviatorScriptScriptExecutorManager;
-import io.innospots.base.script.java.JavaScriptExecutor;
-import io.innospots.base.script.javascript.JavaScriptScriptExecutorManager;
-import io.innospots.base.script.jit.FileClassLoader;
 import io.innospots.base.script.jit.JavaSourceFileCompiler;
 import io.innospots.base.script.jit.JavaSourceFileStaticBuilder;
 import io.innospots.base.script.jit.MethodBody;
@@ -48,9 +44,9 @@ import java.util.Map;
  * @author Smars
  * @date 2021/5/16
  */
-public class GenericScriptExecutorManager implements IScriptExecutorManager {
+public class ScriptExecutorManager implements IScriptExecutorManager {
 
-    private static final Logger logger = LoggerFactory.getLogger(GenericScriptExecutorManager.class);
+    private static final Logger logger = LoggerFactory.getLogger(ScriptExecutorManager.class);
 
     public static final String DEFAULT_EXP_PKG = "live.re.scripts";
 
@@ -78,14 +74,12 @@ public class GenericScriptExecutorManager implements IScriptExecutorManager {
      */
     private static Map<String, Class<IScriptExecutor>> executorClasses = new HashMap<>();
 
-//    protected FileClassLoader classLoader;
 
-
-    public static GenericScriptExecutorManager newInstance(String identifier) {
-        return new GenericScriptExecutorManager(identifier);
+    public static ScriptExecutorManager newInstance(String identifier) {
+        return new ScriptExecutorManager(identifier);
     }
 
-    public GenericScriptExecutorManager(String identifier) {
+    public ScriptExecutorManager(String identifier) {
         this.identifier = identifier;
         sourceBuilder();
     }

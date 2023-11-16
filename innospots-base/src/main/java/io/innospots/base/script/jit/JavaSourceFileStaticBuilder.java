@@ -18,10 +18,8 @@
 
 package io.innospots.base.script.jit;
 
-import io.innospots.base.enums.ScriptType;
 import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.model.field.ParamField;
-import io.innospots.base.script.SourceFileBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -120,6 +118,8 @@ public class JavaSourceFileStaticBuilder {
         buf.append("public static String");
         buf.append(" _");
         buf.append(methodBody.getScriptType());
+        buf.append("_");
+        buf.append(methodBody.getSuffix());
         buf.append("_");
         buf.append(methodBody.getMethodName());
         buf.append("() {\n");

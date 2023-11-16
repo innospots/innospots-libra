@@ -2,7 +2,7 @@ package io.innospots.workflow.node.app;
 
 import io.innospots.base.exception.ScriptException;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.script.GenericScriptExecutorManager;
+import io.innospots.base.script.ScriptExecutorManager;
 import io.innospots.base.script.IScriptExecutorManager;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
@@ -38,10 +38,10 @@ public class BaseNodeTest {
         NodeInstance instance = build(fileName + ".json");
         System.out.println(instance);
 
-        GenericScriptExecutorManager.setPath("target/classes", "target/classes");
+        ScriptExecutorManager.setPath("target/classes", "target/classes");
 
 
-        System.out.println(GenericScriptExecutorManager.getClassPath());
+        System.out.println(ScriptExecutorManager.getClassPath());
         //BaseAppNode baseNode = instance.registerToEngine(engine,instance);
 
         BaseNodeExecutor appNode = null;

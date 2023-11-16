@@ -16,51 +16,33 @@
  * limitations under the License.
  */
 
-package io.innospots.base.script;
-
-import io.innospots.base.exception.ScriptException;
-
-import java.lang.reflect.Method;
-import java.util.Map;
+package io.innospots.base.script.cmdline;
 
 /**
  * @author Smars
- * @date 2023/11/13
+ * @vesion 2.0
+ * @date 2023/11/16
  */
-public class Jsr223ScriptExecutor implements IScriptExecutor {
+public class CmdPythonScriptExecutor extends CmdLineScriptExecutor{
 
-    @Override
-    public void initialize(Method method) {
 
-    }
-
-    @Override
-    public ExecuteMode executeMode() {
-        return null;
-    }
 
     @Override
     public String scriptType() {
-        return null;
+        return "python";
     }
 
     @Override
     public String suffix() {
-        return null;
+        return "py";
     }
 
     @Override
-    public Object execute(Map<String, Object> env) throws ScriptException {
-        return null;
-    }
-
-    @Override
-    public Object execute(Object... args) {
-        return null;
-    }
-
-    @Override
-    public String[] arguments() {
-        return new String[0];
+    protected String cmdPath() {
+        String cmd = super.cmdPath();
+        if(cmd == null){
+            cmd = "python";
+        }
+        return cmd;
     }
 }

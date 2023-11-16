@@ -18,8 +18,6 @@
 
 package io.innospots.base.script.cmdline;
 
-import io.innospots.base.model.field.ParamField;
-import io.innospots.base.script.SourceFileBuilder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -35,7 +33,7 @@ import java.util.Map;
  * @date 2022/11/7
  */
 @Slf4j
-public class SimpleScriptSourceFileBuilder implements SourceFileBuilder {
+public class SimpleScriptSourceFileBuilder  {
 
     private File sourceDirectory;
 
@@ -56,7 +54,7 @@ public class SimpleScriptSourceFileBuilder implements SourceFileBuilder {
 //        scripts.put(methodName, body);
 //    }
 
-    @Override
+
     public void writeToFile() throws IOException {
         if (!sourceDirectory.exists()) {
             sourceDirectory.mkdirs();
@@ -75,17 +73,17 @@ public class SimpleScriptSourceFileBuilder implements SourceFileBuilder {
         return !scripts.isEmpty();
     }
 
-    @Override
+
     public String toSource() {
         return "";
     }
 
-    @Override
+
     public void clear() {
         scripts.clear();
     }
 
-    @Override
+
     public void deleteSourceFile() {
         for (File scriptFile : getScriptFiles()) {
             scriptFile.delete();

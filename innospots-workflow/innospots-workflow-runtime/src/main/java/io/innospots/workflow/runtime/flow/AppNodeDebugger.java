@@ -20,7 +20,7 @@ package io.innospots.workflow.runtime.flow;
 
 import cn.hutool.crypto.digest.DigestUtil;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.script.ExpressionEngineFactory;
+import io.innospots.base.script.ExecutorManagerFactory;
 import io.innospots.workflow.core.debug.DebugPayload;
 import io.innospots.workflow.core.debug.DebugInput;
 import io.innospots.workflow.core.execution.enums.RecordMode;
@@ -114,7 +114,7 @@ public class AppNodeDebugger {
         }
         nodeExecution.setInputs(inputs);
         appNode.innerExecute(nodeExecution,flowExecution);
-        ExpressionEngineFactory.clear(identifier);
+        ExecutorManagerFactory.clear(identifier);
         return NodeExecutionDisplay.build(nodeExecution,ni);
     }
 }

@@ -1,8 +1,7 @@
 package io.innospots.base.script.javascript;
 
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.script.GenericScriptExecutorManager;
-import io.innospots.base.script.IScriptExecutor;
+import io.innospots.base.script.ScriptExecutorManager;
 import org.junit.Test;
 
 import javax.script.*;
@@ -18,7 +17,7 @@ public class JavascriptExpressioinEngineTest2 {
     @Test
     public void test2() {
         String path = "/Users/yxy/works/innospots-v3/_script_build_path";
-        GenericScriptExecutorManager.setPath(path, path);
+        ScriptExecutorManager.setPath(path, path);
 //        GenericScriptExecutorManager engine = GenericScriptExecutorManager.build("Flow_97_0");
 //        engine.reload();
 //        IScriptExecutor expression = engine.getExecutor("$fnMgtskBS");

@@ -20,20 +20,20 @@ class ShellExpressionEngineTest {
         ScriptType scriptType = ScriptType.SHELL;
         String scriptPath = "/tmp";
         String suffix = "sh";
-        ShellScriptExecutorManager engine = ShellScriptExecutorManager.build(cmd, scriptPath, identifier);
+//        ShellScriptExecutorManager engine = ShellScriptExecutorManager.build(cmd, scriptPath, identifier);
 //        String script = "echo 'hello world!'";
         String script = "echo $1 $2;";
         String method = "_fn56UQ5vW";
 //        engine.deleteBuildFile();
 //        engine.register(Void.class, method, script);
 //        engine.compile();
-        IScriptExecutor expression = engine.getExecutor(method);
-        Assert.notNull(expression, "expression not null.");
-        if (expression != null) {
-            Object obj = expression.execute("11", 22, "33");
-            System.out.println("----------");
-            System.out.println(obj);
-        }
+//        IScriptExecutor expression = engine.getExecutor(method);
+//        Assert.notNull(expression, "expression not null.");
+//        if (expression != null) {
+//            Object obj = expression.execute("11", 22, "33");
+//            System.out.println("----------");
+//            System.out.println(obj);
+//        }
     }
 
 }

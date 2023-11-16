@@ -21,7 +21,7 @@ package io.innospots.workflow.runtime.flow;
 
 import io.innospots.base.exception.ScriptException;
 import io.innospots.base.exception.ValidatorException;
-import io.innospots.base.script.ExpressionEngineFactory;
+import io.innospots.base.script.ExecutorManagerFactory;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.enums.BuildStatus;
 import io.innospots.workflow.core.enums.FlowStatus;
@@ -184,7 +184,7 @@ public class Flow extends WorkflowInstance {
 
             logger.info("flowId: {}, name:{}, loadStatus: {}, node size:{}", workflowBody.getWorkflowInstanceId(), workflowBody.getName(), loadStatus, nodeCache.size());
             buildProcessInfo.setStatus(loadStatus);
-            ExpressionEngineFactory.clear(workflowBody.identifier());
+            ExecutorManagerFactory.clear(workflowBody.identifier());
             buildProcessInfo.setEndTime(System.currentTimeMillis());
         }
         return buildProcessInfo;

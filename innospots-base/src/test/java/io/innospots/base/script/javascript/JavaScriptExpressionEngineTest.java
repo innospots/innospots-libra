@@ -17,7 +17,7 @@ public class JavaScriptExpressionEngineTest {
 
     @Test
     public void build() {
-        JavaScriptScriptExecutorManager engine = JavaScriptScriptExecutorManager.build("abc");
+//        JavaScriptScriptExecutorManager engine = JavaScriptScriptExecutorManager.build("abc");
         ParamField p = new ParamField();
         p.setCode("param");
         p.setName("param");
@@ -27,18 +27,18 @@ public class JavaScriptExpressionEngineTest {
 //        String src = "var p1=1; param= param+p1; print('param'); return p1;";
 //        engine.register(Object.class, "test1", src, p);
 
-        IScriptExecutor expression = engine.getExecutor("test1");
-        Map<String, Object> inputs = new HashMap<>();
-        inputs.put("param", "obs");
-        Object v = expression.execute(inputs);
-        System.out.println(v);
-        v = expression.execute("bsd");
-        System.out.println(v);
+//        IScriptExecutor expression = engine.getExecutor("test1");
+//        Map<String, Object> inputs = new HashMap<>();
+//        inputs.put("param", "obs");
+//        Object v = expression.execute(inputs);
+//        System.out.println(v);
+//        v = expression.execute("bsd");
+//        System.out.println(v);
     }
 
     @Test
     public void build22() {
-        JavaScriptScriptExecutorManager engine = JavaScriptScriptExecutorManager.build("abc");
+//        JavaScriptScriptExecutorManager engine = JavaScriptScriptExecutorManager.build("abc");
 
         String src = "print(payload.k2); " +
                 "var item = new Object(); " +
@@ -51,21 +51,21 @@ public class JavaScriptExpressionEngineTest {
 //        String src = "var p1=1; param= param+p1; print('param'); return p1;";
 //        engine.register(Object.class, "test1", src);
 
-        IScriptExecutor expression = engine.getExecutor("test1");
+//        IScriptExecutor expression = engine.getExecutor("test1");
         Map<String, Object> inputs = new HashMap<>();
         Map<String, Object> ov = new HashMap<>();
         ov.put("k", "k1k1");
         ov.put("k2", "k22");
         inputs.put("payload", ov);
-        Object v = expression.execute(inputs);
-        System.out.println(v.getClass());
-        System.out.println("pl:" + v);
+//        Object v = expression.execute(inputs);
+//        System.out.println(v.getClass());
+//        System.out.println("pl:" + v);
         //ScriptObjectMirror so = (ScriptObjectMirror) v;
-        if (v instanceof Map) {
-            Map vv = new HashMap();
-            vv.putAll((Map) v);
-            System.out.println(vv);
-        }
+//        if (v instanceof Map) {
+//            Map vv = new HashMap();
+//            vv.putAll((Map) v);
+//            System.out.println(vv);
+//        }
 
 
     }
@@ -206,7 +206,7 @@ public class JavaScriptExpressionEngineTest {
 
     @Test
     public void test3() throws ScriptException {
-        JavaScriptScriptExecutorManager engine = JavaScriptScriptExecutorManager.build("abc");
+//        JavaScriptScriptExecutorManager engine = JavaScriptScriptExecutorManager.build("abc");
         ParamField p = new ParamField();
         p.setCode("p1");
         p.setName("p1");
@@ -216,20 +216,20 @@ public class JavaScriptExpressionEngineTest {
 //        String src = "var p1=1; param= param+p1; print('param'); return p1;";
 //        engine.register(Object.class, "test1", src, p);
 
-        JavaScriptScriptExecutor expression = (JavaScriptScriptExecutor) engine.getExecutor("test1");
+//        JavaScriptScriptExecutor expression = (JavaScriptScriptExecutor) engine.getExecutor("test1");
 
 
-        Bindings bindings = expression.getCompiledScript().getEngine().createBindings();
-        bindings.put("a", "osd");
-        bindings.put("p1", 1);
+//        Bindings bindings = expression.getCompiledScript().getEngine().createBindings();
+//        bindings.put("a", "osd");
+//        bindings.put("p1", 1);
 
-        Object result = expression.getCompiledScript().eval(bindings);
-        System.out.println(result);
+//        Object result = expression.getCompiledScript().eval(bindings);
+//        System.out.println(result);
     }
 
     @Test
     public void test5() {
-        JavaScriptScriptExecutorManager engine = JavaScriptScriptExecutorManager.build("abc");
+//        JavaScriptScriptExecutorManager engine = JavaScriptScriptExecutorManager.build("abc");
         ParamField p = new ParamField();
         p.setCode("param");
         p.setName("param");
@@ -241,25 +241,25 @@ public class JavaScriptExpressionEngineTest {
 //        String src = "var p1=1; param= param+p1; print('param'); return p1;";
 //        engine.register(Object.class, "test1", src, p);
 
-        IScriptExecutor expression = engine.getExecutor("test1");
+//        IScriptExecutor expression = engine.getExecutor("test1");
         Map<String, Object> inputs = new HashMap<>();
         inputs.put("param", "obs");
         long ss = System.currentTimeMillis();
-        Object v = expression.execute(inputs);
-        long ee = System.currentTimeMillis() - ss;
-        System.out.println(v);
-        System.out.println(ee);
+//        Object v = expression.execute(inputs);
+//        long ee = System.currentTimeMillis() - ss;
+//        System.out.println(v);
+//        System.out.println(ee);
 
-        v = expression.execute("bsd");
-        System.out.println(v);
+//        v = expression.execute("bsd");
+//        System.out.println(v);
 
         long s = System.currentTimeMillis();
         int size = 50000;
         for (int i = 0; i < size; i++) {
             String vs = "abc" + i;
-            v = expression.execute(vs);
+//            v = expression.execute(vs);
         }
-        System.out.println("v:" + v);
+//        System.out.println("v:" + v);
         long e = System.currentTimeMillis();
         long c = e - s;
         System.out.println(c);

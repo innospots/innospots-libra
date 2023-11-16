@@ -16,12 +16,32 @@
  * limitations under the License.
  */
 
-package io.innospots.base.script;
+package io.innospots.base.script.cmdline;
 
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2023/11/12
+ * @date 2023/11/16
  */
-public class ExecutorBuilderFactory {
+public class CmdShellScriptExecutor extends CmdLineScriptExecutor {
+
+
+    @Override
+    public String scriptType() {
+        return "shell";
+    }
+
+    @Override
+    public String suffix() {
+        return "sh";
+    }
+
+    @Override
+    protected String cmdPath() {
+        String cmd = super.cmdPath();
+        if(cmd == null){
+            cmd = "sh";
+        }
+        return cmd;
+    }
 }

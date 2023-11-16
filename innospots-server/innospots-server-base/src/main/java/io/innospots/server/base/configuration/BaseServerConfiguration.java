@@ -21,7 +21,7 @@ package io.innospots.server.base.configuration;
 import cn.hutool.extra.spring.SpringUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.innospots.base.events.EventBusCenter;
-import io.innospots.base.script.GenericScriptExecutorManager;
+import io.innospots.base.script.ScriptExecutorManager;
 import io.innospots.server.base.exception.GlobalExceptionHandler;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.BeanContextAware;
@@ -58,7 +58,7 @@ public class BaseServerConfiguration {
 
     @PostConstruct
     public void buildPath(InnospotsServerProperties configProperties) {
-        GenericScriptExecutorManager.setPath(configProperties.getScriptBuildPath() + File.separator + "src", configProperties.getScriptBuildPath());
+        ScriptExecutorManager.setPath(configProperties.getScriptBuildPath() + File.separator + "src", configProperties.getScriptBuildPath());
     }
 
     @Bean

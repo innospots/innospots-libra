@@ -34,20 +34,17 @@ import java.util.Map;
  * @author Smars
  * @date 2021/4/2
  */
-public class JavaScriptExecutor implements IScriptExecutor {
+public class JavaNativeExecutor implements IScriptExecutor {
 
-    private static final Logger logger = LoggerFactory.getLogger(JavaScriptExecutor.class);
+    private static final Logger logger = LoggerFactory.getLogger(JavaNativeExecutor.class);
 
     private Method method;
     private String[] arguments;
 
-    public JavaScriptExecutor(Method method) {
-        this.method = method;
-        this.reloadArgs(method);
-    }
 
     private void reloadArgs(Method method) {
         this.arguments = new String[method.getParameterAnnotations().length];
+        this.method = method;
         for (int i = 0; i < method.getParameterAnnotations().length; i++) {
             Annotation[] annotations = method.getParameterAnnotations()[i];
             for (Annotation annotation : annotations) {
@@ -65,22 +62,23 @@ public class JavaScriptExecutor implements IScriptExecutor {
 
     @Override
     public void initialize(Method method) {
-
+        this.method = method;
+        this.reloadArgs(method);
     }
 
     @Override
     public ExecuteMode executeMode() {
-        return null;
+        return ExecuteMode.NATIVE;
     }
 
     @Override
     public String scriptType() {
-        return null;
+        return "java";
     }
 
     @Override
     public String suffix() {
-        return null;
+        return "java";
     }
 
     @Override

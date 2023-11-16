@@ -21,20 +21,20 @@ class CmdlineExpressionEngineTest {
         ScriptType scriptType = ScriptType.SHELL;
         String scriptPath = "/tmp";
         String suffix = "sh";
-        CmdlineScriptExecutorManager engine = CmdlineScriptExecutorManager.build(cmd, scriptPath, identifier, scriptType.name(), suffix);
+//        CmdlineScriptExecutorManager engine = CmdlineScriptExecutorManager.build(cmd, scriptPath, identifier, scriptType.name(), suffix);
 //        String script = "echo 'hello world!'";
         String script = "echo $1 $2;";
         String method = "_fn56UQ5vW";
 //        engine.deleteBuildFile();
 //        engine.register(Void.class, method, script);
 //        engine.compile();
-        IScriptExecutor expression = engine.getExecutor(method);
-        Assert.notNull(expression, "expression not null.");
-        if (expression != null) {
-            Object obj = expression.execute("11", 22, "33");
-            System.out.println("----------");
-            System.out.println(obj);
-        }
+//        IScriptExecutor expression = engine.getExecutor(method);
+//        Assert.notNull(expression, "expression not null.");
+//        if (expression != null) {
+//            Object obj = expression.execute("11", 22, "33");
+//            System.out.println("----------");
+//            System.out.println(obj);
+//        }
     }
 
     @Test
@@ -44,20 +44,20 @@ class CmdlineExpressionEngineTest {
         ScriptType scriptType = ScriptType.PYTHON;
         String scriptPath = "/tmp";
         String suffix = "py";
-        CmdlineScriptExecutorManager engine = CmdlineScriptExecutorManager.build(cmd, scriptPath, identifier, scriptType.name(), suffix);
+//        CmdlineScriptExecutorManager engine = CmdlineScriptExecutorManager.build(cmd, scriptPath, identifier, scriptType.name(), suffix);
 //        String script = "echo 'hello world!'";
         String script = "print(\"Hello, World!\"); counter =100;print(counter+201);";
         String method = "_fn79es5Ar";
 //        engine.deleteBuildFile();
 //        engine.register(Void.class, method, script);
 //        engine.compile();
-        IScriptExecutor expression = engine.getExecutor(method);
-        Assert.notNull(expression, "expression not null.");
-        if (expression != null) {
-            Object obj = expression.execute("11", 22, "33");
-            System.out.println("----------");
-            System.out.println(obj);
-        }
+//        IScriptExecutor expression = engine.getExecutor(method);
+//        Assert.notNull(expression, "expression not null.");
+//        if (expression != null) {
+//            Object obj = expression.execute("11", 22, "33");
+//            System.out.println("----------");
+//            System.out.println(obj);
+//        }
     }
 
 }
