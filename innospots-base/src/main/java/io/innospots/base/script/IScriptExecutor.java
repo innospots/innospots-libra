@@ -18,12 +18,11 @@
 
 package io.innospots.base.script;
 
-import cn.hutool.core.annotation.AnnotationUtil;
-import io.innospots.base.script.java.ParamName;
-import io.innospots.base.script.java.ScriptMeta;
+import io.innospots.base.model.Pair;
+import io.innospots.base.script.jit.MethodBody;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -42,10 +41,19 @@ public interface IScriptExecutor {
 
     Object execute(Map<String, Object> env);
 
-    Object execute(Object... args);
+    default Object execute(Object... args){
+        Map<String, Object> env = new HashMap<>();
+        for (int i = 0; i < args.length; i++) {
+            env.put(arguments()[i], args[i]);
+        }
+        return execute(env);
+    }
 
     String[] arguments();
 
+
+    default void reBuildMethodBody(MethodBody methodBody){
+    }
 
     default boolean executeBoolean(Map<String,Object> env){
         Object v = execute(env);
@@ -57,6 +65,17 @@ public interface IScriptExecutor {
             o = (Boolean) v;
         }//end if
         return o;
+    }
+
+    default Pair<Class<?>,String>[] argsPair(String[] args) throws ClassNotFoundException {
+        Pair<Class<?>,String>[] pairs = new Pair[args.length];
+        for (int i = 0; i < args.length; i++) {
+            String[] ss= args[i].split(" ");
+            if (ss.length == 2) {
+                pairs[i] = Pair.of(Class.forName(ss[0]),ss[1]);
+            }
+        }
+        return pairs;
     }
 
 }

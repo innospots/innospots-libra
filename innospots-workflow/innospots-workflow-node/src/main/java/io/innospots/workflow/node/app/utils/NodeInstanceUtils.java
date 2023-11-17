@@ -6,6 +6,7 @@ import io.innospots.base.condition.Mode;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.script.IScriptExecutor;
+import io.innospots.base.script.aviator.AviatorExpressionExecutor;
 import io.innospots.base.script.aviator.AviatorScriptExecutor;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.base.utils.Initializer;
@@ -81,7 +82,7 @@ public class NodeInstanceUtils {
         if (embedCondition != null) {
             String exp = embedCondition.getStatement();
             if (StringUtils.isNotEmpty(exp)) {
-                expression = new AviatorScriptExecutor(exp, null);
+                expression = new AviatorExpressionExecutor(exp);
             }
         }
         return expression;

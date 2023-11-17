@@ -27,6 +27,7 @@ import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.field.BaseField;
 import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.script.IScriptExecutor;
+import io.innospots.base.script.aviator.AviatorExpressionExecutor;
 import io.innospots.base.script.aviator.AviatorScriptExecutor;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.base.utils.Initializer;
@@ -100,7 +101,7 @@ public class AggregationComputeField extends BaseField implements Initializer {
             condition.initialize();
             expr = condition.getStatement();
             if (StringUtils.isNotEmpty(expr)) {
-                conditionExpression = new AviatorScriptExecutor(expr, null);
+                conditionExpression = new AviatorExpressionExecutor(expr);
             }
         }
         this.aggregateFunction = AggregationFunctionBuilder.build(functionType, summaryField,weightField, conditionExpression);

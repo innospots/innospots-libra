@@ -22,6 +22,7 @@ import cn.hutool.core.annotation.AnnotationUtil;
 import io.innospots.base.enums.ScriptType;
 import io.innospots.base.exception.ScriptException;
 import io.innospots.base.json.JSONUtils;
+import io.innospots.base.model.Pair;
 import io.innospots.base.script.ExecuteMode;
 import io.innospots.base.script.IScriptExecutor;
 import io.innospots.base.script.java.ScriptMeta;
@@ -30,10 +31,8 @@ import lombok.extern.slf4j.Slf4j;
 import javax.script.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Smars
@@ -42,7 +41,7 @@ import java.util.Map;
 @Slf4j
 public abstract class Jsr223ScriptExecutor implements IScriptExecutor {
 
-    protected Compilable compilable;
+//    protected Compilable compilable;
 
     protected CompiledScript compiledScript;
 
@@ -53,21 +52,20 @@ public abstract class Jsr223ScriptExecutor implements IScriptExecutor {
         ScriptMeta scriptMeta = AnnotationUtil.getAnnotation(method, ScriptMeta.class);
         try {
             String scriptBody = (String) method.invoke(null);
-            compilable = compilable();
+            Compilable compilable = compilable();
             compiledScript = compilable.compile(scriptBody);
-            arguments = scriptMeta.args();
-        } catch (IllegalAccessException | InvocationTargetException | javax.script.ScriptException e) {
+            Pair<Class<?>,String>[] pairs = this.argsPair(scriptMeta.args());
+            arguments = Arrays.stream(pairs).map(Pair::getRight).collect(Collectors.toList()).toArray(String[]::new);
+        } catch (IllegalAccessException | InvocationTargetException | javax.script.ScriptException |
+                 ClassNotFoundException e) {
             log.error(e.getMessage(), e);
         }
 
     }
 
     private Compilable compilable() {
-        if (compilable == null) {
-            ScriptEngineManager engineManager = new ScriptEngineManager();
-            compilable = (Compilable) engineManager.getEngineByName(scriptType());
-        }
-        return compilable;
+        ScriptEngineManager engineManager = new ScriptEngineManager();
+        return (Compilable) engineManager.getEngineByName(scriptType());
     }
 
     @Override

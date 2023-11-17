@@ -62,6 +62,12 @@ public class WorkflowBaseBody extends WorkflowInstanceBase {
         this.revision = revision;
     }
 
+    public void addNode(NodeInstance nodeInstance){
+        if(nodes == null){
+            this.nodes = new ArrayList<>();
+        }
+        this.nodes.add(nodeInstance);
+    }
 
     /**
      * 检查节点是否循环依赖

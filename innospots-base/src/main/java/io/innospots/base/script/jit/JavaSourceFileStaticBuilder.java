@@ -20,6 +20,7 @@ package io.innospots.base.script.jit;
 
 import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.model.field.ParamField;
+import io.innospots.base.script.java.ScriptMeta;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +31,7 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Smars
@@ -55,7 +57,7 @@ public class JavaSourceFileStaticBuilder {
 
     private Map<String, String> scripts = new LinkedHashMap<>();
 
-    private File sourceDirectory;
+    private File scriptDir;
 
     private String sourcePath;
 
@@ -68,7 +70,8 @@ public class JavaSourceFileStaticBuilder {
     }
 
     private JavaSourceFileStaticBuilder initialize() {
-        this.addImport("import io.innospots.base.re.java.ParamName;")
+        this.addImport("import io.innospots.base.script.java.ParamName;")
+                .addImport("import io.innospots.base.script.java.ScriptMeta;")
                 .addImport("import io.innospots.base.json.JSONUtils;")
                 .addImport("import java.util.*;")
                 .addImport("import java.util.regex.*;")
@@ -82,7 +85,7 @@ public class JavaSourceFileStaticBuilder {
                 .addImport("import com.googlecode.aviator.AviatorEvaluator;")
                 .addImport("import com.googlecode.aviator.Expression;")
                 .addImport("import org.slf4j.LoggerFactory;")
-                .addImport("import static io.innospots.base.re.function.HttpFunc.*;")
+                .addImport("import static io.innospots.base.script.function.HttpFunc.*;")
                 .addImport("import static io.innospots.base.utils.time.DateTimeUtils.*;")
                 .addField("private static final Logger logger = LoggerFactory.getLogger(" + className + ".class);");
         return this;
@@ -131,8 +134,35 @@ public class JavaSourceFileStaticBuilder {
         addMethod(methodBody.getMethodName(), buf.toString());
     }
 
+    private void fillMeta(StringBuilder buf,MethodBody methodBody){
+        buf.append("@ScriptMeta(scriptType=\"").append(methodBody.getScriptType()).append("\"");
+        buf.append(" ,suffix=\"").append(methodBody.getSuffix()).append("\"");
+        if(methodBody.getParams()!=null){
+            String args = methodBody.getParams().stream().map(f->{
+                String arg = "";
+                FieldValueType valueType = f.getValueType();
+                if(valueType == null){
+                    arg = Object.class.getSimpleName();
+                }else{
+                    arg = valueType.getClazz().getSimpleName();
+                }
+                return "\"" +arg + " " +f.getCode()+"\"";})
+                    .collect(Collectors.joining(","));
+
+            buf.append(" ,args={").append(args).append("}");
+        }
+        buf.append(" ,path=\"").append(scriptDir.getPath()).append(File.separator).append(methodBody.scriptName()).append("\"");
+        buf.append(", returnType=\"").append(methodBody.getReturnType().getSimpleName()).append("\"");
+        buf.append(")");
+    }
 
     public void addMethod(MethodBody methodBody) {
+        StringBuilder buf = new StringBuilder();
+        fillMeta(buf,methodBody);
+        buf.append("public static ");
+        Class<?> returnType = methodBody.getReturnType();
+        String methodName = methodBody.getMethodName();
+        ParamField[] params = null;
         if (CollectionUtils.isEmpty(methodBody.getParams())) {
             ParamField paramField = new ParamField();
             paramField.setCode("item");
@@ -143,13 +173,9 @@ public class JavaSourceFileStaticBuilder {
             pm.add(paramField);
             methodBody.setParams(pm);
         }
-        ParamField[] paramFields = methodBody.getParams().toArray(new ParamField[0]);
-        addMethod(methodBody.getReturnType(), methodBody.getSrcBody(), methodBody.getMethodName(), paramFields);
-    }
+        methodBody.getParams().toArray(new ParamField[0]);
+        String body = methodBody.getSrcBody();
 
-    private void addMethod(Class<?> returnType, String body, String methodName, ParamField... params) {
-        StringBuilder buf = new StringBuilder();
-        buf.append("public static ");
         if (returnType == null || returnType.equals(Void.class)) {
             buf.append("void");
         } else {
@@ -158,21 +184,18 @@ public class JavaSourceFileStaticBuilder {
         buf.append(" ");
         buf.append(methodName);
         buf.append("(");
-        if (params != null && params.length > 0) {
-            for (int i = 0; i < params.length; i++) {
-                buf.append("@ParamName(value=\"");
-                buf.append(params[i].getCode());
-                buf.append("\") ");
-                buf.append(params[i].getValueType().getClazz().getName());
-                buf.append(" ");
-                buf.append(params[i].getCode());
-                if (i < params.length - 1) {
-                    buf.append(", ");
-                }
-            }//end for
-        } else {
-            buf.append("@ParamName(value=\"item\") java.util.Map item");
-        }
+        for (int i = 0; i < params.length; i++) {
+            buf.append("@ParamName(value=\"");
+            buf.append(params[i].getCode());
+            buf.append("\") ");
+            buf.append(params[i].getValueType().getClazz().getName());
+            buf.append(" ");
+            buf.append(params[i].getCode());
+            if (i < params.length - 1) {
+                buf.append(", ");
+            }
+        }//end for
+
         buf.append(") {");
         buf.append("\n");
         buf.append(tab(4));
@@ -242,7 +265,7 @@ public class JavaSourceFileStaticBuilder {
             sourceFile.delete();
         }
         //clear file
-        sourceDirectory.delete();
+        scriptDir.delete();
     }
 
     public boolean hasSourceBody() {

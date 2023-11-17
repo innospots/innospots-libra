@@ -44,7 +44,7 @@ import java.util.Map;
  * @author Smars
  * @date 2021/5/16
  */
-public class ScriptExecutorManager implements IScriptExecutorManager {
+public class ScriptExecutorManager {
 
     private static final Logger logger = LoggerFactory.getLogger(ScriptExecutorManager.class);
 
@@ -84,8 +84,6 @@ public class ScriptExecutorManager implements IScriptExecutorManager {
         sourceBuilder();
     }
 
-
-    @Override
     public synchronized void register(MethodBody methodBody) {
         if (methodBody.getScriptType() == null) {
             logger.warn("script type is null, method:{} ", methodBody);
@@ -93,6 +91,7 @@ public class ScriptExecutorManager implements IScriptExecutorManager {
         }
         IScriptExecutor executor = newScriptExecutor(methodBody.getScriptType());
         methodBody.setSuffix(executor.suffix());
+        executor.reBuildMethodBody(methodBody);
         switch (executor.executeMode()){
             case NATIVE:
                 this.sourceBuilder.addMethod(methodBody);
@@ -108,9 +107,6 @@ public class ScriptExecutorManager implements IScriptExecutorManager {
         executors.put(methodBody.getMethodName(),executor);
     }
 
-
-
-    @Override
     public boolean build() throws ScriptException {
         JavaSourceFileCompiler compiler = new JavaSourceFileCompiler(classPath());
         if (this.sourceBuilder.hasSourceBody()) {
@@ -138,8 +134,6 @@ public class ScriptExecutorManager implements IScriptExecutorManager {
         return false;
     }
 
-
-    @Override
     public void reload() throws ScriptException {
         try {
             Class<?> clazz = classForName();
@@ -163,8 +157,6 @@ public class ScriptExecutorManager implements IScriptExecutorManager {
     }
 
 
-
-
     public static void setPath(String sourcePath, String classPath) {
         System.setProperty(CLASS_PATH_ENV, classPath);
         System.setProperty(SOURCE_PATH_EVN, sourcePath);
@@ -183,7 +175,6 @@ public class ScriptExecutorManager implements IScriptExecutorManager {
      *
      * @return
      */
-    @Override
     public void clear() {
         File clsFile = new File(classPath().toFile(), className().replace(".", File.separator) + ".class");
         logger.debug("remove class file:{}", clsFile.getPath());
@@ -194,7 +185,6 @@ public class ScriptExecutorManager implements IScriptExecutorManager {
         sourceBuilder.deleteSourceFile();
     }
 
-    @Override
     public String identifier() {
         return identifier;
     }
@@ -203,7 +193,6 @@ public class ScriptExecutorManager implements IScriptExecutorManager {
         return packageName + "." + identifier;
     }
 
-    @Override
     public IScriptExecutor getExecutor(String methodName) {
         if (this.executors != null) {
             return this.executors.get(methodName);
@@ -211,7 +200,6 @@ public class ScriptExecutorManager implements IScriptExecutorManager {
         return null;
     }
 
-    @Override
     public boolean isLoaded() {
         return this.executors != null;
     }

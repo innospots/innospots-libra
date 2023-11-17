@@ -25,7 +25,6 @@ import io.innospots.base.exception.ScriptException;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.script.ExecutorManagerFactory;
 import io.innospots.base.script.ScriptExecutorManager;
-import io.innospots.base.script.IScriptExecutorManager;
 import io.innospots.base.script.jit.MethodBody;
 import io.innospots.workflow.core.flow.WorkflowBaseBody;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
@@ -54,9 +53,9 @@ public class FlowCompiler {
 
     private WorkflowBaseBody workflowInstance;
 
-    private ScriptExecutorManager genericExpressionEngine;
+    private ScriptExecutorManager scriptExecutorManager;
 
-    public Map<String, IScriptExecutorManager> scriptEngines = new HashMap<>();
+//    public Map<String, IScriptExecutorManager> scriptEngines = new HashMap<>();
 
     private FlowCompiler(WorkflowBaseBody workflowInstance) {
         this(workflowInstance.identifier());
@@ -64,7 +63,7 @@ public class FlowCompiler {
     }
 
     private FlowCompiler(String identifier){
-        genericExpressionEngine = null;
+        scriptExecutorManager = ScriptExecutorManager.newInstance(identifier);
 //                ExecutorManagerFactory.build(identifier);
 //        genericExpressionEngine.prepare();
     }
@@ -78,18 +77,13 @@ public class FlowCompiler {
     }
 
     public void clear() {
-        genericExpressionEngine.clear();
-        for (IScriptExecutorManager expressionEngine : scriptEngines.values()) {
-            expressionEngine.clear();
-            ExecutorManagerFactory.clear(expressionEngine.identifier());
-        }
-        scriptEngines.clear();
-        ExecutorManagerFactory.clear(genericExpressionEngine.identifier());
+        scriptExecutorManager.clear();
+        ExecutorManagerFactory.clear(scriptExecutorManager.identifier());
     }
 
     public boolean isCompiled() {
         try {
-            genericExpressionEngine.classForName();
+            scriptExecutorManager.classForName();
             return true;
         } catch (ClassNotFoundException | MalformedURLException e) {
             log.warn("class exception:{},{},{}", e.getClass().getName(), e.getMessage(), workflowInstance.identifier());
@@ -103,8 +97,8 @@ public class FlowCompiler {
                 registerToEngine(node);
             }//end for
         }
-        genericExpressionEngine.build();
-        scriptEngines.values().stream().filter(Objects::nonNull).forEach(IScriptExecutorManager::build);
+        scriptExecutorManager.build();
+//        scriptEngines.values().stream().filter(Objects::nonNull).forEach(IScriptExecutorManager::build);
         outputFlowFile(ScriptExecutorManager.getClassPath() + File.separator + DIR_FLOW_CONFIG);
     }
 
@@ -115,7 +109,7 @@ public class FlowCompiler {
      * @param nodeInstance
      * @return
      */
-    public BaseNodeExecutor registerToEngine(NodeInstance nodeInstance) {
+    private BaseNodeExecutor registerToEngine(NodeInstance nodeInstance) {
         BaseNodeExecutor appNode = null;
         try {
             appNode = NodeExecutorFactory.newInstance(nodeInstance);
@@ -129,7 +123,7 @@ public class FlowCompiler {
 
         for (MethodBody methodBody : methodBodies) {
             String scriptType = methodBody.getScriptType();
-            IScriptExecutorManager expressionEngine;
+//            IScriptExecutorManager expressionEngine;
             /*
             if (scriptType == null || scriptType == ScriptType.JAVA || scriptType == ScriptType.JAVASCRIPT) {
                 expressionEngine = genericExpressionEngine;

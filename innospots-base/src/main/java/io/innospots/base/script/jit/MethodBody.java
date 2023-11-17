@@ -72,4 +72,8 @@ public class MethodBody {
     public MethodBody(String scriptType) {
         this.scriptType = scriptType;
     }
+
+    public String scriptName(){
+        return methodName + "." +suffix;
+    }
 }

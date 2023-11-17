@@ -24,6 +24,7 @@ import io.innospots.base.condition.BaseCondition;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.script.IScriptExecutor;
+import io.innospots.base.script.aviator.AviatorExpressionExecutor;
 import io.innospots.base.script.aviator.AviatorScriptExecutor;
 import io.innospots.base.utils.Initializer;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
@@ -160,7 +161,7 @@ public class SwitchNode extends BaseNodeExecutor {
                 branch.initialize();
                 this.condition = branch.getStatement();
                 if (condition != null) {
-                    expression = new AviatorScriptExecutor(this.condition, null);
+                    expression = new AviatorExpressionExecutor(this.condition);
                 }
             }
         }

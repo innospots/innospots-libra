@@ -29,8 +29,10 @@ import io.innospots.workflow.core.execution.model.ExecutionResource;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecutionDisplay;
+import io.innospots.workflow.core.flow.WorkflowBaseBody;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
+import io.innospots.workflow.core.node.executor.NodeExecutorFactory;
 import io.innospots.workflow.node.app.script.ScriptNode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -97,11 +99,15 @@ public class AppNodeDebugger {
             ni.setNodeType(ScriptNode.class.getName());
         }
         FlowCompiler flowCompiler = FlowCompiler.build(identifier);
-        BaseNodeExecutor appNode = flowCompiler.registerToEngine(debugPayload.getNi());
+        WorkflowBaseBody tmpFlow =new WorkflowBaseBody(999999999L,ni.getName(),ni.getCode(),0);
+        tmpFlow.addNode(ni);
+        flowCompiler = FlowCompiler.build(tmpFlow);
+//        BaseNodeExecutor appNode = flowCompiler.registerToEngine(debugPayload.getNi());
         flowCompiler.compile();
+        BaseNodeExecutor nodeExecutor = NodeExecutorFactory.build(tmpFlow.identifier(),ni);
         //        BaseAppNode appNode = FlowCompiler.registerToEngine(genericExpressionEngine,debugPayload.getNi());
 //        genericExpressionEngine.compile();
-        appNode.build();
+//        appNode.build();
         FlowExecution flowExecution = FlowExecution.buildNewFlowExecution(1L,0);
         flowExecution.setRecordMode(RecordMode.SYNC);
         NodeExecution nodeExecution = NodeExecution.buildNewNodeExecution(ni.getNodeKey(),flowExecution);
@@ -113,7 +119,7 @@ public class AppNodeDebugger {
             inputs.add(executionInput);
         }
         nodeExecution.setInputs(inputs);
-        appNode.innerExecute(nodeExecution,flowExecution);
+        nodeExecutor.innerExecute(nodeExecution,flowExecution);
         ExecutorManagerFactory.clear(identifier);
         return NodeExecutionDisplay.build(nodeExecution,ni);
     }

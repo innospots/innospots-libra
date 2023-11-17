@@ -13,9 +13,10 @@
 
     <packaging>pom</packaging>
     <modules>
-        <module>innospots-javascript</module>
-        <module>innospots-python</module>
-        <module>innospots-groovy</module>
+        <module>innospots-script-javascript</module>
+        <module>innospots-script-python</module>
+        <module>innospots-script-groovy</module>
+        <module>innospots-script-java</module>
     </modules>
 
 

@@ -3,7 +3,6 @@ package io.innospots.workflow.node.app;
 import io.innospots.base.exception.ScriptException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.script.ScriptExecutorManager;
-import io.innospots.base.script.IScriptExecutorManager;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +44,7 @@ public class BaseNodeTest {
         //BaseAppNode baseNode = instance.registerToEngine(engine,instance);
 
         BaseNodeExecutor appNode = null;
-        Map<String, IScriptExecutorManager> engines = new HashMap<>();
+//        Map<String, IScriptExecutorManager> engines = new HashMap<>();
         /*
         for (MethodBody methodBody : instance.expMethods()) {
             String key = "Test_"+ fileName + "_" + methodBody.getScriptType().name();
@@ -62,11 +61,11 @@ public class BaseNodeTest {
          */
 
         try {
-            engines.values().forEach(IScriptExecutorManager::build);
+//            engines.values().forEach(IScriptExecutorManager::build);
         }catch (Exception e){
             System.err.println(e.getMessage());
         }
-         System.out.println(engines);
+//         System.out.println(engines);
         /*
         try {
             //engine.compile();

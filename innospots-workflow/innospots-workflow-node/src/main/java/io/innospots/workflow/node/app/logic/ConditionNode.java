@@ -22,6 +22,7 @@ package io.innospots.workflow.node.app.logic;
 import io.innospots.base.condition.EmbedCondition;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.script.IScriptExecutor;
+import io.innospots.base.script.aviator.AviatorExpressionExecutor;
 import io.innospots.base.script.aviator.AviatorScriptExecutor;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
@@ -64,7 +65,7 @@ public class ConditionNode extends BaseNodeExecutor {
             throw ConfigException.buildMissingException(this.getClass(), "nodeKey:" + this.nodeKey() + ", field:" + FIELD_CONDITIONS);
         }
         this.conditionExpression =embedCondition.getStatement();
-        this.expression = new AviatorScriptExecutor(this.conditionExpression, null);
+        this.expression = new AviatorExpressionExecutor(this.conditionExpression);
 
     }
 

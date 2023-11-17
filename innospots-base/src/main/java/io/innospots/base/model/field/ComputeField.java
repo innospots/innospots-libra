@@ -72,7 +72,7 @@ public class ComputeField extends BaseField implements Initializer {
     public void initialize() {
         expr = toExpScript("aviator");
         log.debug("field,{},{} expression:{},", code, name, expr);
-        expression = new AviatorScriptExecutor(expr, null);
+//        expression = new AviatorScriptExecutor(expr, null);
     }
 
     @Override

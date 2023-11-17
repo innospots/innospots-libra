@@ -22,6 +22,7 @@ import com.googlecode.aviator.AviatorEvaluator;
 import com.googlecode.aviator.Expression;
 import io.innospots.base.script.ExecuteMode;
 import io.innospots.base.script.IScriptExecutor;
+import io.innospots.base.script.jrs223.Jsr223ScriptExecutor;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -33,55 +34,15 @@ import java.util.Map;
  * @author Smars
  * @date 2021/8/11
  */
-public class AviatorScriptExecutor implements IScriptExecutor {
-
-
-    private Expression expression;
-
-    private String[] arguments;
-
-
-    public AviatorScriptExecutor(String statement, String[] arguments) {
-        expression = AviatorEvaluator.compile(statement, true);
-        this.arguments = arguments;
-    }
-
-    @Override
-    public void initialize(Method method) {
-
-    }
-
-    @Override
-    public ExecuteMode executeMode() {
-        return null;
-    }
+public class AviatorScriptExecutor extends Jsr223ScriptExecutor {
 
     @Override
     public String scriptType() {
-        return null;
+        return "AviatorScript";
     }
-
     @Override
     public String suffix() {
-        return null;
+        return "aviator";
     }
 
-    @Override
-    public Object execute(Map<String, Object> env) {
-        return expression.execute(env);
-    }
-
-    @Override
-    public Object execute(Object... args) {
-        Map<String, Object> env = new HashMap<>();
-        for (int i = 0; i < args.length; i++) {
-            env.put(arguments[i], args[i]);
-        }
-        return execute(env);
-    }
-
-    @Override
-    public String[] arguments() {
-        return arguments;
-    }
 }

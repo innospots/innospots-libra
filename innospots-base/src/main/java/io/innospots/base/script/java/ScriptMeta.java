@@ -39,5 +39,7 @@ public @interface ScriptMeta {
 
     String path() default "";
 
-    String[] args() default {};
+    String[] args() default {"aa","dd"};
+
+    Class<?> returnType() default Object.class;
 }
