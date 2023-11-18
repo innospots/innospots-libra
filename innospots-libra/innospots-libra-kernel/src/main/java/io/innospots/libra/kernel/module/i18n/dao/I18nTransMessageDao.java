@@ -42,7 +42,7 @@ public interface I18nTransMessageDao extends BaseMapper<I18nTransMessageEntity> 
      * @return LocaleMessage
      */
     @Select("select msg.locale as locale, msg.message as message, dict.code as code from i18n_trans_message as msg, i18n_dictionary as dict where dict.dictionary_id = msg.dictionary_id and dict.code = #{dictionaryCode} and msg.locale=#{locale}")
-    LocaleMessage selectLocalMessageByCode(@Param("dictionaryCode") String dictionaryCode, String locale);
+    LocaleMessage selectLocalMessageByCode(@Param("dictionaryCode") String dictionaryCode, @Param("locale") String locale);
 
     /**
      * select local message List by app of dictionary
@@ -52,7 +52,7 @@ public interface I18nTransMessageDao extends BaseMapper<I18nTransMessageEntity> 
      * @return List<LocaleMessage>
      */
     @Select("select msg.locale as locale, msg.message as message, dict.code as code from i18n_trans_message as msg, i18n_dictionary as dict where dict.dictionary_id = msg.dictionary_id and dict.app = #{dictionaryApp} and msg.locale=#{locale}")
-    List<LocaleMessage> selectLocalMessageByApp(@Param("dictionaryApp") String dictionaryApp, String locale);
+    List<LocaleMessage> selectLocalMessageByApp(@Param("dictionaryApp") String dictionaryApp, @Param("locale") String locale);
 
 
     /**
