@@ -17,6 +17,7 @@
         <module>innospots-script-python</module>
         <module>innospots-script-groovy</module>
         <module>innospots-script-java</module>
+        <module>innospots-script-graaljs</module>
     </modules>
 
 

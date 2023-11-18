@@ -144,7 +144,7 @@ public class JavaSourceFileStaticBuilder {
                 if(valueType == null){
                     arg = Object.class.getSimpleName();
                 }else{
-                    arg = valueType.getClazz().getSimpleName();
+                    arg = valueType.getClazz().getName();
                 }
                 return "\"" +arg + " " +f.getCode()+"\"";})
                     .collect(Collectors.joining(","));

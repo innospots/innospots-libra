@@ -18,18 +18,24 @@
 
 package io.innospots.base.script.cmdline;
 
+import cn.hutool.core.annotation.AnnotationUtil;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RuntimeUtil;
+import com.googlecode.aviator.AviatorEvaluator;
 import io.innospots.base.exception.ScriptException;
+import io.innospots.base.model.Pair;
 import io.innospots.base.script.ExecuteMode;
 import io.innospots.base.script.IScriptExecutor;
+import io.innospots.base.script.java.ScriptMeta;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Smars
@@ -48,7 +54,19 @@ public abstract class CmdLineScriptExecutor implements IScriptExecutor {
 
     @Override
     public void initialize(Method method) {
-
+        ScriptMeta scriptMeta = AnnotationUtil.getAnnotation(method, ScriptMeta.class);
+        try {
+            scriptPath = scriptMeta.path();
+            String scriptBody = (String) method.invoke(null);
+            File scriptFile = new File(scriptPath);
+            if(scriptFile.exists()){
+                FileUtil.writeBytes(scriptBody.getBytes(), scriptFile);
+            }
+            Pair<Class<?>,String>[] pairs = this.argsPair(scriptMeta.args());
+            arguments = Arrays.stream(pairs).map(Pair::getRight).collect(Collectors.toList()).toArray(String[]::new);
+        } catch (IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
+            log.error(e.getMessage(), e);
+        }
     }
 
     @Override

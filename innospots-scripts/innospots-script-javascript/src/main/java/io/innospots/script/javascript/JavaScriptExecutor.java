@@ -36,7 +36,7 @@ import java.util.Map;
  * @date 2021/5/5
  */
 @Slf4j
-public class JavaScriptScriptExecutor extends Jsr223ScriptExecutor {
+public class JavaScriptExecutor extends Jsr223ScriptExecutor {
 
     @Override
     public String scriptType() {

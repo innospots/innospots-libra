@@ -73,7 +73,7 @@ public class JavaNativeExecutor implements IScriptExecutor {
 
     @Override
     public String scriptType() {
-        return "java";
+        return "javaNative";
     }
 
     @Override

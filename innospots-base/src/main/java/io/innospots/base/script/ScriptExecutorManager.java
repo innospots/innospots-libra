@@ -18,6 +18,7 @@
 
 package io.innospots.base.script;
 
+import cn.hutool.core.lang.ClassScanner;
 import io.innospots.base.enums.ScriptType;
 import io.innospots.base.exception.ScriptException;
 import io.innospots.base.script.jit.JavaSourceFileCompiler;
@@ -30,16 +31,16 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
- * 通用表达式引擎，底层使用JVM做基础构建引擎，兼容其他脚本在jvm的执行
+ * script executor manager
  *
  * @author Smars
  * @date 2021/5/16
@@ -52,6 +53,7 @@ public class ScriptExecutorManager {
 
     public static final String CLASS_PATH_ENV = "live.classpath";
     public static final String SOURCE_PATH_EVN = "live.sourcepath";
+    public static final String SCRIPT_PACKAGES = "script.packages";
 
     /**
      * source path
@@ -72,8 +74,30 @@ public class ScriptExecutorManager {
     /**
      * spi loader, key: scriptType, value: class
      */
-    private static Map<String, Class<IScriptExecutor>> executorClasses = new HashMap<>();
+    private static Map<String, Class<? extends IScriptExecutor>> executorClasses = new HashMap<>();
 
+    static {
+        initialize();
+    }
+
+    private static void initialize(){
+        String scriptPackages = System.getProperty(SCRIPT_PACKAGES,"io.innospots");
+        Set<Class<?>> executorCls = ClassScanner.scanPackageBySuper(scriptPackages,IScriptExecutor.class);
+
+        for (Class<?> executorCl : executorCls) {
+            if(!Modifier.isInterface(executorCl.getModifiers()) && !Modifier.isAbstract(executorCl.getModifiers())){
+                try {
+                    IScriptExecutor scriptExecutor = (IScriptExecutor) executorCl.getConstructor().newInstance();
+                    logger.info("load script scriptType:{}, suffix:{}, executeMode:{}, class:{}",scriptExecutor.scriptType(),scriptExecutor.suffix(),scriptExecutor.executeMode(),executorCl.getName());
+                    executorClasses.put(scriptExecutor.scriptType(), (Class<? extends IScriptExecutor>) executorCl);
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                         NoSuchMethodException e) {
+                    logger.error(e.getMessage(),e);
+                }
+            }
+        }
+        logger.info("load script executor size:{}",executorClasses.size());
+    }
 
     public static ScriptExecutorManager newInstance(String identifier) {
         return new ScriptExecutorManager(identifier);
@@ -262,7 +286,7 @@ public class ScriptExecutorManager {
     }
 
     private IScriptExecutor newScriptExecutor(String scriptType) {
-        Class<IScriptExecutor> seClass = executorClasses.get(scriptType);
+        Class<? extends IScriptExecutor> seClass = executorClasses.get(scriptType);
         try {
             return seClass.getConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {

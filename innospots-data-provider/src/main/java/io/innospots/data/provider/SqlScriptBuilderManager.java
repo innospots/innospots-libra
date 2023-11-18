@@ -40,10 +40,8 @@ public class SqlScriptBuilderManager {
 
     private static void loadBuilder() {
         ServiceLoader<ISqlScriptBuilder> serviceLoader = ServiceLoader.load(ISqlScriptBuilder.class);
-        Iterator<ISqlScriptBuilder> iterator = serviceLoader.iterator();
 
-        while (iterator.hasNext()) {
-            ISqlScriptBuilder scriptBuilder = iterator.next();
+        for (ISqlScriptBuilder scriptBuilder : serviceLoader) {
             sqlScriptBuilders.put(scriptBuilder.dbType(), scriptBuilder);
             log.debug("Loading sql script builder:{}", scriptBuilder.getClass());
         }
