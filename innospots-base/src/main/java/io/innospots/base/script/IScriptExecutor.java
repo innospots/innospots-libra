@@ -43,6 +43,9 @@ public interface IScriptExecutor {
 
     default Object execute(Object... args){
         Map<String, Object> env = new HashMap<>();
+        if(arguments()==null){
+            return execute(env);
+        }
         for (int i = 0; i < args.length; i++) {
             env.put(arguments()[i], args[i]);
         }

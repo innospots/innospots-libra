@@ -59,7 +59,7 @@ public abstract class CmdLineScriptExecutor implements IScriptExecutor {
             scriptPath = scriptMeta.path();
             String scriptBody = (String) method.invoke(null);
             File scriptFile = new File(scriptPath);
-            if(scriptFile.exists()){
+            if(!scriptFile.exists()){
                 FileUtil.writeBytes(scriptBody.getBytes(), scriptFile);
             }
             Pair<Class<?>,String>[] pairs = this.argsPair(scriptMeta.args());

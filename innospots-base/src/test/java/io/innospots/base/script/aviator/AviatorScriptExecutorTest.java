@@ -16,40 +16,40 @@
  * limitations under the License.
  */
 
-package io.innospots.base.script.cmdline;
+package io.innospots.base.script.aviator;
 
-import io.innospots.base.script.java.ScriptMeta;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Smars
  * @vesion 2.0
  * @date 2023/11/19
  */
-class CmdShellScriptExecutorTest {
-
+class AviatorScriptExecutorTest {
 
     @SneakyThrows
     @Test
-    void test() {
-        CmdShellScriptExecutor executor = new CmdShellScriptExecutor();
-        Method scriptMethod = CmdShellScriptExecutorTest.class.getMethod("scriptMethod");
-        executor.initialize(scriptMethod);
-        Object s = executor.execute("abd", "dds", "1234");
-        System.out.println("out:"+s);
-
+    void test(){
+        AviatorScriptExecutor executor = new AviatorScriptExecutor();
+        Method sciptMethod = AviatorScriptExecutorTest.class.getMethod("scriptMethod");
+        executor.initialize(sciptMethod);
+        Map<String,Object> input = new HashMap<>();
+        input.put("a",20);
+        input.put("b",1200);
+        Object res = executor.execute(input);
+        System.out.println(res);
     }
 
-
-    @ScriptMeta(scriptType = "shell", suffix = "sh", returnType = String.class,
-            path = "/tmp/test.sh")
     public static String scriptMethod() {
         String ps = "";
-        ps += "echo 'abc', $1 $2";
+        ps += "a <100 && b >= 910";
         return ps;
     }
-
 }

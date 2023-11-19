@@ -16,40 +16,49 @@
  * limitations under the License.
  */
 
-package io.innospots.base.script.cmdline;
+package io.innospots.base.script.aviator;
 
-import io.innospots.base.script.java.ScriptMeta;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Smars
  * @vesion 2.0
  * @date 2023/11/19
  */
-class CmdShellScriptExecutorTest {
+class AviatorExpressionExecutorTest {
 
+    @Test
+    void test(){
+        String statement = "a <100 && b >= 910";
+        AviatorExpressionExecutor executor = new AviatorExpressionExecutor(statement);
+        Map<String,Object> input = new HashMap<>();
+        input.put("a",20);
+        input.put("b",1200);
+        Object v = executor.execute(input);
+        System.out.println(v);
+    }
 
     @SneakyThrows
     @Test
-    void test() {
-        CmdShellScriptExecutor executor = new CmdShellScriptExecutor();
-        Method scriptMethod = CmdShellScriptExecutorTest.class.getMethod("scriptMethod");
+    void testMethod(){
+        AviatorExpressionExecutor executor = new AviatorExpressionExecutor();
+        Method scriptMethod = AviatorExpressionExecutorTest.class.getMethod("scriptMethod");
         executor.initialize(scriptMethod);
-        Object s = executor.execute("abd", "dds", "1234");
-        System.out.println("out:"+s);
-
+        Map<String,Object> input = new HashMap<>();
+        input.put("a",20);
+        input.put("b",1200);
+        Object v = executor.execute(input);
+        System.out.println(v);
     }
 
-
-    @ScriptMeta(scriptType = "shell", suffix = "sh", returnType = String.class,
-            path = "/tmp/test.sh")
     public static String scriptMethod() {
         String ps = "";
-        ps += "echo 'abc', $1 $2";
+        ps += "a <100 && b >= 910";
         return ps;
     }
-
 }

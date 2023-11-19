@@ -51,11 +51,14 @@ public abstract class Jsr223ScriptExecutor implements IScriptExecutor {
     public void initialize(Method method) {
         ScriptMeta scriptMeta = AnnotationUtil.getAnnotation(method, ScriptMeta.class);
         try {
+            method.setAccessible(true);
             String scriptBody = (String) method.invoke(null);
             Compilable compilable = compilable();
             compiledScript = compilable.compile(scriptBody);
-            Pair<Class<?>,String>[] pairs = this.argsPair(scriptMeta.args());
-            arguments = Arrays.stream(pairs).map(Pair::getRight).collect(Collectors.toList()).toArray(String[]::new);
+            if(scriptMeta!=null){
+                Pair<Class<?>,String>[] pairs = this.argsPair(scriptMeta.args());
+                arguments = Arrays.stream(pairs).map(Pair::getRight).collect(Collectors.toList()).toArray(String[]::new);
+            }
         } catch (IllegalAccessException | InvocationTargetException | javax.script.ScriptException |
                  ClassNotFoundException e) {
             log.error(e.getMessage(), e);

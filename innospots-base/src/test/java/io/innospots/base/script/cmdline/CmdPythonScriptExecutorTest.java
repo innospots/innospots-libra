@@ -29,14 +29,14 @@ import java.lang.reflect.Method;
  * @vesion 2.0
  * @date 2023/11/19
  */
-class CmdShellScriptExecutorTest {
+class CmdPythonScriptExecutorTest {
 
 
     @SneakyThrows
     @Test
     void test() {
-        CmdShellScriptExecutor executor = new CmdShellScriptExecutor();
-        Method scriptMethod = CmdShellScriptExecutorTest.class.getMethod("scriptMethod");
+        CmdPythonScriptExecutor executor = new CmdPythonScriptExecutor();
+        Method scriptMethod = CmdPythonScriptExecutorTest.class.getMethod("scriptMethod");
         executor.initialize(scriptMethod);
         Object s = executor.execute("abd", "dds", "1234");
         System.out.println("out:"+s);
@@ -44,12 +44,11 @@ class CmdShellScriptExecutorTest {
     }
 
 
-    @ScriptMeta(scriptType = "shell", suffix = "sh", returnType = String.class,
-            path = "/tmp/test.sh")
+    @ScriptMeta(scriptType = "python", suffix = "py", returnType = String.class,
+            path = "/tmp/hello.py")
     public static String scriptMethod() {
-        String ps = "";
-        ps += "echo 'abc', $1 $2";
-        return ps;
+        String script = "td = {\"Alice\": 112, \"Beth\": \"9102\", \"Cecil\": \"3258\"}; print(td)";
+        return script;
     }
 
 }

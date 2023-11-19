@@ -50,6 +50,11 @@ public class AviatorExpressionExecutor implements IScriptExecutor {
     public AviatorExpressionExecutor() {
     }
 
+    public AviatorExpressionExecutor(String[] arguments,String statement) {
+        this.arguments = arguments;
+        expression = AviatorEvaluator.compile(statement, true);
+    }
+
     public AviatorExpressionExecutor(String statement) {
         expression = AviatorEvaluator.compile(statement, true);
     }
