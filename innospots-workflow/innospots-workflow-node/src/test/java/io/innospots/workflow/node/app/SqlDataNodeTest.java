@@ -7,8 +7,8 @@ import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.data.DataNode;
 import io.innospots.workflow.node.app.data.SqlDataNode;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 
 import java.util.ArrayList;
@@ -76,7 +76,7 @@ public class SqlDataNodeTest {
 
     }
 
-    @Before
+    @BeforeAll
     public void init() {
 
 //        DataOperatorBuilder builder = ApplicationContextUtils.getBean(DataOperatorBuilder.class);

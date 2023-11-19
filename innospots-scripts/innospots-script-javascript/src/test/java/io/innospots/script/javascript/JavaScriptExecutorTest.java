@@ -1,40 +1,111 @@
-package io.innospots.base.script.javascript;
+package io.innospots.script.javascript;
 
+import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.model.field.ParamField;
-import io.innospots.base.script.IScriptExecutor;
-import org.junit.Test;
+import io.innospots.base.script.java.ScriptMeta;
+import org.junit.jupiter.api.Test;
 
 import javax.script.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.reflect.Method;
+import java.util.*;
 
 /**
  * @author Smars
  * @date 2021/5/6
  */
-public class JavaScriptExpressionEngineTest {
+public class JavaScriptExecutorTest {
 
     @Test
-    public void build() {
-//        JavaScriptScriptExecutorManager engine = JavaScriptScriptExecutorManager.build("abc");
-        ParamField p = new ParamField();
-        p.setCode("param");
-        p.setName("param");
-        p.setValueType(FieldValueType.STRING);
-
-        String src = "print(param); return 1;";
-//        String src = "var p1=1; param= param+p1; print('param'); return p1;";
-//        engine.register(Object.class, "test1", src, p);
-
-//        IScriptExecutor expression = engine.getExecutor("test1");
-//        Map<String, Object> inputs = new HashMap<>();
-//        inputs.put("param", "obs");
-//        Object v = expression.execute(inputs);
-//        System.out.println(v);
-//        v = expression.execute("bsd");
-//        System.out.println(v);
+    void execute() throws NoSuchMethodException {
+        JavaScriptExecutor executor = new JavaScriptExecutor();
+        Method method2 = JavaScriptExecutorTest.class.getMethod("scriptMethod");
+        executor.initialize(method2);
+        Map<String,Object> input = new HashMap<>();
+        Map<String,String> i = new HashMap<>();
+        i.put("k2","12345");
+        i.put("k3","abc12");
+        input.put("items",i);
+        Object obj = executor.execute(input);
+        System.out.println(obj);
     }
+
+    @ScriptMeta(suffix = "js",returnType = Map.class, args = {"java.util.Map items"})
+    public static String scriptMethod() {
+        String src = "print(items.k2); " +
+                "var item = new Object(); " +
+                "item.a=12;" +
+                "item.b='bs';" +
+                "var p={};" +
+                "p.k=11;p.l='9s';" +
+                "print(p);" +
+                " return item;";
+        return src;
+    }
+
+    @ScriptMeta(suffix = "js",returnType = Map.class, args = {"java.util.Map items"})
+    public static String scriptMethod2() {
+        String script = "function $fnv1sCxRL (items){" +
+                "print(items[0]);\n" +
+                "print(items.length);\n" +
+                "print(typeof items[0]);\n" +
+                "print(items[0].abc);\n" +
+                "print(typeof items);\n" +
+                "print(items instanceof Array);\n" +
+                "print(items instanceof String);\n" +
+                "for(var i=0;i<items.length;i++){print(items[i])}" +
+                "var jjs = JSON.stringify(items);\n" +
+                "print(jjs);\n" +
+                "var total = 0;\n" +
+                "print(\"items:\"+JSON.stringify(items));" +
+                "\n\n//var ages ={\"ages\":total};\n" +
+                "return items;}\n" +
+                "JSON.stringify($fnv1sCxRL(items))";
+        return script;
+    }
+
+    @Test
+    public void test11() throws ScriptException {
+
+        ScriptEngine engine = new ScriptEngineManager().getEngineByName("javascript");
+        String script = "function $fnv1sCxRL (items){" +
+                "print(items[0]);\n" +
+                "print(items.length);\n" +
+                "print(typeof items[0]);\n" +
+                "print(items[0].abc);\n" +
+                "print(typeof items);\n" +
+                "print(items instanceof Array);\n" +
+                "print(items instanceof String);\n" +
+                "for(var i=0;i<items.length;i++){print(items[i])}" +
+                "var jjs = JSON.stringify(items);\n" +
+                "print(jjs);\n" +
+                "var total = 0;\n" +
+                "print(\"items:\"+JSON.stringify(items));" +
+                "\n\n//var ages ={\"ages\":total};\n" +
+                "return items;}\n" +
+                "JSON.stringify($fnv1sCxRL(items))";
+
+        CompiledScript compiledScript = ((Compilable) engine).compile(script);
+
+        Bindings bindings = engine.createBindings();
+        List<Map<String, Object>> ll = new ArrayList<>();
+        Map<String, Object> mm = new LinkedHashMap<>();
+        mm.put("abc", 111);
+        ll.add(mm);
+        mm = new LinkedHashMap<>();
+        mm.put("abc", 222);
+        ll.add(mm);
+        mm = new LinkedHashMap<>();
+        mm.put("abc", 333);
+        ll.add(mm);
+        System.out.println(JSONUtils.toJsonString(ll));
+
+        bindings.put("items", ll);
+
+        Object result = compiledScript.eval(bindings);
+        System.out.println(result);
+    }
+
 
     @Test
     public void build22() {
@@ -66,7 +137,6 @@ public class JavaScriptExpressionEngineTest {
 //            vv.putAll((Map) v);
 //            System.out.println(vv);
 //        }
-
 
     }
 
@@ -213,56 +283,6 @@ public class JavaScriptExpressionEngineTest {
         p.setValueType(FieldValueType.STRING);
 
         String src = "print(p1); return 1;";
-//        String src = "var p1=1; param= param+p1; print('param'); return p1;";
-//        engine.register(Object.class, "test1", src, p);
-
-//        JavaScriptScriptExecutor expression = (JavaScriptScriptExecutor) engine.getExecutor("test1");
-
-
-//        Bindings bindings = expression.getCompiledScript().getEngine().createBindings();
-//        bindings.put("a", "osd");
-//        bindings.put("p1", 1);
-
-//        Object result = expression.getCompiledScript().eval(bindings);
-//        System.out.println(result);
     }
 
-    @Test
-    public void test5() {
-//        JavaScriptScriptExecutorManager engine = JavaScriptScriptExecutorManager.build("abc");
-        ParamField p = new ParamField();
-        p.setCode("param");
-        p.setName("param");
-        p.setValueType(FieldValueType.STRING);
-
-        String src = "var p1=3; param = param+p1; for(i=0;i<30;i++){param+=i;} return param;";
-//        String src = "var p1=3; param = param+p1; return param;";
-//        String src = "print(param); return param;";
-//        String src = "var p1=1; param= param+p1; print('param'); return p1;";
-//        engine.register(Object.class, "test1", src, p);
-
-//        IScriptExecutor expression = engine.getExecutor("test1");
-        Map<String, Object> inputs = new HashMap<>();
-        inputs.put("param", "obs");
-        long ss = System.currentTimeMillis();
-//        Object v = expression.execute(inputs);
-//        long ee = System.currentTimeMillis() - ss;
-//        System.out.println(v);
-//        System.out.println(ee);
-
-//        v = expression.execute("bsd");
-//        System.out.println(v);
-
-        long s = System.currentTimeMillis();
-        int size = 50000;
-        for (int i = 0; i < size; i++) {
-            String vs = "abc" + i;
-//            v = expression.execute(vs);
-        }
-//        System.out.println("v:" + v);
-        long e = System.currentTimeMillis();
-        long c = e - s;
-        System.out.println(c);
-        System.out.println(c * 1f / size);
-    }
 }

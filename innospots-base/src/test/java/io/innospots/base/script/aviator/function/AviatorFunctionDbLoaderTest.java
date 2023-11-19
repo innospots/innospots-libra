@@ -6,8 +6,9 @@ import com.googlecode.aviator.runtime.type.AviatorFunction;
 import io.innospots.base.function.definition.model.FunctionDefinition;
 import io.innospots.base.function.definition.manager.FunctionDefinitionManager;
 import io.innospots.base.utils.time.DateTimeUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
 
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
@@ -15,7 +16,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 
 /**
  * @author Smars
@@ -23,7 +25,7 @@ import static org.junit.Assert.assertNotNull;
  */
 public class AviatorFunctionDbLoaderTest {
 
-    @Before
+    @BeforeAll
     public void setup() {
         AviatorFunctionLoader.load();
     }

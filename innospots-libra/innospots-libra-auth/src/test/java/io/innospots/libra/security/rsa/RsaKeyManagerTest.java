@@ -2,8 +2,9 @@ package io.innospots.libra.security.rsa;
 
 import io.innospots.base.crypto.RsaKeyManager;
 import org.apache.commons.lang3.tuple.Pair;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 
 /**
  * @author Smars
@@ -21,7 +22,7 @@ public class RsaKeyManagerTest {
         System.out.println(enCode);
         String deCode = RsaKeyManager.decrypt(enCode, keyPair.getRight());
         System.out.println(deCode);
-        Assert.assertEquals(pwd, deCode);
+        Assertions.assertEquals(pwd, deCode);
     }
 
     @Test

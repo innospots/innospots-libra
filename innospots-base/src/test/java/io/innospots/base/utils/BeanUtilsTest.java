@@ -3,7 +3,7 @@ package io.innospots.base.utils;
 import io.innospots.base.condition.Factor;
 import io.innospots.base.condition.Opt;
 import io.innospots.base.model.BaseModelInfo;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;

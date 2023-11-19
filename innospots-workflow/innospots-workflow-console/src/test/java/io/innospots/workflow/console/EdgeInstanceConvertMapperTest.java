@@ -5,7 +5,8 @@ import io.innospots.workflow.core.instance.entity.EdgeInstanceEntity;
 import io.innospots.workflow.core.instance.converter.EdgeInstanceConverter;
 import io.innospots.workflow.core.instance.model.Edge;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 
 import java.util.HashMap;
 import java.util.Map;

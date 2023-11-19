@@ -18,21 +18,30 @@
 
 package io.innospots.script.graaljs;
 
+import cn.hutool.core.annotation.AnnotationUtil;
+import io.innospots.base.model.Pair;
 import io.innospots.base.script.ExecuteMode;
 import io.innospots.base.script.IScriptExecutor;
+import io.innospots.base.script.java.ScriptMeta;
+import lombok.extern.slf4j.Slf4j;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Engine;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 
+import javax.script.Compilable;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Smars
  * @vesion 2.0
  * @date 2023/11/18
  */
+@Slf4j
 public class GraalJsScriptExecutor implements IScriptExecutor {
 
     private String[] arguments;
@@ -43,10 +52,22 @@ public class GraalJsScriptExecutor implements IScriptExecutor {
 
     @Override
     public void initialize(Method method) {
-        engine = Engine.create();
-        String srcBody = null;
-        scriptSource = Source.create("js",srcBody);
+        ScriptMeta scriptMeta = AnnotationUtil.getAnnotation(method, ScriptMeta.class);
+        try {
+            method.setAccessible(true);
+            String scriptBody = (String) method.invoke(null);
+            engine = Engine.create();
+            scriptSource = Source.create("js",scriptBody);
+            if(scriptMeta!=null){
+                Pair<Class<?>,String>[] pairs = this.argsPair(scriptMeta.args());
+                arguments = Arrays.stream(pairs).map(Pair::getRight).collect(Collectors.toList()).toArray(String[]::new);
+            }
+        } catch (IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
+            log.error(e.getMessage(), e);
+        }
+
     }
+
 
     @Override
     public ExecuteMode executeMode() {

@@ -6,7 +6,8 @@ import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.logic.ConditionNode;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 
 import java.util.HashMap;
 import java.util.Map;

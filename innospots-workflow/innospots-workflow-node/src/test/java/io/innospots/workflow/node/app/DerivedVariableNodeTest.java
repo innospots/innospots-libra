@@ -3,7 +3,8 @@ package io.innospots.workflow.node.app;
 
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 
 import java.util.HashMap;
 import java.util.Map;

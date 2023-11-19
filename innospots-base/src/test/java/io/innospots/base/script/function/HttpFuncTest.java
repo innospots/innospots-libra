@@ -1,6 +1,7 @@
 package io.innospots.base.script.function;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 import static io.innospots.base.script.function.HttpFunc.httpPost;
 
@@ -11,7 +12,7 @@ import static io.innospots.base.script.function.HttpFunc.httpPost;
 public class HttpFuncTest {
 
     @Test
-    public void testPost() {
+    void testPost() {
         httpPost("", null, "");
     }
 }

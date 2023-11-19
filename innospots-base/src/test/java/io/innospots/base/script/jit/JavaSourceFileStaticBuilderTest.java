@@ -2,7 +2,7 @@ package io.innospots.base.script.jit;
 
 import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.model.field.ParamField;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.nio.file.Paths;
 

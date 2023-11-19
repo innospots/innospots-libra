@@ -6,7 +6,7 @@ import io.innospots.base.script.ScriptExecutorManager;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

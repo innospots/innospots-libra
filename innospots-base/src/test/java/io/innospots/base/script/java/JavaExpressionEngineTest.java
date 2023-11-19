@@ -1,23 +1,12 @@
 package io.innospots.base.script.java;
 
 import io.innospots.base.exception.ScriptException;
-import io.innospots.base.model.field.FieldValueType;
-import io.innospots.base.model.field.ParamField;
-import io.innospots.base.script.IScriptExecutor;
-import io.innospots.base.utils.thread.ThreadPoolBuilder;
-import io.innospots.base.utils.thread.ThreadTaskExecutor;
 import javassist.*;
-import javassist.bytecode.CodeAttribute;
-import javassist.bytecode.LocalVariableAttribute;
-import javassist.bytecode.MethodInfo;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 import java.io.File;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Smars

@@ -2,7 +2,7 @@ package io.innospots.workflow.node.app;
 
 import com.google.common.base.Enums;
 import io.innospots.base.data.enums.DataOperation;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Smars

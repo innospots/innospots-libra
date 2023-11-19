@@ -1,12 +1,12 @@
 package io.innospots.base.utils;
 
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.net.url.UrlBuilder;
 import io.innospots.base.quartz.TimePeriod;
 import io.innospots.base.utils.time.CronUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.quartz.CronExpression;
 
 import java.time.LocalTime;
@@ -31,7 +31,7 @@ public class CronUtilsTest {
         LocalTime localTime = LocalTime.parse("12:23", DateTimeFormatter.ofPattern("HH:mm"));
         String expression = CronUtils.createCronExpression(timePeriod, periodTimes, localTime);
         System.out.println("expression:" + expression);
-        Assert.assertTrue("expression error:" + expression, CronExpression.isValidExpression(expression));
+        Assert.isTrue( CronExpression.isValidExpression(expression));
     }
 
     @Test
