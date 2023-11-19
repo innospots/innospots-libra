@@ -11,5 +11,13 @@
 
     <artifactId>innospots-script-javascript</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
 
 </project>

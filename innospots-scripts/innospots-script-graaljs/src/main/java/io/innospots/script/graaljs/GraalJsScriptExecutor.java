@@ -19,10 +19,13 @@
 package io.innospots.script.graaljs;
 
 import cn.hutool.core.annotation.AnnotationUtil;
+import cn.hutool.core.text.StrFormatter;
 import io.innospots.base.model.Pair;
+import io.innospots.base.model.field.ParamField;
 import io.innospots.base.script.ExecuteMode;
 import io.innospots.base.script.IScriptExecutor;
 import io.innospots.base.script.java.ScriptMeta;
+import io.innospots.base.script.jit.MethodBody;
 import lombok.extern.slf4j.Slf4j;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Engine;
@@ -33,6 +36,8 @@ import javax.script.Compilable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -57,15 +62,39 @@ public class GraalJsScriptExecutor implements IScriptExecutor {
             method.setAccessible(true);
             String scriptBody = (String) method.invoke(null);
             engine = Engine.create();
-            scriptSource = Source.create("js",scriptBody);
-            if(scriptMeta!=null){
-                Pair<Class<?>,String>[] pairs = this.argsPair(scriptMeta.args());
+            scriptSource = Source.create("js", scriptBody);
+            if (scriptMeta != null) {
+                Pair<Class<?>, String>[] pairs = this.argsPair(scriptMeta.args());
                 arguments = Arrays.stream(pairs).map(Pair::getRight).collect(Collectors.toList()).toArray(String[]::new);
             }
         } catch (IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
             log.error(e.getMessage(), e);
         }
+    }
 
+    public void reBuildMethodBody(MethodBody methodBody) {
+        String args = null;
+        if (methodBody.getParams() == null || methodBody.getParams().size() == 0) {
+            args = "item";
+        } else {
+            args = methodBody.getParams().stream().map(ParamField::getCode).collect(Collectors.joining(","));
+        }
+        String srcBody = methodBody.getSrcBody();
+        srcBody = srcBody.replaceAll("\n", "\\\\n");
+        srcBody = srcBody.replaceAll("\"", "\\\\\"");
+        String source = "";
+        source = wrapSource(methodBody.getMethodName(), args, srcBody);
+        methodBody.setSrcBody(source);
+    }
+
+    static String wrapSource(String funName, String args, String srcBody) {
+        Map<String, String> data = new HashMap<>();
+        data.put("methodName", funName);
+        data.put("args", args);
+        data.put("srcBody", srcBody);
+        return StrFormatter.format("function {methodName}({args}){{srcBody}};" +
+                "JSON.stringify({methodName}(JSON.parse({args})))" +
+                "", data, true);
     }
 
 
@@ -93,16 +122,26 @@ public class GraalJsScriptExecutor implements IScriptExecutor {
 
             if (value.isBoolean()) {
                 return value.asBoolean();
-            }
-            else if (value.isNumber()) {
+            } else if (value.isNumber()) {
                 return value.asInt();
-            }
-            else if (value.isString()) {
+            } else if (value.isString()) {
                 return value.asString();
             }
-            return value;
-        }
-        catch (Exception e) {
+            if (value.isHostObject()) {
+                return value.asHostObject();
+            }
+            if (value.isString()) {
+                return value.asString();
+            }
+            Object v = value.as(Object.class);
+            if (v == null) {
+                return null;
+            }
+            if (v instanceof Map) {
+                return new LinkedHashMap<>((Map) v);
+            }
+            return v.toString();
+        } catch (Exception e) {
             throw e;
         }
     }

@@ -108,6 +108,9 @@ public abstract class Jsr223ScriptExecutor implements IScriptExecutor {
     protected Object execute(Bindings bindings) {
         Object v = null;
         try {
+            if(compiledScript==null){
+                throw ScriptException.buildInvokeException(this.getClass(), ScriptType.JAVASCRIPT, "script compile fail");
+            }
             v = compiledScript.eval(bindings);
             if (log.isDebugEnabled()) {
                 if (v != null) {

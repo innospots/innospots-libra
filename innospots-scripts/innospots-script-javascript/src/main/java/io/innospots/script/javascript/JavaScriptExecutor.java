@@ -18,6 +18,7 @@
 
 package io.innospots.script.javascript;
 
+import cn.hutool.core.text.StrFormatter;
 import io.innospots.base.exception.ScriptException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.script.jit.MethodBody;
@@ -26,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.script.Bindings;
 import javax.script.SimpleBindings;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,6 +69,16 @@ public class JavaScriptExecutor extends Jsr223ScriptExecutor {
         return execute(bindings);
     }
 
+    static String wrapSource(String funName,String args,String srcBody){
+        Map<String,String> data = new HashMap<>();
+        data.put("methodName",funName);
+        data.put("args",args);
+        data.put("srcBody",srcBody);
+        return StrFormatter.format("function {methodName}({args}){{srcBody}};" +
+                "JSON.stringify({methodName}(JSON.parse({args})))"+
+                "",data,true);
+    }
+
     @Override
     public void reBuildMethodBody(MethodBody methodBody) {
         String args = null;
@@ -79,6 +91,9 @@ public class JavaScriptExecutor extends Jsr223ScriptExecutor {
         srcBody = srcBody.replaceAll("\n", "\\\\n");
         srcBody = srcBody.replaceAll("\"", "\\\\\"");
         String source = "";
+        source = wrapSource(methodBody.getMethodName(),args,srcBody);
+        methodBody.setSrcBody(source);
+        /*
         source += "function ";
         source += methodBody.getMethodName();
         source += " (";
@@ -97,8 +112,8 @@ public class JavaScriptExecutor extends Jsr223ScriptExecutor {
         source += ")";
         methodBody.setSrcBody(source);
         System.out.println(source);
+         */
 //        return source;
-
         //return srcBody;
     }
 

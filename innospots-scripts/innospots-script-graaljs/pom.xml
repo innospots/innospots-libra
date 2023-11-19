@@ -44,6 +44,12 @@
             <artifactId>js-scriptengine</artifactId>
             <version>${graalvm.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
 </project>

@@ -22,24 +22,25 @@ public class JavaScriptExecutorTest {
         Method method2 = JavaScriptExecutorTest.class.getMethod("scriptMethod");
         executor.initialize(method2);
         Map<String,Object> input = new HashMap<>();
-        Map<String,String> i = new HashMap<>();
-        i.put("k2","12345");
-        i.put("k3","abc12");
-        input.put("items",i);
+//        Map<String,String> i = new HashMap<>();
+        input.put("k2","12345");
+        input.put("k3","abc12");
         Object obj = executor.execute(input);
         System.out.println(obj);
     }
 
-    @ScriptMeta(suffix = "js",returnType = Map.class, args = {"java.util.Map items"})
+    @ScriptMeta(suffix = "js",returnType = Map.class)
     public static String scriptMethod() {
-        String src = "print(items.k2); " +
-                "var item = new Object(); " +
-                "item.a=12;" +
-                "item.b='bs';" +
+        String src = "print(item.k2); " +
+                "var itm = new Object(); " +
+                "itm.a=12;" +
+                "itm.b='bs';" +
                 "var p={};" +
                 "p.k=11;p.l='9s';" +
-                "print(p);" +
-                " return item;";
+                "print(item);" +
+                " return itm;";
+        src = JavaScriptExecutor.wrapSource("func","item",src);
+        System.out.println(src);
         return src;
     }
 
