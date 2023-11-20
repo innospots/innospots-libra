@@ -60,7 +60,6 @@ public class CredentialType {
      * credential auth form value
      */
     @Schema(title = "formValues")
-    @JsonIgnore
     private Map<String, Object> formValues = new LinkedHashMap<>();
 
     @Schema(title = "props")
