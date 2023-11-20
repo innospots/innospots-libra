@@ -21,7 +21,7 @@ package io.innospots.libra.kernel.module.system.controller;
 import io.innospots.base.enums.ImageType;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.kernel.module.system.entity.AvatarResourceEntity;
-import io.innospots.libra.kernel.module.system.enums.ImageResource;
+import io.innospots.base.enums.ImageResource;
 import io.innospots.libra.kernel.module.system.operator.AvatarResourceOperator;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.core.io.ByteArrayResource;
@@ -65,7 +65,7 @@ public class AvatarImageController {
     @GetMapping(value = "{imageType}/{resourceId}")
     @ResponseBody
     public ResponseEntity show(@PathVariable("imageType") String imageType,
-                               @PathVariable("resourceId") Integer resourceId,
+                               @PathVariable("resourceId") String resourceId,
                                @RequestParam(value = "imageSort", required = false) Integer imageSort,
                                HttpServletResponse servletResponse) throws IOException {
         //TODO add user images

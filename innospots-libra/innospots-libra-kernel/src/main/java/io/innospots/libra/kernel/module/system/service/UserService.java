@@ -88,7 +88,7 @@ public class UserService {
         // create user role
         userRoleOperator.saveUserRoles(userId, userInfo.getRoleIds());
         // add user avatar
-        avatarResourceOperator.createAvatar(userId, ImageType.AVATAR, userInfo.getAvatarBase64());
+        avatarResourceOperator.createAvatar(String.valueOf(userId), ImageType.AVATAR, userInfo.getAvatarBase64());
         return user;
     }
 
@@ -117,7 +117,7 @@ public class UserService {
             userRoleOperator.saveUserRoles(userInfo.getUserId(), userInfo.getRoleIds());
             // update user avatar
             if (StringUtils.isNotBlank(userInfo.getAvatarKey())) {
-                avatarResourceOperator.updateAvatar(userInfo.getUserId(), ImageType.AVATAR, userInfo.getAvatarKey(), null);
+                avatarResourceOperator.updateAvatar(String.valueOf(userInfo.getUserId()), ImageType.AVATAR, userInfo.getAvatarKey(), null);
             }
         }
         return result;

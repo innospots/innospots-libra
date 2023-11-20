@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package io.innospots.libra.base.events;
+package io.innospots.base.events;
 
 import io.innospots.base.enums.ImageType;
 import io.innospots.base.events.EventBody;

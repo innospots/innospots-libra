@@ -27,8 +27,13 @@ import io.innospots.base.connector.credential.converter.CredentialTypeConverter;
 import io.innospots.base.connector.credential.dao.CredentialTypeDao;
 import io.innospots.base.connector.credential.entity.CredentialTypeEntity;
 import io.innospots.base.connector.credential.model.CredentialType;
+import io.innospots.base.constant.PathConstant;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.request.FormQuery;
+import io.innospots.base.enums.ImageResource;
+import io.innospots.base.enums.ImageType;
+import io.innospots.base.events.EventBusCenter;
+import io.innospots.base.events.NewAvatarEvent;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.utils.StringConverter;
 import org.apache.commons.collections4.CollectionUtils;
@@ -60,7 +65,11 @@ public class CredentialTypeOperator extends ServiceImpl<CredentialTypeDao, Crede
             qw.lambda().eq(CredentialTypeEntity::getTypeCode, code);
             codeCount = this.count(qw);
         } while (codeCount > 0);
-
+        if(credentialType.getIcon()!=null && !ImageResource.imageResource(credentialType.getIcon()).isLink()){
+            //save base64image
+            EventBusCenter.postSync(new NewAvatarEvent(credentialType.getTypeCode(), ImageType.CREDENTIAL, 0, credentialType.getIcon()));
+            credentialType.setIcon(PathConstant.ROOT_PATH+ImageType.CREDENTIAL+"/"+credentialType.getTypeCode());
+        }
         CredentialTypeEntity entity = CredentialTypeConverter.INSTANCE.modelToEntity(credentialType);
         this.save(entity);
         return credentialType;

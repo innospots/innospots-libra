@@ -31,6 +31,8 @@ public enum ImageType {
     FAVICON("favicon",120,120,true),
     LOGO("logo",140,30,true),
     COMMENT("comment",500,500,false),
+    NODE("app",120,120,true),
+    CREDENTIAL("app",120,120,true),
     APP("app",120,120,true),
     OTHER("other",600,600,false);
 

@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.system.listener;
 
 import io.innospots.base.events.IEventListener;
-import io.innospots.libra.base.events.NewAvatarEvent;
+import io.innospots.base.events.NewAvatarEvent;
 import io.innospots.libra.kernel.module.system.operator.AvatarResourceOperator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -36,7 +36,7 @@ public class NewAvatarListener implements IEventListener<NewAvatarEvent> {
 
     @Override
     public Object listen(NewAvatarEvent newAvatarEvent) {
-        avatarResourceOperator.updateAvatar((Integer) newAvatarEvent.getBody(),
+        avatarResourceOperator.updateAvatar((String) newAvatarEvent.getBody(),
                 newAvatarEvent.getImageType(), newAvatarEvent.getBase64(), newAvatarEvent.getImageSort());
         return null;
     }

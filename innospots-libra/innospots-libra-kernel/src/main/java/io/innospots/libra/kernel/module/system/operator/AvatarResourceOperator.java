@@ -50,7 +50,7 @@ import java.nio.file.Path;
 public class AvatarResourceOperator extends ServiceImpl<AvatarResourceDao, AvatarResourceEntity> {
 
     @Transactional(rollbackFor = Exception.class)
-    public void createAvatar(Integer resourceId, ImageType imageType, String imageBase64) {
+    public void createAvatar(String resourceId, ImageType imageType, String imageBase64) {
         AvatarResourceEntity entity = new AvatarResourceEntity();
         entity.setResourceId(resourceId);
         entity.setImageType(imageType);
@@ -59,7 +59,7 @@ public class AvatarResourceOperator extends ServiceImpl<AvatarResourceDao, Avata
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateAvatar(Integer resourceId, ImageType imageType, String avatarBase64, Integer imageSort) {
+    public boolean updateAvatar(String resourceId, ImageType imageType, String avatarBase64, Integer imageSort) {
         if (StringUtils.isBlank(avatarBase64)) {
             throw ValidatorException.buildMissingException(this.getClass(), "avatar must not be null");
         }
@@ -85,11 +85,11 @@ public class AvatarResourceOperator extends ServiceImpl<AvatarResourceDao, Avata
         super.remove(lambda);
     }
 
-    public AvatarResourceEntity getByResourceIdAndType(Integer resourceId, ImageType imageType) {
+    public AvatarResourceEntity getByResourceIdAndType(String resourceId, ImageType imageType) {
         return getByResourceIdAndTypeAndSort(resourceId, imageType, null);
     }
 
-    public AvatarResourceEntity getByResourceIdAndTypeAndSort(Integer resourceId, ImageType imageType, Integer imageSort) {
+    public AvatarResourceEntity getByResourceIdAndTypeAndSort(String resourceId, ImageType imageType, Integer imageSort) {
         QueryWrapper<AvatarResourceEntity> query = new QueryWrapper<>();
         query.lambda().eq(AvatarResourceEntity::getResourceId, resourceId);
         query.lambda().eq(AvatarResourceEntity::getImageType, imageType);

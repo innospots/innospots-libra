@@ -24,7 +24,7 @@ import io.innospots.base.enums.ImageType;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.data.body.PageBody;
-import io.innospots.libra.base.events.NewAvatarEvent;
+import io.innospots.base.events.NewAvatarEvent;
 import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
 import io.innospots.workflow.core.node.definition.entity.FlowNodeGroupNodeEntity;
 import io.innospots.workflow.console.model.NodeQueryRequest;

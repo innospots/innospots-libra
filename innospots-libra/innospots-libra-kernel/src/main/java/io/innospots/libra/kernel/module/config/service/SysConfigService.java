@@ -64,19 +64,19 @@ public class SysConfigService implements SysConfigCommonService {
 
         //TODO resourceId
         if (StringUtils.isNotEmpty(favIcon)) {
-            AvatarResourceEntity iconEntity = avatarResourceOperator.getByResourceIdAndType(CCH.organizationId(), ImageType.FAVICON);
+            AvatarResourceEntity iconEntity = avatarResourceOperator.getByResourceIdAndType(String.valueOf(CCH.organizationId()), ImageType.FAVICON);
             if (iconEntity == null) {
-                avatarResourceOperator.createAvatar(CCH.organizationId(), ImageType.FAVICON, organizationInfo.getFavIcon());
+                avatarResourceOperator.createAvatar(String.valueOf(CCH.organizationId()), ImageType.FAVICON, organizationInfo.getFavIcon());
             } else {
-                avatarResourceOperator.updateAvatar(CCH.organizationId(), ImageType.FAVICON, organizationInfo.getFavIcon(), null);
+                avatarResourceOperator.updateAvatar(String.valueOf(CCH.organizationId()), ImageType.FAVICON, organizationInfo.getFavIcon(), null);
             }
         }
         if (StringUtils.isNotEmpty(logo)) {
-            AvatarResourceEntity logoEntity = avatarResourceOperator.getByResourceIdAndType(CCH.organizationId(), ImageType.LOGO);
+            AvatarResourceEntity logoEntity = avatarResourceOperator.getByResourceIdAndType(String.valueOf(CCH.organizationId()), ImageType.LOGO);
             if (logoEntity == null) {
-                avatarResourceOperator.createAvatar(CCH.organizationId(), ImageType.LOGO, organizationInfo.getLogo());
+                avatarResourceOperator.createAvatar(String.valueOf(CCH.organizationId()), ImageType.LOGO, organizationInfo.getLogo());
             } else {
-                avatarResourceOperator.updateAvatar(CCH.organizationId(), ImageType.LOGO, organizationInfo.getLogo(), null);
+                avatarResourceOperator.updateAvatar(String.valueOf(CCH.organizationId()), ImageType.LOGO, organizationInfo.getLogo(), null);
             }
         }
 
@@ -87,11 +87,11 @@ public class SysConfigService implements SysConfigCommonService {
     public OrganizationInfo getOrganization() {
         OrganizationInfo info = sysConfigOperator.getOrganization();
         if (info != null) {
-            AvatarResourceEntity iconEntity = avatarResourceOperator.getByResourceIdAndType(CCH.organizationId(), ImageType.FAVICON);
+            AvatarResourceEntity iconEntity = avatarResourceOperator.getByResourceIdAndType(String.valueOf(CCH.organizationId()), ImageType.FAVICON);
             if (iconEntity != null) {
                 info.setFavIcon(iconEntity.getImageBase64());
             }
-            AvatarResourceEntity logoEntity = avatarResourceOperator.getByResourceIdAndType(CCH.organizationId(), ImageType.LOGO);
+            AvatarResourceEntity logoEntity = avatarResourceOperator.getByResourceIdAndType(String.valueOf(CCH.organizationId()), ImageType.LOGO);
             if (logoEntity != null) {
                 info.setLogo(logoEntity.getImageBase64());
             }

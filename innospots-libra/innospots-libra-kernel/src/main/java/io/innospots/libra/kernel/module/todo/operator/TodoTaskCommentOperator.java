@@ -26,7 +26,7 @@ import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.InnospotException;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.libra.base.controller.BaseController;
-import io.innospots.libra.base.events.NewAvatarEvent;
+import io.innospots.base.events.NewAvatarEvent;
 import io.innospots.libra.base.utils.ImageFileUploader;
 import io.innospots.libra.kernel.module.todo.dao.TodoTaskCommentDao;
 import io.innospots.libra.kernel.module.todo.entity.TodoTaskCommentEntity;
