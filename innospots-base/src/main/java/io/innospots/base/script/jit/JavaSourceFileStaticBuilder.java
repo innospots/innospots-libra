@@ -18,6 +18,7 @@
 
 package io.innospots.base.script.jit;
 
+import cn.hutool.core.io.FileUtil;
 import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.base.script.java.ScriptMeta;
@@ -53,19 +54,21 @@ public class JavaSourceFileStaticBuilder {
 
     private File sourceFile;
 
-    private String identifier;
-
-    private Map<String, String> scripts = new LinkedHashMap<>();
+//    private String identifier;
 
     private File scriptDir;
 
-    private String sourcePath;
+//    private String sourcePath;
 
 
     public static JavaSourceFileStaticBuilder newBuilder(String className, String packageName, Path sourcePath) {
         JavaSourceFileStaticBuilder builder = new JavaSourceFileStaticBuilder();
         builder.className(className).packageName(packageName).initialize();
-        builder.sourceFile = new File(sourcePath.toFile(), className + ".java");
+        builder.scriptDir = new File(sourcePath.toFile(), packageName.replace(".", File.separator));
+        if (!builder.scriptDir.exists()) {
+            builder.scriptDir.mkdirs();
+        }
+        builder.sourceFile = new File(builder.scriptDir, className + ".java");
         return builder;
     }
 
@@ -91,12 +94,12 @@ public class JavaSourceFileStaticBuilder {
         return this;
     }
 
-    public JavaSourceFileStaticBuilder packageName(String packageName) {
+    JavaSourceFileStaticBuilder packageName(String packageName) {
         this.packageName = packageName;
         return this;
     }
 
-    public JavaSourceFileStaticBuilder className(String className) {
+    JavaSourceFileStaticBuilder className(String className) {
         this.className = className;
         return this;
     }
@@ -118,6 +121,7 @@ public class JavaSourceFileStaticBuilder {
      */
     public void addScriptMethod(MethodBody methodBody) {
         StringBuilder buf = new StringBuilder();
+        fillMeta(buf, methodBody);
         buf.append("public static String");
         buf.append(" _");
         buf.append(methodBody.getScriptType());
@@ -134,35 +138,30 @@ public class JavaSourceFileStaticBuilder {
         addMethod(methodBody.getMethodName(), buf.toString());
     }
 
-    private void fillMeta(StringBuilder buf,MethodBody methodBody){
+    private void fillMeta(StringBuilder buf, MethodBody methodBody) {
         buf.append("@ScriptMeta(scriptType=\"").append(methodBody.getScriptType()).append("\"");
         buf.append(" ,suffix=\"").append(methodBody.getSuffix()).append("\"");
-        if(methodBody.getParams()!=null){
-            String args = methodBody.getParams().stream().map(f->{
-                String arg = "";
-                FieldValueType valueType = f.getValueType();
-                if(valueType == null){
-                    arg = Object.class.getSimpleName();
-                }else{
-                    arg = valueType.getClazz().getName();
-                }
-                return "\"" +arg + " " +f.getCode()+"\"";})
+        if (methodBody.getParams() != null) {
+            String args = methodBody.getParams().stream().map(f -> {
+                        String arg = "";
+                        FieldValueType valueType = f.getValueType();
+                        if (valueType == null) {
+                            arg = Object.class.getSimpleName();
+                        } else {
+                            arg = valueType.getClazz().getName();
+                        }
+                        return "\"" + arg + " " + f.getCode() + "\"";
+                    })
                     .collect(Collectors.joining(","));
 
             buf.append(" ,args={").append(args).append("}");
         }
         buf.append(" ,path=\"").append(scriptDir.getPath()).append(File.separator).append(methodBody.scriptName()).append("\"");
         buf.append(", returnType=\"").append(methodBody.getReturnType().getSimpleName()).append("\"");
-        buf.append(")");
+        buf.append(")\n");
     }
 
     public void addMethod(MethodBody methodBody) {
-        StringBuilder buf = new StringBuilder();
-        fillMeta(buf,methodBody);
-        buf.append("public static ");
-        Class<?> returnType = methodBody.getReturnType();
-        String methodName = methodBody.getMethodName();
-        ParamField[] params = null;
         if (CollectionUtils.isEmpty(methodBody.getParams())) {
             ParamField paramField = new ParamField();
             paramField.setCode("item");
@@ -173,7 +172,12 @@ public class JavaSourceFileStaticBuilder {
             pm.add(paramField);
             methodBody.setParams(pm);
         }
-        methodBody.getParams().toArray(new ParamField[0]);
+        StringBuilder buf = new StringBuilder();
+        fillMeta(buf, methodBody);
+        buf.append("public static ");
+        Class<?> returnType = methodBody.getReturnType();
+        String methodName = methodBody.getMethodName();
+        ParamField[] params = methodBody.getParams().toArray(new ParamField[0]);
         String body = methodBody.getSrcBody();
 
         if (returnType == null || returnType.equals(Void.class)) {
@@ -264,8 +268,10 @@ public class JavaSourceFileStaticBuilder {
         if (sourceFile.exists()) {
             sourceFile.delete();
         }
-        //clear file
-        scriptDir.delete();
+        if (scriptDir.exists()) {
+            //clear file
+            FileUtil.del(scriptDir);
+        }
     }
 
     public boolean hasSourceBody() {
@@ -324,7 +330,6 @@ public class JavaSourceFileStaticBuilder {
         this.varFields.clear();
         this.methods.clear();
         this.imports.clear();
-        this.scripts.clear();
         this.initialize();
     }
 

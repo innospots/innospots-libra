@@ -49,7 +49,7 @@ public class ScriptExecutorManager {
 
     private static final Logger logger = LoggerFactory.getLogger(ScriptExecutorManager.class);
 
-    public static final String DEFAULT_EXP_PKG = "live.re.scripts";
+    public static final String DEFAULT_EXP_PKG = "autogen";
 
     public static final String CLASS_PATH_ENV = "live.classpath";
     public static final String SOURCE_PATH_EVN = "live.sourcepath";
@@ -105,6 +105,7 @@ public class ScriptExecutorManager {
 
     public ScriptExecutorManager(String identifier) {
         this.identifier = identifier;
+        this.packageName = DEFAULT_EXP_PKG + "." + identifier.toUpperCase();
         sourceBuilder();
     }
 
