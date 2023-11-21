@@ -31,31 +31,31 @@ import lombok.Setter;
 @Setter
 public class ScriptException extends BaseException {
 
-    private ScriptType scriptType;
+    private String scriptType;
 
-    private ScriptException(Class<?> invokeClass, ResponseCode responseCode, ScriptType scriptType, Throwable cause, Object... params) {
+    private ScriptException(Class<?> invokeClass, ResponseCode responseCode, String scriptType, Throwable cause, Object... params) {
         super(invokeClass, responseCode, cause, params);
         this.scriptType = scriptType;
     }
 
-    private ScriptException(Class<?> invokeClass, ResponseCode responseCode, ScriptType scriptType, Object... params) {
+    private ScriptException(Class<?> invokeClass, ResponseCode responseCode, String scriptType, Object... params) {
         super(invokeClass, responseCode, params);
         this.scriptType = scriptType;
     }
 
-    public static ScriptException buildCompileException(Class<?> invokeClass, ScriptType scriptType, Throwable cause, Object... params) {
+    public static ScriptException buildCompileException(Class<?> invokeClass, String scriptType, Throwable cause, Object... params) {
         return new ScriptException(invokeClass, ResponseCode.SCRIPT_COMPILE_ERROR, scriptType, cause, params);
     }
 
-    public static ScriptException buildInvokeException(Class<?> invokeClass, ScriptType scriptType, Throwable cause, Object... params) {
+    public static ScriptException buildInvokeException(Class<?> invokeClass, String scriptType, Throwable cause, Object... params) {
         return new ScriptException(invokeClass, ResponseCode.SCRIPT_INVOKE_ERROR, scriptType, cause, params);
     }
 
-    public static ScriptException buildCompileException(Class<?> invokeClass, ScriptType scriptType, Object... params) {
+    public static ScriptException buildCompileException(Class<?> invokeClass, String scriptType, Object... params) {
         return new ScriptException(invokeClass, ResponseCode.SCRIPT_COMPILE_ERROR, scriptType, params);
     }
 
-    public static ScriptException buildInvokeException(Class<?> invokeClass, ScriptType scriptType, Object... params) {
+    public static ScriptException buildInvokeException(Class<?> invokeClass, String scriptType, Object... params) {
         return new ScriptException(invokeClass, ResponseCode.SCRIPT_INVOKE_ERROR, scriptType, params);
     }
 

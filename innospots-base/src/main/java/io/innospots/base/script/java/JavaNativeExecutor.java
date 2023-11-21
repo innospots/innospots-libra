@@ -102,7 +102,7 @@ public class JavaNativeExecutor implements IScriptExecutor {
             return method.invoke(null, args);
         } catch (IllegalAccessException | InvocationTargetException e) {
             logger.error(e.getMessage(), e);
-            throw ScriptException.buildInvokeException(this.getClass(), ScriptType.JAVA, e, e.getMessage());
+            throw ScriptException.buildInvokeException(this.getClass(), ScriptType.JAVA.name(), e, e.getMessage());
         }
     }
 

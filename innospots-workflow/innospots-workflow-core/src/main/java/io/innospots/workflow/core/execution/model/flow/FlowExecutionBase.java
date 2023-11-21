@@ -18,9 +18,9 @@
 
 package io.innospots.workflow.core.execution.model.flow;
 
+import io.innospots.base.utils.InnospotsIdGenerator;
 import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.base.utils.Initializer;
-import io.innospots.base.utils.InnospotIdGenerator;
 import io.innospots.workflow.core.execution.enums.ExecMode;
 import io.innospots.workflow.core.execution.enums.ExecutionStatus;
 import io.innospots.workflow.core.execution.enums.RecordMode;
@@ -130,7 +130,7 @@ public class FlowExecutionBase implements Initializer {
 
     public void fillExecutionId(String flowKey) {
         this.flowKey = flowKey;
-        this.setFlowExecutionId(String.join("_", flowKey, String.valueOf(InnospotIdGenerator.generateId())));
+        this.setFlowExecutionId(String.join("_", flowKey, String.valueOf(InnospotsIdGenerator.generateId())));
     }
 
 

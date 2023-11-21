@@ -20,7 +20,7 @@ package io.innospots.workflow.core.execution.model.node;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.utils.InnospotIdGenerator;
+import io.innospots.base.utils.InnospotsIdGenerator;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.enums.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
@@ -85,7 +85,7 @@ public class NodeExecution extends NodeExecutionBase {
     public static NodeExecution buildNewNodeExecution(String nodeKey, FlowExecution flowExecution) {
         NodeExecution nodeExecution = new NodeExecution();
         nodeExecution.sequenceNumber = flowExecution.currentSequenceNumber();
-        nodeExecution.nodeExecutionId = String.join("_", "fk", flowExecution.getFlowKey(), Integer.toString(nodeExecution.getSequenceNumber()), nodeKey, String.valueOf(InnospotIdGenerator.generateId()));
+        nodeExecution.nodeExecutionId = String.join("_", "fk", flowExecution.getFlowKey(), Integer.toString(nodeExecution.getSequenceNumber()), nodeKey, String.valueOf(InnospotsIdGenerator.generateId()));
         nodeExecution.nodeKey = nodeKey;
         nodeExecution.skipNodeExecution = flowExecution.isSkipNodeExecution();
         nodeExecution.flowInstanceId = flowExecution.getFlowInstanceId();

@@ -26,7 +26,7 @@ import io.innospots.server.base.exception.GlobalExceptionHandler;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.CCH;
-import io.innospots.base.utils.InnospotIdGenerator;
+import io.innospots.base.utils.InnospotsIdGenerator;
 import io.innospots.base.watcher.WatcherSupervisor;
 import io.innospots.server.base.registry.ServiceRegistryDao;
 import io.innospots.server.base.registry.ServiceRegistryManager;
@@ -98,8 +98,8 @@ public class BaseServerConfiguration {
     }
 
     @Bean
-    public InnospotIdGenerator idGenerator(BeanContextAware springBeanAware) {
-        return InnospotIdGenerator.build(springBeanAware.serverIpAddress(), springBeanAware.serverPort());
+    public InnospotsIdGenerator idGenerator(BeanContextAware springBeanAware) {
+        return InnospotsIdGenerator.build(springBeanAware.serverIpAddress(), springBeanAware.serverPort());
     }
 
     @Bean

@@ -39,14 +39,21 @@ class ScriptExecutorManagerTest {
         File buildPath = new File(parentFile,".script_build_path");
         System.out.println(buildPath.getAbsolutePath());
         ScriptExecutorManager.setPath(new File(buildPath,"src").getAbsolutePath(), buildPath.getAbsolutePath());
-
+        ScriptExecutorManager executorManager =ScriptExecutorManager.newInstance("TestScript1");
+        executorManager.register(buildNativeMethod());
+//        executorManager.register(buildJavaMethod());
+//        executorManager.register(buildJavaScriptMethod());
+        executorManager.register(buildCmdPythonMethod());
+        executorManager.register(buildCmdShellMethod());
+        executorManager.register(buildAviatorMethod());
+        executorManager.build();
     }
 
     private MethodBody buildNativeMethod(){
         MethodBody methodBody = new MethodBody();
         methodBody.setSuffix("java");
         methodBody.setReturnType(Map.class);
-        methodBody.setScriptType("java");
+        methodBody.setScriptType("javaNative");
         methodBody.setMethodName("javaCall");
         String src = "long ts = System.currentTimeMillis();";
         src += "System.out.println(ts);";
@@ -77,25 +84,51 @@ class ScriptExecutorManagerTest {
 
     private MethodBody buildJavaMethod(){
         MethodBody methodBody = new MethodBody();
-
+        methodBody.setSuffix("java");
+        methodBody.setReturnType(Map.class);
+        methodBody.setScriptType("java");
+        methodBody.setMethodName("javaSc");
+        String ps = "";
+        ps += "import java.util.Properties;";
+        ps += "Properties prop = System.getProperties();\n";
+        ps += "System.out.println(\"inner out: \"+prop);";
+        ps += "return item;";
+        methodBody.setSrcBody(ps);
         return methodBody;
     }
 
     private MethodBody buildCmdShellMethod(){
         MethodBody methodBody = new MethodBody();
-
+        methodBody.setSuffix("sh");
+        methodBody.setReturnType(String.class);
+        methodBody.setScriptType("shell");
+        methodBody.setMethodName("shellCall");
+        String ps = "";
+        ps += "echo 'abc', $1 $2";
+        methodBody.setSrcBody(ps);
         return methodBody;
     }
 
     private MethodBody buildAviatorMethod(){
         MethodBody methodBody = new MethodBody();
-
+        methodBody.setSuffix("aviator");
+        methodBody.setReturnType(Boolean.class);
+        methodBody.setScriptType("AviatorScript");
+        methodBody.setMethodName("avCall");
+        String ps = "";
+        ps += "a <100 && b >= 910";
+        methodBody.setSrcBody(ps);
         return methodBody;
     }
 
     private MethodBody buildCmdPythonMethod(){
         MethodBody methodBody = new MethodBody();
-
+        methodBody.setSuffix("py");
+        methodBody.setReturnType(String.class);
+        methodBody.setScriptType("python");
+        methodBody.setMethodName("pyCall");
+        String script = "td = {\"Alice\": 112, \"Beth\": \"9102\", \"Cecil\": \"3258\"}; print(td)";
+        methodBody.setSrcBody(script);
         return methodBody;
     }
 

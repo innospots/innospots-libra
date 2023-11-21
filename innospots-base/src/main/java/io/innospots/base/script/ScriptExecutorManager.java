@@ -69,7 +69,7 @@ public class ScriptExecutorManager {
 
     protected String packageName;
 
-    protected Map<String, IScriptExecutor> executors;
+    protected Map<String, IScriptExecutor> executors = new HashMap<>();
 
     /**
      * spi loader, key: scriptType, value: class
@@ -139,7 +139,7 @@ public class ScriptExecutorManager {
                 logger.info("compile engine:{}, write source file:{}", className(), sourceBuilder.getSourceFile());
                 this.sourceBuilder.writeToFile();
             } catch (IOException e) {
-                throw ScriptException.buildCompileException(this.getClass(), ScriptType.JAVA, e, e.getMessage());
+                throw ScriptException.buildCompileException(this.getClass(), ScriptType.JAVA.name(), e, e.getMessage());
             }
         }
 
@@ -152,7 +152,7 @@ public class ScriptExecutorManager {
                 logger.info("engine class file write complete, classFile:{} , loaded expresion size:{}", className(), executors.size());
                 return true;
             } catch (IOException e) {
-                throw ScriptException.buildCompileException(this.getClass(), ScriptType.JAVA, e, e.getMessage());
+                throw ScriptException.buildCompileException(this.getClass(), ScriptType.JAVA.name(), e, e.getMessage());
             }
         }
 
@@ -289,6 +289,9 @@ public class ScriptExecutorManager {
     private IScriptExecutor newScriptExecutor(String scriptType) {
         Class<? extends IScriptExecutor> seClass = executorClasses.get(scriptType);
         try {
+            if(seClass == null){
+                throw ScriptException.buildCompileException(this.getClass(),scriptType,"script executor is null,scriptType:" + scriptType);
+            }
             return seClass.getConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException(e);

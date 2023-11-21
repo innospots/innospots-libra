@@ -85,7 +85,7 @@ public class JavaSourceFileCompiler {
         }
         if (!success) {
             logger.error("java source file compiler error:{}", errorInfo);
-            throw ScriptException.buildCompileException(this.getClass(), ScriptType.JAVA, errorInfo.toString());
+            throw ScriptException.buildCompileException(this.getClass(), ScriptType.JAVA.name(), errorInfo.toString());
         }
 
     }

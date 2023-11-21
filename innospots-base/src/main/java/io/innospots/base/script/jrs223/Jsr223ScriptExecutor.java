@@ -109,7 +109,7 @@ public abstract class Jsr223ScriptExecutor implements IScriptExecutor {
         Object v = null;
         try {
             if(compiledScript==null){
-                throw ScriptException.buildInvokeException(this.getClass(), ScriptType.JAVASCRIPT, "script compile fail");
+                throw ScriptException.buildInvokeException(this.getClass(), ScriptType.JAVASCRIPT.name(), "script compile fail");
             }
             v = compiledScript.eval(bindings);
             if (log.isDebugEnabled()) {
@@ -123,7 +123,7 @@ public abstract class Jsr223ScriptExecutor implements IScriptExecutor {
             v = parseObject(v);
         } catch (Exception e) {
             log.error(e.getMessage());
-            throw ScriptException.buildInvokeException(this.getClass(), ScriptType.JAVASCRIPT, e, e.getMessage());
+            throw ScriptException.buildInvokeException(this.getClass(), ScriptType.JAVASCRIPT.name(), e, e.getMessage());
         }
         return v;
     }
