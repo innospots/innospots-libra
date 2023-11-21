@@ -18,7 +18,11 @@
 
 package io.innospots.base.script;
 
+import io.innospots.base.script.jit.MethodBody;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,7 +35,68 @@ class ScriptExecutorManagerTest {
 
     @Test
     void test(){
-        ScriptExecutorManager.setPath(".script_build_path/src", ".script_build_path");
+        File parentFile = new File(new File("").getAbsolutePath()).getParentFile();
+        File buildPath = new File(parentFile,".script_build_path");
+        System.out.println(buildPath.getAbsolutePath());
+        ScriptExecutorManager.setPath(new File(buildPath,"src").getAbsolutePath(), buildPath.getAbsolutePath());
+
+    }
+
+    private MethodBody buildNativeMethod(){
+        MethodBody methodBody = new MethodBody();
+        methodBody.setSuffix("java");
+        methodBody.setReturnType(Map.class);
+        methodBody.setScriptType("java");
+        methodBody.setMethodName("javaCall");
+        String src = "long ts = System.currentTimeMillis();";
+        src += "System.out.println(ts);";
+        src += "item.put(\"ts\",ts);";
+        src += "return item;";
+        methodBody.setSrcBody(src);
+        return methodBody;
+    }
+
+    private MethodBody buildJavaScriptMethod(){
+        MethodBody methodBody = new MethodBody();
+        methodBody.setSuffix("js");
+        methodBody.setReturnType(Map.class);
+        methodBody.setScriptType("javascript");
+        methodBody.setMethodName("jsCall");
+        String src = "print(item.k2); " +
+                "var itm = new Object(); " +
+                "itm.a=12;" +
+                "itm.b='bs';" +
+                "var p={};" +
+                "p.k=11;p.l='9s';" +
+                "print(item);" +
+                " return itm;";
+        methodBody.setSrcBody(src);
+
+        return methodBody;
+    }
+
+    private MethodBody buildJavaMethod(){
+        MethodBody methodBody = new MethodBody();
+
+        return methodBody;
+    }
+
+    private MethodBody buildCmdShellMethod(){
+        MethodBody methodBody = new MethodBody();
+
+        return methodBody;
+    }
+
+    private MethodBody buildAviatorMethod(){
+        MethodBody methodBody = new MethodBody();
+
+        return methodBody;
+    }
+
+    private MethodBody buildCmdPythonMethod(){
+        MethodBody methodBody = new MethodBody();
+
+        return methodBody;
     }
 
 }
