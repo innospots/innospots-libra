@@ -18,13 +18,14 @@
 
 package io.innospots.base.script.cmdline;
 
+import io.innospots.base.script.jit.MethodBody;
+
 /**
  * @author Smars
  * @vesion 2.0
  * @date 2023/11/16
  */
 public class CmdShellScriptExecutor extends CmdLineScriptExecutor {
-
 
     @Override
     public String scriptType() {

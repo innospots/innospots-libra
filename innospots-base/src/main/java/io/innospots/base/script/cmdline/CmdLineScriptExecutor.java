@@ -27,6 +27,7 @@ import io.innospots.base.model.Pair;
 import io.innospots.base.script.ExecuteMode;
 import io.innospots.base.script.IScriptExecutor;
 import io.innospots.base.script.java.ScriptMeta;
+import io.innospots.base.script.jit.MethodBody;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -54,6 +55,9 @@ public abstract class CmdLineScriptExecutor implements IScriptExecutor {
 
     @Override
     public void initialize(Method method) {
+        if(scriptPath!=null){
+            return;
+        }
         ScriptMeta scriptMeta = AnnotationUtil.getAnnotation(method, ScriptMeta.class);
         try {
             scriptPath = scriptMeta.path();
@@ -103,6 +107,16 @@ public abstract class CmdLineScriptExecutor implements IScriptExecutor {
 
         return RuntimeUtil.execForStr(params.toArray(new String[]{}));
     }
+
+
+    @Override
+    public void reBuildMethodBody(MethodBody methodBody) {
+        String srcBody = methodBody.getSrcBody();
+        srcBody = srcBody.replaceAll("\n", "\\\\n");
+        srcBody = srcBody.replaceAll("\"", "\\\\\"");
+        methodBody.setSrcBody(srcBody);
+    }
+
 
     @Override
     public String[] arguments() {

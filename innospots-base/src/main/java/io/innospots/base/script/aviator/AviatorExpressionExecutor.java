@@ -61,6 +61,9 @@ public class AviatorExpressionExecutor implements IScriptExecutor {
 
     @Override
     public void initialize(Method method) {
+        if(expression!=null){
+            return;
+        }
         ScriptMeta scriptMeta = AnnotationUtil.getAnnotation(method, ScriptMeta.class);
         try {
             String scriptBody = (String) method.invoke(null);

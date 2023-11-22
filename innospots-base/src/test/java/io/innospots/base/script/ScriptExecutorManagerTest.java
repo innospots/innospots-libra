@@ -22,6 +22,7 @@ import io.innospots.base.script.jit.MethodBody;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,13 +34,15 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class ScriptExecutorManagerTest {
 
+    ScriptExecutorManager executorManager;
+
     @Test
     void test(){
         File parentFile = new File(new File("").getAbsolutePath()).getParentFile();
         File buildPath = new File(parentFile,".script_build_path");
         System.out.println(buildPath.getAbsolutePath());
         ScriptExecutorManager.setPath(new File(buildPath,"src").getAbsolutePath(), buildPath.getAbsolutePath());
-        ScriptExecutorManager executorManager =ScriptExecutorManager.newInstance("TestScript1");
+        executorManager =ScriptExecutorManager.newInstance("TestScript1");
         executorManager.register(buildNativeMethod());
 //        executorManager.register(buildJavaMethod());
 //        executorManager.register(buildJavaScriptMethod());
@@ -47,6 +50,18 @@ class ScriptExecutorManagerTest {
         executorManager.register(buildCmdShellMethod());
         executorManager.register(buildAviatorMethod());
         executorManager.build();
+        executorManager.reload();
+    }
+
+    @Test
+    void testExe(){
+        test();
+        Map<String,Object> input = new HashMap<>();
+        input.put("a",20);
+        input.put("b",1200);
+        IScriptExecutor scriptExecutor = executorManager.getExecutor("avCall");
+        Object object = scriptExecutor.execute(input);
+        System.out.println(object);
     }
 
     private MethodBody buildNativeMethod(){

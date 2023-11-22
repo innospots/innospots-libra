@@ -49,6 +49,9 @@ public abstract class Jsr223ScriptExecutor implements IScriptExecutor {
 
     @Override
     public void initialize(Method method) {
+        if(compiledScript!=null){
+            return;
+        }
         ScriptMeta scriptMeta = AnnotationUtil.getAnnotation(method, ScriptMeta.class);
         try {
             method.setAccessible(true);

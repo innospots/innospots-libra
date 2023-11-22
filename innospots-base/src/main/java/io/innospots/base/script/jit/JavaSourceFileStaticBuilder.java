@@ -64,11 +64,12 @@ public class JavaSourceFileStaticBuilder {
     public static JavaSourceFileStaticBuilder newBuilder(String className, String packageName, Path sourcePath) {
         JavaSourceFileStaticBuilder builder = new JavaSourceFileStaticBuilder();
         builder.className(className).packageName(packageName).initialize();
-        builder.scriptDir = new File(sourcePath.toFile(), packageName.replace(".", File.separator));
+        File parentDir = new File(sourcePath.toFile().getAbsolutePath());
+        builder.scriptDir = new File(parentDir.getParentFile(), packageName.replace(".", File.separator));
         if (!builder.scriptDir.exists()) {
             builder.scriptDir.mkdirs();
         }
-        builder.sourceFile = new File(builder.scriptDir, className + ".java");
+        builder.sourceFile = new File(sourcePath.toFile(), className + ".java");
         return builder;
     }
 
@@ -157,7 +158,7 @@ public class JavaSourceFileStaticBuilder {
             buf.append(" ,args={").append(args).append("}");
         }
         buf.append(" ,path=\"").append(scriptDir.getPath()).append(File.separator).append(methodBody.scriptName()).append("\"");
-        buf.append(", returnType=\"").append(methodBody.getReturnType().getSimpleName()).append("\"");
+        buf.append(", returnType=").append(methodBody.getReturnType().getSimpleName()).append(".class");
         buf.append(")\n");
     }
 
@@ -267,10 +268,6 @@ public class JavaSourceFileStaticBuilder {
         log.debug("remove source file:{}", sourceFile);
         if (sourceFile.exists()) {
             sourceFile.delete();
-        }
-        if (scriptDir.exists()) {
-            //clear file
-            FileUtil.del(scriptDir);
         }
     }
 

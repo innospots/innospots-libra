@@ -105,7 +105,7 @@ public class ScriptExecutorManager {
 
     public ScriptExecutorManager(String identifier) {
         this.identifier = identifier;
-        this.packageName = DEFAULT_EXP_PKG + "." + identifier.toUpperCase();
+        this.packageName = DEFAULT_EXP_PKG + "." + identifier.toLowerCase();
         sourceBuilder();
     }
 
@@ -149,7 +149,8 @@ public class ScriptExecutorManager {
                 compiler.compile();
                 //reload();
                 sourceBuilder.clear();
-                logger.info("engine class file write complete, classFile:{} , loaded expresion size:{}", className(), executors.size());
+                sourceBuilder.deleteSourceFile();
+                logger.info("engine class file write complete, classFile:{} , loaded executor size:{}", className(), executors.size());
                 return true;
             } catch (IOException e) {
                 throw ScriptException.buildCompileException(this.getClass(), ScriptType.JAVA.name(), e, e.getMessage());
@@ -206,7 +207,6 @@ public class ScriptExecutorManager {
         if (clsFile.exists()) {
             clsFile.delete();
         }
-        sourceBuilder.clear();
         sourceBuilder.deleteSourceFile();
     }
 
