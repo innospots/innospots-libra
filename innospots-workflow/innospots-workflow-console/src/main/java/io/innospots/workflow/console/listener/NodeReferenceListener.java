@@ -22,7 +22,7 @@ import io.innospots.base.events.IEventListener;
 import io.innospots.workflow.core.instance.entity.NodeInstanceEntity;
 import io.innospots.workflow.console.events.InstanceUpdateEvent;
 import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
-import io.innospots.workflow.console.operator.instance.NodeInstanceOperator;
+import io.innospots.workflow.core.instance.operator.NodeInstanceOperator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 

@@ -22,7 +22,7 @@ import io.innospots.libra.base.model.swagger.SwaggerOpenApiBuilder;
 import io.innospots.workflow.console.config.WorkflowOperatorConfiguration;
 import io.innospots.workflow.console.listener.NodeReferenceListener;
 import io.innospots.workflow.console.listener.WorkflowPageListener;
-import io.innospots.workflow.console.operator.instance.NodeInstanceOperator;
+import io.innospots.workflow.core.instance.operator.NodeInstanceOperator;
 import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
 import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
 import org.springdoc.core.GroupedOpenApi;

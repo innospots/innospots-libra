@@ -1,22 +1,22 @@
 /*
- *  Copyright © 2021-2023 Innospots (http://www.innospots.com)
- *  Licensed to the Apache Software Foundation (ASF) under one or more
- *  contributor license agreements.  See the NOTICE file distributed with
- *  this work for additional information regarding copyright ownership.
- *  The ASF licenses this file to You under the Apache License, Version 2.0
- *  (the "License"); you may not use this file except in compliance with
- *  the License. You may obtain a copy of the License at
+ * Copyright © 2021-2023 Innospots (http://www.innospots.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
-package io.innospots.workflow.console.operator.instance;
+package io.innospots.workflow.core.instance.operator;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -27,9 +27,10 @@ import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.utils.CCH;
 import io.innospots.workflow.core.instance.dao.NodeInstanceDao;
 import io.innospots.workflow.core.instance.entity.NodeInstanceEntity;
-import io.innospots.workflow.console.enums.FlowVersion;
+import io.innospots.workflow.core.enums.FlowVersion;
 import io.innospots.workflow.core.instance.converter.NodeInstanceConverter;
-import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
+import io.innospots.workflow.core.node.definition.dao.FlowNodeDefinitionDao;
+import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
 import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
@@ -47,10 +48,10 @@ import java.util.stream.Collectors;
 public class NodeInstanceOperator extends ServiceImpl<NodeInstanceDao, NodeInstanceEntity> {
 
 
-    private final FlowNodeDefinitionOperator flowNodeDefinitionOperator;
+    private final FlowNodeDefinitionDao flowNodeDefinitionDao;
 
-    public NodeInstanceOperator(FlowNodeDefinitionOperator flowNodeDefinitionOperator) {
-        this.flowNodeDefinitionOperator = flowNodeDefinitionOperator;
+    public NodeInstanceOperator(FlowNodeDefinitionDao flowNodeDefinitionDao) {
+        this.flowNodeDefinitionDao = flowNodeDefinitionDao;
     }
 
     public boolean deleteNodes(Long workflowInstanceId) {
@@ -147,12 +148,13 @@ public class NodeInstanceOperator extends ServiceImpl<NodeInstanceDao, NodeInsta
 
             for (NodeInstanceEntity nodeInstanceEntity : nodeInstanceEntities) {
                 try {
-                    NodeDefinition appNodeDefinition = flowNodeDefinitionOperator.getNodeDefinition(nodeInstanceEntity.getNodeDefinitionId());
-                    list.add(NodeInstanceConverter.INSTANCE.entityToModel(nodeInstanceEntity, appNodeDefinition));
-                    if (appNodeDefinition == null) {
+                    FlowNodeDefinitionEntity nodeDefinitionEntity = flowNodeDefinitionDao.selectById(nodeInstanceEntity.getNodeDefinitionId());
+                    if (nodeDefinitionEntity == null) {
                         log.warn("node definition not exist,{} ", nodeInstanceEntity.getNodeInstanceId());
+                        continue;
                     }
-
+                    list.add(NodeInstanceConverter.INSTANCE.entityToModel(nodeInstanceEntity, nodeDefinitionEntity));
+//                    NodeDefinition appNodeDefinition = flowNodeDefinitionOperator.getNodeDefinition(nodeInstanceEntity.getNodeDefinitionId());
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
                     throw ValidatorException.buildInvalidException(this.getClass(), e);

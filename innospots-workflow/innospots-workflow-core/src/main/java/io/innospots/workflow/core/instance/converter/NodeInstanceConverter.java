@@ -23,6 +23,7 @@ import io.innospots.base.json.JSONUtils;
 import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.workflow.core.instance.entity.NodeInstanceEntity;
+import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
 import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import org.apache.commons.collections4.MapUtils;
@@ -48,15 +49,16 @@ public interface NodeInstanceConverter extends BaseBeanConverter<NodeInstance,No
     String WIDGET_CODE_EDITOR = "CodeEditor";
 
 
-    default NodeInstance entityToModel(NodeInstanceEntity entity, NodeDefinition appNodeDefinition){
+    default NodeInstance entityToModel(NodeInstanceEntity entity, FlowNodeDefinitionEntity nodeDefinitionEntity){
         NodeInstance ni = entityToModel(entity);
-        ni.setCode(appNodeDefinition.getCode());
-        ni.setPrimitive(appNodeDefinition.getPrimitive());
-        ni.setIcon(appNodeDefinition.getIcon());
-        ni.setNodeType(appNodeDefinition.getNodeType());
+        ni.setCode(nodeDefinitionEntity.getCode());
+        ni.setPrimitive(nodeDefinitionEntity.getPrimitive());
+        ni.setIcon(nodeDefinitionEntity.getIcon());
+        ni.setNodeType(nodeDefinitionEntity.getNodeType());
 //        ni.setColor(appNodeDefinition.getColor());
-        if(MapUtils.isNotEmpty(appNodeDefinition.getConfig()) && appNodeDefinition.getConfig().containsKey(PROPS)){
-            Map<String,Object> elements = (Map<String, Object>) appNodeDefinition.getConfig().get(PROPS);
+        /*
+        if(MapUtils.isNotEmpty(nodeDefinitionEntity.getConfig()) && nodeDefinitionEntity.getConfig().containsKey(PROPS)){
+            Map<String,Object> elements = (Map<String, Object>) nodeDefinitionEntity.getConfig().get(PROPS);
             for (Map.Entry<String, Object> entry : elements.entrySet()) {
                 String elementName = entry.getKey();
                 Map<String,Object> props = (Map<String, Object>) entry.getValue();
@@ -70,6 +72,8 @@ public interface NodeInstanceConverter extends BaseBeanConverter<NodeInstance,No
                 }//end widget and codeType
             }//end for
         }//end PROPS
+
+         */
         return ni;
     }
 

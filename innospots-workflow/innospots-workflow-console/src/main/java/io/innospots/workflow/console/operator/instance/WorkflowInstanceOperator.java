@@ -36,7 +36,7 @@ import io.innospots.base.data.request.FormQuery;
 import io.innospots.workflow.core.instance.converter.WorkflowInstanceConverter;
 import io.innospots.workflow.core.instance.dao.WorkflowInstanceDao;
 import io.innospots.workflow.core.instance.entity.WorkflowInstanceEntity;
-import io.innospots.workflow.console.enums.FlowVersion;
+import io.innospots.workflow.core.enums.FlowVersion;
 import io.innospots.workflow.console.listener.WorkflowPageListener;
 import io.innospots.workflow.console.operator.node.FlowTemplateOperator;
 import io.innospots.workflow.core.flow.WorkflowBaseInfo;

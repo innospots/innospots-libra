@@ -18,6 +18,7 @@
 
 package io.innospots.workflow.core.instance.dao;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.workflow.core.instance.entity.WorkflowInstanceEntity;
@@ -39,8 +40,11 @@ public interface WorkflowInstanceDao extends BaseMapper<WorkflowInstanceEntity> 
      * @param flowKey
      * @return
      */
-    @Select("SELECT * FROM flow_instance where FLOW_KEY=#{flowKey}")
-    WorkflowInstanceEntity getInstanceByFlowKey(String flowKey);
+    default WorkflowInstanceEntity getInstanceByFlowKey(String flowKey) {
+        QueryWrapper<WorkflowInstanceEntity> query = new QueryWrapper<>();
+        query.lambda().eq(WorkflowInstanceEntity::getFlowKey, flowKey);
+        return this.selectOne(query);
+    }
 
     @Update({"update", WorkflowInstanceEntity.TABLE_NAME, "set updated_time = #{updatedTime,jdbcType=TIMESTAMP},",
             "status = #{status,jdbcType=VARCHAR}",

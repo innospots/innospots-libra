@@ -32,6 +32,11 @@ import io.innospots.workflow.core.flow.draft.WorkflowDraftDbOperator;
 import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
 import io.innospots.workflow.core.flow.loader.WorkflowDBLoader;
 import io.innospots.workflow.core.flow.reader.WorkflowDbReader;
+import io.innospots.workflow.core.instance.dao.WorkflowInstanceCacheDao;
+import io.innospots.workflow.core.instance.dao.WorkflowInstanceDao;
+import io.innospots.workflow.core.instance.dao.WorkflowRevisionDao;
+import io.innospots.workflow.core.instance.operator.EdgeOperator;
+import io.innospots.workflow.core.instance.operator.NodeInstanceOperator;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -84,8 +89,12 @@ public class WorkflowCoreConfiguration {
     }
 
     @Bean
-    public WorkflowDraftDbOperator workflowDraftDbOperator() {
-        return new WorkflowDraftDbOperator();
+    public WorkflowDraftDbOperator workflowDraftDbOperator(WorkflowRevisionDao workflowRevisionDao,
+                                                           WorkflowInstanceCacheDao workflowInstanceCacheDao,
+                                                           WorkflowInstanceDao workflowInstanceDao,
+                                                           NodeInstanceOperator nodeInstanceOperator, EdgeOperator edgeOperator,
+                                                           InnospotsWorkflowProperties innospotsWorkflowProperties) {
+        return new WorkflowDraftDbOperator(innospotsWorkflowProperties,workflowRevisionDao, workflowInstanceCacheDao, workflowInstanceDao, nodeInstanceOperator, edgeOperator);
     }
 
     @Bean

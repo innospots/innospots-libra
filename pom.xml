@@ -53,6 +53,7 @@
 
         <hutool.version>5.8.22</hutool.version>
         <mail.version>1.6.2</mail.version>
+        <mapdb.version>3.0.10</mapdb.version>
         <innospots-ui.version>1.2.0-SNAPSHOT</innospots-ui.version>
         <innospots-page-ui.version>1.2.0-SNAPSHOT</innospots-page-ui.version>
         <innosopts.version>2.0.0-SNAPSHOT</innosopts.version>
@@ -421,9 +422,9 @@
             </dependency>
 
             <dependency>
-                <groupId>org.javassist</groupId>
-                <artifactId>javassist</artifactId>
-                <version>${javassist.version}</version>
+                <groupId>org.mapdb</groupId>
+                <artifactId>mapdb</artifactId>
+                <version>${mapdb.version}</version>
             </dependency>
 
             <dependency>

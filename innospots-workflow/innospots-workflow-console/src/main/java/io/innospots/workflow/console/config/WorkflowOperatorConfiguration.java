@@ -20,8 +20,8 @@ package io.innospots.workflow.console.config;
 
 import io.innospots.workflow.console.operator.WorkflowCategoryOperator;
 import io.innospots.workflow.console.operator.execution.ExecutionManagerOperator;
-import io.innospots.workflow.console.operator.instance.EdgeOperator;
-import io.innospots.workflow.console.operator.instance.NodeInstanceOperator;
+import io.innospots.workflow.core.instance.operator.EdgeOperator;
+import io.innospots.workflow.core.instance.operator.NodeInstanceOperator;
 import io.innospots.workflow.console.operator.instance.WorkflowBuilderOperator;
 import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
 import io.innospots.workflow.console.operator.node.FlowCategoryOperator;

@@ -30,7 +30,7 @@ import io.innospots.workflow.core.node.definition.entity.FlowNodeGroupNodeEntity
 import io.innospots.workflow.console.model.NodeQueryRequest;
 import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
 import io.innospots.workflow.console.operator.node.FlowNodeGroupOperator;
-import io.innospots.workflow.console.operator.instance.NodeInstanceOperator;
+import io.innospots.workflow.core.instance.operator.NodeInstanceOperator;
 import io.innospots.workflow.core.enums.NodePrimitive;
 import io.innospots.workflow.core.enums.NodeSource;
 import io.innospots.workflow.core.node.NodeInfo;
