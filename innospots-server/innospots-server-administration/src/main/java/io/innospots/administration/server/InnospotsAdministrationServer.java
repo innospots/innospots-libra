@@ -58,7 +58,7 @@ import java.util.Map;
 @LibraAuthImporter
 @LibraKernelImporter
 @ServerConfigImporter
-//@WorkflowConsoleImporter
+@WorkflowConsoleImporter
 //@WorkflowServerImporter
 @EnableScheduling
 public class InnospotsAdministrationServer {

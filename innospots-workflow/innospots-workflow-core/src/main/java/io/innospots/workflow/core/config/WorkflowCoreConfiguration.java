@@ -88,9 +88,9 @@ public class WorkflowCoreConfiguration {
         return new WorkflowDraftDbOperator();
     }
 
-    @Bean
-    public WorkflowDbReader workflowDbReader() {
-        return new WorkflowDbReader();
-    }
+//    @Bean
+//    public WorkflowDbReader workflowDbReader() {
+//        return new WorkflowDbReader();
+//    }
 
 }
