@@ -16,6 +16,7 @@
         <module>innospots-workflow-core</module>
         <module>innospots-workflow-console</module>
         <module>innospots-workflow-node</module>
+        <module>innospots-workflow-task</module>
     </modules>
 
     <packaging>pom</packaging>
