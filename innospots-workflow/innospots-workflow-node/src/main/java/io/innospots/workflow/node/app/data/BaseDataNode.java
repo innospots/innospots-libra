@@ -43,8 +43,6 @@ import java.util.Map;
 @Slf4j
 public class BaseDataNode extends BaseNodeExecutor {
 
-    private static final Logger logger = LoggerFactory.getLogger(BaseDataNode.class);
-
     /**
      * store mode ,see OutputFieldMode
      */

@@ -19,6 +19,7 @@
 package io.innospots.workflow.core.instance.dao;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.workflow.core.instance.entity.WorkflowInstanceEntity;
@@ -46,8 +47,14 @@ public interface WorkflowInstanceDao extends BaseMapper<WorkflowInstanceEntity> 
         return this.selectOne(query);
     }
 
-    @Update({"update", WorkflowInstanceEntity.TABLE_NAME, "set updated_time = #{updatedTime,jdbcType=TIMESTAMP},",
-            "status = #{status,jdbcType=VARCHAR}",
-            "where workflow_instance_id = #{flowInstanceId,jdbcType=NUMERIC}"})
-    int updateStatus(Long flowInstanceId, DataStatus status, LocalDateTime updatedTime);
+//    @Update({"update", WorkflowInstanceEntity.TABLE_NAME, "set updated_time = #{updatedTime,jdbcType=TIMESTAMP},",
+//            "status = #{status,jdbcType=VARCHAR}",
+//            "where workflow_instance_id = #{flowInstanceId,jdbcType=NUMERIC}"})
+    default int updateStatus(Long flowInstanceId, DataStatus status, LocalDateTime updatedTime){
+        UpdateWrapper<WorkflowInstanceEntity> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.lambda().set(WorkflowInstanceEntity::getStatus, status)
+               .set(WorkflowInstanceEntity::getUpdatedTime, updatedTime)
+               .eq(WorkflowInstanceEntity::getWorkflowInstanceId, flowInstanceId);
+        return this.update(updateWrapper);
+    }
 }

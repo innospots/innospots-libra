@@ -16,21 +16,33 @@
  * limitations under the License.
  */
 
-package io.innospots.workflow.core.flow.reader;
+package io.innospots.workflow.core.instance.events;
 
-import io.innospots.workflow.core.flow.WorkflowBaseBody;
-import io.innospots.workflow.core.flow.WorkflowBody;
+import io.innospots.base.events.EventBody;
+import org.springframework.context.ApplicationEvent;
 
 /**
  * @author Smars
- * @date 2023/8/7
+ * @date 2023/5/16
  */
-public interface IWorkflowReader {
+public class InstanceUpdateEvent extends EventBody {
 
-    WorkflowBaseBody getFlowInstanceDraftOrCache(Long flowInstanceId);
+    public static final String NODE_USE_ADD = "ADD";
 
-    WorkflowBody getWorkflowBody(Long workflowInstanceId, Integer revision, Boolean includeNodes);
+    public static final String NODE_USE_DELETE = "DELETE";
 
-    WorkflowBaseBody getWorkflowBodyByKey(String flowKey, Integer revision, Boolean includeNodes);
+    private String nodeUseType;
 
+    public InstanceUpdateEvent(Object source) {
+        super(source);
+    }
+
+    public InstanceUpdateEvent(Object sourceId, String nodeUseType) {
+        super(sourceId);
+        this.nodeUseType = nodeUseType;
+    }
+
+    public String getNodeUseType() {
+        return nodeUseType;
+    }
 }

@@ -23,6 +23,7 @@ import cn.hutool.core.exceptions.ExceptionUtil;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.model.field.ParamField;
+import io.innospots.base.script.jit.MethodBody;
 import io.innospots.workflow.core.enums.BuildStatus;
 import io.innospots.workflow.core.execution.*;
 import io.innospots.workflow.core.execution.enums.ExecutionStatus;
@@ -36,6 +37,7 @@ import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +51,9 @@ import java.util.*;
 public abstract class BaseNodeExecutor implements INodeExecutor {
 
     private static final Logger logger = LoggerFactory.getLogger(BaseNodeExecutor.class);
+
+    public static final String FIELD_SCRIPT_TYPE = "script_type";
+    public static final String FIELD_ACTION_SCRIPT = "action_script";
 
     protected List<INodeExecutionListener> nodeExecutionListeners;
 
@@ -119,8 +124,12 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
         invoke(nodeExecution);
     }
 
-    protected Object processItem(Map<String, Object> item){
+    protected Object processItem(Map<String, Object> item) {
         return item;
+    }
+
+    protected ExecutionResource processResource(ExecutionResource resource) {
+        return resource;
     }
 
     public void invoke(NodeExecution nodeExecution) {
@@ -138,9 +147,14 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
                     processOutput(result, nodeOutput);
                 }
                 if (CollectionUtils.isNotEmpty(executionInput.getResources())) {
-                    List<ExecutionResource> outputResources = IExecutionContextOperator.saveExecutionResources(executionInput.getResources(), nodeExecution.getContextDataPath());
+                    List<ExecutionResource> outputResources = new ArrayList<>();
+                    for (int i = 0; i < executionInput.getResources().size(); i++) {
+                        ExecutionResource resource = processResource(executionInput.getResources().get(i));
+                        outputResources.add(resource);
+                    }
+                    outputResources = IExecutionContextOperator.saveExecutionResources(outputResources, nodeExecution.getContextDataPath());
                     for (int i = 0; i < outputResources.size(); i++) {
-                        nodeOutput.addResource(i,outputResources.get(i));
+                        nodeOutput.addResource(i, outputResources.get(i));
                     }
                 }
             }//end execution input
@@ -201,7 +215,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
         }
         if (nodeExecution.getStatus() == null) {
             nodeExecution.end(msg, ExecutionStatus.COMPLETE, true);
-        }else if (nodeExecution.getStatus().isDone()) {
+        } else if (nodeExecution.getStatus().isDone()) {
             nodeExecution.end(msg);
         }
         //after process node execution
@@ -320,7 +334,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
         return ni.valueInteger(field);
     }
 
-    protected List<Map<String,Object>> valueMapList(String field) {
+    protected List<Map<String, Object>> valueMapList(String field) {
         validFieldConfig(field);
         return (List<Map<String, Object>>) ni.value(field);
     }
@@ -345,7 +359,6 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
         validFieldConfig(field);
         return ni.valueMap(field);
     }
-
 
 
     protected Boolean validBoolean(String field) {
@@ -418,6 +431,28 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
 
     public Exception getBuildException() {
         return buildException;
+    }
+
+
+    public MethodBody buildScriptMethodBody() {
+        String src = this.valueString(FIELD_SCRIPT_TYPE);
+        String scriptType = scriptType();
+        if (StringUtils.isEmpty(src) || StringUtils.isEmpty(scriptType)) {
+            return null;
+        }
+        MethodBody methodBody = new MethodBody();
+        methodBody.setReturnType(Object.class);
+        methodBody.setScriptType(scriptType);
+        if (CollectionUtils.isNotEmpty(ni.getInputFields())) {
+            methodBody.setParams(ni.getInputFields());
+        }
+        methodBody.setMethodName(ni.expName());
+        methodBody.setSrcBody(src);
+        return methodBody;
+    }
+
+    protected String scriptType() {
+        return this.valueString(FIELD_SCRIPT_TYPE);
     }
 
 }

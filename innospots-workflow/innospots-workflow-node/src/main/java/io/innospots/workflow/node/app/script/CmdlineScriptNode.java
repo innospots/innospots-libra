@@ -62,13 +62,13 @@ public class CmdlineScriptNode extends ScriptBaseNode {
         NodeOutput nodeOutput = new NodeOutput();
         nodeOutput.addNextKey(this.nextNodeKeys());
 
-        if (expression != null) {
+        if (scriptExecutor != null) {
             StringBuilder msg = new StringBuilder();
             if (CollectionUtils.isNotEmpty(nodeExecution.getInputs())) {
                 for (ExecutionInput executionInput : nodeExecution.getInputs()) {
                     if (CollectionUtils.isNotEmpty(executionInput.getData())) {
                         for (Map<String, Object> data : executionInput.getData()) {
-                            Object result = expression.execute(data);
+                            Object result = scriptExecutor.execute(data);
                             processOutput(result, data, nodeOutput);
                             if (this.outputMode == OutputMode.LOG) {
                                 msg.append(result);
@@ -76,7 +76,7 @@ public class CmdlineScriptNode extends ScriptBaseNode {
                             }
                         }//end for
                     } else {
-                        Object result = expression.execute();
+                        Object result = scriptExecutor.execute();
                         processOutput(result, null, nodeOutput);
                         if (this.outputMode == OutputMode.LOG) {
                             msg.append(result);
@@ -84,7 +84,7 @@ public class CmdlineScriptNode extends ScriptBaseNode {
                     }
                 }//end execution input
             } else {
-                Object result = expression.execute();
+                Object result = scriptExecutor.execute();
                 processOutput(result, null, nodeOutput);
                 if (this.outputMode == OutputMode.LOG) {
                     msg.append(result);

@@ -31,8 +31,8 @@ import io.innospots.workflow.core.execution.operator.IScheduledNodeExecutionOper
 import io.innospots.workflow.core.execution.reader.NodeExecutionReader;
 import io.innospots.workflow.core.execution.store.FlowExecutionStoreListener;
 import io.innospots.workflow.core.execution.store.NodeExecutionStoreListener;
-import io.innospots.workflow.core.flow.draft.IWorkflowDraftOperator;
 import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
+import io.innospots.workflow.core.instance.operator.WorkflowDraftOperator;
 import io.innospots.workflow.core.runtime.webhook.DefaultResponseBuilder;
 import io.innospots.workflow.runtime.container.*;
 import io.innospots.workflow.runtime.container.listener.WorkflowRuntimeEventListener;
@@ -168,7 +168,7 @@ public class WorkflowRuntimeConfiguration {
     @Bean
     public FlowNodeDebugger nodeDebugger(NodeExecutionReader nodeExecutionReader,
                                          IFlowExecutionOperator flowExecutionOperator,
-                                         IWorkflowDraftOperator workflowDraftOperator
+                                         WorkflowDraftOperator workflowDraftOperator
     ) {
         return new FlowNodeSimpleDebugger(workflowDraftOperator, nodeExecutionReader, flowExecutionOperator);
     }

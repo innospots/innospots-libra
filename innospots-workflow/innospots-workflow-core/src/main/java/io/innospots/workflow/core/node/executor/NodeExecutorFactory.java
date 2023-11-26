@@ -40,16 +40,16 @@ public class NodeExecutorFactory {
     }
 
     public static BaseNodeExecutor build(String flowIdentifier, NodeInstance nodeInstance) {
-        BaseNodeExecutor baseNode;
+        BaseNodeExecutor nodeExecutor;
         try {
-            baseNode = newInstance(nodeInstance);
-            baseNode.flowIdentifier = flowIdentifier;
-            baseNode.build();
+            nodeExecutor = newInstance(nodeInstance);
+            nodeExecutor.flowIdentifier = flowIdentifier;
+            nodeExecutor.build();
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException |
                  InvocationTargetException e) {
             throw NodeBuildException.build(nodeInstance.getNodeType(),e);
         }
-        return baseNode;
+        return nodeExecutor;
     }
 
 }

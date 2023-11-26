@@ -45,6 +45,7 @@ public enum ResponseCode {
     PERMISSION_DENIED("70000", "permission denied"),
     SCRIPT_INVOKE_ERROR("80000", "script invoke error"),
     SCRIPT_COMPILE_ERROR("80001", ""),
+    SCRIPT_EXECUTOR_ERROR("80002", ""),
     DATA_CONNECTION_ERROR("90000", "connection error"),
     DATA_SCHEMA_ERROR("90001", "schema is error"),
     DATA_SCHEMA_MISSING("90002", "schema is missing"),

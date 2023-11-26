@@ -63,9 +63,9 @@ public class FlowCompiler {
     }
 
     private FlowCompiler(String identifier){
-        scriptExecutorManager = ScriptExecutorManager.newInstance(identifier);
+        scriptExecutorManager = ExecutorManagerFactory.getInstance(identifier);
+//        scriptExecutorManager = ScriptExecutorManager.newInstance(identifier);
 //                ExecutorManagerFactory.build(identifier);
-//        genericExpressionEngine.prepare();
     }
 
     public static FlowCompiler build(String identifier){
@@ -109,20 +109,24 @@ public class FlowCompiler {
      * @param nodeInstance
      * @return
      */
-    private BaseNodeExecutor registerToEngine(NodeInstance nodeInstance) {
-        BaseNodeExecutor appNode = null;
+    private void registerToEngine(NodeInstance nodeInstance) {
+        BaseNodeExecutor nodeExecutor = null;
         try {
-            appNode = NodeExecutorFactory.newInstance(nodeInstance);
+            nodeExecutor = NodeExecutorFactory.newInstance(nodeInstance);
+            MethodBody methodBody = nodeExecutor.buildScriptMethodBody();
+            if (methodBody!= null) {
+                scriptExecutorManager.register(methodBody);
+            }
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException |
                  InvocationTargetException e) {
             log.error(e.getMessage());
             throw InnospotException.buildException(BaseNodeExecutor.class, ResponseCode.INITIALIZING, e);
         }
-        List<MethodBody> methodBodies = null;
+//        List<MethodBody> methodBodies = null;
 //                nodeInstance.expMethods();
 
-        for (MethodBody methodBody : methodBodies) {
-            String scriptType = methodBody.getScriptType();
+//        for (MethodBody methodBody : methodBodies) {
+//            String scriptType = methodBody.getScriptType();
 //            IScriptExecutorManager expressionEngine;
             /*
             if (scriptType == null || scriptType == ScriptType.JAVA || scriptType == ScriptType.JAVASCRIPT) {
@@ -139,9 +143,8 @@ public class FlowCompiler {
             if (expressionEngine != null) {
                 expressionEngine.register(methodBody);
             }             */
-        }//end for methodBody
-
-        return appNode;
+//        }//end for methodBody
+//        return nodeExecutor;
     }
 
     /**

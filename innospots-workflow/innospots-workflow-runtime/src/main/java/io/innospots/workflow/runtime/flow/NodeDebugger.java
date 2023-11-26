@@ -51,7 +51,7 @@ import java.util.Map;
  * @date 2023/4/23
  */
 @Slf4j
-public class AppNodeDebugger {
+public class NodeDebugger {
 
 
     /**

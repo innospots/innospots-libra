@@ -37,14 +37,14 @@ import java.util.Map;
 public class EmailTriggerNode extends CycleTimerNode {
 
 
-    public static final String FIELD_CREDENTIAL_ID = "credentialId";
+    public static final String FIELD_CREDENTIAL_KEY = "credential_key";
     public static final String FIELD_MAIL_BOX = "mail_folder";
 
     public static final String FIELD_ACTION = "action";
     public static final String FIELD_HAS_ATTACH = "has_attach";
     public static final String FIELD_ATTACH_PREFIX = "attach_prefix";
 
-    private Integer credentialId;
+    private String credentialKey;
 
     private String mailBoxName;
 
@@ -60,7 +60,7 @@ public class EmailTriggerNode extends CycleTimerNode {
 
     @Override
     protected void initialize() {
-        credentialId = validInteger(FIELD_CREDENTIAL_ID);
+        credentialKey = validString(FIELD_CREDENTIAL_KEY);
         mailBoxName = validString(FIELD_MAIL_BOX);
         actionName = valueString(FIELD_ACTION);
         hasAttachments = valueBoolean(FIELD_HAS_ATTACH);
@@ -68,9 +68,8 @@ public class EmailTriggerNode extends CycleTimerNode {
         if (hasAttachments) {
             attachPrefix = valueString(FIELD_ATTACH_PREFIX);
         }
-
-        IDataConnectionMinder connectionMinder = DataConnectionMinderManager.getCredentialMinder(connectionCredential.getCredentialKey());
-        executionOperator = (IExecutionOperator) connectionMinder.buildOperator();
+        IDataConnectionMinder connectionMinder = DataConnectionMinderManager.getCredentialMinder(credentialKey);
+        executionOperator = connectionMinder.buildOperator();
 
     }
 

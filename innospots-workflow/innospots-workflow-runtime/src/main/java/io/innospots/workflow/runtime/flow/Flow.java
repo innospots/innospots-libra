@@ -19,6 +19,7 @@
 package io.innospots.workflow.runtime.flow;
 
 
+import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ScriptException;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.script.ExecutorManagerFactory;
@@ -44,17 +45,15 @@ import java.util.*;
  * @author Raydian
  * @date 2020/12/20
  */
-public class Flow extends WorkflowInstance {
+public class Flow {
 
     private static final Logger logger = LoggerFactory.getLogger(Flow.class);
-
-    //protected IWorkflowLoader workflowLoader;
 
     private FlowStatus loadStatus = FlowStatus.UNLOAD;
 
     private HashSetValuedHashMap<String, String> nextNodeCache = new HashSetValuedHashMap<>();
 
-    private HashSetValuedHashMap<String, String> sourceNodeCache = new HashSetValuedHashMap<>();
+    private final HashSetValuedHashMap<String, String> sourceNodeCache = new HashSetValuedHashMap<>();
 
     private List<BaseNodeExecutor> startNodes;
 
@@ -62,17 +61,16 @@ public class Flow extends WorkflowInstance {
 
     private List<INodeExecutionListener> nodeExecutionListeners;
 
-    private BuildProcessInfo buildProcessInfo = new BuildProcessInfo();
+    private final BuildProcessInfo buildProcessInfo = new BuildProcessInfo();
 
-    private boolean force;
+    private final boolean force;
 
-    private WorkflowBody workflowBody;
+    private final WorkflowBody workflowBody;
 
 
     public Flow(WorkflowBody workflowBody, boolean force) {
         this.workflowBody = workflowBody;
         this.force = force;
-        BeanUtils.copyProperties(workflowBody, this);
         buildProcessInfo.setWorkflowInstanceId(this.workflowBody.getWorkflowInstanceId());
         buildProcessInfo.setFlowKey(workflowBody.getFlowKey());
         buildProcessInfo.setDatasourceCode(workflowBody.getDatasourceCode());
@@ -105,32 +103,24 @@ public class Flow extends WorkflowInstance {
 
             List<BaseNodeExecutor> tmpStartNodes = new ArrayList<>();
             for (NodeInstance nodeInstance : workflowBody.getStarts()) {
-                try {
-//                    BaseAppNode appNode = BaseAppNode.buildAppNode(identifier(), nodeInstance, buildProcessInfo);
-                    BaseNodeExecutor appNode = NodeExecutorFactory.build(workflowBody.identifier(),nodeInstance);
-//                    BaseNodeExecutor appNode = BaseNodeExecutor.buildAppNode(workflowBody.identifier(), nodeInstance);
-                    if (appNode.getBuildStatus() == BuildStatus.FAIL) {
-                        buildProcessInfo.incrementFail();
-                        buildProcessInfo.addNodeProcess(nodeInstance.getNodeKey(), appNode.getBuildException());
-                        continue;
-                    }
-                    appNode.addNodeExecutionListener(nodeExecutionListeners);
-                    tmpNodeCache.put(appNode.nodeKey(), appNode);
-                    tmpStartNodes.add(appNode);
-                    buildProcessInfo.incrementSuccess();
-                } catch (Exception e) {
-                    //TODO 构建失败异常返回至调用端
-                    logger.error(e.getMessage(), e);
-                    buildProcessInfo.incrementFail();
-                    buildProcessInfo.addNodeProcess(nodeInstance.getNodeKey(), e);
+                BaseNodeExecutor nodeExecutor = buildNodeExecutor(nodeInstance);
+                if (nodeExecutor != null) {
+                    tmpNodeCache.put(nodeExecutor.nodeKey(), nodeExecutor);
+                    tmpStartNodes.add(nodeExecutor);
                 }
-
             }//end for
 
             startNodes = tmpStartNodes;
 
             HashSetValuedHashMap<String, String> tmpNextNodes = new HashSetValuedHashMap<>();
             for (NodeInstance node : workflowBody.getNodes()) {
+                BaseNodeExecutor nodeExecutor = tmpNodeCache.get(node.getNodeKey());
+                if (nodeExecutor == null) {
+                    nodeExecutor = buildNodeExecutor(node);
+                    if (nodeExecutor != null) {
+                        tmpNodeCache.put(nodeExecutor.nodeKey(), nodeExecutor);
+                    }
+                }
                 //the sources of this node
                 List<String> sourceNodeKeys = workflowBody.sourceNodeKeys(node.getNodeKey());
                 if (CollectionUtils.isNotEmpty(sourceNodeKeys)) {
@@ -142,34 +132,20 @@ public class Flow extends WorkflowInstance {
                     if (CollectionUtils.isEmpty(nextNodes)) {
                         continue;
                     }
-
                     for (NodeInstance nextNode : nextNodes) {
                         if (nextNode == null) {
                             logger.warn("nextNode is null, sourceNode:{}", node.getNodeKey());
                             continue;
                         }
-                        BaseNodeExecutor appNode = tmpNodeCache.get(nextNode.getNodeKey());
-                        if (appNode == null) {
-                            try {
-                                appNode = NodeExecutorFactory.build(workflowBody.identifier(),nextNode);
-//                                appNode = BaseNodeExecutor.buildAppNode(workflowBody.identifier(), nextNode);
-                                appNode.addNodeExecutionListener(nodeExecutionListeners);
-                                tmpNodeCache.put(appNode.nodeKey(), appNode);
-                                if (appNode.getBuildException() != null) {
-                                    buildProcessInfo.addNodeProcess(appNode.nodeKey(),appNode.getBuildException());
-                                    //throw appNode.getBuildException();
-                                }else{
-                                    buildProcessInfo.incrementSuccess();
-                                }
-                            } catch (Exception e) {
-                                logger.error(e.getMessage(), e);
-                                buildProcessInfo.incrementFail();
-                                buildProcessInfo.addNodeProcess(nextNode.getNodeKey(), e);
+                        nodeExecutor = tmpNodeCache.get(nextNode.getNodeKey());
+                        if (nodeExecutor == null) {
+                            nodeExecutor = buildNodeExecutor(nextNode);
+                            if (nodeExecutor != null) {
+                                tmpNodeCache.put(nodeExecutor.nodeKey(), nodeExecutor);
                             }
                         }//end if
                         tmpNextNodes.put(node.getNodeKey(), nextNode.getNodeKey());
                     }//end for
-
 
                 }//end if
             }//end for
@@ -188,6 +164,25 @@ public class Flow extends WorkflowInstance {
             buildProcessInfo.setEndTime(System.currentTimeMillis());
         }
         return buildProcessInfo;
+    }
+
+    private BaseNodeExecutor buildNodeExecutor(NodeInstance nodeInstance) {
+        BaseNodeExecutor nodeExecutor = null;
+        try {
+            nodeExecutor = NodeExecutorFactory.build(workflowBody.identifier(), nodeInstance);
+            nodeExecutor.addNodeExecutionListener(nodeExecutionListeners);
+//            tmpNodeCache.put(nodeExecutor.nodeKey(), nodeExecutor);
+            if (nodeExecutor.getBuildException() != null) {
+                buildProcessInfo.addNodeProcess(nodeExecutor.nodeKey(), nodeExecutor.getBuildException());
+            } else {
+                buildProcessInfo.incrementSuccess();
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            buildProcessInfo.incrementFail();
+            buildProcessInfo.addNodeProcess(nodeInstance.getNodeKey(), e);
+        }
+        return nodeExecutor;
     }
 
     public List<BaseNodeExecutor> startNodes() {
@@ -256,7 +251,6 @@ public class Flow extends WorkflowInstance {
         }
     }
 
-
     public FlowStatus getFlowStatus() {
         return loadStatus;
     }
@@ -272,17 +266,37 @@ public class Flow extends WorkflowInstance {
         return !this.getUpdatedTime().equals(updateTime);
     }
 
-    public void clear() {
-        this.workflowBody = null;
-    }
-
-    public int nodeSize(){
+    public int nodeSize() {
         return this.nodeCache.size();
     }
 
+    public String key() {
+        return workflowBody.key();
+    }
 
-    WorkflowBody getWorkflowInstance() {
+    public Long getWorkflowInstanceId() {
+        return workflowBody.getWorkflowInstanceId();
+    }
+
+    public Integer getRevision() {
+        return workflowBody.getRevision();
+    }
+
+    public String getFlowKey() {
+        return workflowBody.getFlowKey();
+    }
+
+    public LocalDateTime getUpdatedTime() {
+        return workflowBody.getUpdatedTime();
+    }
+
+
+    public WorkflowBody getWorkflowBody() {
         return workflowBody;
+    }
+
+    public DataStatus getStatus() {
+        return workflowBody.getStatus();
     }
 
     public BuildProcessInfo getBuildProcessInfo() {

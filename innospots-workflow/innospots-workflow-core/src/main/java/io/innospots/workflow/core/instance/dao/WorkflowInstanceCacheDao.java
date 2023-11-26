@@ -18,6 +18,7 @@
 
 package io.innospots.workflow.core.instance.dao;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import io.innospots.workflow.core.instance.entity.WorkflowInstanceCacheEntity;
 import org.apache.ibatis.annotations.Param;
@@ -38,8 +39,12 @@ public interface WorkflowInstanceCacheDao extends BaseMapper<WorkflowInstanceCac
      * @param updateTime
      * @return
      */
-    @Select("delete FROM flow_instance_cache " +
-            " where updated_time <= #{updateTime}")
-    int deleteByUpdateTime(@Param("updateTime") LocalDateTime updateTime);
+//    @Select("delete FROM flow_instance_cache " +
+//            " where updated_time <= #{updateTime}")
+    default int deleteByUpdateTime(@Param("updateTime") LocalDateTime updateTime){
+        QueryWrapper<WorkflowInstanceCacheEntity> qw = new QueryWrapper<>();
+        qw.lambda().le(WorkflowInstanceCacheEntity::getUpdatedTime,updateTime);
+        return this.delete(qw);
+    }
 
 }

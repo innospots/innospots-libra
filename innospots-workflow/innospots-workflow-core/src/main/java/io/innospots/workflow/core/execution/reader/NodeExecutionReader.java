@@ -19,6 +19,7 @@
 package io.innospots.workflow.core.execution.reader;
 
 import io.innospots.base.data.body.PageBody;
+import io.innospots.workflow.core.enums.FlowVersion;
 import io.innospots.workflow.core.execution.model.flow.FlowExecutionBase;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecutionDisplay;
@@ -26,7 +27,7 @@ import io.innospots.workflow.core.execution.operator.IFlowExecutionOperator;
 import io.innospots.workflow.core.execution.operator.INodeExecutionOperator;
 import io.innospots.workflow.core.flow.WorkflowBaseBody;
 import io.innospots.workflow.core.flow.WorkflowBody;
-import io.innospots.workflow.core.flow.reader.IWorkflowReader;
+import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -45,14 +46,14 @@ public class NodeExecutionReader {
 
     private IFlowExecutionOperator flowExecutionOperator;
 
-    private IWorkflowReader workflowCacheDraftOperator;
+    private IWorkflowLoader workflowLoader;
 
     public NodeExecutionReader(
-            IWorkflowReader workflowCacheDraftOperator,
+            IWorkflowLoader workflowLoader,
             INodeExecutionOperator nodeExecutionOperator,
                                IFlowExecutionOperator flowExecutionOperator) {
         this.nodeExecutionOperator = nodeExecutionOperator;
-        this.workflowCacheDraftOperator = workflowCacheDraftOperator;
+        this.workflowLoader = workflowLoader;
         this.flowExecutionOperator = flowExecutionOperator;
     }
 
@@ -74,7 +75,7 @@ public class NodeExecutionReader {
         WorkflowBody workflowBody = null;
         if(nodeExecutions.size() > 0){
             NodeExecution ne = nodeExecutions.get(0);
-            workflowBody = workflowCacheDraftOperator.getWorkflowBody(ne.getFlowInstanceId(),ne.getRevision(),true);
+            workflowBody = workflowLoader.loadWorkflow(ne.getFlowInstanceId(),ne.getRevision());
         }
 
         for (NodeExecution nodeExecution : nodeExecutions) {
@@ -104,14 +105,14 @@ public class NodeExecutionReader {
         NodeExecutionDisplay nodeExecutionDisplay = null;
         if(nodeExecution!=null){
             if(nodeExecution.getRevision()==null || nodeExecution.getRevision() == 0){
-                WorkflowBaseBody workflowBaseBody = workflowCacheDraftOperator.getFlowInstanceDraftOrCache(nodeExecution.getFlowInstanceId());
+                WorkflowBaseBody workflowBaseBody = workflowLoader.loadWorkflow(nodeExecution.getFlowInstanceId(), FlowVersion.DRAFT.getVersion());
                 if(workflowBaseBody!=null){
                     NodeInstance nodeInstance = workflowBaseBody.getNodes().stream().filter(ni-> Objects.equals(ni.getNodeKey(),nodeExecution.getNodeKey())).findFirst().orElse(null);
                     nodeExecutionDisplay = NodeExecutionDisplay.build(nodeExecution,nodeInstance,page,size);
                 }
             }else{
                 WorkflowBody workflowBody =
-                        workflowCacheDraftOperator.getWorkflowBody(nodeExecution.getFlowInstanceId(),nodeExecution.getRevision(),true);
+                        workflowLoader.loadWorkflow(nodeExecution.getFlowInstanceId(),nodeExecution.getRevision());
                 NodeInstance nodeInstance = workflowBody.findNode(nodeExecution.getNodeKey());
                 nodeExecutionDisplay = NodeExecutionDisplay.build(nodeExecution,nodeInstance,page,size);
             }

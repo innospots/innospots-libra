@@ -18,6 +18,7 @@
 
 package io.innospots.workflow.core.instance.dao;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import io.innospots.workflow.core.instance.entity.WorkflowRevisionEntity;
 import org.apache.ibatis.annotations.Select;
@@ -34,10 +35,15 @@ public interface WorkflowRevisionDao extends BaseMapper<WorkflowRevisionEntity> 
      * @param workflowInstanceId
      * @return
      */
-    @Select("SELECT * FROM flow_instance_revision " +
-            "where workflow_instance_id = #{workflowInstanceId} " +
-            "order by flow_revision_id desc limit 0,1")
-    WorkflowRevisionEntity getLastedByWorkflowInstanceId(Long workflowInstanceId);
+//    @Select("SELECT * FROM flow_instance_revision " +
+//            "where workflow_instance_id = #{workflowInstanceId} " +
+//            "order by flow_revision_id desc limit 0,1")
+    default WorkflowRevisionEntity getLastedByWorkflowInstanceId(Long workflowInstanceId){
+        QueryWrapper<WorkflowRevisionEntity> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(WorkflowRevisionEntity::getWorkflowInstanceId,workflowInstanceId)
+                .orderByDesc(WorkflowRevisionEntity::getFlowRevisionId);
+        return this.selectOne(wrapper);
+    }
 
     /**
      * 获取工作流版本
@@ -46,10 +52,16 @@ public interface WorkflowRevisionDao extends BaseMapper<WorkflowRevisionEntity> 
      * @param revision
      * @return
      */
-    @Select("SELECT * FROM flow_instance_revision " +
-            " where workflow_instance_id = #{workflowInstanceId} and revision = #{revision}" +
-            " order by revision desc")
-    WorkflowRevisionEntity getByWorkflowInstanceIdAndRevision(Long workflowInstanceId, Integer revision);
+//    @Select("SELECT * FROM flow_instance_revision " +
+//            " where workflow_instance_id = #{workflowInstanceId} and revision = #{revision}" +
+//            " order by revision desc")
+    default WorkflowRevisionEntity getByWorkflowInstanceIdAndRevision(Long workflowInstanceId, Integer revision){
+        QueryWrapper<WorkflowRevisionEntity> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(WorkflowRevisionEntity::getWorkflowInstanceId,workflowInstanceId)
+                .eq(WorkflowRevisionEntity::getRevision,revision)
+                .orderByDesc(WorkflowRevisionEntity::getRevision);
+        return this.selectOne(wrapper);
+    }
 
 
     /**
@@ -59,7 +71,11 @@ public interface WorkflowRevisionDao extends BaseMapper<WorkflowRevisionEntity> 
      * @param revision
      * @return
      */
-    @Select("delete FROM flow_instance_revision " +
-            " where workflow_instance_id = #{workflowInstanceId} and revision <= #{revision}")
-    Integer deleteByWorkflowInstanceIdAndRevision(Long workflowInstanceId, Integer revision);
+//    @Select("delete FROM flow_instance_revision " +
+//            " where workflow_instance_id = #{workflowInstanceId} and revision <= #{revision}")
+    default Integer deleteByWorkflowInstanceIdAndRevision(Long workflowInstanceId, Integer revision){
+        return this.delete(new QueryWrapper<WorkflowRevisionEntity>()
+               .lambda().eq(WorkflowRevisionEntity::getWorkflowInstanceId,workflowInstanceId)
+               .le(WorkflowRevisionEntity::getRevision,revision));
+    }
 }

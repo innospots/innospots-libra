@@ -46,8 +46,6 @@ public class WaitNode extends BaseNodeExecutor {
     public static final String FIELD_RUNNING_DATE_TIME = "running_date_time";
     public static final String FIELD_DELAY_MODE = "delay_mode";
 
-    //protected ScheduledNodeContextRecordApiClient scheduledNodeContextRecordApiClient;
-
     private TimePeriod timePeriod;
     private Integer intervalTime;
     private String runningDateTime;
@@ -65,7 +63,6 @@ public class WaitNode extends BaseNodeExecutor {
         }
 
         scheduledNodeExecutionOperator = BeanContextAwareUtils.getBean(IScheduledNodeExecutionOperator.class);
-        //scheduledNodeContextRecordApiClient = ApplicationContextUtils.getBean(ScheduledNodeContextRecordApiClient.class);
     }
 
     @Override

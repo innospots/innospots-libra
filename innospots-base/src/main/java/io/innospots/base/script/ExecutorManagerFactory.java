@@ -20,7 +20,12 @@ package io.innospots.base.script;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.RemovalCause;
+import com.github.benmanes.caffeine.cache.RemovalListener;
 import io.innospots.base.exception.ScriptException;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -37,6 +42,10 @@ public class ExecutorManagerFactory {
 
     public static void clear(String identifier) {
         executorManagerCache.invalidate(identifier);
+    }
+
+    public static ScriptExecutorManager getCache(String identifier){
+        return executorManagerCache.getIfPresent(identifier);
     }
 
     public static ScriptExecutorManager getInstance(String identifier) throws ScriptException {

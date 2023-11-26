@@ -24,7 +24,9 @@ import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
-import io.innospots.workflow.console.operator.instance.WorkflowBuilderOperator;
+import io.innospots.workflow.core.instance.operator.WorkflowDraftOperator;
+import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
+import io.innospots.workflow.core.instance.operator.WorkflowBodyOperator;
 import io.innospots.workflow.core.flow.WorkflowBaseBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -50,10 +52,16 @@ import static io.innospots.libra.base.menu.ItemType.BUTTON;
 public class WorkflowBuilderController extends BaseController {
 
 
-    private WorkflowBuilderOperator workFlowBuilderOperator;
+    private WorkflowBodyOperator workFlowBodyOperator;
 
-    public WorkflowBuilderController(WorkflowBuilderOperator workFlowBuilderOperator) {
-        this.workFlowBuilderOperator = workFlowBuilderOperator;
+    private WorkflowDraftOperator workflowDraftOperator;
+
+    private InnospotsWorkflowProperties workflowProperties;
+
+    public WorkflowBuilderController(WorkflowBodyOperator workFlowBodyOperator, WorkflowDraftOperator workflowDraftOperator, InnospotsWorkflowProperties workflowProperties) {
+        this.workFlowBodyOperator = workFlowBodyOperator;
+        this.workflowDraftOperator = workflowDraftOperator;
+        this.workflowProperties = workflowProperties;
     }
 
     /**
@@ -72,9 +80,9 @@ public class WorkflowBuilderController extends BaseController {
                                                                         @RequestParam(defaultValue = "true") Boolean includeNodes) {
         WorkflowBaseBody workflowBaseBody;
         if (revision == null || revision == 0) {
-            workflowBaseBody = workFlowBuilderOperator.getFlowInstanceDraftOrCache(workflowInstanceId);
+            workflowBaseBody = workflowDraftOperator.getDraftWorkflow(workflowInstanceId);
         } else {
-            workflowBaseBody = workFlowBuilderOperator.getWorkflowBody(workflowInstanceId, revision, includeNodes);
+            workflowBaseBody = workFlowBodyOperator.getWorkflowBody(workflowInstanceId, revision, includeNodes);
         }
         return success(workflowBaseBody);
     }
@@ -90,7 +98,7 @@ public class WorkflowBuilderController extends BaseController {
     @Operation(summary = "get flow instance by draft")
     public InnospotResponse<WorkflowBaseBody> getFlowInstanceByDraft(@PathVariable Long workflowInstanceId,
                                                                      @RequestParam(defaultValue = "true") Boolean includeNodes) {
-        return success(workFlowBuilderOperator.getFlowInstanceDraftOrCache(workflowInstanceId));
+        return success(workflowDraftOperator.getDraftWorkflow(workflowInstanceId));
     }
 
 
@@ -105,7 +113,7 @@ public class WorkflowBuilderController extends BaseController {
     @Operation(summary = "get flow instance by lasted")
     public InnospotResponse<WorkflowBaseBody> getFlowInstanceByLasted(@PathVariable Long workflowInstanceId,
                                                                       @RequestParam(defaultValue = "true") Boolean includeNodes) {
-        return success(workFlowBuilderOperator.getWorkflowBody(workflowInstanceId, null, includeNodes));
+        return success(workFlowBodyOperator.getWorkflowBody(workflowInstanceId, null, includeNodes));
     }
 
 
@@ -119,7 +127,7 @@ public class WorkflowBuilderController extends BaseController {
     @Operation(summary = "save flow instance to cache")
     @ResourceItemOperation(key = "workflow-builder-opt")
     public InnospotResponse<Boolean> saveCache(@Validated @RequestBody WorkflowBaseBody workflowBaseBody) {
-        return success(workFlowBuilderOperator.saveFlowInstanceToCache(workflowBaseBody));
+        return success(workflowDraftOperator.saveFlowInstanceToCache(workflowBaseBody));
     }
 
     /*
@@ -140,7 +148,7 @@ public class WorkflowBuilderController extends BaseController {
             @PathVariable String nodeKey,
             @RequestParam(required = false) Set<String> sourceNodeKeys
     ) {
-        return success(workFlowBuilderOperator.selectNodeInputFields(workflowInstanceId, nodeKey, sourceNodeKeys));
+        return success(workflowDraftOperator.selectNodeInputFields(workflowInstanceId, nodeKey, sourceNodeKeys));
     }
 
 
@@ -154,7 +162,7 @@ public class WorkflowBuilderController extends BaseController {
     @Operation(summary = "save flow instance draft revision")
     @ResourceItemOperation(key = "workflow-builder-opt", type = BUTTON, icon = "save", name = "${common.button.save}")
     public InnospotResponse<WorkflowBaseBody> saveDraft(@Validated @RequestBody WorkflowBaseBody workflowBaseBody) {
-        return success(workFlowBuilderOperator.saveDraft(workflowBaseBody));
+        return success(workflowDraftOperator.saveDraft(workflowBaseBody));
     }
 
 
@@ -171,7 +179,7 @@ public class WorkflowBuilderController extends BaseController {
     public InnospotResponse<Boolean> publish(@PathVariable Long workflowInstanceId,
                                              @RequestParam(defaultValue = "") String description) {
 
-        return success(workFlowBuilderOperator.publish(workflowInstanceId, description));
+        return success(workflowDraftOperator.publish(workflowInstanceId, description,workflowProperties.getWorkFlowInstanceKeepVersionAmount()));
     }
 
 }

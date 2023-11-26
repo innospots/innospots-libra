@@ -59,5 +59,9 @@ public class ScriptException extends BaseException {
         return new ScriptException(invokeClass, ResponseCode.SCRIPT_INVOKE_ERROR, scriptType, params);
     }
 
+    public static ScriptException buildExecutorException(Class<?> invokeClass, String scriptType, Object... params) {
+        return new ScriptException(invokeClass, ResponseCode.SCRIPT_EXECUTOR_ERROR, scriptType, params);
+    }
+
 
 }

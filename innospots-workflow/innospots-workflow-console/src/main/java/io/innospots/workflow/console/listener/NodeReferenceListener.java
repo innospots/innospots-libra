@@ -20,7 +20,7 @@ package io.innospots.workflow.console.listener;
 
 import io.innospots.base.events.IEventListener;
 import io.innospots.workflow.core.instance.entity.NodeInstanceEntity;
-import io.innospots.workflow.console.events.InstanceUpdateEvent;
+import io.innospots.workflow.core.instance.events.InstanceUpdateEvent;
 import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
 import io.innospots.workflow.core.instance.operator.NodeInstanceOperator;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +29,9 @@ import org.apache.commons.collections4.CollectionUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static io.innospots.workflow.core.instance.events.InstanceUpdateEvent.NODE_USE_ADD;
+import static io.innospots.workflow.core.instance.events.InstanceUpdateEvent.NODE_USE_DELETE;
+
 /**
  * @author Jegy
  * @version 1.0.0
@@ -36,10 +39,6 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class NodeReferenceListener implements IEventListener<InstanceUpdateEvent> {
-
-    public static final String APP_USE_ADD = "ADD";
-
-    public static final String APP_USE_DELETE = "DELETE";
 
     private final NodeInstanceOperator nodeInstanceOperator;
 
@@ -62,10 +61,10 @@ public class NodeReferenceListener implements IEventListener<InstanceUpdateEvent
         }
         // 更新节点应用定义表，所有的不再此应用节点集合中的应用节点，not in and used = true， used设置为false
         // 更新节点应用定义表，所有在此应用节点集合并且used为false的节点，used更新为true
-        if (APP_USE_ADD.equalsIgnoreCase(event.getAppUseType())) {
+        if (NODE_USE_ADD.equalsIgnoreCase(event.getNodeUseType())) {
             nodeDefinitionOperator.updateAppUsed(nodeDefinitionIds, Boolean.TRUE);
 
-        } else if (APP_USE_DELETE.equalsIgnoreCase(event.getAppUseType())) {
+        } else if (NODE_USE_DELETE.equalsIgnoreCase(event.getNodeUseType())) {
             nodeDefinitionOperator.updateAppUsed(nodeDefinitionIds, Boolean.FALSE);
         }
         return workflowInstanceId;

@@ -20,15 +20,16 @@ package io.innospots.workflow.console.config;
 
 import io.innospots.workflow.console.operator.WorkflowCategoryOperator;
 import io.innospots.workflow.console.operator.execution.ExecutionManagerOperator;
+import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
+import io.innospots.workflow.core.instance.operator.WorkflowDraftOperator;
+import io.innospots.workflow.core.instance.dao.WorkflowInstanceDao;
 import io.innospots.workflow.core.instance.operator.EdgeOperator;
 import io.innospots.workflow.core.instance.operator.NodeInstanceOperator;
-import io.innospots.workflow.console.operator.instance.WorkflowBuilderOperator;
 import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
 import io.innospots.workflow.console.operator.node.FlowCategoryOperator;
 import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
 import io.innospots.workflow.console.operator.node.FlowNodeGroupOperator;
 import io.innospots.workflow.console.operator.node.FlowTemplateOperator;
-import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.config.WorkflowCoreConfiguration;
 import io.innospots.workflow.core.execution.dao.ExecutionContextDao;
 import io.innospots.workflow.core.execution.dao.FlowExecutionDao;
@@ -36,9 +37,7 @@ import io.innospots.workflow.core.execution.dao.NodeExecutionDao;
 import io.innospots.workflow.core.execution.dao.ScheduledNodeExecutionDao;
 import io.innospots.workflow.core.execution.operator.IFlowExecutionOperator;
 import io.innospots.workflow.core.execution.operator.INodeExecutionOperator;
-import io.innospots.workflow.core.execution.reader.FlowExecutionReader;
 import io.innospots.workflow.core.execution.reader.NodeExecutionReader;
-import io.innospots.workflow.core.flow.reader.IWorkflowReader;
 import io.innospots.workflow.core.instance.dao.WorkflowInstanceCacheDao;
 import io.innospots.workflow.core.instance.dao.WorkflowRevisionDao;
 import io.innospots.workflow.core.node.definition.dao.FlowNodeDefinitionDao;
@@ -88,15 +87,6 @@ public class WorkflowOperatorConfiguration {
         return new FlowTemplateOperator(flowNodeGroupOperator);
     }
 
-    @Bean
-    public EdgeOperator edgeOperator() {
-        return new EdgeOperator();
-    }
-
-    @Bean
-    public NodeInstanceOperator nodeInstanceOperator(FlowNodeDefinitionOperator flowNodeDefinitionOperator) {
-        return new NodeInstanceOperator(flowNodeDefinitionOperator);
-    }
 
     @Bean
     public WorkflowCategoryOperator workflowCategoryOperator(WorkflowInstanceOperator workflowInstanceOperator) {
@@ -108,29 +98,13 @@ public class WorkflowOperatorConfiguration {
         return new WorkflowInstanceOperator(flowTemplateOperator);
     }
 
-
-    @Bean
-    public WorkflowBuilderOperator workflowBuilderOperator(WorkflowRevisionDao workflowRevisionDao,
-                                                           WorkflowInstanceCacheDao instanceCacheDao,
-                                                           WorkflowInstanceOperator workflowInstanceOperator,
-                                                           NodeInstanceOperator nodeInstanceOperator, EdgeOperator edgeOperator,
-                                                           InnospotsWorkflowProperties innospotsWorkflowProperties) {
-        return new WorkflowBuilderOperator(workflowRevisionDao, instanceCacheDao, workflowInstanceOperator, nodeInstanceOperator, edgeOperator, innospotsWorkflowProperties);
-    }
-
-
     @Bean
     public NodeExecutionReader nodeExecutionDisplayReader(
-            IWorkflowReader workflowCacheDraftOperator,
+            IWorkflowLoader workflowLoader,
             INodeExecutionOperator nodeExecutionOperator,
             IFlowExecutionOperator flowExecutionOperator
     ) {
-        return new NodeExecutionReader(workflowCacheDraftOperator,nodeExecutionOperator, flowExecutionOperator);
-    }
-
-    @Bean
-    public FlowExecutionReader flowExecutionReader(IFlowExecutionOperator IFlowExecutionOperator, INodeExecutionOperator INodeExecutionOperator) {
-        return new FlowExecutionReader(IFlowExecutionOperator, INodeExecutionOperator);
+        return new NodeExecutionReader(workflowLoader,nodeExecutionOperator, flowExecutionOperator);
     }
 
 

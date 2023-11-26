@@ -44,17 +44,17 @@ public class FlowManager implements Closeable {
 
     private static final Logger logger = LoggerFactory.getLogger(FlowManager.class);
 
-    private IWorkflowLoader workflowLoader;
+    private final IWorkflowLoader workflowLoader;
 
     private List<INodeExecutionListener> nodeExecutionListeners;
 
-    private Map<String, Flow> flowCache = new HashMap<>();
+    private final Map<String, Flow> flowCache = new HashMap<>();
 
-    private Cache<String, Flow> draftCache = Caffeine.newBuilder().expireAfterAccess(Duration.ofMinutes(3)).build();
+    private final Cache<String, Flow> draftCache = Caffeine.newBuilder().expireAfterAccess(Duration.ofMinutes(3)).build();
 
-    private FlowPrepareExecutor flowPrepareExecutor;
+    private final FlowPrepareExecutor flowPrepareExecutor;
 
-    private Map<String,String> flowKeyMap = new HashMap<>();
+    private final Map<String,String> flowKeyMap = new HashMap<>();
 
 
     public FlowManager(IWorkflowLoader workflowLoader) {
@@ -70,7 +70,7 @@ public class FlowManager implements Closeable {
         String key = flowKeyMap.get(flowKey);
         Flow flow = flowCache.get(key);
         if(flow == null){
-            WorkflowBody workflowBody = workflowLoader.loadFlowInstance(flowKey);
+            WorkflowBody workflowBody = workflowLoader.loadWorkflow(flowKey);
             flow = load(workflowBody,true,false);
             if (flow.isLoaded()) {
                 cacheFlow(flow);
@@ -96,7 +96,7 @@ public class FlowManager implements Closeable {
                     return flow;
                 }
                 logger.info("async loading flow: {}", key);
-                WorkflowBody workflowBody = workflowLoader.loadFlowInstance(workflowInstanceId, revision);
+                WorkflowBody workflowBody = workflowLoader.loadWorkflow(workflowInstanceId, revision);
                 if (workflowBody != null) {
                     flow = load(workflowBody,force,true);
                 } else {
@@ -104,7 +104,7 @@ public class FlowManager implements Closeable {
                 }
             } else {
                 logger.info("loading flow: {}", key);
-                WorkflowBody workflowBody = workflowLoader.loadFlowInstance(workflowInstanceId, revision);
+                WorkflowBody workflowBody = workflowLoader.loadWorkflow(workflowInstanceId, revision);
                 flow = load(workflowBody,force,false);
                 if (flow.isLoaded()) {
                     cacheFlow(flow);
@@ -199,7 +199,7 @@ public class FlowManager implements Closeable {
      * @param flow
      */
     void cacheFlow(Flow flow) {
-        if (flow.getWorkflowInstance().getRevision() == 0) {
+        if (flow.getWorkflowBody().getRevision() == 0) {
             draftCache.put(flow.key(), flow);
         } else {
             flowCache.put(flow.key(), flow);

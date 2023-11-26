@@ -19,18 +19,16 @@
 package io.innospots.workflow.node.app.script;
 
 import io.innospots.base.condition.Factor;
+import io.innospots.base.connector.minder.DataConnectionMinderManager;
+import io.innospots.base.connector.minder.IDataConnectionMinder;
 import io.innospots.base.data.body.DataBody;
-import io.innospots.base.data.operator.DataOperatorManager;
 import io.innospots.base.data.operator.IDataOperator;
 import io.innospots.base.data.request.SimpleRequest;
 import io.innospots.base.exception.ConfigException;
-import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
-import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
-import io.innospots.workflow.core.instance.model.NodeInstance;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,8 +82,10 @@ public class SqlScriptNode extends ScriptBaseNode {
             conditionFields = BeanUtils.toBean(conditionFieldMapping, Factor.class);
         }
 
-        DataOperatorManager dataOperatorManager = BeanContextAwareUtils.getBean(DataOperatorManager.class);
-        dataOperator = dataOperatorManager.buildDataOperator(credentialKey);
+//        DataOperatorManager dataOperatorManager = BeanContextAwareUtils.getBean(DataOperatorManager.class);
+//        dataOperator = dataOperatorManager.buildDataOperator(credentialKey);
+        IDataConnectionMinder connectionMinder = DataConnectionMinderManager.getCredentialMinder(credentialKey);
+        dataOperator = connectionMinder.buildOperator();
         sqlQueryClause = valueString(FIELD_SQL_CLAUSE);
         if (sqlQueryClause != null) {
             sqlQueryClause = sqlQueryClause.replaceAll("\\n", " ");
@@ -129,11 +129,12 @@ public class SqlScriptNode extends ScriptBaseNode {
                     SimpleRequest request = new SimpleRequest();
                     request.setBody(sql);
                     DataBody dataBody =  dataOperator.execute(request);
+                    processOutput(dataBody.getBody(),nodeOutput);
 //                    InnospotResponse<Integer> innospotResponse = sqlOperatorPoint.executeForSql(datasourceId, sql);
                     if (logger.isDebugEnabled()) {
                         logger.debug("sql query:{}, response:{}", sql, request);
                     }
-                    nodeOutput.addResult(item);
+//                    nodeOutput.addResult(item);
                 }//end item
             }//end execution input
         } else {
@@ -142,6 +143,7 @@ public class SqlScriptNode extends ScriptBaseNode {
             SimpleRequest request = new SimpleRequest();
             request.setBody(sql);
             DataBody dataBody = dataOperator.execute(request);
+            processOutput(dataBody.getBody(),nodeOutput);
 //            InnospotResponse<Integer> innospotResponse = sqlOperatorPoint.executeForSql(datasourceId, sql);
             if (logger.isDebugEnabled()) {
                 logger.debug("execute sql:{}, response:{}", sql, request);

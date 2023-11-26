@@ -31,9 +31,9 @@ import java.io.Closeable;
 public class FlowAsyncPreparer implements Runnable, Closeable {
 
     private static final Logger logger = LoggerFactory.getLogger(FlowAsyncPreparer.class);
-    private Flow flow;
+    private final Flow flow;
 
-    private FlowPrepareExecutor loadExecutor;
+    private final FlowPrepareExecutor loadExecutor;
 
 
     public FlowAsyncPreparer(Flow flow, FlowPrepareExecutor flowPrepareExecutor) {

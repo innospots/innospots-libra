@@ -77,12 +77,12 @@ public class FsWorkflowLoader extends BaseWorkflowLoader {
 
 
     @Override
-    public WorkflowBody loadFlowInstance(Long workflowInstanceId, Integer revision) {
+    public WorkflowBody loadWorkflow(Long workflowInstanceId, Integer revision) {
         return flowInstanceCache.get(IWorkflowLoader.key(workflowInstanceId, revision));
     }
 
     @Override
-    public WorkflowBody loadFlowInstance(String flowKey) {
+    public WorkflowBody loadWorkflow(String flowKey) {
         return null;
     }
 

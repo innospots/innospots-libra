@@ -28,7 +28,7 @@ import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
 import io.innospots.base.data.request.FormQuery;
 import io.innospots.workflow.console.operator.execution.ExecutionManagerOperator;
-import io.innospots.workflow.console.operator.instance.WorkflowBuilderOperator;
+import io.innospots.workflow.core.instance.operator.WorkflowBodyOperator;
 import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
 import io.innospots.workflow.console.service.WorkflowService;
 import io.innospots.workflow.core.flow.WorkflowBaseInfo;
@@ -59,18 +59,18 @@ public class WorkflowInstanceController extends BaseController {
 
     private final WorkflowInstanceOperator workflowInstanceOperator;
 
-    private final WorkflowBuilderOperator workflowBuilderOperator;
+    private final WorkflowBodyOperator workflowBodyOperator;
 
     private final ExecutionManagerOperator executionManagerOperator;
 
     private final WorkflowService workflowService;
 
     public WorkflowInstanceController(WorkflowInstanceOperator workflowInstanceOperator,
-                                      WorkflowBuilderOperator workflowBuilderOperator,
+                                      WorkflowBodyOperator workflowBodyOperator,
                                       ExecutionManagerOperator executionManagerOperator,
                                       WorkflowService workflowService) {
         this.workflowInstanceOperator = workflowInstanceOperator;
-        this.workflowBuilderOperator = workflowBuilderOperator;
+        this.workflowBodyOperator = workflowBodyOperator;
         this.executionManagerOperator = executionManagerOperator;
         this.workflowService = workflowService;
     }
@@ -125,7 +125,7 @@ public class WorkflowInstanceController extends BaseController {
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @OperationLog(idParamPosition = 0, operateType = OperateType.DELETE)
     public InnospotResponse<Boolean> deleteWorkflowInstance(@Parameter(required = true, name = "workflowInstanceId") @PathVariable Long workflowInstanceId) {
-        Boolean delete = workflowBuilderOperator.deleteByWorkflowInstanceId(workflowInstanceId);
+        Boolean delete = workflowBodyOperator.deleteByWorkflowBody(workflowInstanceId);
         if (delete) {
             executionManagerOperator.deleteExecutionLog(workflowInstanceId);
         }

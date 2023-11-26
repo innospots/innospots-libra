@@ -30,9 +30,9 @@ import java.util.List;
 public interface IWorkflowLoader {
 
 
-    WorkflowBody loadFlowInstance(Long workflowInstanceId, Integer revision);
+    WorkflowBody loadWorkflow(Long workflowInstanceId, Integer revision);
 
-    WorkflowBody loadFlowInstance(String flowKey);
+    WorkflowBody loadWorkflow(String flowKey);
 
     default List<WorkflowBody> loadRecentlyUpdateOrOnLine(int recentMinutes){
         return Collections.emptyList();

@@ -24,17 +24,12 @@ import cn.hutool.http.HttpStatus;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.utils.BeanUtils;
-import io.innospots.workflow.core.execution.model.ExecutionInput;
-import io.innospots.workflow.core.execution.model.ExecutionResource;
 import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
-import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;
 import io.innospots.workflow.core.node.executor.TriggerNode;
-import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.core.runtime.webhook.FlowWebhookConfig;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 

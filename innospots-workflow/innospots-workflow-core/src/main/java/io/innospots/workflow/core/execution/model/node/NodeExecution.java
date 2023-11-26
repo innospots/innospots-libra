@@ -46,16 +46,21 @@ import java.util.Map;
 public class NodeExecution extends NodeExecutionBase {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    protected List<ExecutionInput> inputs;
+    private List<ExecutionInput> inputs;
 
     /**
      * multi branch or condition output
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    protected List<NodeOutput> outputs;
+    private List<NodeOutput> outputs;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    protected List<String> nextNodeKeys;
+    private List<String> nextNodeKeys;
+
+    /**
+     * shareContext variables
+     */
+    private List<Map<String, Object>> shareContext = new ArrayList<>();;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Map<String, Object> logs = new LinkedHashMap<>();
@@ -176,6 +181,14 @@ public class NodeExecution extends NodeExecutionBase {
 
     public void clearInput() {
         this.inputs.clear();
+    }
+
+    public void addShareContext(Map<String,Object> context){
+        this.shareContext.add(context);
+    }
+
+    public void clearShareContext(){
+        this.shareContext.clear();
     }
 
     public List<Map<String, Object>> flatOutput(String nodeKey) {

@@ -89,4 +89,11 @@ public class ExecutionInput {
         return data.size();
     }
 
+    public void clear(){
+        this.data.clear();
+        if(this.resources!=null){
+            this.resources.clear();
+        }
+    }
+
 }

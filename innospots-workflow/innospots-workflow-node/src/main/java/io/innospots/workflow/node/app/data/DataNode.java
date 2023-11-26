@@ -18,10 +18,9 @@
 
 package io.innospots.workflow.node.app.data;
 
-import io.innospots.base.data.operator.DataOperatorManager;
+import io.innospots.base.connector.minder.DataConnectionMinderManager;
+import io.innospots.base.connector.minder.IDataConnectionMinder;
 import io.innospots.base.data.operator.IDataOperator;
-import io.innospots.base.utils.BeanContextAwareUtils;
-import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,8 +31,6 @@ import org.slf4j.LoggerFactory;
  */
 @Slf4j
 public class DataNode extends BaseDataNode {
-
-    private static final Logger logger = LoggerFactory.getLogger(DataNode.class);
 
     protected IDataOperator dataOperator;
 
@@ -46,7 +43,9 @@ public class DataNode extends BaseDataNode {
     protected void initialize() {
         super.initialize();
         credentialKey = valueString(FIELD_CREDENTIAL_KEY);
-        dataOperator = BeanContextAwareUtils.getBean(DataOperatorManager.class).buildDataOperator(credentialKey);
+        IDataConnectionMinder connectionMinder = DataConnectionMinderManager.getCredentialMinder(credentialKey);
+        dataOperator = connectionMinder.buildOperator();
+//        dataOperator = BeanContextAwareUtils.getBean(DataOperatorManager.class).buildDataOperator(credentialKey);
     }
 
 }

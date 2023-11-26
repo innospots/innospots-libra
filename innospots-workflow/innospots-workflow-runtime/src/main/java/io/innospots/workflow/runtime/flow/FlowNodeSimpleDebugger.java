@@ -1,19 +1,19 @@
 /*
- *  Copyright © 2021-2023 Innospots (http://www.innospots.com)
- *  Licensed to the Apache Software Foundation (ASF) under one or more
- *  contributor license agreements.  See the NOTICE file distributed with
- *  this work for additional information regarding copyright ownership.
- *  The ASF licenses this file to You under the Apache License, Version 2.0
- *  (the "License"); you may not use this file except in compliance with
- *  the License. You may obtain a copy of the License at
+ * Copyright © 2021-2023 Innospots (http://www.innospots.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package io.innospots.workflow.runtime.flow;
@@ -24,7 +24,7 @@ import com.google.common.collect.Lists;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.workflow.core.execution.enums.RecordMode;
-import io.innospots.workflow.core.flow.draft.IWorkflowDraftOperator;
+import io.innospots.workflow.core.instance.operator.WorkflowDraftOperator;
 import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
 import io.innospots.workflow.core.debug.DebugPayload;
 import io.innospots.workflow.core.engine.FlowEngineManager;
@@ -69,21 +69,21 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
 
     private IFlowExecutionOperator flowExecutionOperator;
 
-    private IWorkflowDraftOperator workflowCacheDraftOperator;
+    private WorkflowDraftOperator workflowDraftOperator;
 
     private Cache<Long, String> executionCache = Caffeine.newBuilder().build();
 
-    public FlowNodeSimpleDebugger(IWorkflowDraftOperator workflowCacheDraftOperator,
+    public FlowNodeSimpleDebugger(WorkflowDraftOperator workflowDraftOperator,
                                   NodeExecutionReader nodeExecutionReader,
                                   IFlowExecutionOperator flowExecutionOperator) {
-        this.workflowCacheDraftOperator = workflowCacheDraftOperator;
+        this.workflowDraftOperator = workflowDraftOperator;
         this.nodeExecutionReader = nodeExecutionReader;
         this.flowExecutionOperator = flowExecutionOperator;
     }
 
     @Override
     public Map<String, NodeExecutionDisplay> execute(Long workflowInstanceId, String nodeKey, List<Map<String, Object>> inputs) {
-        WorkflowBaseBody workflowBaseBody = workflowCacheDraftOperator.saveCacheToDraft(workflowInstanceId);
+        WorkflowBaseBody workflowBaseBody = workflowDraftOperator.saveCacheToDraft(workflowInstanceId);
 
         inputs = convertApiInput(inputs,workflowBaseBody);
 
@@ -124,7 +124,7 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
         flowExecution.setEndNodeKey(nodeKey);
         flowEngine.execute(flowExecution);
 
-        workflowBaseBody = workflowCacheDraftOperator.getFlowInstanceDraftOrCache(workflowInstanceId);
+        workflowBaseBody = workflowDraftOperator.getDraftWorkflow(workflowInstanceId);
         Map<String, NodeInstance> nodeCache = null;
         try {
             nodeCache = workflowBaseBody.getNodes().stream().collect(Collectors.toMap(NodeInstance::getNodeKey, Function.identity()));
@@ -155,9 +155,9 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
             if(CollectionUtils.isEmpty(nodeInstance.getOutputFields())){
                 nodeInstance.setOutputFields(executionDisplay.getOutputFields());
             }
-            workflowCacheDraftOperator.saveFlowInstanceToCache(workflowBaseBody);
+            workflowDraftOperator.saveFlowInstanceToCache(workflowBaseBody);
 
-            workflowCacheDraftOperator.saveCacheToDraft(workflowInstanceId);
+            workflowDraftOperator.saveCacheToDraft(workflowInstanceId);
         }
         try {
             Thread.sleep(1000);
@@ -219,12 +219,12 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
 
     @Override
     public NodeExecutionDisplay execute(DebugPayload debugPayload) {
-        return AppNodeDebugger.execute(debugPayload);
+        return NodeDebugger.execute(debugPayload);
     }
 
     @Override
     public ExecutionResource updateTestFile(MultipartFile uploadFile, boolean force) {
-        return AppNodeDebugger.updateTestFile(uploadFile, force);
+        return NodeDebugger.updateTestFile(uploadFile, force);
     }
 
 
@@ -250,7 +250,7 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
 
     @Override
     public WorkflowResponse testWebhook(String flowKey, List<Map<String, Object>> inputs) {
-        WorkflowBaseBody workflowBaseBody = workflowCacheDraftOperator.getWorkflowBodyByKey(flowKey, false);
+        WorkflowBaseBody workflowBaseBody = workflowDraftOperator.getDraftWorkflow(flowKey);
         BaseFlowEngine flowEngine = (BaseFlowEngine) FlowEngineManager.eventFlowEngine();
         Long workflowInstanceId = workflowBaseBody.getWorkflowInstanceId();
         BuildProcessInfo buildProcessInfo = flowEngine.prepare(workflowInstanceId, 0, false);

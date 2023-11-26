@@ -41,14 +41,14 @@ public class PayloadScriptNode extends ScriptBaseNode {
     @Override
     public void invoke(NodeExecution nodeExecution) {
         NodeOutput nodeOutput = new NodeOutput();
-        if (expression != null) {
+        if (scriptExecutor != null) {
             nodeOutput.addNextKey(this.nextNodeKeys());
             List<Map<String, Object>> items = new ArrayList<>();
             for (ExecutionInput executionInput : nodeExecution.getInputs()) {
                 //end for
                 items.addAll(executionInput.getData());
             }//end execution input
-            Object result = expression.execute(items);
+            Object result = scriptExecutor.execute(items);
             processOutput(result, nodeOutput);
         }//end if
         nodeExecution.addOutput(nodeOutput);

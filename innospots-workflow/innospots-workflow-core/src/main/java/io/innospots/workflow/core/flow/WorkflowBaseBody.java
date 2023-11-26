@@ -70,7 +70,7 @@ public class WorkflowBaseBody extends WorkflowInstanceBase {
     }
 
     /**
-     * 检查节点是否循环依赖
+     * Check whether the node is cyclic dependent
      *
      * @return
      */
@@ -96,7 +96,7 @@ public class WorkflowBaseBody extends WorkflowInstanceBase {
     }
 
     /**
-     * 获取节点的依赖关系
+     * Gets the dependencies of the node
      *
      * @return
      */
@@ -112,7 +112,7 @@ public class WorkflowBaseBody extends WorkflowInstanceBase {
     }
 
     /**
-     * 获取第一个节点
+     * get next node keys
      *
      * @return
      */

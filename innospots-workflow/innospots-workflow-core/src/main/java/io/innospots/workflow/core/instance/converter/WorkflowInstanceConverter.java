@@ -27,6 +27,8 @@ import io.innospots.workflow.core.instance.model.WorkflowInstance;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 /**
  * @author chenc
  * @date 2022/2/20
@@ -42,5 +44,7 @@ public interface WorkflowInstanceConverter extends BaseBeanConverter<WorkflowIns
     WorkflowBaseInfo entityToBaseInfo(WorkflowInstanceEntity workflowInstanceEntity);
 
     WorkflowBody entityToFlowBody(WorkflowInstanceEntity workflowInstanceEntity);
+
+    List<WorkflowBody> entitiesToFlowBodies(List<WorkflowInstanceEntity> entityList);
 
 }

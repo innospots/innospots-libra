@@ -20,6 +20,7 @@ package io.innospots.workflow.core.flow.loader;
 
 import io.innospots.workflow.core.flow.WorkflowBody;
 import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
+import io.innospots.workflow.core.instance.operator.WorkflowBodyOperator;
 
 import java.util.List;
 
@@ -30,27 +31,26 @@ import java.util.List;
 public class WorkflowDBLoader implements IWorkflowLoader {
 
 
-//    public WorkflowDBLoader(WorkflowBuilderOperator workFlowBuilderOperator) {
-////        this.workFlowBuilderOperator = workFlowBuilderOperator;
-//    }
+    private final WorkflowBodyOperator workflowBodyOperator;
+
+    public WorkflowDBLoader(WorkflowBodyOperator workflowBodyOperator) {
+        this.workflowBodyOperator = workflowBodyOperator;
+    }
 
     @Override
-    public WorkflowBody loadFlowInstance(Long workflowInstanceId, Integer revision) {
-//        return workFlowBuilderOperator.getWorkflowBody(workflowInstanceId, revision, true);
-        return null;
+    public WorkflowBody loadWorkflow(Long workflowInstanceId, Integer revision) {
+        return workflowBodyOperator.getWorkflowBody(workflowInstanceId, revision, true);
     }
 
 
     @Override
     public List<WorkflowBody> loadRecentlyUpdateOrOnLine(int recentMinutes) {
-        return null;
-//        return workFlowBuilderOperator.selectRecentlyUpdateOrOnLine(recentMinutes);
+        return workflowBodyOperator.selectRecentlyUpdateOrOnLine(recentMinutes);
     }
 
     @Override
-    public WorkflowBody loadFlowInstance(String flowKey) {
-        return null;
-//        return workFlowBuilderOperator.getWorkflowBody(flowKey,true);
+    public WorkflowBody loadWorkflow(String flowKey) {
+        return workflowBodyOperator.getWorkflowBody(flowKey);
     }
 
 }

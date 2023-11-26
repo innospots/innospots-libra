@@ -19,8 +19,15 @@
 package io.innospots.workflow.node.app.script;
 
 
+import io.innospots.base.exception.ScriptException;
+import io.innospots.base.script.ExecutorManagerFactory;
 import io.innospots.base.script.IScriptExecutor;
+import io.innospots.base.script.ScriptExecutorManager;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,43 +38,27 @@ import java.util.*;
  * @version 1.0.0
  * @date 2020/11/3
  */
+@Slf4j
 public abstract class ScriptBaseNode extends BaseNodeExecutor {
 
-
-    private static final Logger logger = LoggerFactory.getLogger(ScriptBaseNode.class);
-
-
-    protected IScriptExecutor expression;
-
-    protected Map<String, IScriptExecutor> actionScripts;
+    protected IScriptExecutor scriptExecutor;
 
     protected void initialize() {
+       ScriptExecutorManager executorManager = ExecutorManagerFactory.getCache(this.flowIdentifier);
+       if(executorManager==null){
+           throw ScriptException.buildExecutorException(this.getClass(),this.scriptType(),"script executor manager is null,",this.flowIdentifier);
+       }
+        scriptExecutor = executorManager.getExecutor(this.ni.expName());
+       if(scriptExecutor==null){
+           throw ScriptException.buildExecutorException(this.getClass(),this.scriptType(),"script executor is null,",this.flowIdentifier);
+       }
     }
 
-    /*
-    protected void buildExpression(String flowIdentifier, NodeInstance nodeInstance) throws ScriptException {
-        List<MethodBody> methodBodies = nodeInstance.expMethods();
-        if (methodBodies.isEmpty()) {
-            return;
+    @Override
+    protected Object processItem(Map<String, Object> item) {
+        if(scriptExecutor!=null){
+            return scriptExecutor.execute(item);
         }
-        this.actionScripts = new HashMap<>();
-        for (MethodBody methodBody : methodBodies) {
-            IExpressionEngine expressionEngine = ExpressionEngineFactory.getEngine(flowIdentifier, methodBody.getScriptType());
-            if (expressionEngine == null) {
-                logger.error("expression engine is null, identifier:{}, scriptType:{}", flowIdentifier, methodBody.getScriptType());
-                this.buildStatus = BuildStatus.FAIL;
-                continue;
-            }
-            IExpression exp = expressionEngine.getExpression(methodBody.getMethodName());
-            if (NodeInstance.FIELD_DEFAULT_ACTION.equals(methodBody.getFormName())) {
-                this.expression = exp;
-            } else {
-                this.actionScripts.put(methodBody.getFormName(), exp);
-            }
-        }
+        return item;
     }
-
-     */
-
-
 }

@@ -53,7 +53,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.innospots.workflow.console.operator.instance.WorkflowBuilderOperator.CACHE_NAME;
+import static io.innospots.workflow.core.instance.operator.WorkflowBodyOperator.CACHE_NAME;
 
 /**
  * Workflow instance operator
