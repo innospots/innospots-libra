@@ -20,6 +20,8 @@ package io.innospots.base.connector.credential.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.innospots.base.constant.RegexConstants;
+import io.innospots.base.model.BaseModelInfo;
+import io.innospots.base.model.PBaseModelInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,7 +39,7 @@ import java.util.Map;
  */
 @Getter
 @Setter
-public class CredentialInfo {
+public class CredentialInfo extends PBaseModelInfo {
 
     @Size(max = 32, message = "name length max 32")
     @NotBlank(message = "Name cannot be blank")
