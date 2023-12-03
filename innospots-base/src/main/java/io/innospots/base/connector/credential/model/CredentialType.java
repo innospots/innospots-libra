@@ -18,7 +18,8 @@
 
 package io.innospots.base.connector.credential.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.innospots.base.model.BaseModelInfo;
+import io.innospots.base.model.PBaseModelInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,7 +37,7 @@ import java.util.Map;
 @Getter
 @Setter
 @Schema(title = "credential type")
-public class CredentialType {
+public class CredentialType extends PBaseModelInfo {
 
     @Schema(title ="unique code")
     private String typeCode;

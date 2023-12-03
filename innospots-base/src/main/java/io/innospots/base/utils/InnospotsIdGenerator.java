@@ -32,7 +32,8 @@ public class InnospotsIdGenerator {
     private SnowflakeGenerator idGenerator;
 
     public InnospotsIdGenerator(long dataCenterId, long machineId) {
-        idGenerator = new SnowflakeGenerator(machineId,dataCenterId);
+//        idGenerator = new SnowflakeGenerator(machineId,dataCenterId);
+        idGenerator = new SnowflakeGenerator(0,0);
     }
 
     public static InnospotsIdGenerator build(String ip, int port) {

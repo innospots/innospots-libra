@@ -27,7 +27,7 @@ public class ScheduleTaskExecutionController {
 
 
     @Operation(summary ="page schedule executions")
-    @GetMapping("page/${workflowInstanceId}")
+    @GetMapping("page/{workflowInstanceId}")
     public InnospotResponse<PageBody<FlowExecutionBase>> pageExecution(
             @Parameter(name = "page") @RequestParam(required = false, defaultValue = "1") Integer page,
             @Parameter(name = "size") @RequestParam(required = false, defaultValue = "20") Integer size,
@@ -38,7 +38,7 @@ public class ScheduleTaskExecutionController {
     }
 
     @Operation(summary ="task node execution list")
-    @GetMapping("list/flow-execution/${flowExecutionId}")
+    @GetMapping("list/flow-execution/{flowExecutionId}")
     public InnospotResponse<List<TaskNodeExecution>> pageTaskNodeExecution(
             @Parameter(name = "flowExecutionId") @PathVariable String flowExecutionId
     ){
@@ -46,7 +46,7 @@ public class ScheduleTaskExecutionController {
     }
 
     @Operation(summary ="task execution detail")
-    @GetMapping("task-execution/${nodeExecutionId}")
+    @GetMapping("task-execution/{nodeExecutionId}")
     public InnospotResponse<NodeExecutionDisplay> taskNodeExecution(
             @Parameter(name = "nodeExecutionId") @PathVariable String nodeExecutionId
     ){
