@@ -5,7 +5,7 @@ import io.innospots.libra.base.task.ITaskExecutionExplore;
 import io.innospots.libra.base.task.TaskExecution;
 import io.innospots.libra.base.task.TaskExecutionStatus;
 import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.events.FlowExecutionTaskEvent;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.instance.model.WorkflowInstance;

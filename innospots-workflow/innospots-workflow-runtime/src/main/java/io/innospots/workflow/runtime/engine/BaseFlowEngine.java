@@ -25,7 +25,7 @@ import io.innospots.base.exception.ResourceException;
 import io.innospots.workflow.core.engine.IFlowEngine;
 import io.innospots.workflow.core.enums.FlowStatus;
 import io.innospots.workflow.core.exception.FlowPrepareException;
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.events.FlowExecutionTaskEvent;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.listener.IFlowExecutionListener;

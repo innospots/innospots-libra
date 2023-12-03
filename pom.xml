@@ -13,6 +13,7 @@
         <module>innospots-server</module>
         <module>innospots-workflow</module>
         <module>innospots-scripts</module>
+        <module>innospots-schedule</module>
 
     </modules>
 

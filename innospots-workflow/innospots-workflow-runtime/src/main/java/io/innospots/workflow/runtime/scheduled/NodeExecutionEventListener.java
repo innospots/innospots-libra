@@ -22,7 +22,7 @@ import io.innospots.base.events.IEventListener;
 import io.innospots.workflow.core.engine.FlowEngineManager;
 import io.innospots.workflow.core.engine.IFlowEngine;
 import io.innospots.workflow.core.enums.FlowStatus;
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.operator.IFlowExecutionOperator;

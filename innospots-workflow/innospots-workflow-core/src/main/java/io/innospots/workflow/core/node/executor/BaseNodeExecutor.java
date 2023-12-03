@@ -26,7 +26,7 @@ import io.innospots.base.model.field.ParamField;
 import io.innospots.base.script.jit.MethodBody;
 import io.innospots.workflow.core.enums.BuildStatus;
 import io.innospots.workflow.core.execution.*;
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.events.NodeExecutionTaskEvent;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.ExecutionResource;

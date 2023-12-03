@@ -18,7 +18,7 @@
 
 package io.innospots.workflow.node.app;
 
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.node.field.NodeParamField;

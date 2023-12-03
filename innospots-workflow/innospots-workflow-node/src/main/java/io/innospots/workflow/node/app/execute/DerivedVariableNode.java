@@ -22,7 +22,7 @@ import io.innospots.base.model.field.ComputeField;
 import io.innospots.base.model.field.compute.ComputeItem;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;

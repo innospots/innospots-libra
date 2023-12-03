@@ -21,7 +21,7 @@ package io.innospots.workflow.core.runtime.webhook;
 
 import io.innospots.base.model.field.ParamField;
 import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import org.apache.commons.collections4.CollectionUtils;
 

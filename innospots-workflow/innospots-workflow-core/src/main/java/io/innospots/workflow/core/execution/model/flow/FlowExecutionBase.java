@@ -22,7 +22,7 @@ import io.innospots.base.utils.InnospotsIdGenerator;
 import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.base.utils.Initializer;
 import io.innospots.workflow.core.execution.enums.ExecMode;
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.enums.RecordMode;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import lombok.AccessLevel;

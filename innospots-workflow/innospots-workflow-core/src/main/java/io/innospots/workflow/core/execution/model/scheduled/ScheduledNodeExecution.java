@@ -20,7 +20,7 @@ package io.innospots.workflow.core.execution.model.scheduled;
 
 
 import io.innospots.base.utils.CCH;
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import lombok.Getter;
 import lombok.Setter;

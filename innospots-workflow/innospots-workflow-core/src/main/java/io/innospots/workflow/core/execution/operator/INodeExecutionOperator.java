@@ -19,7 +19,7 @@
 package io.innospots.workflow.core.execution.operator;
 
 import io.innospots.base.store.IDataStore;
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 
 import java.util.List;

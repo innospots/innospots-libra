@@ -21,7 +21,7 @@ package io.innospots.workflow.runtime.engine;
 import io.innospots.base.utils.thread.ThreadTaskExecutor;
 import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.base.utils.thread.ThreadPoolBuilder;
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.listener.IFlowExecutionListener;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;

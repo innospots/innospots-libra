@@ -20,7 +20,7 @@ package io.innospots.workflow.runtime.parallel;
 
 import io.innospots.base.exception.InnospotException;
 import io.innospots.base.model.response.ResponseCode;
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;

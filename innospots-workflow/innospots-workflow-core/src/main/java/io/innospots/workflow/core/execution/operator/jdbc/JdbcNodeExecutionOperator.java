@@ -29,7 +29,7 @@ import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.entity.NodeExecutionEntity;
 import io.innospots.workflow.core.execution.converter.NodeExecutionConverter;
 import io.innospots.workflow.core.execution.enums.ExecMode;
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;
 import io.innospots.workflow.core.execution.operator.INodeExecutionOperator;

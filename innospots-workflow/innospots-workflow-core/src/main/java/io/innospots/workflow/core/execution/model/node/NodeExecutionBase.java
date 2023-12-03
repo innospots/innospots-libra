@@ -21,7 +21,7 @@ package io.innospots.workflow.core.execution.model.node;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.workflow.core.execution.enums.ExecMode;
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.enums.RecordMode;
 import lombok.Getter;
 import lombok.Setter;

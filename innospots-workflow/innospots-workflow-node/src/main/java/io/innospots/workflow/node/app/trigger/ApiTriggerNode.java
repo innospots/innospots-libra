@@ -24,7 +24,7 @@ import cn.hutool.http.HttpStatus;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.utils.BeanUtils;
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;

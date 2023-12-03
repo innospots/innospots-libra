@@ -3,7 +3,6 @@ package io.innospots.workflow.console.task.operate;
 import io.innospots.base.events.IEventListener;
 import io.innospots.libra.base.task.TaskEvent;
 import io.innospots.workflow.core.debug.FlowNodeDebuggerBuilder;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

@@ -30,7 +30,7 @@ import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.entity.ExecutionContextEntity;
 import io.innospots.workflow.core.execution.entity.FlowExecutionEntity;
 import io.innospots.workflow.core.execution.converter.FlowExecutionConverter;
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.model.flow.FlowExecutionBase;
 import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;

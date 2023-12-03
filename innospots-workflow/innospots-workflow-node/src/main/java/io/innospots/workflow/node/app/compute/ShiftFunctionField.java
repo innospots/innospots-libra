@@ -7,7 +7,7 @@ import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.base.utils.Initializer;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.instance.model.NodeInstance;

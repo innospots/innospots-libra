@@ -20,7 +20,7 @@ package io.innospots.workflow.core.execution.operator;
 
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.store.IDataStore;
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.model.flow.FlowExecutionBase;
 

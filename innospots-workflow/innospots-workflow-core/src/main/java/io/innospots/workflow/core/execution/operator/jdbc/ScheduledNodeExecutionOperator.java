@@ -30,7 +30,7 @@ import io.innospots.base.store.IDataStore;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.entity.ScheduledNodeExecutionEntity;
 import io.innospots.workflow.core.execution.converter.ScheduledNodeExecutionConverter;
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.operator.IScheduledNodeExecutionOperator;
 import io.innospots.workflow.core.execution.model.scheduled.ScheduledNodeExecution;
 import org.apache.commons.collections4.CollectionUtils;

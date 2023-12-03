@@ -23,7 +23,7 @@ import io.innospots.base.quartz.TimePeriod;
 import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.listener.INodeExecutionListener;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
@@ -31,7 +31,6 @@ import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.execution.operator.IScheduledNodeExecutionOperator;
 import io.innospots.workflow.core.execution.model.scheduled.ScheduledNodeExecution;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
-import io.innospots.workflow.core.instance.model.NodeInstance;
 
 import java.time.LocalDateTime;
 

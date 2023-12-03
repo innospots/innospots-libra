@@ -18,7 +18,7 @@
 
 package io.innospots.workflow.core.execution.operator;
 
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.scheduled.ScheduledNodeExecution;
 
 import java.util.List;

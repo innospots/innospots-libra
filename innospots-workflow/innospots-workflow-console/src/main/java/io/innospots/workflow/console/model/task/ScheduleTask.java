@@ -1,7 +1,7 @@
 package io.innospots.workflow.console.model.task;
 
 import io.innospots.base.quartz.ScheduleMode;
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;

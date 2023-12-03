@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.InnospotsIdGenerator;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import lombok.Getter;
 import lombok.Setter;

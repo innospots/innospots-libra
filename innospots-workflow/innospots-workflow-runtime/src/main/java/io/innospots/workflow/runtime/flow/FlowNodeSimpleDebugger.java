@@ -31,7 +31,7 @@ import io.innospots.workflow.core.engine.FlowEngineManager;
 import io.innospots.workflow.core.engine.IFlowEngine;
 import io.innospots.workflow.core.enums.FlowStatus;
 import io.innospots.workflow.core.execution.model.ExecutionResource;
-import io.innospots.workflow.core.execution.enums.ExecutionStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.debug.FlowNodeDebugger;
 import io.innospots.workflow.core.execution.events.FlowExecutionTaskEvent;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
