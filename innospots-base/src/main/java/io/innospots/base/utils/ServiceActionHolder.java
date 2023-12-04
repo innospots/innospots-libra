@@ -18,6 +18,8 @@
 
 package io.innospots.base.utils;
 
+import java.util.List;
+
 /**
  * @author Smars
  * @vesion 2.0
@@ -25,19 +27,48 @@ package io.innospots.base.utils;
  */
 public class ServiceActionHolder {
 
-    private static boolean scheduleRole;
+    /**
+     * schedule service
+     */
+    private static boolean scheduleService;
+
+    /**
+     * job execute service
+     */
+    private static boolean jobExecutionService;
+
+    /**
+     * execute job group keys
+     */
+    private static List<String> groupKeys;
 
     /**
      * clean execution log and cache
      */
     private static boolean cleanTask;
 
-    public static boolean isScheduleRole() {
-        return scheduleRole;
+    public static boolean isJobExecutionService() {
+        return jobExecutionService;
     }
 
-    public static void setScheduleRole(boolean scheduleRole) {
-        ServiceActionHolder.scheduleRole = scheduleRole;
+    public static void setJobExecutionService(boolean jobExecutionService) {
+        ServiceActionHolder.jobExecutionService = jobExecutionService;
+    }
+
+    public static List<String> getGroupKeys() {
+        return groupKeys;
+    }
+
+    public static void setGroupKeys(List<String> groupKeys) {
+        ServiceActionHolder.groupKeys = groupKeys;
+    }
+
+    public static boolean isScheduleService() {
+        return scheduleService;
+    }
+
+    public static void setScheduleRole(boolean scheduleService) {
+        ServiceActionHolder.scheduleService = scheduleService;
     }
 
     public static boolean isCleanTask() {

@@ -21,6 +21,8 @@ package io.innospots.schedule.config;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 /**
  * @author Smars
  * @vesion 2.0
@@ -31,5 +33,14 @@ import lombok.Setter;
 public class InnospotsScheduleProperties {
 
     private Integer scanSlotTimeMills = 200;
+
+    private Integer fetchSize = 1;
+
+    private Integer executorSize = 4;
+
+    /**
+     * default group keys using select ready job
+     */
+    private List<String> groupKeys;
 
 }

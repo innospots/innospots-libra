@@ -16,31 +16,19 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.operator;
+package io.innospots.schedule.job;
 
-import io.innospots.schedule.entity.JobExecutionEntity;
-import io.innospots.schedule.entity.ReadyQueueEntity;
-
-import java.util.List;
+import io.innospots.schedule.model.JobExecution;
 
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2023/12/4
+ * @date 2023/12/5
  */
-public class ReadyQueueOperator {
+public class JobBuilder {
 
-    /**
-     * fetch ready execute jobs , msg status is undead , order by created time asc
-     * @param fetchSize fetch size
-     * @return
-     */
-    public List<ReadyQueueEntity> poll(int fetchSize,List<String> groupKeys) {
-        //update msg status to read and serverKey
+    public static BaseJob build(JobExecution jobExecution){
+
         return null;
-    }
-
-    public void push(ReadyQueueEntity readyQueueEntity){
-        return;
     }
 }

@@ -40,10 +40,7 @@ public abstract class BaseJob {
         this.jobInfo = jobInfo;
     }
 
-    /**
-     * build job execution according job type and job class
-     * @return
-     */
-    public abstract List<JobExecution> buildExecution();
+
+    public abstract void execute(JobExecution jobExecution);
 
 }

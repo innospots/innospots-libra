@@ -16,31 +16,15 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.operator;
+package io.innospots.schedule.dao;
 
-import io.innospots.schedule.entity.JobExecutionEntity;
-import io.innospots.schedule.entity.ReadyQueueEntity;
-
-import java.util.List;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.innospots.schedule.entity.ScheduleJobInfoEntity;
 
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2023/12/4
+ * @date 2023/12/5
  */
-public class ReadyQueueOperator {
-
-    /**
-     * fetch ready execute jobs , msg status is undead , order by created time asc
-     * @param fetchSize fetch size
-     * @return
-     */
-    public List<ReadyQueueEntity> poll(int fetchSize,List<String> groupKeys) {
-        //update msg status to read and serverKey
-        return null;
-    }
-
-    public void push(ReadyQueueEntity readyQueueEntity){
-        return;
-    }
+public interface ScheduleJobInfoDao extends BaseMapper<ScheduleJobInfoEntity> {
 }

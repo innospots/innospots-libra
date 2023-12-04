@@ -16,36 +16,30 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.launcher;
+package io.innospots.schedule.operator;
 
-import io.innospots.schedule.model.JobExecution;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.innospots.schedule.dao.ScheduleJobInfoDao;
+import io.innospots.schedule.entity.ScheduleJobInfoEntity;
 
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2023/12/3
+ * @date 2023/12/5
  */
-public class ReadyJobLauncher {
+public class ScheduleJobInfoOperator extends ServiceImpl<ScheduleJobInfoDao, ScheduleJobInfoEntity> {
 
-    public int currentJobCount(){
-        return 0;
+
+    public ScheduleJobInfoEntity createScheduleJobInfo(ScheduleJobInfoEntity scheduleJobInfoEntity) {
+        return null;
     }
 
-    public void launch(JobExecution jobExecution){
-        start(jobExecution);
-        execute(jobExecution);
-        end(jobExecution);
+    public ScheduleJobInfoEntity getScheduleJobInfo(String jobKey) {
+        return this.getById(jobKey);
     }
 
-    protected void execute(JobExecution jobExecution){
-
+    public ScheduleJobInfoEntity updateScheduleJobInfo(ScheduleJobInfoEntity scheduleJobInfoEntity) {
+        return null;
     }
 
-    protected void start(JobExecution jobExecution){
-
-    }
-
-    protected void end(JobExecution jobExecution){
-
-    }
 }

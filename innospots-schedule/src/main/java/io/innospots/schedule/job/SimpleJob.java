@@ -36,7 +36,8 @@ public class SimpleJob extends BaseJob {
     }
 
     @Override
-    public List<JobExecution> buildExecution() {
-        return null;
+    public void execute(JobExecution jobExecution) {
+
     }
+
 }

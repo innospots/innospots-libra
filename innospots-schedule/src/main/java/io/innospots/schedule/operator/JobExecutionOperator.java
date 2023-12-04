@@ -19,6 +19,8 @@
 package io.innospots.schedule.operator;
 
 import io.innospots.schedule.entity.JobExecutionEntity;
+import io.innospots.schedule.entity.ReadyQueueEntity;
+import io.innospots.schedule.model.JobExecution;
 
 import java.util.List;
 
@@ -29,13 +31,24 @@ import java.util.List;
  */
 public class JobExecutionOperator {
 
-
-    /**
-     * fetch ready status job execution
-     * @param fetchSize fetch size
-     * @return
-     */
-    public List<JobExecutionEntity> scanReadyJobExecutions(int fetchSize) {
+    public JobExecution createJobExecution(ReadyQueueEntity readyQueueEntity) {
         return null;
     }
+
+    public void stop(String jobExecutionId,String message){
+
+    }
+
+    public void complete(String jobExecutionId,String message){
+
+    }
+
+    public void fail(String jobExecutionId,String message){
+
+    }
+
+    public void updateJobExecution(JobExecution jobExecution){
+
+    }
+
 }

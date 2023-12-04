@@ -18,11 +18,15 @@
 
 package io.innospots.schedule.watcher;
 
+import io.innospots.base.utils.ServiceActionHolder;
 import io.innospots.base.watcher.AbstractWatcher;
 import io.innospots.schedule.config.InnospotsScheduleProperties;
-import io.innospots.schedule.launcher.JobExecutionLauncher;
-import io.innospots.schedule.launcher.ReadyJobLauncher;
+import io.innospots.schedule.entity.ReadyQueueEntity;
+import io.innospots.schedule.launcher.JobLauncher;
 import io.innospots.schedule.operator.ReadyQueueOperator;
+import org.apache.commons.collections4.CollectionUtils;
+
+import java.util.List;
 
 /**
  * @author Smars
@@ -33,18 +37,29 @@ public class ReadyQueueWatcher extends AbstractWatcher {
 
     private ReadyQueueOperator readyQueueOperator;
 
-    private ReadyJobLauncher readyJobLauncher;
+    private JobLauncher jobLauncher;
 
     private InnospotsScheduleProperties scheduleProperties;
 
     @Override
     public int execute() {
+        List<ReadyQueueEntity> readyList = readyQueueOperator.poll(scheduleProperties.getFetchSize(),getGroupKeys());
+        if(CollectionUtils.isEmpty(readyList)){
+            return intervalTime();
+        }
+        for(ReadyQueueEntity readyQueueEntity: readyList){
+            jobLauncher.launch(readyQueueEntity);
+        }
 
         return intervalTime();
     }
 
+    private List<String> getGroupKeys(){
+        return scheduleProperties.getGroupKeys() != null ? scheduleProperties.getGroupKeys(): ServiceActionHolder.getGroupKeys();
+    }
+
     private int intervalTime(){
-        int slotTime = readyJobLauncher.currentJobCount()*100+scheduleProperties.getScanSlotTimeMills();
+        int slotTime = jobLauncher.currentJobCount()*100+scheduleProperties.getScanSlotTimeMills();
 
         return slotTime;
     }

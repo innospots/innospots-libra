@@ -27,5 +27,6 @@ public enum MessageStatus {
 
     UNREAD,
     READ,
+    ASSIGNED,
     DELETED;
 }
