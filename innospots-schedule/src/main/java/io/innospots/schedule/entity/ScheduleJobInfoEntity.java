@@ -24,6 +24,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.innospots.base.entity.PBaseEntity;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.quartz.ScheduleMode;
+import io.innospots.schedule.enums.JobType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -61,8 +62,12 @@ public class ScheduleJobInfoEntity extends PBaseEntity {
     @Enumerated(value = EnumType.STRING)
     private DataStatus jobStatus;
 
+    @Column(length = 16)
+    @Enumerated(value = EnumType.STRING)
+    private JobType jobType;
+
     @Column(length = 128)
-    private String jobType;
+    private String jobClass;
 
     @Column(length = 128)
     private String splitter;

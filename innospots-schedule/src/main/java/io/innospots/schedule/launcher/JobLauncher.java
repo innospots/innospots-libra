@@ -19,15 +19,24 @@
 package io.innospots.schedule.launcher;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.schedule.entity.ReadyQueueEntity;
+import io.innospots.schedule.entity.ScheduleJobInfoEntity;
+import io.innospots.schedule.enums.JobType;
 import io.innospots.schedule.job.BaseJob;
 import io.innospots.schedule.job.JobBuilder;
 import io.innospots.schedule.model.JobExecution;
+import io.innospots.schedule.model.ScheduleJobInfo;
 import io.innospots.schedule.operator.JobExecutionOperator;
+import io.innospots.schedule.operator.ScheduleJobInfoOperator;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
+import java.util.WeakHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 /**
  * @author Smars
@@ -39,34 +48,48 @@ public class JobLauncher {
 
     private JobExecutionOperator jobExecutionOperator;
 
-    public int currentJobCount(){
-        return 0;
+    private ScheduleJobInfoOperator scheduleJobInfoOperator;
+
+    private WeakHashMap<String, JobExecution> executionCache = new WeakHashMap<>();
+
+    private ExecutorService executorService;
+
+    public int currentJobCount() {
+        return executionCache.size();
     }
 
-    public void launch(ReadyQueueEntity readyQueueEntity){
-        JobExecution jobExecution = start(readyQueueEntity);
-        execute(jobExecution);
-        end(jobExecution);
+    public void launch(ReadyQueueEntity readyQueueEntity) {
+        Future future = executorService.submit(()-> {
+            JobExecution jobExecution = start(readyQueueEntity);
+            execute(jobExecution);
+            end(jobExecution);
+        });
     }
 
-    protected void execute(JobExecution jobExecution){
-        try{
-            BaseJob baseJob = JobBuilder.build(jobExecution);
+    protected void execute(JobExecution jobExecution) {
+        try {
+            ScheduleJobInfo scheduleJobInfo = scheduleJobInfoOperator.getScheduleJobInfo(jobExecution.getJobKey());
+            BaseJob baseJob = JobBuilder.build(scheduleJobInfo);
             baseJob.execute(jobExecution);
-            jobExecution.setEndTime(LocalDateTime.now());
-            jobExecution.setExecutionStatus(ExecutionStatus.COMPLETE);
-        }catch (Exception e){
-            log.error(e.getMessage(),e);
+            if (jobExecution.getJobType() == JobType.EXECUTE) {
+                jobExecution.setEndTime(LocalDateTime.now());
+                jobExecution.setExecutionStatus(ExecutionStatus.COMPLETE);
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
             jobExecution.setExecutionStatus(ExecutionStatus.FAILED);
-            jobExecution.setMessage(ExceptionUtil.stacktraceToString(e,1024));
+            jobExecution.setMessage(ExceptionUtil.stacktraceToString(e, 1024));
         }
     }
 
-    protected JobExecution start(ReadyQueueEntity readyQueueEntity){
-        return jobExecutionOperator.createJobExecution(readyQueueEntity);
+    protected JobExecution start(ReadyQueueEntity readyQueueEntity) {
+        JobExecution jobExecution = jobExecutionOperator.createJobExecution(readyQueueEntity);
+        executionCache.put(jobExecution.getJobExecutionId(), jobExecution);
+        return jobExecution;
     }
 
-    protected void end(JobExecution jobExecution){
+    protected void end(JobExecution jobExecution) {
+        executionCache.remove(jobExecution.getJobExecutionId());
         jobExecutionOperator.updateJobExecution(jobExecution);
     }
 }

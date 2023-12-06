@@ -18,7 +18,11 @@
 
 package io.innospots.schedule.job;
 
+import io.innospots.base.exception.ResourceException;
 import io.innospots.schedule.model.JobExecution;
+import io.innospots.schedule.model.ScheduleJobInfo;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * @author Smars
@@ -27,8 +31,15 @@ import io.innospots.schedule.model.JobExecution;
  */
 public class JobBuilder {
 
-    public static BaseJob build(JobExecution jobExecution){
-
-        return null;
+    public static BaseJob build(ScheduleJobInfo scheduleJobInfo){
+        BaseJob baseJob;
+        try {
+            Class<?> jobClass = Class.forName(scheduleJobInfo.getJobClass());
+            baseJob = (BaseJob) jobClass.getConstructor(ScheduleJobInfo.class).newInstance(scheduleJobInfo);
+        } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
+                 InvocationTargetException e) {
+            throw ResourceException.buildAbandonException(JobBuilder.class, "jobClass not found,"+scheduleJobInfo.getJobClass(), e);
+        }
+        return baseJob;
     }
 }

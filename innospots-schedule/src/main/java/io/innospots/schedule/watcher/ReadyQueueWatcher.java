@@ -43,6 +43,9 @@ public class ReadyQueueWatcher extends AbstractWatcher {
 
     @Override
     public int execute() {
+        if(jobLauncher.currentJobCount() >= scheduleProperties.getExecutorSize()){
+            return intervalTime();
+        }
         List<ReadyQueueEntity> readyList = readyQueueOperator.poll(scheduleProperties.getFetchSize(),getGroupKeys());
         if(CollectionUtils.isEmpty(readyList)){
             return intervalTime();

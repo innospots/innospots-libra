@@ -19,8 +19,11 @@
 package io.innospots.schedule.operator;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.innospots.base.exception.ResourceException;
+import io.innospots.schedule.converter.ScheduleJobInfoConverter;
 import io.innospots.schedule.dao.ScheduleJobInfoDao;
 import io.innospots.schedule.entity.ScheduleJobInfoEntity;
+import io.innospots.schedule.model.ScheduleJobInfo;
 
 /**
  * @author Smars
@@ -34,8 +37,12 @@ public class ScheduleJobInfoOperator extends ServiceImpl<ScheduleJobInfoDao, Sch
         return null;
     }
 
-    public ScheduleJobInfoEntity getScheduleJobInfo(String jobKey) {
-        return this.getById(jobKey);
+    public ScheduleJobInfo getScheduleJobInfo(String jobKey) {
+        ScheduleJobInfoEntity scheduleJobInfoEntity = this.getById(jobKey);
+        if(scheduleJobInfoEntity==null){
+            throw ResourceException.buildNotExistException(this.getClass(),"job not exist, jobKey:" + jobKey);
+        }
+        return ScheduleJobInfoConverter.INSTANCE.entityToModel(scheduleJobInfoEntity);
     }
 
     public ScheduleJobInfoEntity updateScheduleJobInfo(ScheduleJobInfoEntity scheduleJobInfoEntity) {

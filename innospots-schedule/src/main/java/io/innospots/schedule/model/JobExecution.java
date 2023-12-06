@@ -21,6 +21,7 @@ package io.innospots.schedule.model;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.innospots.base.quartz.ExecutionStatus;
+import io.innospots.schedule.enums.JobType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -45,6 +46,11 @@ public class JobExecution {
 
     private String jobKey;
 
+    private JobType jobType;
+
+    /**
+     * module scopes
+     */
     private String scopes;
 
     private ExecutionStatus executionStatus;

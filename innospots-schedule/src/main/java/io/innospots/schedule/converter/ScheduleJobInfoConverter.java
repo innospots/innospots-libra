@@ -16,50 +16,19 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.model;
+package io.innospots.schedule.converter;
 
-import io.innospots.base.enums.DataStatus;
-import io.innospots.base.quartz.ScheduleMode;
-import io.innospots.schedule.enums.JobType;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
-
-import java.time.LocalDateTime;
-import java.util.Map;
+import io.innospots.base.converter.BaseBeanConverter;
+import io.innospots.schedule.entity.ScheduleJobInfoEntity;
+import io.innospots.schedule.model.ScheduleJobInfo;
+import org.mapstruct.factory.Mappers;
 
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2023/12/3
+ * @date 2023/12/6
  */
-@Slf4j
-@Getter
-@Setter
-public class ScheduleJobInfo {
+public interface ScheduleJobInfoConverter extends BaseBeanConverter<ScheduleJobInfo, ScheduleJobInfoEntity> {
 
-    private String jobKey;
-
-    private String jobName;
-
-    private ScheduleMode scheduleMode;
-
-    private DataStatus jobStatus;
-
-    private JobType jobType;
-
-    private String jobClass;
-
-    private String scopes;
-
-    private TimeConfig timeConfig;
-
-    private Map<String,String> params;
-
-    private String cronExpression;
-
-    private LocalDateTime startTime;
-
-    private LocalDateTime endTime;
-
+    ScheduleJobInfoConverter INSTANCE = Mappers.getMapper(ScheduleJobInfoConverter.class);
 }

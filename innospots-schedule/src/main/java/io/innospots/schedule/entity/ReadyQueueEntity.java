@@ -32,6 +32,7 @@ import javax.persistence.*;
 import static io.innospots.schedule.entity.TaskExecutionEntity.TABLE_NAME;
 
 /**
+ * job will be executed in the ready queue
  * @author Smars
  * @vesion 2.0
  * @date 2023/12/3
