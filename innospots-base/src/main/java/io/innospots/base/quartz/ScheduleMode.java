@@ -34,7 +34,7 @@ public enum ScheduleMode {
     SCHEDULED,
 
     /**
-     * 不再执行
+     * manual
      */
-    NONE;
+    MANUAL;
 }

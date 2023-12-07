@@ -20,6 +20,7 @@ package io.innospots.schedule.model;
 
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.quartz.ScheduleMode;
+import io.innospots.base.utils.Initializer;
 import io.innospots.schedule.enums.JobType;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,7 +37,7 @@ import java.util.Map;
 @Slf4j
 @Getter
 @Setter
-public class ScheduleJobInfo {
+public class ScheduleJobInfo implements Initializer {
 
     private String jobKey;
 
@@ -62,4 +63,9 @@ public class ScheduleJobInfo {
 
     private LocalDateTime endTime;
 
+
+    @Override
+    public void initialize() {
+        cronExpression = timeConfig.cronExpression(scheduleMode);
+    }
 }

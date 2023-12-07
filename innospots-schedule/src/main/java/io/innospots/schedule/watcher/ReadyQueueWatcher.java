@@ -29,6 +29,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import java.util.List;
 
 /**
+ *  ready job queue thread watcher
  * @author Smars
  * @vesion 2.0
  * @date 2023/12/3
@@ -43,13 +44,20 @@ public class ReadyQueueWatcher extends AbstractWatcher {
 
     @Override
     public int execute() {
-        if(jobLauncher.currentJobCount() >= scheduleProperties.getExecutorSize()){
+        //fetch available worker size
+        int fetchSize = scheduleProperties.getExecutorSize() - jobLauncher.currentJobCount();
+
+        if(fetchSize <= 0){
             return intervalTime();
         }
-        List<ReadyQueueEntity> readyList = readyQueueOperator.poll(scheduleProperties.getFetchSize(),getGroupKeys());
+
+        //fetch from ready queue
+        List<ReadyQueueEntity> readyList = readyQueueOperator.poll(fetchSize,getGroupKeys());
         if(CollectionUtils.isEmpty(readyList)){
+            //empty
             return intervalTime();
         }
+
         for(ReadyQueueEntity readyQueueEntity: readyList){
             jobLauncher.launch(readyQueueEntity);
         }

@@ -22,6 +22,7 @@ import cn.hutool.core.exceptions.ExceptionUtil;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import io.innospots.base.quartz.ExecutionStatus;
+import io.innospots.base.utils.thread.ThreadTaskExecutor;
 import io.innospots.schedule.entity.ReadyQueueEntity;
 import io.innospots.schedule.entity.ScheduleJobInfoEntity;
 import io.innospots.schedule.enums.JobType;
@@ -30,6 +31,7 @@ import io.innospots.schedule.job.JobBuilder;
 import io.innospots.schedule.model.JobExecution;
 import io.innospots.schedule.model.ScheduleJobInfo;
 import io.innospots.schedule.operator.JobExecutionOperator;
+import io.innospots.schedule.operator.ReadyQueueOperator;
 import io.innospots.schedule.operator.ScheduleJobInfoOperator;
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,16 +52,18 @@ public class JobLauncher {
 
     private ScheduleJobInfoOperator scheduleJobInfoOperator;
 
+    private ReadyQueueOperator readyQueueOperator;
+
     private WeakHashMap<String, JobExecution> executionCache = new WeakHashMap<>();
 
-    private ExecutorService executorService;
+    private ThreadTaskExecutor threadTaskExecutor;
 
     public int currentJobCount() {
-        return executionCache.size();
+        return threadTaskExecutor.getActiveCount();
     }
 
     public void launch(ReadyQueueEntity readyQueueEntity) {
-        Future future = executorService.submit(()-> {
+        Future future = threadTaskExecutor.submit(()-> {
             JobExecution jobExecution = start(readyQueueEntity);
             execute(jobExecution);
             end(jobExecution);
@@ -84,6 +88,7 @@ public class JobLauncher {
 
     protected JobExecution start(ReadyQueueEntity readyQueueEntity) {
         JobExecution jobExecution = jobExecutionOperator.createJobExecution(readyQueueEntity);
+        readyQueueOperator.ackRead(readyQueueEntity.getJobReadyKey());
         executionCache.put(jobExecution.getJobExecutionId(), jobExecution);
         return jobExecution;
     }

@@ -40,6 +40,10 @@ public class ReadyQueueOperator {
         return null;
     }
 
+    public void ackRead(String jobReadyKey){
+
+    }
+
     public void push(ReadyQueueEntity readyQueueEntity){
         return;
     }

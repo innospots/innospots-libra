@@ -18,12 +18,20 @@
 
 package io.innospots.schedule.operator;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ResourceException;
+import io.innospots.base.quartz.ScheduleMode;
 import io.innospots.schedule.converter.ScheduleJobInfoConverter;
 import io.innospots.schedule.dao.ScheduleJobInfoDao;
 import io.innospots.schedule.entity.ScheduleJobInfoEntity;
 import io.innospots.schedule.model.ScheduleJobInfo;
+import org.apache.commons.collections4.CollectionUtils;
+
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Smars
@@ -32,6 +40,25 @@ import io.innospots.schedule.model.ScheduleJobInfo;
  */
 public class ScheduleJobInfoOperator extends ServiceImpl<ScheduleJobInfoDao, ScheduleJobInfoEntity> {
 
+    private LocalDateTime lastUpdateTime;
+
+    /**
+     * fetch online and schedule jobs, according recent update time
+     * @return
+     */
+    public List<ScheduleJobInfo> fetchQuartzTimeJob() {
+        QueryWrapper<ScheduleJobInfoEntity> qw = new QueryWrapper<>();
+        qw.lambda().eq(ScheduleJobInfoEntity::getJobStatus, DataStatus.ONLINE)
+                .eq(ScheduleJobInfoEntity::getScheduleMode, ScheduleMode.SCHEDULED)
+                .orderByDesc(ScheduleJobInfoEntity::getUpdatedTime)
+                .ge(lastUpdateTime!=null, ScheduleJobInfoEntity::getUpdatedTime, lastUpdateTime);
+        List<ScheduleJobInfoEntity> entities = this.list(qw);
+        if(CollectionUtils.isEmpty(entities)){
+            return Collections.emptyList();
+        }
+        lastUpdateTime = LocalDateTime.now();
+        return ScheduleJobInfoConverter.INSTANCE.entitiesToModels(entities);
+    }
 
     public ScheduleJobInfoEntity createScheduleJobInfo(ScheduleJobInfoEntity scheduleJobInfoEntity) {
         return null;

@@ -34,8 +34,6 @@ public class InnospotsScheduleProperties {
 
     private Integer scanSlotTimeMills = 200;
 
-    private Integer fetchSize = 1;
-
     private Integer executorSize = 4;
 
     /**

@@ -18,10 +18,24 @@
 
 package io.innospots.schedule.watcher;
 
+import io.innospots.base.quartz.QuartzScheduleManager;
+import io.innospots.base.watcher.AbstractWatcher;
+import io.innospots.schedule.operator.ScheduleJobInfoOperator;
+
 /**
  * @author Smars
  * @vesion 2.0
  * @date 2023/12/3
  */
-public class ScheduleJobWatcher {
+public class ScheduleJobWatcher extends AbstractWatcher {
+
+    private QuartzScheduleManager scheduleManager;
+
+    private ScheduleJobInfoOperator scheduleJobInfoOperator;
+
+    @Override
+    public int execute() {
+        scheduleJobInfoOperator.fetchQuartzTimeJob();
+        return 0;
+    }
 }
