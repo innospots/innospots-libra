@@ -43,12 +43,12 @@ public class ScheduleJobInfoOperator extends ServiceImpl<ScheduleJobInfoDao, Sch
     private LocalDateTime lastUpdateTime;
 
     /**
-     * fetch online and schedule jobs, according recent update time
+     * fetch schedule jobs, according recent update time, include online or offline
      * @return
      */
-    public List<ScheduleJobInfo> fetchQuartzTimeJob() {
+    public List<ScheduleJobInfo> fetchUpdatedQuartzTimeJob() {
         QueryWrapper<ScheduleJobInfoEntity> qw = new QueryWrapper<>();
-        qw.lambda().eq(ScheduleJobInfoEntity::getJobStatus, DataStatus.ONLINE)
+        qw.lambda().eq(lastUpdateTime==null,ScheduleJobInfoEntity::getJobStatus, DataStatus.ONLINE)
                 .eq(ScheduleJobInfoEntity::getScheduleMode, ScheduleMode.SCHEDULED)
                 .orderByDesc(ScheduleJobInfoEntity::getUpdatedTime)
                 .ge(lastUpdateTime!=null, ScheduleJobInfoEntity::getUpdatedTime, lastUpdateTime);
@@ -57,7 +57,10 @@ public class ScheduleJobInfoOperator extends ServiceImpl<ScheduleJobInfoDao, Sch
             return Collections.emptyList();
         }
         lastUpdateTime = LocalDateTime.now();
-        return ScheduleJobInfoConverter.INSTANCE.entitiesToModels(entities);
+        List<ScheduleJobInfo> jobInfos = ScheduleJobInfoConverter.INSTANCE.entitiesToModels(entities);
+        jobInfos.forEach(ScheduleJobInfo::initialize);
+
+        return jobInfos;
     }
 
     public ScheduleJobInfoEntity createScheduleJobInfo(ScheduleJobInfoEntity scheduleJobInfoEntity) {

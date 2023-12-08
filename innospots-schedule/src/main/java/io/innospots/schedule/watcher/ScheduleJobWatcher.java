@@ -18,15 +18,25 @@
 
 package io.innospots.schedule.watcher;
 
+import io.innospots.base.enums.DataStatus;
 import io.innospots.base.quartz.QuartzScheduleManager;
+import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.base.watcher.AbstractWatcher;
+import io.innospots.schedule.model.ScheduleJobInfo;
 import io.innospots.schedule.operator.ScheduleJobInfoOperator;
+import io.innospots.schedule.quartz.QuartzJobScheduler;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author Smars
  * @vesion 2.0
  * @date 2023/12/3
  */
+@Slf4j
 public class ScheduleJobWatcher extends AbstractWatcher {
 
     private QuartzScheduleManager scheduleManager;
@@ -35,7 +45,21 @@ public class ScheduleJobWatcher extends AbstractWatcher {
 
     @Override
     public int execute() {
-        scheduleJobInfoOperator.fetchQuartzTimeJob();
-        return 0;
+        List<ScheduleJobInfo> jobInfos = scheduleJobInfoOperator.fetchUpdatedQuartzTimeJob();
+        if (CollectionUtils.isEmpty(jobInfos)) {
+            return checkIntervalSecond;
+        }
+        for (ScheduleJobInfo jobInfo : jobInfos) {
+            if (jobInfo.getJobStatus() == DataStatus.OFFLINE) {
+                log.info("offline job remove from scheduler:{}", jobInfo.getJobName());
+                scheduleManager.deleteJob(jobInfo.getJobKey());
+            } else {
+                log.info("job add to schedule:{}", jobInfo);
+                Date startTime = jobInfo.getStartTime() != null ? DateTimeUtils.asDate(jobInfo.getStartTime()) : null;
+                Date endTime = jobInfo.getEndTime() != null ? DateTimeUtils.asDate(jobInfo.getEndTime()) : null;
+                scheduleManager.refreshJob(jobInfo.getJobName(), QuartzJobScheduler.class, jobInfo.getCronExpression(), jobInfo.getScheduleMode(), startTime, endTime);
+            }
+        }
+        return checkIntervalSecond;
     }
 }

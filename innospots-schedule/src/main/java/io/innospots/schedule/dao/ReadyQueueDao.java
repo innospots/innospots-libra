@@ -16,23 +16,15 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.job;
+package io.innospots.schedule.dao;
 
-import io.innospots.schedule.model.JobExecution;
-import io.innospots.schedule.model.ScheduleJobInfo;
-
-import java.util.List;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.innospots.schedule.entity.ReadyJobEntity;
 
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2023/12/3
+ * @date 2023/12/5
  */
-public class SimpleJob extends BaseJob {
-
-    @Override
-    public void execute(JobExecution jobExecution) {
-
-    }
-
+public interface ReadyQueueDao extends BaseMapper<ReadyJobEntity> {
 }

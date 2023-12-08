@@ -16,23 +16,22 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.job;
+package io.innospots.schedule.queue;
 
-import io.innospots.schedule.model.JobExecution;
-import io.innospots.schedule.model.ScheduleJobInfo;
+import io.innospots.schedule.entity.ReadyJobEntity;
 
 import java.util.List;
 
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2023/12/3
+ * @date 2023/12/8
  */
-public class SimpleJob extends BaseJob {
+public interface IReadyJobQueue {
 
-    @Override
-    public void execute(JobExecution jobExecution) {
+    List<ReadyJobEntity> poll(int fetchSize, List<String> groupKeys);
 
-    }
+    void ackRead(String jobReadyKey);
 
+    void push(String jobKey);
 }

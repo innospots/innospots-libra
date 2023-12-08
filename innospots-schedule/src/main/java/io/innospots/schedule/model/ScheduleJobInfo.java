@@ -68,4 +68,19 @@ public class ScheduleJobInfo implements Initializer {
     public void initialize() {
         cronExpression = timeConfig.cronExpression(scheduleMode);
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("jobKey='").append(jobKey).append('\'');
+        sb.append(", jobName='").append(jobName).append('\'');
+        sb.append(", scheduleMode=").append(scheduleMode);
+        sb.append(", jobStatus=").append(jobStatus);
+        sb.append(", jobType=").append(jobType);
+        sb.append(", jobClass='").append(jobClass).append('\'');
+        sb.append(", timeConfig=").append(timeConfig);
+        sb.append(", cronExpression='").append(cronExpression).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

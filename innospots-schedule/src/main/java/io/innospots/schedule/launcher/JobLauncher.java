@@ -19,25 +19,21 @@
 package io.innospots.schedule.launcher;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.base.utils.thread.ThreadTaskExecutor;
-import io.innospots.schedule.entity.ReadyQueueEntity;
-import io.innospots.schedule.entity.ScheduleJobInfoEntity;
+import io.innospots.schedule.entity.ReadyJobEntity;
 import io.innospots.schedule.enums.JobType;
 import io.innospots.schedule.job.BaseJob;
 import io.innospots.schedule.job.JobBuilder;
 import io.innospots.schedule.model.JobExecution;
 import io.innospots.schedule.model.ScheduleJobInfo;
 import io.innospots.schedule.operator.JobExecutionOperator;
-import io.innospots.schedule.operator.ReadyQueueOperator;
+import io.innospots.schedule.queue.ReadyJobDbQueue;
 import io.innospots.schedule.operator.ScheduleJobInfoOperator;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 import java.util.WeakHashMap;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 /**
@@ -52,7 +48,7 @@ public class JobLauncher {
 
     private ScheduleJobInfoOperator scheduleJobInfoOperator;
 
-    private ReadyQueueOperator readyQueueOperator;
+    private ReadyJobDbQueue readyJobDbQueue;
 
     private WeakHashMap<String, JobExecution> executionCache = new WeakHashMap<>();
 
@@ -62,9 +58,9 @@ public class JobLauncher {
         return threadTaskExecutor.getActiveCount();
     }
 
-    public void launch(ReadyQueueEntity readyQueueEntity) {
+    public void launch(ReadyJobEntity readyJobEntity) {
         Future future = threadTaskExecutor.submit(()-> {
-            JobExecution jobExecution = start(readyQueueEntity);
+            JobExecution jobExecution = start(readyJobEntity);
             execute(jobExecution);
             end(jobExecution);
         });
@@ -86,9 +82,9 @@ public class JobLauncher {
         }
     }
 
-    protected JobExecution start(ReadyQueueEntity readyQueueEntity) {
-        JobExecution jobExecution = jobExecutionOperator.createJobExecution(readyQueueEntity);
-        readyQueueOperator.ackRead(readyQueueEntity.getJobReadyKey());
+    protected JobExecution start(ReadyJobEntity readyJobEntity) {
+        JobExecution jobExecution = jobExecutionOperator.createJobExecution(readyJobEntity);
+        readyJobDbQueue.ackRead(readyJobEntity.getJobReadyKey());
         executionCache.put(jobExecution.getJobExecutionId(), jobExecution);
         return jobExecution;
     }

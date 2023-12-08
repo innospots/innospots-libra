@@ -21,18 +21,15 @@ package io.innospots.schedule.job;
 import io.innospots.schedule.model.JobExecution;
 import io.innospots.schedule.model.ScheduleJobInfo;
 
-import java.util.List;
-
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2023/12/3
+ * @date 2023/12/9
  */
-public class SimpleJob extends BaseJob {
+public class CommandJob extends BaseJob{
 
     @Override
     public void execute(JobExecution jobExecution) {
 
     }
-
 }

@@ -16,23 +16,45 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.job;
+package io.innospots.schedule.queue;
 
-import io.innospots.schedule.model.JobExecution;
-import io.innospots.schedule.model.ScheduleJobInfo;
+import io.innospots.schedule.dao.ReadyQueueDao;
+import io.innospots.schedule.dao.ScheduleJobInfoDao;
+import io.innospots.schedule.entity.ReadyJobEntity;
 
 import java.util.List;
 
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2023/12/3
+ * @date 2023/12/4
  */
-public class SimpleJob extends BaseJob {
+public class ReadyJobDbQueue implements IReadyJobQueue{
+
+    private ScheduleJobInfoDao scheduleJobInfoDao;
+
+    private ReadyQueueDao readyQueueDao;
+
+    /**
+     * fetch ready execute jobs , msg status is undead , order by created time asc
+     * @param fetchSize fetch size
+     * @return
+     */
+    @Override
+    public List<ReadyJobEntity> poll(int fetchSize, List<String> groupKeys) {
+        //update msg status to read and serverKey
+        return null;
+    }
 
     @Override
-    public void execute(JobExecution jobExecution) {
+    public void ackRead(String jobReadyKey){
 
     }
+
+    @Override
+    public void push(String jobKey) {
+
+    }
+
 
 }

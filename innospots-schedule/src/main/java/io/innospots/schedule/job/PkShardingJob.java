@@ -16,35 +16,19 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.operator;
+package io.innospots.schedule.job;
 
-import io.innospots.schedule.entity.JobExecutionEntity;
-import io.innospots.schedule.entity.ReadyQueueEntity;
-
-import java.util.List;
+import io.innospots.schedule.model.JobExecution;
 
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2023/12/4
+ * @date 2023/12/9
  */
-public class ReadyQueueOperator {
+public class PkShardingJob extends BaseJob {
 
-    /**
-     * fetch ready execute jobs , msg status is undead , order by created time asc
-     * @param fetchSize fetch size
-     * @return
-     */
-    public List<ReadyQueueEntity> poll(int fetchSize,List<String> groupKeys) {
-        //update msg status to read and serverKey
-        return null;
-    }
+    @Override
+    public void execute(JobExecution jobExecution) {
 
-    public void ackRead(String jobReadyKey){
-
-    }
-
-    public void push(ReadyQueueEntity readyQueueEntity){
-        return;
     }
 }

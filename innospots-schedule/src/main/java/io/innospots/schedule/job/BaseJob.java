@@ -34,13 +34,6 @@ import java.util.List;
 @Setter
 public abstract class BaseJob {
 
-    protected ScheduleJobInfo jobInfo;
-
-    public BaseJob(ScheduleJobInfo jobInfo) {
-        this.jobInfo = jobInfo;
-    }
-
-
     public abstract void execute(JobExecution jobExecution);
 
 }

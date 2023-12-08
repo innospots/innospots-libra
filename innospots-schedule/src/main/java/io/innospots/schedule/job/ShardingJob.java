@@ -31,10 +31,6 @@ import java.util.List;
  */
 public class ShardingJob extends BaseJob {
 
-    public ShardingJob(ScheduleJobInfo jobInfo) {
-        super(jobInfo);
-    }
-
     @Override
     public void execute(JobExecution jobExecution) {
 

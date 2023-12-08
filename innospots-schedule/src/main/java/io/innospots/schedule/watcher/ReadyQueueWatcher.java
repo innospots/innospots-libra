@@ -21,9 +21,10 @@ package io.innospots.schedule.watcher;
 import io.innospots.base.utils.ServiceActionHolder;
 import io.innospots.base.watcher.AbstractWatcher;
 import io.innospots.schedule.config.InnospotsScheduleProperties;
-import io.innospots.schedule.entity.ReadyQueueEntity;
+import io.innospots.schedule.entity.ReadyJobEntity;
 import io.innospots.schedule.launcher.JobLauncher;
-import io.innospots.schedule.operator.ReadyQueueOperator;
+import io.innospots.schedule.queue.IReadyJobQueue;
+import io.innospots.schedule.queue.ReadyJobDbQueue;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.List;
@@ -36,7 +37,7 @@ import java.util.List;
  */
 public class ReadyQueueWatcher extends AbstractWatcher {
 
-    private ReadyQueueOperator readyQueueOperator;
+    private IReadyJobQueue readyJobDbQueue;
 
     private JobLauncher jobLauncher;
 
@@ -52,14 +53,14 @@ public class ReadyQueueWatcher extends AbstractWatcher {
         }
 
         //fetch from ready queue
-        List<ReadyQueueEntity> readyList = readyQueueOperator.poll(fetchSize,getGroupKeys());
+        List<ReadyJobEntity> readyList = readyJobDbQueue.poll(fetchSize,getGroupKeys());
         if(CollectionUtils.isEmpty(readyList)){
             //empty
             return intervalTime();
         }
 
-        for(ReadyQueueEntity readyQueueEntity: readyList){
-            jobLauncher.launch(readyQueueEntity);
+        for(ReadyJobEntity readyJobEntity : readyList){
+            jobLauncher.launch(readyJobEntity);
         }
 
         return intervalTime();

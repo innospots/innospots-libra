@@ -18,11 +18,8 @@
 
 package io.innospots.schedule.operator;
 
-import io.innospots.schedule.entity.JobExecutionEntity;
-import io.innospots.schedule.entity.ReadyQueueEntity;
+import io.innospots.schedule.entity.ReadyJobEntity;
 import io.innospots.schedule.model.JobExecution;
-
-import java.util.List;
 
 /**
  * @author Smars
@@ -31,7 +28,7 @@ import java.util.List;
  */
 public class JobExecutionOperator {
 
-    public JobExecution createJobExecution(ReadyQueueEntity readyQueueEntity) {
+    public JobExecution createJobExecution(ReadyJobEntity readyJobEntity) {
         return null;
     }
 

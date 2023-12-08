@@ -176,7 +176,6 @@ public class QuartzScheduleManager {
             updateTime = LocalDateTime.now();
             if (scheduler.checkExists(jobKey)) {
                 result = scheduler.deleteJob(jobKey);
-
             } else {
                 logger.error("delete job name:{},group name:{} not exists.", jobKey.getName(), jobKey.getGroup());
             }
