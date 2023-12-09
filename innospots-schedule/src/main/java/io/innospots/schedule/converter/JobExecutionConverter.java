@@ -16,14 +16,21 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.dao;
+package io.innospots.schedule.converter;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import io.innospots.schedule.entity.TaskExecutionEntity;
+import io.innospots.base.converter.BaseBeanConverter;
+import io.innospots.schedule.entity.JobExecutionEntity;
+import io.innospots.schedule.model.JobExecution;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
 /**
  * @author Smars
  * @date 2023/8/7
  */
-public interface TaskExecutionDao extends BaseMapper<TaskExecutionEntity> {
+@Mapper
+public interface JobExecutionConverter extends BaseBeanConverter<JobExecution, JobExecutionEntity>{
+
+    JobExecutionConverter INSTANCE = Mappers.getMapper(JobExecutionConverter.class);
+
 }

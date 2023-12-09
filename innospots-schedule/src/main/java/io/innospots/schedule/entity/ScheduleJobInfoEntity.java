@@ -62,28 +62,50 @@ public class ScheduleJobInfoEntity extends PBaseEntity {
     @Enumerated(value = EnumType.STRING)
     private DataStatus jobStatus;
 
+    /**
+     * job type
+     */
     @Column(length = 16)
     @Enumerated(value = EnumType.STRING)
     private JobType jobType;
 
+    /**
+     * job class name, which will be executed
+     */
     @Column(length = 128)
     private String jobClass;
 
+    //TODO
     @Column(length = 128)
     private String splitter;
 
+    /**
+     * timeConfig json format
+     */
     @Column(length = 2056)
     private String timeConfig;
 
+    /**
+     * job params map
+     */
     @Column(columnDefinition = "TEXT")
     private String params;
 
+    /**
+     * module job scope
+     */
     @Column(length = 32)
     private String scopes;
 
+    /**
+     * module resource key relation the schedule job
+     */
     @Column(length = 32)
     private String resourceKey;
 
+    /**
+     * job category id
+     */
     @Column
     private Integer categoryId;
 

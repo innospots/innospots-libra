@@ -16,39 +16,12 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.events;
-
-import io.innospots.base.events.EventBody;
-
-import java.util.Map;
+package io.innospots.schedule.model;
 
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2023/12/3
+ * @date 2023/12/10
  */
-public class ExecuteJobEvent extends EventBody {
-
-    private String resourceKey;
-    private String scope;
-
-
-    public ExecuteJobEvent(Object body, String resourceKey, String scope) {
-        super(body);
-        this.resourceKey = resourceKey;
-        this.scope = scope;
-    }
-
-    public String getResourceKey() {
-        return resourceKey;
-    }
-
-    public String getScope() {
-        return scope;
-    }
-
-    public Map<String,String> params(){
-        return (Map<String, String>) this.body;
-    }
+public class ReadyJob {
 }
-

@@ -29,7 +29,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-import static io.innospots.schedule.entity.TaskExecutionEntity.TABLE_NAME;
+import static io.innospots.schedule.entity.ReadyJobEntity.TABLE_NAME;
 
 /**
  * job will be executed in the ready queue

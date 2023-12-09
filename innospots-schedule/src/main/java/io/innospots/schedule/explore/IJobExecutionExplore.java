@@ -16,50 +16,20 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.model.execution;
+package io.innospots.schedule.explore;
 
-import io.innospots.base.quartz.ExecutionStatus;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.time.LocalDateTime;
-import java.util.Map;
+import io.innospots.schedule.model.JobExecution;
 
 /**
  * @author Smars
- * @date 2023/8/6
+ * @date 2023/8/7
  */
-@Getter
-@Setter
-public class TaskExecution {
+public interface IJobExecutionExplore {
 
-    private String taskExecutionId;
 
-    private String taskName;
+    JobExecution getJobExecutionById(String jobExecutionId);
 
-    private ExecutionStatus executionStatus;
+    boolean stop(String taskExecutionId);
 
-    private String extensionKey;
-
-    private String extensionType;
-
-    private String appName;
-
-    private String appKey;
-
-    private int percent;
-
-    private LocalDateTime startTime;
-
-    private LocalDateTime endTime;
-
-    private String detailUrl;
-
-    private Map<String,Object> paramContext;
-
-    private String message;
-
-    private String timeConsume;
-
-    private String createdBy;
+    boolean reRun(String taskExecutionId);
 }

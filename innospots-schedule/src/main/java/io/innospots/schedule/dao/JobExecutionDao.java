@@ -16,29 +16,17 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.model.execution;
+package io.innospots.schedule.dao;
 
-import io.innospots.base.data.request.FormQuery;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Getter;
-import lombok.Setter;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.innospots.schedule.entity.JobExecutionEntity;
 
-import java.util.List;
+/**
+ * @author Smars
+ * @vesion 2.0
+ * @date 2023/12/10
+ */
+public interface JobExecutionDao extends BaseMapper<JobExecutionEntity> {
 
-@Getter
-@Setter
-@Schema(title = "task execution query request")
-public class TaskExecutionForm extends FormQuery {
 
-    @Schema(title = "app name")
-    private List<String> appNames;
-
-    @Schema(title = "task code")
-    private List<String> taskCodes;
-
-    @Schema(title = "startDate")
-    private String startDate;
-
-    @Schema(title = "endDate")
-    private String endDate;
 }

@@ -16,24 +16,15 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.explore;
+package io.innospots.schedule.dao;
 
-import io.innospots.schedule.model.execution.TaskExecution;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.innospots.schedule.entity.ReadyJobEntity;
 
 /**
  * @author Smars
- * @date 2023/8/7
+ * @vesion 2.0
+ * @date 2023/12/5
  */
-public interface ITaskExecutionExplore {
-
-
-    boolean saveTaskExecution(TaskExecution taskExecution);
-
-    boolean updateTaskExecution(TaskExecution taskExecution);
-
-    boolean updateTaskExecution(String taskExecutionId,int percent);
-
-    boolean stop(String taskExecutionId);
-
-    boolean reRun(String taskExecutionId);
+public interface ReadyJobDao extends BaseMapper<ReadyJobEntity> {
 }

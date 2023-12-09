@@ -18,7 +18,7 @@
 
 package io.innospots.schedule.queue;
 
-import io.innospots.schedule.dao.ReadyQueueDao;
+import io.innospots.schedule.dao.ReadyJobDao;
 import io.innospots.schedule.dao.ScheduleJobInfoDao;
 import io.innospots.schedule.entity.ReadyJobEntity;
 
@@ -33,7 +33,7 @@ public class ReadyJobDbQueue implements IReadyJobQueue{
 
     private ScheduleJobInfoDao scheduleJobInfoDao;
 
-    private ReadyQueueDao readyQueueDao;
+    private ReadyJobDao readyJobDao;
 
     /**
      * fetch ready execute jobs , msg status is undead , order by created time asc

@@ -16,15 +16,31 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.dao;
+package io.innospots.schedule.explore;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import io.innospots.schedule.entity.ReadyJobEntity;
+import io.innospots.schedule.model.JobExecution;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Smars
- * @vesion 2.0
- * @date 2023/12/5
+ * @date 2023/8/7
  */
-public interface ReadyQueueDao extends BaseMapper<ReadyJobEntity> {
+@Component
+public class JobExecutionDBExplore implements IJobExecutionExplore {
+
+
+    @Override
+    public JobExecution getJobExecutionById(String jobExecutionId) {
+        return null;
+    }
+
+    @Override
+    public boolean stop(String taskExecutionId) {
+        return false;
+    }
+
+    @Override
+    public boolean reRun(String taskExecutionId) {
+        return false;
+    }
 }
