@@ -54,20 +54,29 @@ public class ReadyJobEntity extends PBaseEntity {
     @Column(length = 32)
     private String jobReadyKey;
 
-    @Column(length = 32)
-    private String jobExecutionId;
+    @Column(length = 64)
+    private String jobClass;
 
     @Column(length = 32)
-    private String originJobExecutionId;
+    private String originExecutionId;
 
     @Column(length = 32)
-    private String parentJobExecutionId;
+    private String parentExecutionId;
+
+    @Column(length = 32)
+    private String name;
 
     @Column(length = 16)
-    private String jobKey;
+    private String key;
+
+    @Column(length = 16)
+    private String keyType;
+
+    @Column(length = 32)
+    private String scopes;
 
     @Column(columnDefinition = "TEXT")
-    private String params;
+    private String context;
 
     @Column(length = 16)
     @Enumerated(value = EnumType.STRING)

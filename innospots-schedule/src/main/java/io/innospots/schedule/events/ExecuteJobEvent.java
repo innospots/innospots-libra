@@ -30,6 +30,9 @@ import java.util.Map;
 public class ExecuteJobEvent extends EventBody {
 
     private String resourceKey;
+    private String key;
+    private String name;
+    private Map<String,Object> context;
     private String scope;
 
 
@@ -47,7 +50,7 @@ public class ExecuteJobEvent extends EventBody {
         return scope;
     }
 
-    public Map<String,String> params(){
+    public Map<String,String> context(){
         return (Map<String, String>) this.body;
     }
 }

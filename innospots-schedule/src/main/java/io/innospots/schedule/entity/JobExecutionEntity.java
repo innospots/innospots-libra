@@ -22,14 +22,18 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
+import io.innospots.base.entity.PBaseEntity;
+import io.innospots.base.execution.ExecMode;
 import io.innospots.base.quartz.ExecutionStatus;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Map;
 
-import static io.innospots.schedule.entity.TaskExecutionEntity.TABLE_NAME;
+import static io.innospots.schedule.entity.JobExecutionEntity.TABLE_NAME;
+
 
 /**
  * @author Smars
@@ -41,27 +45,39 @@ import static io.innospots.schedule.entity.TaskExecutionEntity.TABLE_NAME;
 @Entity
 @Table(name = TABLE_NAME)
 @TableName(TABLE_NAME)
-public class JobExecutionEntity {
+public class JobExecutionEntity extends PBaseEntity {
 
     public static final String TABLE_NAME = "schedule_job_execution";
 
     @Id
     @TableId(type = IdType.INPUT)
     @Column(length = 32)
-    private String jobExecutionId;
+    private String executionId;
 
     @Column(length = 32)
-    private String jobName;
+    private String name;
 
     @Column(length = 16)
-    private String jobKey;
+    private String key;
+
+    @Column(length = 16)
+    protected String keyType;
+
+    /**
+     * md5(context+key)
+     */
+    @Column(length = 32)
+    protected String instanceKey;
 
     @Column(length = 32)
     private String scopes;
 
+    @Column(length = 64)
+    private String jobClass;
+
     @Column(length = 16)
     @Enumerated(value = EnumType.STRING)
-    private ExecutionStatus executionStatus;
+    private ExecutionStatus status;
 
     @Column
     private Integer percent;
@@ -76,7 +92,7 @@ public class JobExecutionEntity {
     private LocalDateTime endTime;
 
     @Column(columnDefinition = "TEXT")
-    private String paramContext;
+    private String context;
 
     @Column(columnDefinition = "TEXT")
     private String message;
@@ -94,10 +110,10 @@ public class JobExecutionEntity {
     private String resourceKey;
 
     @Column(length = 32)
-    private String originJobExecutionId;
+    private String originExecutionId;
 
     @Column(length = 32)
-    private String parentJobExecutionId;
+    private String parentExecutionId;
 
     @Version
     @Column
@@ -105,6 +121,5 @@ public class JobExecutionEntity {
 
     @Column(length = 32)
     private String serverKey;
-
 
 }

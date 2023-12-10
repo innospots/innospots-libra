@@ -20,6 +20,8 @@ package io.innospots.schedule.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.Version;
+import io.innospots.base.execution.ExecutionBase;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.schedule.enums.JobType;
 import lombok.Getter;
@@ -38,44 +40,30 @@ import java.util.Map;
  */
 @Getter
 @Setter
-public class JobExecution {
-
-    private String jobExecutionId;
-
-    private String jobName;
-
-    private String jobKey;
+public class JobExecution extends ExecutionBase {
 
     private JobType jobType;
-
-    /**
-     * module scopes
-     */
-    private String scopes;
-
-    private ExecutionStatus executionStatus;
 
     private Integer percent;
 
     private Integer subJobCount;
 
-    private LocalDateTime startTime;
-
-    private LocalDateTime endTime;
-
-    private String paramContext;
-
-    private String message;
-
-    private String detailUri;
-
     private String extExecutionId;
 
     private String resourceKey;
 
-    private String originJobExecutionId;
+    /**
+     * retry execute the first origin executionId
+     * is null if the execution is the first time executed
+     */
+    private String originExecutionId;
 
     private String timeConsume;
 
-    private String createdBy;
+    private String parentExecutionId;
+
+    private String serverKey;
+
+    private String jobClass;
+
 }

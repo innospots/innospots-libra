@@ -19,7 +19,6 @@
 package io.innospots.schedule.operator;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.quartz.ScheduleMode;
@@ -38,9 +37,11 @@ import java.util.List;
  * @vesion 2.0
  * @date 2023/12/5
  */
-public class ScheduleJobInfoOperator extends ServiceImpl<ScheduleJobInfoDao, ScheduleJobInfoEntity> {
+public class ScheduleJobInfoOperator {
 
     private LocalDateTime lastUpdateTime;
+
+    private ScheduleJobInfoDao scheduleJobInfoDao;
 
     /**
      * fetch schedule jobs, according recent update time, include online or offline
@@ -48,11 +49,12 @@ public class ScheduleJobInfoOperator extends ServiceImpl<ScheduleJobInfoDao, Sch
      */
     public List<ScheduleJobInfo> fetchUpdatedQuartzTimeJob() {
         QueryWrapper<ScheduleJobInfoEntity> qw = new QueryWrapper<>();
+
         qw.lambda().eq(lastUpdateTime==null,ScheduleJobInfoEntity::getJobStatus, DataStatus.ONLINE)
                 .eq(ScheduleJobInfoEntity::getScheduleMode, ScheduleMode.SCHEDULED)
                 .orderByDesc(ScheduleJobInfoEntity::getUpdatedTime)
                 .ge(lastUpdateTime!=null, ScheduleJobInfoEntity::getUpdatedTime, lastUpdateTime);
-        List<ScheduleJobInfoEntity> entities = this.list(qw);
+        List<ScheduleJobInfoEntity> entities = scheduleJobInfoDao.selectList(qw);
         if(CollectionUtils.isEmpty(entities)){
             return Collections.emptyList();
         }
@@ -63,12 +65,14 @@ public class ScheduleJobInfoOperator extends ServiceImpl<ScheduleJobInfoDao, Sch
         return jobInfos;
     }
 
-    public ScheduleJobInfoEntity createScheduleJobInfo(ScheduleJobInfoEntity scheduleJobInfoEntity) {
-        return null;
+    public ScheduleJobInfoEntity createScheduleJobInfo(ScheduleJobInfo scheduleJobInfo) {
+        ScheduleJobInfoEntity scheduleJobInfoEntity = ScheduleJobInfoConverter.INSTANCE.modelToEntity(scheduleJobInfo);
+        this.scheduleJobInfoDao.insert(scheduleJobInfoEntity);
+        return scheduleJobInfoEntity;
     }
 
     public ScheduleJobInfo getScheduleJobInfo(String jobKey) {
-        ScheduleJobInfoEntity scheduleJobInfoEntity = this.getById(jobKey);
+        ScheduleJobInfoEntity scheduleJobInfoEntity = scheduleJobInfoDao.selectById(jobKey);
         if(scheduleJobInfoEntity==null){
             throw ResourceException.buildNotExistException(this.getClass(),"job not exist, jobKey:" + jobKey);
         }
@@ -76,7 +80,8 @@ public class ScheduleJobInfoOperator extends ServiceImpl<ScheduleJobInfoDao, Sch
     }
 
     public ScheduleJobInfoEntity updateScheduleJobInfo(ScheduleJobInfoEntity scheduleJobInfoEntity) {
-        return null;
+        this.scheduleJobInfoDao.updateById(scheduleJobInfoEntity);
+        return scheduleJobInfoEntity;
     }
 
 }

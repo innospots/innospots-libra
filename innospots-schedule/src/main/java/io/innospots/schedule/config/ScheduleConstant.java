@@ -16,36 +16,19 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.launcher;
-
-import io.innospots.schedule.model.JobExecution;
+package io.innospots.schedule.config;
 
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2023/12/3
+ * @date 2023/12/10
  */
-public class JobExecutionLauncher {
+public class ScheduleConstant {
 
-    public int currentJobCount(){
-        return 0;
-    }
 
-    public void launch(JobExecution jobExecution){
-        start(jobExecution);
-        execute(jobExecution);
-        end(jobExecution);
-    }
+    public static final String JOB_CLASS_NAME = "";
+    public static final String PARAM_TIMEOUT_SECOND = "exec.timeout";
 
-    protected void execute(JobExecution jobExecution){
 
-    }
 
-    protected void start(JobExecution jobExecution){
-
-    }
-
-    protected void end(JobExecution jobExecution){
-
-    }
 }

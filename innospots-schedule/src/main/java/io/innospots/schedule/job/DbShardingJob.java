@@ -21,11 +21,13 @@ package io.innospots.schedule.job;
 import io.innospots.schedule.model.JobExecution;
 
 /**
+ * split table data using split script,eg, select column from table where xxx
+ * split number
  * @author Smars
  * @vesion 2.0
  * @date 2023/12/9
  */
-public class DbShardingJob extends BaseJob{
+public class DbShardingJob extends BaseJob {
 
     @Override
     public void execute(JobExecution jobExecution) {

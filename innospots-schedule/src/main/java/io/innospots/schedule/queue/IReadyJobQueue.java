@@ -19,6 +19,7 @@
 package io.innospots.schedule.queue;
 
 import io.innospots.schedule.entity.ReadyJobEntity;
+import io.innospots.schedule.model.ReadyJob;
 
 import java.util.List;
 
@@ -33,5 +34,5 @@ public interface IReadyJobQueue {
 
     void ackRead(String jobReadyKey);
 
-    void push(String jobKey);
+    void push(ReadyJob readyJob);
 }

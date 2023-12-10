@@ -19,18 +19,18 @@
 package io.innospots.schedule.job;
 
 import io.innospots.schedule.model.JobExecution;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
+ * spilt sub jobs by job slitting param
  * @author Smars
  * @vesion 2.0
  * @date 2023/12/3
  */
-@Getter
-@Setter
-public abstract class BaseJob {
+public class FlowJob extends BaseJob {
 
-    public abstract void execute(JobExecution jobExecution);
+    @Override
+    public void execute(JobExecution jobExecution) {
+
+    }
 
 }

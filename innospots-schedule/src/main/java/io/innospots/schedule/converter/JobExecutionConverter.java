@@ -18,8 +18,11 @@
 
 package io.innospots.schedule.converter;
 
+import cn.hutool.crypto.digest.MD5;
 import io.innospots.base.converter.BaseBeanConverter;
+import io.innospots.base.utils.InnospotsIdGenerator;
 import io.innospots.schedule.entity.JobExecutionEntity;
+import io.innospots.schedule.entity.ReadyJobEntity;
 import io.innospots.schedule.model.JobExecution;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -33,4 +36,14 @@ public interface JobExecutionConverter extends BaseBeanConverter<JobExecution, J
 
     JobExecutionConverter INSTANCE = Mappers.getMapper(JobExecutionConverter.class);
 
+    JobExecutionEntity readyJobToJobExecution(ReadyJobEntity readyJobEntity);
+
+    static JobExecutionEntity build(ReadyJobEntity readyJobEntity){
+        JobExecutionEntity jobExecutionEntity = INSTANCE.readyJobToJobExecution(readyJobEntity);
+        jobExecutionEntity.setExecutionId(String.valueOf(InnospotsIdGenerator.generateId()));
+        //using jobKey and context param to generate digestHex
+        String instanceKey = MD5.create().digestHex(readyJobEntity.getKey()+readyJobEntity.getContext());
+        jobExecutionEntity.setInstanceKey(instanceKey);
+        return jobExecutionEntity;
+    }
 }

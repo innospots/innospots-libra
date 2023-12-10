@@ -21,7 +21,7 @@ package io.innospots.workflow.core.execution.model.flow;
 import io.innospots.base.utils.InnospotsIdGenerator;
 import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.base.utils.Initializer;
-import io.innospots.workflow.core.execution.enums.ExecMode;
+import io.innospots.base.execution.ExecMode;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.enums.RecordMode;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;

@@ -16,21 +16,9 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.job;
-
-import io.innospots.schedule.model.JobExecution;
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2023/12/3
+ * @date 2023/11/26
  */
-@Getter
-@Setter
-public abstract class BaseJob {
-
-    public abstract void execute(JobExecution jobExecution);
-
-}
+package io.innospots.workflow.schedule;

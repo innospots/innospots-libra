@@ -18,8 +18,24 @@
 
 package io.innospots.schedule.operator;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import io.innospots.base.events.EventBusCenter;
+import io.innospots.base.quartz.ExecutionStatus;
+import io.innospots.base.utils.InnospotsIdGenerator;
+import io.innospots.schedule.converter.JobExecutionConverter;
+import io.innospots.schedule.dao.JobExecutionDao;
+import io.innospots.schedule.entity.JobExecutionEntity;
 import io.innospots.schedule.entity.ReadyJobEntity;
+import io.innospots.schedule.events.JobExecutionEvent;
 import io.innospots.schedule.model.JobExecution;
+import org.apache.commons.collections4.CollectionUtils;
+
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Smars
@@ -28,24 +44,112 @@ import io.innospots.schedule.model.JobExecution;
  */
 public class JobExecutionOperator {
 
-    public JobExecution createJobExecution(ReadyJobEntity readyJobEntity) {
-        return null;
+    private JobExecutionDao jobExecutionDao;
+
+    private LocalDateTime lastUpdateTime;
+
+
+    public JobExecution jobExecution(String jobExecutionId){
+        return JobExecutionConverter.INSTANCE
+                .entityToModel(jobExecutionDao.selectById(jobExecutionId));
     }
 
-    public void stop(String jobExecutionId,String message){
+    /**
+     * create job execution to database
+     * @param readyJobEntity
+     * @return
+     */
+    public JobExecution createJobExecution(ReadyJobEntity readyJobEntity) {
+        //build job execution by ready Job entity
+        JobExecutionEntity jobExecutionEntity = JobExecutionConverter.build(readyJobEntity);
+        jobExecutionDao.insert(jobExecutionEntity);
+        return JobExecutionConverter.INSTANCE.entityToModel(jobExecutionEntity);
+    }
 
+    /**
+     * This class represents a job execution operator that can stop a job execution
+     * with a given ID and message.
+     */
+    public void stop(String jobExecutionId,String message){
+        jobExecutionDao.update(null,buildUpdateWrapper(jobExecutionId,ExecutionStatus.STOPPED,message));
     }
 
     public void complete(String jobExecutionId,String message){
-
+        jobExecutionDao.update(null,buildUpdateWrapper(jobExecutionId,ExecutionStatus.COMPLETE,message));
     }
 
-    public void fail(String jobExecutionId,String message){
 
+
+    public void fail(String jobExecutionId,String message){
+        jobExecutionDao.update(null,buildUpdateWrapper(jobExecutionId,ExecutionStatus.FAILED,message));
     }
 
     public void updateJobExecution(JobExecution jobExecution){
+        jobExecutionDao.updateById(JobExecutionConverter.INSTANCE.modelToEntity(jobExecution));
+    }
 
+    /**
+     * job executions that have status is executing
+     * @return
+     */
+    public List<JobExecution> fetchExecutingJobs(){
+        QueryWrapper<JobExecutionEntity> qw = new QueryWrapper<>();
+        qw.lambda().in(JobExecutionEntity::getStatus,ExecutionStatus.executingStatus());
+        List<JobExecutionEntity> entities = jobExecutionDao.selectList(qw);
+        return JobExecutionConverter.INSTANCE.entitiesToModels(entities);
+    }
+
+    /**
+     * job executions that have status is done
+     * @return
+     */
+    public List<JobExecution> fetchRecentDoneJobs(){
+        if(lastUpdateTime == null){
+            lastUpdateTime = LocalDateTime.now().minusMinutes(1);
+        }
+        QueryWrapper<JobExecutionEntity> qw = new QueryWrapper<>();
+        qw.lambda().in(JobExecutionEntity::getStatus,ExecutionStatus.doneStatus())
+                .ge(JobExecutionEntity::getUpdatedTime,lastUpdateTime);
+        List<JobExecutionEntity> entities = jobExecutionDao.selectList(qw);
+        return JobExecutionConverter.INSTANCE.entitiesToModels(entities);
+    }
+
+    /**
+     * set job execution status to failed when timeout
+     * @param jobExecution
+     */
+    public void updateTimeoutExecution(JobExecution jobExecution){
+        UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
+        uw.lambda().set(JobExecutionEntity::getStatus, ExecutionStatus.FAILED)
+               .set(JobExecutionEntity::getMessage,"job execute timeout")
+               .eq(JobExecutionEntity::getExecutionId,jobExecution.getExecutionId());
+        this.jobExecutionDao.update(null,uw);
+    }
+
+    public Set<String> completeJobKeys(String parentExecutionId){
+        QueryWrapper<JobExecutionEntity> qw = new QueryWrapper<>();
+        qw.lambda().eq(JobExecutionEntity::getParentExecutionId,parentExecutionId)
+                .select(JobExecutionEntity::getKey);
+        List<JobExecutionEntity> entities = jobExecutionDao.selectList(qw);
+        if(CollectionUtils.isEmpty(entities)){
+            return Collections.emptySet();
+        }
+
+        return entities.stream().map(JobExecutionEntity::getKey).collect(Collectors.toSet());
+
+    }
+
+
+    private UpdateWrapper<JobExecutionEntity> buildUpdateWrapper(String jobExecutionId,
+                                                                 ExecutionStatus executionStatus,
+                                                                 String message){
+        UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
+        uw.lambda().set(JobExecutionEntity::getStatus, executionStatus)
+                .set(message!=null,JobExecutionEntity::getMessage,message)
+                .set(JobExecutionEntity::getUpdatedTime,LocalDateTime.now())
+                .eq(JobExecutionEntity::getExecutionId,jobExecutionId);
+
+        return uw;
     }
 
 }

@@ -18,6 +18,10 @@
 
 package io.innospots.base.quartz;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author Raydian
  * @date 2020/12/20
@@ -45,6 +49,14 @@ public enum ExecutionStatus {
 
     ExecutionStatus(int group) {
         this.group = group;
+    }
+
+    public static List<ExecutionStatus> executingStatus() {
+        return Arrays.stream(ExecutionStatus.values()).filter(ExecutionStatus::isExecuting).collect(Collectors.toList());
+    }
+
+    public static List<ExecutionStatus> doneStatus() {
+        return Arrays.stream(ExecutionStatus.values()).filter(ExecutionStatus::isDone).collect(Collectors.toList());
     }
 
     public boolean isExecuting() {

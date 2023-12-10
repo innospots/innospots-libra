@@ -21,6 +21,7 @@ package io.innospots.schedule.queue;
 import io.innospots.schedule.dao.ReadyJobDao;
 import io.innospots.schedule.dao.ScheduleJobInfoDao;
 import io.innospots.schedule.entity.ReadyJobEntity;
+import io.innospots.schedule.model.ReadyJob;
 
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class ReadyJobDbQueue implements IReadyJobQueue{
     }
 
     @Override
-    public void push(String jobKey) {
+    public void push(ReadyJob readyJob) {
 
     }
 

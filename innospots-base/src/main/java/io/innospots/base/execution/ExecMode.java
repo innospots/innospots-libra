@@ -16,21 +16,18 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.job;
-
-import io.innospots.schedule.model.JobExecution;
-import lombok.Getter;
-import lombok.Setter;
+package io.innospots.base.execution;
 
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2023/12/3
+ * @date 2023/11/12
  */
-@Getter
-@Setter
-public abstract class BaseJob {
+public enum ExecMode {
 
-    public abstract void execute(JobExecution jobExecution);
+    MEMORY,
 
+    PERSISTENT,
+
+    TASK;
 }

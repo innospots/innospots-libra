@@ -68,16 +68,16 @@ public class JobLauncher {
 
     protected void execute(JobExecution jobExecution) {
         try {
-            ScheduleJobInfo scheduleJobInfo = scheduleJobInfoOperator.getScheduleJobInfo(jobExecution.getJobKey());
-            BaseJob baseJob = JobBuilder.build(scheduleJobInfo);
+//            ScheduleJobInfo scheduleJobInfo = scheduleJobInfoOperator.getScheduleJobInfo(jobExecution.getKey());
+            BaseJob baseJob = JobBuilder.build(jobExecution);
             baseJob.execute(jobExecution);
             if (jobExecution.getJobType() == JobType.EXECUTE) {
                 jobExecution.setEndTime(LocalDateTime.now());
-                jobExecution.setExecutionStatus(ExecutionStatus.COMPLETE);
+                jobExecution.setStatus(ExecutionStatus.COMPLETE);
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            jobExecution.setExecutionStatus(ExecutionStatus.FAILED);
+            jobExecution.setStatus(ExecutionStatus.FAILED);
             jobExecution.setMessage(ExceptionUtil.stacktraceToString(e, 1024));
         }
     }
@@ -85,12 +85,12 @@ public class JobLauncher {
     protected JobExecution start(ReadyJobEntity readyJobEntity) {
         JobExecution jobExecution = jobExecutionOperator.createJobExecution(readyJobEntity);
         readyJobDbQueue.ackRead(readyJobEntity.getJobReadyKey());
-        executionCache.put(jobExecution.getJobExecutionId(), jobExecution);
+        executionCache.put(jobExecution.getExecutionId(), jobExecution);
         return jobExecution;
     }
 
     protected void end(JobExecution jobExecution) {
-        executionCache.remove(jobExecution.getJobExecutionId());
+        executionCache.remove(jobExecution.getExecutionId());
         jobExecutionOperator.updateJobExecution(jobExecution);
     }
 }

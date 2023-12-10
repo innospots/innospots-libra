@@ -31,14 +31,14 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class JobBuilder {
 
-    public static BaseJob build(ScheduleJobInfo scheduleJobInfo){
+    public static BaseJob build(JobExecution jobExecution){
         BaseJob baseJob;
         try {
-            Class<?> jobClass = Class.forName(scheduleJobInfo.getJobClass());
-            baseJob = (BaseJob) jobClass.getConstructor(ScheduleJobInfo.class).newInstance(scheduleJobInfo);
+            Class<?> jobClass = Class.forName(jobExecution.getJobClass());
+            baseJob = (BaseJob) jobClass.getConstructor().newInstance();
         } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
                  InvocationTargetException e) {
-            throw ResourceException.buildAbandonException(JobBuilder.class, "jobClass not found,"+scheduleJobInfo.getJobClass(), e);
+            throw ResourceException.buildAbandonException(JobBuilder.class, "jobClass not found,"+jobExecution.getJobClass(), e);
         }
         return baseJob;
     }

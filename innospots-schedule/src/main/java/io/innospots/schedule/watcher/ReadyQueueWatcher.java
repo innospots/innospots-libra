@@ -24,12 +24,12 @@ import io.innospots.schedule.config.InnospotsScheduleProperties;
 import io.innospots.schedule.entity.ReadyJobEntity;
 import io.innospots.schedule.launcher.JobLauncher;
 import io.innospots.schedule.queue.IReadyJobQueue;
-import io.innospots.schedule.queue.ReadyJobDbQueue;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.List;
 
 /**
+ *  execute service
  *  ready job queue thread watcher
  * @author Smars
  * @vesion 2.0

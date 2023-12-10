@@ -18,10 +18,56 @@
 
 package io.innospots.schedule.model;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.Version;
+import io.innospots.schedule.enums.MessageStatus;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import java.util.Map;
+
 /**
  * @author Smars
  * @vesion 2.0
  * @date 2023/12/10
  */
+@Getter
+@Setter
 public class ReadyJob {
+
+    /**
+     * md5(jobKey + params)
+     */
+    private String jobReadyKey;
+
+    private String originExecutionId;
+
+    private String parentExecutionId;
+
+    private String key;
+
+    private Map<String,Object> context;
+
+    private MessageStatus status;
+
+    private Integer sequenceNumber;
+
+    private String groupKey;
+
+    private String extExecutionId;
+
+    private String resourceKey;
+
+    private String serverKey;
+
+    public static ReadyJob build(ScheduleJobInfo scheduleJobInfo,Map<String,Object> params){
+
+        return null;
+    }
+
 }

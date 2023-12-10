@@ -31,4 +31,5 @@ import org.mapstruct.factory.Mappers;
 public interface ScheduleJobInfoConverter extends BaseBeanConverter<ScheduleJobInfo, ScheduleJobInfoEntity> {
 
     ScheduleJobInfoConverter INSTANCE = Mappers.getMapper(ScheduleJobInfoConverter.class);
+
 }

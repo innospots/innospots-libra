@@ -16,24 +16,32 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.job;
+package io.innospots.workflow.schedule.listener;
 
+import io.innospots.base.events.IEventListener;
+import io.innospots.schedule.enums.JobType;
+import io.innospots.schedule.events.JobExecutionEvent;
+import io.innospots.schedule.launcher.JobExecutor;
 import io.innospots.schedule.model.JobExecution;
-import io.innospots.schedule.model.ScheduleJobInfo;
-
-import java.util.List;
+import io.innospots.workflow.schedule.flow.FlowJobManager;
 
 /**
- * spilt sub jobs by job slitting param
  * @author Smars
  * @vesion 2.0
- * @date 2023/12/3
+ * @date 2023/12/10
  */
-public class ShardingJob extends BaseJob {
+public class FlowJobScheduleListener implements IEventListener<JobExecutionEvent> {
+
+    private FlowJobManager flowJobManager;
+
 
     @Override
-    public void execute(JobExecution jobExecution) {
-
+    public Object listen(JobExecutionEvent event) {
+        JobExecution jobExecution = event.jobExecution();
+        if (jobExecution.getJobType() != JobType.FLOW) {
+            //only process flow job
+            flowJobManager.executeFlowJob(jobExecution);
+        }
+        return null;
     }
-
 }

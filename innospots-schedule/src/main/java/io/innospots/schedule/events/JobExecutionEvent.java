@@ -16,9 +16,23 @@
  * limitations under the License.
  */
 
+package io.innospots.schedule.events;
+
+import io.innospots.base.events.EventBody;
+import io.innospots.schedule.model.JobExecution;
+
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2023/12/3
+ * @date 2023/12/10
  */
-package io.innospots.workflow.job.schedule;
+public class JobExecutionEvent extends EventBody {
+
+    public JobExecutionEvent(Object body) {
+        super(body);
+    }
+
+    public JobExecution jobExecution(){
+        return (JobExecution) body;
+    }
+}

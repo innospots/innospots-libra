@@ -28,7 +28,7 @@ import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.entity.NodeExecutionEntity;
 import io.innospots.workflow.core.execution.converter.NodeExecutionConverter;
-import io.innospots.workflow.core.execution.enums.ExecMode;
+import io.innospots.base.execution.ExecMode;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;
