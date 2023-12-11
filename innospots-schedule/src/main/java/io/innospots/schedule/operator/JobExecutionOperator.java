@@ -126,6 +126,11 @@ public class JobExecutionOperator {
         this.jobExecutionDao.update(null,uw);
     }
 
+    /**
+     * all sub job executions are completed
+     * @param parentExecutionId
+     * @return
+     */
     public Set<String> completeJobKeys(String parentExecutionId){
         QueryWrapper<JobExecutionEntity> qw = new QueryWrapper<>();
         qw.lambda().eq(JobExecutionEntity::getParentExecutionId,parentExecutionId)

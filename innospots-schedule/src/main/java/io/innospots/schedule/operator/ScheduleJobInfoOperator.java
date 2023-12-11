@@ -50,6 +50,7 @@ public class ScheduleJobInfoOperator {
     public List<ScheduleJobInfo> fetchUpdatedQuartzTimeJob() {
         QueryWrapper<ScheduleJobInfoEntity> qw = new QueryWrapper<>();
 
+        //TODO check
         qw.lambda().eq(lastUpdateTime==null,ScheduleJobInfoEntity::getJobStatus, DataStatus.ONLINE)
                 .eq(ScheduleJobInfoEntity::getScheduleMode, ScheduleMode.SCHEDULED)
                 .orderByDesc(ScheduleJobInfoEntity::getUpdatedTime)
