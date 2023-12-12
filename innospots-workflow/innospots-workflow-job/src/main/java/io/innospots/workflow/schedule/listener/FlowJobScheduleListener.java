@@ -21,7 +21,6 @@ package io.innospots.workflow.schedule.listener;
 import io.innospots.base.events.IEventListener;
 import io.innospots.schedule.enums.JobType;
 import io.innospots.schedule.events.JobExecutionEvent;
-import io.innospots.schedule.launcher.JobExecutor;
 import io.innospots.schedule.model.JobExecution;
 import io.innospots.workflow.schedule.flow.FlowJobManager;
 

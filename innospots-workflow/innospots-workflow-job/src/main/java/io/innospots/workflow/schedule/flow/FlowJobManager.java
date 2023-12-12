@@ -18,7 +18,7 @@
 
 package io.innospots.workflow.schedule.flow;
 
-import io.innospots.schedule.launcher.JobExecutor;
+import io.innospots.schedule.launcher.ReadJobDispatcher;
 import io.innospots.schedule.model.JobExecution;
 import io.innospots.schedule.model.ReadyJob;
 import io.innospots.schedule.operator.JobExecutionOperator;
@@ -39,7 +39,7 @@ public class FlowJobManager {
 
     private JobExecutionOperator jobExecutionOperator;
 
-    private JobExecutor jobExecutor;
+    private ReadJobDispatcher readJobDispatcher;
 
     private IWorkflowLoader workflowLoader;
 
@@ -54,7 +54,7 @@ public class FlowJobManager {
             return;
         }
         for (NodeInstance instance : instances) {
-            jobExecutor.execute(readyJob(jobExecution,instance));
+            readJobDispatcher.execute(readyJob(jobExecution,instance));
         }
     }
 

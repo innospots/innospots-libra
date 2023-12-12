@@ -20,7 +20,7 @@ package io.innospots.schedule.controller;
 
 import io.innospots.base.constant.PathConstant;
 import io.innospots.base.model.response.InnospotResponse;
-import io.innospots.schedule.launcher.JobExecutor;
+import io.innospots.schedule.launcher.ReadJobDispatcher;
 import io.innospots.schedule.model.ReadyJob;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,11 +35,11 @@ import java.util.Map;
 @RequestMapping(PathConstant.ROOT_PATH +"job")
 public class JobExecutorController {
 
-    private JobExecutor jobExecutor;
+    private ReadJobDispatcher readJobDispatcher;
 
     @PostMapping("execute/{jobKey}")
     public InnospotResponse<ReadyJob> launch(@PathVariable String jobKey, @RequestBody Map<String,Object> params){
-        ReadyJob readyJob = jobExecutor.execute(jobKey,params);
+        ReadyJob readyJob = readJobDispatcher.execute(jobKey,params);
         return InnospotResponse.success(readyJob);
     }
 

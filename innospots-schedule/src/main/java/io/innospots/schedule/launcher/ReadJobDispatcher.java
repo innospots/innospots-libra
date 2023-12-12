@@ -30,7 +30,7 @@ import java.util.Map;
  * @vesion 2.0
  * @date 2023/12/10
  */
-public class JobExecutor {
+public class ReadJobDispatcher {
 
 
     private IReadyJobQueue readyJobQueue;
@@ -50,6 +50,6 @@ public class JobExecutor {
     }
 
     public void execute(ReadyJob readyJob){
-
+        readyJobQueue.push(readyJob);
     }
 }
