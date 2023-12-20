@@ -54,8 +54,12 @@ public class ReadyJobEntity extends PBaseEntity {
     @Column(length = 32)
     private String jobReadyKey;
 
+    /**
+     * execute job implement class
+     */
     @Column(length = 64)
     private String jobClass;
+
 
     @Column(length = 32)
     private String originExecutionId;
@@ -75,9 +79,15 @@ public class ReadyJobEntity extends PBaseEntity {
     @Column(length = 32)
     private String scopes;
 
+    /**
+     * param context, json map format
+     */
     @Column(columnDefinition = "TEXT")
     private String context;
 
+    /**
+     * messsage status
+     */
     @Column(length = 16)
     @Enumerated(value = EnumType.STRING)
     private MessageStatus messageStatus;

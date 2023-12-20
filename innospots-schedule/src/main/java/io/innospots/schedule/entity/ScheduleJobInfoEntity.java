@@ -70,7 +70,7 @@ public class ScheduleJobInfoEntity extends PBaseEntity {
     private JobType jobType;
 
     /**
-     * job class name, which will be executed
+     * job implement class, which will be executed
      */
     @Column(length = 128)
     private String jobClass;
@@ -80,7 +80,7 @@ public class ScheduleJobInfoEntity extends PBaseEntity {
     private String splitter;
 
     /**
-     * timeConfig json format
+     * timeConfig json format, include runtime, time period, TimePeriod, period Times
      */
     @Column(length = 2056)
     private String timeConfig;

@@ -36,6 +36,7 @@ import static io.innospots.schedule.entity.JobExecutionEntity.TABLE_NAME;
 
 
 /**
+ * job execution
  * @author Smars
  * @vesion 2.0
  * @date 2023/12/3
@@ -49,29 +50,47 @@ public class JobExecutionEntity extends PBaseEntity {
 
     public static final String TABLE_NAME = "schedule_job_execution";
 
+    /**
+     * primary
+     */
     @Id
     @TableId(type = IdType.INPUT)
     @Column(length = 32)
     private String executionId;
 
+    /**
+     * job name
+     */
     @Column(length = 32)
     private String name;
 
+    /**
+     * job primary key
+     */
     @Column(length = 16)
     private String key;
 
+    /**
+     * job key type: flow, node ,task etc
+     */
     @Column(length = 16)
     protected String keyType;
 
     /**
-     * md5(context+key)
+     * md5(context+key), job execution instance primary key, which be created by params and job key
      */
     @Column(length = 32)
     protected String instanceKey;
 
+    /**
+     * value: group, execute,flow
+     */
     @Column(length = 32)
     private String scopes;
 
+    /**
+     * execute job implement class
+     */
     @Column(length = 64)
     private String jobClass;
 
@@ -79,46 +98,89 @@ public class JobExecutionEntity extends PBaseEntity {
     @Enumerated(value = EnumType.STRING)
     private ExecutionStatus status;
 
+    /**
+     * the value of execution process percent
+     */
     @Column
     private Integer percent;
 
+    /**
+     * sub job count, if this job is the group or container type
+     */
     @Column
     private Integer subJobCount;
 
+    /**
+     * start time
+     */
     @Column
     private LocalDateTime startTime;
 
+    /**
+     * end time
+     */
     @Column
     private LocalDateTime endTime;
 
+    /**
+     * execution param context, json map format
+     */
     @Column(columnDefinition = "TEXT")
     private String context;
 
+    /**
+     * complete or fail reason
+     */
     @Column(columnDefinition = "TEXT")
     private String message;
 
+    /**
+     * execution sequence
+     */
     @Column
     private Integer sequenceNumber;
 
+
+    /**
+     * job execution detail uri, using in the console, if have more job information will be showed
+     */
     @Column(length = 128)
     private String detailUri;
 
+    /**
+     * external execution primary id, eg, flow execution
+     */
     @Column(length = 32)
     private String extExecutionId;
 
+    /**
+     * external resource primary key
+     */
     @Column(length = 32)
     private String resourceKey;
 
+    /**
+     * the first execution primary id ,if the job execution is failure, and repeat execute again
+     */
     @Column(length = 32)
     private String originExecutionId;
 
+    /**
+     * parent execution primary id ,if the job execution is the sub job execution
+     */
     @Column(length = 32)
     private String parentExecutionId;
 
+    /**
+     * Optimistic lock version
+     */
     @Version
     @Column
     private Integer version;
 
+    /**
+     * executor node key: ip+port
+     */
     @Column(length = 32)
     private String serverKey;
 
