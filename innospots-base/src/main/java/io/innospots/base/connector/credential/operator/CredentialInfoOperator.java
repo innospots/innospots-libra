@@ -77,7 +77,7 @@ public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, Crede
             qw.lambda().eq(CredentialInfoEntity::getCredentialKey, key);
             codeCount = this.count(qw);
         } while (codeCount > 0);
-        //this.authedValuesProcess(credential);
+//        this.authedValuesProcess(credential);
         CredentialInfoEntity entity = CredentialInfoConverter.INSTANCE.modelToEntity(credential);
         super.save(entity);
         return this.getCredential(entity.getCredentialKey());

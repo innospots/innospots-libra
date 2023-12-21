@@ -50,7 +50,7 @@ public class CredentialTypeEntity extends PBaseEntity {
     @Column(length = 32)
     private String name;
 
-    @Column(length = 32)
+    @Column(length = 128)
     private String icon;
 
     @Column(length = 32)

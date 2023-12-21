@@ -97,8 +97,9 @@ public class ConnectionMinderSchemaLoader {
         if(configCode == null){
             return connectionMinderSchema.getAuthOptions().stream().findFirst().orElse(null);
         }
-        return connectionMinderSchema.getAuthOptions().stream().filter(f -> f.getCode().equals(configCode)).findFirst()
-                .orElseThrow(() -> LoadConfigurationException.buildException(ConnectionMinderSchemaLoader.class, "credential configuration can not found"));
+        return connectionMinderSchema.getAuthOptions().get(0); // TODO 默认取第一个 configCode = credentialTypeCode，这里没用到
+//        return connectionMinderSchema.getAuthOptions().stream().filter(f -> f.getCode().equals(configCode)).findFirst()
+//                .orElseThrow(() -> LoadConfigurationException.buildException(ConnectionMinderSchemaLoader.class, "credential configuration can not found"));
     }
 
     public static CredentialAuthOption getCredentialFormConfig(String connectorName) {

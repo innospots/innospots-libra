@@ -51,9 +51,8 @@ import java.util.List;
 public class CredentialTypeOperator extends ServiceImpl<CredentialTypeDao, CredentialTypeEntity> {
 
 
-
     public CredentialType createCredentialType(CredentialType credentialType) {
-        if (this.checkExist(credentialType.getName(),null)) {
+        if (this.checkExist(credentialType.getName(), null)) {
             throw ResourceException.buildExistException(this.getClass(), credentialType.getName());
         }
 
@@ -65,26 +64,26 @@ public class CredentialTypeOperator extends ServiceImpl<CredentialTypeDao, Crede
             qw.lambda().eq(CredentialTypeEntity::getTypeCode, code);
             codeCount = this.count(qw);
         } while (codeCount > 0);
-        if(credentialType.getIcon()!=null && !ImageResource.imageResource(credentialType.getIcon()).isLink()){
+        if (credentialType.getIcon() != null && !ImageResource.imageResource(credentialType.getIcon()).isLink()) {
             //save base64image
             EventBusCenter.postSync(new NewAvatarEvent(credentialType.getTypeCode(), ImageType.CREDENTIAL, 0, credentialType.getIcon()));
-            credentialType.setIcon(PathConstant.ROOT_PATH+ImageType.CREDENTIAL+"/"+credentialType.getTypeCode());
+            credentialType.setIcon(PathConstant.ROOT_PATH + ImageType.CREDENTIAL + "/" + credentialType.getTypeCode());
         }
         CredentialTypeEntity entity = CredentialTypeConverter.INSTANCE.modelToEntity(credentialType);
         this.save(entity);
-        return credentialType;
+        return CredentialTypeConverter.INSTANCE.entityToModel(entity);
     }
 
-    public CredentialType updateCredentialType(CredentialType credentialType){
-        if (this.checkExist(credentialType.getName(),credentialType.getTypeCode())) {
+    public CredentialType updateCredentialType(CredentialType credentialType) {
+        if (this.checkExist(credentialType.getName(), credentialType.getTypeCode())) {
             throw ResourceException.buildExistException(this.getClass(), credentialType.getName());
         }
         CredentialTypeEntity entity = CredentialTypeConverter.INSTANCE.modelToEntity(credentialType);
         this.updateById(entity);
-        return credentialType;
+        return CredentialTypeConverter.INSTANCE.entityToModel(entity);
     }
 
-    public boolean deleteCredentialType(String typeCode){
+    public boolean deleteCredentialType(String typeCode) {
         return this.removeById(typeCode);
     }
 
@@ -93,24 +92,27 @@ public class CredentialTypeOperator extends ServiceImpl<CredentialTypeDao, Crede
         return CredentialTypeConverter.INSTANCE.entityToModel(entity);
     }
 
-    public List<CredentialType> listCredentialTypes(String connectorName){
+    public List<CredentialType> listCredentialTypes(String connectorName) {
         QueryWrapper<CredentialTypeEntity> qw = new QueryWrapper<>();
-        if(connectorName != null){
-            qw.lambda().eq(CredentialTypeEntity::getConnectorName,connectorName);
+        qw.lambda().orderByDesc(CredentialTypeEntity::getCreatedTime);
+        if (connectorName != null) {
+            qw.lambda().eq(CredentialTypeEntity::getConnectorName, connectorName);
+
         }
         return CredentialTypeConverter.INSTANCE.entitiesToModels(this.list(qw));
     }
 
-    public PageBody<CredentialType> pageCredentialTypes(FormQuery formQuery){
+    public PageBody<CredentialType> pageCredentialTypes(FormQuery formQuery) {
         PageBody<CredentialType> pageBody = new PageBody<>();
         QueryWrapper<CredentialTypeEntity> qw = new QueryWrapper<>();
-        if(StringUtils.isNotBlank(formQuery.getQueryInput())){
-            qw.lambda().like(CredentialTypeEntity::getName,formQuery.getQueryInput());
+
+        if (StringUtils.isNotBlank(formQuery.getQueryInput())) {
+            qw.lambda().like(CredentialTypeEntity::getName, formQuery.getQueryInput());
         }
-        if(MapUtils.isNotEmpty(formQuery.getParamMap())){
+        if (MapUtils.isNotEmpty(formQuery.getParamMap())) {
             String connector = formQuery.getParamMap().get("connectorName");
-            if(connector!=null){
-                qw.lambda().eq(CredentialTypeEntity::getConnectorName,connector);
+            if (connector != null) {
+                qw.lambda().eq(CredentialTypeEntity::getConnectorName, connector);
             }
         }
         Page<CredentialTypeEntity> queryPage = new Page<>(formQuery.getPage(), formQuery.getSize());
@@ -118,7 +120,7 @@ public class CredentialTypeOperator extends ServiceImpl<CredentialTypeDao, Crede
             qw.orderBy(true, formQuery.getAsc(),
                     CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, formQuery.getSort()));
         }
-        queryPage = this.page(queryPage,qw);
+        queryPage = this.page(queryPage, qw);
         pageBody.setTotal(queryPage.getTotal());
         pageBody.setCurrent(queryPage.getCurrent());
         pageBody.setPageSize(queryPage.getSize());
@@ -128,11 +130,11 @@ public class CredentialTypeOperator extends ServiceImpl<CredentialTypeDao, Crede
         return pageBody;
     }
 
-    private boolean checkExist(String name,String code) {
+    private boolean checkExist(String name, String code) {
         QueryWrapper<CredentialTypeEntity> qw = new QueryWrapper<>();
         qw.lambda().eq(CredentialTypeEntity::getName, name);
-        if(code!=null){
-            qw.lambda().ne(CredentialTypeEntity::getTypeCode,code);
+        if (code != null) {
+            qw.lambda().ne(CredentialTypeEntity::getTypeCode, code);
         }
         return super.count(qw) > 0;
     }

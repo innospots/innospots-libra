@@ -13,15 +13,14 @@
       "code": "mysql-jdbc",
       "minder": "io.innospots.connector.mysql.minder.MysqlDataConnectionMinder",
       "defaults": {
-        "classDriver": "com.mysql.cj.jdbc.Driver",
+        "driverClassName": "com.mysql.cj.jdbc.Driver",
         "maximumPoolSize": "10",
         "minimumIdle": "1",
         "maxLifetime": "60000",
         "idleTimeout": "30000",
         "connectionTimeout": "30000",
         "validationTimeout": "3000",
-        "connectionTestQuery": "select 1",
-        "jdbcUrlPrefix": "jdbc:mysql://"
+        "connectionTestQuery": "select 1"
       },
       "elements": [
         {
