@@ -31,6 +31,7 @@ import io.innospots.base.connector.schema.meta.CredentialAuthOption;
 import io.innospots.base.connector.schema.reader.ISchemaRegistryReader;
 import io.innospots.base.exception.LoadConfigurationException;
 import io.innospots.base.exception.data.DataConnectionException;
+import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.BeanContextAwareUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -78,15 +79,16 @@ public class DataConnectionMinderManager {
 
     public static IDataConnectionMinder newMinderInstance(ConnectionCredential connectionCredential) {
         try {
-            ConnectionMinderSchema minderSchema = ConnectionMinderSchemaLoader.getConnectionMinderSchema(connectionCredential.getConnectorName());
-            if (minderSchema == null) {
+
+            CredentialAuthOption authOption = JSONUtils.parseObject(connectionCredential.getAuthOption(),CredentialAuthOption.class);
+//            ConnectionMinderSchema minderSchema = ConnectionMinderSchemaLoader.getConnectionMinderSchema(connectionCredential.getConnectorName());
+            if (authOption == null) {
                 return null;
             }
-            // TODO 先不校验 需要替换credentialType获取
 //            CredentialAuthOption config = minderSchema.getAuthOptions().stream().filter(f -> Objects.equals(connectionCredential.getAuthOption(), f.getCode())).findFirst()
 //                    .orElseThrow(() -> LoadConfigurationException.buildException(ConnectionMinderSchemaLoader.class, "dataConnectionMinder newInstance failed, configCode invalid."));
-            CredentialAuthOption config = minderSchema.getAuthOptions().get(0);
-            return (IDataConnectionMinder) Class.forName(config.getMinder()).getConstructor().newInstance();
+//            CredentialAuthOption config = minderSchema.getAuthOptions().get(0);
+            return (IDataConnectionMinder) Class.forName(authOption.getMinder()).getConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException |
                  InvocationTargetException e) {
             logger.error(e.getMessage(), e);
