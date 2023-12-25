@@ -18,6 +18,7 @@
 
 package io.innospots.base.connector.credential.operator;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
@@ -42,6 +43,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @author Smars
@@ -77,6 +79,11 @@ public class CredentialTypeOperator extends ServiceImpl<CredentialTypeDao, Crede
     public CredentialType updateCredentialType(CredentialType credentialType) {
         if (this.checkExist(credentialType.getName(), credentialType.getTypeCode())) {
             throw ResourceException.buildExistException(this.getClass(), credentialType.getName());
+        }
+        if (credentialType.getIcon() != null && !ImageResource.imageResource(credentialType.getIcon()).isLink()) {
+            //save base64image
+            EventBusCenter.postSync(new NewAvatarEvent(credentialType.getTypeCode(), ImageType.CREDENTIAL, 0, credentialType.getIcon()));
+            credentialType.setIcon(PathConstant.ROOT_PATH + ImageType.CREDENTIAL + "/" + credentialType.getTypeCode());
         }
         CredentialTypeEntity entity = CredentialTypeConverter.INSTANCE.modelToEntity(credentialType);
         this.updateById(entity);
@@ -134,6 +141,7 @@ public class CredentialTypeOperator extends ServiceImpl<CredentialTypeDao, Crede
         QueryWrapper<CredentialTypeEntity> qw = new QueryWrapper<>();
         qw.lambda().eq(CredentialTypeEntity::getName, name);
         if (code != null) {
+//            qw.lambda().and(qw.lambda().ne(CredentialTypeEntity::getTypeCode, code));
             qw.lambda().ne(CredentialTypeEntity::getTypeCode, code);
         }
         return super.count(qw) > 0;
