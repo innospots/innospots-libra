@@ -16,32 +16,30 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.config;
+package io.innospots.schedule.exception;
 
-import io.innospots.base.utils.ServiceActionHolder;
+import io.innospots.base.exception.BaseException;
+import io.innospots.base.model.response.ResponseCode;
 
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2023/12/10
+ * @date 2023/12/24
  */
-public class ScheduleConstant {
+public class JobExecutionException extends BaseException {
 
-    public static final String SERVICE_ROLE_SCHEDULE = "SCHEDULER_SERVICE";
-    public static final String SERVICE_ROLE_EXECUTOR = "EXECUTOR_SERVICE";
-
-    public static final String JOB_CLASS_NAME = "";
-    public static final String PARAM_TIMEOUT_SECOND = "exec.timeout";
-
-    public static final String PARAM_CREDENTIAL_KEY = "prm.credential_key";
-
-
-    public static boolean isScheduler() {
-        return SERVICE_ROLE_SCHEDULE.equals(ServiceActionHolder.getServiceRole());
+    public JobExecutionException(Class<?> invokeClass, ResponseCode responseCode, Throwable cause, Object... params) {
+        super(invokeClass, responseCode, cause, params);
     }
 
-    public static boolean isExecutor() {
-        return SERVICE_ROLE_EXECUTOR.equals(ServiceActionHolder.getServiceRole());
+    public JobExecutionException(Class<?> invokeClass, ResponseCode responseCode, String message, String detail) {
+        super(invokeClass, responseCode, message, detail);
+    }
+    public JobExecutionException(Class<?> invokeClass, ResponseCode responseCode,String message) {
+        super(invokeClass, responseCode, message,null);
     }
 
+    public JobExecutionException(Class<?> invokeClass, ResponseCode responseCode, Object... params) {
+        super(invokeClass, responseCode, params);
+    }
 }

@@ -30,9 +30,34 @@ import java.util.List;
  */
 public interface IReadyJobQueue {
 
+    /**
+     * poll read job from queue
+     * @param fetchSize max fetch item size
+     * @param groupKeys job group key
+     * @return
+     */
     List<ReadyJobEntity> poll(int fetchSize, List<String> groupKeys);
 
+    /**
+     * ack read job
+     * @param jobReadyKey
+     */
     void ackRead(String jobReadyKey);
 
+    /**
+     * push ready job
+     * @param readyJob
+     */
     void push(ReadyJob readyJob);
+
+    /**
+     * push ready job using job key
+     * @param jobKey
+     */
+    void push(String jobKey);
+
+    /**
+     * reset assign job to unread, if job's update time is greater than the set timeout
+     */
+    void resetAssignTimeoutJob(int timeoutSecond);
 }

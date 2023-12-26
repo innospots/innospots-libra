@@ -18,16 +18,52 @@
 
 package io.innospots.schedule.job;
 
+import io.innospots.base.model.response.ResponseCode;
+import io.innospots.base.script.ExecutorManagerFactory;
+import io.innospots.base.script.IScriptExecutor;
+import io.innospots.schedule.exception.JobExecutionException;
 import io.innospots.schedule.model.JobExecution;
+
+import javax.script.*;
 
 /**
  * @author Smars
  * @vesion 2.0
  * @date 2023/12/9
  */
-public class ScriptJob extends BaseJob{
+public class ScriptJob extends BaseJob {
+
+    public static String PARAM_SCRIPT_TYPE = "job.script.type";
+    public static String PARAM_SCRIPT_BODY = "job.script.body";
+
     @Override
     public void execute(JobExecution jobExecution) {
+        String scriptType = jobExecution.getString(PARAM_SCRIPT_TYPE);
+        String scriptBody = jobExecution.getString(PARAM_SCRIPT_BODY);
+        if(scriptBody==null){
+            throw new JobExecutionException(this.getClass(), ResponseCode.PARAM_NULL, "script body is null");
+        }
+        if(scriptType==null){
+            throw new JobExecutionException(this.getClass(), ResponseCode.PARAM_NULL, "script type is null");
+        }
+        Compilable compilable = compilable(scriptType);
+        try {
+            CompiledScript compiledScript = compilable.compile(scriptBody);
+            Object val = compiledScript.eval(new SimpleBindings(jobExecution.getContext()));
+            if(val!=null){
+                String msg = val.toString();
+                if(msg.length()>32768){
+                    msg = msg.substring(0,32768);
+                }
+                jobExecution.setMessage(msg);
+            }
+        } catch (ScriptException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    private Compilable compilable(String scriptType) {
+        ScriptEngineManager engineManager = new ScriptEngineManager();
+        return (Compilable) engineManager.getEngineByName(scriptType);
     }
 }

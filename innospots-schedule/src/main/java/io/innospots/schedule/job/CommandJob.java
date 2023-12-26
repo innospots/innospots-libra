@@ -18,18 +18,49 @@
 
 package io.innospots.schedule.job;
 
+import cn.hutool.core.util.RuntimeUtil;
+import io.innospots.base.model.response.ResponseCode;
+import io.innospots.schedule.exception.JobExecutionException;
 import io.innospots.schedule.model.JobExecution;
-import io.innospots.schedule.model.ScheduleJobInfo;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
+ * shell cmd job
  * @author Smars
  * @vesion 2.0
  * @date 2023/12/9
  */
+@Slf4j
 public class CommandJob extends BaseJob{
+
+    public static String PARAM_COMMAND = "job.cmd";
+    public static String PARAM_FILE = "job.file";
+    public static String PARAM_ARGS = "job.args";
 
     @Override
     public void execute(JobExecution jobExecution) {
-
+        String cmd = jobExecution.getString(PARAM_COMMAND);
+        if(cmd==null){
+            throw new JobExecutionException(this.getClass(),ResponseCode.PARAM_NULL, PARAM_COMMAND+" param is null");
+        }
+        String cmdFile = jobExecution.getString(PARAM_FILE);
+        String[] args = jobExecution.getStringArray(PARAM_ARGS);
+        List<String> cmdList = new ArrayList<>();
+        cmdList.add(cmd);
+        if(cmdFile!=null){
+            cmdList.add(cmdFile);
+        }
+        if(args!=null){
+            Collections.addAll(cmdList, args);
+        }
+        String resp = RuntimeUtil.execForStr(cmdList.toArray(new String[]{}));
+        if(resp.length() > 32768){
+            resp = resp.substring(0, 32768);
+        }
+        jobExecution.setMessage(resp);
     }
 }

@@ -36,6 +36,8 @@ public class InnospotsScheduleProperties {
 
     private Integer executorSize = 4;
 
+    private Integer assignedJobTimeoutSecond = 60;
+
     /**
      * default group keys using select ready job
      */

@@ -28,31 +28,32 @@ import java.util.List;
 public class ServiceActionHolder {
 
     /**
-     * schedule service
+     * current service role
      */
-    private static boolean scheduleService;
+    private static String serviceRole;
 
     /**
-     * job execute service
-     */
-    private static boolean jobExecutionService;
-
-    /**
-     * execute job group keys
+     * service group keys
      */
     private static List<String> groupKeys;
+
 
     /**
      * clean execution log and cache
      */
     private static boolean cleanTask;
 
-    public static boolean isJobExecutionService() {
-        return jobExecutionService;
+    /**
+     * ip+port
+     */
+    private static String serverKey;
+
+    public static String getServerKey() {
+        return serverKey;
     }
 
-    public static void setJobExecutionService(boolean jobExecutionService) {
-        ServiceActionHolder.jobExecutionService = jobExecutionService;
+    public static void setServerKey(String serverKey) {
+        ServiceActionHolder.serverKey = serverKey;
     }
 
     public static List<String> getGroupKeys() {
@@ -63,19 +64,19 @@ public class ServiceActionHolder {
         ServiceActionHolder.groupKeys = groupKeys;
     }
 
-    public static boolean isScheduleService() {
-        return scheduleService;
-    }
-
-    public static void setScheduleRole(boolean scheduleService) {
-        ServiceActionHolder.scheduleService = scheduleService;
-    }
-
     public static boolean isCleanTask() {
         return cleanTask;
     }
 
     public static void setCleanTask(boolean cleanTask) {
         ServiceActionHolder.cleanTask = cleanTask;
+    }
+
+    public static String getServiceRole() {
+        return serviceRole;
+    }
+
+    public static void setServiceRole(String serviceRole) {
+        ServiceActionHolder.serviceRole = serviceRole;
     }
 }

@@ -23,14 +23,12 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
 import io.innospots.base.entity.PBaseEntity;
-import io.innospots.base.execution.ExecMode;
 import io.innospots.base.quartz.ExecutionStatus;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Map;
 
 import static io.innospots.schedule.entity.JobExecutionEntity.TABLE_NAME;
 
@@ -51,7 +49,7 @@ public class JobExecutionEntity extends PBaseEntity {
     public static final String TABLE_NAME = "schedule_job_execution";
 
     /**
-     * primary
+     * primary id
      */
     @Id
     @TableId(type = IdType.INPUT)

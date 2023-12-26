@@ -16,32 +16,20 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.config;
+package io.innospots.schedule.job;
 
-import io.innospots.base.utils.ServiceActionHolder;
+import io.innospots.schedule.model.JobExecution;
 
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2023/12/10
+ * @date 2023/12/24
  */
-public class ScheduleConstant {
-
-    public static final String SERVICE_ROLE_SCHEDULE = "SCHEDULER_SERVICE";
-    public static final String SERVICE_ROLE_EXECUTOR = "EXECUTOR_SERVICE";
-
-    public static final String JOB_CLASS_NAME = "";
-    public static final String PARAM_TIMEOUT_SECOND = "exec.timeout";
-
-    public static final String PARAM_CREDENTIAL_KEY = "prm.credential_key";
+public class SqlJob extends BaseJob{
 
 
-    public static boolean isScheduler() {
-        return SERVICE_ROLE_SCHEDULE.equals(ServiceActionHolder.getServiceRole());
+    @Override
+    public void execute(JobExecution jobExecution) {
+
     }
-
-    public static boolean isExecutor() {
-        return SERVICE_ROLE_EXECUTOR.equals(ServiceActionHolder.getServiceRole());
-    }
-
 }

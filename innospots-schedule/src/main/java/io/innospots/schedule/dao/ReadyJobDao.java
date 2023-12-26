@@ -18,8 +18,16 @@
 
 package io.innospots.schedule.dao;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import io.innospots.schedule.entity.ReadyJobEntity;
+import io.innospots.schedule.enums.MessageStatus;
+import org.apache.commons.collections4.CollectionUtils;
+
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Smars
@@ -27,4 +35,49 @@ import io.innospots.schedule.entity.ReadyJobEntity;
  * @date 2023/12/5
  */
 public interface ReadyJobDao extends BaseMapper<ReadyJobEntity> {
+
+    default List<ReadyJobEntity> selectUnReadJob(int fetchSize, List<String> groupKeys){
+        QueryWrapper<ReadyJobEntity> qw = new QueryWrapper<>();
+        qw.lambda().eq(ReadyJobEntity::getMessageStatus, MessageStatus.UNREAD)
+                .in(CollectionUtils.isNotEmpty(groupKeys), ReadyJobEntity::getGroupKey, groupKeys)
+                .orderByDesc(ReadyJobEntity::getCreatedTime)
+                .last("limit " +fetchSize);
+        return this.selectList(qw);
+    }
+
+    /**
+     * update by
+     * @param readyJobEntity
+     * @return
+     */
+    default int updateAssignedJob(ReadyJobEntity readyJobEntity){
+        UpdateWrapper<ReadyJobEntity> uw = new UpdateWrapper<>();
+        uw.lambda().set(ReadyJobEntity::getMessageStatus, MessageStatus.ASSIGNED)
+                .set(ReadyJobEntity::getVersion, readyJobEntity.getVersion() + 1)
+                .set(ReadyJobEntity::getServerKey, readyJobEntity.getServerKey())
+                .set(ReadyJobEntity::getUpdatedTime, LocalDateTime.now())
+               .eq(ReadyJobEntity::getJobReadyKey, readyJobEntity.getJobReadyKey())
+                .eq(ReadyJobEntity::getMessageStatus, MessageStatus.UNREAD)
+                .eq(ReadyJobEntity::getVersion,readyJobEntity.getVersion());
+        return this.update(null, uw);
+    }
+
+    default List<ReadyJobEntity> selectAssignJobs(String serverKey){
+        if(serverKey==null){
+            return Collections.emptyList();
+        }
+        QueryWrapper<ReadyJobEntity> qw = new QueryWrapper<>();
+        qw.lambda().eq(ReadyJobEntity::getMessageStatus,MessageStatus.ASSIGNED)
+                .eq(ReadyJobEntity::getServerKey, serverKey);
+        return this.selectList(qw);
+    }
+
+    default int updateStatusAssignedToRead(String jobReadyKey){
+        UpdateWrapper<ReadyJobEntity> uw = new UpdateWrapper<>();
+        uw.lambda().set(ReadyJobEntity::getMessageStatus, MessageStatus.READ)
+               .set(ReadyJobEntity::getUpdatedTime, LocalDateTime.now())
+               .eq(ReadyJobEntity::getJobReadyKey, jobReadyKey)
+               .eq(ReadyJobEntity::getMessageStatus, MessageStatus.ASSIGNED);
+        return this.update(null,uw);
+    }
 }

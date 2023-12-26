@@ -26,10 +26,9 @@ import io.innospots.schedule.enums.JobType;
 import io.innospots.schedule.job.BaseJob;
 import io.innospots.schedule.job.JobBuilder;
 import io.innospots.schedule.model.JobExecution;
-import io.innospots.schedule.model.ScheduleJobInfo;
 import io.innospots.schedule.operator.JobExecutionOperator;
+import io.innospots.schedule.queue.IReadyJobQueue;
 import io.innospots.schedule.queue.ReadyJobDbQueue;
-import io.innospots.schedule.operator.ScheduleJobInfoOperator;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
@@ -46,29 +45,52 @@ public class JobLauncher {
 
     private JobExecutionOperator jobExecutionOperator;
 
-    private ScheduleJobInfoOperator scheduleJobInfoOperator;
 
-    private ReadyJobDbQueue readyJobDbQueue;
+    private IReadyJobQueue readyJobDbQueue;
 
     private WeakHashMap<String, JobExecution> executionCache = new WeakHashMap<>();
 
     private ThreadTaskExecutor threadTaskExecutor;
 
+    private WeakHashMap<String,Future> threadFutures = new WeakHashMap<>();
+
+
+    public JobLauncher(JobExecutionOperator jobExecutionOperator,
+                       ReadyJobDbQueue readyJobDbQueue, ThreadTaskExecutor threadTaskExecutor) {
+        this.jobExecutionOperator = jobExecutionOperator;
+        this.readyJobDbQueue = readyJobDbQueue;
+        this.threadTaskExecutor = threadTaskExecutor;
+    }
+
     public int currentJobCount() {
         return threadTaskExecutor.getActiveCount();
     }
 
+    /**
+     * cancel running job
+     * @param jobKey
+     */
+    public void cancelJob(String jobKey){
+        if(threadFutures.containsKey(jobKey)){
+            threadFutures.get(jobKey).cancel(true);
+        }
+    }
+
     public void launch(ReadyJobEntity readyJobEntity) {
+        if(threadFutures.containsKey(readyJobEntity.getJobReadyKey())){
+            log.warn("Job is already running, jobReadyKey: {}", readyJobEntity.getJobReadyKey());
+            return;
+        }
         Future future = threadTaskExecutor.submit(()-> {
             JobExecution jobExecution = start(readyJobEntity);
             execute(jobExecution);
             end(jobExecution);
         });
+        threadFutures.put(readyJobEntity.getJobReadyKey(), future);
     }
 
     protected void execute(JobExecution jobExecution) {
         try {
-//            ScheduleJobInfo scheduleJobInfo = scheduleJobInfoOperator.getScheduleJobInfo(jobExecution.getKey());
             BaseJob baseJob = JobBuilder.build(jobExecution);
             baseJob.execute(jobExecution);
             if (jobExecution.getJobType() == JobType.EXECUTE) {
@@ -83,6 +105,7 @@ public class JobLauncher {
     }
 
     protected JobExecution start(ReadyJobEntity readyJobEntity) {
+        log.info("Start job, jobReadyKey: {}", readyJobEntity.getJobReadyKey());
         JobExecution jobExecution = jobExecutionOperator.createJobExecution(readyJobEntity);
         readyJobDbQueue.ackRead(readyJobEntity.getJobReadyKey());
         executionCache.put(jobExecution.getExecutionId(), jobExecution);
@@ -90,7 +113,10 @@ public class JobLauncher {
     }
 
     protected void end(JobExecution jobExecution) {
+        log.info("End job, jobExecutionId: {}", jobExecution.getExecutionId());
         executionCache.remove(jobExecution.getExecutionId());
         jobExecutionOperator.updateJobExecution(jobExecution);
+        threadFutures.remove(jobExecution.getInstanceKey());
     }
+
 }

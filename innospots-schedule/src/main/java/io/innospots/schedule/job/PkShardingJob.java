@@ -27,6 +27,16 @@ import io.innospots.schedule.model.JobExecution;
  */
 public class PkShardingJob extends BaseJob {
 
+    public static final String PARAM_PK_COLUMN = "job.sharding.pk";
+
+    public static final String PARAM_SHARDING_CLAUSE = "job.registry.clause";
+
+    public static final String PARAM_SHARDING_TABLE = "job.registry.table";
+
+    public static final String PARAM_SHARDING_SIZE = "job.sharding.size";
+
+    public static final String PARAM_CREDENTIAL_KEY = "job.credential_key";
+
     @Override
     public void execute(JobExecution jobExecution) {
 

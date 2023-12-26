@@ -20,7 +20,6 @@ package io.innospots.schedule.job;
 
 import io.innospots.base.exception.ResourceException;
 import io.innospots.schedule.model.JobExecution;
-import io.innospots.schedule.model.ScheduleJobInfo;
 
 import java.lang.reflect.InvocationTargetException;
 

@@ -20,6 +20,7 @@ package io.innospots.schedule.quartz;
 
 import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.base.utils.ServiceActionHolder;
+import io.innospots.schedule.config.ScheduleConstant;
 import io.innospots.schedule.queue.IReadyJobQueue;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.Job;
@@ -28,6 +29,7 @@ import org.quartz.JobExecutionException;
 import org.quartz.JobKey;
 
 /**
+ * time quartz scheduler
  * @author Smars
  * @vesion 2.0
  * @date 2023/12/8
@@ -37,11 +39,12 @@ public class QuartzJobScheduler implements Job {
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        if (ServiceActionHolder.isScheduleService()) {
+        if (ScheduleConstant.SERVICE_ROLE_SCHEDULE.equals(ServiceActionHolder.getServiceRole())) {
             JobKey jobKey = jobExecutionContext.getJobDetail().getKey();
             log.info("schedule job is：{}, push to queue", jobKey.getName());
             IReadyJobQueue readyJobQueue = BeanContextAwareUtils.getBean(IReadyJobQueue.class);
             //push ready execute job to queue
+
             readyJobQueue.push(jobKey.getName());
             log.info("schedule job {} execute end", jobKey.getName());
         } else {

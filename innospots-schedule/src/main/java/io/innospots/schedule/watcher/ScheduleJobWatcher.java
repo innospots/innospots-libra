@@ -58,7 +58,7 @@ public class ScheduleJobWatcher extends AbstractWatcher {
                 log.info("job add to schedule:{}", jobInfo);
                 Date startTime = jobInfo.getStartTime() != null ? DateTimeUtils.asDate(jobInfo.getStartTime()) : null;
                 Date endTime = jobInfo.getEndTime() != null ? DateTimeUtils.asDate(jobInfo.getEndTime()) : null;
-                scheduleManager.refreshJob(jobInfo.getJobName(), QuartzJobScheduler.class, jobInfo.getCronExpression(), jobInfo.getScheduleMode(), startTime, endTime);
+                scheduleManager.refreshJob(jobInfo.getJobKey(), QuartzJobScheduler.class, jobInfo.getCronExpression(), jobInfo.getScheduleMode(), startTime, endTime);
             }
         }
         return checkIntervalSecond;

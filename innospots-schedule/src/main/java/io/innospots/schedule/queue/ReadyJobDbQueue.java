@@ -18,42 +18,86 @@
 
 package io.innospots.schedule.queue;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import io.innospots.base.utils.ServiceActionHolder;
 import io.innospots.schedule.dao.ReadyJobDao;
 import io.innospots.schedule.dao.ScheduleJobInfoDao;
 import io.innospots.schedule.entity.ReadyJobEntity;
+import io.innospots.schedule.enums.MessageStatus;
 import io.innospots.schedule.model.ReadyJob;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.RandomUtils;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Smars
  * @vesion 2.0
  * @date 2023/12/4
  */
-public class ReadyJobDbQueue implements IReadyJobQueue{
+@Slf4j
+public class ReadyJobDbQueue implements IReadyJobQueue {
 
     private ScheduleJobInfoDao scheduleJobInfoDao;
 
     private ReadyJobDao readyJobDao;
 
+    public ReadyJobDbQueue(ScheduleJobInfoDao scheduleJobInfoDao, ReadyJobDao readyJobDao) {
+        this.scheduleJobInfoDao = scheduleJobInfoDao;
+        this.readyJobDao = readyJobDao;
+    }
+
     /**
      * fetch ready execute jobs , msg status is undead , order by created time asc
+     *
      * @param fetchSize fetch size
      * @return
      */
     @Override
     public List<ReadyJobEntity> poll(int fetchSize, List<String> groupKeys) {
+        //select unread job
+        List<ReadyJobEntity> readies = readyJobDao.selectUnReadJob(fetchSize, groupKeys);
+        if (CollectionUtils.isEmpty(readies)) {
+            return Collections.emptyList();
+        }
+        //update job status to assigned, and assign to current server
+        for (ReadyJobEntity readyJobEntity : readies) {
+            if (readies.size() > 1) {
+                //Avoid overly concentrated preemption of assigned jobs
+                try {
+                    TimeUnit.MILLISECONDS.sleep(RandomUtils.nextInt(1, readies.size()));
+                } catch (InterruptedException e) {
+                    log.error(e.getMessage());
+                }
+            }
+            readyJobEntity.setServerKey(ServiceActionHolder.getServerKey());
+            //Update ready job with optimistic locks
+            int count = readyJobDao.updateAssignedJob(readyJobEntity);
+        }
         //update msg status to read and serverKey
-        return null;
+        return readyJobDao.selectAssignJobs(ServiceActionHolder.getServerKey());
     }
 
     @Override
-    public void ackRead(String jobReadyKey){
-
+    public void ackRead(String jobReadyKey) {
+        readyJobDao.updateStatusAssignedToRead(jobReadyKey);
     }
 
     @Override
     public void push(ReadyJob readyJob) {
+
+    }
+
+    @Override
+    public void push(String jobKey) {
+
+    }
+
+    @Override
+    public void resetAssignTimeoutJob() {
 
     }
 

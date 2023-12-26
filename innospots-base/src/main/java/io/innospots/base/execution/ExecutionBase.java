@@ -23,7 +23,9 @@ import io.innospots.base.quartz.ExecutionStatus;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -105,6 +107,26 @@ public class ExecutionBase {
 
     public Integer getInteger(String key){
         return context!=null? (Integer) context.getOrDefault(key,0) :null;
+    }
+
+    public Date getDate(String key){
+        return context!=null? (Date) context.getOrDefault(key,null) :null;
+    }
+
+    public LocalDateTime getLocalDateTime(String key){
+        return context!=null? (LocalDateTime) context.getOrDefault(key,null) :null;
+    }
+
+    public LocalDate getLocalDate(String key){
+        return context!=null? (LocalDate) context.getOrDefault(key,null) :null;
+    }
+
+    public Boolean getBoolean(String key){
+        return context!=null? (Boolean) context.getOrDefault(key,null) :null;
+    }
+
+    public String[] getStringArray(String key){
+        return context!=null? (String[]) context.getOrDefault(key,null) :null;
     }
 
 }
