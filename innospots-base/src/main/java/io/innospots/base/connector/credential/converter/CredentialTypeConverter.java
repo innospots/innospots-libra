@@ -25,6 +25,7 @@ import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.BeanUtils;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -46,16 +47,23 @@ public interface CredentialTypeConverter extends BaseBeanConverter<CredentialTyp
             model.setFormValues(JSONUtils.toList(entity.getFormValues(), FormValue.class));
             entity.setFormValues(null);
         }
+        if (StringUtils.isNotBlank(entity.getProps())) {
+            model.setProps(JSONUtils.toMap(entity.getProps()));
+            entity.setProps(null);
+        }
         BeanUtils.copyProperties(entity, model);
         return model;
     }
 
     @Override
-    default CredentialTypeEntity modelToEntity(CredentialType model){
+    default CredentialTypeEntity modelToEntity(CredentialType model) {
         CredentialTypeEntity entity = new CredentialTypeEntity();
         BeanUtils.copyProperties(model, entity);
         if (CollectionUtils.isNotEmpty(model.getFormValues())) {
             entity.setFormValues(JSONUtils.toJsonString(model.getFormValues()));
+        }
+        if (MapUtils.isNotEmpty(model.getProps())) {
+            entity.setProps(JSONUtils.toJsonString(model.getProps()));
         }
         return entity;
     }
