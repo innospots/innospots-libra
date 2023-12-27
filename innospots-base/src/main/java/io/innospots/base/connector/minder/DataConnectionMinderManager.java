@@ -79,16 +79,10 @@ public class DataConnectionMinderManager {
 
     public static IDataConnectionMinder newMinderInstance(ConnectionCredential connectionCredential) {
         try {
-
-            CredentialAuthOption authOption = JSONUtils.parseObject(connectionCredential.getAuthOption(),CredentialAuthOption.class);
-//            ConnectionMinderSchema minderSchema = ConnectionMinderSchemaLoader.getConnectionMinderSchema(connectionCredential.getConnectorName());
-            if (authOption == null) {
-                return null;
-            }
-//            CredentialAuthOption config = minderSchema.getAuthOptions().stream().filter(f -> Objects.equals(connectionCredential.getAuthOption(), f.getCode())).findFirst()
-//                    .orElseThrow(() -> LoadConfigurationException.buildException(ConnectionMinderSchemaLoader.class, "dataConnectionMinder newInstance failed, configCode invalid."));
-//            CredentialAuthOption config = minderSchema.getAuthOptions().get(0);
-            return (IDataConnectionMinder) Class.forName(authOption.getMinder()).getConstructor().newInstance();
+            ConnectionMinderSchema minderSchema = ConnectionMinderSchemaLoader.getConnectionMinderSchema(connectionCredential.getConnectorName());
+            CredentialAuthOption config = minderSchema.getAuthOptions().stream().filter(f -> Objects.equals(connectionCredential.getAuthOption(), f.getCode())).findFirst()
+                    .orElseThrow(() -> LoadConfigurationException.buildException(ConnectionMinderSchemaLoader.class, "dataConnectionMinder newInstance failed, configCode invalid."));
+            return (IDataConnectionMinder) Class.forName(config.getMinder()).getConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException |
                  InvocationTargetException e) {
             logger.error(e.getMessage(), e);

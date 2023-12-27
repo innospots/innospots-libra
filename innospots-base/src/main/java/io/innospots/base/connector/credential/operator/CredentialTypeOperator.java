@@ -104,7 +104,6 @@ public class CredentialTypeOperator extends ServiceImpl<CredentialTypeDao, Crede
         qw.lambda().orderByDesc(CredentialTypeEntity::getCreatedTime);
         if (connectorName != null) {
             qw.lambda().eq(CredentialTypeEntity::getConnectorName, connectorName);
-
         }
         return CredentialTypeConverter.INSTANCE.entitiesToModels(this.list(qw));
     }
@@ -126,6 +125,8 @@ public class CredentialTypeOperator extends ServiceImpl<CredentialTypeDao, Crede
         if (StringUtils.isNotBlank(formQuery.getSort())) {
             qw.orderBy(true, formQuery.getAsc(),
                     CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, formQuery.getSort()));
+        } else {
+            qw.lambda().orderByDesc(CredentialTypeEntity::getCreatedTime);
         }
         queryPage = this.page(queryPage, qw);
         pageBody.setTotal(queryPage.getTotal());

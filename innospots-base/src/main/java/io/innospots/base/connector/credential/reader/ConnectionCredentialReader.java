@@ -70,13 +70,10 @@ public class ConnectionCredentialReader implements IConnectionCredentialReader {
         if (credentialInfo == null) {
             return null;
         }
-        CredentialType credentialType = credentialInfo.getCredentialType();
-        List<CredentialAuthOption> credentialAuthOptions = JSONUtils.toList(credentialType.getAuthOption(),CredentialAuthOption.class);
-//        CredentialAuthOption credentialAuthOption = ConnectionMinderSchemaLoader.getCredentialFormConfig(credentialInfo.getConnectorName(), credentialInfo.getCredentialTypeCode());
-        CredentialAuthOption credentialAuthOption = credentialAuthOptions.get(0); // TODO 确认一下多个时取哪一个？
+        CredentialAuthOption credentialAuthOption = ConnectionMinderSchemaLoader.getCredentialFormConfig(credentialInfo.getConnectorName(), credentialInfo.getCredentialType().getAuthOption());
         credentialInfo.getProps().putAll(credentialAuthOption.getDefaults());
         ConnectionCredential connection = decryptFormValues(credentialInfo);
-        connection.setAuthOption(JSONUtils.toJsonString(credentialAuthOption));
+        connection.setAuthOption(credentialInfo.getCredentialType().getAuthOption());
         return connection;
     }
 

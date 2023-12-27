@@ -89,7 +89,6 @@ public class ConnectionMinderSchemaLoader {
                 .filter(f -> f.getName().equals(connectorName)).findFirst().orElse(null);
     }
 
-    // TODO 方法待删除 检查调用
     public static CredentialAuthOption getCredentialFormConfig(String connectorName, String configCode) {
         ConnectionMinderSchema connectionMinderSchema = getConnectionMinderSchema(connectorName);
         if (connectionMinderSchema == null) {
@@ -98,9 +97,8 @@ public class ConnectionMinderSchemaLoader {
         if(configCode == null){
             return connectionMinderSchema.getAuthOptions().stream().findFirst().orElse(null);
         }
-        return connectionMinderSchema.getAuthOptions().get(0);
-//        return connectionMinderSchema.getAuthOptions().stream().filter(f -> f.getCode().equals(configCode)).findFirst()
-//                .orElseThrow(() -> LoadConfigurationException.buildException(ConnectionMinderSchemaLoader.class, "credential configuration can not found"));
+        return connectionMinderSchema.getAuthOptions().stream().filter(f -> f.getCode().equals(configCode)).findFirst()
+                .orElseThrow(() -> LoadConfigurationException.buildException(ConnectionMinderSchemaLoader.class, "credential configuration can not found"));
     }
 
     public static CredentialAuthOption getCredentialFormConfig(String connectorName) {
