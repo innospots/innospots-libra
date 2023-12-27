@@ -16,18 +16,43 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.enums;
+package io.innospots.schedule.events;
+
+import io.innospots.base.events.EventBody;
+import io.innospots.schedule.enums.MessageStatus;
 
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2023/12/4
+ * @date 2023/12/27
  */
-public enum MessageStatus {
+public class JobQueueEvent extends EventBody {
 
-    UNREAD,
-    READ,
-    ASSIGNED,
-    CANCEL,
-    DELETED;
+    private String jobReadyKey;
+
+    private MessageStatus messageStatus;
+
+    public JobQueueEvent(Object body) {
+        super(body);
+    }
+
+    public void setJobReadyKey(String jobReadyKey) {
+        this.jobReadyKey = jobReadyKey;
+    }
+
+    public MessageStatus getMessageStatus() {
+        return messageStatus;
+    }
+
+    public void setMessageStatus(MessageStatus messageStatus) {
+        this.messageStatus = messageStatus;
+    }
+
+    public String getParentExecutionId() {
+        return (String) body;
+    }
+
+    public String getJobReadyKey() {
+        return jobReadyKey;
+    }
 }

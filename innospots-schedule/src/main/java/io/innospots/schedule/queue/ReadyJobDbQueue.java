@@ -19,6 +19,7 @@
 package io.innospots.schedule.queue;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import io.innospots.base.utils.ServiceActionHolder;
 import io.innospots.schedule.dao.ReadyJobDao;
 import io.innospots.schedule.dao.ScheduleJobInfoDao;
@@ -29,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.RandomUtils;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -97,9 +99,45 @@ public class ReadyJobDbQueue implements IReadyJobQueue {
     }
 
     @Override
-    public void resetAssignTimeoutJob() {
-
+    public int resetAssignTimeoutJob(int timeoutSecond) {
+        UpdateWrapper<ReadyJobEntity> uw = new UpdateWrapper<>();
+        uw.lambda().set(ReadyJobEntity::getMessageStatus, MessageStatus.UNREAD)
+                .set(ReadyJobEntity::getServerKey,null)
+                .eq(ReadyJobEntity::getMessageStatus,MessageStatus.ASSIGNED)
+                .lt(ReadyJobEntity::getUpdatedTime, LocalDateTime.now().minusSeconds(timeoutSecond));
+        return readyJobDao.update(uw);
     }
 
+
+    /**
+     * cancel assign and unread job
+     * @param jobKey
+     * @return
+     */
+    @Override
+    public int cancelJob(String jobKey) {
+        UpdateWrapper<ReadyJobEntity> uw = new UpdateWrapper<>();
+        uw.lambda().set(ReadyJobEntity::getMessageStatus, MessageStatus.CANCEL)
+                .in(ReadyJobEntity::getMessageStatus,MessageStatus.ASSIGNED,MessageStatus.UNREAD)
+               .eq(ReadyJobEntity::getJobReadyKey,jobKey);
+        return readyJobDao.update(uw);
+    }
+
+    /**
+     * cancel job by parentExecutionId
+     * @param parentExecutionId
+     * @return
+     */
+    @Override
+    public int cancelJobByParentExecutionId(String parentExecutionId) {
+        if (parentExecutionId!= null) {
+            UpdateWrapper<ReadyJobEntity> uw = new UpdateWrapper<>();
+            uw.lambda().set(ReadyJobEntity::getMessageStatus,MessageStatus.CANCEL)
+                    .eq(ReadyJobEntity::getParentExecutionId,parentExecutionId)
+                   .in(ReadyJobEntity::getMessageStatus,MessageStatus.ASSIGNED,MessageStatus.UNREAD);
+            return readyJobDao.update(uw);
+        }
+        return 0;
+    }
 
 }

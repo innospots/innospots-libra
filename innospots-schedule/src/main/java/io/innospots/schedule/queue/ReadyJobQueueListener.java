@@ -16,18 +16,30 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.enums;
+package io.innospots.schedule.queue;
+
+import io.innospots.base.events.IEventListener;
+import io.innospots.schedule.enums.MessageStatus;
+import io.innospots.schedule.events.JobQueueEvent;
 
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2023/12/4
+ * @date 2023/12/27
  */
-public enum MessageStatus {
+public class ReadyJobQueueListener implements IEventListener<JobQueueEvent>{
 
-    UNREAD,
-    READ,
-    ASSIGNED,
-    CANCEL,
-    DELETED;
+    private IReadyJobQueue readyJobQueue;
+
+    public ReadyJobQueueListener(IReadyJobQueue readyJobQueue) {
+        this.readyJobQueue = readyJobQueue;
+    }
+
+    @Override
+    public Object listen(JobQueueEvent event) {
+        if(event.getMessageStatus() == MessageStatus.CANCEL){
+            readyJobQueue.cancelJobByParentExecutionId(event.getParentExecutionId());
+        }
+        return null;
+    }
 }

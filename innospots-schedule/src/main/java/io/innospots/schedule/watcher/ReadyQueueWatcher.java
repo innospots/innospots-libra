@@ -55,6 +55,8 @@ public class ReadyQueueWatcher extends AbstractWatcher {
         //fetch available worker size
         int fetchSize = scheduleProperties.getExecutorSize() - jobLauncher.currentJobCount();
 
+        checkAssignTimeout();
+
         if (fetchSize <= 0) {
             return intervalTime();
         }
@@ -82,15 +84,20 @@ public class ReadyQueueWatcher extends AbstractWatcher {
         return slotTime;
     }
 
-    private void checkAssignTime() {
+    private void checkAssignTimeout() {
         if(!ScheduleConstant.isScheduler()){
             return;
         }
+
         if (lastUpdateTime == null) {
             lastUpdateTime = LocalDateTime.now();
         } else {
             if (LocalDateTime.now().isAfter(lastUpdateTime.plusSeconds(scheduleProperties.getAssignedJobTimeoutSecond()))) {
-                readyJobDbQueue.resetAssignTimeoutJob(scheduleProperties.getAssignedJobTimeoutSecond());
+                int upCount = readyJobDbQueue.resetAssignTimeoutJob(scheduleProperties.getAssignedJobTimeoutSecond());
+                if(upCount>0){
+                    log.warn("reset ready job status assign to unread, count:{}",upCount);
+                }
+                lastUpdateTime = LocalDateTime.now();
             }
         }
     }

@@ -19,9 +19,12 @@
 package io.innospots.schedule.watcher;
 
 import io.innospots.base.events.EventBusCenter;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.base.watcher.AbstractWatcher;
 import io.innospots.schedule.config.ScheduleConstant;
+import io.innospots.schedule.enums.MessageStatus;
 import io.innospots.schedule.events.JobExecutionEvent;
+import io.innospots.schedule.events.JobQueueEvent;
 import io.innospots.schedule.model.JobExecution;
 import io.innospots.schedule.operator.JobExecutionOperator;
 import org.apache.commons.collections4.CollectionUtils;
@@ -31,6 +34,7 @@ import java.util.List;
 
 /**
  * schedule service watcher
+ *
  * @author Smars
  * @vesion 2.0
  * @date 2023/12/10
@@ -46,34 +50,67 @@ public class JobExecutionWatcher extends AbstractWatcher {
     @Override
     public int execute() {
         List<JobExecution> jobExecutions = jobExecutionOperator.fetchExecutingJobs();
-        if(CollectionUtils.isNotEmpty(jobExecutions)){
+        if (CollectionUtils.isNotEmpty(jobExecutions)) {
             for (JobExecution jobExecution : jobExecutions) {
-                if (isTimeout(jobExecution)){
+                if (isTimeout(jobExecution)) {
                     jobExecutionOperator.updateTimeoutExecution(jobExecution);
                     continue;
                 }
-                checkParentExecution(jobExecution);
             }//end for
         }//end if
 
         jobExecutions = jobExecutionOperator.fetchRecentDoneJobs();
-        if(CollectionUtils.isNotEmpty(jobExecutions)){
+        if (CollectionUtils.isNotEmpty(jobExecutions)) {
             for (JobExecution jobExecution : jobExecutions) {
                 processDoneJobs(jobExecution);
+                checkParentExecution(jobExecution);
             }
         }//end if
-
 
         return checkIntervalSecond;
     }
 
-    private void processDoneJobs(JobExecution jobExecution){
-        //TODO
+    private void processExecutingParentJob(JobExecution jobExecution){
+        if(jobExecution.getParentExecutionId()!=null){
+            List<ExecutionStatus> subStatus = jobExecutionOperator.subJobExecutionStatus(jobExecution.getParentExecutionId());
+            //TODO update percent
+        }
+
     }
 
-    private boolean isTimeout(JobExecution jobExecution){
+    private void processDoneJobs(JobExecution jobExecution) {
+        processDoneParentJob(jobExecution);
+        processDoneChildrenJob(jobExecution);
+    }
+
+    private void processDoneParentJob(JobExecution jobExecution) {
+        if (jobExecution.getSubJobCount() != null && jobExecution.getSubJobCount() > 0) {
+            if (jobExecution.getStatus() == ExecutionStatus.STOPPED ||
+                    jobExecution.getStatus() == ExecutionStatus.FAILED) {
+                //cancel job in the queue
+                JobQueueEvent queueEvent = new JobQueueEvent(jobExecution.getExecutionId());
+                queueEvent.setMessageStatus(MessageStatus.CANCEL);
+                EventBusCenter.postSync(queueEvent);
+                //stop sub job execution
+                jobExecutionOperator.stopSubJobExecutions(jobExecution.getExecutionId());
+            }
+        }
+    }
+
+    private void processDoneChildrenJob(JobExecution jobExecution) {
+        if (jobExecution.getParentExecutionId() != null) {
+            if (jobExecution.getStatus() == ExecutionStatus.FAILED) {
+                JobExecution parentJobExecution = jobExecutionOperator.jobExecution(jobExecution.getParentExecutionId());
+                if(parentJobExecution.getStatus().isExecuting()){
+                    jobExecutionOperator.fail(jobExecution.getParentExecutionId(), "sub job is failed.");
+                }
+            }
+        }
+    }
+
+    private boolean isTimeout(JobExecution jobExecution) {
         Integer timeout = jobExecution.getInteger(ScheduleConstant.PARAM_TIMEOUT_SECOND);
-        if(timeout==null){
+        if (timeout == null) {
             return false;
         }
         LocalDateTime timeoutTime = jobExecution.getStartTime().plusSeconds(timeout);
@@ -82,12 +119,14 @@ public class JobExecutionWatcher extends AbstractWatcher {
 
     /**
      * check parent job execution and fire execution event
+     *
      * @param jobExecution
      */
-    private void checkParentExecution(JobExecution jobExecution){
-        if(jobExecution.getParentExecutionId()!=null){
+    private void checkParentExecution(JobExecution jobExecution) {
+        if (jobExecution.getParentExecutionId() != null) {
             JobExecution parentJobExecution = jobExecutionOperator.jobExecution(jobExecution.getParentExecutionId());
-            if(parentJobExecution!=null){
+            long subCount = jobExecutionOperator.countSubJobExecutions(jobExecution.getParentExecutionId());
+            if (parentJobExecution != null && jobExecution.getSubJobCount() > subCount) {
                 //check parent job execution status
                 EventBusCenter.postSync(new JobExecutionEvent(parentJobExecution));
             }

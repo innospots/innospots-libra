@@ -59,5 +59,9 @@ public interface IReadyJobQueue {
     /**
      * reset assign job to unread, if job's update time is greater than the set timeout
      */
-    void resetAssignTimeoutJob(int timeoutSecond);
+    int resetAssignTimeoutJob(int timeoutSecond);
+
+    int cancelJob(String jobKey);
+
+    int cancelJobByParentExecutionId(String parentExecutionId);
 }

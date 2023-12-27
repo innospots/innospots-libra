@@ -43,6 +43,10 @@ public class ScheduleJobInfoOperator {
 
     private ScheduleJobInfoDao scheduleJobInfoDao;
 
+    public ScheduleJobInfoOperator(ScheduleJobInfoDao scheduleJobInfoDao) {
+        this.scheduleJobInfoDao = scheduleJobInfoDao;
+    }
+
     /**
      * fetch schedule jobs, according recent update time, include online or offline
      * @return

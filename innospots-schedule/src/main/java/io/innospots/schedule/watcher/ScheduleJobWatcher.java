@@ -40,9 +40,15 @@ import java.util.List;
 @Slf4j
 public class ScheduleJobWatcher extends AbstractWatcher {
 
-    private QuartzScheduleManager scheduleManager;
+    private final QuartzScheduleManager scheduleManager;
 
-    private ScheduleJobInfoOperator scheduleJobInfoOperator;
+    private final ScheduleJobInfoOperator scheduleJobInfoOperator;
+
+    public ScheduleJobWatcher(QuartzScheduleManager scheduleManager,
+                              ScheduleJobInfoOperator scheduleJobInfoOperator) {
+        this.scheduleManager = scheduleManager;
+        this.scheduleJobInfoOperator = scheduleJobInfoOperator;
+    }
 
     @Override
     public int execute() {
