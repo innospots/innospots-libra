@@ -46,7 +46,7 @@ import static io.innospots.libra.base.menu.ItemType.BUTTON;
  */
 @RestController
 @RequestMapping(PATH_ROOT_ADMIN + "credential-type")
-@ModuleMenu(menuKey = "libra-credential")
+@ModuleMenu(menuKey = "libra-credential-type")
 @Tag(name = "CredentialType")
 public class CredentialTypeController {
 
