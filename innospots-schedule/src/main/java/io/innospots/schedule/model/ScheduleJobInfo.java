@@ -25,6 +25,8 @@ import io.innospots.schedule.enums.JobType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 
 import java.time.LocalDateTime;
 import java.util.Map;

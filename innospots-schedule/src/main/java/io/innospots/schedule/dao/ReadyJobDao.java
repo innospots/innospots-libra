@@ -78,6 +78,6 @@ public interface ReadyJobDao extends BaseMapper<ReadyJobEntity> {
                .set(ReadyJobEntity::getUpdatedTime, LocalDateTime.now())
                .eq(ReadyJobEntity::getJobReadyKey, jobReadyKey)
                .eq(ReadyJobEntity::getMessageStatus, MessageStatus.ASSIGNED);
-        return this.update(null,uw);
+        return this.update(uw);
     }
 }

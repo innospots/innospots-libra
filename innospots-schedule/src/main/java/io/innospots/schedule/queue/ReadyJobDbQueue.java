@@ -95,7 +95,7 @@ public class ReadyJobDbQueue implements IReadyJobQueue {
 
     @Override
     public void push(String jobKey) {
-
+        scheduleJobInfoDao.selectById(jobKey);
     }
 
     @Override

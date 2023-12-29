@@ -106,7 +106,15 @@ public class JobExecutionEntity extends PBaseEntity {
      * sub job count, if this job is the group or container type
      */
     @Column
-    private Integer subJobCount;
+    private Long subJobCount;
+
+
+    @Column
+    private Long successCount;
+
+
+    @Column
+    private Long failCount;
 
     /**
      * start time

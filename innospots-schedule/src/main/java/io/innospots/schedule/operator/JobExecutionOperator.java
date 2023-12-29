@@ -92,6 +92,21 @@ public class JobExecutionOperator {
         jobExecutionDao.updateById(JobExecutionConverter.INSTANCE.modelToEntity(jobExecution));
     }
 
+    public int updateJobExecution(String jobExecutionId,
+                                   Integer percent,
+                                   Long successCount,
+                                   Long failCount,
+                                   ExecutionStatus status,String message){
+        UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
+        uw.lambda().set(status!=null,JobExecutionEntity::getStatus,status)
+                .set(JobExecutionEntity::getPercent,percent)
+                .set(JobExecutionEntity::getSuccessCount,successCount)
+                .set(JobExecutionEntity::getFailCount,failCount)
+                .set(message!=null,JobExecutionEntity::getMessage,message)
+                .eq(JobExecutionEntity::getExecutionId,jobExecutionId);
+        return jobExecutionDao.update(uw);
+    }
+
     /**
      * job executions that have status is executing
      * @return

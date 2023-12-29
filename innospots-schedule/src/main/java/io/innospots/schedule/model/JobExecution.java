@@ -46,7 +46,11 @@ public class JobExecution extends ExecutionBase {
 
     private Integer percent;
 
-    private Integer subJobCount;
+    private Long subJobCount;
+
+    private Long successCount;
+
+    private Long failCount;
 
     private String extExecutionId;
 

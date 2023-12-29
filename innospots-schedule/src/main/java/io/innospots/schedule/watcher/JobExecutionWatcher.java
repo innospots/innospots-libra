@@ -27,10 +27,12 @@ import io.innospots.schedule.events.JobExecutionEvent;
 import io.innospots.schedule.events.JobQueueEvent;
 import io.innospots.schedule.model.JobExecution;
 import io.innospots.schedule.operator.JobExecutionOperator;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * schedule service watcher
@@ -39,6 +41,7 @@ import java.util.List;
  * @vesion 2.0
  * @date 2023/12/10
  */
+@Slf4j
 public class JobExecutionWatcher extends AbstractWatcher {
 
     private JobExecutionOperator jobExecutionOperator;
@@ -56,6 +59,7 @@ public class JobExecutionWatcher extends AbstractWatcher {
                     jobExecutionOperator.updateTimeoutExecution(jobExecution);
                     continue;
                 }
+                processDoneParentJob(jobExecution);
             }//end for
         }//end if
 
@@ -70,21 +74,42 @@ public class JobExecutionWatcher extends AbstractWatcher {
         return checkIntervalSecond;
     }
 
-    private void processExecutingParentJob(JobExecution jobExecution){
-        if(jobExecution.getParentExecutionId()!=null){
+    /**
+     * update parent job execution, percent, successCount, failCount and status
+     * @param jobExecution
+     */
+    private void processExecutingParentJob(JobExecution jobExecution) {
+        if (jobExecution.getParentExecutionId() != null) {
             List<ExecutionStatus> subStatus = jobExecutionOperator.subJobExecutionStatus(jobExecution.getParentExecutionId());
-            //TODO update percent
+            Long successCount = subStatus.stream().filter(i -> i == ExecutionStatus.COMPLETE).count();
+            Long failCount = subStatus.stream().filter(i -> i == ExecutionStatus.FAILED).count();
+            Long doneCount = subStatus.stream().filter(ExecutionStatus::isDone).count();
+            Integer percent = Long.bitCount(doneCount * 100 / jobExecution.getSubJobCount());
+            String message = null;
+            ExecutionStatus status = null;
+
+            if (failCount > 0) {
+                status = ExecutionStatus.FAILED;
+                message = "sub job is failed.";
+            } else if (Objects.equals(doneCount, jobExecution.getSubJobCount())) {
+                status = ExecutionStatus.COMPLETE;
+                message = "success";
+            }
+
+            jobExecutionOperator.updateJobExecution(jobExecution.getExecutionId(), percent,
+                    successCount, failCount, status, message);
         }
 
     }
 
     private void processDoneJobs(JobExecution jobExecution) {
-        processDoneParentJob(jobExecution);
         processDoneChildrenJob(jobExecution);
+        processDoneParentJob(jobExecution);
     }
 
     private void processDoneParentJob(JobExecution jobExecution) {
         if (jobExecution.getSubJobCount() != null && jobExecution.getSubJobCount() > 0) {
+            //if parent job execution status is stopped or failed，then clear sub job in the queue,and stop sub job execution in executing
             if (jobExecution.getStatus() == ExecutionStatus.STOPPED ||
                     jobExecution.getStatus() == ExecutionStatus.FAILED) {
                 //cancel job in the queue
@@ -99,9 +124,10 @@ public class JobExecutionWatcher extends AbstractWatcher {
 
     private void processDoneChildrenJob(JobExecution jobExecution) {
         if (jobExecution.getParentExecutionId() != null) {
+            //if sub job execution status is failed,then fail parent job execution
             if (jobExecution.getStatus() == ExecutionStatus.FAILED) {
                 JobExecution parentJobExecution = jobExecutionOperator.jobExecution(jobExecution.getParentExecutionId());
-                if(parentJobExecution.getStatus().isExecuting()){
+                if (parentJobExecution.getStatus().isExecuting()) {
                     jobExecutionOperator.fail(jobExecution.getParentExecutionId(), "sub job is failed.");
                 }
             }
@@ -127,10 +153,10 @@ public class JobExecutionWatcher extends AbstractWatcher {
             JobExecution parentJobExecution = jobExecutionOperator.jobExecution(jobExecution.getParentExecutionId());
             long subCount = jobExecutionOperator.countSubJobExecutions(jobExecution.getParentExecutionId());
             if (parentJobExecution != null && jobExecution.getSubJobCount() > subCount) {
-                //check parent job execution status
+                //check parent job execution status.
+                //the parent job will check job flow execute status, and control next job execution.
                 EventBusCenter.postSync(new JobExecutionEvent(parentJobExecution));
             }
         }
-
     }
 }

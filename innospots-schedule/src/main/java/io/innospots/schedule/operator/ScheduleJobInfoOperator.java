@@ -27,6 +27,8 @@ import io.innospots.schedule.dao.ScheduleJobInfoDao;
 import io.innospots.schedule.entity.ScheduleJobInfoEntity;
 import io.innospots.schedule.model.ScheduleJobInfo;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -42,6 +44,7 @@ public class ScheduleJobInfoOperator {
     private LocalDateTime lastUpdateTime;
 
     private ScheduleJobInfoDao scheduleJobInfoDao;
+
 
     public ScheduleJobInfoOperator(ScheduleJobInfoDao scheduleJobInfoDao) {
         this.scheduleJobInfoDao = scheduleJobInfoDao;
