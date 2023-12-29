@@ -157,9 +157,13 @@ public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, Crede
         IPage<CredentialInfoEntity> entityPage = super.page(PageDTO.of(formQuery.getPage(), formQuery.getSize()), query);
         List<SimpleCredentialInfo> credentialInfos = new ArrayList<>();
         Set<String> typeCodes = entityPage.getRecords().stream().map(CredentialInfoEntity::getCredentialTypeCode).collect(Collectors.toSet());
-        Map<String, CredentialTypeEntity> types = findCredentialTypes(typeCodes);
+
+        Map<String, CredentialTypeEntity> types = null;
+        if (CollectionUtils.isNotEmpty(typeCodes)) {
+            types = findCredentialTypes(typeCodes);
+        }
         for (CredentialInfoEntity entity : entityPage.getRecords()) {
-            CredentialTypeEntity credentialTypeEntity = types.get(entity.getCredentialTypeCode());
+            CredentialTypeEntity credentialTypeEntity = types == null ? null : types.get(entity.getCredentialTypeCode());
             SimpleCredentialInfo simpleCredentialInfo = CredentialInfoConverter.INSTANCE.entityToSimpleModel(entity, credentialTypeEntity);
             credentialInfos.add(simpleCredentialInfo);
         }
