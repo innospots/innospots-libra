@@ -115,6 +115,7 @@ public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, Crede
      */
     public List<SimpleCredentialInfo> listSimpleCredentials(String credentialTypeCode) {
         QueryWrapper<CredentialInfoEntity> query = new QueryWrapper<>();
+        query.lambda().orderByDesc(CredentialInfoEntity::getCreatedTime);
         if (credentialTypeCode != null) {
             query.lambda().eq(CredentialInfoEntity::getCredentialTypeCode, credentialTypeCode);
         }
@@ -138,6 +139,8 @@ public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, Crede
 
         if (StringUtils.isNotBlank(formQuery.getSort())) {
             query.orderByDesc(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, formQuery.getSort()));
+        } else {
+            query.lambda().orderByDesc(CredentialInfoEntity::getCreatedTime);
         }
 
 
