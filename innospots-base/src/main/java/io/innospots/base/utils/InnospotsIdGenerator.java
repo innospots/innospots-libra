@@ -57,6 +57,10 @@ public class InnospotsIdGenerator {
         return innospotsIdGenerator.nextId();
     }
 
+    public static String generateIdStr() {
+        return String.valueOf(generateId());
+    }
+
     /**
      * generator id
      *

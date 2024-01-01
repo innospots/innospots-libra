@@ -45,15 +45,21 @@ public class ReadyJob {
      */
     private String jobReadyKey;
 
+    private String jobClass;
+
     private String originExecutionId;
 
     private String parentExecutionId;
 
     private String key;
 
+    private String name;
+
+    private String keyType;
+
     private Map<String,Object> context;
 
-    private MessageStatus status;
+    private MessageStatus messageStatus;
 
     private Integer sequenceNumber;
 
@@ -65,9 +71,9 @@ public class ReadyJob {
 
     private String serverKey;
 
-    public static ReadyJob build(ScheduleJobInfo scheduleJobInfo,Map<String,Object> params){
+    private String scopes;
 
-        return null;
-    }
+    private Integer version;
+
 
 }

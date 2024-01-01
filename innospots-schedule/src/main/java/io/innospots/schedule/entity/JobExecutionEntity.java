@@ -128,6 +128,9 @@ public class JobExecutionEntity extends PBaseEntity {
     @Column
     private LocalDateTime endTime;
 
+    @Column
+    private LocalDateTime selfEndTime;
+
     /**
      * execution param context, json map format
      */

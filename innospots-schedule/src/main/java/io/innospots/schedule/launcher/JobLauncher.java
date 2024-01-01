@@ -92,7 +92,8 @@ public class JobLauncher {
     protected void execute(JobExecution jobExecution) {
         try {
             BaseJob baseJob = JobBuilder.build(jobExecution);
-            baseJob.execute(jobExecution);
+            baseJob.prepare();
+            baseJob.execute();
             if (jobExecution.getJobType() == JobType.EXECUTE) {
                 jobExecution.setEndTime(LocalDateTime.now());
                 jobExecution.setStatus(ExecutionStatus.COMPLETE);
@@ -101,6 +102,8 @@ public class JobLauncher {
             log.error(e.getMessage(), e);
             jobExecution.setStatus(ExecutionStatus.FAILED);
             jobExecution.setMessage(ExceptionUtil.stacktraceToString(e, 1024));
+        }finally {
+            jobExecution.setSelfEndTime(LocalDateTime.now());
         }
     }
 

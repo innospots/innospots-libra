@@ -31,7 +31,7 @@ import java.util.List;
 public class SimpleJob extends BaseJob {
 
     @Override
-    public void execute(JobExecution jobExecution) {
+    public void execute() {
 
     }
 

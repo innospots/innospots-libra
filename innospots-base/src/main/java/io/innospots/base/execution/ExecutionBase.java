@@ -74,6 +74,8 @@ public class ExecutionBase {
 
     protected LocalDateTime endTime;
 
+    protected LocalDateTime selfEndTime;
+
     protected String detailUri;
 
     protected boolean next;
@@ -111,6 +113,10 @@ public class ExecutionBase {
 
     public Date getDate(String key){
         return context!=null? (Date) context.getOrDefault(key,null) :null;
+    }
+
+    public Object get(String key){
+        return context!=null? context.getOrDefault(key,null) :null;
     }
 
     public LocalDateTime getLocalDateTime(String key){

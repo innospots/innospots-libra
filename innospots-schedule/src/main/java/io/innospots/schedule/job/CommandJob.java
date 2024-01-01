@@ -42,11 +42,8 @@ public class CommandJob extends BaseJob{
     public static String PARAM_ARGS = "job.args";
 
     @Override
-    public void execute(JobExecution jobExecution) {
-        String cmd = jobExecution.getString(PARAM_COMMAND);
-        if(cmd==null){
-            throw new JobExecutionException(this.getClass(),ResponseCode.PARAM_NULL, PARAM_COMMAND+" param is null");
-        }
+    public void execute() {
+        String cmd = validParamString(PARAM_COMMAND);
         String cmdFile = jobExecution.getString(PARAM_FILE);
         String[] args = jobExecution.getStringArray(PARAM_ARGS);
         List<String> cmdList = new ArrayList<>();

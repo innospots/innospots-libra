@@ -45,6 +45,8 @@ public class SelectClause {
 
     protected BaseCondition condition;
 
+    protected String whereClause;
+
     protected List<String> orderColumns = new ArrayList<>();
 
     /**
@@ -75,6 +77,9 @@ public class SelectClause {
             if (whereStmt != null) {
                 sql.WHERE(whereStmt);
             }
+        }
+        if(whereClause!=null){
+            sql.WHERE(whereClause);
         }
 
         if (CollectionUtils.isNotEmpty(groupColumns)) {
@@ -145,6 +150,13 @@ public class SelectClause {
             this.orderColumns = new ArrayList<>();
         }
         this.orderColumns.add(column);
+    }
+
+    public void addColumn(String column){
+        if(this.columns == null){
+            this.columns = new ArrayList<>();
+        }
+        this.columns.add(column);
     }
 
 }

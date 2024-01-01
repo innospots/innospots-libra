@@ -18,7 +18,7 @@
 
 package io.innospots.workflow.schedule.flow;
 
-import io.innospots.schedule.launcher.ReadJobDispatcher;
+import io.innospots.schedule.dispatch.ReadJobDispatcher;
 import io.innospots.schedule.model.JobExecution;
 import io.innospots.schedule.model.ReadyJob;
 import io.innospots.schedule.operator.JobExecutionOperator;

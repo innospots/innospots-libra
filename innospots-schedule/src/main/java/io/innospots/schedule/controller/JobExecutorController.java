@@ -20,7 +20,7 @@ package io.innospots.schedule.controller;
 
 import io.innospots.base.constant.PathConstant;
 import io.innospots.base.model.response.InnospotResponse;
-import io.innospots.schedule.launcher.ReadJobDispatcher;
+import io.innospots.schedule.dispatch.ReadJobDispatcher;
 import io.innospots.schedule.model.ReadyJob;
 import org.springframework.web.bind.annotation.*;
 

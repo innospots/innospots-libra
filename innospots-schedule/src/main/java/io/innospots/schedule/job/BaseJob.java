@@ -18,9 +18,14 @@
 
 package io.innospots.schedule.job;
 
+import io.innospots.base.json.JSONUtils;
+import io.innospots.base.model.response.ResponseCode;
+import io.innospots.schedule.exception.JobExecutionException;
 import io.innospots.schedule.model.JobExecution;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Map;
 
 /**
  * @author Smars
@@ -31,6 +36,38 @@ import lombok.Setter;
 @Setter
 public abstract class BaseJob {
 
-    public abstract void execute(JobExecution jobExecution);
+    protected JobExecution jobExecution;
+
+    public void prepare(){
+    }
+
+    public abstract void execute();
+
+    protected String validParamString(String key){
+        String value = jobExecution.getString(key);
+        if(value==null){
+            throw new JobExecutionException(this.getClass(), ResponseCode.PARAM_NULL, key + " is null");
+        }
+        return value;
+    }
+
+    protected Integer validParamInteger(String key){
+        Integer value = jobExecution.getInteger(key);
+        if(value==null){
+            throw new JobExecutionException(this.getClass(), ResponseCode.PARAM_NULL, key + " is null");
+        }
+        return value;
+    }
+
+    protected Map getParamMap(String key){
+        Object executeJobParams = jobExecution.get(key);
+        Map prm = null;
+        if (executeJobParams instanceof Map) {
+            prm = (Map) executeJobParams;
+        } else if (executeJobParams instanceof String && ((String) executeJobParams).startsWith("{")) {
+            prm = JSONUtils.toMap((String) executeJobParams);
+        }
+        return prm;
+    }
 
 }

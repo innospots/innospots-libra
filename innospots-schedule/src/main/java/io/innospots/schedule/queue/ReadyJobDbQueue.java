@@ -18,14 +18,16 @@
 
 package io.innospots.schedule.queue;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import io.innospots.base.utils.InnospotsIdGenerator;
 import io.innospots.base.utils.ServiceActionHolder;
+import io.innospots.schedule.converter.ReadyJobConverter;
 import io.innospots.schedule.dao.ReadyJobDao;
-import io.innospots.schedule.dao.ScheduleJobInfoDao;
 import io.innospots.schedule.entity.ReadyJobEntity;
 import io.innospots.schedule.enums.MessageStatus;
 import io.innospots.schedule.model.ReadyJob;
+import io.innospots.schedule.model.ScheduleJobInfo;
+import io.innospots.schedule.operator.ScheduleJobInfoOperator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -33,9 +35,11 @@ import org.apache.commons.lang3.RandomUtils;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * ready job queue store in database table
  * @author Smars
  * @vesion 2.0
  * @date 2023/12/4
@@ -43,12 +47,12 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class ReadyJobDbQueue implements IReadyJobQueue {
 
-    private ScheduleJobInfoDao scheduleJobInfoDao;
+    private final ScheduleJobInfoOperator scheduleJobInfoOperator;
 
-    private ReadyJobDao readyJobDao;
+    private final ReadyJobDao readyJobDao;
 
-    public ReadyJobDbQueue(ScheduleJobInfoDao scheduleJobInfoDao, ReadyJobDao readyJobDao) {
-        this.scheduleJobInfoDao = scheduleJobInfoDao;
+    public ReadyJobDbQueue(ScheduleJobInfoOperator scheduleJobInfoOperator, ReadyJobDao readyJobDao) {
+        this.scheduleJobInfoOperator = scheduleJobInfoOperator;
         this.readyJobDao = readyJobDao;
     }
 
@@ -89,13 +93,34 @@ public class ReadyJobDbQueue implements IReadyJobQueue {
     }
 
     @Override
-    public void push(ReadyJob readyJob) {
+    public void push(String jobKey, Map<String,Object> params){
+        ScheduleJobInfo scheduleJobInfo = scheduleJobInfoOperator.getScheduleJobInfo(jobKey);
+        ReadyJobEntity readyJobEntity = ReadyJobConverter.build(scheduleJobInfo,params);
+        readyJobDao.insert(readyJobEntity);
+    }
 
+    @Override
+    public void push(String parentExecutionId, Integer sequenceNumber, String jobKey, Map<String, Object> params) {
+        ScheduleJobInfo scheduleJobInfo = scheduleJobInfoOperator.getScheduleJobInfo(jobKey);
+        ReadyJobEntity readyJobEntity = ReadyJobConverter.build(scheduleJobInfo,params);
+        readyJobEntity.setSequenceNumber(sequenceNumber);
+        readyJobEntity.setParentExecutionId(parentExecutionId);
+        readyJobDao.insert(readyJobEntity);
     }
 
     @Override
     public void push(String jobKey) {
-        scheduleJobInfoDao.selectById(jobKey);
+        push(jobKey,null);
+    }
+
+    @Override
+    public void push(ReadyJob readyJob) {
+        if(readyJob.getJobReadyKey()==null){
+            readyJob.setJobReadyKey(InnospotsIdGenerator.generateIdStr());
+        }
+        ReadyJobEntity readyJobEntity = ReadyJobConverter.INSTANCE.modelToEntity(readyJob);
+        readyJobEntity.setVersion(1);
+        readyJobDao.insert(readyJobEntity);
     }
 
     @Override

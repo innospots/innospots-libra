@@ -37,15 +37,10 @@ public class ScriptJob extends BaseJob {
     public static String PARAM_SCRIPT_BODY = "job.script.body";
 
     @Override
-    public void execute(JobExecution jobExecution) {
-        String scriptType = jobExecution.getString(PARAM_SCRIPT_TYPE);
-        String scriptBody = jobExecution.getString(PARAM_SCRIPT_BODY);
-        if(scriptBody==null){
-            throw new JobExecutionException(this.getClass(), ResponseCode.PARAM_NULL, "script body is null");
-        }
-        if(scriptType==null){
-            throw new JobExecutionException(this.getClass(), ResponseCode.PARAM_NULL, "script type is null");
-        }
+    public void execute() {
+        String scriptType = validParamString(PARAM_SCRIPT_TYPE);
+        String scriptBody = validParamString(PARAM_SCRIPT_BODY);
+
         Compilable compilable = compilable(scriptType);
         try {
             CompiledScript compiledScript = compilable.compile(scriptBody);

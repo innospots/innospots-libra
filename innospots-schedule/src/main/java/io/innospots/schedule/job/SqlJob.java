@@ -18,18 +18,41 @@
 
 package io.innospots.schedule.job;
 
-import io.innospots.schedule.model.JobExecution;
+import io.innospots.base.connector.minder.DataConnectionMinderManager;
+import io.innospots.base.connector.minder.IDataConnectionMinder;
+import io.innospots.base.data.body.DataBody;
+import io.innospots.base.data.operator.IOperator;
+import io.innospots.base.data.request.SimpleRequest;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Smars
  * @vesion 2.0
  * @date 2023/12/24
  */
-public class SqlJob extends BaseJob{
+@Slf4j
+public class SqlJob extends BaseJob {
 
+    public static String PARAM_SCRIPT_BODY = "job.script.body";
+    public static final String PARAM_CREDENTIAL_KEY = "job.credential.key";
+
+    private String sqlScript;
+    private String credentialKey;
+    private IOperator operator;
 
     @Override
-    public void execute(JobExecution jobExecution) {
+    public void prepare() {
+        credentialKey = validParamString(PARAM_CREDENTIAL_KEY);
+        sqlScript = validParamString(PARAM_SCRIPT_BODY);
+        IDataConnectionMinder minder = DataConnectionMinderManager.getCredentialMinder(credentialKey);
+        operator = minder.buildOperator();
+    }
 
+    @Override
+    public void execute() {
+        SimpleRequest simpleRequest = new SimpleRequest(credentialKey, sqlScript);
+        log.info("execute sql job, credentialKey:{}, sqlScript:{}", credentialKey, sqlScript);
+        DataBody dataBody = operator.execute(simpleRequest);
+        log.info("sql execute job:{}", dataBody);
     }
 }

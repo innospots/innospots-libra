@@ -22,6 +22,7 @@ import io.innospots.schedule.entity.ReadyJobEntity;
 import io.innospots.schedule.model.ReadyJob;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Smars
@@ -46,15 +47,19 @@ public interface IReadyJobQueue {
 
     /**
      * push ready job
-     * @param readyJob
+     * @param jobKey
      */
-    void push(ReadyJob readyJob);
+    void push(String jobKey, Map<String,Object> params);
+
+    void push(String parentExecutionId,Integer sequenceNumber, String jobKey, Map<String,Object> params);
 
     /**
      * push ready job using job key
      * @param jobKey
      */
     void push(String jobKey);
+
+    void push(ReadyJob readyJob);
 
     /**
      * reset assign job to unread, if job's update time is greater than the set timeout

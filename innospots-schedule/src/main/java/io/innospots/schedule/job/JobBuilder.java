@@ -35,6 +35,7 @@ public class JobBuilder {
         try {
             Class<?> jobClass = Class.forName(jobExecution.getJobClass());
             baseJob = (BaseJob) jobClass.getConstructor().newInstance();
+            baseJob.jobExecution = jobExecution;
         } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
                  InvocationTargetException e) {
             throw ResourceException.buildAbandonException(JobBuilder.class, "jobClass not found,"+jobExecution.getJobClass(), e);

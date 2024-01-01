@@ -16,21 +16,28 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.job;
+package io.innospots.schedule.listener;
 
+import io.innospots.base.events.IEventListener;
+import io.innospots.schedule.dispatch.ReadJobDispatcher;
+import io.innospots.schedule.enums.JobType;
+import io.innospots.schedule.events.JobExecutionEvent;
 import io.innospots.schedule.model.JobExecution;
 
 /**
- * spilt sub jobs by job slitting param
  * @author Smars
  * @vesion 2.0
- * @date 2023/12/3
+ * @date 2024/1/2
  */
-public class FileSplitJob extends BaseJob {
+public class LineChainJobListener implements IEventListener<JobExecutionEvent> {
+
+    private ReadJobDispatcher readJobDispatcher;
 
     @Override
-    public void execute(JobExecution jobExecution) {
-
+    public Object listen(JobExecutionEvent event) {
+        JobExecution jobExecution = event.jobExecution();
+        if (jobExecution.getJobType() == JobType.LINE_CHAIN) {
+        }
+        return null;
     }
-
 }

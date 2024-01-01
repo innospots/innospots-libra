@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.launcher;
+package io.innospots.schedule.dispatch;
 
 import io.innospots.schedule.model.ReadyJob;
 import io.innospots.schedule.model.ScheduleJobInfo;
@@ -35,21 +35,26 @@ public class ReadJobDispatcher {
 
     private IReadyJobQueue readyJobQueue;
 
-    private ScheduleJobInfoOperator scheduleJobInfoOperator;
+
+    public ReadJobDispatcher(IReadyJobQueue readyJobQueue) {
+        this.readyJobQueue = readyJobQueue;
+    }
 
     /**
      * execute job by jobKey, and set external params
+     *
      * @param jobKey
      * @param params
      */
-    public ReadyJob execute(String jobKey, Map<String,Object> params){
-        ScheduleJobInfo scheduleJobInfo = scheduleJobInfoOperator.getScheduleJobInfo(jobKey);
-        ReadyJob readyJob = ReadyJob.build(scheduleJobInfo,params);
-        readyJobQueue.push(readyJob);
-        return readyJob;
+    public void execute(String jobKey, Map<String, Object> params) {
+        readyJobQueue.push(jobKey, params);
     }
 
-    public void execute(ReadyJob readyJob){
+    public void execute(String parentExecutionId, Integer sequenceNumber, String jobKey, Map<String, Object> params) {
+        readyJobQueue.push(parentExecutionId, sequenceNumber, jobKey, params);
+    }
+
+    public void execute(ReadyJob readyJob) {
         readyJobQueue.push(readyJob);
     }
 }

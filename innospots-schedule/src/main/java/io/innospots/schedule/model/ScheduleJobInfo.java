@@ -65,6 +65,8 @@ public class ScheduleJobInfo implements Initializer {
 
     private LocalDateTime endTime;
 
+    private String resourceKey;
+
 
     @Override
     public void initialize() {

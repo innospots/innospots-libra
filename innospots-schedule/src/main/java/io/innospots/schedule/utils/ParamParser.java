@@ -34,13 +34,14 @@ public class ParamParser {
     private static ExpressionParser expressionParser = new SpelExpressionParser();
 
 
-    public Map<String,Object> toValueMap(Map<String,Object> param){
+    public static Map<String,Object> toValueMap(Map<String,?> param){
         Map<String,Object> vParam = new HashMap<>();
         param.forEach((k,v)->{
             if(v instanceof String){
                 String vv = (String) v;
                 if(vv.startsWith("#{")){
                     vv = vv.substring(2,vv.length()-1);
+                    vParam.put(k,expressionParser.parseExpression(vv).getValue());
                 }else{
                     vParam.put(k,v);
                 }

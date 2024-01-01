@@ -44,7 +44,6 @@ public class QuartzJobScheduler implements Job {
             log.info("schedule job is：{}, push to queue", jobKey.getName());
             IReadyJobQueue readyJobQueue = BeanContextAwareUtils.getBean(IReadyJobQueue.class);
             //push ready execute job to queue
-
             readyJobQueue.push(jobKey.getName());
             log.info("schedule job {} execute end", jobKey.getName());
         } else {

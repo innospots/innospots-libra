@@ -28,5 +28,6 @@ public enum JobType {
     //include multi job in a group
     GROUP,
     FLOW,
+    LINE_CHAIN,
     EXECUTE;
 }

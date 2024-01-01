@@ -48,6 +48,14 @@ public class ReadyQueueWatcher extends AbstractWatcher {
 
     private InnospotsScheduleProperties scheduleProperties;
 
+    public ReadyQueueWatcher(IReadyJobQueue readyJobDbQueue,
+                             JobLauncher jobLauncher,
+                             InnospotsScheduleProperties scheduleProperties) {
+        this.readyJobDbQueue = readyJobDbQueue;
+        this.jobLauncher = jobLauncher;
+        this.scheduleProperties = scheduleProperties;
+    }
+
     private LocalDateTime lastUpdateTime;
 
     @Override
@@ -84,6 +92,9 @@ public class ReadyQueueWatcher extends AbstractWatcher {
         return slotTime;
     }
 
+    /**
+     * update ready job status assign to unread, if ready job update time is over assignedJobTimeoutSecond,
+     */
     private void checkAssignTimeout() {
         if(!ScheduleConstant.isScheduler()){
             return;

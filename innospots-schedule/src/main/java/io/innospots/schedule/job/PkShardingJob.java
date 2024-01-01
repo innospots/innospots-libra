@@ -18,27 +18,34 @@
 
 package io.innospots.schedule.job;
 
-import io.innospots.schedule.model.JobExecution;
+import cn.hutool.core.text.StrFormatter;
+import io.innospots.base.connector.minder.IDataConnectionMinder;
+import io.innospots.base.connector.schema.model.SchemaField;
+import io.innospots.base.connector.schema.model.SchemaRegistry;
+import io.innospots.base.model.response.ResponseCode;
+import io.innospots.schedule.exception.JobExecutionException;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.Optional;
 
 /**
+ * split job according primary column
  * @author Smars
  * @vesion 2.0
  * @date 2023/12/9
  */
-public class PkShardingJob extends BaseJob {
+@Slf4j
+public class PkShardingJob extends DbShardingJob {
 
-    public static final String PARAM_PK_COLUMN = "job.sharding.pk";
-
-    public static final String PARAM_SHARDING_CLAUSE = "job.registry.clause";
-
-    public static final String PARAM_SHARDING_TABLE = "job.registry.table";
-
-    public static final String PARAM_SHARDING_SIZE = "job.sharding.size";
-
-    public static final String PARAM_CREDENTIAL_KEY = "job.credential_key";
 
     @Override
-    public void execute(JobExecution jobExecution) {
-
+    protected String shardingColumn(IDataConnectionMinder minder) {
+        SchemaRegistry schemaRegistry = minder.schemaRegistry(table);
+        Optional<SchemaField> schemaField = schemaRegistry.getSchemaFields().stream().filter(SchemaField::getPkey).findFirst();
+        if (schemaField.isPresent()) {
+            return schemaField.get().getCode();
+        } else {
+            throw new JobExecutionException(this.getClass(), ResponseCode.PARAM_NULL,StrFormatter.format("Table {}'s schema primary key field is empty", table));
+        }
     }
 }

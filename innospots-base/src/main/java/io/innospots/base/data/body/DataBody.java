@@ -59,6 +59,7 @@ public class DataBody<T> {
         final StringBuilder sb = new StringBuilder("{");
         sb.append("body=").append(body);
         sb.append(", startTime=").append(startTime);
+        sb.append(", message=").append(message);
         sb.append(", consume=").append(consume);
         sb.append('}');
         return sb.toString();

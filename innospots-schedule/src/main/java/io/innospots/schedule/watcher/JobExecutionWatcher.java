@@ -36,6 +36,7 @@ import java.util.Objects;
 
 /**
  * schedule service watcher
+ * watch job execution status
  *
  * @author Smars
  * @vesion 2.0
@@ -44,7 +45,7 @@ import java.util.Objects;
 @Slf4j
 public class JobExecutionWatcher extends AbstractWatcher {
 
-    private JobExecutionOperator jobExecutionOperator;
+    private final JobExecutionOperator jobExecutionOperator;
 
     public JobExecutionWatcher(JobExecutionOperator jobExecutionOperator) {
         this.jobExecutionOperator = jobExecutionOperator;
@@ -52,10 +53,16 @@ public class JobExecutionWatcher extends AbstractWatcher {
 
     @Override
     public int execute() {
+        if(!ScheduleConstant.isScheduler()){
+            return checkIntervalSecond;
+        }
+
+        // fetch executing jobs
         List<JobExecution> jobExecutions = jobExecutionOperator.fetchExecutingJobs();
         if (CollectionUtils.isNotEmpty(jobExecutions)) {
             for (JobExecution jobExecution : jobExecutions) {
                 if (isTimeout(jobExecution)) {
+                    //update time out job execution
                     jobExecutionOperator.updateTimeoutExecution(jobExecution);
                     continue;
                 }
@@ -97,7 +104,7 @@ public class JobExecutionWatcher extends AbstractWatcher {
             }
 
             jobExecutionOperator.updateJobExecution(jobExecution.getExecutionId(), percent,
-                    successCount, failCount, status, message);
+                    jobExecution.getSubJobCount(),successCount, failCount, status, message);
         }
 
     }
