@@ -38,9 +38,9 @@ public class JobExecutorController {
     private ReadJobDispatcher readJobDispatcher;
 
     @PostMapping("execute/{jobKey}")
-    public InnospotResponse<ReadyJob> launch(@PathVariable String jobKey, @RequestBody Map<String,Object> params){
-        ReadyJob readyJob = readJobDispatcher.execute(jobKey,params);
-        return InnospotResponse.success(readyJob);
+    public InnospotResponse<Void> launch(@PathVariable String jobKey, @RequestBody Map<String,Object> params){
+        readJobDispatcher.execute(jobKey,params);
+        return InnospotResponse.success();
     }
 
 }

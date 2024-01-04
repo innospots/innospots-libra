@@ -51,17 +51,17 @@ public interface ReadyJobConverter extends BaseBeanConverter<ReadyJob, ReadyJobE
             context.putAll(ParamParser.toValueMap(scheduleJobInfo.getParams()));
         }
 
-        return ReadyJobEntity.builder()
-                .jobReadyKey(InnospotsIdGenerator.generateIdStr())
-                .context(JSONUtils.toJsonString(context))
-                .name(scheduleJobInfo.getJobName())
-                .keyType(scheduleJobInfo.getJobType().name())
-               .key(scheduleJobInfo.getJobKey())
-                .sequenceNumber(1)
-                .resourceKey(scheduleJobInfo.getResourceKey())
-                .messageStatus(MessageStatus.UNREAD)
-                .jobClass(scheduleJobInfo.getJobClass())
-               .scopes(scheduleJobInfo.getScopes())
-                .build();
+        ReadyJobEntity readyJobEntity = new ReadyJobEntity();
+        readyJobEntity.setJobReadyKey(InnospotsIdGenerator.generateIdStr());
+        readyJobEntity.setContext(JSONUtils.toJsonString(context));
+        readyJobEntity.setName(scheduleJobInfo.getJobName());
+        readyJobEntity.setKeyType(scheduleJobInfo.getJobType().name());
+        readyJobEntity.setKey(scheduleJobInfo.getJobKey());
+        readyJobEntity.setSequenceNumber(1);
+        readyJobEntity.setResourceKey(scheduleJobInfo.getResourceKey());
+        readyJobEntity.setMessageStatus(MessageStatus.UNREAD);
+        readyJobEntity.setJobClass(scheduleJobInfo.getJobClass());
+        readyJobEntity.setScopes(scheduleJobInfo.getScopes());
+                return readyJobEntity;
     }
 }

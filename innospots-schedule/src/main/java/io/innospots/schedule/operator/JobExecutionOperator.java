@@ -21,6 +21,7 @@ package io.innospots.schedule.operator;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import io.innospots.base.events.EventBusCenter;
+import io.innospots.base.model.Pair;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.base.utils.InnospotsIdGenerator;
 import io.innospots.schedule.converter.JobExecutionConverter;
@@ -202,6 +203,14 @@ public class JobExecutionOperator {
                 .select(JobExecutionEntity::getStatus, JobExecutionEntity::getExecutionId);
         List<JobExecutionEntity> entities = this.jobExecutionDao.selectList(qw);
         return entities.stream().map(JobExecutionEntity::getStatus).collect(Collectors.toList());
+    }
+
+    public List<Pair<String,ExecutionStatus>> subJobExecutionStatusPair(String parentExecutionId) {
+        QueryWrapper<JobExecutionEntity> qw = new QueryWrapper<>();
+        qw.lambda().eq(JobExecutionEntity::getParentExecutionId, parentExecutionId)
+               .select(JobExecutionEntity::getStatus, JobExecutionEntity::getExecutionId);
+        List<JobExecutionEntity> entities = this.jobExecutionDao.selectList(qw);
+        return entities.stream().map(e -> Pair.of(e.getExecutionId(), e.getStatus())).collect(Collectors.toList());
     }
 
 

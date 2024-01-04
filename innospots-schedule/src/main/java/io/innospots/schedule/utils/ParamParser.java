@@ -18,10 +18,13 @@
 
 package io.innospots.schedule.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.common.TemplateParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -29,24 +32,26 @@ import java.util.Map;
  * @vesion 2.0
  * @date 2023/12/28
  */
+@Slf4j
 public class ParamParser {
 
     private static ExpressionParser expressionParser = new SpelExpressionParser();
+    private static TemplateParserContext parserContext = new TemplateParserContext();
 
 
-    public static Map<String,Object> toValueMap(Map<String,?> param){
-        Map<String,Object> vParam = new HashMap<>();
-        param.forEach((k,v)->{
-            if(v instanceof String){
+    public static Map<String, Object> toValueMap(Map<String, ?> param) {
+        Map<String, Object> vParam = new LinkedHashMap<>();
+        param.forEach((k, v) -> {
+            if (v instanceof String) {
                 String vv = (String) v;
-                if(vv.startsWith("#{")){
-                    vv = vv.substring(2,vv.length()-1);
-                    vParam.put(k,expressionParser.parseExpression(vv).getValue());
-                }else{
-                    vParam.put(k,v);
+                try{
+                    vParam.put(k, expressionParser.parseExpression(vv,parserContext).getValue());
+                }catch (Exception e){
+                    log.error(e.getMessage(),vv,e);
+                    e.printStackTrace();
                 }
-            }else{
-                vParam.put(k,v);
+            } else {
+                vParam.put(k, v);
             }
         });
 

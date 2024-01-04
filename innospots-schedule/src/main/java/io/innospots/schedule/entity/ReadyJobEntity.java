@@ -43,7 +43,6 @@ import static io.innospots.schedule.entity.ReadyJobEntity.TABLE_NAME;
 @Entity
 @Table(name = TABLE_NAME)
 @TableName(TABLE_NAME)
-@Builder
 public class ReadyJobEntity extends PBaseEntity {
 
     public static final String TABLE_NAME = "schedule_ready_queue";
