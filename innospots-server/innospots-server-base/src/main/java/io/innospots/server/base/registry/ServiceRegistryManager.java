@@ -46,11 +46,11 @@ public class ServiceRegistryManager {
         this.serviceRegistryDao = serviceRegistryDao;
     }
 
-    public List<ServiceInfo> listOnlineServices(ServiceType serviceType) {
+    public List<ServiceInfo> listOnlineServices(String serviceType) {
         QueryWrapper<ServiceRegistryEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
                 .eq(ServiceRegistryEntity::getServiceStatus, ServiceStatus.ONLINE.name())
-                .eq(ServiceRegistryEntity::getServiceType, serviceType.name());
+                .eq(ServiceRegistryEntity::getServiceType, serviceType);
         List<ServiceRegistryEntity> registryEntities = serviceRegistryDao.selectList(queryWrapper);
         if (CollectionUtils.isNotEmpty(registryEntities)) {
             return BeanUtils.copyProperties(registryEntities, ServiceInfo.class);

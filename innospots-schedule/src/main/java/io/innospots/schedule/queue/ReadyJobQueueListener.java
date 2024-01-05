@@ -21,12 +21,14 @@ package io.innospots.schedule.queue;
 import io.innospots.base.events.IEventListener;
 import io.innospots.schedule.enums.MessageStatus;
 import io.innospots.schedule.events.JobQueueEvent;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Smars
  * @vesion 2.0
  * @date 2023/12/27
  */
+@Component
 public class ReadyJobQueueListener implements IEventListener<JobQueueEvent>{
 
     private IReadyJobQueue readyJobQueue;

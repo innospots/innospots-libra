@@ -21,7 +21,7 @@ package io.innospots.schedule.watcher;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.base.watcher.AbstractWatcher;
-import io.innospots.schedule.config.ScheduleConstant;
+import io.innospots.schedule.utils.ScheduleUtils;
 import io.innospots.schedule.enums.MessageStatus;
 import io.innospots.schedule.events.JobExecutionEvent;
 import io.innospots.schedule.events.JobQueueEvent;
@@ -29,6 +29,7 @@ import io.innospots.schedule.model.JobExecution;
 import io.innospots.schedule.operator.JobExecutionOperator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -42,6 +43,7 @@ import java.util.Objects;
  * @vesion 2.0
  * @date 2023/12/10
  */
+@Component
 @Slf4j
 public class JobExecutionWatcher extends AbstractWatcher {
 
@@ -53,7 +55,7 @@ public class JobExecutionWatcher extends AbstractWatcher {
 
     @Override
     public int execute() {
-        if(!ScheduleConstant.isScheduler()){
+        if(!ScheduleUtils.isScheduler()){
             return checkIntervalSecond;
         }
 
@@ -142,7 +144,7 @@ public class JobExecutionWatcher extends AbstractWatcher {
     }
 
     private boolean isTimeout(JobExecution jobExecution) {
-        Integer timeout = jobExecution.getInteger(ScheduleConstant.PARAM_TIMEOUT_SECOND);
+        Integer timeout = jobExecution.getInteger(ScheduleUtils.PARAM_TIMEOUT_SECOND);
         if (timeout == null) {
             return false;
         }

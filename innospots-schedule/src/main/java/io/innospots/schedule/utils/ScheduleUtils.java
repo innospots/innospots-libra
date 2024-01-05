@@ -16,31 +16,28 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.explore;
+package io.innospots.schedule.utils;
 
-import io.innospots.schedule.model.JobExecution;
-import org.springframework.stereotype.Component;
+import io.innospots.base.utils.ServiceActionHolder;
 
 /**
  * @author Smars
- * @date 2023/8/7
+ * @vesion 2.0
+ * @date 2023/12/10
  */
-@Component
-public class JobExecutionDBExplore implements IJobExecutionExplore {
+public class ScheduleUtils {
+
+    public static final String SERVICE_TYPE_SCHEDULE = "SCHEDULER_SERVICE";
+    public static final String SERVICE_TYPE_EXECUTOR = "EXECUTOR_SERVICE";
+    public static final String PARAM_TIMEOUT_SECOND = "exec.timeout";
 
 
-    @Override
-    public JobExecution getJobExecutionById(String jobExecutionId) {
-        return null;
+    public static boolean isScheduler() {
+        return SERVICE_TYPE_SCHEDULE.equals(ServiceActionHolder.getServiceType());
     }
 
-    @Override
-    public boolean stop(String taskExecutionId) {
-        return false;
+    public static boolean isExecutor() {
+        return SERVICE_TYPE_EXECUTOR.equals(ServiceActionHolder.getServiceType());
     }
 
-    @Override
-    public boolean reRun(String taskExecutionId) {
-        return false;
-    }
 }

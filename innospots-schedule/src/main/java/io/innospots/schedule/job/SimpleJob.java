@@ -20,19 +20,33 @@ package io.innospots.schedule.job;
 
 import io.innospots.schedule.model.JobExecution;
 import io.innospots.schedule.model.ScheduleJobInfo;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Smars
  * @vesion 2.0
  * @date 2023/12/3
  */
+@Slf4j
 public class SimpleJob extends BaseJob {
+
+    public static final String PARAM_SLEEP_TIME = "job.sleep.time";
 
     @Override
     public void execute() {
-
+        Integer sleepTime = this.jobExecution.getInteger(PARAM_SLEEP_TIME);
+        if(sleepTime == null){
+            sleepTime = 100;
+        }
+        try {
+            TimeUnit.MILLISECONDS.sleep(sleepTime);
+            log.info("execute simple job:{}",jobExecution);
+        } catch (InterruptedException e) {
+            log.error(e.getMessage(),e);
+        }
     }
 
 }

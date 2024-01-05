@@ -30,6 +30,7 @@ import io.innospots.schedule.operator.JobExecutionOperator;
 import io.innospots.schedule.queue.IReadyJobQueue;
 import io.innospots.schedule.queue.ReadyJobDbQueue;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.WeakHashMap;
@@ -40,6 +41,7 @@ import java.util.concurrent.Future;
  * @vesion 2.0
  * @date 2023/12/3
  */
+@Component
 @Slf4j
 public class JobLauncher {
 

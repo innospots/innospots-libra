@@ -47,7 +47,7 @@ public class ServiceRegistryHolder {
 
     public static long maxValidTimeSecond = 55;
 
-    private static ServiceType serviceType;
+    private static String serviceType;
 
     private static int position = -1;
 
@@ -59,7 +59,7 @@ public class ServiceRegistryHolder {
         startupTime = LocalDateTime.now();
     }
 
-    public static void serverType(ServiceType serviceType) {
+    public static void serviceType(String serviceType) {
         ServiceRegistryHolder.serviceType = serviceType;
     }
 
@@ -78,7 +78,7 @@ public class ServiceRegistryHolder {
         return shardingKeys.toArray(new Integer[]{});
     }
 
-    public static ServiceType serverType() {
+    public static String serverType() {
         return serviceType;
     }
 

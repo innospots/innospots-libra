@@ -49,7 +49,7 @@ public class WatcherStarter implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        ServiceActionHolder.setScheduleRole(ServiceRegistryHolder.isLeader());
+        ServiceActionHolder.setServiceType(ServiceRegistryHolder.serverType());
         WatcherSupervisor watcherSupervisor = applicationContext.getBean(WatcherSupervisor.class);
         watcherSupervisor.registry(triggerRegistryWatcher());
         watcherSupervisor.registry(workflowStatusWatcher());

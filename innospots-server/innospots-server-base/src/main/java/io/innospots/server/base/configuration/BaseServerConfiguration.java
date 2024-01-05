@@ -22,6 +22,7 @@ import cn.hutool.extra.spring.SpringUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.script.ScriptExecutorManager;
+import io.innospots.base.watcher.WatcherStarter;
 import io.innospots.server.base.exception.GlobalExceptionHandler;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.BeanContextAware;
@@ -80,6 +81,11 @@ public class BaseServerConfiguration {
     @Bean
     public WatcherSupervisor watcherSupervisor(InnospotsServerProperties configProperties) {
         return new WatcherSupervisor(configProperties.getWatcherSize());
+    }
+
+    @Bean
+    public WatcherStarter watcherStarter(WatcherSupervisor watcherSupervisor){
+        return new WatcherStarter(watcherSupervisor);
     }
 
     @Bean

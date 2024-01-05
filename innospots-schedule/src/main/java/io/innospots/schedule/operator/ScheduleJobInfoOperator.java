@@ -29,6 +29,7 @@ import io.innospots.schedule.model.ScheduleJobInfo;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -39,6 +40,7 @@ import java.util.List;
  * @vesion 2.0
  * @date 2023/12/5
  */
+@Component
 public class ScheduleJobInfoOperator {
 
     private LocalDateTime lastUpdateTime;

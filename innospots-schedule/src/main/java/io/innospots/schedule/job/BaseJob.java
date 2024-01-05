@@ -22,6 +22,7 @@ import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.schedule.exception.JobExecutionException;
 import io.innospots.schedule.model.JobExecution;
+import io.innospots.schedule.utils.ParamParser;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -59,15 +60,8 @@ public abstract class BaseJob {
         return value;
     }
 
-    protected Map getParamMap(String key){
-        Object executeJobParams = jobExecution.get(key);
-        Map prm = null;
-        if (executeJobParams instanceof Map) {
-            prm = (Map) executeJobParams;
-        } else if (executeJobParams instanceof String && ((String) executeJobParams).startsWith("{")) {
-            prm = JSONUtils.toMap((String) executeJobParams);
-        }
-        return prm;
+    protected Map getParamMap(String key) {
+        return ParamParser.getParamMap(jobExecution, key);
     }
 
 }

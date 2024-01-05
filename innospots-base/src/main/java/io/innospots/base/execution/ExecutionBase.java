@@ -135,4 +135,16 @@ public class ExecutionBase {
         return context!=null? (String[]) context.getOrDefault(key,null) :null;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("executionId='").append(executionId).append('\'');
+        sb.append(", key='").append(key).append('\'');
+        sb.append(", keyType='").append(keyType).append('\'');
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", instanceKey='").append(instanceKey).append('\'');
+        sb.append(", message='").append(message).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

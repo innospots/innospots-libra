@@ -16,32 +16,35 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.config;
+package io.innospots.base.watcher;
 
-import io.innospots.base.utils.ServiceActionHolder;
+import io.innospots.base.utils.BeanContextAwareUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.annotation.Order;
+
+import java.util.Map;
 
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2023/12/10
+ * @date 2024/1/6
  */
-public class ScheduleConstant {
+@Order
+public class WatcherStarter implements ApplicationRunner {
 
-    public static final String SERVICE_ROLE_SCHEDULE = "SCHEDULER_SERVICE";
-    public static final String SERVICE_ROLE_EXECUTOR = "EXECUTOR_SERVICE";
+    private WatcherSupervisor watcherSupervisor;
 
-    public static final String JOB_CLASS_NAME = "";
-    public static final String PARAM_TIMEOUT_SECOND = "exec.timeout";
-
-    public static final String PARAM_CREDENTIAL_KEY = "prm.credential_key";
-
-
-    public static boolean isScheduler() {
-        return SERVICE_ROLE_SCHEDULE.equals(ServiceActionHolder.getServiceRole());
+    public WatcherStarter(WatcherSupervisor watcherSupervisor) {
+        this.watcherSupervisor = watcherSupervisor;
     }
 
-    public static boolean isExecutor() {
-        return SERVICE_ROLE_EXECUTOR.equals(ServiceActionHolder.getServiceRole());
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        Map<String,IWatcher> watcherMap = BeanContextAwareUtils.getBeansOfType(IWatcher.class);
+        if(MapUtils.isNotEmpty(watcherMap)){
+            watcherMap.values().forEach(watcherSupervisor::registry);
+        }
     }
-
 }

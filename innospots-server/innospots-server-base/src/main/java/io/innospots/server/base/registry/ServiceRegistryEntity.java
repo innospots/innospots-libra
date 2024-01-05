@@ -82,8 +82,7 @@ public class ServiceRegistryEntity {
     private ServiceStatus serviceStatus;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private ServiceType serviceType;
+    private String serviceType;
 
     /**
      * serverRole

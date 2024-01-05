@@ -18,6 +18,8 @@
 
 package io.innospots.schedule.utils;
 
+import io.innospots.base.json.JSONUtils;
+import io.innospots.schedule.model.JobExecution;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.common.TemplateParserContext;
@@ -56,6 +58,17 @@ public class ParamParser {
         });
 
         return vParam;
+    }
+
+    public static Map getParamMap(JobExecution jobExecution, String key){
+        Object executeJobParams = jobExecution.get(key);
+        Map prm = null;
+        if (executeJobParams instanceof Map) {
+            prm = (Map) executeJobParams;
+        } else if (executeJobParams instanceof String && ((String) executeJobParams).startsWith("{")) {
+            prm = JSONUtils.toMap((String) executeJobParams);
+        }
+        return prm;
     }
 
 }

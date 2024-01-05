@@ -31,6 +31,7 @@ import io.innospots.schedule.operator.ScheduleJobInfoOperator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.RandomUtils;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -45,6 +46,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2023/12/4
  */
 @Slf4j
+@Component
 public class ReadyJobDbQueue implements IReadyJobQueue {
 
     private final ScheduleJobInfoOperator scheduleJobInfoOperator;

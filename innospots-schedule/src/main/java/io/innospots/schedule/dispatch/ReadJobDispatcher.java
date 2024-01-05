@@ -22,6 +22,7 @@ import io.innospots.schedule.model.ReadyJob;
 import io.innospots.schedule.model.ScheduleJobInfo;
 import io.innospots.schedule.operator.ScheduleJobInfoOperator;
 import io.innospots.schedule.queue.IReadyJobQueue;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
@@ -30,10 +31,11 @@ import java.util.Map;
  * @vesion 2.0
  * @date 2023/12/10
  */
+@Component
 public class ReadJobDispatcher {
 
 
-    private IReadyJobQueue readyJobQueue;
+    private final IReadyJobQueue readyJobQueue;
 
 
     public ReadJobDispatcher(IReadyJobQueue readyJobQueue) {

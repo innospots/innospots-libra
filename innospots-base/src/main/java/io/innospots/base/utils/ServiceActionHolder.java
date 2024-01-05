@@ -28,9 +28,9 @@ import java.util.List;
 public class ServiceActionHolder {
 
     /**
-     * current service role
+     * current service type
      */
-    private static String serviceRole;
+    private static String serviceType;
 
     /**
      * service group keys
@@ -72,11 +72,11 @@ public class ServiceActionHolder {
         ServiceActionHolder.cleanTask = cleanTask;
     }
 
-    public static String getServiceRole() {
-        return serviceRole;
+    public static String getServiceType() {
+        return serviceType;
     }
 
-    public static void setServiceRole(String serviceRole) {
-        ServiceActionHolder.serviceRole = serviceRole;
+    public static void setServiceType(String serviceType) {
+        ServiceActionHolder.serviceType = serviceType;
     }
 }

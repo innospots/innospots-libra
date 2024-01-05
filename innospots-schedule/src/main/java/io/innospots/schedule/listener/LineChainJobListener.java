@@ -27,19 +27,31 @@ import io.innospots.schedule.events.JobExecutionEvent;
 import io.innospots.schedule.job.LineChainJob;
 import io.innospots.schedule.model.JobExecution;
 import io.innospots.schedule.operator.JobExecutionOperator;
+import io.innospots.schedule.utils.ParamParser;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Smars
  * @vesion 2.0
  * @date 2024/1/2
  */
+@Component
 public class LineChainJobListener implements IEventListener<JobExecutionEvent> {
 
-    private ReadJobDispatcher readJobDispatcher;
+    private final ReadJobDispatcher readJobDispatcher;
 
-    private JobExecutionOperator jobExecutionOperator;
+    private final JobExecutionOperator jobExecutionOperator;
+
+    public LineChainJobListener(ReadJobDispatcher readJobDispatcher,
+                                JobExecutionOperator jobExecutionOperator) {
+        this.readJobDispatcher = readJobDispatcher;
+        this.jobExecutionOperator = jobExecutionOperator;
+    }
 
     @Override
     public Object listen(JobExecutionEvent event) {
@@ -47,7 +59,25 @@ public class LineChainJobListener implements IEventListener<JobExecutionEvent> {
         if (jobExecution.getJobType() == JobType.LINE_CHAIN) {
             List<Pair<String, ExecutionStatus>> pairs = jobExecutionOperator.subJobExecutionStatusPair(jobExecution.getExecutionId());
             List<String> chainKeys = LineChainJob.getChainJobKeys(jobExecution);
-
+            boolean failOrRunning = pairs.stream().anyMatch(p -> p.getRight() == ExecutionStatus.FAILED || p.getRight() == ExecutionStatus.RUNNING);
+            if (failOrRunning) {
+                //has fail or running
+                return null;
+            }
+            Set<String> doneJobKeys = pairs.stream().map(Pair::getLeft).collect(Collectors.toSet());
+            if (chainKeys.size() == doneJobKeys.size()) {
+                //all complete
+                return null;
+            }
+            for (int i = 0; i < chainKeys.size(); i++) {
+                String chainKey = chainKeys.get(i);
+                if (!doneJobKeys.contains(chainKey)) {
+                    //next job will be executed that push to queue
+                    Map prm = ParamParser.getParamMap(jobExecution, LineChainJob.PARAM_EXECUTE_JOB_PARAMS);
+                    readJobDispatcher.execute(jobExecution.getExecutionId(), i+1, chainKey, prm);
+                    break;
+                }
+            }
         }
         return null;
     }

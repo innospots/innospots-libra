@@ -55,7 +55,7 @@ public class ServiceInfo extends BaseModelInfo implements Comparable<ServiceInfo
     protected Integer port;
 
     //server type, app,schedule,executor
-    protected ServiceType serviceType;
+    protected String serviceType;
 
     //server role
     protected ServiceRole serviceRole;

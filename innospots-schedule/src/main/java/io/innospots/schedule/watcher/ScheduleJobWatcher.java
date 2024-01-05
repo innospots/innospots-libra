@@ -27,6 +27,7 @@ import io.innospots.schedule.operator.ScheduleJobInfoOperator;
 import io.innospots.schedule.quartz.QuartzJobScheduler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
@@ -37,6 +38,7 @@ import java.util.List;
  * @vesion 2.0
  * @date 2023/12/3
  */
+@Component
 @Slf4j
 public class ScheduleJobWatcher extends AbstractWatcher {
 

@@ -31,6 +31,7 @@ import io.innospots.schedule.entity.ReadyJobEntity;
 import io.innospots.schedule.events.JobExecutionEvent;
 import io.innospots.schedule.model.JobExecution;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -41,12 +42,16 @@ import java.util.stream.Collectors;
  * @vesion 2.0
  * @date 2023/12/3
  */
+@Component
 public class JobExecutionOperator {
 
     private JobExecutionDao jobExecutionDao;
 
     private LocalDateTime lastUpdateTime;
 
+    public JobExecutionOperator(JobExecutionDao jobExecutionDao) {
+        this.jobExecutionDao = jobExecutionDao;
+    }
 
     public JobExecution jobExecution(String jobExecutionId) {
         return JobExecutionConverter.INSTANCE

@@ -21,12 +21,13 @@ package io.innospots.schedule.watcher;
 import io.innospots.base.utils.ServiceActionHolder;
 import io.innospots.base.watcher.AbstractWatcher;
 import io.innospots.schedule.config.InnospotsScheduleProperties;
-import io.innospots.schedule.config.ScheduleConstant;
+import io.innospots.schedule.utils.ScheduleUtils;
 import io.innospots.schedule.entity.ReadyJobEntity;
 import io.innospots.schedule.launcher.JobLauncher;
 import io.innospots.schedule.queue.IReadyJobQueue;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -39,6 +40,7 @@ import java.util.List;
  * @vesion 2.0
  * @date 2023/12/3
  */
+@Component
 @Slf4j
 public class ReadyQueueWatcher extends AbstractWatcher {
 
@@ -96,7 +98,7 @@ public class ReadyQueueWatcher extends AbstractWatcher {
      * update ready job status assign to unread, if ready job update time is over assignedJobTimeoutSecond,
      */
     private void checkAssignTimeout() {
-        if(!ScheduleConstant.isScheduler()){
+        if(!ScheduleUtils.isScheduler()){
             return;
         }
 
