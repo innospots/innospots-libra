@@ -48,6 +48,9 @@ public class ServiceActionHolder {
      */
     private static String serverKey;
 
+
+    private static boolean serviceLeader;
+
     public static String getServerKey() {
         return serverKey;
     }
@@ -78,5 +81,13 @@ public class ServiceActionHolder {
 
     public static void setServiceType(String serviceType) {
         ServiceActionHolder.serviceType = serviceType;
+    }
+
+    public static boolean isServiceLeader() {
+        return serviceLeader;
+    }
+
+    public static void setServiceLeader(boolean serviceLeader) {
+        ServiceActionHolder.serviceLeader = serviceLeader;
     }
 }

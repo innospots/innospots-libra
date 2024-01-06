@@ -1,0 +1,92 @@
+server:
+  port: 8585
+  undertow:
+    threads:
+      io: 4
+      worker: 50
+  compression:
+    enabled: true
+  http2:
+    enabled: true
+
+spring:
+  application:
+    name: Innospots-server-scheduler
+  main:
+    allow-bean-definition-overriding: true
+  profiles:
+    active: dev
+  boot:
+    admin:
+      context-path: /monitor
+      ui:
+        title: innospots-Server-Monitor
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  web:
+    resources:
+      chain:
+        compressed: true
+      cache:
+        cachecontrol:
+          max-age: 120
+          must-revalidate: true
+      static-locations: classpath:/static,classpath:/public,classpath:/resources,classpath:/META-INF/resources,file:${innospots.config.upload-file-path}
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info,health,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  file:
+    path: ${innospots.config.log-root-path}/logs
+  config: classpath:log4j2-spring.xml
+
+
+mybatis-plus:
+  global-config:
+    banner: off
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+innospots:
+  config:
+    enable-swagger: true
+    upload-file-path: ./file/
+    ext-lib-path: ./ext_lib/
+    schema-cache-timeout-second: 180
+    extension-load: true
+    public-key: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCV0BmhCv/TVA6du/ku9kMuU7J6a1CZwwSyNUHHcDpnr0/FwJucEzcpwrkcI98uv2JVqSV+cf9BfyKAYc3pLOI6roVMNW7ah3i3sW0wKuLE00YjSsz3EbtCpxmg22+CruWFCDX3Jk0rkLiqNVTByppfEAzfMBHXS1nHstfBV+/TgQIDAQAB
+    private-key: MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAJXQGaEK/9NUDp27+S72Qy5TsnprUJnDBLI1QcdwOmevT8XAm5wTNynCuRwj3y6/YlWpJX5x/0F/IoBhzeks4jquhUw1btqHeLexbTAq4sTTRiNKzPcRu0KnGaDbb4Ku5YUINfcmTSuQuKo1VMHKml8QDN8wEddLWcey18FX79OBAgMBAAECgYEAgHCAeJRQjmLjgRIWac/R+xbgzpnQ6XLMROjp803hlOE1mEowXxgOVCxQvbJ3dsG4Uc6JiaW8fO+9qamwerfzX5tgjhc7ryqTHBE50Xe5ITJkLVt8BhTSvpNixG9CufBderhjY/Q1657NwYrbbTtCjZNKnVM842hAf/sX5Pwt+UECQQDv6LtVEx639BfPKRMqZVHHR2Apo48PRGAKd0alGU0mqAdSwgRuSHF3EdoKk+n6F4Z9wZTV1EWJ0P0XbmfpnrcZAkEAn9xnzG0JTAZDnnYE1nz2VhrWuQluyRDlp6Geof6rbtQKqRK8NJ4prI0le99NCJzeBXqYRNydX6rTRlx6SRMUqQJAJkTDjSCNp95B5gOxUPP0hYs3Ja03ZsILZ9/63t8YVXA8KtFUD5tyrgGk/Eb37bLO+0Rjz3Aa3478sD4mSTfOEQJANPkfeFFldEjbHWZ0YfMU2iGYp8ZlbMFpqKvY2kt+2YHwamhn73O90Y0QL8UmTMVWmTAvxxnoGGyOCFHav95PyQJBANquqvB2JC9AIHLkGfdl48fYDrM4W+l0Gp44/Q4xvBrRdrOq6+auV79LWjsi3A13hRF6Q7IK7A91kU/g1WRegS0=
+    secret-key: Q2K9aOslSxDv3wM5
+  server:
+    enable-registry: true
+    # set system environment variable: logRootPath
+    log-root-path: ${LOG_PATH:innospots-server}
+    script-build-path: .script_build_path
+    watcher-size: 10
+    # open debug mode
+    debug-mode: true
+
+springdoc:
+  swagger-ui:
+    docExpansion: none
+    persistAuthorization: true
+
+
+# /actuator/info config
+info:
+  build:
+    version: ${java.version}
+  profiles:
+    active: ${spring.profiles.active}

@@ -23,14 +23,13 @@ import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.base.utils.thread.ThreadTaskExecutor;
 import io.innospots.schedule.entity.ReadyJobEntity;
 import io.innospots.schedule.enums.JobType;
+import io.innospots.schedule.explore.JobExecutionExplorer;
 import io.innospots.schedule.job.BaseJob;
 import io.innospots.schedule.job.JobBuilder;
 import io.innospots.schedule.model.JobExecution;
-import io.innospots.schedule.operator.JobExecutionOperator;
 import io.innospots.schedule.queue.IReadyJobQueue;
 import io.innospots.schedule.queue.ReadyJobDbQueue;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.WeakHashMap;
@@ -41,14 +40,13 @@ import java.util.concurrent.Future;
  * @vesion 2.0
  * @date 2023/12/3
  */
-@Component
 @Slf4j
-public class JobLauncher {
+public class ReadyJobLauncher {
 
-    private JobExecutionOperator jobExecutionOperator;
+    private final JobExecutionExplorer jobExecutionExplorer;
 
 
-    private IReadyJobQueue readyJobDbQueue;
+    private final IReadyJobQueue readyJobDbQueue;
 
     private WeakHashMap<String, JobExecution> executionCache = new WeakHashMap<>();
 
@@ -57,9 +55,9 @@ public class JobLauncher {
     private WeakHashMap<String,Future> threadFutures = new WeakHashMap<>();
 
 
-    public JobLauncher(JobExecutionOperator jobExecutionOperator,
-                       ReadyJobDbQueue readyJobDbQueue, ThreadTaskExecutor threadTaskExecutor) {
-        this.jobExecutionOperator = jobExecutionOperator;
+    public ReadyJobLauncher(JobExecutionExplorer jobExecutionExplorer,
+                            ReadyJobDbQueue readyJobDbQueue, ThreadTaskExecutor threadTaskExecutor) {
+        this.jobExecutionExplorer = jobExecutionExplorer;
         this.readyJobDbQueue = readyJobDbQueue;
         this.threadTaskExecutor = threadTaskExecutor;
     }
@@ -111,7 +109,7 @@ public class JobLauncher {
 
     protected JobExecution start(ReadyJobEntity readyJobEntity) {
         log.info("Start job, jobReadyKey: {}", readyJobEntity.getJobReadyKey());
-        JobExecution jobExecution = jobExecutionOperator.createJobExecution(readyJobEntity);
+        JobExecution jobExecution = jobExecutionExplorer.createJobExecution(readyJobEntity);
         readyJobDbQueue.ackRead(readyJobEntity.getJobReadyKey());
         executionCache.put(jobExecution.getExecutionId(), jobExecution);
         return jobExecution;
@@ -120,7 +118,7 @@ public class JobLauncher {
     protected void end(JobExecution jobExecution) {
         log.info("End job, jobExecutionId: {}", jobExecution.getExecutionId());
         executionCache.remove(jobExecution.getExecutionId());
-        jobExecutionOperator.updateJobExecution(jobExecution);
+        jobExecutionExplorer.updateJobExecution(jobExecution);
         threadFutures.remove(jobExecution.getInstanceKey());
     }
 

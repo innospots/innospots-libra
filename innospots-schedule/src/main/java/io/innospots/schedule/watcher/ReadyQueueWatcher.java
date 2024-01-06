@@ -23,7 +23,7 @@ import io.innospots.base.watcher.AbstractWatcher;
 import io.innospots.schedule.config.InnospotsScheduleProperties;
 import io.innospots.schedule.utils.ScheduleUtils;
 import io.innospots.schedule.entity.ReadyJobEntity;
-import io.innospots.schedule.launcher.JobLauncher;
+import io.innospots.schedule.launcher.ReadyJobLauncher;
 import io.innospots.schedule.queue.IReadyJobQueue;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -40,21 +40,20 @@ import java.util.List;
  * @vesion 2.0
  * @date 2023/12/3
  */
-@Component
 @Slf4j
 public class ReadyQueueWatcher extends AbstractWatcher {
 
-    private IReadyJobQueue readyJobDbQueue;
+    private final IReadyJobQueue readyJobDbQueue;
 
-    private JobLauncher jobLauncher;
+    private final ReadyJobLauncher readyJobLauncher;
 
-    private InnospotsScheduleProperties scheduleProperties;
+    private final InnospotsScheduleProperties scheduleProperties;
 
     public ReadyQueueWatcher(IReadyJobQueue readyJobDbQueue,
-                             JobLauncher jobLauncher,
+                             ReadyJobLauncher readyJobLauncher,
                              InnospotsScheduleProperties scheduleProperties) {
         this.readyJobDbQueue = readyJobDbQueue;
-        this.jobLauncher = jobLauncher;
+        this.readyJobLauncher = readyJobLauncher;
         this.scheduleProperties = scheduleProperties;
     }
 
@@ -63,7 +62,7 @@ public class ReadyQueueWatcher extends AbstractWatcher {
     @Override
     public int execute() {
         //fetch available worker size
-        int fetchSize = scheduleProperties.getExecutorSize() - jobLauncher.currentJobCount();
+        int fetchSize = scheduleProperties.getExecutorSize() - readyJobLauncher.currentJobCount();
 
         checkAssignTimeout();
 
@@ -79,7 +78,7 @@ public class ReadyQueueWatcher extends AbstractWatcher {
         }
 
         for (ReadyJobEntity readyJobEntity : readyList) {
-            jobLauncher.launch(readyJobEntity);
+            readyJobLauncher.launch(readyJobEntity);
         }
 
         return intervalTime();
@@ -90,7 +89,7 @@ public class ReadyQueueWatcher extends AbstractWatcher {
     }
 
     private int intervalTime() {
-        int slotTime = jobLauncher.currentJobCount() * 100 + scheduleProperties.getScanSlotTimeMills();
+        int slotTime = readyJobLauncher.currentJobCount() * 100 + scheduleProperties.getScanSlotTimeMills();
         return slotTime;
     }
 
@@ -98,7 +97,7 @@ public class ReadyQueueWatcher extends AbstractWatcher {
      * update ready job status assign to unread, if ready job update time is over assignedJobTimeoutSecond,
      */
     private void checkAssignTimeout() {
-        if(!ScheduleUtils.isScheduler()){
+        if(!ScheduleUtils.isExecutorLeader()){
             return;
         }
 

@@ -25,13 +25,12 @@ import io.innospots.schedule.converter.ReadyJobConverter;
 import io.innospots.schedule.dao.ReadyJobDao;
 import io.innospots.schedule.entity.ReadyJobEntity;
 import io.innospots.schedule.enums.MessageStatus;
+import io.innospots.schedule.explore.ScheduleJobInfoExplorer;
 import io.innospots.schedule.model.ReadyJob;
 import io.innospots.schedule.model.ScheduleJobInfo;
-import io.innospots.schedule.operator.ScheduleJobInfoOperator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.RandomUtils;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -46,15 +45,14 @@ import java.util.concurrent.TimeUnit;
  * @date 2023/12/4
  */
 @Slf4j
-@Component
 public class ReadyJobDbQueue implements IReadyJobQueue {
 
-    private final ScheduleJobInfoOperator scheduleJobInfoOperator;
+    private final ScheduleJobInfoExplorer scheduleJobInfoExplorer;
 
     private final ReadyJobDao readyJobDao;
 
-    public ReadyJobDbQueue(ScheduleJobInfoOperator scheduleJobInfoOperator, ReadyJobDao readyJobDao) {
-        this.scheduleJobInfoOperator = scheduleJobInfoOperator;
+    public ReadyJobDbQueue(ScheduleJobInfoExplorer scheduleJobInfoExplorer, ReadyJobDao readyJobDao) {
+        this.scheduleJobInfoExplorer = scheduleJobInfoExplorer;
         this.readyJobDao = readyJobDao;
     }
 
@@ -96,14 +94,14 @@ public class ReadyJobDbQueue implements IReadyJobQueue {
 
     @Override
     public void push(String jobKey, Map<String,Object> params){
-        ScheduleJobInfo scheduleJobInfo = scheduleJobInfoOperator.getScheduleJobInfo(jobKey);
+        ScheduleJobInfo scheduleJobInfo = scheduleJobInfoExplorer.getScheduleJobInfo(jobKey);
         ReadyJobEntity readyJobEntity = ReadyJobConverter.build(scheduleJobInfo,params);
         readyJobDao.insert(readyJobEntity);
     }
 
     @Override
     public void push(String parentExecutionId, Integer sequenceNumber, String jobKey, Map<String, Object> params) {
-        ScheduleJobInfo scheduleJobInfo = scheduleJobInfoOperator.getScheduleJobInfo(jobKey);
+        ScheduleJobInfo scheduleJobInfo = scheduleJobInfoExplorer.getScheduleJobInfo(jobKey);
         ReadyJobEntity readyJobEntity = ReadyJobConverter.build(scheduleJobInfo,params);
         readyJobEntity.setSequenceNumber(sequenceNumber);
         readyJobEntity.setParentExecutionId(parentExecutionId);

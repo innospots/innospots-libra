@@ -64,7 +64,7 @@ import java.util.Map;
 public class InnospotsAdministrationServer {
 
     public static void main(String[] args) {
-        ServiceRegistryHolder.serverType(ServiceType.ADMINISTRATION);
+        ServiceRegistryHolder.serviceType(ServiceType.ADMINISTRATION.name());
         SpringApplication.run(InnospotsAdministrationServer.class, args);
     }
 

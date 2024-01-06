@@ -37,7 +37,7 @@ public class ThreadPoolBuilder {
         ThreadTaskExecutor threadTaskExecutor = new ThreadTaskExecutor(coreSize,maxSize,keepAliveSeconds, TimeUnit.SECONDS,
                 createQueue(queueCapacity),
                 new ThreadFactoryBuilder().setNameFormat(poolName + "-%d").build(),
-                new ThreadPoolExecutor.AbortPolicy());
+                new ThreadPoolExecutor.CallerRunsPolicy());
         threadTaskExecutor.setPoolName(poolName);
         return threadTaskExecutor;
     }
@@ -55,7 +55,7 @@ public class ThreadPoolBuilder {
     }
 
     protected static BlockingQueue<Runnable> createQueue(int queueCapacity) {
-        return queueCapacity > 0 ? new LinkedBlockingQueue(queueCapacity) : new SynchronousQueue();
+        return queueCapacity > 0 ? new ArrayBlockingQueue<>(queueCapacity) : new SynchronousQueue<>();
     }
 
 }

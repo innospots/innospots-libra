@@ -20,6 +20,7 @@ package io.innospots.schedule.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import io.innospots.schedule.entity.JobExecutionEntity;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * @author Smars

@@ -19,12 +19,17 @@
 package io.innospots.schedule.operator;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.quartz.ScheduleMode;
 import io.innospots.schedule.converter.ScheduleJobInfoConverter;
 import io.innospots.schedule.dao.ScheduleJobInfoDao;
 import io.innospots.schedule.entity.ScheduleJobInfoEntity;
+import io.innospots.schedule.enums.JobType;
 import io.innospots.schedule.model.ScheduleJobInfo;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.expression.ExpressionParser;
@@ -40,58 +45,62 @@ import java.util.List;
  * @vesion 2.0
  * @date 2023/12/5
  */
-@Component
-public class ScheduleJobInfoOperator {
-
-    private LocalDateTime lastUpdateTime;
-
-    private ScheduleJobInfoDao scheduleJobInfoDao;
+public class ScheduleJobInfoOperator extends ServiceImpl<ScheduleJobInfoDao, ScheduleJobInfoEntity> {
 
 
-    public ScheduleJobInfoOperator(ScheduleJobInfoDao scheduleJobInfoDao) {
-        this.scheduleJobInfoDao = scheduleJobInfoDao;
-    }
-
-    /**
-     * fetch schedule jobs, according recent update time, include online or offline
-     * @return
-     */
-    public List<ScheduleJobInfo> fetchUpdatedQuartzTimeJob() {
-        QueryWrapper<ScheduleJobInfoEntity> qw = new QueryWrapper<>();
-
-        //TODO check
-        qw.lambda().eq(lastUpdateTime==null,ScheduleJobInfoEntity::getJobStatus, DataStatus.ONLINE)
-                .eq(ScheduleJobInfoEntity::getScheduleMode, ScheduleMode.SCHEDULED)
-                .orderByDesc(ScheduleJobInfoEntity::getUpdatedTime)
-                .ge(lastUpdateTime!=null, ScheduleJobInfoEntity::getUpdatedTime, lastUpdateTime);
-        List<ScheduleJobInfoEntity> entities = scheduleJobInfoDao.selectList(qw);
-        if(CollectionUtils.isEmpty(entities)){
-            return Collections.emptyList();
-        }
-        lastUpdateTime = LocalDateTime.now();
-        List<ScheduleJobInfo> jobInfos = ScheduleJobInfoConverter.INSTANCE.entitiesToModels(entities);
-        jobInfos.forEach(ScheduleJobInfo::initialize);
-
-        return jobInfos;
-    }
-
-    public ScheduleJobInfoEntity createScheduleJobInfo(ScheduleJobInfo scheduleJobInfo) {
+    public ScheduleJobInfo createScheduleJobInfo(ScheduleJobInfo scheduleJobInfo) {
         ScheduleJobInfoEntity scheduleJobInfoEntity = ScheduleJobInfoConverter.INSTANCE.modelToEntity(scheduleJobInfo);
-        this.scheduleJobInfoDao.insert(scheduleJobInfoEntity);
-        return scheduleJobInfoEntity;
+        this.save(scheduleJobInfoEntity);
+        return ScheduleJobInfoConverter.INSTANCE.entityToModel(scheduleJobInfoEntity);
     }
 
     public ScheduleJobInfo getScheduleJobInfo(String jobKey) {
-        ScheduleJobInfoEntity scheduleJobInfoEntity = scheduleJobInfoDao.selectById(jobKey);
+        ScheduleJobInfoEntity scheduleJobInfoEntity = this.getById(jobKey);
         if(scheduleJobInfoEntity==null){
             throw ResourceException.buildNotExistException(this.getClass(),"job not exist, jobKey:" + jobKey);
         }
         return ScheduleJobInfoConverter.INSTANCE.entityToModel(scheduleJobInfoEntity);
     }
 
-    public ScheduleJobInfoEntity updateScheduleJobInfo(ScheduleJobInfoEntity scheduleJobInfoEntity) {
-        this.scheduleJobInfoDao.updateById(scheduleJobInfoEntity);
-        return scheduleJobInfoEntity;
+    public boolean updateScheduleJobStatus(String jobKey, DataStatus jobStatus) {
+        ScheduleJobInfoEntity scheduleJobInfoEntity = this.getById(jobKey);
+        if(scheduleJobInfoEntity==null){
+            throw ResourceException.buildNotExistException(this.getClass(),"job not exist, jobKey:" + jobKey);
+        }
+        UpdateWrapper<ScheduleJobInfoEntity> uw = new UpdateWrapper<>();
+        uw.lambda().eq(ScheduleJobInfoEntity::getJobKey, jobKey)
+                .set(ScheduleJobInfoEntity::getJobStatus, jobStatus);
+        return this.update(uw);
+    }
+
+    public boolean deleteScheduleJobInfo(String jobKey) {
+        ScheduleJobInfoEntity scheduleJobInfoEntity = this.getById(jobKey);
+        if(scheduleJobInfoEntity==null){
+            throw ResourceException.buildNotExistException(this.getClass(),"job not exist, jobKey:" + jobKey);
+        }
+        return this.removeById(jobKey);
+    }
+
+    public ScheduleJobInfo updateScheduleJobInfo(ScheduleJobInfo scheduleJobInfo) {
+        this.updateById(ScheduleJobInfoConverter.INSTANCE.modelToEntity(scheduleJobInfo));
+        return scheduleJobInfo;
+    }
+
+    public PageBody<ScheduleJobInfo> pageScheduleJobInfo(int page, int pageSize, JobType jobType, DataStatus jobStatus, ScheduleMode scheduleMode) {
+        Page<ScheduleJobInfoEntity> pageScheduleJobInfo = this.page(new Page<>(page, pageSize), new QueryWrapper<ScheduleJobInfoEntity>()
+                .lambda()
+                .eq(jobType!=null,ScheduleJobInfoEntity::getJobType, jobType)
+                .eq(jobStatus!=null,ScheduleJobInfoEntity::getJobStatus, jobStatus)
+                .eq(scheduleMode!=null,ScheduleJobInfoEntity::getScheduleMode, scheduleMode));
+
+        PageBody<ScheduleJobInfo> pageBody = new PageBody<>();
+        pageBody.setTotal(pageScheduleJobInfo.getTotal());
+        pageBody.setPageSize(pageScheduleJobInfo.getSize());
+        pageBody.setList(ScheduleJobInfoConverter.INSTANCE.entitiesToModels(pageScheduleJobInfo.getRecords()));
+        pageBody.setCurrent(pageScheduleJobInfo.getCurrent());
+        pageBody.setTotalPage(pageScheduleJobInfo.getPages());
+
+        return pageBody;
     }
 
 }

@@ -24,11 +24,10 @@ import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.schedule.dispatch.ReadJobDispatcher;
 import io.innospots.schedule.enums.JobType;
 import io.innospots.schedule.events.JobExecutionEvent;
+import io.innospots.schedule.explore.JobExecutionExplorer;
 import io.innospots.schedule.job.LineChainJob;
 import io.innospots.schedule.model.JobExecution;
-import io.innospots.schedule.operator.JobExecutionOperator;
 import io.innospots.schedule.utils.ParamParser;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
@@ -40,24 +39,23 @@ import java.util.stream.Collectors;
  * @vesion 2.0
  * @date 2024/1/2
  */
-@Component
 public class LineChainJobListener implements IEventListener<JobExecutionEvent> {
 
     private final ReadJobDispatcher readJobDispatcher;
 
-    private final JobExecutionOperator jobExecutionOperator;
+    private final JobExecutionExplorer jobExecutionExplorer;
 
     public LineChainJobListener(ReadJobDispatcher readJobDispatcher,
-                                JobExecutionOperator jobExecutionOperator) {
+                                JobExecutionExplorer jobExecutionExplorer) {
         this.readJobDispatcher = readJobDispatcher;
-        this.jobExecutionOperator = jobExecutionOperator;
+        this.jobExecutionExplorer = jobExecutionExplorer;
     }
 
     @Override
     public Object listen(JobExecutionEvent event) {
         JobExecution jobExecution = event.jobExecution();
         if (jobExecution.getJobType() == JobType.LINE_CHAIN) {
-            List<Pair<String, ExecutionStatus>> pairs = jobExecutionOperator.subJobExecutionStatusPair(jobExecution.getExecutionId());
+            List<Pair<String, ExecutionStatus>> pairs = jobExecutionExplorer.subJobExecutionStatusPair(jobExecution.getExecutionId());
             List<String> chainKeys = LineChainJob.getChainJobKeys(jobExecution);
             boolean failOrRunning = pairs.stream().anyMatch(p -> p.getRight() == ExecutionStatus.FAILED || p.getRight() == ExecutionStatus.RUNNING);
             if (failOrRunning) {

@@ -30,6 +30,7 @@ import org.quartz.JobKey;
 
 /**
  * time quartz scheduler
+ *
  * @author Smars
  * @vesion 2.0
  * @date 2023/12/8
@@ -39,7 +40,7 @@ public class QuartzJobScheduler implements Job {
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        if (ScheduleUtils.SERVICE_TYPE_SCHEDULE.equals(ServiceActionHolder.getServiceType())) {
+        if (ScheduleUtils.isExecutorLeader()) {
             JobKey jobKey = jobExecutionContext.getJobDetail().getKey();
             log.info("schedule job is：{}, push to queue", jobKey.getName());
             IReadyJobQueue readyJobQueue = BeanContextAwareUtils.getBean(IReadyJobQueue.class);

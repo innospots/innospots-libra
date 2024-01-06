@@ -28,10 +28,9 @@ import org.springframework.stereotype.Component;
  * @vesion 2.0
  * @date 2023/12/27
  */
-@Component
 public class ReadyJobQueueListener implements IEventListener<JobQueueEvent>{
 
-    private IReadyJobQueue readyJobQueue;
+    private final IReadyJobQueue readyJobQueue;
 
     public ReadyJobQueueListener(IReadyJobQueue readyJobQueue) {
         this.readyJobQueue = readyJobQueue;

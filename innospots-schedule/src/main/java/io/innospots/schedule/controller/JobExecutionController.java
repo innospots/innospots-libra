@@ -16,31 +16,27 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.config;
+package io.innospots.schedule.controller;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import java.util.List;
+import io.innospots.base.constant.PathConstant;
+import io.innospots.schedule.operator.JobExecutionOperator;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2023/12/4
+ * @date 2024/1/6
  */
-@Getter
-@Setter
-public class InnospotsScheduleProperties {
+@RestController
+@RequestMapping(PathConstant.ROOT_PATH +"schedule/job-execution")
+public class JobExecutionController {
 
-    private Integer scanSlotTimeMills = 200;
+    private JobExecutionOperator jobExecutionOperator;
 
-    private Integer executorSize = 8;
+    public JobExecutionController(JobExecutionOperator jobExecutionOperator) {
+        this.jobExecutionOperator = jobExecutionOperator;
+    }
 
-    private Integer assignedJobTimeoutSecond = 60;
-
-    /**
-     * default group keys using select ready job
-     */
-    private List<String> groupKeys;
 
 }

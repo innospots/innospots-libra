@@ -27,17 +27,21 @@ import io.innospots.base.utils.ServiceActionHolder;
  */
 public class ScheduleUtils {
 
-    public static final String SERVICE_TYPE_SCHEDULE = "SCHEDULER_SERVICE";
-    public static final String SERVICE_TYPE_EXECUTOR = "EXECUTOR_SERVICE";
+    public static final String SCHEDULE_SERVICE_CONSOLE = "SCHEDULE_CONSOLE";
+    public static final String SCHEDULE_SERVICE_EXECUTOR = "SCHEDULE_EXECUTOR";
     public static final String PARAM_TIMEOUT_SECOND = "exec.timeout";
 
 
-    public static boolean isScheduler() {
-        return SERVICE_TYPE_SCHEDULE.equals(ServiceActionHolder.getServiceType());
+    public static boolean isConsole() {
+        return SCHEDULE_SERVICE_CONSOLE.equals(ServiceActionHolder.getServiceType());
     }
 
     public static boolean isExecutor() {
-        return SERVICE_TYPE_EXECUTOR.equals(ServiceActionHolder.getServiceType());
+        return SCHEDULE_SERVICE_EXECUTOR.equals(ServiceActionHolder.getServiceType());
+    }
+
+    public static boolean isExecutorLeader(){
+        return ServiceActionHolder.isServiceLeader() && isExecutor();
     }
 
 }

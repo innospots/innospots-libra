@@ -21,15 +21,14 @@ package io.innospots.schedule.watcher;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.base.watcher.AbstractWatcher;
-import io.innospots.schedule.utils.ScheduleUtils;
 import io.innospots.schedule.enums.MessageStatus;
 import io.innospots.schedule.events.JobExecutionEvent;
 import io.innospots.schedule.events.JobQueueEvent;
+import io.innospots.schedule.explore.JobExecutionExplorer;
 import io.innospots.schedule.model.JobExecution;
-import io.innospots.schedule.operator.JobExecutionOperator;
+import io.innospots.schedule.utils.ScheduleUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,36 +42,35 @@ import java.util.Objects;
  * @vesion 2.0
  * @date 2023/12/10
  */
-@Component
 @Slf4j
 public class JobExecutionWatcher extends AbstractWatcher {
 
-    private final JobExecutionOperator jobExecutionOperator;
+    private final JobExecutionExplorer jobExecutionExplorer;
 
-    public JobExecutionWatcher(JobExecutionOperator jobExecutionOperator) {
-        this.jobExecutionOperator = jobExecutionOperator;
+    public JobExecutionWatcher(JobExecutionExplorer jobExecutionExplorer) {
+        this.jobExecutionExplorer = jobExecutionExplorer;
     }
 
     @Override
     public int execute() {
-        if(!ScheduleUtils.isScheduler()){
+        if (!ScheduleUtils.isExecutorLeader()) {
             return checkIntervalSecond;
         }
 
         // fetch executing jobs
-        List<JobExecution> jobExecutions = jobExecutionOperator.fetchExecutingJobs();
+        List<JobExecution> jobExecutions = jobExecutionExplorer.fetchExecutingJobs();
         if (CollectionUtils.isNotEmpty(jobExecutions)) {
             for (JobExecution jobExecution : jobExecutions) {
                 if (isTimeout(jobExecution)) {
                     //update time out job execution
-                    jobExecutionOperator.updateTimeoutExecution(jobExecution);
+                    jobExecutionExplorer.updateTimeoutExecution(jobExecution);
                     continue;
                 }
-                processDoneParentJob(jobExecution);
+                processExecutingParentJob(jobExecution);
             }//end for
         }//end if
 
-        jobExecutions = jobExecutionOperator.fetchRecentDoneJobs();
+        jobExecutions = jobExecutionExplorer.fetchRecentDoneJobs();
         if (CollectionUtils.isNotEmpty(jobExecutions)) {
             for (JobExecution jobExecution : jobExecutions) {
                 processDoneJobs(jobExecution);
@@ -85,11 +83,12 @@ public class JobExecutionWatcher extends AbstractWatcher {
 
     /**
      * update parent job execution, percent, successCount, failCount and status
+     *
      * @param jobExecution
      */
     private void processExecutingParentJob(JobExecution jobExecution) {
         if (jobExecution.getParentExecutionId() != null) {
-            List<ExecutionStatus> subStatus = jobExecutionOperator.subJobExecutionStatus(jobExecution.getParentExecutionId());
+            List<ExecutionStatus> subStatus = jobExecutionExplorer.subJobExecutionStatus(jobExecution.getParentExecutionId());
             Long successCount = subStatus.stream().filter(i -> i == ExecutionStatus.COMPLETE).count();
             Long failCount = subStatus.stream().filter(i -> i == ExecutionStatus.FAILED).count();
             Long doneCount = subStatus.stream().filter(ExecutionStatus::isDone).count();
@@ -105,8 +104,8 @@ public class JobExecutionWatcher extends AbstractWatcher {
                 message = "success";
             }
 
-            jobExecutionOperator.updateJobExecution(jobExecution.getExecutionId(), percent,
-                    jobExecution.getSubJobCount(),successCount, failCount, status, message);
+            jobExecutionExplorer.updateJobExecution(jobExecution.getExecutionId(), percent,
+                    jobExecution.getSubJobCount(), successCount, failCount, status, message);
         }
 
     }
@@ -126,7 +125,7 @@ public class JobExecutionWatcher extends AbstractWatcher {
                 queueEvent.setMessageStatus(MessageStatus.CANCEL);
                 EventBusCenter.postSync(queueEvent);
                 //stop sub job execution
-                jobExecutionOperator.stopSubJobExecutions(jobExecution.getExecutionId());
+                jobExecutionExplorer.stopSubJobExecutions(jobExecution.getExecutionId());
             }
         }
     }
@@ -135,9 +134,9 @@ public class JobExecutionWatcher extends AbstractWatcher {
         if (jobExecution.getParentExecutionId() != null) {
             //if sub job execution status is failed,then fail parent job execution
             if (jobExecution.getStatus() == ExecutionStatus.FAILED) {
-                JobExecution parentJobExecution = jobExecutionOperator.jobExecution(jobExecution.getParentExecutionId());
+                JobExecution parentJobExecution = jobExecutionExplorer.jobExecution(jobExecution.getParentExecutionId());
                 if (parentJobExecution.getStatus().isExecuting()) {
-                    jobExecutionOperator.fail(jobExecution.getParentExecutionId(), "sub job is failed.");
+                    jobExecutionExplorer.fail(jobExecution.getParentExecutionId(), "sub job is failed.");
                 }
             }
         }
@@ -159,8 +158,8 @@ public class JobExecutionWatcher extends AbstractWatcher {
      */
     private void checkParentExecution(JobExecution jobExecution) {
         if (jobExecution.getParentExecutionId() != null) {
-            JobExecution parentJobExecution = jobExecutionOperator.jobExecution(jobExecution.getParentExecutionId());
-            long subCount = jobExecutionOperator.countSubJobExecutions(jobExecution.getParentExecutionId());
+            JobExecution parentJobExecution = jobExecutionExplorer.jobExecution(jobExecution.getParentExecutionId());
+            long subCount = jobExecutionExplorer.countSubJobExecutions(jobExecution.getParentExecutionId());
             if (parentJobExecution != null && jobExecution.getSubJobCount() > subCount) {
                 //check parent job execution status.
                 //the parent job will check job flow execute status, and control next job execution.

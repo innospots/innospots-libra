@@ -16,20 +16,18 @@
  * limitations under the License.
  */
 
-package io.innospots.workflow.server;
+package io.innospots.schedule.server;
 
 
+import io.innospots.schedule.ScheduleExecutorImporter;
 import io.innospots.server.base.ServerConfigImporter;
 import io.innospots.server.base.registry.ServiceRegistryHolder;
 import io.innospots.server.base.registry.enums.ServiceType;
-import io.innospots.workflow.runtime.WorkflowRuntimeImporter;
-import io.undertow.UndertowOptions;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.autoconfigure.quartz.QuartzAutoConfiguration;
-import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
@@ -40,19 +38,14 @@ import org.springframework.scheduling.annotation.EnableScheduling;
         HibernateJpaAutoConfiguration.class,
         FreeMarkerAutoConfiguration.class})
 @EnableScheduling
+@ScheduleExecutorImporter
 @ServerConfigImporter
-public class InnospotsWorkflowServer {
+public class InnospotsScheduleServer {
+
 
     public static void main(String[] args) {
-        ServiceRegistryHolder.serviceType(ServiceType.WORKFLOW.name());
-        SpringApplication.run(InnospotsWorkflowServer.class, args);
+        ServiceRegistryHolder.serviceType(ServiceType.EXECUTOR.name());
+        SpringApplication.run(InnospotsScheduleServer.class, args);
     }
 
-    public UndertowServletWebServerFactory webServerFactory() {
-        UndertowServletWebServerFactory factory = new UndertowServletWebServerFactory();
-        //factory.addDeploymentInfoCustomizers(deploymentInfo -> deploymentI);
-
-        factory.addBuilderCustomizers(builder -> builder.setServerOption(UndertowOptions.ENABLE_STATISTICS, true));
-        return factory;
-    }
 }

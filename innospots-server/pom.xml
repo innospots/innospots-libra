@@ -18,6 +18,7 @@
         <module>innospots-server-data</module>
         <module>innospots-server-workflow</module>
         <module>innospots-server-base</module>
+        <module>innospots-server-schedule</module>
     </modules>
 
     <dependencyManagement>

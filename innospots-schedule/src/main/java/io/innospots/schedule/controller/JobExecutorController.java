@@ -32,12 +32,16 @@ import java.util.Map;
  * @date 2023/12/10
  */
 @RestController
-@RequestMapping(PathConstant.ROOT_PATH +"job")
+@RequestMapping(PathConstant.ROOT_PATH +"schedule/job/execute")
 public class JobExecutorController {
 
-    private ReadJobDispatcher readJobDispatcher;
+    private final ReadJobDispatcher readJobDispatcher;
 
-    @PostMapping("execute/{jobKey}")
+    public JobExecutorController(ReadJobDispatcher readJobDispatcher) {
+        this.readJobDispatcher = readJobDispatcher;
+    }
+
+    @PostMapping("{jobKey}")
     public InnospotResponse<Void> launch(@PathVariable String jobKey, @RequestBody Map<String,Object> params){
         readJobDispatcher.execute(jobKey,params);
         return InnospotResponse.success();

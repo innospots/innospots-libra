@@ -36,7 +36,7 @@ import org.springframework.boot.autoconfigure.quartz.QuartzAutoConfiguration;
 public class InnospotsDataServer {
 
     public static void main(String[] args) {
-        ServiceRegistryHolder.serverType(ServiceType.DATA);
+        ServiceRegistryHolder.serviceType(ServiceType.DATA.name());
         SpringApplication.run(InnospotsDataServer.class, args);
 //        DataConnectionMinderManager.getMinderClasses();
     }

@@ -22,12 +22,11 @@ import io.innospots.base.enums.DataStatus;
 import io.innospots.base.quartz.QuartzScheduleManager;
 import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.base.watcher.AbstractWatcher;
+import io.innospots.schedule.explore.ScheduleJobInfoExplorer;
 import io.innospots.schedule.model.ScheduleJobInfo;
-import io.innospots.schedule.operator.ScheduleJobInfoOperator;
 import io.innospots.schedule.quartz.QuartzJobScheduler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
@@ -38,23 +37,22 @@ import java.util.List;
  * @vesion 2.0
  * @date 2023/12/3
  */
-@Component
 @Slf4j
 public class ScheduleJobWatcher extends AbstractWatcher {
 
     private final QuartzScheduleManager scheduleManager;
 
-    private final ScheduleJobInfoOperator scheduleJobInfoOperator;
+    private final ScheduleJobInfoExplorer scheduleJobInfoExplorer;
 
     public ScheduleJobWatcher(QuartzScheduleManager scheduleManager,
-                              ScheduleJobInfoOperator scheduleJobInfoOperator) {
+                              ScheduleJobInfoExplorer scheduleJobInfoExplorer) {
         this.scheduleManager = scheduleManager;
-        this.scheduleJobInfoOperator = scheduleJobInfoOperator;
+        this.scheduleJobInfoExplorer = scheduleJobInfoExplorer;
     }
 
     @Override
     public int execute() {
-        List<ScheduleJobInfo> jobInfos = scheduleJobInfoOperator.fetchUpdatedQuartzTimeJob();
+        List<ScheduleJobInfo> jobInfos = scheduleJobInfoExplorer.fetchUpdatedQuartzTimeJob();
         if (CollectionUtils.isEmpty(jobInfos)) {
             return checkIntervalSecond;
         }
