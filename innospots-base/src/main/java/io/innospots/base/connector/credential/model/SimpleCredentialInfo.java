@@ -39,7 +39,7 @@ public class SimpleCredentialInfo extends BaseModelInfo {
 
 
     @Schema(title = "credential primary key")
-    protected Integer credentialKey;
+    protected String credentialKey;
 
     @Size(max = 32, message = "name length max 32")
     @NotBlank(message = "Name cannot be blank")

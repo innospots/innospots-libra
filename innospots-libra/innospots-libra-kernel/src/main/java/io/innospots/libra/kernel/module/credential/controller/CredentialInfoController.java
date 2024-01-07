@@ -19,6 +19,8 @@
 package io.innospots.libra.kernel.module.credential.controller;
 
 import io.innospots.base.connector.credential.model.ConnectionCredential;
+import io.innospots.base.connector.credential.model.CredentialType;
+import io.innospots.base.connector.credential.operator.CredentialTypeOperator;
 import io.innospots.base.connector.credential.reader.IConnectionCredentialReader;
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.data.body.PageBody;
@@ -62,11 +64,15 @@ public class CredentialInfoController extends BaseController {
 
     private final IConnectionCredentialReader connectionCredentialReader;
 
+    private final CredentialTypeOperator credentialTypeOperator;
+
     public CredentialInfoController(
             CredentialInfoOperator credentialInfoOperator,
-            IConnectionCredentialReader connectionCredentialReader) {
+            IConnectionCredentialReader connectionCredentialReader,
+            CredentialTypeOperator credentialTypeOperator) {
         this.credentialInfoOperator = credentialInfoOperator;
         this.connectionCredentialReader = connectionCredentialReader;
+        this.credentialTypeOperator = credentialTypeOperator;
 
     }
 
@@ -76,6 +82,8 @@ public class CredentialInfoController extends BaseController {
         if (StringUtils.isBlank(credentialInfo.getEncryptFormValues())) {
             throw buildInvalidException(this.getClass(), "schemaDatasource formValues can not be empty");
         }
+        CredentialType credentialType = credentialTypeOperator.getCredentialType(credentialInfo.getCredentialTypeCode());
+        credentialInfo.setCredentialType(credentialType);
         // fill credential
         ConnectionCredential connection = connectionCredentialReader.fillCredential(credentialInfo);
         Object connectionTest = DataConnectionMinderManager.testConnection(connection);

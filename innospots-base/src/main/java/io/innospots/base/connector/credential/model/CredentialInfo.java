@@ -71,4 +71,8 @@ public class CredentialInfo extends PBaseModelInfo {
     @Schema(title = "props")
     protected Map<String,String> props;
 
+    @Schema(title = "credential Type")
+    @JsonIgnore
+    protected CredentialType credentialType;
+
 }

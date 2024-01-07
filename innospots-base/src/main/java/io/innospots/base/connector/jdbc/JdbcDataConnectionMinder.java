@@ -22,6 +22,7 @@ package io.innospots.base.connector.jdbc;
 import cn.hutool.db.ds.DSFactory;
 import cn.hutool.db.ds.hikari.HikariDSFactory;
 import cn.hutool.setting.Setting;
+import com.zaxxer.hikari.HikariDataSource;
 import io.innospots.base.connector.credential.model.ConnectionCredential;
 import io.innospots.base.connector.minder.BaseDataConnectionMinder;
 import io.innospots.base.data.operator.IDataOperator;
@@ -57,7 +58,7 @@ public class JdbcDataConnectionMinder extends BaseDataConnectionMinder {
     public static final String SERVER_IP = "server_ip";
     public static final String DATABASE = "database";
     public static final String PORT = "port";
-    public static final String JDBC_URL_PREFIX = "jdbcUrlPrefix";
+    //    public static final String JDBC_URL_PREFIX = "jdbcUrlPrefix";
     public static final String JDBC_URL_PARAM = "jdbcUrlParam";
     public static final String USERNAME = "user_name";
     public static final String PASSWORD = "db_password";
@@ -254,8 +255,10 @@ public class JdbcDataConnectionMinder extends BaseDataConnectionMinder {
     }
 
 
-    public static DataSource buildDataSource(ConnectionCredential connectionCredential, String maxPoolSize) {
+    public DataSource buildDataSource(ConnectionCredential connectionCredential, String maxPoolSize) {
         Map<String, Object> configs = connectionCredential.getConfig();
+        Map<String, String> props = connectionCredential.getProps();
+
         Setting setting = new Setting();
         DataSource dataSource = null;
         String jdbcParam = connectionCredential.prop(JDBC_URL_PARAM) == null ?
@@ -264,7 +267,7 @@ public class JdbcDataConnectionMinder extends BaseDataConnectionMinder {
 
 //        HikariDataSource hikariDataSource = new HikariDataSource();
 
-        String jdbcUrl = "" + configs.get(JDBC_URL_PREFIX) +
+        String jdbcUrl = "" + this.getJdbcUrlPrefix() +
                 configs.get(SERVER_IP) +
                 ":" +
                 configs.get(PORT) +
@@ -277,14 +280,17 @@ public class JdbcDataConnectionMinder extends BaseDataConnectionMinder {
         setting.set(DSFactory.KEY_ALIAS_PASSWORD[1], String.valueOf(configs.get(PASSWORD)));
         setting.set(DSFactory.KEY_CONN_PROPS[0], "true");
         setting.set(DSFactory.KEY_CONN_PROPS[1], "true");
-        setting.set("maxPoolSize", maxPoolSize);
-        setting.set("minIdle", "1");
-        setting.set("connectionTestQuery", "select 1");
-        configs.forEach((k, v) -> {
+//        setting.set("maxPoolSize", maxPoolSize);
+//        setting.set("minIdle", "1");
+//        setting.set("connectionTestQuery", "select 1");
+        props.forEach((k, v) -> {
             setting.put(k, String.valueOf(v));
         });
 
-        try (DSFactory dsFactory = HikariDSFactory.create(setting)) {
+
+        try {
+            // 外部调用需要手动关闭dataSource
+            DSFactory dsFactory = HikariDSFactory.create(setting);
             dataSource = dsFactory.getDataSource();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -378,6 +384,10 @@ public class JdbcDataConnectionMinder extends BaseDataConnectionMinder {
         return valueType;
     }
 
+    protected String getJdbcUrlPrefix() {
+        return null;
+    }
+
     @Override
     public void close() {
         try {
@@ -393,7 +403,9 @@ public class JdbcDataConnectionMinder extends BaseDataConnectionMinder {
         try {
             Method close = dataSource.getClass().getMethod("close");
             close.invoke(dataSource);
-            logger.info("close connection, credential: {}",connectionCredential.getCredentialKey());
+            if (connectionCredential != null) {
+                logger.info("close connection, credential: {}", connectionCredential.getCredentialKey());
+            }
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             logger.error(e.getMessage());
         }

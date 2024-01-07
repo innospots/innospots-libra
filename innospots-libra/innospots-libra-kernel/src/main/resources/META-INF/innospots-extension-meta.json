@@ -101,6 +101,14 @@
       }
     },
     {
+      "itemKey": "libra-credential-type",
+      "uri": "/metadata/credential-type",
+      "i18nNames": {
+        "en_US": "Credential Type",
+        "zh_CN": "凭据类型管理"
+      }
+    },
+    {
       "itemKey": "libra-dataset",
       "uri": "/metadata/dataset",
       "i18nNames": {

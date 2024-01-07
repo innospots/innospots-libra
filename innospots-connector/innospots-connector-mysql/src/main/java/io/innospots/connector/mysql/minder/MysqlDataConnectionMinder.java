@@ -39,16 +39,16 @@ public class MysqlDataConnectionMinder extends JdbcDataConnectionMinder {
         if (dataSource != null) {
             return;
         }
-        Map<String, Object> config = this.connectionCredential.getConfig();
-        config.put(DRIVER_CLASS_NAME, "com.mysql.cj.jdbc.Driver");
+//        Map<String, Object> config = this.connectionCredential.getConfig();
+//        config.put(DRIVER_CLASS_NAME, "com.mysql.cj.jdbc.Driver");
 
-        this.dataSource = buildDataSource(connectionCredential,MAX_POOL_SIZE);
+        this.dataSource = buildDataSource(connectionCredential, MAX_POOL_SIZE);
     }
 
 
     @Override
     public Object testConnect(ConnectionCredential connectionCredential) {
-        connectionCredential.getConfig().put(DRIVER_CLASS_NAME, "com.mysql.cj.jdbc.Driver");
+//        connectionCredential.getConfig().put(DRIVER_CLASS_NAME, "com.mysql.cj.jdbc.Driver");
         return super.testConnect(connectionCredential);
     }
 
@@ -56,5 +56,11 @@ public class MysqlDataConnectionMinder extends JdbcDataConnectionMinder {
     @Override
     public String schemaName() {
         return "mysql";
+    }
+
+
+    @Override
+    protected String getJdbcUrlPrefix() {
+        return "jdbc:mysql://";
     }
 }

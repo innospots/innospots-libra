@@ -61,7 +61,12 @@ public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, Crede
         if (entity == null) {
             return null;
         }
-        return CredentialInfoConverter.INSTANCE.entityToModel(entity);
+        CredentialTypeEntity credentialTypeEntity = findCredentialType(entity.getCredentialTypeCode());
+        CredentialInfo model = CredentialInfoConverter.INSTANCE.entityToModel(entity);
+        if (credentialTypeEntity != null) {
+            model.setConnectorName(credentialTypeEntity.getConnectorName());
+        }
+        return model;
     }
 
     public CredentialInfo createCredential(CredentialInfo credential) {
@@ -77,7 +82,7 @@ public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, Crede
             qw.lambda().eq(CredentialInfoEntity::getCredentialKey, key);
             codeCount = this.count(qw);
         } while (codeCount > 0);
-        //this.authedValuesProcess(credential);
+//        this.authedValuesProcess(credential);
         CredentialInfoEntity entity = CredentialInfoConverter.INSTANCE.modelToEntity(credential);
         super.save(entity);
         return this.getCredential(entity.getCredentialKey());
@@ -94,23 +99,25 @@ public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, Crede
     }
 
     public Boolean deleteCredential(String credentialKey) {
-        return  super.removeById(credentialKey);
+        return super.removeById(credentialKey);
     }
 
-    public List<CredentialInfo> listCredentialInfos(Set<String> credentialKeys){
+    public List<CredentialInfo> listCredentialInfos(Set<String> credentialKeys) {
         List<CredentialInfoEntity> entities = this.listByIds(credentialKeys);
         return CredentialInfoConverter.INSTANCE.entitiesToModels(entities);
     }
 
     /**
      * list credentials
+     *
      * @param credentialTypeCode
      * @return
      */
-    public List<SimpleCredentialInfo> listSimpleCredentials(String credentialTypeCode){
+    public List<SimpleCredentialInfo> listSimpleCredentials(String credentialTypeCode) {
         QueryWrapper<CredentialInfoEntity> query = new QueryWrapper<>();
-        if(credentialTypeCode!=null){
-            query.lambda().eq(CredentialInfoEntity::getCredentialTypeCode,credentialTypeCode);
+        query.lambda().orderByDesc(CredentialInfoEntity::getCreatedTime);
+        if (credentialTypeCode != null) {
+            query.lambda().eq(CredentialInfoEntity::getCredentialTypeCode, credentialTypeCode);
         }
         List<CredentialInfoEntity> entities = this.list(query);
         Set<String> typeCodes = entities.stream().map(CredentialInfoEntity::getCredentialTypeCode).collect(Collectors.toSet());
@@ -119,7 +126,7 @@ public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, Crede
 
         for (CredentialInfoEntity entity : entities) {
             CredentialTypeEntity credentialTypeEntity = types.get(entity.getCredentialTypeCode());
-            SimpleCredentialInfo simpleAppCredential = CredentialInfoConverter.INSTANCE.entityToSimpleModel(entity,credentialTypeEntity);
+            SimpleCredentialInfo simpleAppCredential = CredentialInfoConverter.INSTANCE.entityToSimpleModel(entity, credentialTypeEntity);
             simpleAppCredentials.add(simpleAppCredential);
         }
 
@@ -130,28 +137,34 @@ public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, Crede
     public PageBody<SimpleCredentialInfo> pageCredentials(FormQuery formQuery) {
         QueryWrapper<CredentialInfoEntity> query = new QueryWrapper<>();
 
-        if (formQuery.getSort() != null) {
+        if (StringUtils.isNotBlank(formQuery.getSort())) {
             query.orderByDesc(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, formQuery.getSort()));
+        } else {
+            query.lambda().orderByDesc(CredentialInfoEntity::getCreatedTime);
         }
 
 
         if (StringUtils.isNotBlank(formQuery.getQueryInput())) {
             query.lambda().like(CredentialInfoEntity::getName, formQuery.getQueryInput());
         }
-        if(MapUtils.isNotEmpty(formQuery.getParamMap())){
+        if (MapUtils.isNotEmpty(formQuery.getParamMap())) {
             String credentialTypeCode = formQuery.getParamMap().get("credentialTypeCode");
-            if(credentialTypeCode!=null){
-                query.lambda().eq(CredentialInfoEntity::getCredentialTypeCode,credentialTypeCode);
+            if (credentialTypeCode != null) {
+                query.lambda().eq(CredentialInfoEntity::getCredentialTypeCode, credentialTypeCode);
             }
         }
 
         IPage<CredentialInfoEntity> entityPage = super.page(PageDTO.of(formQuery.getPage(), formQuery.getSize()), query);
         List<SimpleCredentialInfo> credentialInfos = new ArrayList<>();
         Set<String> typeCodes = entityPage.getRecords().stream().map(CredentialInfoEntity::getCredentialTypeCode).collect(Collectors.toSet());
-        Map<String,CredentialTypeEntity> types = findCredentialTypes(typeCodes);
+
+        Map<String, CredentialTypeEntity> types = null;
+        if (CollectionUtils.isNotEmpty(typeCodes)) {
+            types = findCredentialTypes(typeCodes);
+        }
         for (CredentialInfoEntity entity : entityPage.getRecords()) {
-            CredentialTypeEntity credentialTypeEntity = types.get(entity.getCredentialTypeCode());
-            SimpleCredentialInfo simpleCredentialInfo = CredentialInfoConverter.INSTANCE.entityToSimpleModel(entity,credentialTypeEntity);
+            CredentialTypeEntity credentialTypeEntity = types == null ? null : types.get(entity.getCredentialTypeCode());
+            SimpleCredentialInfo simpleCredentialInfo = CredentialInfoConverter.INSTANCE.entityToSimpleModel(entity, credentialTypeEntity);
             credentialInfos.add(simpleCredentialInfo);
         }
 
@@ -165,23 +178,26 @@ public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, Crede
     }
 
 
-
     public boolean checkExist(String name, String credentialKey) {
         QueryWrapper<CredentialInfoEntity> qw = new QueryWrapper<>();
-        qw.lambda().eq(CredentialInfoEntity::getName,name);
-        if(credentialKey!=null){
-            qw.lambda().ne(CredentialInfoEntity::getCredentialKey,credentialKey);
+        qw.lambda().eq(CredentialInfoEntity::getName, name);
+        if (credentialKey != null) {
+            qw.lambda().ne(CredentialInfoEntity::getCredentialKey, credentialKey);
         }
         return super.count(qw) > 0;
     }
 
 
-    private Map<String, CredentialTypeEntity> findCredentialTypes(Set<String> typeCode){
+    private Map<String, CredentialTypeEntity> findCredentialTypes(Set<String> typeCode) {
         List<CredentialTypeEntity> typeEntities = credentialTypeDao.selectBatchIds(typeCode);
-        if(CollectionUtils.isEmpty(typeEntities)){
+        if (CollectionUtils.isEmpty(typeEntities)) {
             return Collections.emptyMap();
         }
         return typeEntities.stream().collect(Collectors.toMap(CredentialTypeEntity::getTypeCode, Function.identity()));
+    }
+
+    private CredentialTypeEntity findCredentialType(String typeCode) {
+        return credentialTypeDao.selectById(typeCode);
     }
 
 }

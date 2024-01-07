@@ -31,6 +31,7 @@ import io.innospots.base.connector.schema.meta.CredentialAuthOption;
 import io.innospots.base.connector.schema.reader.ISchemaRegistryReader;
 import io.innospots.base.exception.LoadConfigurationException;
 import io.innospots.base.exception.data.DataConnectionException;
+import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.BeanContextAwareUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -79,12 +80,8 @@ public class DataConnectionMinderManager {
     public static IDataConnectionMinder newMinderInstance(ConnectionCredential connectionCredential) {
         try {
             ConnectionMinderSchema minderSchema = ConnectionMinderSchemaLoader.getConnectionMinderSchema(connectionCredential.getConnectorName());
-            if (minderSchema == null) {
-                return null;
-            }
             CredentialAuthOption config = minderSchema.getAuthOptions().stream().filter(f -> Objects.equals(connectionCredential.getAuthOption(), f.getCode())).findFirst()
                     .orElseThrow(() -> LoadConfigurationException.buildException(ConnectionMinderSchemaLoader.class, "dataConnectionMinder newInstance failed, configCode invalid."));
-
             return (IDataConnectionMinder) Class.forName(config.getMinder()).getConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException |
                  InvocationTargetException e) {

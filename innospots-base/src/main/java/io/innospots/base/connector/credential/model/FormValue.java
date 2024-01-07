@@ -15,55 +15,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.innospots.base.connector.credential.model;
 
-import io.innospots.base.model.BaseModelInfo;
-import io.innospots.base.model.PBaseModelInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-import java.util.*;
-
 /**
- * credential type
- *
- * @author Smars
+ * Form value
+ * @author Alfred
  * @date 2023/10/28
  */
 @Getter
 @Setter
-@Schema(title = "credential type")
-public class CredentialType extends PBaseModelInfo {
+@Schema(title = "Form value")
+public class FormValue {
 
-    @Schema(title = "unique code")
-    private String typeCode;
-
-    @Size(max = 32, message = "name length max 32")
-    @NotBlank(message = "Name cannot be blank")
-    @Schema(title = "credential name")
+    @Schema(title ="name")
     private String name;
 
-    @Schema(title = "icon url")
-    private String icon;
+    @Schema(title ="value")
+    private String value;
 
-    @Schema(title = "connector auth option in form")
-    private String authOption;
+    @Schema(title ="readOnly")
+    private Boolean readOnly;
 
-    @NotBlank(message = "connector name cannot be blank")
-    @Schema(title = "connector name")
-    private String connectorName;
-
-    /**
-     * credential auth form value
-     * readOnlies
-     */
-    @Schema(title = "formValues")
-    private List<FormValue> formValues = new ArrayList<>();
-
-    @Schema(title = "props")
-    private Map<String, Object> props;
 }
