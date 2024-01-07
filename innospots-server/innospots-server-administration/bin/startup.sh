@@ -65,7 +65,6 @@ else
   JAVA_OPT="${JAVA_OPT} -XX:-UseLargePages"
 fi
 
-JAVA_OPT="${JAVA_OPT} -XX:StartFlightRecording=disk=true,delay=90s,filename=recording.jfr,dumppath=${LOG_PATH},dumponexit=true,maxage=7d,maxsize=1024m"
 #JAVA_OPT="${JAVA_OPT} -XX:StartFlightRecording=disk=true,delay=90s,filename=recording.jfr,dumppath=${LOG_PATH},dumponexit=true,maxage=7d,maxsize=1024m,path-to-gc-roots=false,settings=profile"
 
 JAVA_MAJOR_VERSION=$($JAVA -version 2>&1 | sed -E -n 's/.* version "([0-9]*).*$/\1/p')
