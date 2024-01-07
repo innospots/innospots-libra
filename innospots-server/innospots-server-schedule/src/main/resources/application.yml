@@ -8,10 +8,13 @@ server:
     enabled: true
   http2:
     enabled: true
+  servlet:
+    encoding:
+      force: true
 
 spring:
   application:
-    name: Innospots-server-scheduler
+    name: innospots-server-schedule
   main:
     allow-bean-definition-overriding: true
   profiles:
@@ -20,7 +23,7 @@ spring:
     admin:
       context-path: /monitor
       ui:
-        title: innospots-Server-Monitor
+        title: innospots-server-monitor
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -30,13 +33,14 @@ spring:
         compressed: true
       cache:
         cachecontrol:
-          max-age: 120
+          max-age: 216000
           must-revalidate: true
-      static-locations: classpath:/static,classpath:/public,classpath:/resources,classpath:/META-INF/resources,file:${innospots.config.upload-file-path}
-
+      static-locations: classpath:/static,classpath:/public,classpath:/resources,classpath:/META-INF/resources,file:${innospots.config.upload-file-path},classpath:/META-INF/resources/apps/visualization/
   servlet:
     multipart:
       max-file-size: 10MB
+  jmx:
+    enabled: false
 
 management:
   endpoints:
@@ -46,10 +50,18 @@ management:
   endpoint:
     health:
       show-details: always
+      probes:
+        enabled: true
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+
 
 logging:
   file:
-    path: ${innospots.config.log-root-path}/logs
+    path: ${innospots.server.log-root-path}/logs
   config: classpath:log4j2-spring.xml
 
 
@@ -82,7 +94,6 @@ springdoc:
   swagger-ui:
     docExpansion: none
     persistAuthorization: true
-
 
 # /actuator/info config
 info:

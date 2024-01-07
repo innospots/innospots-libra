@@ -1,3 +1,6 @@
+server:
+  port: 8585
+
 spring:
   jpa:
     hibernate:

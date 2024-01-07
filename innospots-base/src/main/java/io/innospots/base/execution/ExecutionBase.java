@@ -45,7 +45,7 @@ public class ExecutionBase {
     /**
      * resource, task, node key
      */
-    protected String key;
+    protected String jobKey;
 
     /**
      * flow, node, task
@@ -55,7 +55,7 @@ public class ExecutionBase {
     /**
      * resource ,task, node name
      */
-    protected String name;
+    protected String jobName;
 
     /**
      * md5(context+key)
@@ -68,7 +68,7 @@ public class ExecutionBase {
     /**
      * execution status
      */
-    protected ExecutionStatus status;
+    protected ExecutionStatus executionStatus;
 
     protected LocalDateTime startTime;
 
@@ -139,9 +139,9 @@ public class ExecutionBase {
     public String toString() {
         final StringBuilder sb = new StringBuilder("{");
         sb.append("executionId='").append(executionId).append('\'');
-        sb.append(", key='").append(key).append('\'');
+        sb.append(", key='").append(jobKey).append('\'');
         sb.append(", keyType='").append(keyType).append('\'');
-        sb.append(", name='").append(name).append('\'');
+        sb.append(", name='").append(jobName).append('\'');
         sb.append(", instanceKey='").append(instanceKey).append('\'');
         sb.append(", message='").append(message).append('\'');
         sb.append('}');

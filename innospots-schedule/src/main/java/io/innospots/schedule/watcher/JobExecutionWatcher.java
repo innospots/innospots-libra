@@ -118,8 +118,8 @@ public class JobExecutionWatcher extends AbstractWatcher {
     private void processDoneParentJob(JobExecution jobExecution) {
         if (jobExecution.getSubJobCount() != null && jobExecution.getSubJobCount() > 0) {
             //if parent job execution status is stopped or failed，then clear sub job in the queue,and stop sub job execution in executing
-            if (jobExecution.getStatus() == ExecutionStatus.STOPPED ||
-                    jobExecution.getStatus() == ExecutionStatus.FAILED) {
+            if (jobExecution.getExecutionStatus() == ExecutionStatus.STOPPED ||
+                    jobExecution.getExecutionStatus() == ExecutionStatus.FAILED) {
                 //cancel job in the queue
                 JobQueueEvent queueEvent = new JobQueueEvent(jobExecution.getExecutionId());
                 queueEvent.setMessageStatus(MessageStatus.CANCEL);
@@ -133,9 +133,9 @@ public class JobExecutionWatcher extends AbstractWatcher {
     private void processDoneChildrenJob(JobExecution jobExecution) {
         if (jobExecution.getParentExecutionId() != null) {
             //if sub job execution status is failed,then fail parent job execution
-            if (jobExecution.getStatus() == ExecutionStatus.FAILED) {
+            if (jobExecution.getExecutionStatus() == ExecutionStatus.FAILED) {
                 JobExecution parentJobExecution = jobExecutionExplorer.jobExecution(jobExecution.getParentExecutionId());
-                if (parentJobExecution.getStatus().isExecuting()) {
+                if (parentJobExecution.getExecutionStatus().isExecuting()) {
                     jobExecutionExplorer.fail(jobExecution.getParentExecutionId(), "sub job is failed.");
                 }
             }

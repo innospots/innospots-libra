@@ -42,7 +42,7 @@ public interface JobExecutionConverter extends BaseBeanConverter<JobExecution, J
         JobExecutionEntity jobExecutionEntity = INSTANCE.readyJobToJobExecution(readyJobEntity);
         jobExecutionEntity.setExecutionId(String.valueOf(InnospotsIdGenerator.generateId()));
         //using jobKey and context param to generate digestHex
-        String instanceKey = MD5.create().digestHex(readyJobEntity.getKey()+readyJobEntity.getContext());
+        String instanceKey = MD5.create().digestHex(readyJobEntity.getJobKey()+readyJobEntity.getContext());
         jobExecutionEntity.setInstanceKey(instanceKey);
         return jobExecutionEntity;
     }

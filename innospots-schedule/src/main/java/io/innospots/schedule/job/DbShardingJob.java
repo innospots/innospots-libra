@@ -108,11 +108,11 @@ public class DbShardingJob extends BaseJob {
         List<Pair<String, String>> shardingList = shardingList();
         jobExecution.setSubJobCount((long) shardingList.size());
         if (shardingList.isEmpty()) {
-            log.warn("job sharding is empty,jobKey:{}, executionId:{}, credentialKey:{}, table:{}", jobExecution.getKey(), jobExecution.getExecutionId(), credentialKey, table);
+            log.warn("job sharding is empty,jobKey:{}, executionId:{}, credentialKey:{}, table:{}", jobExecution.getJobKey(), jobExecution.getExecutionId(), credentialKey, table);
             return;
         }
         dispatchSubShardingJob(shardingList);
-        log.info("job sharding count:{}, jobKey:{}, jobExecutionId:{}", shardingList.size(), jobExecution.getKey(), jobExecution.getExecutionId());
+        log.info("job sharding count:{}, jobKey:{}, jobExecutionId:{}", shardingList.size(), jobExecution.getJobKey(), jobExecution.getExecutionId());
     }
 
     /**

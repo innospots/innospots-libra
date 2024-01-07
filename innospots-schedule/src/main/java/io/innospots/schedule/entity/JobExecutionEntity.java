@@ -60,13 +60,13 @@ public class JobExecutionEntity extends PBaseEntity {
      * job name
      */
     @Column(length = 32)
-    private String name;
+    private String jobName;
 
     /**
      * job primary key
      */
     @Column(length = 16)
-    private String key;
+    private String jobKey;
 
     /**
      * job key type: flow, node ,task etc
@@ -77,7 +77,7 @@ public class JobExecutionEntity extends PBaseEntity {
     /**
      * md5(context+key), job execution instance primary key, which be created by params and job key
      */
-    @Column(length = 32)
+    @Column(length = 64)
     protected String instanceKey;
 
     /**
@@ -94,7 +94,7 @@ public class JobExecutionEntity extends PBaseEntity {
 
     @Column(length = 16)
     @Enumerated(value = EnumType.STRING)
-    private ExecutionStatus status;
+    private ExecutionStatus executionStatus;
 
     /**
      * the value of execution process percent

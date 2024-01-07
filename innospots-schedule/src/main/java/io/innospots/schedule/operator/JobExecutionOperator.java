@@ -52,7 +52,7 @@ public class JobExecutionOperator extends ServiceImpl<JobExecutionDao, JobExecut
                                   Long failCount,
                                   ExecutionStatus status, String message) {
         UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
-        uw.lambda().set(status != null, JobExecutionEntity::getStatus, status)
+        uw.lambda().set(status != null, JobExecutionEntity::getExecutionStatus, status)
                 .set(percent != null, JobExecutionEntity::getPercent, percent)
                 .set(subJobCount != null, JobExecutionEntity::getSubJobCount, subJobCount)
                 .set(JobExecutionEntity::getSuccessCount, successCount)
