@@ -45,7 +45,7 @@ public class ExecutionClearScheduler {
                 int count = workflowInstanceCacheDao.deleteByUpdateTime(updateTime);
                 log.info("workflowInstanceCacheCleanTask delete:{} updateTime:{} currTime:{}", count, updateTime, LocalDateTime.now());
             } else {
-                log.info("workflowInstanceCacheCleanTask not run!  curr service not leader {} {}", ServiceActionHolder.isCleanTask(), ServiceActionHolder.isScheduleService());
+                log.info("workflowInstanceCacheCleanTask not run!  curr service not leader {} {}", ServiceActionHolder.isCleanTask(), ServiceActionHolder.isServiceLeader());
             }
         } catch (Exception e) {
             log.error("workflowInstanceCacheCleanTask error:{}", e.getMessage(), e);
@@ -78,7 +78,7 @@ public class ExecutionClearScheduler {
                     }
                 }
             } else {
-                log.info("workflowInstanceCacheCleanTask not run!  curr service not leader {} {}", ServiceActionHolder.isCleanTask(), ServiceActionHolder.isScheduleService());
+                log.info("workflowInstanceCacheCleanTask not run!  curr service not leader {} {}", ServiceActionHolder.isCleanTask(), ServiceActionHolder.isServiceLeader());
             }
         } catch (Exception e) {
             log.error("workflowInstanceCacheCleanTask error:{}", e.getMessage(), e);

@@ -45,7 +45,7 @@ public class FlowJobManager {
 
     public void executeFlowJob(JobExecution jobExecution){
         //load workflow
-        WorkflowBody workflowBody = workflowLoader.loadWorkflow(jobExecution.getKey());
+        WorkflowBody workflowBody = workflowLoader.loadWorkflow(jobExecution.getJobKey());
         //select complete keys
         Set<String> completeKeys = completeJobKeys(jobExecution.getParentExecutionId());
         //select next can be executed nodes
@@ -75,7 +75,8 @@ public class FlowJobManager {
      * @return
      */
     private Set<String> completeJobKeys(String parentExecutionId){
-        return jobExecutionOperator.completeJobKeys(parentExecutionId);
+        return null;
+        //return jobExecutionOperator.completeJobKeys(parentExecutionId);
     }
 
 }

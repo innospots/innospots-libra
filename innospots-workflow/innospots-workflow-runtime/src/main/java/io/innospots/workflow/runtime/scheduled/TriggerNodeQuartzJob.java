@@ -38,7 +38,7 @@ public class TriggerNodeQuartzJob implements Job {
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        if (ServiceActionHolder.isScheduleService()) {
+        if (ServiceActionHolder.isServiceLeader()) {
             JobKey jobKey = jobExecutionContext.getJobDetail().getKey();
             log.info("schedule task is trigger：{}", jobKey.getName());
             ScheduleRuntimeContainer scheduleRuntimeContainer = BeanContextAwareUtils.getBean(ScheduleRuntimeContainer.class);
