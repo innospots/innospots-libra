@@ -16,10 +16,10 @@
  * limitations under the License.
  */
 
-package io.innospots.libra.kernel.module.task;
+package io.innospots.libra.kernel.module.task.controller;
 
-import io.innospots.base.exception.InnospotException;
 import io.innospots.base.data.body.PageBody;
+import io.innospots.base.exception.InnospotException;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.libra.base.menu.ModuleMenu;
@@ -32,11 +32,7 @@ import io.innospots.libra.kernel.module.task.operator.TaskExecutionOperator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,9 +1,6 @@
 package io.innospots.workflow.console.task.execution;
 
 import io.innospots.base.events.IEventListener;
-import io.innospots.libra.base.task.ITaskExecutionExplore;
-import io.innospots.libra.base.task.TaskExecution;
-import io.innospots.libra.base.task.TaskExecutionStatus;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.events.NodeExecutionTaskEvent;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
@@ -25,6 +22,7 @@ import java.util.stream.Collectors;
  * @author Smars
  * @date 2023/8/7
  */
+/*
 @Component
 public class TaskNodeExecutionListener implements IEventListener<NodeExecutionTaskEvent> {
 
@@ -86,3 +84,4 @@ public class TaskNodeExecutionListener implements IEventListener<NodeExecutionTa
         return NodeExecutionTaskEvent.class;
     }
 }
+*/
