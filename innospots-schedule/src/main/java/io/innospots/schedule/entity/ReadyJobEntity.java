@@ -72,10 +72,10 @@ public class ReadyJobEntity extends PBaseEntity {
     private String parentExecutionId;
 
     @Column(length = 32)
-    private String name;
+    private String jobName;
 
     @Column(length = 16)
-    private String key;
+    private String jobKey;
 
     @Column(length = 16)
     private String keyType;

@@ -33,14 +33,21 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.innospots</groupId>
-            <artifactId>innospots-server-data</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>io.innospots</groupId>
+            <artifactId>innospots-server-base</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>io.innospots</groupId>
             <artifactId>innospots-schedule</artifactId>
             <version>${innosopts.version}</version>
         </dependency>
+
     </dependencies>
 
     <build>

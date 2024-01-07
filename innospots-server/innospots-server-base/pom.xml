@@ -24,6 +24,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.lmax</groupId>
+            <artifactId>disruptor</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>io.innospots</groupId>
             <artifactId>innospots-base</artifactId>
         </dependency>

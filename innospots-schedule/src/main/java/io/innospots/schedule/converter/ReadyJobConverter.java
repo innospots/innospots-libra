@@ -54,9 +54,9 @@ public interface ReadyJobConverter extends BaseBeanConverter<ReadyJob, ReadyJobE
         ReadyJobEntity readyJobEntity = new ReadyJobEntity();
         readyJobEntity.setJobReadyKey(InnospotsIdGenerator.generateIdStr());
         readyJobEntity.setContext(JSONUtils.toJsonString(context));
-        readyJobEntity.setName(scheduleJobInfo.getJobName());
+        readyJobEntity.setJobName(scheduleJobInfo.getJobName());
         readyJobEntity.setKeyType(scheduleJobInfo.getJobType().name());
-        readyJobEntity.setKey(scheduleJobInfo.getJobKey());
+        readyJobEntity.setJobKey(scheduleJobInfo.getJobKey());
         readyJobEntity.setSequenceNumber(1);
         readyJobEntity.setResourceKey(scheduleJobInfo.getResourceKey());
         readyJobEntity.setMessageStatus(MessageStatus.UNREAD);

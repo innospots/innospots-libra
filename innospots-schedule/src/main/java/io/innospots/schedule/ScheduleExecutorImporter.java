@@ -16,10 +16,12 @@ import io.innospots.schedule.operator.ScheduleJobInfoOperator;
 import io.innospots.schedule.queue.IReadyJobQueue;
 import io.innospots.schedule.queue.ReadyJobDbQueue;
 import io.innospots.schedule.queue.ReadyJobQueueListener;
+import io.innospots.schedule.starter.ScheduleExecutorStarter;
 import io.innospots.schedule.watcher.JobExecutionWatcher;
 import io.innospots.schedule.watcher.ReadyQueueWatcher;
 import io.innospots.schedule.watcher.ScheduleJobWatcher;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -46,7 +48,6 @@ public @interface ScheduleExecutorImporter {
     @EnableConfigurationProperties(InnospotsScheduleProperties.class)
     @EntityScan(basePackages = "io.innospots.schedule.entity")
     @MapperScan(basePackages = "io.innospots.schedule.dao")
-    @ComponentScan(basePackages = "io.innospots.schedule")
     class InnerConfiguration {
 
 
@@ -73,10 +74,11 @@ public @interface ScheduleExecutorImporter {
 
         @Bean
         public ReadyJobLauncher readyJobLauncher(JobExecutionExplorer jobExecutionExplorer,
-                                                 ReadyJobDbQueue readyJobDbQueue, ThreadTaskExecutor executorThreadPool){
+                                                 IReadyJobQueue readyJobDbQueue, @Qualifier("executorThreadPool") ThreadTaskExecutor executorThreadPool){
             return new ReadyJobLauncher(jobExecutionExplorer,readyJobDbQueue,executorThreadPool);
         }
 
+        @Bean
         public ThreadTaskExecutor executorThreadPool(InnospotsScheduleProperties scheduleProperties){
             return ThreadPoolBuilder.build(scheduleProperties.getExecutorSize(),scheduleProperties.getExecutorSize(),0,"executorThreadPool");
         }
@@ -109,6 +111,11 @@ public @interface ScheduleExecutorImporter {
         public ScheduleJobWatcher scheduleJobWatcher(QuartzScheduleManager scheduleManager,
                                                      ScheduleJobInfoExplorer scheduleJobInfoExplorer){
             return new ScheduleJobWatcher(scheduleManager,scheduleJobInfoExplorer);
+        }
+
+        @Bean
+        public ScheduleExecutorStarter scheduleExecutorStarter(InnospotsScheduleProperties scheduleProperties){
+            return new ScheduleExecutorStarter(scheduleProperties);
         }
 
     }

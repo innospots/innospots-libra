@@ -18,6 +18,7 @@
 
 package io.innospots.server.base.registry;
 
+import io.innospots.base.utils.ServiceActionHolder;
 import io.innospots.server.base.registry.enums.ServiceRole;
 import io.innospots.base.watcher.AbstractWatcher;
 import org.apache.commons.collections4.CollectionUtils;
@@ -62,7 +63,11 @@ public class ServiceRegistryWatcher extends AbstractWatcher {
         }
 
         checkAvailableService();
-
+        if(ServiceRegistryHolder.getCurrentServer()!=null){
+            ServiceActionHolder.setServiceLeader(ServiceRegistryHolder.isLeader());
+            ServiceActionHolder.setServiceType(ServiceRegistryHolder.serverType());
+            ServiceActionHolder.setServerKey(ServiceRegistryHolder.getCurrentServer().getServerKey());
+        }
         return checkIntervalSecond;
     }
 
@@ -131,7 +136,7 @@ public class ServiceRegistryWatcher extends AbstractWatcher {
     private void checkServiceRole(List<ServiceInfo> serviceInfos) {
         //check leader service exist or not
         List<ServiceInfo> leaderServices = serviceInfos.stream().filter(
-                        item -> item.getServiceType() == ServiceRegistryHolder.serverType() &&
+                        item -> Objects.equals(item.getServiceType(), ServiceRegistryHolder.serverType()) &&
                                 item.getServiceRole() == ServiceRole.LEADER)
                 .collect(Collectors.toList());
 

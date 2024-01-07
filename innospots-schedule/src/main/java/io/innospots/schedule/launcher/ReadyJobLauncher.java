@@ -56,7 +56,7 @@ public class ReadyJobLauncher {
 
 
     public ReadyJobLauncher(JobExecutionExplorer jobExecutionExplorer,
-                            ReadyJobDbQueue readyJobDbQueue, ThreadTaskExecutor threadTaskExecutor) {
+                            IReadyJobQueue readyJobDbQueue, ThreadTaskExecutor threadTaskExecutor) {
         this.jobExecutionExplorer = jobExecutionExplorer;
         this.readyJobDbQueue = readyJobDbQueue;
         this.threadTaskExecutor = threadTaskExecutor;
@@ -96,11 +96,11 @@ public class ReadyJobLauncher {
             baseJob.execute();
             if (jobExecution.getJobType() == JobType.EXECUTE) {
                 jobExecution.setEndTime(LocalDateTime.now());
-                jobExecution.setStatus(ExecutionStatus.COMPLETE);
+                jobExecution.setExecutionStatus(ExecutionStatus.COMPLETE);
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            jobExecution.setStatus(ExecutionStatus.FAILED);
+            jobExecution.setExecutionStatus(ExecutionStatus.FAILED);
             jobExecution.setMessage(ExceptionUtil.stacktraceToString(e, 1024));
         }finally {
             jobExecution.setSelfEndTime(LocalDateTime.now());

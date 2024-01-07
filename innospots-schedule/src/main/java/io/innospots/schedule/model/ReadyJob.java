@@ -51,11 +51,13 @@ public class ReadyJob {
 
     private String parentExecutionId;
 
-    private String key;
+    private String jobKey;
 
-    private String name;
+    private String jobName;
 
     private String keyType;
+
+    private String scopes;
 
     private Map<String,Object> context;
 
@@ -70,8 +72,6 @@ public class ReadyJob {
     private String resourceKey;
 
     private String serverKey;
-
-    private String scopes;
 
     private Integer version;
 
