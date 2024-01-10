@@ -8,6 +8,7 @@ import io.innospots.base.entity.PBaseEntity;
 import io.innospots.base.enums.DataStatus;
 import lombok.Getter;
 import lombok.Setter;
+import org.checkerframework.checker.units.qual.C;
 
 import javax.persistence.*;
 
@@ -21,7 +22,7 @@ import javax.persistence.*;
 @Entity
 @TableName(value = AppDefinitionEntity.TABLE_NAME)
 @Table(name = AppDefinitionEntity.TABLE_NAME)
-public class AppDefinitionEntity extends PBaseEntity {
+public class AppDefinitionEntity extends BaseAppEntity {
 
     public static final String TABLE_NAME = "app_definition";
 
@@ -31,30 +32,10 @@ public class AppDefinitionEntity extends PBaseEntity {
     @Column(length = 16)
     private String appKey;
 
-    @Column(length = 32)
-    private String name;
-
-    private Integer categoryId;
-
-    @Column(length = 256)
-    private String description;
+    @Column(length = 16)
+    private String templateKey;
 
     @Column(length = 32)
-    @Enumerated(value = EnumType.STRING)
-    private DataStatus status;
-
-    @Column(length = 32)
-    private String icon;
-
-    @Column(columnDefinition = "MEDIUMTEXT")
-    private String config;
-
-
-    @Column(columnDefinition = "MEDIUMTEXT")
-    private String executionPreview;
-
-    @Column(columnDefinition = "MEDIUMTEXT")
-    private String executeCode;
-
+    private String appPath;
 
 }
