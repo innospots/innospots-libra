@@ -22,7 +22,7 @@ package io.innospots.workflow.core.enums;
  * @author chenc
  * @date 2023/4/09
  */
-public enum NodeSource {
+public enum NodeVendor {
     system,
-    non_system;
+    official;
 }

@@ -33,8 +33,7 @@ public interface ISchemaRegistryReader {
 
     List<SchemaRegistry> listSchemaRegistries(String credentialKey, boolean includeField);
 
+    SchemaRegistry getSchemaRegistryByCode(String credentialKey, String registryCode);
 
-    SchemaRegistry getSchemaRegistry(String credentialKey, String registryCode);
-
-    SchemaRegistry getSchemaRegistry(String credentialKey, Integer registryId);
+    SchemaRegistry getSchemaRegistryById(String credentialKey, String registryId);
 }

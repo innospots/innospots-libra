@@ -68,24 +68,24 @@ public class CachedSchemaRegistryReader implements ISchemaRegistryReader {
 
 
     @Override
-    public SchemaRegistry getSchemaRegistry(String credentialKey, String registryCode) {
+    public SchemaRegistry getSchemaRegistryByCode(String credentialKey, String registryCode) {
 
         String schemaKey = credentialKey + "_" + StringUtils.defaultString(registryCode, "");
         // 从schemaRegistryCache获取
         return schemaRegistryCache.get(schemaKey,
                 // 始终保持数据源id对应的数据集列表信息是最新的全部数据
-                key -> this.schemaRegistryReader.getSchemaRegistry(credentialKey, registryCode));
+                key -> this.schemaRegistryReader.getSchemaRegistryByCode(credentialKey, registryCode));
 
     }
 
     @Override
-    public SchemaRegistry getSchemaRegistry(String credentialKey, Integer registryId) {
+    public SchemaRegistry getSchemaRegistryById(String credentialKey, String registryId) {
 
         String schemaKey = credentialKey + "_" + registryId;
         // 从schemaRegistryCache获取
         return schemaRegistryCache.get(schemaKey,
                 // 始终保持数据源id对应的数据集列表信息是最新的全部数据
-                key -> this.schemaRegistryReader.getSchemaRegistry(credentialKey, registryId));
+                key -> this.schemaRegistryReader.getSchemaRegistryById(credentialKey, registryId));
     }
 
 

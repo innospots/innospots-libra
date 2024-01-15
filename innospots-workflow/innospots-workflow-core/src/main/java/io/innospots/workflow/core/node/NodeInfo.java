@@ -21,7 +21,6 @@ package io.innospots.workflow.core.node;
 
 import io.innospots.base.enums.DataStatus;
 import io.innospots.workflow.core.enums.NodePrimitive;
-import io.innospots.workflow.core.enums.NodeSource;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -64,7 +63,9 @@ public class NodeInfo {
 
     protected Boolean used;
 
-    protected NodeSource nodeSource;
+    @Schema(title = "node vendor")
+    protected String vendor;
+//    protected NodeSource nodeSource;
 
     @Schema(title = "node class name")
     protected String nodeType;

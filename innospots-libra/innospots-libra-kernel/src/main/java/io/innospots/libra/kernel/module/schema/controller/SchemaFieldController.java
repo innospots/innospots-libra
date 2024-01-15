@@ -70,9 +70,9 @@ public class SchemaFieldController extends BaseController {
     public InnospotResponse<List<SchemaField>> listSchemaFields(
             @Parameter(name = "credentialId") @RequestParam(value = "credentialId") String credentialKey,
             @Parameter(name = "tableName") @RequestParam(value = "tableName", required = false) String tableName,
-            @Parameter(name = "registryId") @RequestParam(value = "registryId", required = false) Integer registryId) {
+            @Parameter(name = "registryId") @RequestParam(value = "registryId", required = false) String registryId) {
         IDataConnectionMinder connectionMinder = dataConnectionMinderManager.getMinder(credentialKey);
-        SchemaRegistry schemaRegistry = registryId != null ? connectionMinder.schemaRegistry(registryId) : connectionMinder.schemaRegistry(tableName);
+        SchemaRegistry schemaRegistry = registryId != null ? connectionMinder.schemaRegistryById(registryId) : connectionMinder.schemaRegistryByCode(tableName);
         if (schemaRegistry != null) {
             return success(schemaRegistry.getSchemaFields());
         } else {

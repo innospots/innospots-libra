@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
  */
 public class SchemaFieldOperator extends ServiceImpl<SchemaFieldDao, SchemaFieldEntity> {
 
-    public List<SchemaField> createOrUpdateSchemaFieldBatch(Integer registryId, List<SchemaField> schemaFields) {
+    public List<SchemaField> createOrUpdateSchemaFieldBatch(String registryId, List<SchemaField> schemaFields) {
         if (CollectionUtils.isEmpty(schemaFields)) {
             return Collections.emptyList();
         }
@@ -99,7 +99,7 @@ public class SchemaFieldOperator extends ServiceImpl<SchemaFieldDao, SchemaField
         return schemaFields;
     }
 
-    public List<SchemaField> listByRegistryId(Integer registryId) {
+    public List<SchemaField> listByRegistryId(String registryId) {
         QueryWrapper<SchemaFieldEntity> query = new QueryWrapper<>();
         query.lambda().eq(SchemaFieldEntity::getRegistryId, registryId);
         List<SchemaFieldEntity> entities = super.list(query);
@@ -157,11 +157,11 @@ public class SchemaFieldOperator extends ServiceImpl<SchemaFieldDao, SchemaField
     }
 
 
-    public Boolean deleteByRegistryId(Integer registryId) {
+    public Boolean deleteByRegistryId(String registryId) {
         return super.remove(new QueryWrapper<SchemaFieldEntity>().lambda().eq(SchemaFieldEntity::getRegistryId, registryId));
     }
 
-    public Boolean deleteByRegistryIds(Set<Integer> registryIds) {
+    public Boolean deleteByRegistryIds(Set<String> registryIds) {
         return super.remove(new QueryWrapper<SchemaFieldEntity>().lambda().in(SchemaFieldEntity::getRegistryId, registryIds));
     }
 
@@ -170,14 +170,14 @@ public class SchemaFieldOperator extends ServiceImpl<SchemaFieldDao, SchemaField
         return super.removeById(fieldId);
     }
 
-    private boolean checkCodeExist(String code, Integer registryId) {
+    private boolean checkCodeExist(String code, String registryId) {
         return super.count(new QueryWrapper<SchemaFieldEntity>().lambda()
                 .eq(SchemaFieldEntity::getCode, code)
                 .eq(SchemaFieldEntity::getRegistryId, registryId)
         ) > 0;
     }
 
-    private boolean checkCodeExistAndExcludeOriginalCode(String code, Integer registryId, Integer fieldId) {
+    private boolean checkCodeExistAndExcludeOriginalCode(String code, String registryId, Integer fieldId) {
         return super.count(new QueryWrapper<SchemaFieldEntity>().lambda()
                 .eq(SchemaFieldEntity::getCode, code)
                 .eq(SchemaFieldEntity::getRegistryId, registryId)

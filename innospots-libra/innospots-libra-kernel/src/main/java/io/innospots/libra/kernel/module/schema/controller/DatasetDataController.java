@@ -88,14 +88,14 @@ public class DatasetDataController {
         if (viewId == null || snippet == null) {
             throw ValidatorException.buildInvalidException(this.getClass(), "viewId or snippet cannot be empty");
         }
-        Boolean validata = dataframeExecutor.functionValidate(Integer.valueOf(String.valueOf(viewId)), String.valueOf(snippet));
+        Boolean validata = dataframeExecutor.functionValidate(String.valueOf(viewId), String.valueOf(snippet));
         return success(validata);
     }
 
     @GetMapping("function/support/{viewId}")
     @Operation(summary = "function support list")
     public InnospotResponse<Set<StdSqlOperator>> functionValidate(
-            @Parameter(name = "viewId") @PathVariable(name = "viewId") Integer viewId) {
+            @Parameter(name = "viewId") @PathVariable(name = "viewId") String viewId) {
         Set<StdSqlOperator> sqlOperators = dataframeExecutor.supportedFunctions(viewId);
         return success(sqlOperators);
     }

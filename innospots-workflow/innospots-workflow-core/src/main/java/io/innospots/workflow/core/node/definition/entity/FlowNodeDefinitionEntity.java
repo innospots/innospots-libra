@@ -26,6 +26,7 @@ import io.innospots.base.enums.DataStatus;
 import io.innospots.base.entity.BaseEntity;
 import io.innospots.workflow.core.enums.NodePrimitive;
 import io.innospots.workflow.core.node.definition.model.NodeDefinition;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -52,14 +53,18 @@ public class FlowNodeDefinitionEntity extends BaseEntity {
     @Column(length = 32)
     private String name;
 
-    @Column(length = 64)
-    private String displayName;
-
     @Column(length = 32)
     private String code;
 
+    @Column(length = 256)
+    private String description;
+
     @Column(length = 32)
-    private String connectorName;
+    private String icon;
+
+
+//    @Column(length = 32)
+//    private String connectorName;
 
 //    @Column(length = 32)
 //    private String configCode;
@@ -67,8 +72,8 @@ public class FlowNodeDefinitionEntity extends BaseEntity {
     /**
      * connectorSchema default form config
      */
-    @Column(columnDefinition = "TEXT")
-    private String connectorConfigs;
+//    @Column(columnDefinition = "TEXT")
+//    private String connectorConfigs;
 
 //    @Column(length = 2048)
 //    private String configs;
@@ -76,35 +81,16 @@ public class FlowNodeDefinitionEntity extends BaseEntity {
     @Column(length = 128)
     private String nodeType;
 
-    @Column(length = 256)
-    private String description;
-
-    @Column(length = 32)
-    @Enumerated(value = EnumType.STRING)
-    private DataStatus status;
-
-    @Column(length = 32)
-    private String icon;
-
-    @Column(length = 32)
-    private String color;
-
-    @Column(length = 256)
-    private String style;
-
     @Column(length = 16)
     @Enumerated(value = EnumType.STRING)
     private NodePrimitive primitive;
 
-    @Column(length = 16)
+    @Column(length = 32)
+    protected String credentialTypeCode;
+
+    @Column(length = 32)
     @Enumerated(value = EnumType.STRING)
-    private NodeDefinition.RunMethod runMethod;
-
-    @Column(length = 512)
-    private String inPorts;
-
-    @Column(length = 512)
-    private String outPorts;
+    private DataStatus status;
 
     @Column
     private Boolean enableDelete;
@@ -113,23 +99,47 @@ public class FlowNodeDefinitionEntity extends BaseEntity {
     private Boolean used;
 
     @Column(length = 32)
-    private String appSource;
+    private String vendor;
+
+//    @Column(columnDefinition = "MEDIUMTEXT")
+//    private String config;
+
+    /**
+     * include inPorts, outPorts
+     */
+    @Column(columnDefinition = "MEDIUMTEXT")
+    private String resources;
+
+    /**
+     * include runMethod, color, style
+     */
+    @Column(columnDefinition = "TEXT")
+    private String settings;
+
 
     @Column(columnDefinition = "MEDIUMTEXT")
-    private String config;
+    private String scripts;
 
+//    @Column(length = 32)
+//    private String color;
 
-    @Column(columnDefinition = "MEDIUMTEXT")
-    private String executionPreview;
+//    @Column(length = 256)
+//    private String style;
 
-    @Column(columnDefinition = "MEDIUMTEXT")
-    private String executeCode;
+//    @Column(length = 16)
+//    @Enumerated(value = EnumType.STRING)
+//    private NodeDefinition.RunMethod runMethod;
+
+//    @Column(length = 512)
+//    private String inPorts;
+
+//    @Column(length = 512)
+//    private String outPorts;
 
     /**
      * 非数据库字段，用户关联查询获取数据使用
      */
-    @TableField(exist = false)
-    private Integer nodeGroupId;
-
+//    @TableField(exist = false)
+//    private Integer nodeGroupId;
 
 }

@@ -30,8 +30,8 @@ import java.util.Map;
  */
 @Getter
 @Setter
-@Schema(title = "app connector credential config")
-public class AppConnectorConfig {
+@Schema(title = "node connector credential config")
+public class NodeConnectorConfig {
 
     @Schema(title = "tab and checkbox value")
     private String configCode;
@@ -40,12 +40,12 @@ public class AppConnectorConfig {
     private String configName;
 
     @Schema(title = "connector credential ")
-    private Map<String,Object> formValues;
+    private Map<String, Object> formValues;
 
-    private Map<String,Object> props;
+    private Map<String, Object> props;
 
-    public Object getValue(String name){
-        if(formValues!=null){
+    public Object getValue(String name) {
+        if (formValues != null) {
             return formValues.get(name);
         }
         return null;
@@ -53,9 +53,9 @@ public class AppConnectorConfig {
 
     public boolean isReadOnly(String name) {
         Object rv = getValue("readOnly");
-        if(rv instanceof Map){
-            Map<String,Boolean> ro = (Map<String, Boolean>) rv;
-            return ro.getOrDefault(name,Boolean.FALSE);
+        if (rv instanceof Map) {
+            Map<String, Boolean> ro = (Map<String, Boolean>) rv;
+            return ro.getOrDefault(name, Boolean.FALSE);
         }
         return false;
     }

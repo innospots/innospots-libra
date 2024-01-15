@@ -45,7 +45,7 @@ public class SchemaRegistryEntity extends PBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(length = 16)
-    private String registryKey;
+    private String registryId;
 
     @Column(length = 64)
     private String name;

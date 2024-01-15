@@ -31,5 +31,6 @@ public enum CategoryType {
     REGISTRY,
     DATA_SET,
     APPS,
+    APP_TPL,
     WORKFLOW,
 }

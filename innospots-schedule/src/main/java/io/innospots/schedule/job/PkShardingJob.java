@@ -40,7 +40,7 @@ public class PkShardingJob extends DbShardingJob {
 
     @Override
     protected String shardingColumn(IDataConnectionMinder minder) {
-        SchemaRegistry schemaRegistry = minder.schemaRegistry(table);
+        SchemaRegistry schemaRegistry = minder.schemaRegistryByCode(table);
         Optional<SchemaField> schemaField = schemaRegistry.getSchemaFields().stream().filter(SchemaField::getPkey).findFirst();
         if (schemaField.isPresent()) {
             return schemaField.get().getCode();

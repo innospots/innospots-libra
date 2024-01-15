@@ -122,7 +122,7 @@ public class JdbcDataConnectionMinder extends BaseDataConnectionMinder {
 
 
     @Override
-    public SchemaRegistry schemaRegistry(String tableName) {
+    public SchemaRegistry schemaRegistryByCode(String tableName) {
         ResultSet resultSet = null;
         try (Connection connection = this.dataSource.getConnection()) {
             SchemaRegistry schemaRegistry = null;

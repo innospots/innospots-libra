@@ -61,11 +61,11 @@ public class HttpApiOperator {
         return ApiSchemaRegistryConverter.INSTANCE.schemaRegistryToApi(schemaRegistry);
     }
 
-    public Boolean deleteApiRegistry(Integer schemaRegistryId) {
+    public Boolean deleteApiRegistry(String schemaRegistryId) {
         return schemaRegistryOperator.deleteSchemaRegistry(schemaRegistryId);
     }
 
-    public ApiSchemaRegistry getApiRegistry(Integer schemaRegistryId) {
+    public ApiSchemaRegistry getApiRegistry(String schemaRegistryId) {
         SchemaRegistry schemaRegistry = schemaRegistryOperator.getSchemaRegistryById(schemaRegistryId, true);
         if (schemaRegistry == null) {
             throw ResourceException.buildNotExistException(this.getClass(), "http api registry not exist", schemaRegistryId);

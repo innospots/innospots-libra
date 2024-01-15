@@ -32,7 +32,7 @@ import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
 import io.innospots.workflow.console.operator.node.FlowNodeGroupOperator;
 import io.innospots.workflow.core.instance.operator.NodeInstanceOperator;
 import io.innospots.workflow.core.enums.NodePrimitive;
-import io.innospots.workflow.core.enums.NodeSource;
+import io.innospots.workflow.core.enums.NodeVendor;
 import io.innospots.workflow.core.node.NodeInfo;
 import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import lombok.extern.slf4j.Slf4j;
@@ -89,7 +89,7 @@ public class NodeDefinitionService {
     @Transactional(rollbackFor = Exception.class)
     public NodeInfo createAppInfo(NodeInfo nodeInfo) {
         nodeInfo.setUsed(Boolean.FALSE);
-        nodeInfo.setNodeSource(NodeSource.non_system);
+        nodeInfo.setVendor(NodeVendor.official.name());
         nodeInfo = flowNodeDefinitionOperator.createAppInfo(nodeInfo);
         Integer nodeId = nodeInfo.getNodeId();
         if (nodeId != null) {

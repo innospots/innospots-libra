@@ -57,10 +57,10 @@ public interface IDataConnectionMinder {
      * @param registryCode
      * @return
      */
-    SchemaRegistry schemaRegistry(String registryCode);
+    SchemaRegistry schemaRegistryByCode(String registryCode);
 
 
-    SchemaRegistry schemaRegistry(Integer registryId);
+    SchemaRegistry schemaRegistryById(String registryId);
 
     /**
      * fetch database table schema

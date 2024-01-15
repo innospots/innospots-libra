@@ -23,7 +23,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,41 +35,37 @@ import java.util.Map;
 public class NodeDefinition extends NodeInfo {
 
 
-    @Schema(title = "node css style")
-    protected Map<String, Object> style;
+//    @Schema(title = "node css style")
+//    protected Map<String, Object> style;
 
-    @Schema(title = "the node running method when click the execution button")
-    private RunMethod runMethod;
+//    @Schema(title = "the node running method when click the execution button")
+//    private RunMethod runMethod;
 
-    @Schema(title = "input ports, only use in frontend which define the input ports")
-    private List<Map<String, Object>> inPorts;
+//    @Schema(title = "input ports, only use in frontend which define the input ports")
+//    private List<Map<String, Object>> inPorts;
 
-    @Schema(title = "output ports, only use in frontend which define the output ports")
-    private List<Map<String, Object>> outPorts;
+//    @Schema(title = "output ports, only use in frontend which define the output ports")
+//    private List<Map<String, Object>> outPorts;
 
     @Schema(title = "the node has delete icon in the canvas")
     private Boolean enableDelete;
 
-    @Schema(title = "app config form element")
-    private Map<String, Object> config;
+    @Schema(title = "node config form element")
+//    private Map<String, Object> config;
+    private NodeResource resources;
+
+    @Schema(title = "node setting")
+    private NodeSetting settings;
 
 //    @Schema(title = "connector config info")
 //    private List<Map<String, Object>> configs;
 
-    @Schema(title = "execute code")
-    private Map<String, Object> executeCode;
+    @Schema(title = "execute script code")
+    private Map<String, Object> scripts;
 
-    @Schema(title = "the setting of the execution pop panel, includes size and elements")
-    private Map<String, Object> executionPreview;
+//    @Schema(title = "the setting of the execution pop panel, includes size and elements")
+//    private Map<String, Object> executionPreview;
 
-
-    public enum RunMethod {
-        /**
-         *
-         */
-        DEFAULT,
-        CONFIG;
-    }
 
     @Override
     public String toString() {

@@ -85,14 +85,14 @@ public class HttpApiController extends BaseController {
     @DeleteMapping("{registryId}")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @Operation(summary = "delete http api")
-    public InnospotResponse<Boolean> deleteHttpApi(@Parameter(name = "registryId") @PathVariable Integer registryId) {
+    public InnospotResponse<Boolean> deleteHttpApi(@Parameter(name = "registryId") @PathVariable String registryId) {
         Boolean delete = httpApiOperator.deleteApiRegistry(registryId);
         return success(delete);
     }
 
     @GetMapping("{registryId}")
     @Operation(summary = "get api registry by id")
-    public InnospotResponse<ApiSchemaRegistry> getHttpApiById(@Parameter(name = "registryId") @PathVariable Integer registryId) {
+    public InnospotResponse<ApiSchemaRegistry> getHttpApiById(@Parameter(name = "registryId") @PathVariable String registryId) {
         ApiSchemaRegistry apiSchemaRegistry = httpApiOperator.getApiRegistry(registryId);
         return success(apiSchemaRegistry);
     }

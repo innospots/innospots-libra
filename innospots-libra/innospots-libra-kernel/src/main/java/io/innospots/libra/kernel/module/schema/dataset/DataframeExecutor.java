@@ -78,7 +78,7 @@ public class DataframeExecutor {
             return Dataframe.empty();
         }
 
-        Dataset dataset = datasetOperator.getDatasetById(Integer.valueOf(viewExecuteParam.getViewId()));
+        Dataset dataset = datasetOperator.getDatasetById(viewExecuteParam.getViewId());
         ConnectionCredential connectionCredential = connectionCredentialReader.readCredential(dataset.getCredentialKey());
         viewExecuteParam.setScript(dataset.getScript());
         viewExecuteParam.setModel(this.parseSchema(dataset.getModel()));
@@ -136,13 +136,13 @@ public class DataframeExecutor {
         return dataframe;
     }
 
-    public Boolean functionValidate(Integer viewId, String snippet) {
+    public Boolean functionValidate(String viewId, String snippet) {
         Dataset dataset = datasetOperator.getDatasetById(viewId);
         ConnectionCredential connectionCredential = connectionCredentialReader.readCredential(dataset.getCredentialKey());
         return SqlScriptBuilderManager.functionValidate(connectionCredential.getAuthOption(), snippet);
     }
 
-    public Set<StdSqlOperator> supportedFunctions(Integer viewId) {
+    public Set<StdSqlOperator> supportedFunctions(String viewId) {
         Dataset dataset = datasetOperator.getDatasetById(viewId);
         ConnectionCredential connectionCredential = connectionCredentialReader.readCredential(dataset.getCredentialKey());
         return SqlScriptBuilderManager.supportedFunctions(connectionCredential.getAuthOption());

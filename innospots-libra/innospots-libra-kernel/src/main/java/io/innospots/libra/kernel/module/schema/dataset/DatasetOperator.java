@@ -82,11 +82,11 @@ public class DatasetOperator implements IDatasetReader {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Boolean deleteDataset(Integer registryId) {
+    public Boolean deleteDataset(String registryId) {
         return schemaRegistryOperator.deleteSchemaRegistry(registryId);
     }
 
-    public Dataset getDatasetById(Integer registryId) {
+    public Dataset getDatasetById(String registryId) {
         return SchemaRegistryConverter.INSTANCE.schemaRegistryToDataset(schemaRegistryOperator.getSchemaRegistryById(registryId, true));
     }
 

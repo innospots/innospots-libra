@@ -107,7 +107,7 @@ public interface SchemaRegistryConverter extends BaseBeanConverter<SchemaRegistr
             List<SchemaField> schemaFields = new ArrayList<>();
             for (Variable variable : dataset.getVariables()) {
                 SchemaField schemaField = new SchemaField();
-                schemaField.setRegistryId(StringUtils.isEmpty(variable.getViewId()) ? null : Integer.valueOf(variable.getViewId()));
+                schemaField.setRegistryId(StringUtils.isEmpty(variable.getViewId()) ? null : variable.getViewId());
                 schemaField.setName(variable.getName());
                 Map<String, Object> config = new HashMap<>();
                 config.put("type", variable.getType());

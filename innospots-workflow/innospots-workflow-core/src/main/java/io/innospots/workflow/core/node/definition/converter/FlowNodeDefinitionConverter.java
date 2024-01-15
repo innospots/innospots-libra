@@ -22,8 +22,10 @@ import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.workflow.core.node.NodeInfo;
 import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
-import io.innospots.workflow.core.node.definition.model.AppConnectorConfig;
+import io.innospots.workflow.core.node.definition.model.NodeConnectorConfig;
 import io.innospots.workflow.core.node.definition.model.NodeDefinition;
+import io.innospots.workflow.core.node.definition.model.NodeResource;
+import io.innospots.workflow.core.node.definition.model.NodeSetting;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -66,11 +68,27 @@ public interface FlowNodeDefinitionConverter extends BaseBeanConverter<NodeDefin
     void infoToEntity(NodeInfo nodeInfo, @MappingTarget FlowNodeDefinitionEntity entity);
 
 
-    default List<AppConnectorConfig> strToConnectorConfigs(String connectorConfig){
-        return JSONUtils.toList(connectorConfig,AppConnectorConfig.class);
+    default List<NodeConnectorConfig> strToConnectorConfigs(String connectorConfig){
+        return JSONUtils.toList(connectorConfig, NodeConnectorConfig.class);
     }
 
-    default String connectorConfigsToStr(List<AppConnectorConfig> connectorConfigs){
+    default String connectorConfigsToStr(List<NodeConnectorConfig> connectorConfigs){
         return JSONUtils.toJsonString(connectorConfigs);
+    }
+
+    default String resourceToStr(NodeResource nodeResource){
+        return JSONUtils.toJsonString(nodeResource);
+    }
+
+    default NodeResource strToResource(String resource){
+        return JSONUtils.parseObject(resource, NodeResource.class);
+    }
+
+    default String settingToStr(NodeSetting nodeSetting){
+        return JSONUtils.toJsonString(nodeSetting);
+    }
+
+    default NodeSetting strToSetting(String setting){
+        return JSONUtils.parseObject(setting, NodeSetting.class);
     }
 }

@@ -40,7 +40,7 @@ import java.util.List;
 public class Dataset extends BaseModelInfo {
 
     @Schema(title = "dataset id") // registryId
-    private Integer id;
+    private String id;
 
     @Schema(title = "category id")
     private Integer categoryId;

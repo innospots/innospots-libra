@@ -52,12 +52,12 @@ import static io.innospots.libra.base.menu.ItemType.BUTTON;
 @RequestMapping(PATH_ROOT_ADMIN + "flow-node/management")
 @ModuleMenu(menuKey = "node-management")
 @Tag(name = "Node Definition")
-public class FlowManagementController extends BaseController {
+public class FlowNodeDefinitionController extends BaseController {
 
 
     private final NodeDefinitionService nodeDefinitionService;
 
-    public FlowManagementController(NodeDefinitionService nodeDefinitionService) {
+    public FlowNodeDefinitionController(NodeDefinitionService nodeDefinitionService) {
         this.nodeDefinitionService = nodeDefinitionService;
     }
 

@@ -201,10 +201,14 @@ public class FlowNodeGroupOperator {
             List<FlowNodeDefinitionEntity> ndList = flowNodeDefinitionDao.getNodeDefinitionByFlowTplIdAndStatus(flowTplId, DataStatus.ONLINE);
             if (CollectionUtils.isNotEmpty(ndList)) {
                 for (FlowNodeDefinitionEntity entity : ndList) {
+                    //TODO 修改nodeGroupId的转换逻辑，从数据库获取
+                    /*
                     if (!ndMap.containsKey(entity.getNodeGroupId())) {
                         ndMap.put(entity.getNodeGroupId(), new ArrayList<>());
                     }
                     ndMap.get(entity.getNodeGroupId()).add(FlowNodeDefinitionConverter.INSTANCE.entityToModel(entity));
+
+                     */
                 }
             }
         }

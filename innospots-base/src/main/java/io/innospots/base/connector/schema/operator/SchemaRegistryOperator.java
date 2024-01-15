@@ -93,7 +93,7 @@ public class SchemaRegistryOperator extends ServiceImpl<SchemaRegistryDao, Schem
         return this.getSchemaRegistryById(entity.getRegistryId(), true);
     }
 
-    public Boolean deleteSchemaRegistry(Integer registryId) {
+    public Boolean deleteSchemaRegistry(String registryId) {
         schemaFieldOperator.deleteByRegistryId(registryId);
         return super.removeById(registryId);
     }
@@ -103,17 +103,17 @@ public class SchemaRegistryOperator extends ServiceImpl<SchemaRegistryDao, Schem
         if (CollectionUtils.isEmpty(registryEntities)) {
             return true;
         }
-        Set<Integer> ids = registryEntities.stream().map(SchemaRegistryEntity::getRegistryId).collect(Collectors.toSet());
+        Set<String> ids = registryEntities.stream().map(SchemaRegistryEntity::getRegistryId).collect(Collectors.toSet());
         boolean delete = super.remove(new QueryWrapper<SchemaRegistryEntity>().lambda().eq(SchemaRegistryEntity::getCredentialKey, credentialKey));
         schemaFieldOperator.deleteByRegistryIds(ids);
         return delete;
     }
 
-    public SchemaRegistry getSchemaRegistryById(Integer registryId) {
+    public SchemaRegistry getSchemaRegistryById(String registryId) {
         return getSchemaRegistryById(registryId, false);
     }
 
-    public SchemaRegistry getSchemaRegistryById(Integer registryId, boolean includeField) {
+    public SchemaRegistry getSchemaRegistryById(String registryId, boolean includeField) {
         SchemaRegistryEntity entity = super.getById(registryId);
         SchemaRegistry schemaRegistry = SchemaRegistryConverter.INSTANCE.entityToModel(entity);
         if (includeField) {
@@ -204,7 +204,7 @@ public class SchemaRegistryOperator extends ServiceImpl<SchemaRegistryDao, Schem
         }
     }
 
-    public boolean checkNameExist(String name, Integer registryId) {
+    public boolean checkNameExist(String name, String registryId) {
         QueryWrapper<SchemaRegistryEntity> qw = new QueryWrapper<SchemaRegistryEntity>();
         qw.lambda().eq(SchemaRegistryEntity::getName, name);
         if(registryId!=null){

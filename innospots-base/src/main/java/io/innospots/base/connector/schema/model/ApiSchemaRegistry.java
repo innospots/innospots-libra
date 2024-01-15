@@ -46,7 +46,7 @@ public class ApiSchemaRegistry extends SchemaCatalog {
     public static final String CONFIG_ADDRESS = "address";
 
     @Schema(title = "schema registry primary key")
-    protected String registryKey;
+    protected String registryId;
 
     @NotBlank(message = "address cannot be blank")
     @Schema(title = "address")

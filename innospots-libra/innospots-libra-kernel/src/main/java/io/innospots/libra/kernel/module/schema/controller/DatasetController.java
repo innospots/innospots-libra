@@ -80,14 +80,14 @@ public class DatasetController {
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @OperationLog(idParamPosition = 0, operateType = OperateType.DELETE)
     @Operation(summary = "delete dataset")
-    public InnospotResponse<Boolean> deleteDataset(@Parameter(name = "id") @PathVariable Integer id) {
+    public InnospotResponse<Boolean> deleteDataset(@Parameter(name = "id") @PathVariable String id) {
         Boolean delete = datasetOperator.deleteDataset(id);
         return success(delete);
     }
 
     @GetMapping("{id}")
     @Operation(summary = "get dataset")
-    public InnospotResponse<Dataset> getDatasetById(@Parameter(name = "id") @PathVariable Integer id) {
+    public InnospotResponse<Dataset> getDatasetById(@Parameter(name = "id") @PathVariable String id) {
         Dataset dataset = datasetOperator.getDatasetById(id);
         return success(dataset);
     }

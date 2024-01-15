@@ -63,7 +63,7 @@ public class SchemaRegistryReader implements ISchemaRegistryReader {
 
 
     @Override
-    public SchemaRegistry getSchemaRegistry(String credentialKey, Integer registryId) {
+    public SchemaRegistry getSchemaRegistryById(String credentialKey, String registryId) {
 
         SchemaRegistry schemaRegistry = null;
 
@@ -83,7 +83,7 @@ public class SchemaRegistryReader implements ISchemaRegistryReader {
 
 
     @Override
-    public SchemaRegistry getSchemaRegistry(String credentialKey, String registryCode) {
+    public SchemaRegistry getSchemaRegistryByCode(String credentialKey, String registryCode) {
 
         SchemaRegistry schemaRegistry = null;
 

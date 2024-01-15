@@ -117,7 +117,7 @@ public class SqlDataNode extends DataNode {
         if (DataOperation.UPSERT == operation) {
             IDataConnectionMinder connectionMinder = DataConnectionMinderManager.getCredentialMinder(credentialKey);
             if (connectionMinder != null) {
-                List<SchemaField> schemaFields = connectionMinder.schemaRegistry(tableName).getSchemaFields();
+                List<SchemaField> schemaFields = connectionMinder.schemaRegistryByCode(tableName).getSchemaFields();
                 schemaFields = schemaFields.stream().filter(SchemaField::getPkey).collect(Collectors.toList());
                 keyColumn = "";
                 for (int i = 0; i < schemaFields.size(); i++) {

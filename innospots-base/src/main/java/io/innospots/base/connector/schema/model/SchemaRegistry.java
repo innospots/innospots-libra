@@ -40,7 +40,7 @@ public class SchemaRegistry extends SchemaCatalog {
     public static final String QUEUE_CONFIG_SCAN_STARTUP_MODE = "scan.startup.mode";
 
     @Schema(title = "schema registry primaryKey")
-    protected String registryKey;
+    protected String registryId;
 
     @NotNull(message = "registryType cannot be empty")
     @Schema(title = "registryType type")

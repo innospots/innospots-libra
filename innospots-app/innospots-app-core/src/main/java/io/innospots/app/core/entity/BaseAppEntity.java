@@ -35,9 +35,9 @@ public class BaseAppEntity extends PBaseEntity {
     protected String icon;
 
     @Column(columnDefinition = "MEDIUMTEXT")
-    protected String appConfig;
+    protected String resources;
 
     @Column(columnDefinition = "TEXT")
-    protected String appSetting;
+    protected String settings;
 
 }

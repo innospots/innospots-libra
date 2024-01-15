@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @Schema(title = "app config, include page config, apis config, data view config")
-public class AppConfig {
+public class AppResource {
 
     @Schema(title = "app page list")
     private List<AppPage> pages;
