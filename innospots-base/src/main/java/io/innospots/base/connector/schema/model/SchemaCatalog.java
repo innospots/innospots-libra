@@ -47,8 +47,13 @@ public class SchemaCatalog extends BaseModelInfo {
     @Pattern(regexp = RegexConstants.NAME_REGEX, message = "name, only supports: contains a maximum of 32 characters, including letters, digits, and underscores (_), and chinese.")
     protected String name;
 
+    @Schema(title = "description")
+    protected String description;
+
     @Schema(title = "code")
     protected String code;
+
+    protected Integer categoryId;
 
     @Schema(title = "credential key")
     protected String credentialKey;

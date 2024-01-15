@@ -33,5 +33,6 @@ public enum SchemaRegistryType {
     API,
     TABLE,
     TABLE_VIEW,
+    WORKFLOW,
     TOPIC
 }

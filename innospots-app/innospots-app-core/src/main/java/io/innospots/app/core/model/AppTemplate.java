@@ -1,5 +1,6 @@
 package io.innospots.app.core.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,12 +15,10 @@ import java.time.LocalDate;
 @Setter
 public class AppTemplate extends BaseAppInfo {
 
-    protected LocalDate publishTime;
-
-    protected String author;
-
+    @Schema(title = "app setting")
     protected AppSetting appSetting;
 
+    @Schema(title = "app page, apis config")
     protected AppConfig appConfig;
 
 }

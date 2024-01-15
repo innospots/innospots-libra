@@ -9,11 +9,9 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2024/1/7
+ * @date 2024/1/15
  */
 @RestController
-@RequestMapping(PATH_ROOT_ADMIN+"app/category")
-public class AppCategoryController extends BaseController {
-
-
+@RequestMapping(PATH_ROOT_ADMIN+"app/template")
+public class AppTemplateController extends BaseController {
 }

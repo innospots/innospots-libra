@@ -36,8 +36,17 @@ import java.util.Map;
 @Schema(title = "api schema registry")
 public class ApiSchemaRegistry extends SchemaCatalog {
 
-    @Schema(title = "schema registry id")
-    protected Integer registryId;
+    public static final String SCRIPT_POST = "post_script";
+
+    public static final String SCRIPT_PRE = "pre_script";
+
+    public static final String CONFIG_BODY_TEMPLATE = "body_template";
+    public static final String CONFIG_PARAM = "params";
+    public static final String CONFIG_API_METHOD = "api_method";
+    public static final String CONFIG_ADDRESS = "address";
+
+    @Schema(title = "schema registry primary key")
+    protected String registryKey;
 
     @NotBlank(message = "address cannot be blank")
     @Schema(title = "address")

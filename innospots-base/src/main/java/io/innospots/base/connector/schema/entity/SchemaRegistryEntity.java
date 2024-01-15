@@ -41,10 +41,11 @@ public class SchemaRegistryEntity extends PBaseEntity {
 
     public static final String TABLE_NAME = "ds_schema_registry";
 
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.INPUT)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer registryId;
+    @Column(length = 16)
+    private String registryKey;
 
     @Column(length = 64)
     private String name;

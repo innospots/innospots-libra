@@ -39,17 +39,12 @@ public class SchemaRegistry extends SchemaCatalog {
     public static final String QUEUE_CONFIG_MESSAGE_FORMAT = "message.format";
     public static final String QUEUE_CONFIG_SCAN_STARTUP_MODE = "scan.startup.mode";
 
-    @Schema(title = "schema registry id")
-    protected Integer registryId;
-
-    @Schema(title = "description")
-    protected String description;
+    @Schema(title = "schema registry primaryKey")
+    protected String registryKey;
 
     @NotNull(message = "registryType cannot be empty")
     @Schema(title = "registryType type")
     protected SchemaRegistryType registryType;
-
-    protected Integer categoryId;
 
     @Schema(title = "configs")
     protected Map<String, Object> configs;

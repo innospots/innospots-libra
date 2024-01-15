@@ -36,8 +36,8 @@ import javax.validation.constraints.NotNull;
 @Schema(title = "schema field")
 public class SchemaField extends BaseField {
 
-    @NotNull(message = "registryId cannot be empty")
-    private Integer registryId;
+    @NotNull(message = "registryKey cannot be empty")
+    private String registryKey;
 
     @NotBlank(message = "registryCode cannot be blank")
     private String registryCode;

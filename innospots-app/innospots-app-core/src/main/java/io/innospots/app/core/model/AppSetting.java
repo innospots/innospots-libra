@@ -1,5 +1,6 @@
 package io.innospots.app.core.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import lombok.Setter;
  */
 @Setter
 @Getter
+@Schema(title = "app setting")
 public class AppSetting {
 
     private Boolean showNavigation;
@@ -19,7 +21,6 @@ public class AppSetting {
     private Boolean publicVisit;
 
     private Boolean embedShowNavigation;
-
 
     public enum NaviLocation {
         TOP,
