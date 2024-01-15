@@ -54,7 +54,7 @@ public class FlowNodeConnectorFormController {
     }
 
     @GetMapping("{appNodeId}")
-    @Operation(summary = "app node connector form config")
+    @Operation(summary = "node connector form config")
     public InnospotResponse<List<CredentialAuthOption>> selectAppNodeConnectorFormConfig(
             @Parameter(name = "appNodeId") @PathVariable Integer appNodeId
     ) {

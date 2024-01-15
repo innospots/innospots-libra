@@ -68,7 +68,7 @@ public class NodeDefinitionService {
         this.flowNodeDefinitionOperator = flowNodeDefinitionOperator;
     }
 
-    public PageBody<NodeInfo> pageAppInfos(NodeQueryRequest request) {
+    public PageBody<NodeInfo> pageNodeInfos(NodeQueryRequest request) {
         PageBody<NodeInfo> body = flowNodeDefinitionOperator.pageAppDefinitions(request);
         List<NodeInfo> nodeInfos = body.getList();
         if (!CollectionUtils.isEmpty(nodeInfos)) {
@@ -87,7 +87,7 @@ public class NodeDefinitionService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public NodeInfo createAppInfo(NodeInfo nodeInfo) {
+    public NodeInfo createNodeInfo(NodeInfo nodeInfo) {
         nodeInfo.setUsed(Boolean.FALSE);
         nodeInfo.setVendor(NodeVendor.official.name());
         nodeInfo = flowNodeDefinitionOperator.createAppInfo(nodeInfo);
@@ -106,7 +106,7 @@ public class NodeDefinitionService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public NodeInfo updateAppInfo(NodeInfo nodeInfo) {
+    public NodeInfo updateNodeInfo(NodeInfo nodeInfo) {
         /*
         long count = nodeInstanceOperator.countByNodeDefinitionId(appInfo.getNodeId());
         if (count > 0) {
@@ -144,11 +144,11 @@ public class NodeDefinitionService {
         return flowNodeDefinitionOperator.deleteNodeDefinition(nodeId);
     }
 
-    public NodeDefinition updateAppNodeDefinition(NodeDefinition appNodeDefinition) {
+    public NodeDefinition updateNodeDefinition(NodeDefinition appNodeDefinition) {
         return flowNodeDefinitionOperator.updateNodeDefinition(appNodeDefinition);
     }
 
-    public NodeDefinition getAppNodeDefinitionById(Integer nodeId) {
+    public NodeDefinition getNodeDefinitionById(Integer nodeId) {
         NodeDefinition appNodeDefinition = flowNodeDefinitionOperator.getNodeDefinition(nodeId);
         List<FlowNodeGroupNodeEntity> entityList = flowNodeGroupOperator.getGroupNodeByNodeIds(1, Collections.singletonList(nodeId));
         if (!CollectionUtils.isEmpty(entityList)) {
@@ -157,7 +157,7 @@ public class NodeDefinitionService {
         return appNodeDefinition;
     }
 
-    public Map<String, String> getAppNodeIcons() {
+    public Map<String, String> getNodeIcons() {
         List<FlowNodeDefinitionEntity> entityList = flowNodeDefinitionOperator.list(
                 new QueryWrapper<FlowNodeDefinitionEntity>().lambda().eq(FlowNodeDefinitionEntity::getStatus, DataStatus.ONLINE)
         );

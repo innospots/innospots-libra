@@ -71,7 +71,7 @@ public class FlowNodeDefinitionController extends BaseController {
     @Operation(summary = "node definition page info")
     public InnospotResponse<PageBody<NodeInfo>> pageNodeDefinitions(
             NodeQueryRequest queryRequest) {
-        return success(nodeDefinitionService.pageAppInfos(queryRequest));
+        return success(nodeDefinitionService.pageNodeInfos(queryRequest));
     }
 
 
@@ -91,38 +91,38 @@ public class FlowNodeDefinitionController extends BaseController {
      */
     @OperationLog(operateType = OperateType.CREATE, primaryField = "code")
     @PostMapping("info")
-    @Operation(summary = "create app info")
+    @Operation(summary = "create node definition info")
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
-    public InnospotResponse<NodeInfo> createAppInfo(@Parameter(name = "app node info", required = true) @Validated @RequestBody NodeInfo nodeInfo) {
-        return success(nodeDefinitionService.createAppInfo(nodeInfo));
+    public InnospotResponse<NodeInfo> createNodeInfo(@Parameter(name = "node info", required = true) @Validated @RequestBody NodeInfo nodeInfo) {
+        return success(nodeDefinitionService.createNodeInfo(nodeInfo));
     }
 
     /**
      * update app info
      *
-     * @param nodeInfo app info
+     * @param nodeInfo node info
      * @return AppInfo
      */
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "nodeId")
     @PutMapping("info")
     @Operation(summary = "update app info")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.save}")
-    public InnospotResponse<NodeInfo> updateAppInfo(@Parameter(name = "app node info", required = true) @Validated @RequestBody NodeInfo nodeInfo) {
-        return success(nodeDefinitionService.updateAppInfo(nodeInfo));
+    public InnospotResponse<NodeInfo> updateNodeInfo(@Parameter(name = "app node info", required = true) @Validated @RequestBody NodeInfo nodeInfo) {
+        return success(nodeDefinitionService.updateNodeInfo(nodeInfo));
     }
 
     /**
-     * update app node definition
+     * update node definition
      *
-     * @param appNodeDefinition app node definition info
+     * @param appNodeDefinition node definition info
      * @return AppNodeDefinition
      */
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "nodeId")
     @PutMapping
     @Operation(summary = "update app node definition")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.save}")
-    public InnospotResponse<NodeDefinition> updateAppNodeDefinition(@Parameter(name = "node definition", required = true) @Validated @RequestBody NodeDefinition appNodeDefinition) {
-        return success(nodeDefinitionService.updateAppNodeDefinition(appNodeDefinition));
+    public InnospotResponse<NodeDefinition> updateNodeDefinition(@Parameter(name = "node definition", required = true) @Validated @RequestBody NodeDefinition appNodeDefinition) {
+        return success(nodeDefinitionService.updateNodeDefinition(appNodeDefinition));
     }
 
     /**
@@ -133,9 +133,9 @@ public class FlowNodeDefinitionController extends BaseController {
      */
     @GetMapping("/{nodeId}")
     @Operation(summary = "node definition detail info")
-    public InnospotResponse<NodeDefinition> getAppNodeDefinitionById(@Parameter(name = "nodeId", required = true) @PathVariable Integer nodeId) {
+    public InnospotResponse<NodeDefinition> getNodeDefinitionById(@Parameter(name = "nodeId", required = true) @PathVariable Integer nodeId) {
 
-        return success(nodeDefinitionService.getAppNodeDefinitionById(nodeId));
+        return success(nodeDefinitionService.getNodeDefinitionById(nodeId));
     }
 
 
@@ -174,9 +174,9 @@ public class FlowNodeDefinitionController extends BaseController {
     }
 
     @GetMapping("icons")
-    @Operation(summary = "app node icons")
-    public InnospotResponse<Map<String,String>> getAppNodeIcon() {
-        return success(nodeDefinitionService.getAppNodeIcons());
+    @Operation(summary = "node icons")
+    public InnospotResponse<Map<String,String>> getNodeIcon() {
+        return success(nodeDefinitionService.getNodeIcons());
     }
 
 }
