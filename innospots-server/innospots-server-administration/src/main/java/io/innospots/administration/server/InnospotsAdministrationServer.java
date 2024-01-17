@@ -20,31 +20,19 @@ package io.innospots.administration.server;
 
 
 import io.innospots.administration.schedule.LoggerClearScheduler;
-import io.innospots.base.utils.BeanContextAware;
-import io.innospots.base.utils.BeanContextAwareUtils;
-import io.innospots.base.utils.time.DateTimeUtils;
+import io.innospots.app.console.ApplicationConsoleImporter;
 import io.innospots.libra.kernel.LibraKernelImporter;
 import io.innospots.libra.security.LibraAuthImporter;
 import io.innospots.server.base.ServerConfigImporter;
 import io.innospots.server.base.registry.ServiceRegistryHolder;
 import io.innospots.server.base.registry.enums.ServiceType;
 import io.innospots.workflow.console.WorkflowConsoleImporter;
-import io.innospots.workflow.runtime.WorkflowRuntimeImporter;
-import io.innospots.workflow.server.configuration.WorkflowServerImporter;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.actuate.info.Info;
-import org.springframework.boot.actuate.info.InfoContributor;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration;
 import org.springframework.boot.autoconfigure.quartz.QuartzAutoConfiguration;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.stereotype.Component;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
-//import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
  * @author Raydian
@@ -59,6 +47,7 @@ import java.util.Map;
 @LibraKernelImporter
 @ServerConfigImporter
 @WorkflowConsoleImporter
+@ApplicationConsoleImporter
 //@WorkflowServerImporter
 @EnableScheduling
 public class InnospotsAdministrationServer {

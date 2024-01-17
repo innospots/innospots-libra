@@ -48,7 +48,7 @@ public class NotificationChannel {
 
     private DataStatus status;
 
-    private Integer registryId;
+    private String registryId;
 
     private Integer credentialId;
 

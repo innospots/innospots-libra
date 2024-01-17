@@ -63,7 +63,7 @@ public class NotificationChannelEntity extends PBaseEntity {
     private NotificationChannel.ChannelType channelType;
 
     @Column
-    private Integer registryId;
+    private String registryId;
 
     @Column
     private Integer credentialId;

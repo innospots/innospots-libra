@@ -38,7 +38,7 @@ import javax.persistence.*;
 @Entity
 @TableName(value = SchemaFieldEntity.TABLE_NAME)
 @Table(name = SchemaFieldEntity.TABLE_NAME, indexes = {
-        @Index(name = "idx_registry_fld", columnList = "registryKey")
+        @Index(name = "idx_registry_fld", columnList = "registryId")
 })
 public class SchemaFieldEntity extends PBaseEntity {
 
