@@ -2,6 +2,7 @@ package io.innospots.app.console.operator;
 
 import io.innospots.libra.base.category.BaseCategory;
 import io.innospots.libra.base.category.BaseCategoryOperator;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 

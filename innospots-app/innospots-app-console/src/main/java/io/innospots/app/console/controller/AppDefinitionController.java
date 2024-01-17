@@ -8,6 +8,7 @@ import io.innospots.base.data.body.PageBody;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.controller.BaseController;
+import io.innospots.libra.base.menu.ModuleMenu;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,8 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
  */
 @RestController
 @RequestMapping(PATH_ROOT_ADMIN+"app/definition")
-@Tag(name = "App Definition")
+@ModuleMenu(menuKey = "applications")
+@Tag(name = "application definition")
 public class AppDefinitionController extends BaseController {
 
     @GetMapping("{appKey}")

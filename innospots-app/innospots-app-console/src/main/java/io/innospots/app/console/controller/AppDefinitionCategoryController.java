@@ -27,7 +27,7 @@ import static io.innospots.libra.base.menu.ItemType.BUTTON;
  */
 @RestController
 @RequestMapping(PATH_ROOT_ADMIN+"app/definition/category")
-@ModuleMenu(menuKey = "app-definition")
+@ModuleMenu(menuKey = "applications")
 @Tag(name = "application category")
 public class AppDefinitionCategoryController extends BaseController {
 

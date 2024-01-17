@@ -25,6 +25,14 @@
         <dependencies>
             <dependency>
                 <groupId>io.innospots</groupId>
+                <artifactId>innospots-app</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>io.innospots</groupId>
                 <artifactId>innospots-workflow</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
