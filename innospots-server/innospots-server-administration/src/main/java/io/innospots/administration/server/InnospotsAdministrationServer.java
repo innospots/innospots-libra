@@ -23,6 +23,7 @@ import io.innospots.administration.schedule.LoggerClearScheduler;
 import io.innospots.app.console.ApplicationConsoleImporter;
 import io.innospots.libra.kernel.LibraKernelImporter;
 import io.innospots.libra.security.LibraAuthImporter;
+import io.innospots.schedule.ScheduleConsoleImporter;
 import io.innospots.server.base.ServerConfigImporter;
 import io.innospots.server.base.registry.ServiceRegistryHolder;
 import io.innospots.server.base.registry.enums.ServiceType;
@@ -48,6 +49,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ServerConfigImporter
 @WorkflowConsoleImporter
 @ApplicationConsoleImporter
+@ScheduleConsoleImporter
 //@WorkflowServerImporter
 @EnableScheduling
 public class InnospotsAdministrationServer {

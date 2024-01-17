@@ -16,6 +16,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -34,6 +35,7 @@ public @interface ScheduleConsoleImporter {
 
 
     @Configuration
+//    @ComponentScan(value = {"io.innospots.schedule.controller"})
     @EnableConfigurationProperties(InnospotsScheduleProperties.class)
     @EntityScan(basePackages = "io.innospots.schedule.entity")
     @MapperScan(basePackages = "io.innospots.schedule.dao")

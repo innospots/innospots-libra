@@ -70,6 +70,11 @@
                 <artifactId>innospots-server-workflow</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-schedule</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

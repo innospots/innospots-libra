@@ -19,7 +19,9 @@
 package io.innospots.schedule.controller;
 
 import io.innospots.base.constant.PathConstant;
+import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.schedule.operator.JobExecutionOperator;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,6 +32,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(PathConstant.ROOT_PATH +"schedule/job-execution")
+@ModuleMenu(menuKey = "job-schedule")
+@Tag(name = "schedule job execution")
 public class JobExecutionController {
 
     private JobExecutionOperator jobExecutionOperator;

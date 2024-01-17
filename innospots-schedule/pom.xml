@@ -35,7 +35,8 @@
     <dependencies>
         <dependency>
             <groupId>io.innospots</groupId>
-            <artifactId>innospots-base</artifactId>
+            <artifactId>innospots-libra-base</artifactId>
+            <scope>provided</scope>
             <version>${innosopts.version}</version>
         </dependency>
 
