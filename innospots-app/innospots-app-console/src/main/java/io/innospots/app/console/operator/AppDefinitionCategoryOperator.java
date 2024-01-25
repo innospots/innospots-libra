@@ -2,7 +2,7 @@ package io.innospots.app.console.operator;
 
 import io.innospots.libra.base.category.BaseCategory;
 import io.innospots.libra.base.category.BaseCategoryOperator;
-import org.springframework.stereotype.Service;
+import io.innospots.libra.base.category.CategoryType;
 
 import java.util.List;
 
@@ -13,8 +13,10 @@ import java.util.List;
  */
 public class AppDefinitionCategoryOperator extends BaseCategoryOperator {
 
-    public List<BaseCategory> listCategories(boolean hasNumber){
-        return null;
+    public List<BaseCategory> listCategories() {
+        List<BaseCategory> categories = this.listCategories(CategoryType.APPS);
+        categories.add(this.getRecycleBinCategory());
+        return categories;
     }
 
 }

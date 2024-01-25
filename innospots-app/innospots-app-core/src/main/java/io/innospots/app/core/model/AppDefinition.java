@@ -13,11 +13,17 @@ import javax.persistence.Column;
  */
 @Setter
 @Getter
-public class AppDefinition extends AppTemplate {
+public class AppDefinition extends BaseAppInfo {
 
     @Schema(title = "app definition primary key")
     private String appKey;
 
+    @Schema(title = "app definition template key")
+    private String templateKey;
+
+    /**
+     * 应用路径
+     */
     @Schema(title = "app url path, when share to public")
     private String appPath;
 }

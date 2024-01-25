@@ -24,7 +24,10 @@ import io.innospots.app.core.ApplicationCoreImporter;
 import io.innospots.app.core.config.InnospotsAppProperties;
 import io.innospots.app.core.operator.AppDefinitionOperator;
 import io.innospots.app.core.operator.AppTemplateOperator;
+import io.innospots.libra.base.model.swagger.SwaggerOpenApiBuilder;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springdoc.core.GroupedOpenApi;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -45,6 +48,7 @@ import java.lang.annotation.*;
 @Documented
 @Inherited
 @ApplicationCoreImporter
+@Import({ApplicationConsoleImporter.ApplicationConsoleConfiguration.class})
 public @interface ApplicationConsoleImporter {
 
 
@@ -60,6 +64,12 @@ public @interface ApplicationConsoleImporter {
         @Bean
         public AppTemplateCategoryOperator appTemplateCategoryOperator(){
             return new AppTemplateCategoryOperator();
+        }
+
+        @Bean
+        @ConditionalOnProperty(prefix = "innospots.config", name = "enable-swagger", havingValue = "true")
+        public GroupedOpenApi AppConsoleGroupedOpenApi() {
+            return SwaggerOpenApiBuilder.buildGroupedOpenApi("app-console", "io.innospots.app.console");
         }
 
     }

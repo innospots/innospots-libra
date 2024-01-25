@@ -26,7 +26,7 @@ import static io.innospots.libra.base.menu.ItemType.BUTTON;
  * @date 2024/1/7
  */
 @RestController
-@RequestMapping(PATH_ROOT_ADMIN+"app/definition/category")
+@RequestMapping(PATH_ROOT_ADMIN + "app/definition/category")
 @ModuleMenu(menuKey = "applications")
 @Tag(name = "application category")
 public class AppDefinitionCategoryController extends BaseController {
@@ -67,18 +67,18 @@ public class AppDefinitionCategoryController extends BaseController {
 
 
     @GetMapping
-    @Operation(summary = "application category list", description = "param：0-category has no value 1-it has value")
-    public InnospotResponse<List<BaseCategory>> listCategories(Boolean hasNumber) {
-        List<BaseCategory> list = appDefinitionCategoryOperator.listCategories(hasNumber);
+    @Operation(summary = "application category list")
+    public InnospotResponse<List<BaseCategory>> listCategories() {
+        List<BaseCategory> list = appDefinitionCategoryOperator.listCategories();
         return success(list);
 
     }
 
-    @GetMapping("check/{categoryName}")
-    @Operation(summary = "check name duplicate", description = "return: true = duplicate,false = not duplicate")
-    public InnospotResponse<Boolean> checkNameExist(@Parameter(required = true, name = "categoryName") @PathVariable String categoryName) {
-        return success(appDefinitionCategoryOperator.checkNameExist(categoryName, CategoryType.APPS));
-    }
+//    @GetMapping("check/{categoryName}")
+//    @Operation(summary = "check name duplicate", description = "return: true = duplicate,false = not duplicate")
+//    public InnospotResponse<Boolean> checkNameExist(@Parameter(required = true, name = "categoryName") @PathVariable String categoryName) {
+//        return success(appDefinitionCategoryOperator.checkNameExist(categoryName, CategoryType.APPS));
+//    }
 
 
 }

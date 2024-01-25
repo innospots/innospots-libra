@@ -1,4 +1,4 @@
-package io.innospots.app.console.form;
+package io.innospots.app.core.model.form;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -14,9 +14,12 @@ import lombok.Setter;
 @Schema(title = "app create form")
 public class CreateAppFrom {
 
+    @Schema(title = "name")
     private String name;
 
+    @Schema(title = "category id")
     private Integer categoryId;
 
+    @Schema(title = "icon")
     private String icon;
 }

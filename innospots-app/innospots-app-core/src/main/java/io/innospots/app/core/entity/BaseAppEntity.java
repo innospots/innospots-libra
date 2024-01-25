@@ -22,6 +22,7 @@ public class BaseAppEntity extends PBaseEntity {
     @Column(length = 32)
     protected String name;
 
+    @Column
     protected Integer categoryId;
 
     @Column(length = 256)

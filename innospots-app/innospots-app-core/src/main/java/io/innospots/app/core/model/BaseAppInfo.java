@@ -1,17 +1,10 @@
 package io.innospots.app.core.model;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
 import io.innospots.base.enums.DataStatus;
+import io.innospots.base.model.PBaseModelInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 /**
  * @author Smars
@@ -21,30 +14,27 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Schema(title = "only include base info")
-public class BaseAppInfo {
+public class BaseAppInfo extends PBaseModelInfo {
 
-    @Schema(title = "app primary key")
-    protected String appKey;
-
-    @Schema(title = "template primary key")
-    protected String templateKey;
-
+    @Schema(title = "name")
     protected String name;
 
+    @Schema(title = "category Id")
     protected Integer categoryId;
 
+    @Schema(title = "description")
     protected String description;
 
+    @Schema(title = "status")
     protected DataStatus status;
 
+    @Schema(title = "icon")
     protected String icon;
 
-    protected LocalDateTime updatedTime;
+    @Schema(title = "app page, apis resources")
+    protected AppResource resources;
 
-    protected String createdBy;
-
-    protected LocalDate publishTime;
-
-    protected String author;
+    @Schema(title = "app setting")
+    protected AppSetting settings;
 
 }

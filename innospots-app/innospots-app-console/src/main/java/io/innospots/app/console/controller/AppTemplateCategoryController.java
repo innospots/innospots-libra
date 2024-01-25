@@ -41,7 +41,7 @@ public class AppTemplateCategoryController extends BaseController {
 
     @OperationLog(operateType = OperateType.CREATE, idParamPosition = 0)
     @PostMapping
-    @Operation(summary = "create application category")
+    @Operation(summary = "create application template category")
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${app.category.add.title}")
     public InnospotResponse<BaseCategory> createCategory(@Parameter(required = true, name = "categoryName") @RequestParam("categoryName") String categoryName) {
         BaseCategory category = appTemplateCategoryOperator.createCategory(categoryName, CategoryType.APP_TPL);
@@ -50,7 +50,7 @@ public class AppTemplateCategoryController extends BaseController {
 
     @OperationLog(operateType = OperateType.UPDATE, idParamPosition = 0)
     @PutMapping("{categoryId}")
-    @Operation(summary = "update application category")
+    @Operation(summary = "update application template category")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${page.category.edit.title}")
     public InnospotResponse<Boolean> updateCategory(@Parameter(required = true, name = "categoryId") @PathVariable Integer categoryId,
                                                     @Parameter(required = true, name = "categoryName") @RequestParam("categoryName") String categoryName) {
@@ -60,7 +60,7 @@ public class AppTemplateCategoryController extends BaseController {
 
     @OperationLog(operateType = OperateType.DELETE, idParamPosition = 0)
     @DeleteMapping("{categoryId}")
-    @Operation(summary = "delete application category")
+    @Operation(summary = "delete application template category")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.category.delete.title}")
     public InnospotResponse<Boolean> deleteCategory(@Parameter(required = true, name = "categoryId") @PathVariable Integer categoryId) {
         return success(appTemplateCategoryOperator.deleteCategory(categoryId));
@@ -68,18 +68,18 @@ public class AppTemplateCategoryController extends BaseController {
 
 
     @GetMapping
-    @Operation(summary = "application category list", description = "param：0-category has no value 1-it has value")
-    public InnospotResponse<List<BaseCategory>> listCategories(Boolean hasNumber) {
-        List<BaseCategory> list = appTemplateCategoryOperator.listCategories(hasNumber);
+    @Operation(summary = "application template category list")
+    public InnospotResponse<List<BaseCategory>> listCategories() {
+        List<BaseCategory> list = appTemplateCategoryOperator.listCategories();
         return success(list);
 
     }
 
-    @GetMapping("check/{categoryName}")
-    @Operation(summary = "check name duplicate", description = "return: true = duplicate,false = not duplicate")
-    public InnospotResponse<Boolean> checkNameExist(@Parameter(required = true, name = "categoryName") @PathVariable String categoryName) {
-        return success(appTemplateCategoryOperator.checkNameExist(categoryName, CategoryType.APP_TPL));
-    }
+//    @GetMapping("check/{categoryName}")
+//    @Operation(summary = "check name duplicate", description = "return: true = duplicate,false = not duplicate")
+//    public InnospotResponse<Boolean> checkNameExist(@Parameter(required = true, name = "categoryName") @PathVariable String categoryName) {
+//        return success(appTemplateCategoryOperator.checkNameExist(categoryName, CategoryType.APP_TPL));
+//    }
 
 
 }

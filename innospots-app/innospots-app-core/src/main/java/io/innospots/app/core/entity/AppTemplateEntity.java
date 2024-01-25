@@ -31,8 +31,10 @@ public class AppTemplateEntity extends BaseAppEntity {
     @Column(length = 16)
     private String templateKey;
 
+    @Column
     private LocalDate publishTime;
 
+    @Column(length = 64)
     private String author;
 
 }
