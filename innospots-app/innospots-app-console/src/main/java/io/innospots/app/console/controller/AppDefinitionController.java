@@ -70,7 +70,7 @@ public class AppDefinitionController extends BaseController {
 
     @GetMapping("page")
     @Operation(summary = "application page")
-    public InnospotResponse<PageBody<AppDefinition>> pageAppInfos(@RequestParam AppQueryRequest queryRequest) {
+    public InnospotResponse<PageBody<AppDefinition>> pageAppInfos(AppQueryRequest queryRequest) {
         return InnospotResponse.success(appDefinitionOperator.pageAppInfos(queryRequest));
     }
 

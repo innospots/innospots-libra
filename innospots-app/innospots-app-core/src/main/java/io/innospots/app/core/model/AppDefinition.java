@@ -13,6 +13,7 @@ import javax.persistence.Column;
  */
 @Setter
 @Getter
+@Schema(title = "app definition")
 public class AppDefinition extends BaseAppInfo {
 
     @Schema(title = "app definition primary key")
