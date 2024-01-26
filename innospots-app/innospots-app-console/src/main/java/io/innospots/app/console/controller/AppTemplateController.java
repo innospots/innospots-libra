@@ -29,6 +29,7 @@ public class AppTemplateController extends BaseController {
     @Operation(summary = "get application")
     public InnospotResponse<AppTemplate> getAppDefinition(
             @Parameter(required = true, name = "templateKey") @PathVariable String templateKey) {
+
         return InnospotResponse.success();
     }
 }
