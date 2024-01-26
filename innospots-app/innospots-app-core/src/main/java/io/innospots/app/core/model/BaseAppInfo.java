@@ -13,7 +13,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@Schema(title = "only include base info")
+@Schema(title = "only include app base info")
 public class BaseAppInfo extends PBaseModelInfo {
 
     @Schema(title = "name")

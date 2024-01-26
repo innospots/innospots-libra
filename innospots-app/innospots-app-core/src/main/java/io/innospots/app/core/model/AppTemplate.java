@@ -13,6 +13,7 @@ import java.time.LocalDate;
  */
 @Getter
 @Setter
+@Schema(title = "app template")
 public class AppTemplate extends BaseAppInfo {
 
     @Schema(title = "template primary key")
