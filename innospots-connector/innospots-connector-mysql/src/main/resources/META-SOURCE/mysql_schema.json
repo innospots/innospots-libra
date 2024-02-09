@@ -4,8 +4,7 @@
   "order": 200,
   "enabled": true,
   "connectType": "JDBC",
-  "appNodeType": "io.innospots.workflow.node.app.data.SqlDataNode",
-  "overview": "MySQL数据库连接",
+  "overview": "${meta.schema.mysql.overview:Mysql数据库连接}",
   "description": "请填入连接鉴权的默认值，当控件“只读”被勾选中时，改字段在凭据创建时只展示不能修改。",
   "authOptions": [
     {
@@ -26,37 +25,40 @@
         {
           "label": "主机名",
           "name": "server_ip",
+          "maxSize": 64,
           "placeholder": "请输入主机名",
           "required": true,
           "labelGrid": 4,
           "tips": "连接的主机名",
           "type": "INPUT",
           "expression": "",
-          "gridSize": 8,
+          "gridSize": 16,
           "options": []
         },
         {
           "label": "数据库",
           "name": "database",
+          "maxSize": 64,
           "placeholder": "请输入数据库",
           "required": true,
           "labelGrid": 4,
           "tips": "连接的数据库名称",
           "type": "INPUT",
           "expression": "",
-          "gridSize": 8,
+          "gridSize": 16,
           "options": []
         },
         {
           "label": "用户名",
           "name": "user_name",
+          "maxSize": 64,
           "placeholder": "请输入用户名",
           "required": true,
           "labelGrid": 4,
           "tips": "访问数据库用户名",
           "type": "INPUT",
           "expression": "",
-          "gridSize": 8,
+          "gridSize": 16,
           "options": []
         },
         {
@@ -68,19 +70,20 @@
           "tips": "数据库密码",
           "type": "PASSWORD",
           "expression": "",
-          "gridSize": 8,
+          "gridSize": 16,
           "options": []
         },
         {
           "label": "端口号",
           "name": "port",
           "placeholder": "3306",
+          "maxSize": 32,
           "required": true,
           "labelGrid": 4,
-          "tips": "连接的端口号",
+          "tips": "端口号为有效的数字",
           "type": "INPUT",
-          "expression": "",
-          "gridSize": 8,
+          "expression": "[\\d]+",
+          "gridSize": 16,
           "options": []
         }
       ]

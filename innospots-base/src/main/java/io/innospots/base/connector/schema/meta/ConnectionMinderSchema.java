@@ -19,6 +19,7 @@
 package io.innospots.base.connector.schema.meta;
 
 import io.innospots.base.enums.ConnectType;
+import io.innospots.base.json.annotation.I18n;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,6 +46,7 @@ public class ConnectionMinderSchema {
 
     private ConnectType connectType;
 
+    @I18n
     private String overview;
 
     private String description;

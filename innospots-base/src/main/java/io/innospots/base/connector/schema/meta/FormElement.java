@@ -39,6 +39,9 @@ public class FormElement implements Cloneable {
     @Schema(title = "form element name")
     private String name;
 
+    @Schema(title = "the value max character size")
+    private Integer maxSize;
+
     @Schema(title = "form element value")
     private String value;
 
@@ -57,6 +60,7 @@ public class FormElement implements Cloneable {
     @Schema(title = "tips info")
     private String tips;
 
+    @Schema(title = "tips info")
     private ElementType type;
 
     private String expression;
@@ -67,7 +71,7 @@ public class FormElement implements Cloneable {
     @Schema(title = "checkbox list or select list data")
     private List<LinkedHashMap<String, Object>> options;
 
-    @Schema(title = "The number of grids occupied，1 or 2")
+    @Schema(title = "The number of grids occupied, which current form element，1 or 2")
     private Integer gridSize;
 
     @Schema(title = "value not be modified")

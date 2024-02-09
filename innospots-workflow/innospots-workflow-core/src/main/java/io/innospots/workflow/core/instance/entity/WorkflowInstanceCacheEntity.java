@@ -43,7 +43,7 @@ public class WorkflowInstanceCacheEntity extends PBaseEntity {
 
     @Id
     @TableId(type = IdType.INPUT)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long workflowInstanceId;
 
     @Column(columnDefinition = "MEDIUMTEXT")

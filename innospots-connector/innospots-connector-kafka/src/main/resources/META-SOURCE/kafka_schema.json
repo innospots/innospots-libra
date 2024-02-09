@@ -21,11 +21,12 @@
           "name": "bootstrap.servers",
           "placeholder": "请输入Bootstrap集群地址 如: localhost:9092",
           "required": true,
+          "maxSize": 64,
           "labelGrid": 4,
           "tips": "集群地址",
           "type": "INPUT",
           "expression": "",
-          "gridSize": 8
+          "gridSize": 16
         },
         {
           "label": "SSL",
@@ -35,7 +36,7 @@
           "labelGrid": 4,
           "tips": "是否开启加密",
           "type": "SWITCH",
-          "gridSize": 8,
+          "gridSize": 16,
           "options": []
         }
       ]
@@ -56,7 +57,7 @@
           "tips": "集群地址",
           "type": "INPUT",
           "expression": "",
-          "gridSize": 8
+          "gridSize": 16
         },
         {
           "label": "SSL",
@@ -66,7 +67,7 @@
           "labelGrid": 4,
           "tips": "是否开启加密",
           "type": "SWITCH",
-          "gridSize": 8,
+          "gridSize": 16,
           "options": []
         },
         {
@@ -77,19 +78,23 @@
           "labelGrid": 4,
           "tips": "认证机制",
           "type": "SELECT",
-          "gridSize": 8,
+          "gridSize": 16,
           "options": [
             {
-              "GSSAPI": "GSSAPI"
+              "name": "GSSAPI",
+              "value": "GSSAPI"
             },
             {
-              "PLAIN": "PLAIN"
+              "name": "PLAIN",
+              "value": "PLAIN"
             },
             {
-              "SCRAM-SHA-256": "SCRAM-SHA-256"
+              "name": "SCRAM-SHA-256",
+              "value": "SCRAM-SHA-256"
             },
             {
-              "SCRAM-SHA-512": "SCRAM-SHA-256"
+              "name": "SCRAM-SHA-512",
+              "value": "SCRAM-SHA-512"
             }
           ]
         },
@@ -102,7 +107,7 @@
           "tips": "SASL用户名",
           "type": "INPUT",
           "expression": "",
-          "gridSize": 8
+          "gridSize": 16
         },
         {
           "label": "SASL密码",
@@ -113,7 +118,7 @@
           "tips": "SASL密码",
           "type": "INPUT",
           "expression": "",
-          "gridSize": 8
+          "gridSize": 16
         }
       ]
     }

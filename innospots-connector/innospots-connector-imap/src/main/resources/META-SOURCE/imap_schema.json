@@ -26,7 +26,7 @@
           "tips": "中文或英文有效字符，小于16个字符",
           "type": "INPUT",
           "expression": "",
-          "gridSize": 8
+          "gridSize": 16
         },
         {
           "label": "Imap地址",
@@ -37,7 +37,7 @@
           "tips": "Imap地址",
           "type": "INPUT",
           "expression": "",
-          "gridSize": 8,
+          "gridSize": 16,
           "options": []
         },
         {
@@ -49,7 +49,7 @@
           "tips": "Imap端口号",
           "type": "INPUT",
           "expression": "",
-          "gridSize": 8,
+          "gridSize": 16,
           "options": []
         },
         {
@@ -61,7 +61,7 @@
           "tips": "邮件用户名",
           "type": "INPUT",
           "expression": "",
-          "gridSize": 8,
+          "gridSize": 16,
           "options": []
         },
         {
@@ -73,7 +73,7 @@
           "tips": "邮件密码",
           "type": "PASSWORD",
           "expression": "",
-          "gridSize": 8,
+          "gridSize": 16,
           "options": []
         },
         {

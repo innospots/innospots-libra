@@ -106,7 +106,10 @@ public class I18nTransMessageOperator {
         int resultNum = 0;
         int messageNum = 0;
         Map<String, I18nTransMessageEntity> entityMap = new HashMap<>();
-        List<I18nTransMessageEntity> entityList = i18nTransMessageDao.selectByDictionaryId(dictionaryEntity.getDictionaryId());
+        QueryWrapper<I18nTransMessageEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(I18nTransMessageEntity::getDictionaryId, dictionaryEntity.getDictionaryId());
+        List<I18nTransMessageEntity> entityList = i18nTransMessageDao.selectList(queryWrapper);
+
         if (entityList != null && !entityList.isEmpty()) {
             entityMap = entityList.stream().collect(Collectors.toMap(I18nTransMessageEntity::getLocale, Function.identity()));
         }
@@ -173,7 +176,10 @@ public class I18nTransMessageOperator {
 
         Map<Integer, Map<String, String>> resMap = null;
         if (!dictionaryIds.isEmpty()) {
-            List<I18nTransMessageEntity> entityList = i18nTransMessageDao.selectByDictionaryIds(dictionaryIds);
+            QueryWrapper<I18nTransMessageEntity> transQuery = new QueryWrapper<>();
+            transQuery.lambda().in(I18nTransMessageEntity::getDictionaryId, dictionaryIds);
+            List<I18nTransMessageEntity> entityList = i18nTransMessageDao.selectList(transQuery);
+//            List<I18nTransMessageEntity> entityList = i18nTransMessageDao.selectByDictionaryIds(dictionaryIds);
             if (entityList != null) {
                 resMap = new HashMap<>();
                 for (I18nTransMessageEntity entity : entityList) {

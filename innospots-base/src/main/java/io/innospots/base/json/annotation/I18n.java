@@ -29,6 +29,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.lang.annotation.*;
+import java.util.Objects;
 
 
 /**
@@ -50,7 +51,16 @@ public @interface I18n {
             if (!StringUtils.isEmpty(o)) {
                 if (I18nUtils.isI18nField(o)) {
                     String key = o.substring(2, o.length() - 1);
+                    String defValue = null;
+                    int p = key.indexOf(":");
+                    if (p > 0) {
+                        defValue = key.substring(p + 1);
+                        key = key.substring(0, p);
+                    }
                     String v = LocaleMessageUtils.message(key);
+                    if (StringUtils.isEmpty(v)) {
+                        v = defValue != null ? defValue : key;
+                    }
                     if (StringUtils.isNotEmpty(v)) {
                         jsonGenerator.writeString(v);
                     } else {

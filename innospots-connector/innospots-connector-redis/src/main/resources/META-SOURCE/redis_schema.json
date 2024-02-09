@@ -24,7 +24,7 @@
           "tips": "集群地址",
           "type": "INPUT",
           "expression": "",
-          "gridSize": 8
+          "gridSize": 16
         },
         {
           "label": "端口号",
@@ -34,8 +34,8 @@
           "labelGrid": 4,
           "tips": "集群地址",
           "type": "INPUT",
-          "expression": "",
-          "gridSize": 8
+          "expression": "[\\d]+",
+          "gridSize": 16
         },
         {
           "label": "密码",
@@ -46,7 +46,7 @@
           "tips": "介绍描述，不超过50个字符",
           "type": "PASSWORD",
           "expression": "",
-          "gridSize": 8,
+          "gridSize": 16,
           "options": []
         },
         {
@@ -58,7 +58,7 @@
           "tips": "哨兵模式和单节点模式下可设置使用的数据库1-32",
           "type": "INPUT_NUMBER",
           "expression": "",
-          "gridSize": 8,
+          "gridSize": 16,
           "options": []
         }
       ]

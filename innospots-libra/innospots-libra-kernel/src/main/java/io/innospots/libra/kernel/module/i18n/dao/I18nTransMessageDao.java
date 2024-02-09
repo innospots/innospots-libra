@@ -64,19 +64,5 @@ public interface I18nTransMessageDao extends BaseMapper<I18nTransMessageEntity> 
     @Select("select * from " + I18nTransMessageEntity.TABLE_NAME + " where dictionary_id = #{dictionaryId}")
     List<I18nTransMessageEntity> selectByDictionaryId(Integer dictionaryId);
 
-    /**
-     * Query the transMessage according to dictionaryIds
-     *
-     * @param dictionaryIds
-     * @return
-     */
-    @Select({
-            "<script>",
-            "select * from " + I18nTransMessageEntity.TABLE_NAME + " where dictionary_id in",
-            "<foreach collection='dictionaryIds' item='item' open='(' separator=',' close=')'>",
-            "#{item}",
-            "</foreach>",
-            "</script>"
-    })
-    List<I18nTransMessageEntity> selectByDictionaryIds(List<Integer> dictionaryIds);
+
 }
