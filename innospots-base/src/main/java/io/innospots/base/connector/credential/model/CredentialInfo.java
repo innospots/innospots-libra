@@ -69,7 +69,7 @@ public class CredentialInfo extends PBaseModelInfo {
     protected Map<String, Object> formValues = new LinkedHashMap<>();
 
     @Schema(title = "props")
-    protected Map<String,String> props;
+    protected Map<String,Object> props;
 
     @Schema(title = "credential Type")
     @JsonIgnore

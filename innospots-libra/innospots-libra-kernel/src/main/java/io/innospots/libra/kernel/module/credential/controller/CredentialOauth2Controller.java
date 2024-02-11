@@ -16,10 +16,10 @@
  *  limitations under the License.
  */
 
-package io.innospots.libra.kernel.module.schema.controller;
+package io.innospots.libra.kernel.module.credential.controller;
 
 import io.innospots.base.constant.PathConstant;
-import io.innospots.libra.kernel.module.schema.service.Oauth2CallbackService;
+import io.innospots.libra.kernel.module.credential.service.Oauth2CallbackService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Slf4j
 @Controller
-@RequestMapping(PathConstant.ROOT_PATH + "schema/oauth2")
+@RequestMapping(PathConstant.ROOT_PATH + "oauth2")
 @Tag(name = "App Credential Oauth2")
 public class CredentialOauth2Controller {
 
@@ -46,14 +46,14 @@ public class CredentialOauth2Controller {
         this.authorizationCallbackService = authorizationCallbackService;
     }
 
-    @GetMapping("callback/{appCode}")
+    @GetMapping("callback/{credentialTypeCode}")
     @Operation(summary = "oauth2 credential callback")
     public String callback(
-            @Parameter(name = "appCode") @PathVariable String appCode,
+            @Parameter(name = "credentialTypeCode") @PathVariable String credentialTypeCode,
             @Parameter(name = "code") @RequestParam("code") String code,
             @Parameter(name = "state") @RequestParam("state") String state) {
-        boolean success = authorizationCallbackService.authCallback(appCode, code, state);
-        return "redirect:/#/oauth-result?state=" + state + "&appCode=" + appCode + "&success=" + success;
+        boolean success = authorizationCallbackService.authCallback(credentialTypeCode, code, state);
+        return "redirect:/#/oauth-result?state=" + state + "&appCode=" + credentialTypeCode + "&success=" + success;
     }
 
 //    @Deprecated

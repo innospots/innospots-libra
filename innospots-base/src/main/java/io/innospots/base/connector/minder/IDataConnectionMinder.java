@@ -19,6 +19,7 @@
 package io.innospots.base.connector.minder;
 
 
+import io.innospots.base.connector.credential.model.CredentialInfo;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.connector.credential.model.ConnectionCredential;
 import io.innospots.base.connector.schema.model.SchemaCatalog;
@@ -85,6 +86,11 @@ public interface IDataConnectionMinder {
     Object testConnect(ConnectionCredential connectionCredential);
 
     Object fetchSample(ConnectionCredential connectionCredential, String tableName);
+
+
+    default void fillCredentialInfo(CredentialInfo credentialInfo) {
+
+    }
 
     default PageBody<Map<String, Object>> fetchSamples(ConnectionCredential connectionCredential, Map<String,Object> config) {
         return null;

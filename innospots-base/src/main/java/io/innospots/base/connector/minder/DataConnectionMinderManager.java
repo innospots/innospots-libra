@@ -77,10 +77,10 @@ public class DataConnectionMinderManager {
         return (IQueueConnectionMinder) BeanContextAwareUtils.getBean(DataConnectionMinderManager.class).getMinder(credentialKey);
     }
 
-    public static IDataConnectionMinder newMinderInstance(ConnectionCredential connectionCredential) {
+    public static IDataConnectionMinder newMinderInstance(String connectorName,String authOption){
         try {
-            ConnectionMinderSchema minderSchema = ConnectionMinderSchemaLoader.getConnectionMinderSchema(connectionCredential.getConnectorName());
-            CredentialAuthOption config = minderSchema.getAuthOptions().stream().filter(f -> Objects.equals(connectionCredential.getAuthOption(), f.getCode())).findFirst()
+            ConnectionMinderSchema minderSchema = ConnectionMinderSchemaLoader.getConnectionMinderSchema(connectorName);
+            CredentialAuthOption config = minderSchema.getAuthOptions().stream().filter(f -> Objects.equals(authOption, f.getCode())).findFirst()
                     .orElseThrow(() -> LoadConfigurationException.buildException(ConnectionMinderSchemaLoader.class, "dataConnectionMinder newInstance failed, configCode invalid."));
             return (IDataConnectionMinder) Class.forName(config.getMinder()).getConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException |
@@ -88,6 +88,10 @@ public class DataConnectionMinderManager {
             logger.error(e.getMessage(), e);
         }
         return null;
+    }
+
+    public static IDataConnectionMinder newMinderInstance(ConnectionCredential connectionCredential) {
+        return newMinderInstance(connectionCredential.getConnectorName(), connectionCredential.getAuthOption());
     }
 
     public static Object testConnection(ConnectionCredential connectionCredential) {

@@ -19,20 +19,18 @@
 package io.innospots.libra.kernel.module.credential.controller;
 
 import io.innospots.base.connector.credential.model.ConnectionCredential;
-import io.innospots.base.connector.credential.model.CredentialType;
-import io.innospots.base.connector.credential.operator.CredentialTypeOperator;
+import io.innospots.base.connector.credential.model.CredentialInfo;
+import io.innospots.base.connector.credential.model.SimpleCredentialInfo;
+import io.innospots.base.connector.credential.operator.CredentialInfoOperator;
 import io.innospots.base.connector.credential.reader.IConnectionCredentialReader;
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.request.FormQuery;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.controller.BaseController;
-import io.innospots.base.connector.credential.model.SimpleCredentialInfo;
-import io.innospots.base.connector.credential.operator.CredentialInfoOperator;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
-import io.innospots.base.connector.credential.model.CredentialInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -64,15 +62,12 @@ public class CredentialInfoController extends BaseController {
 
     private final IConnectionCredentialReader connectionCredentialReader;
 
-    private final CredentialTypeOperator credentialTypeOperator;
-
     public CredentialInfoController(
             CredentialInfoOperator credentialInfoOperator,
-            IConnectionCredentialReader connectionCredentialReader,
-            CredentialTypeOperator credentialTypeOperator) {
+            IConnectionCredentialReader connectionCredentialReader) {
         this.credentialInfoOperator = credentialInfoOperator;
         this.connectionCredentialReader = connectionCredentialReader;
-        this.credentialTypeOperator = credentialTypeOperator;
+
 
     }
 
@@ -82,8 +77,6 @@ public class CredentialInfoController extends BaseController {
         if (StringUtils.isBlank(credentialInfo.getEncryptFormValues())) {
             throw buildInvalidException(this.getClass(), "schemaDatasource formValues can not be empty");
         }
-        CredentialType credentialType = credentialTypeOperator.getCredentialType(credentialInfo.getCredentialTypeCode());
-        credentialInfo.setCredentialType(credentialType);
         // fill credential
         ConnectionCredential connection = connectionCredentialReader.fillCredential(credentialInfo);
         Object connectionTest = DataConnectionMinderManager.testConnection(connection);

@@ -43,8 +43,8 @@ import org.springframework.stereotype.Component;
 public class CredentialConfiguration {
 
     @Bean
-    public CredentialInfoOperator credentialInfoOperator(CredentialTypeDao credentialTypeDao){
-        return new CredentialInfoOperator(credentialTypeDao);
+    public CredentialInfoOperator credentialInfoOperator(CredentialTypeDao credentialTypeDao,IEncryptor encryptor){
+        return new CredentialInfoOperator(credentialTypeDao,encryptor);
     }
 
     @Bean
@@ -54,8 +54,8 @@ public class CredentialConfiguration {
 
     @Bean
     public ConnectionCredentialReader connectionCredentialReader(CredentialInfoOperator credentialInfoOperator,
-                                                                 IEncryptor encryptor){
-        return new ConnectionCredentialReader(credentialInfoOperator, encryptor);
+                                                                 CredentialTypeOperator credentialTypeOperator){
+        return new ConnectionCredentialReader(credentialInfoOperator,credentialTypeOperator);
     }
 
     @Bean

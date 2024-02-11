@@ -1,8 +1,11 @@
-package io.innospots.libra.kernel.module.schema.service;
+package io.innospots.libra.kernel.module.credential.service;
 
 import io.innospots.base.connector.credential.model.ConnectionCredential;
 import io.innospots.base.connector.credential.model.CredentialInfo;
+import io.innospots.base.connector.credential.model.CredentialType;
+import io.innospots.base.connector.credential.operator.CredentialTypeOperator;
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
+import io.innospots.base.exception.ResourceException;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.store.CacheStoreManager;
@@ -23,20 +26,23 @@ import java.util.Map;
 public class Oauth2CallbackService {
 
     private ConnectionCredentialReader connectionCredentialReader;
+    private CredentialTypeOperator credentialTypeOperator;
 
-    public Oauth2CallbackService(ConnectionCredentialReader connectionCredentialReader) {
+    public Oauth2CallbackService(ConnectionCredentialReader connectionCredentialReader,
+                                 CredentialTypeOperator credentialTypeOperator) {
         this.connectionCredentialReader = connectionCredentialReader;
+        this.credentialTypeOperator = credentialTypeOperator;
     }
 
-    public boolean authCallback(String credentialType, String code, String state) {
+    public boolean authCallback(String credentialTypeCode, String code, String state) {
         if (StringUtils.isBlank(state)) {
             log.warn("oauth2 credential callback state can not be empty");
             throw ValidatorException.buildInvalidException("oauth2-credential", "oauth2 credential callback state can not be empty");
         }
+
         CredentialInfo credentialInfo = new CredentialInfo();
-        //credentialInfo.("oauth2-auth-api");
-        credentialInfo.setConnectorName("Http");
-        credentialInfo.setCredentialTypeCode(credentialType);
+        credentialInfo.setCredentialTypeCode(credentialTypeCode);
+
         String json = CacheStoreManager.get(state);
         if (StringUtils.isBlank(json)) {
             log.warn("oauth2 credential callback state invalid");

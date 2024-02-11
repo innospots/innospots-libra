@@ -19,19 +19,24 @@
 package io.innospots.connector.api.minder;
 
 import cn.hutool.core.net.url.UrlBuilder;
+import io.innospots.base.connector.credential.model.CredentialInfo;
 import io.innospots.base.constant.PathConstant;
 import io.innospots.base.data.enums.ApiMethod;
 import io.innospots.base.connector.credential.model.ConnectionCredential;
+import io.innospots.base.exception.data.HttpConnectionException;
 import io.innospots.base.json.JSONUtils;
+import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.store.CacheStoreManager;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.checkerframework.checker.units.qual.C;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,6 +86,7 @@ public class OAuth2ApiConnectionMinder extends OAuth2ClientConnectionMinder {
         String redirectUrl = connectionCredential.v(REDIRECT_URI);
         if (StringUtils.isBlank(redirectUrl)) {
             redirectUrl = redirectAddress != null ? redirectAddress + OAUTH_CALLBACK + connectionCredential.getCredentialTypeCode() : null;
+//            redirectUrl = redirectPath != null ? redirectPath + OAUTH_CALLBACK + connectionCredential.getCredentialTypeCode() : null;
         }
 
         Map<String, Object> resp = null;
@@ -118,8 +124,20 @@ public class OAuth2ApiConnectionMinder extends OAuth2ClientConnectionMinder {
         if (accessToken != null) {
             return true;
         }
-
         return resp;
+    }
+
+    @Override
+    public void fillCredentialInfo(CredentialInfo credentialInfo) {
+        String clientId = (String) credentialInfo.getFormValues().get(CLIENT_ID);
+        String cacheKey = clientId + "_" + credentialInfo.getCredentialTypeCode();
+        String tokenJson = CacheStoreManager.get(cacheKey);
+        if(tokenJson == null){
+            throw HttpConnectionException.buildException(this.getClass(), ResponseCode.PARAM_INVALID, "auth token is null");
+        }
+        Map<String, Object> tokenBody = JSONUtils.toMap(tokenJson);
+        CacheStoreManager.remove(cacheKey);
+        credentialInfo.getFormValues().putAll(tokenBody);
     }
 
     private Map<String, Object> fetchAccessToken(String accessTokenUrl,
@@ -127,7 +145,7 @@ public class OAuth2ApiConnectionMinder extends OAuth2ClientConnectionMinder {
                                                  String clientSecret,
                                                  String code,
                                                  String redirectUrl,
-                                                 String appCode,
+                                                 String credentialTypeCode,
                                                  String akRequestMethod) {
         UrlBuilder rb = UrlBuilder.of().addQuery(CLIENT_ID, clientId)
                 .addQuery(CLIENT_SECRET, clientSecret)
@@ -136,10 +154,10 @@ public class OAuth2ApiConnectionMinder extends OAuth2ClientConnectionMinder {
                 .addQuery(REDIRECT_URI, redirectUrl);
 
         TokenHolder holder = buildTokenHolder(accessTokenUrl, rb.getQueryStr(), akRequestMethod);
-        return cacheToken(holder, clientId, appCode);
+        return cacheToken(holder, clientId, credentialTypeCode);
     }
 
-    private void refreshToken(String appCode, String accessTokenUrl, String refreshToken, String clientId, String clientSecret, String akRequestMethod) {
+    private void refreshToken(String credentialTypeCode, String accessTokenUrl, String refreshToken, String clientId, String clientSecret, String akRequestMethod) {
 
         UrlBuilder rb = UrlBuilder.of().addQuery(CLIENT_ID, clientId)
                 .addQuery(CLIENT_SECRET, clientSecret)
@@ -147,7 +165,7 @@ public class OAuth2ApiConnectionMinder extends OAuth2ClientConnectionMinder {
                 .addQuery("refresh_token", refreshToken);
         TokenHolder holder = buildTokenHolder(accessTokenUrl, rb.getQueryStr(), akRequestMethod);
 
-        cacheToken(holder, clientId, appCode);
+        cacheToken(holder, clientId, credentialTypeCode);
     }
 
     private Map<String, Object> openAuthorize(String accessTokenUrl,
@@ -180,12 +198,12 @@ public class OAuth2ApiConnectionMinder extends OAuth2ClientConnectionMinder {
         return resp;
     }
 
-    private Map<String, Object> cacheToken(TokenHolder holder, String clientId, String appCode) {
+    private Map<String, Object> cacheToken(TokenHolder holder, String clientId, String credentialTypeCode) {
         Map<String, Object> resp = new HashMap<>();
         holder.fetchToken(false);
         resp = holder.buildAuthBody();
         if (MapUtils.isNotEmpty(resp)) {
-            CacheStoreManager.save(clientId + "_" + appCode, JSONUtils.toJsonString(resp));
+            CacheStoreManager.save(clientId + "_" + credentialTypeCode, JSONUtils.toJsonString(resp));
         }
         resp.remove(ACCESS_TOKEN);
 

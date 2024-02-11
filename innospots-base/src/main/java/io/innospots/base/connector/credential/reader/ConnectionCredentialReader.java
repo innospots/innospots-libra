@@ -23,15 +23,19 @@ import io.innospots.base.connector.credential.model.ConnectionCredential;
 import io.innospots.base.connector.credential.model.CredentialInfo;
 import io.innospots.base.connector.credential.model.CredentialType;
 import io.innospots.base.connector.credential.operator.CredentialInfoOperator;
+import io.innospots.base.connector.credential.operator.CredentialTypeOperator;
 import io.innospots.base.connector.schema.meta.ConnectionMinderSchemaLoader;
 import io.innospots.base.connector.schema.meta.CredentialAuthOption;
 import io.innospots.base.crypto.IEncryptor;
 import io.innospots.base.exception.AuthenticationException;
+import io.innospots.base.exception.ResourceException;
 import io.innospots.base.json.JSONUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -40,17 +44,17 @@ import java.util.Set;
  * @version 1.2.0
  * @date 2023/2/4
  */
+@Slf4j
 public class ConnectionCredentialReader implements IConnectionCredentialReader {
-
-    private final IEncryptor encryptor;
 
     private final CredentialInfoOperator credentialOperator;
 
-    public ConnectionCredentialReader(
-            CredentialInfoOperator credentialOperator,
-            IEncryptor encryptor) {
+    private final CredentialTypeOperator credentialTypeOperator;
+
+    public ConnectionCredentialReader(CredentialInfoOperator credentialOperator,
+                                      CredentialTypeOperator credentialTypeOperator) {
         this.credentialOperator = credentialOperator;
-        this.encryptor = encryptor;
+        this.credentialTypeOperator = credentialTypeOperator;
     }
 
     @Override
@@ -70,22 +74,28 @@ public class ConnectionCredentialReader implements IConnectionCredentialReader {
         if (credentialInfo == null) {
             return null;
         }
+        CredentialType credentialType = credentialTypeOperator.getCredentialType(credentialInfo.getCredentialTypeCode());
+        if (credentialType == null) {
+            log.error("oauth2 credential callback credentialTypeCode invalid");
+            throw ResourceException.buildNotExistException(this.getClass(),"oauth2-credential", "oauth2 credential callback credentialTypeCode invalid");
+        }
+        if(credentialInfo.getProps()==null){
+            credentialInfo.setProps(new LinkedHashMap<>());
+        }
+        credentialInfo.setCredentialType(credentialType);
+        credentialInfo.setConnectorName(credentialType.getConnectorName());
+        if(credentialType.getProps()!=null){
+            credentialInfo.getProps().putAll(credentialType.getProps());
+        }
         CredentialAuthOption credentialAuthOption = ConnectionMinderSchemaLoader.getCredentialFormConfig(credentialInfo.getConnectorName(), credentialInfo.getCredentialType().getAuthOption());
-        credentialInfo.getProps().putAll(credentialAuthOption.getDefaults());
+        if(credentialAuthOption!=null && credentialAuthOption.getDefaults()!=null){
+            credentialInfo.getProps().putAll(credentialAuthOption.getDefaults());
+        }
         ConnectionCredential connection = decryptFormValues(credentialInfo);
         connection.setAuthOption(credentialInfo.getCredentialType().getAuthOption());
         return connection;
     }
 
-    public CredentialInfo encryptFormValues(CredentialInfo credentialInfo){
-        if(MapUtils.isEmpty(credentialInfo.getFormValues())){
-            return credentialInfo;
-        }
-        String jsonStr = JSONUtils.toJsonString(credentialInfo.getFormValues());
-        credentialInfo.setEncryptFormValues(encryptor.encode(jsonStr));
-
-        return credentialInfo;
-    }
 
     private ConnectionCredential decryptFormValues(CredentialInfo credentialInfo) {
         if (credentialInfo == null) {
@@ -94,14 +104,13 @@ public class ConnectionCredentialReader implements IConnectionCredentialReader {
 
         ConnectionCredential connectionCredential =
                 CredentialInfoConverter.INSTANCE.credentialToConnection(credentialInfo);
-
         if (StringUtils.isBlank(credentialInfo.getEncryptFormValues())) {
             connectionCredential.setConfig(new HashMap<>());
             return connectionCredential;
         }
         try {
-            String formValuesStr = encryptor.decode(credentialInfo.getEncryptFormValues());
-            connectionCredential.setConfig(JSONUtils.toMap(formValuesStr));
+            credentialInfo = credentialOperator.decryptFormValues(credentialInfo);
+            connectionCredential.setConfig(credentialInfo.getFormValues());
         } catch (Exception e) {
             throw AuthenticationException.buildDecryptException(this.getClass(), "form values");
         }

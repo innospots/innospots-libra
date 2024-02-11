@@ -58,14 +58,22 @@ public class CredentialTypeOperator extends ServiceImpl<CredentialTypeDao, Crede
             throw ResourceException.buildExistException(this.getClass(), credentialType.getName());
         }
 
-        long codeCount = 0;
-        do {
-            String code = StringConverter.randomKey(8);
-            credentialType.setTypeCode(code);
-            QueryWrapper<CredentialTypeEntity> qw = new QueryWrapper<>();
-            qw.lambda().eq(CredentialTypeEntity::getTypeCode, code);
-            codeCount = this.count(qw);
-        } while (codeCount > 0);
+        if (StringUtils.isNotEmpty(credentialType.getTypeCode())) {
+            if (this.checkExist(null, credentialType.getTypeCode())) {
+                throw ResourceException.buildExistException(this.getClass(), credentialType.getName());
+            }
+        } else {
+            long codeCount = 0;
+            do {
+                String code = StringConverter.randomKey(8);
+                credentialType.setTypeCode(code);
+                QueryWrapper<CredentialTypeEntity> qw = new QueryWrapper<>();
+                qw.lambda().eq(CredentialTypeEntity::getTypeCode, code);
+                codeCount = this.count(qw);
+            } while (codeCount > 0);
+        }
+
+
         if (credentialType.getIcon() != null && !ImageResource.imageResource(credentialType.getIcon()).isLink()) {
             //save base64image
             EventBusCenter.postSync(new NewAvatarEvent(credentialType.getTypeCode(), ImageType.CREDENTIAL, 0, credentialType.getIcon()));
@@ -140,7 +148,9 @@ public class CredentialTypeOperator extends ServiceImpl<CredentialTypeDao, Crede
 
     private boolean checkExist(String name, String code) {
         QueryWrapper<CredentialTypeEntity> qw = new QueryWrapper<>();
-        qw.lambda().eq(CredentialTypeEntity::getName, name);
+        if (name != null) {
+            qw.lambda().eq(CredentialTypeEntity::getName, name);
+        }
         if (code != null) {
 //            qw.lambda().and(qw.lambda().ne(CredentialTypeEntity::getTypeCode, code));
             qw.lambda().ne(CredentialTypeEntity::getTypeCode, code);

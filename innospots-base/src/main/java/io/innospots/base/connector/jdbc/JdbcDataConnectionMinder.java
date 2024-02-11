@@ -294,6 +294,7 @@ public class JdbcDataConnectionMinder extends BaseDataConnectionMinder {
             dataSource = dsFactory.getDataSource();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
+            throw DataConnectionException.buildException(this.getClass(), "Build data source failure, ", e);
         }
 
 //        hikariDataSource.setJdbcUrl(jdbcUrl);

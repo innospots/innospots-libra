@@ -24,6 +24,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.CaseFormat;
+import io.innospots.base.connector.credential.model.ConnectionCredential;
 import io.innospots.base.connector.credential.model.CredentialInfo;
 import io.innospots.base.connector.credential.converter.CredentialInfoConverter;
 import io.innospots.base.connector.credential.dao.CredentialInfoDao;
@@ -31,10 +32,16 @@ import io.innospots.base.connector.credential.dao.CredentialTypeDao;
 import io.innospots.base.connector.credential.entity.CredentialInfoEntity;
 import io.innospots.base.connector.credential.entity.CredentialTypeEntity;
 import io.innospots.base.connector.credential.model.SimpleCredentialInfo;
+import io.innospots.base.connector.minder.DataConnectionMinderManager;
+import io.innospots.base.connector.minder.IDataConnectionMinder;
+import io.innospots.base.crypto.IEncryptor;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.request.FormQuery;
+import io.innospots.base.exception.AuthenticationException;
 import io.innospots.base.exception.ResourceException;
+import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.StringConverter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -48,12 +55,16 @@ import java.util.stream.Collectors;
  * @version 1.0.0
  * @date 2023/1/19
  */
+@Slf4j
 public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, CredentialInfoEntity> {
 
     private final CredentialTypeDao credentialTypeDao;
 
-    public CredentialInfoOperator(CredentialTypeDao credentialTypeDao) {
+    private final IEncryptor encryptor;
+
+    public CredentialInfoOperator(CredentialTypeDao credentialTypeDao, IEncryptor encryptor) {
         this.credentialTypeDao = credentialTypeDao;
+        this.encryptor = encryptor;
     }
 
     public CredentialInfo getCredential(String credentialKey) {
@@ -82,7 +93,7 @@ public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, Crede
             qw.lambda().eq(CredentialInfoEntity::getCredentialKey, key);
             codeCount = this.count(qw);
         } while (codeCount > 0);
-//        this.authedValuesProcess(credential);
+        fillMinderCredentialInfo(credential);
         CredentialInfoEntity entity = CredentialInfoConverter.INSTANCE.modelToEntity(credential);
         super.save(entity);
         return this.getCredential(entity.getCredentialKey());
@@ -92,10 +103,25 @@ public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, Crede
         if (this.checkExist(credentialInfo.getName(), credentialInfo.getCredentialKey())) {
             throw ResourceException.buildExistException(this.getClass(), credentialInfo.getName());
         }
-//        this.authedValuesProcess(credentialInfo);
+        fillMinderCredentialInfo(credentialInfo);
         CredentialInfoEntity entity = CredentialInfoConverter.INSTANCE.modelToEntity(credentialInfo);
         super.updateById(entity);
         return this.getCredential(entity.getCredentialKey());
+    }
+
+    private void fillMinderCredentialInfo(CredentialInfo credentialInfo) {
+        CredentialTypeEntity credentialTypeEntity = this.findCredentialType(credentialInfo.getCredentialTypeCode());
+        if(credentialTypeEntity == null){
+            return;
+        }
+        credentialInfo = decryptFormValues(credentialInfo);
+        IDataConnectionMinder connectionMinder = DataConnectionMinderManager.newMinderInstance(credentialTypeEntity.getConnectorName(),credentialTypeEntity.getAuthOption());
+        if(connectionMinder == null){
+            log.warn("credential type not found, credentialKey:{}",credentialInfo.getCredentialKey());
+            return;
+        }
+        connectionMinder.fillCredentialInfo(credentialInfo);
+        encryptFormValues(credentialInfo);
     }
 
     public Boolean deleteCredential(String credentialKey) {
@@ -198,6 +224,34 @@ public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, Crede
 
     private CredentialTypeEntity findCredentialType(String typeCode) {
         return credentialTypeDao.selectById(typeCode);
+    }
+
+
+    public CredentialInfo encryptFormValues(CredentialInfo credentialInfo){
+        if(MapUtils.isEmpty(credentialInfo.getFormValues())){
+            return credentialInfo;
+        }
+        String jsonStr = JSONUtils.toJsonString(credentialInfo.getFormValues());
+        credentialInfo.setEncryptFormValues(encryptor.encode(jsonStr));
+
+        return credentialInfo;
+    }
+
+    public CredentialInfo decryptFormValues(CredentialInfo credentialInfo) {
+        if (credentialInfo == null) {
+            return null;
+        }
+        try {
+            if(StringUtils.isBlank(credentialInfo.getEncryptFormValues())){
+                return credentialInfo;
+            }
+
+            String formValuesStr = encryptor.decode(credentialInfo.getEncryptFormValues());
+            credentialInfo.setFormValues(JSONUtils.toMap(formValuesStr));
+        } catch (Exception e) {
+            throw AuthenticationException.buildDecryptException(this.getClass(), "form values");
+        }
+        return credentialInfo;
     }
 
 }
