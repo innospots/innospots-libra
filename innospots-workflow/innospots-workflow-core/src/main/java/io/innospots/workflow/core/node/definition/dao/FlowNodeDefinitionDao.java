@@ -41,12 +41,12 @@ public interface FlowNodeDefinitionDao extends BaseMapper<FlowNodeDefinitionEnti
      * @param flowTplId
      * @return
      */
-    @Select("select ngn.node_group_id,nd.* from app_node_group_node ngn left join app_node_definition nd " +
+    @Select("select ngn.node_group_id,nd.* from flow_node_group_node ngn left join flow_node_definition nd " +
             "on ngn.node_id=nd.node_id where ngn.flow_tpl_id=#{flowTplId}")
     List<FlowNodeDefinitionEntity> getNodeDefinitionByFlowTplId(Integer flowTplId);
 
 
-    @Select("select ngn.node_group_id,nd.* from app_node_group_node ngn left join app_node_definition nd " +
+    @Select("select ngn.node_group_id,nd.* from flow_node_group_node ngn left join flow_node_definition nd " +
             "on ngn.node_id=nd.node_id where ngn.flow_tpl_id=#{flowTplId} and nd.status=#{status}")
     List<FlowNodeDefinitionEntity> getNodeDefinitionByFlowTplIdAndStatus(Integer flowTplId, DataStatus status);
 
@@ -54,6 +54,6 @@ public interface FlowNodeDefinitionDao extends BaseMapper<FlowNodeDefinitionEnti
     /**
      * 使用@Select注解，将SQL的where条件部分用${ew.customSqlSegment}代替
      */
-    @Select("select s.* from app_node_definition s left join app_node_group_node t on s.node_id = t.node_id ${ew.customSqlSegment}")
+    @Select("select s.* from flow_node_definition s left join flow_node_group_node t on s.node_id = t.node_id ${ew.customSqlSegment}")
     IPage<FlowNodeDefinitionEntity> selectNodePage(IPage<FlowNodeDefinitionEntity> page, @Param(Constants.WRAPPER) Wrapper queryWrapper);
 }

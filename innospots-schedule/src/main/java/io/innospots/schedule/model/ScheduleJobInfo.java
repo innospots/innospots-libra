@@ -22,6 +22,7 @@ import io.innospots.base.enums.DataStatus;
 import io.innospots.base.quartz.ScheduleMode;
 import io.innospots.base.utils.Initializer;
 import io.innospots.schedule.enums.JobType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -39,12 +40,16 @@ import java.util.Map;
 @Slf4j
 @Getter
 @Setter
+@Schema(title = "schedule job info")
 public class ScheduleJobInfo implements Initializer {
 
+    @Schema(title = "job key,primary")
     private String jobKey;
 
+    @Schema(title = "job name")
     private String jobName;
 
+    @Schema(title = "schedule mode")
     private ScheduleMode scheduleMode;
 
     private DataStatus jobStatus;

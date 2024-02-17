@@ -19,11 +19,20 @@
 package io.innospots.schedule.controller;
 
 import io.innospots.base.constant.PathConstant;
+import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.libra.base.log.OperateType;
+import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
+import io.innospots.libra.base.menu.ResourceItemOperation;
+import io.innospots.schedule.model.ScheduleJobInfo;
 import io.innospots.schedule.operator.ScheduleJobInfoOperator;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import static io.innospots.libra.base.menu.ItemType.BUTTON;
 
 /**
  * @author Smars
@@ -42,7 +51,12 @@ public class ScheduleJobInfoController {
         this.scheduleJobInfoOperator = scheduleJobInfoOperator;
     }
 
-
-
+    @OperationLog(operateType = OperateType.CREATE, primaryField = "id")
+    @PostMapping
+    @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
+    @Operation(summary = "create schedule")
+    public InnospotResponse<ScheduleJobInfo> createScheduleJobInfo(ScheduleJobInfo scheduleJobInfo) {
+        return InnospotResponse.success(scheduleJobInfoOperator.createScheduleJobInfo(scheduleJobInfo));
+    }
 
 }
