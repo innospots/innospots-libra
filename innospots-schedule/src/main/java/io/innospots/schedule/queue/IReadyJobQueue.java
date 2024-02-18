@@ -49,17 +49,17 @@ public interface IReadyJobQueue {
      * push ready job
      * @param jobKey
      */
-    void push(String jobKey, Map<String,Object> params);
+    int push(String jobKey, Map<String,Object> params);
 
-    void push(String parentExecutionId,Integer sequenceNumber, String jobKey, Map<String,Object> params);
+    int push(String parentExecutionId,Integer sequenceNumber, String jobKey, Map<String,Object> params);
 
     /**
      * push ready job using job key
      * @param jobKey
      */
-    void push(String jobKey);
+    int push(String jobKey);
 
-    void push(ReadyJob readyJob);
+    int push(ReadyJob readyJob);
 
     /**
      * reset assign job to unread, if job's update time is greater than the set timeout

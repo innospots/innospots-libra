@@ -36,6 +36,13 @@ import java.util.List;
  */
 public interface ReadyJobDao extends BaseMapper<ReadyJobEntity> {
 
+    default long countUnReadAndAssignedJob(String instanceKey){
+        QueryWrapper<ReadyJobEntity> qw = new QueryWrapper<>();
+        qw.lambda().in(ReadyJobEntity::getMessageStatus, MessageStatus.UNREAD,MessageStatus.ASSIGNED)
+                .eq(ReadyJobEntity::getInstanceKey, instanceKey);
+        return this.selectCount(qw);
+    }
+
     default List<ReadyJobEntity> selectUnReadJob(int fetchSize, List<String> groupKeys){
         QueryWrapper<ReadyJobEntity> qw = new QueryWrapper<>();
         qw.lambda().eq(ReadyJobEntity::getMessageStatus, MessageStatus.UNREAD)

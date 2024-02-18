@@ -42,32 +42,32 @@ import java.util.Map;
 @Setter
 public class JobExecution extends ExecutionBase {
 
-    private JobType jobType;
+    protected JobType jobType;
 
-    private Integer percent;
+    protected Integer percent;
 
-    private Long subJobCount;
+    protected Long subJobCount;
 
-    private Long successCount;
+    protected Long successCount;
 
-    private Long failCount;
+    protected Long failCount;
 
-    private String extExecutionId;
+    protected String extExecutionId;
 
-    private String resourceKey;
+    protected String resourceKey;
 
     /**
      * retry execute the first origin executionId
      * is null if the execution is the first time executed
      */
-    private String originExecutionId;
+    protected String originExecutionId;
 
-    private String timeConsume;
+    protected String timeConsume;
 
-    private String parentExecutionId;
+    protected String parentExecutionId;
 
-    private String serverKey;
+    protected String serverKey;
 
-    private String jobClass;
+    protected String jobClass;
 
 }

@@ -18,6 +18,7 @@
 
 package io.innospots.schedule.converter;
 
+import cn.hutool.crypto.digest.MD5;
 import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.InnospotsIdGenerator;
@@ -42,6 +43,18 @@ public interface ReadyJobConverter extends BaseBeanConverter<ReadyJob, ReadyJobE
 
     ReadyJobConverter INSTANCE = Mappers.getMapper(ReadyJobConverter.class);
 
+    static ReadyJobEntity build(ReadyJob readyJob){
+        ReadyJobEntity readyJobEntity = INSTANCE.modelToEntity(readyJob);
+        if(readyJobEntity.getContext() == null){
+            readyJobEntity.setContext(JSONUtils.toJsonString(new HashMap<>()));
+        }
+        //using jobKey and context param to generate digestHex
+        String instanceKey = MD5.create().digestHex(readyJobEntity.getJobKey()+readyJobEntity.getContext());
+        readyJobEntity.setInstanceKey(instanceKey);
+        readyJobEntity.setVersion(1);
+        return readyJobEntity;
+    }
+
     static ReadyJobEntity build(ScheduleJobInfo scheduleJobInfo, Map<String,Object> params){
         Map<String,Object> context = new HashMap<>();
         if(MapUtils.isNotEmpty(params)){
@@ -62,6 +75,9 @@ public interface ReadyJobConverter extends BaseBeanConverter<ReadyJob, ReadyJobE
         readyJobEntity.setMessageStatus(MessageStatus.UNREAD);
         readyJobEntity.setJobClass(scheduleJobInfo.getJobClass());
         readyJobEntity.setScopes(scheduleJobInfo.getScopes());
+        //using jobKey and context param to generate digestHex
+        String instanceKey = MD5.create().digestHex(readyJobEntity.getJobKey()+readyJobEntity.getContext());
+        readyJobEntity.setInstanceKey(instanceKey);
                 return readyJobEntity;
     }
 }

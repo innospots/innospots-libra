@@ -20,11 +20,14 @@ package io.innospots.schedule.operator;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.schedule.converter.JobExecutionConverter;
 import io.innospots.schedule.dao.JobExecutionDao;
 import io.innospots.schedule.entity.JobExecutionEntity;
 import io.innospots.schedule.model.JobExecution;
+
+import java.util.List;
 
 /**
  * @author Smars
@@ -32,6 +35,8 @@ import io.innospots.schedule.model.JobExecution;
  * @date 2023/12/3
  */
 public class JobExecutionOperator extends ServiceImpl<JobExecutionDao, JobExecutionEntity> {
+
+
 
 
     public JobExecution jobExecution(String jobExecutionId) {

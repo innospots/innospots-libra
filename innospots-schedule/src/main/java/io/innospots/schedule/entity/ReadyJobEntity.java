@@ -59,6 +59,12 @@ public class ReadyJobEntity extends PBaseEntity {
     private String jobReadyKey;
 
     /**
+     * md5(context+jobKey), job execution instance primary key, which be created by params and job key
+     */
+    @Column(length = 64)
+    protected String instanceKey;
+
+    /**
      * execute job implement class
      */
     @Column(length = 64)

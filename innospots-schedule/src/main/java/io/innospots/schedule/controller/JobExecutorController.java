@@ -20,9 +20,12 @@ package io.innospots.schedule.controller;
 
 import io.innospots.base.constant.PathConstant;
 import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.libra.base.log.OperateType;
+import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.schedule.dispatch.ReadJobDispatcher;
 import io.innospots.schedule.model.ReadyJob;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +37,7 @@ import java.util.Map;
  * @date 2023/12/10
  */
 @RestController
-@RequestMapping(PathConstant.ROOT_PATH +"schedule/job/execute")
+@RequestMapping(PathConstant.ROOT_PATH +"schedule/job")
 @ModuleMenu(menuKey = "job-schedule")
 @Tag(name = "schedule job executor")
 public class JobExecutorController {
@@ -45,10 +48,19 @@ public class JobExecutorController {
         this.readJobDispatcher = readJobDispatcher;
     }
 
-    @PostMapping("{jobKey}")
+    @Operation(summary = "execute schedule")
+    @OperationLog(operateType = OperateType.EXECUTE)
+    @PostMapping("execute/{jobKey}")
     public InnospotResponse<Void> launch(@PathVariable String jobKey, @RequestBody Map<String,Object> params){
         readJobDispatcher.execute(jobKey,params);
         return InnospotResponse.success();
+    }
+
+    @OperationLog(operateType = OperateType.UPDATE_STATUS)
+    @Operation(summary = "cancel schedule")
+    @PostMapping("cancel/{jobKey}")
+    public InnospotResponse<Integer> cancel(@PathVariable String jobKey){
+        return InnospotResponse.success(readJobDispatcher.cancel(jobKey));
     }
 
 }

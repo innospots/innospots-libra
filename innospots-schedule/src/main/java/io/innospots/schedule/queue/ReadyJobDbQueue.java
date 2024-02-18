@@ -18,6 +18,7 @@
 
 package io.innospots.schedule.queue;
 
+import cn.hutool.crypto.digest.MD5;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import io.innospots.base.utils.InnospotsIdGenerator;
 import io.innospots.base.utils.ServiceActionHolder;
@@ -93,34 +94,48 @@ public class ReadyJobDbQueue implements IReadyJobQueue {
     }
 
     @Override
-    public void push(String jobKey, Map<String,Object> params){
+    public int push(String jobKey, Map<String,Object> params){
         ScheduleJobInfo scheduleJobInfo = scheduleJobInfoExplorer.getScheduleJobInfo(jobKey);
         ReadyJobEntity readyJobEntity = ReadyJobConverter.build(scheduleJobInfo,params);
-        readyJobDao.insert(readyJobEntity);
+        long count = readyJobDao.countUnReadAndAssignedJob(readyJobEntity.getInstanceKey());
+        if(count >0){
+            log.warn("job has exist in the queue, jobKey:{}, param:{}",jobKey,params);
+            return 0;
+        }
+        return readyJobDao.insert(readyJobEntity);
     }
 
     @Override
-    public void push(String parentExecutionId, Integer sequenceNumber, String jobKey, Map<String, Object> params) {
+    public int push(String parentExecutionId, Integer sequenceNumber, String jobKey, Map<String, Object> params) {
         ScheduleJobInfo scheduleJobInfo = scheduleJobInfoExplorer.getScheduleJobInfo(jobKey);
         ReadyJobEntity readyJobEntity = ReadyJobConverter.build(scheduleJobInfo,params);
         readyJobEntity.setSequenceNumber(sequenceNumber);
         readyJobEntity.setParentExecutionId(parentExecutionId);
-        readyJobDao.insert(readyJobEntity);
+        long count = readyJobDao.countUnReadAndAssignedJob(readyJobEntity.getInstanceKey());
+        if(count >0){
+            log.warn("job has exist in the queue, jobKey:{}, param:{}",jobKey,params);
+            return 0;
+        }
+        return readyJobDao.insert(readyJobEntity);
     }
 
     @Override
-    public void push(String jobKey) {
-        push(jobKey,null);
+    public int push(String jobKey) {
+        return push(jobKey,null);
     }
 
     @Override
-    public void push(ReadyJob readyJob) {
+    public int push(ReadyJob readyJob) {
         if(readyJob.getJobReadyKey()==null){
             readyJob.setJobReadyKey(InnospotsIdGenerator.generateIdStr());
         }
-        ReadyJobEntity readyJobEntity = ReadyJobConverter.INSTANCE.modelToEntity(readyJob);
-        readyJobEntity.setVersion(1);
-        readyJobDao.insert(readyJobEntity);
+        ReadyJobEntity readyJobEntity = ReadyJobConverter.build(readyJob);
+        long count = readyJobDao.countUnReadAndAssignedJob(readyJobEntity.getInstanceKey());
+        if(count >0){
+            log.warn("job has exist in the queue, jobKey:{}, param:{}",readyJob.getJobKey(),readyJob.getContext());
+            return 0;
+        }
+        return readyJobDao.insert(readyJobEntity);
     }
 
     @Override

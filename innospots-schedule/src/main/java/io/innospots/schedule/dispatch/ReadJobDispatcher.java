@@ -55,4 +55,8 @@ public class ReadJobDispatcher {
     public void execute(ReadyJob readyJob) {
         readyJobQueue.push(readyJob);
     }
+
+    public int cancel(String jobKey) {
+        return readyJobQueue.cancelJob(jobKey);
+    }
 }

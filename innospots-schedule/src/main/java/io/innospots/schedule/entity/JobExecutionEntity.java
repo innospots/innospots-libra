@@ -75,7 +75,7 @@ public class JobExecutionEntity extends PBaseEntity {
     protected String keyType;
 
     /**
-     * md5(context+key), job execution instance primary key, which be created by params and job key
+     * md5(context+jobKey), job execution instance primary key, which be created by params and job key
      */
     @Column(length = 64)
     protected String instanceKey;
