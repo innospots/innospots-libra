@@ -5,5 +5,5 @@ package io.innospots.schedule.model;
  * @vesion 2.0
  * @date 2024/2/18
  */
-public class JobExecutionDisplay {
+public class JobExecutionDisplay extends JobExecution{
 }

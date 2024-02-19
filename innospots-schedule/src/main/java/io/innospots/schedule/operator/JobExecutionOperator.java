@@ -18,7 +18,9 @@
 
 package io.innospots.schedule.operator;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.quartz.ExecutionStatus;
@@ -26,7 +28,9 @@ import io.innospots.schedule.converter.JobExecutionConverter;
 import io.innospots.schedule.dao.JobExecutionDao;
 import io.innospots.schedule.entity.JobExecutionEntity;
 import io.innospots.schedule.model.JobExecution;
+import io.innospots.schedule.model.JobExecutionDisplay;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -37,7 +41,39 @@ import java.util.List;
 public class JobExecutionOperator extends ServiceImpl<JobExecutionDao, JobExecutionEntity> {
 
 
+    public PageBody<JobExecution> pageJobExecutions(long size, long page,
+                                                    LocalDateTime startTime,
+                                                    LocalDateTime endTime,
+                                                    ExecutionStatus status,
+                                                    String jobKey,
+                                                    String jobName,
+                                                    String serverKey,
+                                                    String createdBy
+                                                    ) {
+        PageBody<JobExecution> pageBody = new PageBody<>();
 
+        QueryWrapper<JobExecutionEntity> qw = new QueryWrapper<>();
+        qw.lambda().eq(jobKey!=null,JobExecutionEntity::getJobKey, jobKey)
+                .eq(jobName!=null,JobExecutionEntity::getJobName, jobName)
+                .eq(serverKey!=null,JobExecutionEntity::getServerKey, serverKey)
+                .eq(createdBy!=null,JobExecutionEntity::getCreatedBy, createdBy)
+                .eq(status!=null,JobExecutionEntity::getExecutionStatus, status)
+                .ge(startTime!=null,JobExecutionEntity::getStartTime, startTime)
+                .le(endTime!=null,JobExecutionEntity::getEndTime, endTime);
+        Page<JobExecutionEntity> entityPage = new Page<>(page,size);
+        entityPage = this.page(entityPage,qw);
+        pageBody.setTotal(entityPage.getTotal());
+        pageBody.setTotalPage(entityPage.getPages());
+        pageBody.setPageSize(size);
+        pageBody.setList(JobExecutionConverter.INSTANCE.entitiesToModels(entityPage.getRecords()));
+
+        return pageBody;
+    }
+
+    public List<JobExecutionDisplay> listJobExecutions(String jobExecutionId) {
+
+        return null;
+    }
 
     public JobExecution jobExecution(String jobExecutionId) {
         return JobExecutionConverter.INSTANCE
