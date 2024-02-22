@@ -16,3 +16,4 @@ innospots-isp-ui/dist
 .flattened-pom.xml
 target
 null
+.DS_Store
