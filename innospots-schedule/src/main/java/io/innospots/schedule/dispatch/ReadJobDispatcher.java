@@ -38,6 +38,11 @@ public class ReadJobDispatcher {
         this.readyJobQueue = readyJobQueue;
     }
 
+
+    public void continueExecute(String jobExecutionId){
+
+    }
+
     /**
      * execute job by jobKey, and set external params
      *

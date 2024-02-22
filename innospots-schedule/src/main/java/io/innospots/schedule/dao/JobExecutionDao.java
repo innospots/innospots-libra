@@ -18,9 +18,13 @@
 
 package io.innospots.schedule.dao;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.schedule.entity.JobExecutionEntity;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.time.LocalDateTime;
 
 /**
  * @author Smars
@@ -30,4 +34,15 @@ import org.apache.ibatis.annotations.Mapper;
 public interface JobExecutionDao extends BaseMapper<JobExecutionEntity> {
 
 
+    static UpdateWrapper<JobExecutionEntity> buildUpdateWrapper(String jobExecutionId,
+                                                                 ExecutionStatus executionStatus,
+                                                                 String message) {
+        UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
+        uw.lambda().set(JobExecutionEntity::getExecutionStatus, executionStatus)
+                .set(message != null, JobExecutionEntity::getMessage, message)
+                .set(JobExecutionEntity::getUpdatedTime, LocalDateTime.now())
+                .eq(JobExecutionEntity::getExecutionId, jobExecutionId);
+
+        return uw;
+    }
 }

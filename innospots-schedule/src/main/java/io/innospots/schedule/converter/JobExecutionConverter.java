@@ -24,8 +24,11 @@ import io.innospots.base.utils.InnospotsIdGenerator;
 import io.innospots.schedule.entity.JobExecutionEntity;
 import io.innospots.schedule.entity.ReadyJobEntity;
 import io.innospots.schedule.model.JobExecution;
+import io.innospots.schedule.model.JobExecutionDisplay;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+
+import java.util.List;
 
 /**
  * @author Smars
@@ -44,4 +47,8 @@ public interface JobExecutionConverter extends BaseBeanConverter<JobExecution, J
         jobExecutionEntity.setInstanceKey(readyJobEntity.getInstanceKey());
         return jobExecutionEntity;
     }
+
+    List<JobExecutionDisplay> entitiesToDisplays(List<JobExecutionEntity> entities);
+
+    JobExecutionDisplay enitityToDisplay(JobExecutionEntity entity);
 }

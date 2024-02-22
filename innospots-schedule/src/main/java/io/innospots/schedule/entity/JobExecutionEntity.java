@@ -81,7 +81,7 @@ public class JobExecutionEntity extends PBaseEntity {
     protected String instanceKey;
 
     /**
-     * value: group, execute,flow
+     * value: schedule, execute,flow
      */
     @Column(length = 32)
     private String scopes;

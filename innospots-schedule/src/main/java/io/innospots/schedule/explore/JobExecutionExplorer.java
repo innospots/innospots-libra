@@ -21,19 +21,19 @@ package io.innospots.schedule.explore;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import io.innospots.base.model.Pair;
+import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.schedule.converter.JobExecutionConverter;
 import io.innospots.schedule.dao.JobExecutionDao;
 import io.innospots.schedule.entity.JobExecutionEntity;
 import io.innospots.schedule.entity.ReadyJobEntity;
+import io.innospots.schedule.exception.JobExecutionException;
 import io.innospots.schedule.model.JobExecution;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
  * @vesion 2.0
  * @date 2023/12/3
  */
+@Slf4j
 public class JobExecutionExplorer {
 
     private final JobExecutionDao jobExecutionDao;
@@ -69,18 +70,6 @@ public class JobExecutionExplorer {
         return JobExecutionConverter.INSTANCE.entityToModel(jobExecutionEntity);
     }
 
-    /**
-     * This class represents a job execution operator that can stop a job execution
-     * with a given ID and message.
-     */
-    public void stop(String jobExecutionId, String message) {
-        jobExecutionDao.update(buildUpdateWrapper(jobExecutionId, ExecutionStatus.STOPPED, message));
-    }
-
-    public void complete(String jobExecutionId, String message) {
-        jobExecutionDao.update(buildUpdateWrapper(jobExecutionId, ExecutionStatus.COMPLETE, message));
-    }
-
 
     public void fail(String jobExecutionId, String message) {
         UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
@@ -92,8 +81,22 @@ public class JobExecutionExplorer {
         jobExecutionDao.update(uw);
     }
 
-    public void updateJobExecution(JobExecution jobExecution) {
-        jobExecutionDao.updateById(JobExecutionConverter.INSTANCE.modelToEntity(jobExecution));
+    public void endJobExecution(JobExecution jobExecution) {
+        JobExecutionEntity jobExecutionEntity = jobExecutionDao.selectById(jobExecution.getExecutionId());
+        jobExecutionEntity.setEndTime(jobExecution.getEndTime());
+        jobExecutionEntity.setFailCount(jobExecution.getFailCount());
+        jobExecutionEntity.setPercent(jobExecution.getPercent());
+        jobExecutionEntity.setSelfEndTime(jobExecution.getSelfEndTime());
+        jobExecutionEntity.setSuccessCount(jobExecution.getSuccessCount());
+        jobExecutionEntity.setMessage(jobExecution.getMessage());
+        jobExecutionEntity.setUpdatedTime(LocalDateTime.now());
+
+        if (jobExecutionEntity.getExecutionStatus() == ExecutionStatus.STOPPING) {
+            jobExecutionEntity.setExecutionStatus(ExecutionStatus.STOPPED);
+        } else {
+            jobExecutionEntity.setExecutionStatus(jobExecution.getExecutionStatus());
+        }
+        jobExecutionDao.updateById(jobExecutionEntity);
     }
 
 
@@ -110,6 +113,7 @@ public class JobExecutionExplorer {
                 .set(JobExecutionEntity::getSuccessCount, successCount)
                 .set(JobExecutionEntity::getFailCount, failCount)
                 .set(message != null, JobExecutionEntity::getMessage, message)
+                .set(JobExecutionEntity::getUpdatedTime, LocalDateTime.now())
                 .eq(JobExecutionEntity::getExecutionId, jobExecutionId);
         return jobExecutionDao.update(uw);
     }
@@ -124,6 +128,12 @@ public class JobExecutionExplorer {
         qw.lambda().in(JobExecutionEntity::getExecutionStatus, ExecutionStatus.executingStatus());
         List<JobExecutionEntity> entities = jobExecutionDao.selectList(qw);
         return JobExecutionConverter.INSTANCE.entitiesToModels(entities);
+    }
+
+    public List<JobExecution> selectJobExecutions(Collection<String> jobExecutionIds) {
+        QueryWrapper<JobExecutionEntity> qw = new QueryWrapper<>();
+        qw.lambda().in(JobExecutionEntity::getExecutionId, jobExecutionIds);
+        return JobExecutionConverter.INSTANCE.entitiesToModels(jobExecutionDao.selectList(qw));
     }
 
     /**
@@ -143,6 +153,29 @@ public class JobExecutionExplorer {
     }
 
     /**
+     * stopping executions
+     *
+     * @return
+     */
+    public List<JobExecution> fetchStoppingJobs() {
+        QueryWrapper<JobExecutionEntity> qw = new QueryWrapper<>();
+        qw.lambda().eq(JobExecutionEntity::getExecutionStatus, ExecutionStatus.STOPPING);
+        return JobExecutionConverter.INSTANCE.entitiesToModels(jobExecutionDao.selectList(qw));
+    }
+
+    public void updateStoppingTimeoutExecutions() {
+        UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
+        uw.lambda()
+                .set(JobExecutionEntity::getExecutionStatus, ExecutionStatus.STOPPED)
+                .eq(JobExecutionEntity::getExecutionStatus, ExecutionStatus.STOPPING)
+                .le(JobExecutionEntity::getUpdatedTime, LocalDateTime.now().minusSeconds(180));
+        int count = jobExecutionDao.update(uw);
+        if (count > 0) {
+            log.info("stopping execution timeout, update to stopped:{}", count);
+        }
+    }
+
+    /**
      * set job execution status to failed when timeout
      *
      * @param jobExecution
@@ -152,7 +185,48 @@ public class JobExecutionExplorer {
         uw.lambda().set(JobExecutionEntity::getExecutionStatus, ExecutionStatus.FAILED)
                 .set(JobExecutionEntity::getMessage, "job execute timeout")
                 .eq(JobExecutionEntity::getExecutionId, jobExecution.getExecutionId());
-        this.jobExecutionDao.update(null, uw);
+        this.jobExecutionDao.update(uw);
+    }
+
+    public List<JobExecution> continueExecution(String jobExecutionId) {
+        JobExecutionEntity entity = this.jobExecutionDao.selectById(jobExecutionId);
+        if (entity.getExecutionStatus() != ExecutionStatus.STOPPED) {
+            throw new JobExecutionException(this.getClass(), ResponseCode.DATA_OPERATION_ERROR, "job status is not stopped", jobExecutionId);
+        }
+
+        UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
+        uw.lambda().set(JobExecutionEntity::getSequenceNumber, -1)
+                .set(JobExecutionEntity::getExecutionStatus, ExecutionStatus.CONTINUE_RUNNING)
+                .set(JobExecutionEntity::getUpdatedTime, LocalDateTime.now())
+                .eq(JobExecutionEntity::getExecutionId, jobExecutionId);
+        this.jobExecutionDao.update(uw);
+        List<JobExecutionEntity> entities = new ArrayList<>();
+        if (entity.getSubJobCount() != null && entity.getSubJobCount() > 0) {
+            //has sub job execution
+            QueryWrapper<JobExecutionEntity> qw = new QueryWrapper<>();
+            qw.lambda().eq(JobExecutionEntity::getParentExecutionId,jobExecutionId);
+            entities = this.jobExecutionDao.selectList(qw);
+            if(CollectionUtils.isNotEmpty(entities)){
+                this.jobExecutionDao.update(
+                        new UpdateWrapper<JobExecutionEntity>().lambda()
+                                .set(JobExecutionEntity::getExecutionStatus,ExecutionStatus.CONTINUE_RUNNING)
+                                .eq(JobExecutionEntity::getParentExecutionId,entity.getExecutionId())
+                );
+            }else{
+                entities.add(entity);
+            }
+        } else if (entity.getParentExecutionId() != null) {
+            JobExecutionEntity parentExecutionEntity = this.jobExecutionDao.selectById(entity.getParentExecutionId());
+            this.jobExecutionDao.update(
+                    new UpdateWrapper<JobExecutionEntity>().lambda()
+                            .set(JobExecutionEntity::getExecutionStatus,ExecutionStatus.CONTINUE_RUNNING)
+                    .eq(JobExecutionEntity::getExecutionId,entity.getParentExecutionId())
+            );
+            entities.add(entity);
+        }else{
+            entities.add(entity);
+        }
+        return JobExecutionConverter.INSTANCE.entitiesToModels(entities);
     }
 
     /**
@@ -171,7 +245,6 @@ public class JobExecutionExplorer {
         }
 
         return entities.stream().map(JobExecutionEntity::getJobKey).collect(Collectors.toSet());
-
     }
 
     /**
@@ -208,25 +281,13 @@ public class JobExecutionExplorer {
         return entities.stream().map(JobExecutionEntity::getExecutionStatus).collect(Collectors.toList());
     }
 
-    public List<Pair<String,ExecutionStatus>> subJobExecutionStatusPair(String parentExecutionId) {
+    public List<Pair<String, ExecutionStatus>> subJobExecutionStatusPair(String parentExecutionId) {
         QueryWrapper<JobExecutionEntity> qw = new QueryWrapper<>();
         qw.lambda().eq(JobExecutionEntity::getParentExecutionId, parentExecutionId)
-               .select(JobExecutionEntity::getExecutionStatus, JobExecutionEntity::getExecutionId);
+                .select(JobExecutionEntity::getExecutionStatus, JobExecutionEntity::getExecutionId);
         List<JobExecutionEntity> entities = this.jobExecutionDao.selectList(qw);
         return entities.stream().map(e -> Pair.of(e.getExecutionId(), e.getExecutionStatus())).collect(Collectors.toList());
     }
 
-
-    private UpdateWrapper<JobExecutionEntity> buildUpdateWrapper(String jobExecutionId,
-                                                                 ExecutionStatus executionStatus,
-                                                                 String message) {
-        UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
-        uw.lambda().set(JobExecutionEntity::getExecutionStatus, executionStatus)
-                .set(message != null, JobExecutionEntity::getMessage, message)
-                .set(JobExecutionEntity::getUpdatedTime, LocalDateTime.now())
-                .eq(JobExecutionEntity::getExecutionId, jobExecutionId);
-
-        return uw;
-    }
 
 }

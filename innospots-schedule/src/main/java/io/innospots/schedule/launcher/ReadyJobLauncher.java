@@ -30,9 +30,13 @@ import io.innospots.schedule.model.JobExecution;
 import io.innospots.schedule.queue.IReadyJobQueue;
 import io.innospots.schedule.queue.ReadyJobDbQueue;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 
 /**
@@ -48,11 +52,11 @@ public class ReadyJobLauncher {
 
     private final IReadyJobQueue readyJobDbQueue;
 
-    private WeakHashMap<String, JobExecution> executionCache = new WeakHashMap<>();
+    private Map<String, JobExecution> executionCache = new ConcurrentHashMap<>();
 
     private ThreadTaskExecutor threadTaskExecutor;
 
-    private WeakHashMap<String,Future> threadFutures = new WeakHashMap<>();
+    private Map<String, Future> threadFutures = new ConcurrentHashMap<>();
 
 
     public ReadyJobLauncher(JobExecutionExplorer jobExecutionExplorer,
@@ -62,48 +66,71 @@ public class ReadyJobLauncher {
         this.threadTaskExecutor = threadTaskExecutor;
     }
 
+
+    public int runningJobCount() {
+        return this.executionCache.size();
+    }
+
     public int currentJobCount() {
         return threadTaskExecutor.getActiveCount();
     }
 
+    public int checkRunningJobs() {
+        if (this.executionCache.isEmpty()) {
+            return 0;
+        }
+        List<JobExecution> jobExecutions = jobExecutionExplorer.selectJobExecutions(executionCache.keySet());
+        if (CollectionUtils.isNotEmpty(jobExecutions)) {
+            for (JobExecution jobExecution : jobExecutions) {
+                ExecutionStatus status = jobExecution.getExecutionStatus();
+                if (status.isStopping() || status.isDone()) {
+                    this.cancelJob(jobExecution.getInstanceKey());
+                }
+            }
+        }
+
+        return runningJobCount();
+    }
+
     /**
-     * cancel running job
-     * @param jobKey
+     * cancel running job, thread will be interrupted
+     *
+     * @param instanceKey
      */
-    public void cancelJob(String jobKey){
-        if(threadFutures.containsKey(jobKey)){
-            threadFutures.get(jobKey).cancel(true);
+    public void cancelJob(String instanceKey) {
+        if (threadFutures.containsKey(instanceKey)) {
+            threadFutures.get(instanceKey).cancel(true);
         }
     }
 
     public void launch(ReadyJobEntity readyJobEntity) {
-        if(threadFutures.containsKey(readyJobEntity.getJobReadyKey())){
+        if (threadFutures.containsKey(readyJobEntity.getJobReadyKey())) {
             log.warn("Job is already running, jobReadyKey: {}", readyJobEntity.getJobReadyKey());
             return;
         }
-        Future future = threadTaskExecutor.submit(()-> {
+        Future future = threadTaskExecutor.submit(() -> {
             JobExecution jobExecution = start(readyJobEntity);
-            execute(jobExecution);
-            end(jobExecution);
+            try {
+                execute(jobExecution);
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+                jobExecution.setExecutionStatus(ExecutionStatus.FAILED);
+                jobExecution.setMessage(ExceptionUtil.stacktraceToString(e, 1024));
+            } finally {
+                jobExecution.setSelfEndTime(LocalDateTime.now());
+                end(jobExecution);
+            }
         });
-        threadFutures.put(readyJobEntity.getJobReadyKey(), future);
+        threadFutures.put(readyJobEntity.getInstanceKey(), future);
     }
 
     protected void execute(JobExecution jobExecution) {
-        try {
-            BaseJob baseJob = JobBuilder.build(jobExecution);
-            baseJob.prepare();
-            baseJob.execute();
-            if (jobExecution.getJobType() == JobType.EXECUTE) {
-                jobExecution.setEndTime(LocalDateTime.now());
-                jobExecution.setExecutionStatus(ExecutionStatus.COMPLETE);
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            jobExecution.setExecutionStatus(ExecutionStatus.FAILED);
-            jobExecution.setMessage(ExceptionUtil.stacktraceToString(e, 1024));
-        }finally {
-            jobExecution.setSelfEndTime(LocalDateTime.now());
+        BaseJob baseJob = JobBuilder.build(jobExecution);
+        baseJob.prepare();
+        baseJob.execute();
+        if (jobExecution.getJobType() == JobType.EXECUTE) {
+            jobExecution.setEndTime(LocalDateTime.now());
+            jobExecution.setExecutionStatus(ExecutionStatus.COMPLETE);
         }
     }
 
@@ -118,7 +145,7 @@ public class ReadyJobLauncher {
     protected void end(JobExecution jobExecution) {
         log.info("End job, jobExecutionId: {}", jobExecution.getExecutionId());
         executionCache.remove(jobExecution.getExecutionId());
-        jobExecutionExplorer.updateJobExecution(jobExecution);
+        jobExecutionExplorer.endJobExecution(jobExecution);
         threadFutures.remove(jobExecution.getInstanceKey());
     }
 

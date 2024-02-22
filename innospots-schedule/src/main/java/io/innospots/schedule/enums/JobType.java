@@ -30,4 +30,8 @@ public enum JobType {
     FLOW,
     LINE_CHAIN,
     EXECUTE;
+
+    public boolean isJobContainer(){
+        return this != EXECUTE;
+    }
 }

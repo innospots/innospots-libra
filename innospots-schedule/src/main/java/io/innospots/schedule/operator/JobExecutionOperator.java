@@ -29,9 +29,13 @@ import io.innospots.schedule.dao.JobExecutionDao;
 import io.innospots.schedule.entity.JobExecutionEntity;
 import io.innospots.schedule.model.JobExecution;
 import io.innospots.schedule.model.JobExecutionDisplay;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static io.innospots.schedule.dao.JobExecutionDao.buildUpdateWrapper;
 
 /**
  * @author Smars
@@ -48,20 +52,22 @@ public class JobExecutionOperator extends ServiceImpl<JobExecutionDao, JobExecut
                                                     String jobKey,
                                                     String jobName,
                                                     String serverKey,
+                                                    String scopes,
                                                     String createdBy
-                                                    ) {
+    ) {
         PageBody<JobExecution> pageBody = new PageBody<>();
 
         QueryWrapper<JobExecutionEntity> qw = new QueryWrapper<>();
-        qw.lambda().eq(jobKey!=null,JobExecutionEntity::getJobKey, jobKey)
-                .eq(jobName!=null,JobExecutionEntity::getJobName, jobName)
-                .eq(serverKey!=null,JobExecutionEntity::getServerKey, serverKey)
-                .eq(createdBy!=null,JobExecutionEntity::getCreatedBy, createdBy)
-                .eq(status!=null,JobExecutionEntity::getExecutionStatus, status)
-                .ge(startTime!=null,JobExecutionEntity::getStartTime, startTime)
-                .le(endTime!=null,JobExecutionEntity::getEndTime, endTime);
-        Page<JobExecutionEntity> entityPage = new Page<>(page,size);
-        entityPage = this.page(entityPage,qw);
+        qw.lambda().eq(jobKey != null, JobExecutionEntity::getJobKey, jobKey)
+                .eq(jobName != null, JobExecutionEntity::getJobName, jobName)
+                .eq(serverKey != null, JobExecutionEntity::getServerKey, serverKey)
+                .eq(createdBy != null, JobExecutionEntity::getCreatedBy, createdBy)
+                .eq(status != null, JobExecutionEntity::getExecutionStatus, status)
+                .eq(scopes != null, JobExecutionEntity::getScopes, scopes)
+                .ge(startTime != null, JobExecutionEntity::getStartTime, startTime)
+                .le(endTime != null, JobExecutionEntity::getEndTime, endTime);
+        Page<JobExecutionEntity> entityPage = new Page<>(page, size);
+        entityPage = this.page(entityPage, qw);
         pageBody.setTotal(entityPage.getTotal());
         pageBody.setTotalPage(entityPage.getPages());
         pageBody.setPageSize(size);
@@ -70,37 +76,85 @@ public class JobExecutionOperator extends ServiceImpl<JobExecutionDao, JobExecut
         return pageBody;
     }
 
-    public List<JobExecutionDisplay> listJobExecutions(String jobExecutionId) {
-
-        return null;
+    public JobExecutionDisplay getJobExecution(String jobExecutionId, boolean includeSub) {
+        JobExecutionDisplay jobExecutionDisplay = JobExecutionConverter.INSTANCE.enitityToDisplay(this.getById(jobExecutionId));
+        if (jobExecutionDisplay != null && jobExecutionDisplay.getJobType().isJobContainer()) {
+            fillSubExecutions(jobExecutionDisplay);
+        }
+        return jobExecutionDisplay;
     }
 
-    public JobExecution jobExecution(String jobExecutionId) {
-        return JobExecutionConverter.INSTANCE
-                .entityToModel(this.getById(jobExecutionId));
-    }
+    private void fillSubExecutions(JobExecutionDisplay jobExecutionDisplay) {
+        if (jobExecutionDisplay.getParentExecutionId() == null) {
+            return;
+        }
+        QueryWrapper<JobExecutionEntity> pqw = new QueryWrapper<>();
+        pqw.lambda().eq(JobExecutionEntity::getParentExecutionId, jobExecutionDisplay.getExecutionId());
+        List<JobExecutionEntity> subExecutions = this.list(pqw);
+        List<JobExecutionDisplay> subDisplays = JobExecutionConverter.INSTANCE.entitiesToDisplays(subExecutions);
+        if (CollectionUtils.isNotEmpty(subDisplays)) {
+            for (JobExecutionDisplay subDisplay : subDisplays) {
+                if (subDisplay.getJobType().isJobContainer()) {
+                    fillSubExecutions(subDisplay);
+                }
+            }
+            jobExecutionDisplay.setSubExecutions(subDisplays);
+        }
 
-
-    public void updateJobExecution(JobExecution jobExecution) {
-        this.updateById(JobExecutionConverter.INSTANCE.modelToEntity(jobExecution));
     }
 
 
     public boolean updateJobExecution(String jobExecutionId,
-                                  Integer percent,
-                                  Long subJobCount,
-                                  Long successCount,
-                                  Long failCount,
-                                  ExecutionStatus status, String message) {
+                                      Integer percent,
+                                      Long subJobCount,
+                                      Long successCount,
+                                      Long failCount,
+                                      ExecutionStatus status, String message) {
         UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
         uw.lambda().set(status != null, JobExecutionEntity::getExecutionStatus, status)
                 .set(percent != null, JobExecutionEntity::getPercent, percent)
                 .set(subJobCount != null, JobExecutionEntity::getSubJobCount, subJobCount)
-                .set(JobExecutionEntity::getSuccessCount, successCount)
-                .set(JobExecutionEntity::getFailCount, failCount)
+                .set(successCount != null, JobExecutionEntity::getSuccessCount, successCount)
+                .set(failCount != null, JobExecutionEntity::getFailCount, failCount)
                 .set(message != null, JobExecutionEntity::getMessage, message)
                 .eq(JobExecutionEntity::getExecutionId, jobExecutionId);
         return this.update(uw);
+    }
+
+    public boolean updatePercent(String jobExecutionId,
+                                 Integer percent,
+                                 Long subJobCount,
+                                 Long successCount,
+                                 Long failCount) {
+        return updateJobExecution(jobExecutionId,percent,subJobCount,successCount,failCount,null,null);
+    }
+
+
+    public boolean updateStatus(String jobExecutionId,
+                                ExecutionStatus status, String message) {
+        return updateJobExecution(jobExecutionId,null,null,null,null,status,message);
+    }
+
+    /**
+     * stopping the job, and waiting the job execution update to stopped
+     * with a given ID and message.
+     */
+    public void stopping(String jobExecutionId, String message) {
+        this.update(buildUpdateWrapper(jobExecutionId, ExecutionStatus.STOPPING, message));
+        try {
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException e) {
+            log.error(e.getMessage(),e);
+        }
+    }
+
+    /**
+     * manual update complete status
+     * @param jobExecutionId
+     * @param message
+     */
+    public void complete(String jobExecutionId, String message) {
+        this.update(buildUpdateWrapper(jobExecutionId, ExecutionStatus.COMPLETE, message));
     }
 
 
