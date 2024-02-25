@@ -33,14 +33,18 @@ public enum ExecutionStatus {
      */
     NOT_PREPARED(1),
     READY(1),
+    RETRYING(1),
+    CONTINUING(1),
     STARTING(2),
     RUNNING(2),
-    CONTINUE_RUNNING(1),
+    CONTINUE_RUNNING(2),
+    RETRY_RUNNING(2),
     COMPLETE(3),
     FAILED(3),
+    STOPPED(3),
     PENDING(4),
-    STOPPING(5),
-    STOPPED(3);
+    STOPPING(5);
+
 
     /**
      *
@@ -60,7 +64,8 @@ public enum ExecutionStatus {
     }
 
     public boolean isExecuting() {
-        return group == 1 || group == 2;
+        return group == 2;
+//        return group == 1 || group == 2;
     }
 
     public boolean isDone() {

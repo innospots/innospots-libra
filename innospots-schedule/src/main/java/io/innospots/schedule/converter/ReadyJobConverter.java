@@ -22,13 +22,16 @@ import cn.hutool.crypto.digest.MD5;
 import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.InnospotsIdGenerator;
+import io.innospots.schedule.entity.JobExecutionEntity;
 import io.innospots.schedule.entity.ReadyJobEntity;
 import io.innospots.schedule.enums.MessageStatus;
+import io.innospots.schedule.model.JobExecution;
 import io.innospots.schedule.model.ReadyJob;
 import io.innospots.schedule.model.ScheduleJobInfo;
 import io.innospots.schedule.utils.ParamParser;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
+import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import java.util.HashMap;
@@ -39,28 +42,31 @@ import java.util.Map;
  * @vesion 2.0
  * @date 2023/12/31
  */
+@Mapper
 public interface ReadyJobConverter extends BaseBeanConverter<ReadyJob, ReadyJobEntity> {
 
     ReadyJobConverter INSTANCE = Mappers.getMapper(ReadyJobConverter.class);
 
-    static ReadyJobEntity build(ReadyJob readyJob){
+    static ReadyJobEntity build(ReadyJob readyJob,Map<String,Object> params) {
         ReadyJobEntity readyJobEntity = INSTANCE.modelToEntity(readyJob);
-        if(readyJobEntity.getContext() == null){
+        if (readyJobEntity.getContext() == null) {
             readyJobEntity.setContext(JSONUtils.toJsonString(new HashMap<>()));
         }
         //using jobKey and context param to generate digestHex
-        String instanceKey = MD5.create().digestHex(readyJobEntity.getJobKey()+readyJobEntity.getContext());
-        readyJobEntity.setInstanceKey(instanceKey);
+        if (readyJob.getInstanceKey() == null) {
+            String instanceKey = MD5.create().digestHex(readyJobEntity.getJobKey() + readyJobEntity.getContext());
+            readyJobEntity.setInstanceKey(instanceKey);
+        }
         readyJobEntity.setVersion(1);
         return readyJobEntity;
     }
 
-    static ReadyJobEntity build(ScheduleJobInfo scheduleJobInfo, Map<String,Object> params){
-        Map<String,Object> context = new HashMap<>();
-        if(MapUtils.isNotEmpty(params)){
+    static ReadyJobEntity build(ScheduleJobInfo scheduleJobInfo, Map<String, Object> params) {
+        Map<String, Object> context = new HashMap<>();
+        if (MapUtils.isNotEmpty(params)) {
             context.putAll(ParamParser.toValueMap(params));
         }
-        if(MapUtils.isNotEmpty(scheduleJobInfo.getParams())){
+        if (MapUtils.isNotEmpty(scheduleJobInfo.getParams())) {
             context.putAll(ParamParser.toValueMap(scheduleJobInfo.getParams()));
         }
 
@@ -75,9 +81,31 @@ public interface ReadyJobConverter extends BaseBeanConverter<ReadyJob, ReadyJobE
         readyJobEntity.setMessageStatus(MessageStatus.UNREAD);
         readyJobEntity.setJobClass(scheduleJobInfo.getJobClass());
         readyJobEntity.setScopes(scheduleJobInfo.getScopes());
+        readyJobEntity.setJobType(scheduleJobInfo.getJobType());
         //using jobKey and context param to generate digestHex
-        String instanceKey = MD5.create().digestHex(readyJobEntity.getJobKey()+readyJobEntity.getContext());
+        String instanceKey = MD5.create().digestHex(readyJobEntity.getJobKey() + readyJobEntity.getContext());
         readyJobEntity.setInstanceKey(instanceKey);
-                return readyJobEntity;
+        return readyJobEntity;
+    }
+
+
+    static ReadyJob build(JobExecution jobExecution){
+        ReadyJob readyJob = new ReadyJob();
+        readyJob.setJobKey(jobExecution.getJobKey());
+        readyJob.setJobName(jobExecution.getJobName());
+        readyJob.setKeyType(jobExecution.getKeyType());
+        readyJob.setContext(jobExecution.getContext());
+        readyJob.setJobClass(jobExecution.getJobClass());
+        readyJob.setJobType(jobExecution.getJobType());
+        readyJob.setScopes(jobExecution.getScopes());
+        readyJob.setExtExecutionId(jobExecution.getExtExecutionId());
+        readyJob.setOriginExecutionId(jobExecution.getExecutionId());
+        readyJob.setParentExecutionId(jobExecution.getParentExecutionId());
+        readyJob.setMessageStatus(MessageStatus.UNREAD);
+        readyJob.setResourceKey(jobExecution.getResourceKey());
+        readyJob.setSequenceNumber(jobExecution.getSequenceNumber());
+        readyJob.setInstanceKey(jobExecution.getInstanceKey());
+        readyJob.setSubJobCount(jobExecution.getSubJobCount());
+        return readyJob;
     }
 }

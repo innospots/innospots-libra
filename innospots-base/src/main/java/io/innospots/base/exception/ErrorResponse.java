@@ -18,6 +18,7 @@
 
 package io.innospots.base.exception;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.innospots.base.model.response.ResponseCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,6 +40,7 @@ public class ErrorResponse {
 
     private String module;
 
+    @JsonInclude(value = JsonInclude.Include.NON_NULL)
     private String detail;
 
     public ErrorResponse() {

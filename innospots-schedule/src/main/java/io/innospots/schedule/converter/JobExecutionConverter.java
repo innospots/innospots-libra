@@ -20,35 +20,84 @@ package io.innospots.schedule.converter;
 
 import cn.hutool.crypto.digest.MD5;
 import io.innospots.base.converter.BaseBeanConverter;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.base.utils.InnospotsIdGenerator;
 import io.innospots.schedule.entity.JobExecutionEntity;
 import io.innospots.schedule.entity.ReadyJobEntity;
+import io.innospots.schedule.enums.MessageStatus;
 import io.innospots.schedule.model.JobExecution;
 import io.innospots.schedule.model.JobExecutionDisplay;
+import io.innospots.schedule.model.ReadyJob;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Smars
  * @date 2023/8/7
  */
 @Mapper
-public interface JobExecutionConverter extends BaseBeanConverter<JobExecution, JobExecutionEntity>{
+public interface JobExecutionConverter extends BaseBeanConverter<JobExecution, JobExecutionEntity> {
 
     JobExecutionConverter INSTANCE = Mappers.getMapper(JobExecutionConverter.class);
 
     JobExecutionEntity readyJobToJobExecution(ReadyJobEntity readyJobEntity);
 
-    static JobExecutionEntity build(ReadyJobEntity readyJobEntity){
+    static JobExecutionEntity build(ReadyJobEntity readyJobEntity) {
         JobExecutionEntity jobExecutionEntity = INSTANCE.readyJobToJobExecution(readyJobEntity);
         jobExecutionEntity.setExecutionId(String.valueOf(InnospotsIdGenerator.generateId()));
-        jobExecutionEntity.setInstanceKey(readyJobEntity.getInstanceKey());
+        jobExecutionEntity.setExecutionStatus(ExecutionStatus.RUNNING);
         return jobExecutionEntity;
     }
 
-    List<JobExecutionDisplay> entitiesToDisplays(List<JobExecutionEntity> entities);
+    static List<JobExecutionDisplay> entitiesToDisplays(List<JobExecutionEntity> entities) {
+        if (entities == null || entities.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<JobExecutionDisplay> displays = new ArrayList<>();
+        for (JobExecutionEntity entity : entities) {
+            JobExecutionDisplay display = new JobExecutionDisplay();
+            entityToDisplay(entity,display);
+            displays.add(display);
+        }
+        return displays;
+//        return entities.stream().map(JobExecutionConverter::entityToDisplay).collect(Collectors.toList());
+    }
 
-    JobExecutionDisplay enitityToDisplay(JobExecutionEntity entity);
+
+    static void entityToDisplay(JobExecutionEntity entity,JobExecutionDisplay jobExecutionDisplay){
+//        JobExecutionDisplay jobExecutionDisplay = new JobExecutionDisplay();
+        jobExecutionDisplay.setExecutionId(entity.getExecutionId());
+        jobExecutionDisplay.setJobKey(entity.getJobKey());
+        jobExecutionDisplay.setJobName(entity.getJobName());
+        jobExecutionDisplay.setJobClass(entity.getJobClass());
+        jobExecutionDisplay.setJobType(entity.getJobType());
+        jobExecutionDisplay.setServerKey(entity.getServerKey());
+        jobExecutionDisplay.setResourceKey(entity.getResourceKey());
+        jobExecutionDisplay.setPercent(entity.getPercent());
+        jobExecutionDisplay.setStartTime(entity.getStartTime());
+        jobExecutionDisplay.setEndTime(entity.getEndTime());
+        jobExecutionDisplay.setSelfEndTime(entity.getSelfEndTime());
+        jobExecutionDisplay.setExecutionStatus(entity.getExecutionStatus());
+        jobExecutionDisplay.setMessage(entity.getMessage());
+        jobExecutionDisplay.setDetailUri(entity.getDetailUri());
+        jobExecutionDisplay.setScopes(entity.getScopes());
+        jobExecutionDisplay.setCreatedBy(entity.getCreatedBy());
+        jobExecutionDisplay.setContext(JobExecutionConverter.INSTANCE.jsonStrToMap(entity.getContext()));
+        jobExecutionDisplay.setKeyType(entity.getKeyType());
+        jobExecutionDisplay.setSubJobCount(entity.getSubJobCount());
+        jobExecutionDisplay.setSuccessCount(entity.getSuccessCount());
+        jobExecutionDisplay.setFailCount(entity.getFailCount());
+        jobExecutionDisplay.setSequenceNumber(entity.getSequenceNumber());
+        jobExecutionDisplay.setOriginExecutionId(entity.getOriginExecutionId());
+        jobExecutionDisplay.setSelfEndTime(entity.getSelfEndTime());
+        jobExecutionDisplay.setPercent(entity.getPercent());
+//        return jobExecutionDisplay;
+    }
+
 }

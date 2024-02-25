@@ -19,8 +19,11 @@
 package io.innospots.schedule.converter;
 
 import io.innospots.base.converter.BaseBeanConverter;
+import io.innospots.base.json.JSONUtils;
 import io.innospots.schedule.entity.ScheduleJobInfoEntity;
 import io.innospots.schedule.model.ScheduleJobInfo;
+import io.innospots.schedule.model.TimeConfig;
+import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -28,8 +31,18 @@ import org.mapstruct.factory.Mappers;
  * @vesion 2.0
  * @date 2023/12/6
  */
+@Mapper
 public interface ScheduleJobInfoConverter extends BaseBeanConverter<ScheduleJobInfo, ScheduleJobInfoEntity> {
 
     ScheduleJobInfoConverter INSTANCE = Mappers.getMapper(ScheduleJobInfoConverter.class);
+
+
+    default TimeConfig timeConfigToStr(String timeConfig){
+        return JSONUtils.parseObject(timeConfig, TimeConfig.class);
+    }
+
+    default String strToTimeConfig(TimeConfig timeConfig){
+        return JSONUtils.toJsonString(timeConfig);
+    }
 
 }

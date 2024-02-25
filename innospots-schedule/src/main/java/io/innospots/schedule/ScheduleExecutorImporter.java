@@ -11,14 +11,13 @@ import io.innospots.schedule.dispatch.ReadJobDispatcher;
 import io.innospots.schedule.explore.JobExecutionExplorer;
 import io.innospots.schedule.explore.ScheduleJobInfoExplorer;
 import io.innospots.schedule.launcher.ReadyJobLauncher;
-import io.innospots.schedule.operator.JobExecutionOperator;
-import io.innospots.schedule.operator.ScheduleJobInfoOperator;
 import io.innospots.schedule.queue.IReadyJobQueue;
 import io.innospots.schedule.queue.ReadyJobDbQueue;
 import io.innospots.schedule.queue.ReadyJobQueueListener;
 import io.innospots.schedule.starter.ScheduleExecutorStarter;
 import io.innospots.schedule.watcher.JobExecutionWatcher;
 import io.innospots.schedule.watcher.ReadyQueueWatcher;
+import io.innospots.schedule.watcher.RunningExecutionWatcher;
 import io.innospots.schedule.watcher.ScheduleJobWatcher;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,7 +25,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -52,6 +50,7 @@ public @interface ScheduleExecutorImporter {
 
 
         @Bean
+        @ConditionalOnMissingBean
         public IReadyJobQueue readyJobDbQueue(ScheduleJobInfoExplorer scheduleJobInfoExplorer, ReadyJobDao readyJobDao){
             return new ReadyJobDbQueue(scheduleJobInfoExplorer,readyJobDao);
         }
@@ -63,11 +62,13 @@ public @interface ScheduleExecutorImporter {
         }
 
         @Bean
-        public ReadJobDispatcher readJobDispatcher(IReadyJobQueue readyJobDbQueue){
-            return new ReadJobDispatcher(readyJobDbQueue);
+        @ConditionalOnMissingBean
+        public ReadJobDispatcher readJobDispatcher(IReadyJobQueue readyJobDbQueue,JobExecutionExplorer jobExecutionExplorer){
+            return new ReadJobDispatcher(readyJobDbQueue, jobExecutionExplorer);
         }
 
         @Bean
+        @ConditionalOnMissingBean
         public JobExecutionExplorer jobExecutionExplorer(JobExecutionDao jobExecutionDao){
             return new JobExecutionExplorer(jobExecutionDao);
         }
@@ -98,11 +99,14 @@ public @interface ScheduleExecutorImporter {
         @Bean
         @ConditionalOnMissingBean(QuartzScheduleManager.class)
         public QuartzScheduleManager quartzScheduleManager(){
-            return new QuartzScheduleManager();
+            QuartzScheduleManager scheduleManager = new QuartzScheduleManager();
+            scheduleManager.startup();
+            return scheduleManager;
         }
 
 
         @Bean
+        @ConditionalOnMissingBean
         public ScheduleJobInfoExplorer scheduleJobInfoExplorer(ScheduleJobInfoDao scheduleJobInfoDao){
             return new ScheduleJobInfoExplorer(scheduleJobInfoDao);
         }
@@ -113,10 +117,18 @@ public @interface ScheduleExecutorImporter {
             return new ScheduleJobWatcher(scheduleManager,scheduleJobInfoExplorer);
         }
 
+
+        @Bean
+        public RunningExecutionWatcher runningExecutionWatcher(JobExecutionExplorer jobExecutionExplorer,
+                                                               ReadyJobLauncher readyJobLauncher){
+            return new RunningExecutionWatcher(readyJobLauncher,jobExecutionExplorer);
+        }
+
         @Bean
         public ScheduleExecutorStarter scheduleExecutorStarter(InnospotsScheduleProperties scheduleProperties){
             return new ScheduleExecutorStarter(scheduleProperties);
         }
+
 
     }
 

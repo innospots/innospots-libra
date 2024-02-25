@@ -20,6 +20,7 @@ package io.innospots.base.i18n;
 
 
 import cn.hutool.core.thread.threadlocal.NamedThreadLocal;
+import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.BeanContextAwareUtils;
 
 import java.util.Arrays;
@@ -39,7 +40,7 @@ public class LocaleMessageUtils {
     private static TimeZone defaultTimeZone;
 
     public static I18nMessageSource messageSource() {
-        if(BeanContextAwareUtils.isLoaded()){
+        if(BeanContextAwareUtils.isLoaded() && BeanContextAwareUtils.hasBean(I18nMessageSource.class)){
             return BeanContextAwareUtils.getBean(I18nMessageSource.class);
         }
         return null;

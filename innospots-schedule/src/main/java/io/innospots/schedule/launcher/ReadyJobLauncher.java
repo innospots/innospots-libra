@@ -117,7 +117,9 @@ public class ReadyJobLauncher {
                 jobExecution.setExecutionStatus(ExecutionStatus.FAILED);
                 jobExecution.setMessage(ExceptionUtil.stacktraceToString(e, 1024));
             } finally {
-                jobExecution.setSelfEndTime(LocalDateTime.now());
+                if(jobExecution.getExecutionStatus().isDone() || jobExecution.getExecutionStatus().isStopping()){
+                    jobExecution.setSelfEndTime(LocalDateTime.now());
+                }
                 end(jobExecution);
             }
         });

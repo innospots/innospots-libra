@@ -18,9 +18,15 @@
 
 package io.innospots.schedule.dispatch;
 
+import io.innospots.schedule.converter.JobExecutionConverter;
+import io.innospots.schedule.converter.ReadyJobConverter;
+import io.innospots.schedule.explore.JobExecutionExplorer;
+import io.innospots.schedule.model.JobExecution;
 import io.innospots.schedule.model.ReadyJob;
 import io.innospots.schedule.queue.IReadyJobQueue;
+import org.apache.commons.collections4.CollectionUtils;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,14 +39,41 @@ public class ReadJobDispatcher {
 
     private final IReadyJobQueue readyJobQueue;
 
+    private final JobExecutionExplorer jobExecutionExplorer;
 
-    public ReadJobDispatcher(IReadyJobQueue readyJobQueue) {
+
+    public ReadJobDispatcher(IReadyJobQueue readyJobQueue, JobExecutionExplorer jobExecutionExplorer) {
         this.readyJobQueue = readyJobQueue;
+        this.jobExecutionExplorer = jobExecutionExplorer;
     }
 
+    public int stop(String jobExecutionId, String message) {
+        return jobExecutionExplorer.stop(jobExecutionId, message);
+    };
 
-    public void continueExecute(String jobExecutionId){
+    public int continueExecute(String jobExecutionId) {
+        List<JobExecution> continueExecutions = jobExecutionExplorer.continueExecution(jobExecutionId);
+        if (CollectionUtils.isNotEmpty(continueExecutions)) {
+            for (JobExecution execution : continueExecutions) {
+                ReadyJob readyJob = ReadyJobConverter.build(execution);
+                execute(readyJob);
+            }
+            return continueExecutions.size();
+        }
+        return 0;
+    }
 
+    public int retryExecute(String jobExecutionId) {
+        List<JobExecution> retryExecutions = jobExecutionExplorer.retryExecution(jobExecutionId);
+        if (CollectionUtils.isNotEmpty(retryExecutions)) {
+            for (JobExecution execution : retryExecutions) {
+                ReadyJob readyJob = ReadyJobConverter.build(execution);
+                execute(readyJob);
+            }
+            return retryExecutions.size();
+        }
+
+        return 0;
     }
 
     /**

@@ -21,8 +21,10 @@ package io.innospots.base.utils;
 import cn.hutool.core.io.resource.Resource;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.net.NetUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import io.innospots.base.events.EventBody;
 import io.innospots.base.events.EventBusCenter;
+import org.springframework.context.ApplicationContext;
 
 import java.util.Map;
 
@@ -38,15 +40,23 @@ public class BeanContextAwareUtils {
         BeanContextAwareUtils.contextAware = contextAware;
     }
 
-    public static boolean isLoaded(){
-        return contextAware!=null;
+    public static boolean hasBean(Class<?> clazz) {
+        try {
+            return contextAware.getBean(clazz) != null;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static boolean isLoaded() {
+        return contextAware != null;
     }
 
     public static BeanContextAware beanContextAware() {
         return contextAware;
     }
 
-    public static Resource[] getResources(String locationPattern){
+    public static Resource[] getResources(String locationPattern) {
         Assert.notNull(contextAware, "application context is null.");
         return contextAware.getResources(locationPattern);
     }

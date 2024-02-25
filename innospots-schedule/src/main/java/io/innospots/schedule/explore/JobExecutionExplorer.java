@@ -34,7 +34,10 @@ import org.apache.commons.collections4.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+
+import static io.innospots.schedule.dao.JobExecutionDao.buildUpdateWrapper;
 
 /**
  * @author Smars
@@ -46,7 +49,6 @@ public class JobExecutionExplorer {
 
     private final JobExecutionDao jobExecutionDao;
 
-    private LocalDateTime lastUpdateTime;
 
     public JobExecutionExplorer(JobExecutionDao jobExecutionDao) {
         this.jobExecutionDao = jobExecutionDao;
@@ -57,6 +59,168 @@ public class JobExecutionExplorer {
                 .entityToModel(jobExecutionDao.selectById(jobExecutionId));
     }
 
+
+    /**
+     * stopping the job, and waiting the job execution update to stopped
+     * with a given ID and message.
+     */
+    public int stop(String jobExecutionId, String message) {
+        UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
+        uw.lambda().set(JobExecutionEntity::getExecutionStatus, ExecutionStatus.STOPPING)
+                .set(JobExecutionEntity::getUpdatedTime, LocalDateTime.now())
+                .set(JobExecutionEntity::getMessage, message)
+                .in(JobExecutionEntity::getExecutionStatus, ExecutionStatus.executingStatus())
+                .eq(JobExecutionEntity::getExecutionId, jobExecutionId);
+        this.jobExecutionDao.update(uw);
+        int count = 0;
+        JobExecutionEntity entity = null;
+        do {
+            //waiting stop executing job in the executor service
+            try {
+                TimeUnit.SECONDS.sleep(3);
+            } catch (InterruptedException e) {
+                log.error(e.getMessage(), e);
+            }
+            count++;
+            entity = jobExecutionDao.selectById(jobExecutionId);
+            if (entity.getExecutionStatus().isDone()) {
+                break;
+            }
+        } while (count < 3 && entity.getExecutionStatus().isStopping());
+        if (count >= 3 || entity.getExecutionStatus().isStopping()) {
+            log.warn("job can't be set stopped, manual set stopped,{}", jobExecutionId);
+            this.jobExecutionDao.update(buildUpdateWrapper(jobExecutionId, ExecutionStatus.STOPPED, message));
+            return 0;
+        }
+        return 1;
+    }
+
+    /**
+     * manual update complete status
+     *
+     * @param jobExecutionId
+     * @param message
+     */
+    public int complete(String jobExecutionId, String message) {
+        return this.jobExecutionDao.update(buildUpdateWrapper(jobExecutionId, ExecutionStatus.COMPLETE, message));
+    }
+
+    public int fail(String jobExecutionId, String message) {
+        UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
+        uw.lambda().set(JobExecutionEntity::getExecutionStatus, ExecutionStatus.FAILED)
+                .set(message != null, JobExecutionEntity::getMessage, message)
+                .set(JobExecutionEntity::getUpdatedTime, LocalDateTime.now())
+                .in(JobExecutionEntity::getExecutionStatus, ExecutionStatus.executingStatus())
+                .eq(JobExecutionEntity::getExecutionId, jobExecutionId);
+        return jobExecutionDao.update(uw);
+    }
+
+    /**
+     * continue to execute the job, if the status is stopped
+     *
+     * @param jobExecutionId
+     * @return
+     */
+    public List<JobExecution> retryExecution(String jobExecutionId) {
+        JobExecutionEntity entity = this.jobExecutionDao.selectById(jobExecutionId);
+        if (entity.getExecutionStatus() != ExecutionStatus.FAILED) {
+            throw new JobExecutionException(this.getClass(), ResponseCode.DATA_OPERATION_ERROR, "job can be executed in failed status. ", jobExecutionId);
+        }
+        List<JobExecutionEntity> entities = new ArrayList<>();
+        if (entity.getJobType().isJobContainer()) {
+            UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
+            uw.lambda().set(JobExecutionEntity::getExecutionStatus, ExecutionStatus.RETRY_RUNNING)
+                    .set(JobExecutionEntity::getUpdatedTime, LocalDateTime.now())
+                    .eq(JobExecutionEntity::getExecutionId, jobExecutionId);
+            this.jobExecutionDao.update(uw);
+
+            //has sub job execution
+            QueryWrapper<JobExecutionEntity> qw = new QueryWrapper<>();
+            qw.lambda().eq(JobExecutionEntity::getParentExecutionId, jobExecutionId)
+                    .in(JobExecutionEntity::getExecutionStatus, ExecutionStatus.STOPPED, ExecutionStatus.FAILED);
+            //sub job will retry to execute
+            entities = this.jobExecutionDao.selectList(qw);
+            if (CollectionUtils.isNotEmpty(entities)) {
+                List<String> subs = entities.stream().
+                        map(JobExecutionEntity::getExecutionId).collect(Collectors.toList());
+                //sub job executions
+                for (JobExecutionEntity jobExecutionEntity : entities) {
+                    if (jobExecutionEntity.getExecutionStatus() == ExecutionStatus.FAILED) {
+                        this.jobExecutionDao.update(
+                                new UpdateWrapper<JobExecutionEntity>().lambda()
+                                        .set(JobExecutionEntity::getExecutionStatus, ExecutionStatus.RETRYING)
+                                        .eq(JobExecutionEntity::getExecutionId, jobExecutionEntity.getExecutionId()));
+                    } else if (jobExecutionEntity.getExecutionStatus() == ExecutionStatus.STOPPED) {
+                        this.jobExecutionDao.update(
+                                new UpdateWrapper<JobExecutionEntity>().lambda()
+                                        .set(JobExecutionEntity::getExecutionStatus, ExecutionStatus.CONTINUING)
+                                        .eq(JobExecutionEntity::getExecutionId, jobExecutionEntity.getExecutionId()));
+                    }
+                }
+                log.info("retry to execute sub job executions: {}", subs);
+            }
+        } else {
+            //execute sub job execution directly, only execute selected sub job execution
+            UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
+            uw.lambda().set(JobExecutionEntity::getExecutionStatus, ExecutionStatus.RETRYING)
+                    .set(JobExecutionEntity::getUpdatedTime, LocalDateTime.now())
+                    .eq(JobExecutionEntity::getExecutionId, jobExecutionId);
+            this.jobExecutionDao.update(uw);
+            entities.add(entity);
+            log.info("continue to execute job execution: {}", entity.getExecutionId());
+        }
+        return JobExecutionConverter.INSTANCE.entitiesToModels(entities);
+    }
+
+    /**
+     * continue to execute the job, if the status is stopped
+     *
+     * @param jobExecutionId
+     * @return
+     */
+    public List<JobExecution> continueExecution(String jobExecutionId) {
+        JobExecutionEntity entity = this.jobExecutionDao.selectById(jobExecutionId);
+        if (entity.getExecutionStatus() != ExecutionStatus.STOPPED) {
+            throw new JobExecutionException(this.getClass(), ResponseCode.DATA_OPERATION_ERROR, "job can be executed in stopped status. ", jobExecutionId);
+        }
+        List<JobExecutionEntity> entities = new ArrayList<>();
+        if (entity.getJobType().isJobContainer()) {
+            UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
+            uw.lambda().set(JobExecutionEntity::getExecutionStatus, ExecutionStatus.CONTINUE_RUNNING)
+                    .set(JobExecutionEntity::getUpdatedTime, LocalDateTime.now())
+                    .eq(JobExecutionEntity::getExecutionId, jobExecutionId);
+            this.jobExecutionDao.update(uw);
+
+            //has sub job execution
+            QueryWrapper<JobExecutionEntity> qw = new QueryWrapper<>();
+            qw.lambda().eq(JobExecutionEntity::getParentExecutionId, jobExecutionId)
+                    .eq(JobExecutionEntity::getExecutionStatus, ExecutionStatus.STOPPED);
+            //sub job will continue to execute
+            entities = this.jobExecutionDao.selectList(qw);
+            if (CollectionUtils.isNotEmpty(entities)) {
+                List<String> subs = entities.stream().
+                        map(JobExecutionEntity::getExecutionId).collect(Collectors.toList());
+                //sub job executions
+                this.jobExecutionDao.update(
+                        new UpdateWrapper<JobExecutionEntity>().lambda()
+                                .set(JobExecutionEntity::getExecutionStatus, ExecutionStatus.CONTINUING)
+                                .eq(JobExecutionEntity::getExecutionId, subs));
+                log.info("continue to execute sub job executions: {}", subs);
+            }
+        } else {
+            //execute sub job execution directly, only execute selected sub job execution
+            UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
+            uw.lambda().set(JobExecutionEntity::getExecutionStatus, ExecutionStatus.CONTINUING)
+                    .set(JobExecutionEntity::getUpdatedTime, LocalDateTime.now())
+                    .eq(JobExecutionEntity::getExecutionId, jobExecutionId);
+            this.jobExecutionDao.update(uw);
+            entities.add(entity);
+            log.info("continue to execute job execution: {}", entity.getExecutionId());
+        }
+        return JobExecutionConverter.INSTANCE.entitiesToModels(entities);
+    }
+
+
     /**
      * create job execution to database
      *
@@ -66,19 +230,45 @@ public class JobExecutionExplorer {
     public JobExecution createJobExecution(ReadyJobEntity readyJobEntity) {
         //build job execution by ready Job entity
         JobExecutionEntity jobExecutionEntity = JobExecutionConverter.build(readyJobEntity);
-        jobExecutionDao.insert(jobExecutionEntity);
+        if (jobExecutionEntity.getOriginExecutionId() != null) {
+            JobExecutionEntity originJobExecutionEntity = jobExecutionDao.selectOne(new QueryWrapper<JobExecutionEntity>()
+                    .lambda().eq(JobExecutionEntity::getExecutionId, jobExecutionEntity.getOriginExecutionId()));
+            if (originJobExecutionEntity.getExecutionStatus() == ExecutionStatus.CONTINUING) {
+                return createContinueJobExecution(originJobExecutionEntity);
+            } else if (originJobExecutionEntity.getExecutionStatus() == ExecutionStatus.RETRYING) {
+                return createRetryJobExecution(jobExecutionEntity);
+            }
+        } else {
+            jobExecutionDao.insert(jobExecutionEntity);
+        }
         return JobExecutionConverter.INSTANCE.entityToModel(jobExecutionEntity);
     }
 
-
-    public void fail(String jobExecutionId, String message) {
+    /**
+     * set original job execution status to continue running
+     *
+     * @param originJobExecutionEntity
+     * @return
+     */
+    private JobExecution createContinueJobExecution(JobExecutionEntity originJobExecutionEntity) {
+        //continue execute
         UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
-        uw.lambda().set(JobExecutionEntity::getExecutionStatus, ExecutionStatus.FAILED)
-                .set(message != null, JobExecutionEntity::getMessage, message)
+        uw.lambda().set(JobExecutionEntity::getExecutionStatus, ExecutionStatus.CONTINUE_RUNNING)
                 .set(JobExecutionEntity::getUpdatedTime, LocalDateTime.now())
-                .in(JobExecutionEntity::getExecutionStatus, ExecutionStatus.executingStatus())
-                .eq(JobExecutionEntity::getExecutionId, jobExecutionId);
+                .eq(JobExecutionEntity::getExecutionId, originJobExecutionEntity.getExecutionId());
         jobExecutionDao.update(uw);
+        return JobExecutionConverter.INSTANCE.entityToModel(originJobExecutionEntity);
+    }
+
+    private JobExecution createRetryJobExecution(JobExecutionEntity jobExecutionEntity) {
+        jobExecutionEntity.setExecutionStatus(ExecutionStatus.RETRY_RUNNING);
+        //retry execute
+        UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
+        uw.lambda().set(JobExecutionEntity::getSequenceNumber, -1)
+                .set(JobExecutionEntity::getUpdatedTime, LocalDateTime.now())
+                .eq(JobExecutionEntity::getExecutionId, jobExecutionEntity.getOriginExecutionId());
+        jobExecutionDao.insert(jobExecutionEntity);
+        return JobExecutionConverter.INSTANCE.entityToModel(jobExecutionEntity);
     }
 
     public void endJobExecution(JobExecution jobExecution) {
@@ -102,14 +292,12 @@ public class JobExecutionExplorer {
 
     public int updateJobExecution(String jobExecutionId,
                                   Integer percent,
-                                  Long subJobCount,
                                   Long successCount,
                                   Long failCount,
                                   ExecutionStatus status, String message) {
         UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
         uw.lambda().set(status != null, JobExecutionEntity::getExecutionStatus, status)
                 .set(percent != null, JobExecutionEntity::getPercent, percent)
-                .set(subJobCount != null, JobExecutionEntity::getSubJobCount, subJobCount)
                 .set(JobExecutionEntity::getSuccessCount, successCount)
                 .set(JobExecutionEntity::getFailCount, failCount)
                 .set(message != null, JobExecutionEntity::getMessage, message)
@@ -142,12 +330,9 @@ public class JobExecutionExplorer {
      * @return
      */
     public List<JobExecution> fetchRecentDoneJobs() {
-        if (lastUpdateTime == null) {
-            lastUpdateTime = LocalDateTime.now().minusMinutes(1);
-        }
         QueryWrapper<JobExecutionEntity> qw = new QueryWrapper<>();
         qw.lambda().in(JobExecutionEntity::getExecutionStatus, ExecutionStatus.doneStatus())
-                .ge(JobExecutionEntity::getUpdatedTime, lastUpdateTime);
+                .ge(JobExecutionEntity::getUpdatedTime, LocalDateTime.now().minusMinutes(1));
         List<JobExecutionEntity> entities = jobExecutionDao.selectList(qw);
         return JobExecutionConverter.INSTANCE.entitiesToModels(entities);
     }
@@ -188,47 +373,6 @@ public class JobExecutionExplorer {
         this.jobExecutionDao.update(uw);
     }
 
-    public List<JobExecution> continueExecution(String jobExecutionId) {
-        JobExecutionEntity entity = this.jobExecutionDao.selectById(jobExecutionId);
-        if (entity.getExecutionStatus() != ExecutionStatus.STOPPED) {
-            throw new JobExecutionException(this.getClass(), ResponseCode.DATA_OPERATION_ERROR, "job status is not stopped", jobExecutionId);
-        }
-
-        UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
-        uw.lambda().set(JobExecutionEntity::getSequenceNumber, -1)
-                .set(JobExecutionEntity::getExecutionStatus, ExecutionStatus.CONTINUE_RUNNING)
-                .set(JobExecutionEntity::getUpdatedTime, LocalDateTime.now())
-                .eq(JobExecutionEntity::getExecutionId, jobExecutionId);
-        this.jobExecutionDao.update(uw);
-        List<JobExecutionEntity> entities = new ArrayList<>();
-        if (entity.getSubJobCount() != null && entity.getSubJobCount() > 0) {
-            //has sub job execution
-            QueryWrapper<JobExecutionEntity> qw = new QueryWrapper<>();
-            qw.lambda().eq(JobExecutionEntity::getParentExecutionId,jobExecutionId);
-            entities = this.jobExecutionDao.selectList(qw);
-            if(CollectionUtils.isNotEmpty(entities)){
-                this.jobExecutionDao.update(
-                        new UpdateWrapper<JobExecutionEntity>().lambda()
-                                .set(JobExecutionEntity::getExecutionStatus,ExecutionStatus.CONTINUE_RUNNING)
-                                .eq(JobExecutionEntity::getParentExecutionId,entity.getExecutionId())
-                );
-            }else{
-                entities.add(entity);
-            }
-        } else if (entity.getParentExecutionId() != null) {
-            JobExecutionEntity parentExecutionEntity = this.jobExecutionDao.selectById(entity.getParentExecutionId());
-            this.jobExecutionDao.update(
-                    new UpdateWrapper<JobExecutionEntity>().lambda()
-                            .set(JobExecutionEntity::getExecutionStatus,ExecutionStatus.CONTINUE_RUNNING)
-                    .eq(JobExecutionEntity::getExecutionId,entity.getParentExecutionId())
-            );
-            entities.add(entity);
-        }else{
-            entities.add(entity);
-        }
-        return JobExecutionConverter.INSTANCE.entitiesToModels(entities);
-    }
-
     /**
      * all sub job executions are completed
      *
@@ -251,15 +395,14 @@ public class JobExecutionExplorer {
      * stop all sub job executions by parent execution id
      *
      * @param parentExecutionId
-     * @return
      */
-    public int stopSubJobExecutions(String parentExecutionId) {
+    public void stopSubJobExecutions(String parentExecutionId) {
         UpdateWrapper<JobExecutionEntity> qw = new UpdateWrapper<>();
         qw.lambda().set(JobExecutionEntity::getExecutionStatus, ExecutionStatus.STOPPED)
                 .set(JobExecutionEntity::getUpdatedTime, LocalDateTime.now())
                 .eq(JobExecutionEntity::getParentExecutionId, parentExecutionId)
                 .in(JobExecutionEntity::getExecutionStatus, ExecutionStatus.executingStatus());
-        return this.jobExecutionDao.update(qw);
+        this.jobExecutionDao.update(qw);
     }
 
     public long countSubJobExecutions(String parentExecutionId, ExecutionStatus... executionStatus) {
@@ -269,6 +412,7 @@ public class JobExecutionExplorer {
             statuses = Arrays.asList(executionStatus);
         }
         qw.lambda().eq(JobExecutionEntity::getParentExecutionId, parentExecutionId)
+                .ge(JobExecutionEntity::getSequenceNumber, 0)
                 .in(statuses != null, JobExecutionEntity::getExecutionStatus, statuses);
         return this.jobExecutionDao.selectCount(qw);
     }
@@ -276,6 +420,7 @@ public class JobExecutionExplorer {
     public List<ExecutionStatus> subJobExecutionStatus(String parentExecutionId) {
         QueryWrapper<JobExecutionEntity> qw = new QueryWrapper<>();
         qw.lambda().eq(JobExecutionEntity::getParentExecutionId, parentExecutionId)
+                .ge(JobExecutionEntity::getSequenceNumber, 0)
                 .select(JobExecutionEntity::getExecutionStatus, JobExecutionEntity::getExecutionId);
         List<JobExecutionEntity> entities = this.jobExecutionDao.selectList(qw);
         return entities.stream().map(JobExecutionEntity::getExecutionStatus).collect(Collectors.toList());
@@ -284,6 +429,7 @@ public class JobExecutionExplorer {
     public List<Pair<String, ExecutionStatus>> subJobExecutionStatusPair(String parentExecutionId) {
         QueryWrapper<JobExecutionEntity> qw = new QueryWrapper<>();
         qw.lambda().eq(JobExecutionEntity::getParentExecutionId, parentExecutionId)
+                .ge(JobExecutionEntity::getSequenceNumber, 0)
                 .select(JobExecutionEntity::getExecutionStatus, JobExecutionEntity::getExecutionId);
         List<JobExecutionEntity> entities = this.jobExecutionDao.selectList(qw);
         return entities.stream().map(e -> Pair.of(e.getExecutionId(), e.getExecutionStatus())).collect(Collectors.toList());

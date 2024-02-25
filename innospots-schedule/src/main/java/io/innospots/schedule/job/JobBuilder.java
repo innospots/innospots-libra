@@ -30,7 +30,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class JobBuilder {
 
-    public static BaseJob build(JobExecution jobExecution){
+    public static BaseJob build(JobExecution jobExecution) {
         BaseJob baseJob;
         try {
             Class<?> jobClass = Class.forName(jobExecution.getJobClass());
@@ -38,7 +38,7 @@ public class JobBuilder {
             baseJob.jobExecution = jobExecution;
         } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
                  InvocationTargetException e) {
-            throw ResourceException.buildAbandonException(JobBuilder.class, "jobClass not found,"+jobExecution.getJobClass(), e);
+            throw ResourceException.buildAbandonException(JobBuilder.class, "jobClass not found," + jobExecution.getJobClass(), e);
         }
         return baseJob;
     }

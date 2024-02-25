@@ -129,7 +129,7 @@ public class ReadyJobDbQueue implements IReadyJobQueue {
         if(readyJob.getJobReadyKey()==null){
             readyJob.setJobReadyKey(InnospotsIdGenerator.generateIdStr());
         }
-        ReadyJobEntity readyJobEntity = ReadyJobConverter.build(readyJob);
+        ReadyJobEntity readyJobEntity = ReadyJobConverter.build(readyJob,null);
         long count = readyJobDao.countUnReadAndAssignedJob(readyJobEntity.getInstanceKey());
         if(count >0){
             log.warn("job has exist in the queue, jobKey:{}, param:{}",readyJob.getJobKey(),readyJob.getContext());

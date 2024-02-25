@@ -18,6 +18,7 @@
 
 package io.innospots.schedule.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.quartz.ScheduleMode;
 import io.innospots.base.utils.Initializer;
@@ -64,6 +65,7 @@ public class ScheduleJobInfo implements Initializer {
 
     private Map<String,String> params;
 
+    @JsonIgnore
     private String cronExpression;
 
     private LocalDateTime startTime;
@@ -72,6 +74,7 @@ public class ScheduleJobInfo implements Initializer {
 
     private String resourceKey;
 
+    private Long subJobCount;
 
     @Override
     public void initialize() {

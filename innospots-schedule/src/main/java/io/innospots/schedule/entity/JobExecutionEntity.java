@@ -24,6 +24,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
 import io.innospots.base.entity.PBaseEntity;
 import io.innospots.base.quartz.ExecutionStatus;
+import io.innospots.schedule.enums.JobType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -192,5 +193,9 @@ public class JobExecutionEntity extends PBaseEntity {
      */
     @Column(length = 32)
     private String serverKey;
+
+    @Column(length = 16)
+    @Enumerated(value = EnumType.STRING)
+    private JobType jobType;
 
 }

@@ -21,6 +21,7 @@ package io.innospots.schedule.model;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.Version;
+import io.innospots.schedule.enums.JobType;
 import io.innospots.schedule.enums.MessageStatus;
 import lombok.Getter;
 import lombok.Setter;
@@ -75,5 +76,10 @@ public class ReadyJob {
 
     private Integer version;
 
+    private String instanceKey;
+
+    private JobType jobType;
+
+    private Long subJobCount;
 
 }

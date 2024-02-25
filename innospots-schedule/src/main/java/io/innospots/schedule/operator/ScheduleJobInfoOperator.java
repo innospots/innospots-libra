@@ -25,6 +25,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ResourceException;
+import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.quartz.ScheduleMode;
 import io.innospots.schedule.converter.ScheduleJobInfoConverter;
 import io.innospots.schedule.dao.ScheduleJobInfoDao;
@@ -32,6 +33,7 @@ import io.innospots.schedule.entity.ScheduleJobInfoEntity;
 import io.innospots.schedule.enums.JobType;
 import io.innospots.schedule.model.ScheduleJobInfo;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.stereotype.Component;
@@ -49,23 +51,39 @@ public class ScheduleJobInfoOperator extends ServiceImpl<ScheduleJobInfoDao, Sch
 
 
     public ScheduleJobInfo createScheduleJobInfo(ScheduleJobInfo scheduleJobInfo) {
+        if (StringUtils.isEmpty(scheduleJobInfo.getJobKey())) {
+            throw ValidatorException.buildMissingException(this.getClass(), "jobKey is empty");
+        }
         ScheduleJobInfoEntity scheduleJobInfoEntity = ScheduleJobInfoConverter.INSTANCE.modelToEntity(scheduleJobInfo);
+        if (scheduleJobInfoEntity.getSubJobCount() == null) {
+            scheduleJobInfoEntity.setSubJobCount(0);
+        }
+        checkJobKey(scheduleJobInfo);
         this.save(scheduleJobInfoEntity);
         return ScheduleJobInfoConverter.INSTANCE.entityToModel(scheduleJobInfoEntity);
     }
 
+    private void checkJobKey(ScheduleJobInfo scheduleJobInfo) {
+        QueryWrapper<ScheduleJobInfoEntity> cq = new QueryWrapper<>();
+        cq.lambda().eq(ScheduleJobInfoEntity::getJobKey, scheduleJobInfo.getJobKey());
+        long count = this.count(cq);
+        if (count > 0) {
+            throw ResourceException.buildDuplicateException(this.getClass(), "jobKey is duplicate");
+        }
+    }
+
     public ScheduleJobInfo getScheduleJobInfo(String jobKey) {
         ScheduleJobInfoEntity scheduleJobInfoEntity = this.getById(jobKey);
-        if(scheduleJobInfoEntity==null){
-            throw ResourceException.buildNotExistException(this.getClass(),"job not exist, jobKey:" + jobKey);
+        if (scheduleJobInfoEntity == null) {
+            throw ResourceException.buildNotExistException(this.getClass(), "job not exist, jobKey:" + jobKey);
         }
         return ScheduleJobInfoConverter.INSTANCE.entityToModel(scheduleJobInfoEntity);
     }
 
     public boolean updateScheduleJobStatus(String jobKey, DataStatus jobStatus) {
         ScheduleJobInfoEntity scheduleJobInfoEntity = this.getById(jobKey);
-        if(scheduleJobInfoEntity==null){
-            throw ResourceException.buildNotExistException(this.getClass(),"job not exist, jobKey:" + jobKey);
+        if (scheduleJobInfoEntity == null) {
+            throw ResourceException.buildNotExistException(this.getClass(), "job not exist, jobKey:" + jobKey);
         }
         UpdateWrapper<ScheduleJobInfoEntity> uw = new UpdateWrapper<>();
         uw.lambda().eq(ScheduleJobInfoEntity::getJobKey, jobKey)
@@ -75,8 +93,8 @@ public class ScheduleJobInfoOperator extends ServiceImpl<ScheduleJobInfoDao, Sch
 
     public boolean deleteScheduleJobInfo(String jobKey) {
         ScheduleJobInfoEntity scheduleJobInfoEntity = this.getById(jobKey);
-        if(scheduleJobInfoEntity==null){
-            throw ResourceException.buildNotExistException(this.getClass(),"job not exist, jobKey:" + jobKey);
+        if (scheduleJobInfoEntity == null) {
+            throw ResourceException.buildNotExistException(this.getClass(), "job not exist, jobKey:" + jobKey);
         }
         return this.removeById(jobKey);
     }
@@ -89,9 +107,9 @@ public class ScheduleJobInfoOperator extends ServiceImpl<ScheduleJobInfoDao, Sch
     public PageBody<ScheduleJobInfo> pageScheduleJobInfo(int page, int pageSize, JobType jobType, DataStatus jobStatus, ScheduleMode scheduleMode) {
         Page<ScheduleJobInfoEntity> pageScheduleJobInfo = this.page(new Page<>(page, pageSize), new QueryWrapper<ScheduleJobInfoEntity>()
                 .lambda()
-                .eq(jobType!=null,ScheduleJobInfoEntity::getJobType, jobType)
-                .eq(jobStatus!=null,ScheduleJobInfoEntity::getJobStatus, jobStatus)
-                .eq(scheduleMode!=null,ScheduleJobInfoEntity::getScheduleMode, scheduleMode));
+                .eq(jobType != null, ScheduleJobInfoEntity::getJobType, jobType)
+                .eq(jobStatus != null, ScheduleJobInfoEntity::getJobStatus, jobStatus)
+                .eq(scheduleMode != null, ScheduleJobInfoEntity::getScheduleMode, scheduleMode));
 
         PageBody<ScheduleJobInfo> pageBody = new PageBody<>();
         pageBody.setTotal(pageScheduleJobInfo.getTotal());

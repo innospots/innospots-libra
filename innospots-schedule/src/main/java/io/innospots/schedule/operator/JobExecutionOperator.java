@@ -27,6 +27,7 @@ import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.schedule.converter.JobExecutionConverter;
 import io.innospots.schedule.dao.JobExecutionDao;
 import io.innospots.schedule.entity.JobExecutionEntity;
+import io.innospots.schedule.model.ExecutionFormQuery;
 import io.innospots.schedule.model.JobExecution;
 import io.innospots.schedule.model.JobExecutionDisplay;
 import org.apache.commons.collections4.CollectionUtils;
@@ -45,39 +46,32 @@ import static io.innospots.schedule.dao.JobExecutionDao.buildUpdateWrapper;
 public class JobExecutionOperator extends ServiceImpl<JobExecutionDao, JobExecutionEntity> {
 
 
-    public PageBody<JobExecution> pageJobExecutions(long size, long page,
-                                                    LocalDateTime startTime,
-                                                    LocalDateTime endTime,
-                                                    ExecutionStatus status,
-                                                    String jobKey,
-                                                    String jobName,
-                                                    String serverKey,
-                                                    String scopes,
-                                                    String createdBy
-    ) {
+    public PageBody<JobExecution> pageJobExecutions(ExecutionFormQuery formQuery
+                                                    ) {
         PageBody<JobExecution> pageBody = new PageBody<>();
 
         QueryWrapper<JobExecutionEntity> qw = new QueryWrapper<>();
-        qw.lambda().eq(jobKey != null, JobExecutionEntity::getJobKey, jobKey)
-                .eq(jobName != null, JobExecutionEntity::getJobName, jobName)
-                .eq(serverKey != null, JobExecutionEntity::getServerKey, serverKey)
-                .eq(createdBy != null, JobExecutionEntity::getCreatedBy, createdBy)
-                .eq(status != null, JobExecutionEntity::getExecutionStatus, status)
-                .eq(scopes != null, JobExecutionEntity::getScopes, scopes)
-                .ge(startTime != null, JobExecutionEntity::getStartTime, startTime)
-                .le(endTime != null, JobExecutionEntity::getEndTime, endTime);
-        Page<JobExecutionEntity> entityPage = new Page<>(page, size);
+        qw.lambda().eq(formQuery.getJobKey() != null, JobExecutionEntity::getJobKey, formQuery.getJobKey())
+                .eq(formQuery.getJobName() != null, JobExecutionEntity::getJobName, formQuery.getJobName())
+                .eq(formQuery.getServerKey() != null, JobExecutionEntity::getServerKey, formQuery.getServerKey())
+                .eq(formQuery.getCreatedBy() != null, JobExecutionEntity::getCreatedBy, formQuery.getCreatedBy())
+                .eq(formQuery.getStatus() != null, JobExecutionEntity::getExecutionStatus, formQuery.getStatus())
+                .eq(formQuery.getScopes() != null, JobExecutionEntity::getScopes, formQuery.getScopes())
+                .ge(formQuery.getStartTime() != null, JobExecutionEntity::getStartTime, formQuery.getStartTime())
+                .le(formQuery.getEndTime() != null, JobExecutionEntity::getEndTime, formQuery.getEndTime());
+        Page<JobExecutionEntity> entityPage = new Page<>(formQuery.getPage(), formQuery.getSize());
         entityPage = this.page(entityPage, qw);
         pageBody.setTotal(entityPage.getTotal());
         pageBody.setTotalPage(entityPage.getPages());
-        pageBody.setPageSize(size);
+        pageBody.setPageSize((long) formQuery.getSize());
         pageBody.setList(JobExecutionConverter.INSTANCE.entitiesToModels(entityPage.getRecords()));
 
         return pageBody;
     }
 
     public JobExecutionDisplay getJobExecution(String jobExecutionId, boolean includeSub) {
-        JobExecutionDisplay jobExecutionDisplay = JobExecutionConverter.INSTANCE.enitityToDisplay(this.getById(jobExecutionId));
+        JobExecutionDisplay jobExecutionDisplay = new JobExecutionDisplay();
+        JobExecutionConverter.entityToDisplay(this.getById(jobExecutionId),jobExecutionDisplay);
         if (jobExecutionDisplay != null && jobExecutionDisplay.getJobType().isJobContainer()) {
             fillSubExecutions(jobExecutionDisplay);
         }
@@ -91,7 +85,7 @@ public class JobExecutionOperator extends ServiceImpl<JobExecutionDao, JobExecut
         QueryWrapper<JobExecutionEntity> pqw = new QueryWrapper<>();
         pqw.lambda().eq(JobExecutionEntity::getParentExecutionId, jobExecutionDisplay.getExecutionId());
         List<JobExecutionEntity> subExecutions = this.list(pqw);
-        List<JobExecutionDisplay> subDisplays = JobExecutionConverter.INSTANCE.entitiesToDisplays(subExecutions);
+        List<JobExecutionDisplay> subDisplays = JobExecutionConverter.entitiesToDisplays(subExecutions);
         if (CollectionUtils.isNotEmpty(subDisplays)) {
             for (JobExecutionDisplay subDisplay : subDisplays) {
                 if (subDisplay.getJobType().isJobContainer()) {
@@ -133,28 +127,6 @@ public class JobExecutionOperator extends ServiceImpl<JobExecutionDao, JobExecut
     public boolean updateStatus(String jobExecutionId,
                                 ExecutionStatus status, String message) {
         return updateJobExecution(jobExecutionId,null,null,null,null,status,message);
-    }
-
-    /**
-     * stopping the job, and waiting the job execution update to stopped
-     * with a given ID and message.
-     */
-    public void stopping(String jobExecutionId, String message) {
-        this.update(buildUpdateWrapper(jobExecutionId, ExecutionStatus.STOPPING, message));
-        try {
-            TimeUnit.SECONDS.sleep(3);
-        } catch (InterruptedException e) {
-            log.error(e.getMessage(),e);
-        }
-    }
-
-    /**
-     * manual update complete status
-     * @param jobExecutionId
-     * @param message
-     */
-    public void complete(String jobExecutionId, String message) {
-        this.update(buildUpdateWrapper(jobExecutionId, ExecutionStatus.COMPLETE, message));
     }
 
 

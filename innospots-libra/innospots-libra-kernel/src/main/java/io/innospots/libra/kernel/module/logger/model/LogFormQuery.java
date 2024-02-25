@@ -59,7 +59,7 @@ public class LogFormQuery extends FormQuery {
     @Schema(title = "user name")
     private List<String> usernames;
 
-    @Schema(title = "user name")
+    @Schema(title = "user id list")
     private List<Integer> userIds;
 
     @Schema(title = "query from time, include")

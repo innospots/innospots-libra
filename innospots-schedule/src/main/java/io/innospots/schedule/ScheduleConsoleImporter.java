@@ -5,9 +5,11 @@ import io.innospots.schedule.config.InnospotsScheduleProperties;
 import io.innospots.schedule.controller.JobExecutionController;
 import io.innospots.schedule.controller.JobExecutorController;
 import io.innospots.schedule.controller.ScheduleJobInfoController;
+import io.innospots.schedule.dao.JobExecutionDao;
 import io.innospots.schedule.dao.ReadyJobDao;
 import io.innospots.schedule.dao.ScheduleJobInfoDao;
 import io.innospots.schedule.dispatch.ReadJobDispatcher;
+import io.innospots.schedule.explore.JobExecutionExplorer;
 import io.innospots.schedule.explore.ScheduleJobInfoExplorer;
 import io.innospots.schedule.operator.JobExecutionOperator;
 import io.innospots.schedule.operator.ScheduleJobInfoOperator;
@@ -19,7 +21,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -60,8 +61,13 @@ public @interface ScheduleConsoleImporter {
         }
 
         @Bean
-        public ReadJobDispatcher readJobDispatcher(IReadyJobQueue readyJobDbQueue){
-            return new ReadJobDispatcher(readyJobDbQueue);
+        public JobExecutionExplorer jobExecutionExplorer(JobExecutionDao jobExecutionDao){
+            return new JobExecutionExplorer(jobExecutionDao);
+        }
+
+        @Bean
+        public ReadJobDispatcher readJobDispatcher(IReadyJobQueue readyJobDbQueue, JobExecutionExplorer jobExecutionExplorer){
+            return new ReadJobDispatcher(readyJobDbQueue, jobExecutionExplorer);
         }
 
         @Bean

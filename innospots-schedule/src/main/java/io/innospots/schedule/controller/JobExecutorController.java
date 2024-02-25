@@ -37,7 +37,7 @@ import java.util.Map;
  * @date 2023/12/10
  */
 @RestController
-@RequestMapping(PathConstant.ROOT_PATH +"schedule/job")
+@RequestMapping(PathConstant.ROOT_PATH + "schedule/job")
 @ModuleMenu(menuKey = "job-schedule")
 @Tag(name = "schedule job executor")
 public class JobExecutorController {
@@ -48,19 +48,43 @@ public class JobExecutorController {
         this.readJobDispatcher = readJobDispatcher;
     }
 
-    @Operation(summary = "execute schedule")
+    @Operation(summary = "execute schedule job")
     @OperationLog(operateType = OperateType.EXECUTE)
     @PostMapping("execute/{jobKey}")
-    public InnospotResponse<Void> launch(@PathVariable String jobKey, @RequestBody Map<String,Object> params){
-        readJobDispatcher.execute(jobKey,params);
+    public InnospotResponse<Void> launch(@PathVariable String jobKey, @RequestBody Map<String, Object> params) {
+        readJobDispatcher.execute(jobKey, params);
         return InnospotResponse.success();
     }
 
     @OperationLog(operateType = OperateType.UPDATE_STATUS)
-    @Operation(summary = "cancel schedule")
+    @Operation(summary = "cancel schedule job in the queue")
     @PostMapping("cancel/{jobKey}")
-    public InnospotResponse<Integer> cancel(@PathVariable String jobKey){
+    public InnospotResponse<Integer> cancel(@PathVariable String jobKey) {
         return InnospotResponse.success(readJobDispatcher.cancel(jobKey));
+    }
+
+    @OperationLog(operateType = OperateType.EXECUTE)
+    @Operation(summary = "retry execute schedule job")
+    @PostMapping("retry/{jobExecutionId}")
+    public InnospotResponse<Integer> retry(@PathVariable String jobExecutionId) {
+        int c = readJobDispatcher.retryExecute(jobExecutionId);
+        return InnospotResponse.success(c);
+    }
+
+    @OperationLog(operateType = OperateType.EXECUTE)
+    @Operation(summary = "continue execute stopped job")
+    @PostMapping("continue/{jobExecutionId}")
+    public InnospotResponse<Integer> continueExecute(@PathVariable String jobExecutionId) {
+        int c = readJobDispatcher.continueExecute(jobExecutionId);
+        return InnospotResponse.success(c);
+    }
+
+    @OperationLog(operateType = OperateType.OFFLINE)
+    @Operation(summary = "stop executing job")
+    @PostMapping("stop/{jobExecutionId}")
+    public InnospotResponse<Integer> stop(@PathVariable String jobExecutionId,
+                                          @RequestParam(required = false) String message) {
+        return InnospotResponse.success(readJobDispatcher.stop(jobExecutionId, message));
     }
 
 }

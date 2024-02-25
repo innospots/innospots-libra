@@ -23,6 +23,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
 import io.innospots.base.entity.PBaseEntity;
+import io.innospots.schedule.enums.JobType;
 import io.innospots.schedule.enums.MessageStatus;
 import lombok.Builder;
 import lombok.Getter;
@@ -121,5 +122,12 @@ public class ReadyJobEntity extends PBaseEntity {
     @Version
     @Column
     private Integer version;
+
+    @Column(length = 16)
+    @Enumerated(value = EnumType.STRING)
+    private JobType jobType;
+
+    @Column
+    private Integer subJobCount;
 
 }

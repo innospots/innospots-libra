@@ -70,6 +70,12 @@ public class ScheduleJobInfoEntity extends PBaseEntity {
     private JobType jobType;
 
     /**
+     * sub job count, zero if execute
+     */
+    @Column
+    private Integer subJobCount;
+
+    /**
      * job implement class, which will be executed
      */
     @Column(length = 128)
