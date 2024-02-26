@@ -83,6 +83,10 @@ public class DateTimeUtils {
         return time;
     }
 
+    public static String consume(LocalDateTime endTime, LocalDateTime startTime){
+        return consume(endTime.toInstant(ZoneOffset.UTC).toEpochMilli(), startTime.toInstant(ZoneOffset.UTC).toEpochMilli());
+    }
+
     /**
      * 计算耗时
      *

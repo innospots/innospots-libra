@@ -24,13 +24,12 @@ import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
 import com.google.common.collect.ImmutableList;
-import io.innospots.base.config.CredentialConfiguration;
 import io.innospots.base.config.InnospotsBaseImporter;
 import io.innospots.base.connector.schema.operator.SchemaRegistryOperator;
 import io.innospots.base.store.CacheStoreManager;
 import io.innospots.base.utils.CCH;
 import io.innospots.libra.base.category.SchemaCategoryOperator;
-import io.innospots.libra.base.handler.EntityMetaObjectHandler;
+import io.innospots.base.entity.handler.EntityMetaObjectHandler;
 import io.innospots.libra.base.temp.SystemTempCacheOperator;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
@@ -39,7 +38,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 import java.util.List;
 

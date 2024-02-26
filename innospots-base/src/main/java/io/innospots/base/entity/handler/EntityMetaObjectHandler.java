@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package io.innospots.libra.base.handler;
+package io.innospots.base.entity.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import io.innospots.base.utils.CCH;

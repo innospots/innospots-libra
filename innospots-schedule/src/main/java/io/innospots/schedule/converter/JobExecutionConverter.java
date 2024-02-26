@@ -31,6 +31,7 @@ import io.innospots.schedule.model.ReadyJob;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -52,6 +53,8 @@ public interface JobExecutionConverter extends BaseBeanConverter<JobExecution, J
         JobExecutionEntity jobExecutionEntity = INSTANCE.readyJobToJobExecution(readyJobEntity);
         jobExecutionEntity.setExecutionId(String.valueOf(InnospotsIdGenerator.generateId()));
         jobExecutionEntity.setExecutionStatus(ExecutionStatus.RUNNING);
+        jobExecutionEntity.setStartTime(LocalDateTime.now());
+        jobExecutionEntity.setPercent(0);
         return jobExecutionEntity;
     }
 

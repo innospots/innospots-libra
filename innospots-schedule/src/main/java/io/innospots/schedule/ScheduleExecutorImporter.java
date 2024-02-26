@@ -1,5 +1,6 @@
 package io.innospots.schedule;
 
+import io.innospots.base.entity.handler.EntityMetaObjectHandler;
 import io.innospots.base.quartz.QuartzScheduleManager;
 import io.innospots.base.utils.thread.ThreadPoolBuilder;
 import io.innospots.base.utils.thread.ThreadTaskExecutor;
@@ -48,6 +49,11 @@ public @interface ScheduleExecutorImporter {
     @MapperScan(basePackages = "io.innospots.schedule.dao")
     class InnerConfiguration {
 
+        @Bean
+        @ConditionalOnMissingBean
+        public EntityMetaObjectHandler metaObjectHandler() {
+            return new EntityMetaObjectHandler();
+        }
 
         @Bean
         @ConditionalOnMissingBean

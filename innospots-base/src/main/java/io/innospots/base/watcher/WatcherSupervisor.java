@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.concurrent.*;
 
 /**
@@ -50,7 +51,7 @@ public class WatcherSupervisor {
             ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("watcher-supervisor-%d").build();
             executorService = new ThreadPoolExecutor(maxSize, maxSize,
                     300, TimeUnit.SECONDS,
-                    new ArrayBlockingQueue<>(maxSize), threadFactory);
+                    new SynchronousQueue<>(), threadFactory);
         }
     }
 

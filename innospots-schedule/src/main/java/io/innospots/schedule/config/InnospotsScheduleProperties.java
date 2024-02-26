@@ -34,7 +34,7 @@ import java.util.List;
 @ConfigurationProperties(prefix = "innospots.schedule")
 public class InnospotsScheduleProperties {
 
-    private Integer scanSlotTimeMills = 200;
+    private Integer scanSlotTimeMills = 2000;
 
     private Integer executorSize = 8;
 

@@ -74,7 +74,7 @@ public class ScheduleJobInfo implements Initializer {
 
     private String resourceKey;
 
-    private Long subJobCount;
+    private Integer subJobCount;
 
     @Override
     public void initialize() {

@@ -42,11 +42,11 @@ public class QuartzJobScheduler implements Job {
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         if (ScheduleUtils.isExecutorLeader()) {
             JobKey jobKey = jobExecutionContext.getJobDetail().getKey();
-            log.info("schedule job is：{}, push to queue", jobKey.getName());
+            log.info("schedule job and push to queue, jobName: [{}]", jobKey.getName());
             IReadyJobQueue readyJobQueue = BeanContextAwareUtils.getBean(IReadyJobQueue.class);
             //push ready execute job to queue
-            readyJobQueue.push(jobKey.getName());
-            log.info("schedule job {} execute end", jobKey.getName());
+            int cnt = readyJobQueue.push(jobKey.getName());
+            log.info("schedule end. jobName: [{}], result: {}", jobKey.getName(), cnt);
         } else {
             log.info("service is not leader, not execute job:{}", jobExecutionContext.getJobDetail().getKey());
         }

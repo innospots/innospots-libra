@@ -32,7 +32,7 @@ public abstract class AbstractWatcher implements IWatcher {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractWatcher.class);
 
-    protected int checkIntervalSecond = 5;
+    protected int checkIntervalMills = 5000;
     protected boolean running;
     protected String name;
     protected long startTime;
@@ -52,20 +52,20 @@ public abstract class AbstractWatcher implements IWatcher {
         prepare();
         logger.info("Started watcher: {}", name);
         startTime = System.currentTimeMillis();
-        int interval = checkIntervalSecond;
+        int interval = checkIntervalMills;
         while (running) {
             try {
                 if (check()) {
                     interval = execute();
                 }
                 if (interval <= 0) {
-                    interval = checkIntervalSecond;
+                    interval = checkIntervalMills;
                 }
             } catch (Exception e) {
                 logger.error("watcher execution error: {}：", e.getMessage(), e);
             } finally {
                 try {
-                    TimeUnit.SECONDS.sleep(interval);
+                    TimeUnit.MILLISECONDS.sleep(interval);
                 } catch (InterruptedException e) {
                     logger.error(e.getMessage(), e);
                     Thread.currentThread().interrupt();
@@ -81,8 +81,4 @@ public abstract class AbstractWatcher implements IWatcher {
         this.running = false;
     }
 
-
-    public void setCheckIntervalSecond(int checkIntervalSecond) {
-        this.checkIntervalSecond = checkIntervalSecond;
-    }
 }

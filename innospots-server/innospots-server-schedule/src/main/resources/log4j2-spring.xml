@@ -78,16 +78,10 @@
         <AsyncLogger name="io.innospots.libra.kernel.interceptor" level="info"/>
         <AsyncLogger name="io.innospots.libra.kernel.module.i18n.service.I18nTransMessageService" level="debug"/>
         <AsyncLogger name="io.innospots.base.data" level="info"/>
-        <AsyncLogger name="io.innospots.workflow.runtime.container" level="info"/>
-        <AsyncLogger name="io.innospots.workflow.runtime" level="debug"/>
-        <AsyncLogger name="io.innospots.workflow.runtime.flow.node" level="debug"/>
-        <AsyncLogger name="io.innospots.workflow.console.dao" level="info"/>
-        <AsyncLogger name="io.innospots.workflow.runtime.watcher" level="info"/>
-        <AsyncLogger name="io.innospots.workflow.core.execution.store.NodeExecutionStoreListener" level="info"/>
-        <AsyncLogger name="io.innospots.base.registry" level="info"/>
+        <AsyncLogger name="io.innospots.schedule.dao" level="info"/>
+        <AsyncLogger name="io.innospots.server.base.registry" level="info"/>
         <AsyncLogger name="io.innospots.base.data.operator" level="info"/>
         <AsyncLogger name="io.innospots.connector.schema.dao" level="info"/>
-        <AsyncLogger name="io.innospots.workflow.runtime.flow.node" level="debug"/>
     </Loggers>
 
 </Configuration>

@@ -28,7 +28,7 @@ public class RunningExecutionWatcher extends AbstractWatcher {
             jobExecutionExplorer.updateStoppingTimeoutExecutions();
         }
         int runningJobCount = readyJobLauncher.checkRunningJobs();
-        return runningJobCount == 0 ? checkIntervalSecond : 2;
+        return runningJobCount == 0 ? checkIntervalMills : 2000;
     }
 
 }

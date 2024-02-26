@@ -33,6 +33,7 @@ import java.util.List;
 
 /**
  * schedule service watcher
+ *
  * @author Smars
  * @vesion 2.0
  * @date 2023/12/3
@@ -54,7 +55,7 @@ public class ScheduleJobWatcher extends AbstractWatcher {
     public int execute() {
         List<ScheduleJobInfo> jobInfos = scheduleJobInfoExplorer.fetchUpdatedQuartzTimeJob();
         if (CollectionUtils.isEmpty(jobInfos)) {
-            return checkIntervalSecond;
+            return checkIntervalMills;
         }
         for (ScheduleJobInfo jobInfo : jobInfos) {
             if (jobInfo.getJobStatus() == DataStatus.OFFLINE) {
@@ -67,6 +68,6 @@ public class ScheduleJobWatcher extends AbstractWatcher {
                 scheduleManager.refreshJob(jobInfo.getJobKey(), QuartzJobScheduler.class, jobInfo.getCronExpression(), jobInfo.getScheduleMode(), startTime, endTime);
             }
         }
-        return checkIntervalSecond;
+        return checkIntervalMills;
     }
 }

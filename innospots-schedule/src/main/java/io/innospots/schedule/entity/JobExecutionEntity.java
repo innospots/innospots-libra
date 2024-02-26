@@ -53,6 +53,7 @@ public class JobExecutionEntity extends PBaseEntity {
      * primary id
      */
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @TableId(type = IdType.INPUT)
     @Column(length = 32)
     private String executionId;
@@ -184,7 +185,6 @@ public class JobExecutionEntity extends PBaseEntity {
     /**
      * Optimistic lock version
      */
-    @Version
     @Column
     private Integer version;
 

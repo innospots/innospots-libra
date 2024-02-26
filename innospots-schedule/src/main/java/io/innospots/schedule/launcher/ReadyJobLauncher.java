@@ -117,7 +117,7 @@ public class ReadyJobLauncher {
                 jobExecution.setExecutionStatus(ExecutionStatus.FAILED);
                 jobExecution.setMessage(ExceptionUtil.stacktraceToString(e, 1024));
             } finally {
-                if(jobExecution.getExecutionStatus().isDone() || jobExecution.getExecutionStatus().isStopping()){
+                if (jobExecution.getExecutionStatus().isDone() || jobExecution.getExecutionStatus().isStopping()) {
                     jobExecution.setSelfEndTime(LocalDateTime.now());
                 }
                 end(jobExecution);
@@ -132,20 +132,24 @@ public class ReadyJobLauncher {
         baseJob.execute();
         if (jobExecution.getJobType() == JobType.EXECUTE) {
             jobExecution.setEndTime(LocalDateTime.now());
-            jobExecution.setExecutionStatus(ExecutionStatus.COMPLETE);
+            if (!jobExecution.getExecutionStatus().isDone()) {
+                jobExecution.setExecutionStatus(ExecutionStatus.COMPLETE);
+                jobExecution.setPercent(100);
+            }
         }
     }
 
     protected JobExecution start(ReadyJobEntity readyJobEntity) {
-        log.info("Start job, jobReadyKey: {}", readyJobEntity.getJobReadyKey());
         JobExecution jobExecution = jobExecutionExplorer.createJobExecution(readyJobEntity);
+        log.info("Start job, jobReadyKey: {}, jobExecutionId:{}, startTime:{}",
+                readyJobEntity.getJobReadyKey(), jobExecution.getExecutionId(), jobExecution.getStartTime());
         readyJobDbQueue.ackRead(readyJobEntity.getJobReadyKey());
         executionCache.put(jobExecution.getExecutionId(), jobExecution);
         return jobExecution;
     }
 
     protected void end(JobExecution jobExecution) {
-        log.info("End job, jobExecutionId: {}", jobExecution.getExecutionId());
+        log.info("End job, {}", jobExecution.info());
         executionCache.remove(jobExecution.getExecutionId());
         jobExecutionExplorer.endJobExecution(jobExecution);
         threadFutures.remove(jobExecution.getInstanceKey());

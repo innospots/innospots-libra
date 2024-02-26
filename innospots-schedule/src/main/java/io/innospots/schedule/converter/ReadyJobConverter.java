@@ -74,7 +74,6 @@ public interface ReadyJobConverter extends BaseBeanConverter<ReadyJob, ReadyJobE
         readyJobEntity.setJobReadyKey(InnospotsIdGenerator.generateIdStr());
         readyJobEntity.setContext(JSONUtils.toJsonString(context));
         readyJobEntity.setJobName(scheduleJobInfo.getJobName());
-        readyJobEntity.setKeyType(scheduleJobInfo.getJobType().name());
         readyJobEntity.setJobKey(scheduleJobInfo.getJobKey());
         readyJobEntity.setSequenceNumber(1);
         readyJobEntity.setResourceKey(scheduleJobInfo.getResourceKey());
@@ -82,7 +81,9 @@ public interface ReadyJobConverter extends BaseBeanConverter<ReadyJob, ReadyJobE
         readyJobEntity.setJobClass(scheduleJobInfo.getJobClass());
         readyJobEntity.setScopes(scheduleJobInfo.getScopes());
         readyJobEntity.setJobType(scheduleJobInfo.getJobType());
+        readyJobEntity.setSubJobCount(scheduleJobInfo.getSubJobCount());
         //using jobKey and context param to generate digestHex
+        readyJobEntity.setVersion(1);
         String instanceKey = MD5.create().digestHex(readyJobEntity.getJobKey() + readyJobEntity.getContext());
         readyJobEntity.setInstanceKey(instanceKey);
         return readyJobEntity;

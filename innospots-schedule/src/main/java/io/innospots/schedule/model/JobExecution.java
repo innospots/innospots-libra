@@ -23,6 +23,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.Version;
 import io.innospots.base.execution.ExecutionBase;
 import io.innospots.base.quartz.ExecutionStatus;
+import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.schedule.enums.JobType;
 import lombok.Getter;
 import lombok.Setter;
@@ -69,5 +70,20 @@ public class JobExecution extends ExecutionBase {
     protected String serverKey;
 
     protected String jobClass;
+
+
+    public String info() {
+        LocalDateTime ed = this.endTime != null ? this.endTime : this.selfEndTime;
+        if (ed == null) {
+            ed = LocalDateTime.now();
+        }
+        this.timeConsume = DateTimeUtils.consume(ed, this.startTime);
+        return String.format("jobExecutionId:%s, timeConsume:%s, status:%s, jobKey:%s, jobClass:%s," +
+                        " jobType:%s, percent:%s, subJobCount:%s," +
+                        " successCount:%s, failCount:%s," +
+                        " serverKey:%s, jobClass:%s",
+                executionId, timeConsume,this.executionStatus, jobKey, jobClass,
+                jobType, percent, subJobCount, successCount, failCount, serverKey, jobClass);
+    }
 
 }

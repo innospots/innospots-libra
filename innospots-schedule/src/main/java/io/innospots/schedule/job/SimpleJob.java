@@ -43,7 +43,7 @@ public class SimpleJob extends BaseJob {
         }
         try {
             TimeUnit.MILLISECONDS.sleep(sleepTime);
-            log.info("execute simple job:{}",jobExecution);
+            log.info("execute simple job, sleep:{}, {}",sleepTime,jobExecution);
         } catch (InterruptedException e) {
             log.error(e.getMessage(),e);
         }

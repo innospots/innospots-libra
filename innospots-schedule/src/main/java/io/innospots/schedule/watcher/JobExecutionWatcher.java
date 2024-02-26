@@ -54,7 +54,7 @@ public class JobExecutionWatcher extends AbstractWatcher {
     @Override
     public int execute() {
         if (!ScheduleUtils.isExecutorLeader()) {
-            return checkIntervalSecond;
+            return checkIntervalMills;
         }
 
         // fetch executing jobs
@@ -78,7 +78,7 @@ public class JobExecutionWatcher extends AbstractWatcher {
             }
         }//end if
 
-        return checkIntervalSecond;
+        return checkIntervalMills;
     }
 
     /**

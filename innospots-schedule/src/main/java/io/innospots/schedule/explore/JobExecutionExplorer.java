@@ -31,6 +31,7 @@ import io.innospots.schedule.exception.JobExecutionException;
 import io.innospots.schedule.model.JobExecution;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -271,22 +272,24 @@ public class JobExecutionExplorer {
         return JobExecutionConverter.INSTANCE.entityToModel(jobExecutionEntity);
     }
 
+    @Transactional
     public void endJobExecution(JobExecution jobExecution) {
         JobExecutionEntity jobExecutionEntity = jobExecutionDao.selectById(jobExecution.getExecutionId());
+
         jobExecutionEntity.setEndTime(jobExecution.getEndTime());
         jobExecutionEntity.setFailCount(jobExecution.getFailCount());
         jobExecutionEntity.setPercent(jobExecution.getPercent());
         jobExecutionEntity.setSelfEndTime(jobExecution.getSelfEndTime());
         jobExecutionEntity.setSuccessCount(jobExecution.getSuccessCount());
         jobExecutionEntity.setMessage(jobExecution.getMessage());
-        jobExecutionEntity.setUpdatedTime(LocalDateTime.now());
 
         if (jobExecutionEntity.getExecutionStatus() == ExecutionStatus.STOPPING) {
             jobExecutionEntity.setExecutionStatus(ExecutionStatus.STOPPED);
         } else {
             jobExecutionEntity.setExecutionStatus(jobExecution.getExecutionStatus());
         }
-        jobExecutionDao.updateById(jobExecutionEntity);
+        int cnt = jobExecutionDao.updateById(jobExecutionEntity);
+        log.debug("update result:{}, executionId:{}",cnt,jobExecution.getExecutionId());
     }
 
 

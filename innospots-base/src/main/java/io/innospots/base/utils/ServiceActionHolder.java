@@ -59,6 +59,10 @@ public class ServiceActionHolder {
         ServiceActionHolder.serverKey = serverKey;
     }
 
+    public static boolean isRegistry() {
+        return serverKey!=null;
+    }
+
     public static List<String> getGroupKeys() {
         return groupKeys;
     }

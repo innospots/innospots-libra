@@ -18,11 +18,14 @@
 
 package io.innospots.base.execution;
 
+import cn.hutool.core.util.ArrayUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.innospots.base.quartz.ExecutionStatus;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.ArrayUtils;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -104,11 +107,22 @@ public class ExecutionBase {
     protected String createdBy;
 
     public String getString(String key){
-        return context!=null? (String) context.get(key):null;
+        if(context==null){
+            return null;
+        }
+        Object v = context.get(key);
+        return v!=null?v.toString():null;
     }
 
     public Integer getInteger(String key){
-        return context!=null? (Integer) context.getOrDefault(key,0) :null;
+        if(context==null){
+            return null;
+        }
+        Object v = context.get(key);
+        if(v==null){
+            return null;
+        }
+        return Integer.valueOf(v.toString());
     }
 
     public Date getDate(String key){
@@ -132,7 +146,20 @@ public class ExecutionBase {
     }
 
     public String[] getStringArray(String key){
-        return context!=null? (String[]) context.getOrDefault(key,null) :null;
+        if(context==null){
+            return null;
+        }
+        Object v = context.get(key);
+        if(v == null){
+            return null;
+        }
+        if(v instanceof String){
+            return ((String) v).split(",");
+        }
+        if(v instanceof String[]){
+            return (String[]) v;
+        }
+        return null;
     }
 
     @Override

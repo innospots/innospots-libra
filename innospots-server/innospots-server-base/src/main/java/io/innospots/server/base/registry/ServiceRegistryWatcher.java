@@ -24,6 +24,8 @@ import io.innospots.base.watcher.AbstractWatcher;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -68,7 +70,7 @@ public class ServiceRegistryWatcher extends AbstractWatcher {
             ServiceActionHolder.setServiceType(ServiceRegistryHolder.serverType());
             ServiceActionHolder.setServerKey(ServiceRegistryHolder.getCurrentServer().getServerKey());
         }
-        return checkIntervalSecond;
+        return checkIntervalMills;
     }
 
     @Override
