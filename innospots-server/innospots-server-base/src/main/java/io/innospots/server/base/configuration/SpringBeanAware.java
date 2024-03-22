@@ -23,6 +23,8 @@ import cn.hutool.core.net.NetUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.BeanContextAwareUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
@@ -35,6 +37,7 @@ import java.util.Map;
  * @vesion 2.0
  * @date 2023/11/6
  */
+@Slf4j
 public class SpringBeanAware implements BeanContextAware {
 
 
@@ -110,8 +113,11 @@ public class SpringBeanAware implements BeanContextAware {
         String ip = environment.getProperty("spring.cloud.client.ip-address");
         if(ip!=null){
             return ip;
+        }else{
+            ip = NetUtil.LOCAL_IP;
+            log.warn("not have ip param value: {}, using localIP:{}","spring.cloud.client.ip-address",ip);
         }
-        return NetUtil.getLocalHostName();
+        return ip;
     }
 
 

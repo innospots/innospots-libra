@@ -52,7 +52,7 @@ public class JobExecutionController {
     @GetMapping("page")
     @Operation(summary = "page job executions")
     public InnospotResponse<PageBody<JobExecution>> pageJobExecutions(
-            @RequestParam ExecutionFormQuery executionFormQuery
+            @RequestParam(required = false) ExecutionFormQuery executionFormQuery
     ) {
         return InnospotResponse.success(jobExecutionOperator.
                 pageJobExecutions(executionFormQuery));

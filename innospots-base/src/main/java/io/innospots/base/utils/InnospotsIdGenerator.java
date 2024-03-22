@@ -45,11 +45,15 @@ public class InnospotsIdGenerator {
 
     private static long ipToLong(String ipAddress) {
         long result = 0;
-        String[] atoms = ipAddress.split("\\.");
-
-        for (int i = 3; i >= 0; i--) {
-            result |= (Long.parseLong(atoms[3 - i]) << (i * 8));
+        if(ipAddress.matches("[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}")){
+            String[] atoms = ipAddress.split("\\.");
+            for (int i = 3; i >= 0; i--) {
+                result |= (Long.parseLong(atoms[3 - i]) << (i * 8));
+            }
+        }else{
+            result = ipAddress.hashCode();
         }
+
         return result % MAX_DATACENTER_NUM;
     }
 

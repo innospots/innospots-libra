@@ -55,6 +55,7 @@ public class CommandJob extends BaseJob{
             Collections.addAll(cmdList, args);
         }
         String resp = RuntimeUtil.execForStr(cmdList.toArray(new String[]{}));
+        log.info("execute cmd job:{}, cmd:{}, response:{}",this.jobExecution.getExecutionId(),cmdList,resp);
         if(resp.length() > 32768){
             resp = resp.substring(0, 32768);
         }

@@ -23,6 +23,9 @@ package io.innospots.base.quartz;
  * @date 2021/5/5
  */
 public enum TimePeriod {
+
+    SECOND("second", "SECONDS", "0 0 0 0 0 ?"),
+
     /**
      * hour
      */

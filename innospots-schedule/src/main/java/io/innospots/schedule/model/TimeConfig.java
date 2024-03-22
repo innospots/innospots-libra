@@ -68,4 +68,14 @@ public class TimeConfig {
         }
         return cronExpression;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("runTime='").append(runTime).append('\'');
+        sb.append(", timePeriod=").append(timePeriod);
+        sb.append(", periodTimes=").append(periodTimes);
+        sb.append('}');
+        return sb.toString();
+    }
 }

@@ -141,8 +141,9 @@ public class ReadyJobLauncher {
 
     protected JobExecution start(ReadyJobEntity readyJobEntity) {
         JobExecution jobExecution = jobExecutionExplorer.createJobExecution(readyJobEntity);
-        log.info("Start job, jobReadyKey: {}, jobExecutionId:{}, startTime:{}",
-                readyJobEntity.getJobReadyKey(), jobExecution.getExecutionId(), jobExecution.getStartTime());
+        log.info("Start job, jobKey:{}, jobReadyKey: {}, jobExecutionId:{}, startTime:{}"
+                ,readyJobEntity.getJobKey(), readyJobEntity.getJobReadyKey(),
+                jobExecution.getExecutionId(), jobExecution.getStartTime());
         readyJobDbQueue.ackRead(readyJobEntity.getJobReadyKey());
         executionCache.put(jobExecution.getExecutionId(), jobExecution);
         return jobExecution;

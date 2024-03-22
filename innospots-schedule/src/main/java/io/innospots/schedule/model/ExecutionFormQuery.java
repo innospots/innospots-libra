@@ -14,7 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Schema(title = "job execution query")
-public class ExecutionFormQuery extends FormQuery {
+public class ExecutionFormQuery {
 
     @Schema(title = "start time")
     private String startTime;
@@ -39,4 +39,17 @@ public class ExecutionFormQuery extends FormQuery {
 
     @Schema(title = "create user name")
     private String createdBy;
+
+    @Schema(title = "the current number of pages")
+    protected int page = 1;
+
+    @Schema(title = "number of entries per page")
+    protected int size = 20;
+
+    @Schema(title = "sort field")
+    protected String sort;
+
+    @Schema(title = "collation (ASC for ascending, DESC for descending)")
+    protected Boolean asc = true;
+
 }
