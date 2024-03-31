@@ -18,6 +18,7 @@
 
 package io.innospots.schedule.job;
 
+import io.innospots.schedule.enums.JobType;
 import io.innospots.schedule.model.JobExecution;
 import io.innospots.schedule.model.ScheduleJobInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,11 @@ public class SimpleJob extends BaseJob {
     public static final String PARAM_SLEEP_TIME = "job.sleep.time";
 
     @Override
+    public JobType jobType() {
+        return JobType.EXECUTE;
+    }
+
+    @Override
     public void execute() {
         Integer sleepTime = this.jobExecution.getInteger(PARAM_SLEEP_TIME);
         if(sleepTime == null){
@@ -45,7 +51,7 @@ public class SimpleJob extends BaseJob {
             TimeUnit.MILLISECONDS.sleep(sleepTime);
             log.info("execute simple job, sleep:{}, {}",sleepTime,jobExecution);
         } catch (InterruptedException e) {
-            log.error(e.getMessage(),e);
+            log.error(e.getMessage()+", info:"+jobExecution.info(),e);
         }
     }
 

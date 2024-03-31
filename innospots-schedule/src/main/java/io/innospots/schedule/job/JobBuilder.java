@@ -33,13 +33,17 @@ public class JobBuilder {
     public static BaseJob build(JobExecution jobExecution) {
         BaseJob baseJob;
         try {
-            Class<?> jobClass = Class.forName(jobExecution.getJobClass());
-            baseJob = (BaseJob) jobClass.getConstructor().newInstance();
+            baseJob = newInstance(jobExecution.getJobClass());
             baseJob.jobExecution = jobExecution;
         } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
                  InvocationTargetException e) {
             throw ResourceException.buildAbandonException(JobBuilder.class, "jobClass not found," + jobExecution.getJobClass(), e);
         }
         return baseJob;
+    }
+
+    public static BaseJob newInstance(String jobClazz) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        Class<?> jobClass = Class.forName(jobClazz);
+        return  (BaseJob) jobClass.getConstructor().newInstance();
     }
 }

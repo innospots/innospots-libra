@@ -19,25 +19,30 @@
 package io.innospots.schedule.launcher;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
+import io.innospots.base.enums.DataStatus;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.base.utils.thread.ThreadTaskExecutor;
 import io.innospots.schedule.entity.ReadyJobEntity;
 import io.innospots.schedule.enums.JobType;
 import io.innospots.schedule.explore.JobExecutionExplorer;
+import io.innospots.schedule.explore.ScheduleJobInfoExplorer;
 import io.innospots.schedule.job.BaseJob;
 import io.innospots.schedule.job.JobBuilder;
 import io.innospots.schedule.model.JobExecution;
+import io.innospots.schedule.model.ScheduleJobInfo;
 import io.innospots.schedule.queue.IReadyJobQueue;
 import io.innospots.schedule.queue.ReadyJobDbQueue;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 /**
  * @author Smars
@@ -49,6 +54,8 @@ public class ReadyJobLauncher {
 
     private final JobExecutionExplorer jobExecutionExplorer;
 
+    private final ScheduleJobInfoExplorer scheduleJobInfoExplorer;
+
 
     private final IReadyJobQueue readyJobDbQueue;
 
@@ -59,11 +66,22 @@ public class ReadyJobLauncher {
     private Map<String, Future> threadFutures = new ConcurrentHashMap<>();
 
 
-    public ReadyJobLauncher(JobExecutionExplorer jobExecutionExplorer,
+    public ReadyJobLauncher(
+            ScheduleJobInfoExplorer scheduleJobInfoExplorer,
+            JobExecutionExplorer jobExecutionExplorer,
                             IReadyJobQueue readyJobDbQueue, ThreadTaskExecutor threadTaskExecutor) {
+        this.scheduleJobInfoExplorer = scheduleJobInfoExplorer;
         this.jobExecutionExplorer = jobExecutionExplorer;
         this.readyJobDbQueue = readyJobDbQueue;
         this.threadTaskExecutor = threadTaskExecutor;
+    }
+
+    /**
+     * running job executions in the current executor
+     * @return
+     */
+    public List<JobExecution> currentCacheExecutions() {
+        return new ArrayList<>(this.executionCache.values());
     }
 
 
@@ -127,8 +145,20 @@ public class ReadyJobLauncher {
     }
 
     protected void execute(JobExecution jobExecution) {
+        ScheduleJobInfo scheduleJobInfo = scheduleJobInfoExplorer.getScheduleJobInfo(jobExecution.getJobKey());
+        if(scheduleJobInfo == null){
+            jobExecution.setExecutionStatus(ExecutionStatus.FAILED);
+            jobExecution.setMessage("schedule job is missing");
+            log.warn("schedule job is missing: {}",jobExecution.info());
+            return;
+        }else if(scheduleJobInfo.getJobStatus() != DataStatus.ONLINE){
+            jobExecution.setExecutionStatus(ExecutionStatus.COMPLETE);
+            jobExecution.setMessage("schedule job is offline");
+            log.warn("schedule job is offline: {}",jobExecution.info());
+        }
         BaseJob baseJob = JobBuilder.build(jobExecution);
         baseJob.prepare();
+        jobExecutionExplorer.updateJobExecution(jobExecution);
         baseJob.execute();
         if (jobExecution.getJobType() == JobType.EXECUTE) {
             jobExecution.setEndTime(LocalDateTime.now());

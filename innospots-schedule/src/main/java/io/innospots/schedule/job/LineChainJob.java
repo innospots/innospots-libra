@@ -20,6 +20,7 @@ package io.innospots.schedule.job;
 
 import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.schedule.dispatch.ReadJobDispatcher;
+import io.innospots.schedule.enums.JobType;
 import io.innospots.schedule.model.JobExecution;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -48,15 +49,20 @@ public class LineChainJob extends BaseJob {
 
     private ReadJobDispatcher readJobDispatcher;
 
+    @Override
+    public JobType jobType() {
+        return JobType.LINE_CHAIN;
+    }
+
     public void prepare() {
         chainJobKeys = getChainJobKeys(this.jobExecution);
         readJobDispatcher = BeanContextAwareUtils.getBean(ReadJobDispatcher.class);
+        this.jobExecution.setSubJobCount((long) chainJobKeys.size());
     }
 
     @Override
     public void execute() {
         Map prm = getParamMap(PARAM_EXECUTE_JOB_PARAMS);
-        this.jobExecution.setSubJobCount((long) chainJobKeys.size());
         log.info("dispatch sub job:{} , parentExecutionId:{}", chainJobKeys.get(0), jobExecution.getExecutionId());
         readJobDispatcher.execute(jobExecution.getExecutionId(), 1, chainJobKeys.get(0), prm);
     }

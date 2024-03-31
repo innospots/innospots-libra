@@ -21,6 +21,7 @@ package io.innospots.schedule.job;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.script.ExecutorManagerFactory;
 import io.innospots.base.script.IScriptExecutor;
+import io.innospots.schedule.enums.JobType;
 import io.innospots.schedule.exception.JobExecutionException;
 import io.innospots.schedule.model.JobExecution;
 
@@ -35,6 +36,11 @@ public class ScriptJob extends BaseJob {
 
     public static String PARAM_SCRIPT_TYPE = "job.script.type";
     public static String PARAM_SCRIPT_BODY = "job.script.body";
+
+    @Override
+    public JobType jobType() {
+        return JobType.EXECUTE;
+    }
 
     @Override
     public void execute() {

@@ -20,6 +20,7 @@ package io.innospots.schedule.queue;
 
 import cn.hutool.crypto.digest.MD5;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import io.innospots.base.enums.DataStatus;
 import io.innospots.base.utils.InnospotsIdGenerator;
 import io.innospots.base.utils.ServiceActionHolder;
 import io.innospots.schedule.converter.ReadyJobConverter;
@@ -95,23 +96,20 @@ public class ReadyJobDbQueue implements IReadyJobQueue {
 
     @Override
     public int push(String jobKey, Map<String,Object> params){
-        ScheduleJobInfo scheduleJobInfo = scheduleJobInfoExplorer.getScheduleJobInfo(jobKey);
-        ReadyJobEntity readyJobEntity = ReadyJobConverter.build(scheduleJobInfo,params);
-        long count = readyJobDao.countUnReadAndAssignedJob(readyJobEntity.getInstanceKey());
-        if(count >0){
-            log.warn("job has exist in the queue, jobKey:{}, param:{}",jobKey,params);
-            return 0;
-        }
-        return readyJobDao.insert(readyJobEntity);
+        return push(null,1,jobKey,params);
     }
 
     @Override
     public int push(String parentExecutionId, Integer sequenceNumber, String jobKey, Map<String, Object> params) {
         ScheduleJobInfo scheduleJobInfo = scheduleJobInfoExplorer.getScheduleJobInfo(jobKey);
+        if(scheduleJobInfo == null){
+            log.error("schedule job is missing:{}",jobKey);
+            return 0;
+        }
         ReadyJobEntity readyJobEntity = ReadyJobConverter.build(scheduleJobInfo,params);
         readyJobEntity.setSequenceNumber(sequenceNumber);
         readyJobEntity.setParentExecutionId(parentExecutionId);
-        long count = readyJobDao.countUnReadAndAssignedJob(readyJobEntity.getInstanceKey());
+        long count = readyJobDao.countUnReadAndAssignedJob(readyJobEntity.getInstanceKey(),parentExecutionId);
         if(count >0){
             log.warn("job has exist in the queue, jobKey:{}, param:{}",jobKey,params);
             return 0;

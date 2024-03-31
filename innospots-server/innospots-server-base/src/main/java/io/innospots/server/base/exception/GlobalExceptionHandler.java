@@ -125,7 +125,7 @@ public class GlobalExceptionHandler {
                 }
             }
             if (StringUtils.isEmpty(msg)) {
-                msg = fieldError.getDefaultMessage();
+                msg = fieldError.getObjectName() + "." + fieldError.getField() + " " + fieldError.getDefaultMessage();
             }
             messages.add(msg);
         }//end for

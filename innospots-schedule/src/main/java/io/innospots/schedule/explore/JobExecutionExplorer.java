@@ -31,6 +31,7 @@ import io.innospots.schedule.exception.JobExecutionException;
 import io.innospots.schedule.model.JobExecution;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -292,11 +293,16 @@ public class JobExecutionExplorer {
         log.debug("update result:{}, executionId:{}",cnt,jobExecution.getExecutionId());
     }
 
+    public int updateJobExecution(JobExecution jobExecution){
+        JobExecutionEntity jobExecutionEntity = JobExecutionConverter.INSTANCE.modelToEntity(jobExecution);
+        return jobExecutionDao.updateById(jobExecutionEntity);
+    }
 
     public int updateJobExecution(String jobExecutionId,
                                   Integer percent,
                                   Long successCount,
                                   Long failCount,
+                                  LocalDateTime endTime,
                                   ExecutionStatus status, String message) {
         UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
         uw.lambda().set(status != null, JobExecutionEntity::getExecutionStatus, status)
@@ -305,6 +311,8 @@ public class JobExecutionExplorer {
                 .set(JobExecutionEntity::getFailCount, failCount)
                 .set(message != null, JobExecutionEntity::getMessage, message)
                 .set(JobExecutionEntity::getUpdatedTime, LocalDateTime.now())
+                .set(endTime!=null,JobExecutionEntity::getEndTime, endTime)
+                .set(endTime!=null,JobExecutionEntity::getSelfEndTime, endTime)
                 .eq(JobExecutionEntity::getExecutionId, jobExecutionId);
         return jobExecutionDao.update(uw);
     }
@@ -411,7 +419,7 @@ public class JobExecutionExplorer {
     public long countSubJobExecutions(String parentExecutionId, ExecutionStatus... executionStatus) {
         QueryWrapper<JobExecutionEntity> qw = new QueryWrapper<>();
         List<ExecutionStatus> statuses = null;
-        if (executionStatus != null) {
+        if (ArrayUtils.isNotEmpty(executionStatus)) {
             statuses = Arrays.asList(executionStatus);
         }
         qw.lambda().eq(JobExecutionEntity::getParentExecutionId, parentExecutionId)
@@ -421,21 +429,21 @@ public class JobExecutionExplorer {
     }
 
     public List<ExecutionStatus> subJobExecutionStatus(String parentExecutionId) {
-        QueryWrapper<JobExecutionEntity> qw = new QueryWrapper<>();
-        qw.lambda().eq(JobExecutionEntity::getParentExecutionId, parentExecutionId)
-                .ge(JobExecutionEntity::getSequenceNumber, 0)
-                .select(JobExecutionEntity::getExecutionStatus, JobExecutionEntity::getExecutionId);
-        List<JobExecutionEntity> entities = this.jobExecutionDao.selectList(qw);
+        List<JobExecutionEntity> entities = parentExecutions(parentExecutionId);
         return entities.stream().map(JobExecutionEntity::getExecutionStatus).collect(Collectors.toList());
     }
 
     public List<Pair<String, ExecutionStatus>> subJobExecutionStatusPair(String parentExecutionId) {
+        List<JobExecutionEntity> entities = parentExecutions(parentExecutionId);
+        return entities.stream().map(e -> Pair.of(e.getJobKey(), e.getExecutionStatus())).collect(Collectors.toList());
+    }
+
+    private List<JobExecutionEntity> parentExecutions(String parentExecutionId) {
         QueryWrapper<JobExecutionEntity> qw = new QueryWrapper<>();
         qw.lambda().eq(JobExecutionEntity::getParentExecutionId, parentExecutionId)
                 .ge(JobExecutionEntity::getSequenceNumber, 0)
-                .select(JobExecutionEntity::getExecutionStatus, JobExecutionEntity::getExecutionId);
-        List<JobExecutionEntity> entities = this.jobExecutionDao.selectList(qw);
-        return entities.stream().map(e -> Pair.of(e.getExecutionId(), e.getExecutionStatus())).collect(Collectors.toList());
+                .select(JobExecutionEntity::getExecutionStatus, JobExecutionEntity::getExecutionId,JobExecutionEntity::getJobKey);
+        return this.jobExecutionDao.selectList(qw);
     }
 
 

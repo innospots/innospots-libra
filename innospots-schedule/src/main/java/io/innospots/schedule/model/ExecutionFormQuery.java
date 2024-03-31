@@ -41,15 +41,15 @@ public class ExecutionFormQuery {
     private String createdBy;
 
     @Schema(title = "the current number of pages")
-    protected int page = 1;
+    protected Integer page = 1;
 
     @Schema(title = "number of entries per page")
-    protected int size = 20;
+    protected Integer size = 20;
 
     @Schema(title = "sort field")
     protected String sort;
 
     @Schema(title = "collation (ASC for ascending, DESC for descending)")
-    protected Boolean asc = true;
+    protected Boolean asc = false;
 
 }

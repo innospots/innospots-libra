@@ -18,6 +18,8 @@
 
 package io.innospots.schedule.watcher;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.base.watcher.AbstractWatcher;
@@ -33,6 +35,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * schedule service watcher
@@ -46,6 +49,10 @@ import java.util.Objects;
 public class JobExecutionWatcher extends AbstractWatcher {
 
     private final JobExecutionExplorer jobExecutionExplorer;
+
+    private final Cache<String, String> doneJobExecutionCache = Caffeine.newBuilder()
+            .expireAfterWrite(2, TimeUnit.MINUTES)
+            .build();
 
     public JobExecutionWatcher(JobExecutionExplorer jobExecutionExplorer) {
         this.jobExecutionExplorer = jobExecutionExplorer;
@@ -73,8 +80,13 @@ public class JobExecutionWatcher extends AbstractWatcher {
         jobExecutions = jobExecutionExplorer.fetchRecentDoneJobs();
         if (CollectionUtils.isNotEmpty(jobExecutions)) {
             for (JobExecution jobExecution : jobExecutions) {
+                String cachedExecutionId = doneJobExecutionCache.getIfPresent(jobExecution.getExecutionId());
+                if (cachedExecutionId != null) {
+                    continue;
+                }
                 processDoneJobs(jobExecution);
                 checkParentExecution(jobExecution);
+                doneJobExecutionCache.put(jobExecution.getExecutionId(), jobExecution.getExecutionId());
             }
         }//end if
 
@@ -83,35 +95,60 @@ public class JobExecutionWatcher extends AbstractWatcher {
 
     /**
      * update parent job execution, percent, successCount, failCount and status
+     * only update container job execution
      *
      * @param jobExecution
      */
     private void processExecutingParentJob(JobExecution jobExecution) {
-        if (jobExecution.getParentExecutionId() != null) {
-            List<ExecutionStatus> subStatus = jobExecutionExplorer.subJobExecutionStatus(jobExecution.getParentExecutionId());
+        if (jobExecution.getJobType().isJobContainer()) {
+            //fetch sub job execution status
+            List<ExecutionStatus> subStatus = jobExecutionExplorer.subJobExecutionStatus(jobExecution.getExecutionId());
             Long successCount = subStatus.stream().filter(i -> i == ExecutionStatus.COMPLETE).count();
             Long failCount = subStatus.stream().filter(i -> i == ExecutionStatus.FAILED).count();
             Long doneCount = subStatus.stream().filter(ExecutionStatus::isDone).count();
-            Integer percent = Long.bitCount(doneCount * 100 / jobExecution.getSubJobCount());
+            Long subCount = jobExecution.getSubJobCount() != null && jobExecution.getSubJobCount() > 0 ? jobExecution.getSubJobCount() : 0;
+            Long executingCount = subStatus.stream().filter(ExecutionStatus::isExecuting).count();
+
+            Long percent = subCount > 0 ? (doneCount * 100 / subCount) : 0;
             String message = null;
             ExecutionStatus status = null;
+            LocalDateTime endTime = jobExecution.getEndTime();
+            jobExecution.setSuccessCount(successCount);
+            jobExecution.setFailCount(failCount);
+            jobExecution.setPercent(percent.intValue());
 
             if (failCount > 0) {
                 status = ExecutionStatus.FAILED;
-                message = "sub job is failed.";
+                message = "sub job is failed";
+                log.info("container job execution is failed: {}", jobExecution.info());
+                endTime = endTime != null ? endTime : LocalDateTime.now();
+                jobExecution.setExecutionStatus(status);
+                jobExecution.setEndTime(endTime);
+                jobExecution.setMessage(message);
             } else if (Objects.equals(doneCount, jobExecution.getSubJobCount())) {
                 status = ExecutionStatus.COMPLETE;
-                message = "success";
+                message = "all sub jobs are complete";
+                endTime = endTime != null ? endTime : LocalDateTime.now();
+                jobExecution.setExecutionStatus(status);
+                jobExecution.setEndTime(endTime);
+                jobExecution.setMessage(message);
+                log.info("container job execution is complete: {}", jobExecution.info());
+            }else if(executingCount == 0 && !Objects.equals(doneCount,subCount)){
+                //check parent job execution status.
+                //the parent job will check job flow execute status, and control next job execution.
+                EventBusCenter.postSync(new JobExecutionEvent(jobExecution));
             }
 
-            jobExecutionExplorer.updateJobExecution(jobExecution.getExecutionId(), percent
-                    , successCount, failCount, status, message);
+            jobExecutionExplorer.updateJobExecution(jobExecution.getExecutionId(), percent.intValue()
+                    , successCount, failCount,endTime, status, message);
         }
 
     }
 
+    /**
+     * @param jobExecution parent job execution
+     */
     private void processDoneJobs(JobExecution jobExecution) {
-        //TODO to be tested
         //processDoneChildrenJob(jobExecution);
         processDoneParentJob(jobExecution);
     }
@@ -162,8 +199,9 @@ public class JobExecutionWatcher extends AbstractWatcher {
 
     /**
      * check parent job execution and fire execution event
+     * ensure that the job execution event processing is idempotent and cannot be executed or processed repeatedly
      *
-     * @param jobExecution
+     * @param jobExecution sub job execution
      */
     private void checkParentExecution(JobExecution jobExecution) {
         if (jobExecution.getParentExecutionId() != null) {

@@ -34,14 +34,31 @@ import java.util.List;
 @ConfigurationProperties(prefix = "innospots.schedule")
 public class InnospotsScheduleProperties {
 
+    /**
+     * ready queue watcher scan interval time,
+     * the smaller the value, the shorter the wait time of the pull queue.
+     *
+     * The default value is 2 seconds, which indicates that the execution tasks
+     * in the message queue are rotated at least once every two seconds
+     * and assigned to the current execution node.
+     */
     private Integer scanSlotTimeMills = 2000;
 
+    /**
+     * The maximum number of assigned jobs that can be executed in the executor
+     */
     private Integer executorSize = 8;
 
+    /**
+     * the timeout second when the job state is assigned in the queue
+     *
+     */
     private Integer assignedJobTimeoutSecond = 60;
 
     /**
      * default group keys using select ready job
+     * If group keys is used, you can specify that the execution node executes only the jobs of a certain queue group.
+     * If the value is empty, all the jobs in the queue will be detected and executed
      */
     private List<String> groupKeys;
 

@@ -60,11 +60,11 @@ public class ParamParser {
         return vParam;
     }
 
-    public static Map getParamMap(JobExecution jobExecution, String key){
+    public static Map<String,Object> getParamMap(JobExecution jobExecution, String key){
         Object executeJobParams = jobExecution.get(key);
-        Map prm = null;
+        Map<String,Object> prm = null;
         if (executeJobParams instanceof Map) {
-            prm = (Map) executeJobParams;
+            prm = (Map<String,Object>) executeJobParams;
         } else if (executeJobParams instanceof String && ((String) executeJobParams).startsWith("{")) {
             prm = JSONUtils.toMap((String) executeJobParams);
         }

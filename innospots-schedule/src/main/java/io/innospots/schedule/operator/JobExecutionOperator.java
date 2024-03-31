@@ -31,6 +31,7 @@ import io.innospots.schedule.model.ExecutionFormQuery;
 import io.innospots.schedule.model.JobExecution;
 import io.innospots.schedule.model.JobExecutionDisplay;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -47,23 +48,32 @@ public class JobExecutionOperator extends ServiceImpl<JobExecutionDao, JobExecut
 
 
     public PageBody<JobExecution> pageJobExecutions(ExecutionFormQuery formQuery
-                                                    ) {
+    ) {
         PageBody<JobExecution> pageBody = new PageBody<>();
 
         QueryWrapper<JobExecutionEntity> qw = new QueryWrapper<>();
-        qw.lambda().eq(formQuery.getJobKey() != null, JobExecutionEntity::getJobKey, formQuery.getJobKey())
-                .eq(formQuery.getJobName() != null, JobExecutionEntity::getJobName, formQuery.getJobName())
-                .eq(formQuery.getServerKey() != null, JobExecutionEntity::getServerKey, formQuery.getServerKey())
-                .eq(formQuery.getCreatedBy() != null, JobExecutionEntity::getCreatedBy, formQuery.getCreatedBy())
+
+        qw.lambda().eq(StringUtils.isNotEmpty(formQuery.getJobKey()), JobExecutionEntity::getJobKey, formQuery.getJobKey())
+                .eq(StringUtils.isNotEmpty(formQuery.getJobName()), JobExecutionEntity::getJobName, formQuery.getJobName())
+                .eq(StringUtils.isNotEmpty(formQuery.getServerKey()), JobExecutionEntity::getServerKey, formQuery.getServerKey())
+                .eq(StringUtils.isNotEmpty(formQuery.getCreatedBy()), JobExecutionEntity::getCreatedBy, formQuery.getCreatedBy())
                 .eq(formQuery.getStatus() != null, JobExecutionEntity::getExecutionStatus, formQuery.getStatus())
-                .eq(formQuery.getScopes() != null, JobExecutionEntity::getScopes, formQuery.getScopes())
-                .ge(formQuery.getStartTime() != null, JobExecutionEntity::getStartTime, formQuery.getStartTime())
-                .le(formQuery.getEndTime() != null, JobExecutionEntity::getEndTime, formQuery.getEndTime());
+                .eq(StringUtils.isNotEmpty(formQuery.getScopes()), JobExecutionEntity::getScopes, formQuery.getScopes())
+                .ge(StringUtils.isNotEmpty(formQuery.getStartTime()), JobExecutionEntity::getStartTime, formQuery.getStartTime())
+                .le(StringUtils.isNotEmpty(formQuery.getEndTime()), JobExecutionEntity::getEndTime, formQuery.getEndTime());
+        if (StringUtils.isNotEmpty(formQuery.getSort())) {
+            if (formQuery.getAsc()) {
+                qw.orderByAsc(formQuery.getSort());
+            } else {
+                qw.orderByDesc(formQuery.getSort());
+            }
+        }
         Page<JobExecutionEntity> entityPage = new Page<>(formQuery.getPage(), formQuery.getSize());
         entityPage = this.page(entityPage, qw);
         pageBody.setTotal(entityPage.getTotal());
         pageBody.setTotalPage(entityPage.getPages());
         pageBody.setPageSize((long) formQuery.getSize());
+        pageBody.setCurrent(entityPage.getCurrent());
         pageBody.setList(JobExecutionConverter.INSTANCE.entitiesToModels(entityPage.getRecords()));
 
         return pageBody;
@@ -71,7 +81,7 @@ public class JobExecutionOperator extends ServiceImpl<JobExecutionDao, JobExecut
 
     public JobExecutionDisplay getJobExecution(String jobExecutionId, boolean includeSub) {
         JobExecutionDisplay jobExecutionDisplay = new JobExecutionDisplay();
-        JobExecutionConverter.entityToDisplay(this.getById(jobExecutionId),jobExecutionDisplay);
+        JobExecutionConverter.entityToDisplay(this.getById(jobExecutionId), jobExecutionDisplay);
         if (jobExecutionDisplay != null && jobExecutionDisplay.getJobType().isJobContainer()) {
             fillSubExecutions(jobExecutionDisplay);
         }
@@ -120,13 +130,13 @@ public class JobExecutionOperator extends ServiceImpl<JobExecutionDao, JobExecut
                                  Long subJobCount,
                                  Long successCount,
                                  Long failCount) {
-        return updateJobExecution(jobExecutionId,percent,subJobCount,successCount,failCount,null,null);
+        return updateJobExecution(jobExecutionId, percent, subJobCount, successCount, failCount, null, null);
     }
 
 
     public boolean updateStatus(String jobExecutionId,
                                 ExecutionStatus status, String message) {
-        return updateJobExecution(jobExecutionId,null,null,null,null,status,message);
+        return updateJobExecution(jobExecutionId, null, null, null, null, status, message);
     }
 
 

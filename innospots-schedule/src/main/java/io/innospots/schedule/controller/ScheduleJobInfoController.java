@@ -33,6 +33,7 @@ import io.innospots.schedule.operator.ScheduleJobInfoOperator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
@@ -58,15 +59,16 @@ public class ScheduleJobInfoController {
     @PostMapping
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
     @Operation(summary = "create schedule")
-    public InnospotResponse<ScheduleJobInfo> createScheduleJobInfo(@RequestBody ScheduleJobInfo scheduleJobInfo) {
+    public InnospotResponse<ScheduleJobInfo> createScheduleJobInfo(@Validated @RequestBody ScheduleJobInfo scheduleJobInfo) {
         return InnospotResponse.success(scheduleJobInfoOperator.createScheduleJobInfo(scheduleJobInfo));
     }
+
 
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "jobKey")
     @PutMapping
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
     @Operation(summary = "update schedule")
-    public InnospotResponse<ScheduleJobInfo> updateScheduleJobInfo(@RequestBody ScheduleJobInfo scheduleJobInfo) {
+    public InnospotResponse<ScheduleJobInfo> updateScheduleJobInfo(@Validated @RequestBody ScheduleJobInfo scheduleJobInfo) {
         return InnospotResponse.success(scheduleJobInfoOperator.updateScheduleJobInfo(scheduleJobInfo));
     }
 

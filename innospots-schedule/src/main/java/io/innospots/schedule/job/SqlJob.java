@@ -23,6 +23,7 @@ import io.innospots.base.connector.minder.IDataConnectionMinder;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.operator.IOperator;
 import io.innospots.base.data.request.SimpleRequest;
+import io.innospots.schedule.enums.JobType;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -39,6 +40,11 @@ public class SqlJob extends BaseJob {
     private String sqlScript;
     private String credentialKey;
     private IOperator operator;
+
+    @Override
+    public JobType jobType() {
+        return JobType.EXECUTE;
+    }
 
     @Override
     public void prepare() {

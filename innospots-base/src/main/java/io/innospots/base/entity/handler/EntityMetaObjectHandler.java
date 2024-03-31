@@ -18,7 +18,9 @@
 
 package io.innospots.base.entity.handler;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import io.innospots.base.entity.PBaseEntity;
 import io.innospots.base.utils.CCH;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
@@ -44,7 +46,7 @@ public class EntityMetaObjectHandler implements MetaObjectHandler {
         this.strictInsertFill(metaObject, "updatedBy", String.class, CCH.authUser());
         this.strictInsertFill(metaObject, "projectId", Integer.class, CCH.projectId());
 
-        log.debug("insert fill, context:{}", CCH.contextInfo());
+        log.debug("insert fill:{}, context:{}",metaObject.getOriginalObject().getClass().getSimpleName(), CCH.contextInfo());
     }
 
     @Override
@@ -52,6 +54,12 @@ public class EntityMetaObjectHandler implements MetaObjectHandler {
         this.setFieldValByName("updatedTime", LocalDateTime.now(), metaObject);
         this.setFieldValByName("updatedBy", CCH.authUser(), metaObject);
         this.setFieldValByName("projectId", CCH.projectId(), metaObject);
-        log.debug("update fill, context:{}", CCH.contextInfo());
+        log.debug("update fill:{}, context:{}",metaObject.getOriginalObject().getClass().getSimpleName(), CCH.contextInfo());
+    }
+
+    public static <E extends PBaseEntity> void fillUpdateWrapper(UpdateWrapper<E> updateWrapper) {
+        updateWrapper.set("updated_time", LocalDateTime.now())
+                        .set("updated_by", CCH.authUser())
+                        .set("project_id", CCH.projectId());
     }
 }

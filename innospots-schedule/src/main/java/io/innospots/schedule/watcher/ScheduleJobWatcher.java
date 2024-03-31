@@ -27,9 +27,11 @@ import io.innospots.schedule.model.ScheduleJobInfo;
 import io.innospots.schedule.quartz.QuartzJobScheduler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.math3.analysis.function.Identity;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * schedule service watcher
@@ -45,6 +47,8 @@ public class ScheduleJobWatcher extends AbstractWatcher {
 
     private final ScheduleJobInfoExplorer scheduleJobInfoExplorer;
 
+    private Map<String, ScheduleJobInfo> currentJobCache;
+
     public ScheduleJobWatcher(QuartzScheduleManager scheduleManager,
                               ScheduleJobInfoExplorer scheduleJobInfoExplorer) {
         this.scheduleManager = scheduleManager;
@@ -53,21 +57,35 @@ public class ScheduleJobWatcher extends AbstractWatcher {
 
     @Override
     public int execute() {
-        List<ScheduleJobInfo> jobInfos = scheduleJobInfoExplorer.fetchUpdatedQuartzTimeJob();
-        if (CollectionUtils.isEmpty(jobInfos)) {
+        List<ScheduleJobInfo> jobInfos = scheduleJobInfoExplorer.fetchOnlineQuartzTimeJob();
+        Set<String> scheduleJobKeys = scheduleManager.scheduleJobs();
+        if (CollectionUtils.isEmpty(jobInfos) && scheduleJobKeys.isEmpty()) {
+            currentJobCache = null;
             return checkIntervalMills;
         }
+
         for (ScheduleJobInfo jobInfo : jobInfos) {
-            if (jobInfo.getJobStatus() == DataStatus.OFFLINE) {
-                log.info("offline job remove from scheduler:{}", jobInfo.getJobName());
-                scheduleManager.deleteJob(jobInfo.getJobKey());
-            } else {
+            ScheduleJobInfo currentJob = currentJobCache != null ? currentJobCache.get(jobInfo.getJobKey()) : null;
+            if (currentJob == null || jobInfo.getUpdatedTime().isAfter(currentJob.getUpdatedTime())) {
+                //have new online job or job updated
                 log.info("job add to schedule:{}", jobInfo);
                 Date startTime = jobInfo.getStartTime() != null ? DateTimeUtils.asDate(jobInfo.getStartTime()) : null;
                 Date endTime = jobInfo.getEndTime() != null ? DateTimeUtils.asDate(jobInfo.getEndTime()) : null;
+                jobInfo.initialize();
                 scheduleManager.refreshJob(jobInfo.getJobKey(), QuartzJobScheduler.class, jobInfo.getCronExpression(), jobInfo.getScheduleMode(), startTime, endTime);
             }
+            if (scheduleJobKeys != null) {
+                scheduleJobKeys.remove(jobInfo.getJobKey());
+            }
+        }//end for
+
+        if (CollectionUtils.isNotEmpty(scheduleJobKeys)) {
+            scheduleJobKeys.forEach(jobKey -> {
+                log.info("job remove from schedule:{}", jobKey);
+                scheduleManager.deleteJob(jobKey);
+            });
         }
+        currentJobCache = jobInfos.stream().collect(Collectors.toMap(ScheduleJobInfo::getJobKey, jobInfo -> jobInfo));
         return checkIntervalMills;
     }
 }

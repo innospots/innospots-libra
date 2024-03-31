@@ -27,9 +27,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.expression.ExpressionParser;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
-
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -45,25 +43,30 @@ import java.util.Map;
 public class ScheduleJobInfo implements Initializer {
 
     @Schema(title = "job key,primary")
+    @NotNull
     private String jobKey;
 
     @Schema(title = "job name")
+    @NotNull
     private String jobName;
 
     @Schema(title = "schedule mode")
+    @NotNull
     private ScheduleMode scheduleMode;
 
     private DataStatus jobStatus;
 
+    @NotNull
     private JobType jobType;
 
+    @NotNull
     private String jobClass;
 
     private String scopes;
 
     private TimeConfig timeConfig;
 
-    private Map<String,String> params;
+    private Map<String,Object> params;
 
     @JsonIgnore
     private String cronExpression;
@@ -75,6 +78,8 @@ public class ScheduleJobInfo implements Initializer {
     private String resourceKey;
 
     private Integer subJobCount;
+
+    private LocalDateTime updatedTime;
 
     @Override
     public void initialize() {

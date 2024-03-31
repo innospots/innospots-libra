@@ -28,6 +28,7 @@ import io.innospots.schedule.explore.JobExecutionExplorer;
 import io.innospots.schedule.job.LineChainJob;
 import io.innospots.schedule.model.JobExecution;
 import io.innospots.schedule.utils.ParamParser;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,7 @@ import java.util.stream.Collectors;
  * @vesion 2.0
  * @date 2024/1/2
  */
+@Slf4j
 public class LineChainJobListener implements IEventListener<JobExecutionEvent> {
 
     private final ReadJobDispatcher readJobDispatcher;
@@ -59,11 +61,13 @@ public class LineChainJobListener implements IEventListener<JobExecutionEvent> {
             List<String> chainKeys = LineChainJob.getChainJobKeys(jobExecution);
             boolean failOrRunning = pairs.stream().anyMatch(p -> p.getRight() == ExecutionStatus.FAILED || p.getRight() == ExecutionStatus.RUNNING);
             if (failOrRunning) {
+                log.warn("The sub-jobs within the current chains have either failed or are still running, preventing the subsequent job in the chain from being initiated. job execution:",jobExecution.info());
                 //has fail or running
                 return null;
             }
             Set<String> doneJobKeys = pairs.stream().map(Pair::getLeft).collect(Collectors.toSet());
             if (chainKeys.size() == doneJobKeys.size()) {
+                log.warn("all sub-jobs have been completed, job execution:{}", jobExecution.info());
                 //all complete
                 return null;
             }
@@ -71,7 +75,8 @@ public class LineChainJobListener implements IEventListener<JobExecutionEvent> {
                 String chainKey = chainKeys.get(i);
                 if (!doneJobKeys.contains(chainKey)) {
                     //next job will be executed that push to queue
-                    Map prm = ParamParser.getParamMap(jobExecution, LineChainJob.PARAM_EXECUTE_JOB_PARAMS);
+                    Map<String, Object> prm = ParamParser.getParamMap(jobExecution, LineChainJob.PARAM_EXECUTE_JOB_PARAMS);
+                    log.info("execute next job in the chain, jobKey:{}, chainExecution:{}",chainKey,jobExecution.info());
                     readJobDispatcher.execute(jobExecution.getExecutionId(), i+1, chainKey, prm);
                     break;
                 }

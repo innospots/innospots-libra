@@ -20,6 +20,7 @@ package io.innospots.schedule.job;
 
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.response.ResponseCode;
+import io.innospots.schedule.enums.JobType;
 import io.innospots.schedule.exception.JobExecutionException;
 import io.innospots.schedule.model.JobExecution;
 import io.innospots.schedule.utils.ParamParser;
@@ -29,6 +30,7 @@ import lombok.Setter;
 import java.util.Map;
 
 /**
+ *
  * @author Smars
  * @vesion 2.0
  * @date 2023/12/3
@@ -41,6 +43,8 @@ public abstract class BaseJob {
 
     public void prepare(){
     }
+
+    public abstract JobType jobType();
 
     public abstract void execute();
 

@@ -23,6 +23,7 @@ import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.connector.minder.IDataConnectionMinder;
 import io.innospots.base.connector.schema.model.SchemaField;
 import io.innospots.base.connector.schema.model.SchemaRegistry;
+import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.operator.IDataOperator;
 import io.innospots.base.data.operator.jdbc.SelectClause;
@@ -30,6 +31,7 @@ import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.Pair;
 import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.schedule.dispatch.ReadJobDispatcher;
+import io.innospots.schedule.enums.JobType;
 import io.innospots.schedule.model.JobExecution;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -83,7 +85,15 @@ public class DbShardingJob extends BaseJob {
 
     protected String executeJobKey;
 
+    protected List<Pair<String, String>> shardingList;
+
     protected ReadJobDispatcher readJobDispatcher;
+
+    @Override
+    public JobType jobType() {
+        return JobType.GROUP;
+    }
+
 
     @Override
     public void prepare() {
@@ -95,6 +105,10 @@ public class DbShardingJob extends BaseJob {
         shardingClause = jobExecution.getString(PARAM_SHARDING_CLAUSE);
         dataOperator = minder.buildOperator();
         executeJobKey = validParamString(PARAM_EXECUTE_JOB_KEY);
+
+        //sharding sub execute job key
+        List<Pair<String, String>> shardingList = shardingList();
+        jobExecution.setSubJobCount((long) shardingList.size());
         readJobDispatcher = BeanContextAwareUtils.getBean(ReadJobDispatcher.class);
     }
 
@@ -104,9 +118,6 @@ public class DbShardingJob extends BaseJob {
 
     @Override
     public void execute() {
-        //sharding sub execute job key
-        List<Pair<String, String>> shardingList = shardingList();
-        jobExecution.setSubJobCount((long) shardingList.size());
         if (shardingList.isEmpty()) {
             log.warn("job sharding is empty,jobKey:{}, executionId:{}, credentialKey:{}, table:{}", jobExecution.getJobKey(), jobExecution.getExecutionId(), credentialKey, table);
             return;
@@ -135,43 +146,56 @@ public class DbShardingJob extends BaseJob {
                 params.putAll(prm);
             }
             log.info("dispatch jobKey:{}, params:{}", executeJobKey, params);
-            readJobDispatcher.execute(jobExecution.getExecutionId(),seq,executeJobKey, params);
+            readJobDispatcher.execute(jobExecution.getExecutionId(), seq, executeJobKey, params);
         }//end for
     }
 
 
     /**
      * select clause
+     *
      * @return
      */
     private List<Pair<String, String>> shardingList() {
         List<Pair<String, String>> shardingList = new ArrayList<>();
-        String from = null;
-        String to = null;
-        PageBody<Map<String, Object>> pageBody = null;
+        String maxId = null;
+        String minId;
+        DataBody<Map<String, Object>> dataBody = null;
         do {
-            SelectClause selectClause = buildClause(table, shardingColumn, shardingSize, 1, shardingClause,to);
-            pageBody = dataOperator.selectForList(selectClause);
-            from = pageBody.getList().get(0).get(shardingColumn).toString();
-            to = pageBody.getList().get(pageBody.getList().size() - 1).get(shardingColumn).toString();
-            log.info("sharding clause:{}, from:{}, to:{}", selectClause.buildSql(), from, to);
-            Pair<String, String> pair = Pair.of(from, to);
+            SelectClause selectClause = buildRangeClause(table, shardingColumn, shardingSize, 1, shardingClause, maxId);
+            dataOperator.selectForObject(selectClause);
+            dataBody = dataOperator.selectForObject(selectClause);
+            Object v = dataBody.getBody().get("maxId");
+            maxId = v != null ? v.toString() : null;
+            v = dataBody.getBody().get("minId");
+            minId = v != null ? v.toString() : null;
+            log.info("sharding clause:{}, maxId:{}, minId:{}", selectClause.buildSql(), maxId, minId);
+            Pair<String, String> pair = Pair.of(minId, maxId);
             shardingList.add(pair);
-        } while (CollectionUtils.isNotEmpty(pageBody.getList()));
+        } while (maxId != null);
 
         return shardingList;
     }
 
+    private SelectClause buildRangeClause(String table, String shardingColumn, Integer shardingSize, int page, String shardingClause, String to) {
+        SelectClause tableClause = buildTableClause(table, shardingColumn, shardingSize, page, shardingClause, to);
+        SelectClause selectClause = new SelectClause();
+        selectClause.setTableName(" (" + tableClause.buildSql() + ") ");
+        selectClause.addColumn("max(" + shardingColumn + ") as maxId");
+        selectClause.addColumn("min(" + shardingColumn + ") as minId");
+        return selectClause;
+    }
 
-    private SelectClause buildClause(String table, String shardingColumn, Integer shardingSize, int page, String shardingClause,String to) {
+
+    private SelectClause buildTableClause(String table, String shardingColumn, Integer shardingSize, int page, String shardingClause, String to) {
         SelectClause selectClause = new SelectClause();
         selectClause.setTableName(table);
         selectClause.setPage(page);
         selectClause.setSize(shardingSize);
         selectClause.addOrderBy(shardingColumn);
         selectClause.addColumn(shardingColumn);
-        if(to!=null){
-            selectClause.addWhere(shardingColumn,to, Opt.GREATER_EQUAL);
+        if (to != null) {
+            selectClause.addWhere(shardingColumn, to, Opt.GREATER);
         }
         if (shardingClause != null) {
             selectClause.setWhereClause(shardingClause);

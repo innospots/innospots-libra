@@ -50,9 +50,11 @@ public class ScheduleJobInfoExplorer {
 
     public ScheduleJobInfo getScheduleJobInfo(String jobKey) {
         ScheduleJobInfoEntity scheduleJobInfoEntity = scheduleJobInfoDao.selectById(jobKey);
+        /*
         if(scheduleJobInfoEntity==null){
             throw ResourceException.buildNotExistException(this.getClass(),"job not exist, jobKey:" + jobKey);
         }
+         */
         return ScheduleJobInfoConverter.INSTANCE.entityToModel(scheduleJobInfoEntity);
     }
 
@@ -60,20 +62,19 @@ public class ScheduleJobInfoExplorer {
      * fetch schedule jobs, according recent update time, include online or offline
      * @return
      */
-    public List<ScheduleJobInfo> fetchUpdatedQuartzTimeJob() {
+    public List<ScheduleJobInfo> fetchOnlineQuartzTimeJob() {
         QueryWrapper<ScheduleJobInfoEntity> qw = new QueryWrapper<>();
-        qw.lambda().eq(lastUpdateTime==null,ScheduleJobInfoEntity::getJobStatus, DataStatus.ONLINE)
+        qw.lambda().eq(ScheduleJobInfoEntity::getJobStatus, DataStatus.ONLINE)
                 .eq(ScheduleJobInfoEntity::getScheduleMode, ScheduleMode.SCHEDULED)
-                .orderByDesc(ScheduleJobInfoEntity::getUpdatedTime)
-                .ge(lastUpdateTime!=null, ScheduleJobInfoEntity::getUpdatedTime, lastUpdateTime);
+                .orderByDesc(ScheduleJobInfoEntity::getUpdatedTime);
         List<ScheduleJobInfoEntity> entities = scheduleJobInfoDao.selectList(qw);
         if(CollectionUtils.isEmpty(entities)){
             return Collections.emptyList();
         }
-        lastUpdateTime = LocalDateTime.now();
         List<ScheduleJobInfo> jobInfos = ScheduleJobInfoConverter.INSTANCE.entitiesToModels(entities);
-        jobInfos.forEach(ScheduleJobInfo::initialize);
-
+        //jobInfos.forEach(ScheduleJobInfo::initialize);
         return jobInfos;
     }
+
+
 }

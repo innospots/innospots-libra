@@ -23,7 +23,9 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.innospots.base.data.body.PageBody;
+import io.innospots.base.entity.handler.EntityMetaObjectHandler;
 import io.innospots.base.enums.DataStatus;
+import io.innospots.base.exception.ConfigException;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.quartz.ScheduleMode;
@@ -51,13 +53,7 @@ public class ScheduleJobInfoOperator extends ServiceImpl<ScheduleJobInfoDao, Sch
 
 
     public ScheduleJobInfo createScheduleJobInfo(ScheduleJobInfo scheduleJobInfo) {
-        if (StringUtils.isEmpty(scheduleJobInfo.getJobKey())) {
-            throw ValidatorException.buildMissingException(this.getClass(), "jobKey is empty");
-        }
-        ScheduleJobInfoEntity scheduleJobInfoEntity = ScheduleJobInfoConverter.INSTANCE.modelToEntity(scheduleJobInfo);
-        if (scheduleJobInfoEntity.getSubJobCount() == null) {
-            scheduleJobInfoEntity.setSubJobCount(0);
-        }
+        ScheduleJobInfoEntity scheduleJobInfoEntity = checkScheduleInfo(scheduleJobInfo);
         checkJobKey(scheduleJobInfo);
         this.save(scheduleJobInfoEntity);
         return ScheduleJobInfoConverter.INSTANCE.entityToModel(scheduleJobInfoEntity);
@@ -88,6 +84,7 @@ public class ScheduleJobInfoOperator extends ServiceImpl<ScheduleJobInfoDao, Sch
         UpdateWrapper<ScheduleJobInfoEntity> uw = new UpdateWrapper<>();
         uw.lambda().eq(ScheduleJobInfoEntity::getJobKey, jobKey)
                 .set(ScheduleJobInfoEntity::getJobStatus, jobStatus);
+        EntityMetaObjectHandler.fillUpdateWrapper(uw);
         return this.update(uw);
     }
 
@@ -100,8 +97,23 @@ public class ScheduleJobInfoOperator extends ServiceImpl<ScheduleJobInfoDao, Sch
     }
 
     public ScheduleJobInfo updateScheduleJobInfo(ScheduleJobInfo scheduleJobInfo) {
-        this.updateById(ScheduleJobInfoConverter.INSTANCE.modelToEntity(scheduleJobInfo));
-        return scheduleJobInfo;
+        ScheduleJobInfoEntity scheduleJobInfoEntity = checkScheduleInfo(scheduleJobInfo);
+        this.updateById(scheduleJobInfoEntity);
+        return getScheduleJobInfo(scheduleJobInfo.getJobKey());
+    }
+
+    private ScheduleJobInfoEntity checkScheduleInfo(ScheduleJobInfo scheduleJobInfo){
+        if (StringUtils.isEmpty(scheduleJobInfo.getJobKey())) {
+            throw ValidatorException.buildMissingException(this.getClass(), "jobKey is empty");
+        }
+        ScheduleJobInfoEntity scheduleJobInfoEntity = ScheduleJobInfoConverter.INSTANCE.modelToEntity(scheduleJobInfo);
+        if (scheduleJobInfoEntity.getSubJobCount() == null) {
+            scheduleJobInfoEntity.setSubJobCount(0);
+        }
+        if( scheduleJobInfo.getJobType().isJobContainer() && scheduleJobInfoEntity.getSubJobCount() == 0){
+            throw ConfigException.buildParamException(this.getClass(),"job type is container, subJobCount must have setup the correct the number of sub jobs.");
+        }
+        return scheduleJobInfoEntity;
     }
 
     public PageBody<ScheduleJobInfo> pageScheduleJobInfo(int page, int pageSize, JobType jobType, DataStatus jobStatus, ScheduleMode scheduleMode) {

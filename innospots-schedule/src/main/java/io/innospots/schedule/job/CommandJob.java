@@ -20,6 +20,7 @@ package io.innospots.schedule.job;
 
 import cn.hutool.core.util.RuntimeUtil;
 import io.innospots.base.model.response.ResponseCode;
+import io.innospots.schedule.enums.JobType;
 import io.innospots.schedule.exception.JobExecutionException;
 import io.innospots.schedule.model.JobExecution;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +41,12 @@ public class CommandJob extends BaseJob{
     public static String PARAM_COMMAND = "job.cmd";
     public static String PARAM_FILE = "job.file";
     public static String PARAM_ARGS = "job.args";
+
+
+    @Override
+    public JobType jobType() {
+        return JobType.EXECUTE;
+    }
 
     @Override
     public void execute() {
