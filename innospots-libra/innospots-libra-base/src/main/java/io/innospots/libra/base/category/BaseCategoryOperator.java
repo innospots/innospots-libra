@@ -74,15 +74,17 @@ public class BaseCategoryOperator extends ServiceImpl<BaseCategoryDao, BaseCateg
         return list;
     }
 
-    public List<BaseCategory> listCategories(CategoryType categoryType, Supplier<Map<Integer, Long>> queryOperator){
+    public List<BaseCategory> listCategories(CategoryType categoryType, Supplier<Map<Integer, Long>> queryOperator) {
         List<BaseCategory> list = this.listCategories(categoryType);
         Map<Integer, Long> groupMap = queryOperator.get();
         // fill subsetTotal
         for (BaseCategory category : list) {
-            Long count = groupMap.get(category.getCategoryId());
-            category.setTotalCount(count.intValue());
+                Long count = groupMap.get(category.getCategoryId());
+                category.setTotalCount(count == null ? 0 : count.intValue());
         }
         return list;
+
+
     }
 
     public List<BaseCategory> listCategoriesByType(CategoryType categoryType) {
