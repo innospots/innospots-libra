@@ -103,7 +103,7 @@ public class SchemaRegistryController extends BaseController {
     @GetMapping("catalog/list")
     @Operation(summary = "list schema catalog from middleware", description = "")
     public InnospotResponse<List<SchemaCatalog>> listSchemaRegistries(
-            @Parameter(name = "credentialId") @RequestParam(value = "credentialKey") String credentialKey) {
+            @Parameter(name = "credentialKey") @RequestParam(value = "credentialKey") String credentialKey) {
         IDataConnectionMinder minder = dataConnectionMinderManager.getMinder(credentialKey);
         List<SchemaCatalog> schemaCatalogs = minder.schemaCatalogs();
         return success(schemaCatalogs);
