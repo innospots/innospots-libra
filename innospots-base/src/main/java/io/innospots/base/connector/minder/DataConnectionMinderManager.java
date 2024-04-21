@@ -138,7 +138,7 @@ public class DataConnectionMinderManager {
             dataConnectionMinder = newMinderInstance(connectionCredential);
             if (dataConnectionMinder != null) {
                 dataConnectionMinder.initialize(dataSchemaReader, connectionCredential);
-                connectionPoolCache.put(connectionCredential.key(), dataConnectionMinder);
+//                connectionPoolCache.put(connectionCredential.key(), dataConnectionMinder);
                 dataConnectionMinder.open();
 
                 if (logger.isDebugEnabled()) {
@@ -170,7 +170,8 @@ public class DataConnectionMinderManager {
     }
 
     public  IDataConnectionMinder getMinder(String credentialKey) {
-        return connectionPoolCache.getIfPresent(credentialKey);
+        return connectionPoolCache.get(credentialKey);
+//        return connectionPoolCache.getIfPresent(credentialKey);
     }
 
 
