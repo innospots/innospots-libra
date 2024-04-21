@@ -31,6 +31,7 @@ import io.innospots.base.connector.schema.operator.SchemaFieldOperator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -68,11 +69,12 @@ public class SchemaFieldController extends BaseController {
     @GetMapping("list")
     @Operation(summary = "list schema fields", description = "support SourceType: QUEUE,JDBC Parameter. requirements: registryId is required when SourceType = QUEUE, tableName is required when SourceType = JDBC")
     public InnospotResponse<List<SchemaField>> listSchemaFields(
-            @Parameter(name = "credentialId") @RequestParam(value = "credentialId") String credentialKey,
+            @Parameter(name = "credentialKey") @RequestParam(value = "credentialKey") String credentialKey,
             @Parameter(name = "tableName") @RequestParam(value = "tableName", required = false) String tableName,
             @Parameter(name = "registryId") @RequestParam(value = "registryId", required = false) String registryId) {
         IDataConnectionMinder connectionMinder = dataConnectionMinderManager.getMinder(credentialKey);
-        SchemaRegistry schemaRegistry = registryId != null ? connectionMinder.schemaRegistryById(registryId) : connectionMinder.schemaRegistryByCode(tableName);
+
+        SchemaRegistry schemaRegistry = StringUtils.isNotBlank(registryId)? connectionMinder.schemaRegistryById(registryId) : connectionMinder.schemaRegistryByCode(tableName);
         if (schemaRegistry != null) {
             return success(schemaRegistry.getSchemaFields());
         } else {

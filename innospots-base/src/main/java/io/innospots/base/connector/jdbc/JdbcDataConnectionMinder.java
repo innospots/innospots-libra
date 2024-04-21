@@ -133,6 +133,7 @@ public class JdbcDataConnectionMinder extends BaseDataConnectionMinder {
 
             if (resultSet.next()) {
                 schemaRegistry = buildSchemaRegistry(resultSet);
+                schemaRegistry.setSchemaFields(this.schemaRegistryFields(connection,tableName));
             }
             return schemaRegistry;
         } catch (SQLException e) {
