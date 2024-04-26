@@ -98,6 +98,7 @@ public interface SchemaRegistryConverter extends BaseBeanConverter<SchemaRegistr
         schemaRegistry.setRegistryType(SchemaRegistryType.DATASET);
         schemaRegistry.setRegistryId(dataset.getId());
         schemaRegistry.setName(dataset.getName());
+        schemaRegistry.setCode(dataset.getCode());
         schemaRegistry.setCredentialKey(dataset.getCredentialKey());
         schemaRegistry.setCategoryId(dataset.getCategoryId());
         schemaRegistry.addScript("script", dataset.getScript());
