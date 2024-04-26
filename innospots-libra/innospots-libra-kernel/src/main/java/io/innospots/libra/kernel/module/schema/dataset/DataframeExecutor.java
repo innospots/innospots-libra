@@ -28,17 +28,22 @@ import datart.provider.ScriptVariable;
 import datart.provider.StdSqlOperator;
 import io.innospots.base.connector.credential.model.ConnectionCredential;
 import io.innospots.base.connector.credential.reader.IConnectionCredentialReader;
+import io.innospots.base.connector.minder.IDataConnectionMinder;
 import io.innospots.base.connector.schema.model.SchemaColumn;
+import io.innospots.base.connector.schema.model.SchemaField;
+import io.innospots.base.connector.schema.model.SchemaRegistry;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.body.SqlDataPageBody;
 import io.innospots.base.data.dataset.Dataset;
 import io.innospots.base.data.dataset.DatasetExecuteParam;
 import io.innospots.base.data.dataset.Variable;
+import io.innospots.base.data.enums.DataOperation;
 import io.innospots.base.data.operator.DataOperatorManager;
 import io.innospots.base.data.operator.IDataOperator;
 import io.innospots.base.data.request.SimpleRequest;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.Pair;
+import io.innospots.base.model.field.FieldValueType;
 import io.innospots.data.provider.SqlScriptBuilderManager;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -46,7 +51,11 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.temporal.Temporal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Alfred
@@ -88,7 +97,7 @@ public class DataframeExecutor {
         IDataOperator dataOperator = dataOperatorManager.buildDataOperator(dataset.getCredentialKey());
         if (viewExecuteParam.getPageInfo().isCountTotal()) {
             String countSql = SqlScriptBuilderManager.buildCountSql(connectionCredential.getConnectorName(), viewExecuteParam);
-            SimpleRequest request = new SimpleRequest(dataset.getCredentialKey(),countSql);
+            SimpleRequest request = new SimpleRequest(dataset.getCredentialKey(),countSql,DataOperation.COUNT);
             DataBody<Map<String, Object>> body = dataOperator.execute(request);
             Long total = this.parseResultCount(body);
             viewExecuteParam.getPageInfo().setTotal(total);
@@ -97,9 +106,39 @@ public class DataframeExecutor {
 
         String sql = SqlScriptBuilderManager.buildSql(connectionCredential.getConnectorName(), viewExecuteParam);
         dataframe.setScript(sql);
-        SqlDataPageBody pageBody = (SqlDataPageBody<?>) dataOperator.executePage(new SimpleRequest(dataset.getCredentialKey(),sql));
-        this.parseResultData(dataframe, pageBody);
+        SqlDataPageBody pageBody = (SqlDataPageBody<?>) dataOperator.executePage(new SimpleRequest(dataset.getCredentialKey(),sql,DataOperation.LIST));
+        this.parseResultData(dataframe, pageBody,dataset.getCredentialKey());
         return dataframe;
+    }
+
+    private List<Column> findColumns(String credentialKey, String tableName,Set<String> columns){
+        IDataConnectionMinder dataConnectionMinder = dataOperatorManager.dataConnectionMinder(credentialKey);
+        SchemaRegistry schemaRegistry = dataConnectionMinder.schemaRegistryByCode(tableName);
+        List<Column> columnList = new ArrayList<>();
+        for (SchemaField schemaField : schemaRegistry.getSchemaFields()) {
+            if(columns.contains(schemaField.getCode())){
+                ValueType valueType = null;
+                if(schemaField.getValueType() == FieldValueType.STRING){
+                    valueType = ValueType.STRING;
+                }else if(schemaField.getValueType() == FieldValueType.NUMERIC ||
+                        schemaField.getValueType() == FieldValueType.LONG ||
+                        schemaField.getValueType() == FieldValueType.DOUBLE ||
+                        schemaField.getValueType() == FieldValueType.INTEGER ||
+                        schemaField.getValueType() == FieldValueType.CURRENCY ||
+                        schemaField.getValueType() == FieldValueType.DECIMAL
+                ){
+                    valueType = ValueType.NUMERIC;
+                }else if(schemaField.getValueType() == FieldValueType.DATE ||
+                        schemaField.getValueType() == FieldValueType.TIME ||
+                        schemaField.getValueType() == FieldValueType.TIMESTAMP ||
+                        schemaField.getValueType() == FieldValueType.DATE_TIME
+                ){
+                    valueType = ValueType.DATE;
+                }
+                columnList.add(Column.of(valueType,schemaField.getCode()));
+            }
+        }
+        return columnList;
     }
 
     public Dataframe datasetData(String credentialKey, int page, int size, DatasetExecuteParam datasetExecuteParam) {
@@ -121,7 +160,7 @@ public class DataframeExecutor {
 
         String countSql = SqlScriptBuilderManager.buildCountSql(connectionCredential.getConnectorName(), viewExecuteParam);
 
-        SimpleRequest request = new SimpleRequest(dataset.getCredentialKey(),countSql);
+        SimpleRequest request = new SimpleRequest(dataset.getCredentialKey(),countSql,DataOperation.COUNT);
         DataBody<Map<String, Object>> body = dataOperator.execute(request);
         Long total = this.parseResultCount(body);
 
@@ -130,9 +169,9 @@ public class DataframeExecutor {
         dataframe.setPageInfo(pageInfo);
 
         String sql = SqlScriptBuilderManager.buildSql(connectionCredential.getConnectorName(), viewExecuteParam);
-        SqlDataPageBody pageBody = (SqlDataPageBody<?>) dataOperator.executePage(new SimpleRequest(dataset.getCredentialKey(),sql));
+        SqlDataPageBody pageBody = (SqlDataPageBody<?>) dataOperator.executePage(new SimpleRequest(dataset.getCredentialKey(),sql,DataOperation.LIST));
         dataframe.setScript(sql);
-        this.parseResultData(dataframe, pageBody);
+        this.parseResultData(dataframe, pageBody,credentialKey);
         return dataframe;
     }
 
@@ -148,16 +187,40 @@ public class DataframeExecutor {
         return SqlScriptBuilderManager.supportedFunctions(connectionCredential.getAuthOption());
     }
 
-    private void parseResultData(Dataframe dataframe, SqlDataPageBody<Map<String,Object>> sqlDataPageBody) {
-        List<Pair<String, ValueType>> columns = this.convertColumnsValueType(sqlDataPageBody.getSchemaColumns());
-        List<Column> resultColumns = new ArrayList<>();
-
+    private void parseResultData(Dataframe dataframe, SqlDataPageBody<Map<String,Object>> sqlDataPageBody,String credentialKey) {
+//        List<Column> resultColumns = findColumns(credentialKey, sqlDataPageBody.getTableName(),sqlDataPageBody.getSchemaColumns().stream().map(SchemaColumn::getColumnName).collect(Collectors.toSet()));
+        //List<Pair<String, ValueType>> columns = this.convertColumnsValueType(sqlDataPageBody.getSchemaColumns());
+//        List<Column> resultColumns = new ArrayList<>();
+        /*
         for (Pair<String, ValueType> column : columns) {
             resultColumns.add(Column.of(column.getRight(), column.getLeft()));
         }
+         */
+      List<Column> resultColumns = new ArrayList<>();
+        List<List<Object>> data = new ArrayList<>();
+      Map<String,Object> one = null;
+      if(sqlDataPageBody.getList()!=null && sqlDataPageBody.getList().size()>0){
+          one = sqlDataPageBody.getList().get(0);
+      }
+
+        for (SchemaColumn schemaColumn : sqlDataPageBody.getSchemaColumns()) {
+            if(one!=null){
+                Object v = one.get(schemaColumn.getColumnName());
+                if(v instanceof Number){
+                    resultColumns.add(Column.of(ValueType.NUMERIC, schemaColumn.getColumnName()));
+                }else if(v instanceof Date || v instanceof Temporal){
+                    resultColumns.add(Column.of(ValueType.DATE, schemaColumn.getColumnName()));
+                }else if(v instanceof String){
+                    resultColumns.add(Column.of(ValueType.STRING, schemaColumn.getColumnName()));
+                }
+            }else{
+                resultColumns.add(Column.of(ValueType.STRING, schemaColumn.getColumnName()));
+            }
+
+        }
         dataframe.setColumns(resultColumns);
 
-        List<List<Object>> data = new ArrayList<>();
+
         for (Object item : sqlDataPageBody.getList()) {
             Map<String, Object> map = (Map<String, Object>) item;
             data.add(new ArrayList<>(map.values()));

@@ -32,8 +32,10 @@ import io.innospots.base.condition.Mode;
 import io.innospots.base.condition.Opt;
 import io.innospots.base.condition.statement.FactorStatementBuilder;
 import io.innospots.base.condition.statement.IFactorStatement;
+import io.innospots.base.connector.schema.model.SchemaColumn;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.body.PageBody;
+import io.innospots.base.data.body.SqlDataPageBody;
 import io.innospots.base.data.enums.DataOperation;
 import io.innospots.base.data.operator.IDataOperator;
 import io.innospots.base.data.request.BaseRequest;
@@ -549,10 +551,36 @@ public class JdbcDataOperator implements IDataOperator {
     @Override
     public <D> DataBody<D> execute(SimpleRequest simpleRequest) {
         DataOperation operation = Enums.getIfPresent(DataOperation.class, simpleRequest.getOperation()).orNull();
+        DataBody dataBody = new DataBody<>();
+        String body = simpleRequest.getBody();
+        if(body!=null){
+            Object entity = null;
+            try {
+                if(operation == DataOperation.COUNT){
+                    entity = db.queryOne(body);
+                }else if(operation == DataOperation.GET){
+                    entity = db.queryOne(body);
+                }else if(operation == DataOperation.LIST){
+                    entity = db.query(body);
+
+                }else if(operation == DataOperation.EXECUTE){
+                    entity = db.execute(body);
+                }
+                dataBody.setBody(entity);
+            }catch (Exception e){
+                log.error(e.getMessage(),e);
+                dataBody.setMessage(e.getMessage());
+            }
+            dataBody.end();
+        }else{
+            return execute((BaseRequest<?>) simpleRequest);
+        }
+        /*
         if(operation == DataOperation.EXECUTE){
             DataBody dataBody = new DataBody<>();
             try {
                 int count = db.execute(simpleRequest.getBody());
+
                 dataBody.setBody(count);
             } catch (SQLException e) {
                 log.error(e.getMessage(),e);
@@ -560,9 +588,40 @@ public class JdbcDataOperator implements IDataOperator {
             }
             dataBody.end();
             return dataBody;
-        }else{
-            return execute((BaseRequest<?>) simpleRequest);
+        } else{
+
         }
+
+         */
+        return dataBody;
+    }
+
+    @Override
+    public <D> PageBody<D> executePage(String scripts) {
+        SqlDataPageBody pageBody = new SqlDataPageBody<>();
+        try {
+            List<Entity> ll = db.query(scripts);
+
+            Set<String> fieldNames = null;
+            for (Entity entity : ll) {
+                pageBody.setTableName(entity.getTableName());
+                fieldNames = entity.getFieldNames();
+            }
+            List<SchemaColumn> schemaColumns = new ArrayList<>();
+            if(fieldNames!=null){
+                for (String fieldName : fieldNames) {
+                    SchemaColumn column = new SchemaColumn();
+                    column.setColumnName(fieldName);
+                    schemaColumns.add(column);
+                }
+            }
+            pageBody.setSchemaColumns(schemaColumns);
+            pageBody.setList(ll);
+        } catch (SQLException e) {
+            log.error(e.getMessage(),e);
+        }
+        pageBody.end();
+        return pageBody;
     }
 
     @Override

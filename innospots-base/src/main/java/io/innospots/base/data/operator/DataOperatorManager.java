@@ -61,6 +61,10 @@ public class DataOperatorManager {
         return null;
     }
 
+    public IDataConnectionMinder dataConnectionMinder(String credentialKey){
+        return dataConnectionMinderManager.getMinder(credentialKey);
+    }
+
     public IDataOperator buildDataOperator(String credentialKey) {
         JdbcDataConnectionMinder dataConnectionMinder = (JdbcDataConnectionMinder) dataConnectionMinderManager.getMinder(credentialKey);
         return dataConnectionMinder.buildOperator();

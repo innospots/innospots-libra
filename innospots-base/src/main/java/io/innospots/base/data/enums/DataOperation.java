@@ -27,6 +27,7 @@ public enum DataOperation {
      *
      */
     INSERT,
+    COUNT,
     DELETE,
     GET,
     LIST,

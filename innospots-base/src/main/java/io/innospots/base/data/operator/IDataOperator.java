@@ -147,37 +147,37 @@ public interface IDataOperator extends IOperator {
         DataOperation dataOperation = Enums.getIfPresent(DataOperation.class, itemRequest.getOperation().toUpperCase()).orNull();
         DataBody dataBody = new DataBody<>();
         Object reqData = itemRequest.getBody();
-        int count=0;
+        int count = 0;
         if (dataOperation != null) {
             switch (dataOperation) {
                 case UPSERT:
-                    if(reqData instanceof List){
+                    if (reqData instanceof List) {
                         count = this.upsertBatch(itemRequest.getTargetName(), itemRequest.getKeyColumn(), (List<Map<String, Object>>) reqData);
-                    }else if(reqData instanceof Map){
+                    } else if (reqData instanceof Map) {
                         count = this.upsert(itemRequest.getTargetName(), itemRequest.getKeyColumn(), (Map<String, Object>) reqData);
-                    }else if(reqData instanceof String){
+                    } else if (reqData instanceof String) {
                         this.execute(reqData.toString());
-                    }else {
+                    } else {
                         dataBody.setMessage("update data type error");
                     }
                     dataBody.setBody(count);
                     break;
                 case INSERT:
-                    if(reqData instanceof List){
+                    if (reqData instanceof List) {
                         count = this.insertBatch(itemRequest.getTargetName(), (List<Map<String, Object>>) reqData);
-                    }else if(reqData instanceof Map){
+                    } else if (reqData instanceof Map) {
                         count = this.insert(itemRequest.getTargetName(), (Map<String, Object>) reqData);
-                    }else if(reqData instanceof String){
+                    } else if (reqData instanceof String) {
                         this.execute(reqData.toString());
-                    }else{
+                    } else {
                         dataBody.setMessage("update data type error");
                     }
                     dataBody.setBody(count);
                     break;
                 case DELETE:
-                    if(itemRequest.getConditions()!=null){
+                    if (itemRequest.getConditions() != null) {
                         count = this.deleteBatch(itemRequest.getTargetName(), itemRequest.getConditions());
-                    }else{
+                    } else {
                         count = this.delete(itemRequest.getTargetName(), itemRequest.getKeyColumn(), reqData);
                     }
                     dataBody.setBody(count);
@@ -186,19 +186,19 @@ public interface IDataOperator extends IOperator {
                     if (reqData instanceof List) {
                         if (((List<?>) reqData).get(0) instanceof UpdateItem) {
                             this.updateForBatch(itemRequest.getTargetName(), (List<UpdateItem>) reqData);
-                        } else if(((List<?>) reqData).get(0) instanceof Map) {
+                        } else if (((List<?>) reqData).get(0) instanceof Map) {
                             this.updateForBatch(itemRequest.getTargetName(), itemRequest.getKeyColumn(), (List<Map<String, Object>>) reqData);
                         }
-                    }else if(reqData instanceof String){
+                    } else if (reqData instanceof String) {
                         execute(reqData.toString());
-                    }else {
+                    } else {
                         dataBody.setMessage("update data type error");
                     }
                     break;
                 case GET:
-                    if(itemRequest.getConditions()!=null){
+                    if (itemRequest.getConditions() != null) {
                         dataBody = this.selectForObject(itemRequest.getTargetName(), itemRequest.getConditions());
-                    }else{
+                    } else {
                         dataBody = this.selectForObject(itemRequest.getTargetName(), itemRequest.getKeyColumn(), reqData.toString());
                     }
                     break;
@@ -207,7 +207,7 @@ public interface IDataOperator extends IOperator {
                     dataBody.setBody(pageBody.getList());
                     break;
             }
-        }else{
+        } else {
             dataBody.setMessage("operation not support");
         }
 
@@ -220,16 +220,25 @@ public interface IDataOperator extends IOperator {
     default <D> PageBody<D> executePage(BaseRequest<?> itemRequest) {
         DataOperation dataOperation = Enums.getIfPresent(DataOperation.class, itemRequest.getOperation().toUpperCase()).orNull();
         PageBody pageBody = new PageBody<>();
-        if(dataOperation == DataOperation.LIST){
-            pageBody = this.selectForList(itemRequest.getTargetName(), itemRequest.getConditions(), itemRequest.getPage(), itemRequest.getSize());
-        }else{
+        if (dataOperation == DataOperation.LIST) {
+            if(itemRequest.getBody() instanceof String){
+                return executePage((String)itemRequest.getBody());
+            }else{
+                pageBody = this.selectForList(itemRequest.getTargetName(), itemRequest.getConditions(), itemRequest.getPage(), itemRequest.getSize());
+            }
+        } else {
             pageBody.setMessage("operation not support");
         }
         pageBody.end();
         return pageBody;
     }
 
-    default int execute(String scripts){
+    default <D> PageBody<D> executePage(String scripts) {
+        return null;
+    }
+
+    default int execute(String scripts) {
         return 0;
     }
+
 }

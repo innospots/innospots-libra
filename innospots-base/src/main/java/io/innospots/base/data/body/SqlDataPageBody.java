@@ -30,11 +30,21 @@ public class SqlDataPageBody<T> extends PageBody<T> {
 
     private List<SchemaColumn> schemaColumns;
 
+    private String tableName;
+
     public List<SchemaColumn> getSchemaColumns() {
         return this.schemaColumns;
     }
 
     public void setSchemaColumns(List<SchemaColumn> schemaColumns) {
         this.schemaColumns = schemaColumns;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
     }
 }

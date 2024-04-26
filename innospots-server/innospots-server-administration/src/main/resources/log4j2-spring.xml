@@ -92,6 +92,7 @@
         <Logger name="io.innospots.connector.schema.dao" level="info"/>
         <Logger name="io.innospots.workflow.runtime.flow.node" level="debug"/>
         <Logger name="io.innospots.workflow.runtime.scheduled" level="debug"/>
+        <Logger name="io.innospots.server.base.registry" level="info"/>
     </Loggers>
 
 </Configuration>
