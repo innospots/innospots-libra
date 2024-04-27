@@ -36,5 +36,6 @@ public enum FieldScope {
     HTTP_HEADER,
     HTTP_PARAM,
     HTTP_PATH,
-    HTTP_BODY
+    HTTP_BODY,
+    HTTP_RESP
 }

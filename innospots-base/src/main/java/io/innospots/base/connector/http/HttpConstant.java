@@ -26,6 +26,8 @@ public interface HttpConstant {
 
     String HTTP_API_URL = "url_address";
 
+    String WORKFLOW_API = "workflow_api";
+
     String HTTP_BODY_TEMPLATE = "body_template";
 
     String HTTP_PREV_SCRIPT = "prev_script";

@@ -53,4 +53,9 @@ public class SchemaField extends BaseField {
     private Boolean pkey = false;
 
     private String config;
+
+    /**
+     * default value
+     */
+    private String defaultValue;
 }
