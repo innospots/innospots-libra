@@ -61,4 +61,10 @@ public class SchemaCatalog extends BaseModelInfo {
     @Schema(title = "schema field list")
     protected List<SchemaField> schemaFields;
 
+    @Schema(title = "application primary key")
+    protected String appKey;
+
+    @Schema(title = "app schema registry scope, example: application, general etc.")
+    protected String scope;
+
 }

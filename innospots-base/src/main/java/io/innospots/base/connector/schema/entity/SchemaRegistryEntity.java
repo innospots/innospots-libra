@@ -36,7 +36,10 @@ import javax.persistence.*;
 @Getter
 @Entity
 @TableName(value = SchemaRegistryEntity.TABLE_NAME)
-@Table(name = SchemaRegistryEntity.TABLE_NAME, indexes = {@Index(name = "idx_credential_key", columnList = "credentialKey")})
+@Table(name = SchemaRegistryEntity.TABLE_NAME, indexes = {
+        @Index(name = "idx_credential_key", columnList = "credentialKey"),
+        @Index(name = "idx_app_key",columnList = "appKey")
+})
 public class SchemaRegistryEntity extends PBaseEntity {
 
     public static final String TABLE_NAME = "ds_schema_registry";
@@ -72,5 +75,10 @@ public class SchemaRegistryEntity extends PBaseEntity {
     @Column(columnDefinition = "TEXT")
     private String script;
 
+    @Column(length = 16)
+    private String appKey;
+
+    @Column(length = 16)
+    private String scope;
 
 }

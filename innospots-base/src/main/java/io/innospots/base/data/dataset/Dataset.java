@@ -77,4 +77,7 @@ public class Dataset extends BaseModelInfo {
     @Schema(title = "icon")
     private String icon;
 
+    @Schema(title = "application primary key")
+    private String appKey;
+
 }

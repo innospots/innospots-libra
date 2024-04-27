@@ -22,6 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,9 +37,6 @@ import java.util.Map;
 @Schema(title = "schema registry")
 public class SchemaRegistry extends SchemaCatalog {
 
-    public static final String QUEUE_CONFIG_MESSAGE_FORMAT = "message.format";
-    public static final String QUEUE_CONFIG_SCAN_STARTUP_MODE = "scan.startup.mode";
-
     @Schema(title = "schema registry primaryKey")
     protected String registryId;
 
@@ -51,6 +49,7 @@ public class SchemaRegistry extends SchemaCatalog {
 
     @Schema(title = "json body include scripts")
     protected Map<String, Object> script;
+
 
     public void addScript(String scriptKey, Object body) {
         if (script == null) {

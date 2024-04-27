@@ -51,6 +51,7 @@ public interface SchemaRegistryConverter extends BaseBeanConverter<SchemaRegistr
     default Dataset schemaRegistryToDataset(SchemaRegistry schemaRegistry) {
         Dataset dataset = new Dataset();
         dataset.setId(schemaRegistry.getRegistryId());
+        dataset.setAppKey(schemaRegistry.getAppKey());
         dataset.setName(schemaRegistry.getName());
         dataset.setCredentialKey(schemaRegistry.getCredentialKey());
         dataset.setCategoryId(schemaRegistry.getCategoryId());
@@ -99,6 +100,7 @@ public interface SchemaRegistryConverter extends BaseBeanConverter<SchemaRegistr
         schemaRegistry.setRegistryId(dataset.getId());
         schemaRegistry.setName(dataset.getName());
         schemaRegistry.setCode(dataset.getCode());
+        schemaRegistry.setAppKey(dataset.getAppKey());
         schemaRegistry.setCredentialKey(dataset.getCredentialKey());
         schemaRegistry.setCategoryId(dataset.getCategoryId());
         schemaRegistry.addScript("script", dataset.getScript());

@@ -137,6 +137,13 @@ public class SchemaRegistryOperator extends ServiceImpl<SchemaRegistryDao, Schem
         return schemaRegistry;
     }
 
+    public List<SchemaRegistry> listAppSchemaRegistries(String appKey) {
+        QueryWrapper<SchemaRegistryEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(SchemaRegistryEntity::getAppKey, appKey);
+        List<SchemaRegistryEntity> entities = super.list(queryWrapper);
+        return CollectionUtils.isEmpty(entities) ? Collections.emptyList() : SchemaRegistryConverter.INSTANCE.entitiesToModels(entities);
+    }
+
     public List<SchemaRegistry> listSchemaRegistries(String credentialKey) {
         QueryWrapper<SchemaRegistryEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(SchemaRegistryEntity::getCredentialKey, credentialKey);
