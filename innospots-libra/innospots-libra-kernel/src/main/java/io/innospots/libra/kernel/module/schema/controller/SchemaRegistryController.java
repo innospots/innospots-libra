@@ -22,7 +22,10 @@ import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.connector.minder.IDataConnectionMinder;
 import io.innospots.base.connector.schema.model.SchemaCatalog;
 import io.innospots.base.connector.schema.model.SchemaRegistry;
+import io.innospots.base.connector.schema.model.SchemaRegistryType;
 import io.innospots.base.connector.schema.operator.SchemaRegistryOperator;
+import io.innospots.base.data.body.PageBody;
+import io.innospots.base.data.dataset.Dataset;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
@@ -112,6 +115,27 @@ public class SchemaRegistryController extends BaseController {
         IDataConnectionMinder minder = dataConnectionMinderManager.getMinder(credentialKey);
         List<SchemaRegistry> schemaRegistryList = minder.schemaRegistries(includeField);
         return success(schemaRegistryList);
+    }
+
+    @GetMapping("page")
+    @Operation(summary = "page schemaRegistry")
+    public InnospotResponse<PageBody<SchemaRegistry>> pageDatasets(
+            @Parameter(name = "page") @RequestParam(value = "page") Integer page,
+            @Parameter(name = "size") @RequestParam(value = "size") Integer size,
+            @Parameter(name = "registryType",description = "VIEW,DATASET,ENTITY,API,TABLE,TABLE_VIEW,WORKFLOW,TOPIC") @RequestParam(value = "registryType", required = false) SchemaRegistryType registryType,
+            @Parameter(name = "credentialKey") @RequestParam(value = "credentialKey", required = false) String credentialKey,
+            @Parameter(name = "scope",description = "app,general") @RequestParam(value = "scope", required = false) String scope,
+            @Parameter(name = "appKey") @RequestParam(value = "appKey", required = false) String appKey,
+            @Parameter(name = "categoryId") @RequestParam(value = "categoryId", required = false, defaultValue = "0") Integer categoryId,
+            @Parameter(name = "name") @RequestParam(value = "name", required = false) String name,
+            @Parameter(name = "sort", description = "sort desc, default field createdTime") @RequestParam(value = "sort", required = false, defaultValue = "createdTime") String sort
+    ) {
+        PageBody<SchemaRegistry> pageBody = schemaRegistryOperator.pageSchemaRegistries(name,sort,
+                 appKey, scope,
+                 credentialKey,
+                 categoryId,  registryType,
+                 page, size);
+        return success(pageBody);
     }
 
     @GetMapping("catalog/list")

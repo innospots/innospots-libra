@@ -70,6 +70,23 @@ public class SchemaRegistryOperator extends ServiceImpl<SchemaRegistryDao, Schem
                 throw ResourceException.buildExistException(this.getClass(), "schema registry code has exist, credential:" + registryEntity.getCredentialKey());
             }
         }
+        if (registryEntity.getRegistryId() == null) {
+            do {
+                String registryId = StringConverter.randomKey(8);
+                registryEntity.setRegistryId(registryId);
+                QueryWrapper<SchemaRegistryEntity> qw = new QueryWrapper<>();
+                qw.lambda().eq(SchemaRegistryEntity::getRegistryId, registryId);
+                codeCount = this.count(qw);
+            } while (codeCount > 0);
+        } else {
+            QueryWrapper<SchemaRegistryEntity> qw = new QueryWrapper<>();
+            qw.lambda().eq(SchemaRegistryEntity::getRegistryId, registryEntity.getRegistryId());
+
+            if (this.count(qw) > 0) {
+                throw ResourceException.buildExistException(this.getClass(), "schema registry id has exist, credential:" + registryEntity.getRegistryId());
+            }
+        }
+
         this.save(registryEntity);
         return registryEntity;
     }
@@ -171,14 +188,26 @@ public class SchemaRegistryOperator extends ServiceImpl<SchemaRegistryDao, Schem
         return CollectionUtils.isEmpty(entities) ? Collections.emptyList() : SchemaRegistryConverter.INSTANCE.entitiesToModels(entities);
     }
 
-    public PageBody<SchemaRegistry> pageSchemaRegistries(String queryCode, String sortField, Integer categoryId, SchemaRegistryType registryType, Integer page, Integer size) {
+    public PageBody<SchemaRegistry> pageSchemaRegistries(String name, String sortField,
+                                                         String appKey,String scope,
+                                                         String credentialKey,
+                                                         Integer categoryId, SchemaRegistryType registryType,
+                                                         Integer page, Integer size) {
         QueryWrapper<SchemaRegistryEntity> queryWrapper = new QueryWrapper<>();
-        if (StringUtils.isNotEmpty(queryCode)) {
-            queryWrapper.lambda().like(SchemaRegistryEntity::getCode, queryCode)
-                    .or().like(SchemaRegistryEntity::getName, queryCode);
+        if (StringUtils.isNotEmpty(name)) {
+            queryWrapper.lambda().or().like(SchemaRegistryEntity::getName, name);
         }
         if (StringUtils.isNotEmpty(sortField)) {
             queryWrapper.orderByDesc(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, sortField));
+        }
+        if (StringUtils.isNotEmpty(appKey)) {
+            queryWrapper.lambda().eq(SchemaRegistryEntity::getAppKey, appKey);
+        }
+        if (StringUtils.isNotEmpty(scope)) {
+            queryWrapper.lambda().eq(SchemaRegistryEntity::getScope, scope);
+        }
+        if (StringUtils.isNotEmpty(credentialKey)) {
+            queryWrapper.lambda().eq(SchemaRegistryEntity::getCredentialKey, credentialKey);
         }
         if (categoryId != null) {
             queryWrapper.lambda().eq(SchemaRegistryEntity::getCategoryId, categoryId);

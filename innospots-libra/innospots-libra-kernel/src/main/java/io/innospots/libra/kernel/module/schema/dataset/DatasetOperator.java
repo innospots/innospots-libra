@@ -98,7 +98,7 @@ public class DatasetOperator implements IDatasetReader {
     }
 
     public PageBody<Dataset> pageDatasets(Integer categoryId, Integer page, Integer size, String queryCode, String sort) {
-        PageBody<SchemaRegistry> schemaRegistryPageBody = schemaRegistryOperator.pageSchemaRegistries(queryCode, sort, categoryId, SchemaRegistryType.DATASET, page, size);
+        PageBody<SchemaRegistry> schemaRegistryPageBody = schemaRegistryOperator.pageSchemaRegistries(queryCode, sort,null,null,null, categoryId, SchemaRegistryType.DATASET, page, size);
         List<Dataset> datasets = SchemaRegistryConverter.INSTANCE.schemaRegistriesToDatasets(schemaRegistryPageBody.getList());
         PageBody<Dataset> pageBody = new PageBody<>();
         this.fillDatasetIcon(datasets);
