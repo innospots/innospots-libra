@@ -126,7 +126,7 @@ public class SchemaRegistryController extends BaseController {
             @Parameter(name = "credentialKey") @RequestParam(value = "credentialKey", required = false) String credentialKey,
             @Parameter(name = "scope",description = "app,general") @RequestParam(value = "scope", required = false) String scope,
             @Parameter(name = "appKey") @RequestParam(value = "appKey", required = false) String appKey,
-            @Parameter(name = "categoryId") @RequestParam(value = "categoryId", required = false, defaultValue = "0") Integer categoryId,
+            @Parameter(name = "categoryId") @RequestParam(value = "categoryId", required = false) Integer categoryId,
             @Parameter(name = "name") @RequestParam(value = "name", required = false) String name,
             @Parameter(name = "sort", description = "sort desc, default field createdTime") @RequestParam(value = "sort", required = false, defaultValue = "createdTime") String sort
     ) {
