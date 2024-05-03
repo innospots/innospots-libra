@@ -24,14 +24,11 @@ import io.innospots.base.connector.credential.model.CredentialInfo;
 import io.innospots.base.connector.credential.model.CredentialType;
 import io.innospots.base.connector.credential.operator.CredentialInfoOperator;
 import io.innospots.base.connector.credential.operator.CredentialTypeOperator;
-import io.innospots.base.connector.schema.meta.ConnectionMinderSchemaLoader;
-import io.innospots.base.connector.schema.meta.CredentialAuthOption;
-import io.innospots.base.crypto.IEncryptor;
+import io.innospots.base.connector.meta.ConnectionMinderSchemaLoader;
+import io.innospots.base.connector.meta.CredentialAuthOption;
 import io.innospots.base.exception.AuthenticationException;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.base.json.JSONUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;

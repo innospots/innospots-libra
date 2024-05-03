@@ -32,11 +32,14 @@ import io.innospots.base.connector.credential.dao.CredentialTypeDao;
 import io.innospots.base.connector.credential.entity.CredentialInfoEntity;
 import io.innospots.base.connector.credential.entity.CredentialTypeEntity;
 import io.innospots.base.connector.credential.model.SimpleCredentialInfo;
+import io.innospots.base.connector.meta.ConnectionMinderSchema;
+import io.innospots.base.connector.meta.ConnectionMinderSchemaLoader;
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.connector.minder.IDataConnectionMinder;
 import io.innospots.base.crypto.IEncryptor;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.request.FormQuery;
+import io.innospots.base.enums.ConnectType;
 import io.innospots.base.exception.AuthenticationException;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.json.JSONUtils;
@@ -111,13 +114,13 @@ public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, Crede
 
     private void fillMinderCredentialInfo(CredentialInfo credentialInfo) {
         CredentialTypeEntity credentialTypeEntity = this.findCredentialType(credentialInfo.getCredentialTypeCode());
-        if(credentialTypeEntity == null){
+        if (credentialTypeEntity == null) {
             return;
         }
         credentialInfo = decryptFormValues(credentialInfo);
-        IDataConnectionMinder connectionMinder = DataConnectionMinderManager.newMinderInstance(credentialTypeEntity.getConnectorName(),credentialTypeEntity.getAuthOption());
-        if(connectionMinder == null){
-            log.warn("credential type not found, credentialKey:{}",credentialInfo.getCredentialKey());
+        IDataConnectionMinder connectionMinder = DataConnectionMinderManager.newMinderInstance(credentialTypeEntity.getConnectorName(), credentialTypeEntity.getAuthOption());
+        if (connectionMinder == null) {
+            log.warn("credential type not found, credentialKey:{}", credentialInfo.getCredentialKey());
             return;
         }
         connectionMinder.fillCredentialInfo(credentialInfo);
@@ -139,15 +142,28 @@ public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, Crede
      * @param credentialTypeCode
      * @return
      */
-    public List<SimpleCredentialInfo> listSimpleCredentials(String credentialTypeCode) {
+    public List<SimpleCredentialInfo> listSimpleCredentials(String credentialTypeCode, ConnectType connectType) {
         QueryWrapper<CredentialInfoEntity> query = new QueryWrapper<>();
         query.lambda().orderByDesc(CredentialInfoEntity::getCreatedTime);
-        if (credentialTypeCode != null) {
+        if (StringUtils.isNotEmpty(credentialTypeCode)) {
             query.lambda().eq(CredentialInfoEntity::getCredentialTypeCode, credentialTypeCode);
         }
+        Map<String, CredentialTypeEntity> types = null;
+        if (connectType != null) {
+            List<ConnectionMinderSchema> minderSchemas = ConnectionMinderSchemaLoader.connectionMinderSchemas(connectType);
+            QueryWrapper<CredentialTypeEntity> typeQueryWrapper = new QueryWrapper<>();
+            typeQueryWrapper.lambda().in(CredentialTypeEntity::getConnectorName, minderSchemas.stream().map(ConnectionMinderSchema::getName).collect(Collectors.toSet()));
+            List<CredentialTypeEntity> typeEntities = credentialTypeDao.selectList(typeQueryWrapper);
+            query.lambda().in(CredentialInfoEntity::getCredentialTypeCode, typeEntities.stream().map(CredentialTypeEntity::getTypeCode).collect(Collectors.toSet()));
+            types = typeEntities.stream().collect(Collectors.toMap(CredentialTypeEntity::getTypeCode, Function.identity()));
+        }
+
         List<CredentialInfoEntity> entities = this.list(query);
-        Set<String> typeCodes = entities.stream().map(CredentialInfoEntity::getCredentialTypeCode).collect(Collectors.toSet());
-        Map<String, CredentialTypeEntity> types = findCredentialTypes(typeCodes);
+        if (types == null && CollectionUtils.isNotEmpty(entities)) {
+            Set<String> typeCodes = entities.stream().map(CredentialInfoEntity::getCredentialTypeCode).collect(Collectors.toSet());
+            types = findCredentialTypes(typeCodes);
+        }
+
         List<SimpleCredentialInfo> simpleAppCredentials = new ArrayList<>();
 
         for (CredentialInfoEntity entity : entities) {
@@ -227,8 +243,8 @@ public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, Crede
     }
 
 
-    public CredentialInfo encryptFormValues(CredentialInfo credentialInfo){
-        if(MapUtils.isEmpty(credentialInfo.getFormValues())){
+    public CredentialInfo encryptFormValues(CredentialInfo credentialInfo) {
+        if (MapUtils.isEmpty(credentialInfo.getFormValues())) {
             return credentialInfo;
         }
         String jsonStr = JSONUtils.toJsonString(credentialInfo.getFormValues());
@@ -242,7 +258,7 @@ public class CredentialInfoOperator extends ServiceImpl<CredentialInfoDao, Crede
             return null;
         }
         try {
-            if(StringUtils.isBlank(credentialInfo.getEncryptFormValues())){
+            if (StringUtils.isBlank(credentialInfo.getEncryptFormValues())) {
                 return credentialInfo;
             }
 

@@ -35,7 +35,9 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = CredentialTypeEntity.TABLE_NAME)
+@Table(name = CredentialTypeEntity.TABLE_NAME, indexes = {
+        @Index(name = "connector_name", columnList = "connectorName")
+})
 @TableName(CredentialTypeEntity.TABLE_NAME)
 public class CredentialTypeEntity extends PBaseEntity {
 
@@ -56,7 +58,7 @@ public class CredentialTypeEntity extends PBaseEntity {
     @Column(length = 32)
     private String connectorName;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(length = 32)
     private String authOption;
 
     @Column(length = 2048)

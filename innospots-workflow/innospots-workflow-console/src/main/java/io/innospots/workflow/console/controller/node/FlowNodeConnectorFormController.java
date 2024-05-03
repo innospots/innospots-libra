@@ -18,7 +18,7 @@
 
 package io.innospots.workflow.console.controller.node;
 
-import io.innospots.base.connector.schema.meta.CredentialAuthOption;
+import io.innospots.base.connector.meta.CredentialAuthOption;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;

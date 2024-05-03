@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package io.innospots.base.connector.schema.meta;
+package io.innospots.base.connector.meta;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -98,7 +98,7 @@ public class SchemaRegistryController extends BaseController {
         return success(delete);
     }
 
-    @GetMapping("list-app/{appKey}")
+    @GetMapping("list/apps/{appKey}")
     @Operation(summary = "list app schema registries", description = "")
     public InnospotResponse<List<SchemaRegistry>> listAppSchemaRegistries(
             @Parameter(name = "appKey") @PathVariable String appKey
@@ -117,9 +117,21 @@ public class SchemaRegistryController extends BaseController {
         return success(schemaRegistryList);
     }
 
+    @GetMapping("page/apps/{appKey}")
+    @Operation(summary = "page schemaRegistry by appKey", description = "")
+    public InnospotResponse<PageBody<SchemaRegistry>> pageSchemaRegistryByType(
+            @Parameter(name = "appKey") @PathVariable String appKey,
+            @Parameter(name = "page") @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @Parameter(name = "size") @RequestParam(value = "size", defaultValue = "20") Integer size,
+            @Parameter(name = "includeField") @RequestParam(value = "includeField", required = false, defaultValue = "true") Boolean includeField
+    ) {
+        PageBody<SchemaRegistry> pageBody = schemaRegistryOperator.pageSchemaRegistryByTypeOrAppKey(appKey,page,size,List.of(SchemaRegistryType.API,SchemaRegistryType.WORKFLOW,SchemaRegistryType.DATASET),includeField);
+        return success(pageBody);
+    }
+
     @GetMapping("page")
     @Operation(summary = "page schemaRegistry")
-    public InnospotResponse<PageBody<SchemaRegistry>> pageDatasets(
+    public InnospotResponse<PageBody<SchemaRegistry>> pageSchemaRegistries(
             @Parameter(name = "page") @RequestParam(value = "page") Integer page,
             @Parameter(name = "size") @RequestParam(value = "size") Integer size,
             @Parameter(name = "registryType",description = "VIEW,DATASET,ENTITY,API,TABLE,TABLE_VIEW,WORKFLOW,TOPIC") @RequestParam(value = "registryType", required = false) SchemaRegistryType registryType,

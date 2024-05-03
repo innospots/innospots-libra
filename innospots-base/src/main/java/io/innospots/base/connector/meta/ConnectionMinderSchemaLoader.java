@@ -16,8 +16,9 @@
  * limitations under the License.
  */
 
-package io.innospots.base.connector.schema.meta;
+package io.innospots.base.connector.meta;
 
+import io.innospots.base.enums.ConnectType;
 import io.innospots.base.exception.LoadConfigurationException;
 import io.innospots.base.json.JSONUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Raydian
@@ -82,6 +84,10 @@ public class ConnectionMinderSchemaLoader {
 
     public static List<ConnectionMinderSchema> connectionMinderSchemas() {
         return connectionMinderSchemas;
+    }
+
+    public static List<ConnectionMinderSchema> connectionMinderSchemas(ConnectType connectType) {
+        return connectionMinderSchemas.stream().filter(f->f.getConnectType().equals(connectType)).collect(Collectors.toList());
     }
 
     public static ConnectionMinderSchema getConnectionMinderSchema(String connectorName) {

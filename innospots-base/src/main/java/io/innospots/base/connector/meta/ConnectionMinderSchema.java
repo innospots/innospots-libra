@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package io.innospots.base.connector.schema.meta;
+package io.innospots.base.connector.meta;
 
 import io.innospots.base.enums.ConnectType;
 import io.innospots.base.json.annotation.I18n;

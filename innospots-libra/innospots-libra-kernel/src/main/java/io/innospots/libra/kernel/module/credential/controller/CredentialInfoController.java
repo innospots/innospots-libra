@@ -26,6 +26,7 @@ import io.innospots.base.connector.credential.reader.IConnectionCredentialReader
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.request.FormQuery;
+import io.innospots.base.enums.ConnectType;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperationLog;
@@ -128,9 +129,12 @@ public class CredentialInfoController extends BaseController {
 
 
     @GetMapping("simple/list")
-    @Operation(summary = "list credentials by credential type")
-    public InnospotResponse<List<SimpleCredentialInfo>> listSimpleCredentials(@RequestParam(required = false) String credentialTypeCode) {
-        return success(credentialInfoOperator.listSimpleCredentials(credentialTypeCode));
+    @Operation(summary = "list credentials by credential type or connect type")
+    public InnospotResponse<List<SimpleCredentialInfo>> listSimpleCredentials(
+            @RequestParam(required = false) String credentialTypeCode,
+            @RequestParam(required = false) ConnectType connectType
+    ) {
+        return success(credentialInfoOperator.listSimpleCredentials(credentialTypeCode,connectType));
     }
 
 }

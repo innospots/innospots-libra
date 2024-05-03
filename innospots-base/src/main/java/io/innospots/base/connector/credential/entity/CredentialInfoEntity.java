@@ -35,7 +35,9 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = CredentialInfoEntity.TABLE_NAME)
+@Table(name = CredentialInfoEntity.TABLE_NAME,indexes = {
+        @Index(name = "credential_type", columnList = "credentialTypeCode")
+})
 @TableName(CredentialInfoEntity.TABLE_NAME)
 public class CredentialInfoEntity extends PBaseEntity {
 

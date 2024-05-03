@@ -168,6 +168,42 @@ public class SchemaRegistryOperator extends ServiceImpl<SchemaRegistryDao, Schem
         return CollectionUtils.isEmpty(entities) ? Collections.emptyList() : SchemaRegistryConverter.INSTANCE.entitiesToModels(entities);
     }
 
+    /**
+     * select schema registry by appkey or registryTypes
+     * @param appKey
+     * @param page
+     * @param size
+     * @param registryTypes
+     * @param includeField
+     * @return
+     */
+    public PageBody<SchemaRegistry> pageSchemaRegistryByTypeOrAppKey(
+            String appKey, Integer page, Integer size,
+            List<SchemaRegistryType> registryTypes,
+            boolean includeField) {
+        QueryWrapper<SchemaRegistryEntity> queryWrapper = new QueryWrapper<>();
+        if (CollectionUtils.isNotEmpty(registryTypes)) {
+            queryWrapper.lambda().in(SchemaRegistryEntity::getRegistryType, registryTypes);
+        }
+        if(StringUtils.isNotEmpty(appKey)){
+            queryWrapper.lambda().or().eq(SchemaRegistryEntity::getAppKey, appKey);
+        }
+        Page<SchemaRegistryEntity> entities = super.page(PageDTO.of(page, size), queryWrapper);
+        List<SchemaRegistry> schemaRegistries = SchemaRegistryConverter.INSTANCE.entitiesToModels(entities.getRecords());
+        if (includeField) {
+            for (SchemaRegistry schemaRegistry : schemaRegistries) {
+                schemaRegistry.setSchemaFields(this.schemaFieldOperator.listByRegistryId(schemaRegistry.getRegistryId()));
+            }
+        }
+        PageBody<SchemaRegistry> pageBody = new PageBody<>();
+        pageBody.setList(schemaRegistries);
+        pageBody.setPageSize(entities.getSize());
+        pageBody.setCurrent(entities.getCurrent());
+        pageBody.setTotal(entities.getTotal());
+
+        return pageBody;
+    }
+
     public List<SchemaRegistry> listSchemaRegistries(String queryCode, String sortField, Integer categoryId, SchemaRegistryType registryType) {
         QueryWrapper<SchemaRegistryEntity> queryWrapper = new QueryWrapper<>();
         if (StringUtils.isNotEmpty(queryCode)) {
@@ -189,7 +225,7 @@ public class SchemaRegistryOperator extends ServiceImpl<SchemaRegistryDao, Schem
     }
 
     public PageBody<SchemaRegistry> pageSchemaRegistries(String name, String sortField,
-                                                         String appKey,String scope,
+                                                         String appKey, String scope,
                                                          String credentialKey,
                                                          Integer categoryId, SchemaRegistryType registryType,
                                                          Integer page, Integer size) {
@@ -243,8 +279,8 @@ public class SchemaRegistryOperator extends ServiceImpl<SchemaRegistryDao, Schem
     public boolean checkNameExist(String name, String registryId) {
         QueryWrapper<SchemaRegistryEntity> qw = new QueryWrapper<SchemaRegistryEntity>();
         qw.lambda().eq(SchemaRegistryEntity::getName, name);
-        if(registryId!=null){
-            qw.lambda().ne(SchemaRegistryEntity::getRegistryId,registryId);
+        if (registryId != null) {
+            qw.lambda().ne(SchemaRegistryEntity::getRegistryId, registryId);
         }
         return super.count(qw) > 0;
 
