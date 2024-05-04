@@ -121,6 +121,7 @@ public class SchemaRegistryController extends BaseController {
     @Operation(summary = "page schemaRegistry by appKey", description = "")
     public InnospotResponse<PageBody<SchemaRegistry>> pageSchemaRegistryByType(
             @Parameter(name = "appKey") @PathVariable String appKey,
+            @Parameter(name = "name") @RequestParam(value = "name") String name,
             @Parameter(name = "page") @RequestParam(value = "page", defaultValue = "1") Integer page,
             @Parameter(name = "size") @RequestParam(value = "size", defaultValue = "20") Integer size,
             @Parameter(name = "includeField") @RequestParam(value = "includeField", required = false, defaultValue = "true") Boolean includeField

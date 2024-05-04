@@ -170,6 +170,7 @@ public class SchemaRegistryOperator extends ServiceImpl<SchemaRegistryDao, Schem
 
     /**
      * select schema registry by appkey or registryTypes
+     *
      * @param appKey
      * @param page
      * @param size
@@ -178,15 +179,21 @@ public class SchemaRegistryOperator extends ServiceImpl<SchemaRegistryDao, Schem
      * @return
      */
     public PageBody<SchemaRegistry> pageSchemaRegistryByTypeOrAppKey(
-            String appKey, Integer page, Integer size,
+            String appKey, String name, Integer page, Integer size,
             List<SchemaRegistryType> registryTypes,
             boolean includeField) {
         QueryWrapper<SchemaRegistryEntity> queryWrapper = new QueryWrapper<>();
-        if (CollectionUtils.isNotEmpty(registryTypes)) {
-            queryWrapper.lambda().in(SchemaRegistryEntity::getRegistryType, registryTypes);
-        }
-        if(StringUtils.isNotEmpty(appKey)){
-            queryWrapper.lambda().or().eq(SchemaRegistryEntity::getAppKey, appKey);
+        boolean hasName = StringUtils.isNotEmpty(name);
+        if (hasName) {
+            queryWrapper.lambda().like(SchemaRegistryEntity::getName, name)
+                    .and(CollectionUtils.isNotEmpty(registryTypes),
+                            qw -> qw.in(SchemaRegistryEntity::getRegistryType, registryTypes)
+                                    .or().eq(StringUtils.isNotEmpty(appKey), SchemaRegistryEntity::getAppKey, appKey)
+                    );
+        } else {
+            queryWrapper.lambda().in(
+                            CollectionUtils.isNotEmpty(registryTypes), SchemaRegistryEntity::getRegistryType, registryTypes)
+                    .or().eq(StringUtils.isNotEmpty(appKey), SchemaRegistryEntity::getAppKey, appKey);
         }
         Page<SchemaRegistryEntity> entities = super.page(PageDTO.of(page, size), queryWrapper);
         List<SchemaRegistry> schemaRegistries = SchemaRegistryConverter.INSTANCE.entitiesToModels(entities.getRecords());
