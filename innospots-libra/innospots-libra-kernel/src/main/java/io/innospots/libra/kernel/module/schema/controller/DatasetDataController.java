@@ -59,7 +59,7 @@ public class DatasetDataController {
     @PostMapping("execute")
     @Operation(summary = "dataset execute")
     public InnospotResponse<Dataframe> execute(
-            @Parameter(name = "credentialId") @RequestParam("credentialKey") String credentialKey,
+            @Parameter(name = "credentialKey") @RequestParam("credentialKey") String credentialKey,
             @Parameter(name = "page") @RequestParam("page") int page,
             @Parameter(name = "size") @RequestParam("size") int size,
             @Parameter(name = "datasetExecuteParam") @RequestBody DatasetExecuteParam datasetExecuteParam) {

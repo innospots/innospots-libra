@@ -126,7 +126,7 @@ public class SchemaRegistryController extends BaseController {
             @Parameter(name = "size") @RequestParam(value = "size", defaultValue = "20") Integer size,
             @Parameter(name = "includeField") @RequestParam(value = "includeField", required = false, defaultValue = "true") Boolean includeField
     ) {
-        PageBody<SchemaRegistry> pageBody = schemaRegistryOperator.pageSchemaRegistryByTypeOrAppKey(appKey,page,size,List.of(SchemaRegistryType.API,SchemaRegistryType.WORKFLOW,SchemaRegistryType.DATASET),includeField);
+        PageBody<SchemaRegistry> pageBody = schemaRegistryOperator.pageSchemaRegistryByTypeOrAppKey(appKey,name,page,size,List.of(SchemaRegistryType.API,SchemaRegistryType.WORKFLOW,SchemaRegistryType.DATASET),includeField);
         return success(pageBody);
     }
 
