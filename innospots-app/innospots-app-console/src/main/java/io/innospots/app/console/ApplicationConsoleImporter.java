@@ -57,8 +57,8 @@ public @interface ApplicationConsoleImporter {
     class ApplicationConsoleConfiguration {
 
         @Bean
-        public AppDefinitionCategoryOperator appDefinitionCategoryOperator() {
-            return new AppDefinitionCategoryOperator();
+        public AppDefinitionCategoryOperator appDefinitionCategoryOperator(AppDefinitionOperator appDefinitionOperator) {
+            return new AppDefinitionCategoryOperator(appDefinitionOperator);
         }
 
         @Bean
