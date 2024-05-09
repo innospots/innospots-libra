@@ -22,5 +22,12 @@ public class AppPage {
     @Schema(title = "form element components")
     private Map<String,Object> components;
 
+    @Schema(title = "page name")
+    private String pageName;
 
+    @Schema(title = "page url")
+    private String pageUrl;
+
+    @Schema(title = "set home page")
+    private String setHomePage;
 }
