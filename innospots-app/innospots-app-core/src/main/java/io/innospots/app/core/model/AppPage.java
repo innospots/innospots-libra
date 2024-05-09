@@ -28,6 +28,9 @@ public class AppPage {
     @Schema(title = "page url")
     private String pageUrl;
 
+    @Schema(title = "show navigation")
+    private Boolean showNavigation;
+
     @Schema(title = "set home page")
-    private String setHomePage;
+    private Boolean setHomePage;
 }
