@@ -255,6 +255,10 @@ public class JdbcDataConnectionMinder extends BaseDataConnectionMinder {
         return dataOperator;
     }
 
+    public DataSource dataSource(){
+        return dataSource;
+    }
+
 
     public DataSource buildDataSource(ConnectionCredential connectionCredential, String maxPoolSize) {
         Map<String, Object> configs = connectionCredential.getConfig();

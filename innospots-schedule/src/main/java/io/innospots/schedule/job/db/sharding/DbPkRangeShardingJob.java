@@ -16,9 +16,10 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.job;
+package io.innospots.schedule.job.db.sharding;
 
 import cn.hutool.core.text.StrFormatter;
+import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.connector.minder.IDataConnectionMinder;
 import io.innospots.base.connector.schema.model.SchemaField;
 import io.innospots.base.connector.schema.model.SchemaRegistry;
@@ -35,11 +36,11 @@ import java.util.Optional;
  * @date 2023/12/9
  */
 @Slf4j
-public class PkShardingJob extends DbShardingJob {
+public class DbPkRangeShardingJob extends DbRangeShardingJob {
 
 
-    @Override
-    protected String shardingColumn(IDataConnectionMinder minder) {
+    protected String shardingColumn() {
+        IDataConnectionMinder minder = DataConnectionMinderManager.getCredentialMinder(credentialKey);
         SchemaRegistry schemaRegistry = minder.schemaRegistryByCode(table);
         Optional<SchemaField> schemaField = schemaRegistry.getSchemaFields().stream().filter(SchemaField::getPkey).findFirst();
         if (schemaField.isPresent()) {
