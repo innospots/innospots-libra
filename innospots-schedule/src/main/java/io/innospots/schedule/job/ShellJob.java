@@ -10,7 +10,9 @@ import io.innospots.schedule.enums.JobType;
 public class ShellJob extends BaseJob {
 
 
+    public static String PARAM_SCRIPT_TYPE = "job.script.type";
 
+    public static String PARAM_SCRIPT_BODY = "job.script.body";
     @Override
     public void prepare() {
         super.prepare();

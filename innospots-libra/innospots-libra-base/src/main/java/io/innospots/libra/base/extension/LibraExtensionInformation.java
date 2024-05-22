@@ -24,6 +24,7 @@ import lombok.Setter;
 import org.apache.commons.collections4.MapUtils;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -66,6 +67,17 @@ public class LibraExtensionInformation {
     protected String lastPublishTime;
 
     protected String lastDescription;
+
+    protected String[] endpoints;
+
+    protected String[] indicators;
+
+    /**
+     * start: [start.sh, start.cmd]
+     * stop: [stop.sh,stop.cmd]
+     * restart: [restart.sh,restart.cmd]
+     */
+    protected Map<String, List<String>> commands;
 
     private ExtensionSource extensionSource;
 
