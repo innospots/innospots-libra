@@ -25,10 +25,12 @@ import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.operator.IDataOperator;
 import io.innospots.base.data.operator.jdbc.SelectClause;
 import io.innospots.base.model.Pair;
+import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.schedule.dispatch.ReadJobDispatcher;
 import io.innospots.schedule.enums.JobType;
 import io.innospots.schedule.job.BaseJob;
+import io.innospots.schedule.model.JobExecution;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -86,6 +88,10 @@ public abstract class AbstractShardingJob<T> extends BaseJob {
 
     protected ReadJobDispatcher readJobDispatcher;
 
+    public AbstractShardingJob(JobExecution jobExecution) {
+        super(jobExecution);
+    }
+
     @Override
     public JobType jobType() {
         return JobType.GROUP;
@@ -113,13 +119,14 @@ public abstract class AbstractShardingJob<T> extends BaseJob {
     }
 
     @Override
-    public void execute() {
+    public InnospotResponse<Map<String, Object>> execute() {
         if (shardingList.isEmpty()) {
             log.warn("job sharding is empty,jobKey:{}, executionId:{}, credentialKey:{}, table:{}", jobExecution.getJobKey(), jobExecution.getExecutionId(), credentialKey, table);
-            return;
+            return null;
         }
         dispatchSubShardingJob();
         log.info("job sharding count:{}, jobKey:{}, jobExecutionId:{}", shardingList.size(), jobExecution.getJobKey(), jobExecution.getExecutionId());
+        return null;
     }
 
     /**

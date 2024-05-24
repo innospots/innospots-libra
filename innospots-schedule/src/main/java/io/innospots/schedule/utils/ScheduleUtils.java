@@ -18,7 +18,7 @@
 
 package io.innospots.schedule.utils;
 
-import io.innospots.base.utils.ServiceActionHolder;
+import io.innospots.base.utils.ServiceRoleHolder;
 
 /**
  * @author Smars
@@ -33,15 +33,15 @@ public class ScheduleUtils {
 
 
     public static boolean isConsole() {
-        return SCHEDULE_SERVICE_CONSOLE.equals(ServiceActionHolder.getServiceType());
+        return SCHEDULE_SERVICE_CONSOLE.equals(ServiceRoleHolder.getServiceType());
     }
 
     public static boolean isExecutor() {
-        return SCHEDULE_SERVICE_EXECUTOR.equals(ServiceActionHolder.getServiceType());
+        return SCHEDULE_SERVICE_EXECUTOR.equals(ServiceRoleHolder.getServiceType());
     }
 
     public static boolean isExecutorLeader(){
-        return ServiceActionHolder.isServiceLeader() && isExecutor();
+        return ServiceRoleHolder.isServiceLeader() && isExecutor();
     }
 
 }

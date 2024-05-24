@@ -18,9 +18,11 @@
 
 package io.innospots.schedule.job;
 
+import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.schedule.dispatch.ReadJobDispatcher;
 import io.innospots.schedule.enums.JobType;
+import io.innospots.schedule.model.JobExecution;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
@@ -46,7 +48,9 @@ public class GroupJob extends BaseJob {
 
     private ReadJobDispatcher readJobDispatcher;
 
-
+    public GroupJob(JobExecution jobExecution) {
+        super(jobExecution);
+    }
 
 
     @Override
@@ -63,12 +67,15 @@ public class GroupJob extends BaseJob {
     }
 
     @Override
-    public void execute() {
+    public InnospotResponse<Map<String,Object>> execute() {
         Map prm = getParamMap(PARAM_EXECUTE_JOB_PARAMS);
-
+        InnospotResponse<Map<String,Object>> response = new InnospotResponse<>();
         for (int i = 0; i < groupJobKeys.size(); i++) {
             log.info("dispatch sub job:{} , parentExecutionId:{}", groupJobKeys.get(i), jobExecution.getExecutionId());
             readJobDispatcher.execute(jobExecution.getExecutionId(), i + 1, groupJobKeys.get(i), prm);
         }
+        response.setMessage("dispatch sub job count:"+groupJobKeys.size());
+
+        return response;
     }
 }

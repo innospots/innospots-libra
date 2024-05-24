@@ -25,6 +25,7 @@ import io.innospots.base.execution.ExecutionBase;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.schedule.enums.JobType;
+import io.innospots.schedule.utils.ScheduleUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -71,6 +72,24 @@ public class JobExecution extends ExecutionBase {
 
     protected String jobClass;
 
+    public boolean isTimeout() {
+        Integer timeout = timeoutSecond();
+        if (timeout == null) {
+            return false;
+        }
+        if (this.getJobType().isJobContainer()) {
+            return false;
+        }
+        if(this.startTime == null){
+            return false;
+        }
+        LocalDateTime timeoutTime = this.getStartTime().plusSeconds(timeout);
+        return LocalDateTime.now().isAfter(timeoutTime);
+    }
+
+    public Integer timeoutSecond(){
+        return this.getInteger(ScheduleUtils.PARAM_TIMEOUT_SECOND);
+    }
 
     public String info() {
         LocalDateTime ed = this.endTime != null ? this.endTime : this.selfEndTime;

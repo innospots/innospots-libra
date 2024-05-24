@@ -1,11 +1,9 @@
 package io.innospots.workflow.console.schedule;
 
-import io.innospots.base.utils.ServiceActionHolder;
+import io.innospots.base.utils.ServiceRoleHolder;
 import io.innospots.workflow.console.operator.execution.ExecutionManagerOperator;
 import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
-import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
 import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
-import io.innospots.workflow.core.execution.operator.IFlowExecutionOperator;
 import io.innospots.workflow.core.instance.dao.WorkflowInstanceCacheDao;
 import io.innospots.workflow.core.instance.entity.WorkflowInstanceEntity;
 import lombok.AllArgsConstructor;
@@ -38,14 +36,14 @@ public class ExecutionClearScheduler {
     @Scheduled(cron = "0 0 4 * * ?")
     private void workflowInstanceCacheCleanTask() {
         try {
-            if (ServiceActionHolder.isCleanTask()) {
+            if (ServiceRoleHolder.isCleanTask()) {
                 int seconds = innospotsWorkflowProperties.getWorkflowInstanceCacheKeepSeconds();
                 LocalDateTime updateTime = LocalDateTime.now();
                 updateTime.plusSeconds(seconds);
                 int count = workflowInstanceCacheDao.deleteByUpdateTime(updateTime);
                 log.info("workflowInstanceCacheCleanTask delete:{} updateTime:{} currTime:{}", count, updateTime, LocalDateTime.now());
             } else {
-                log.info("workflowInstanceCacheCleanTask not run!  curr service not leader {} {}", ServiceActionHolder.isCleanTask(), ServiceActionHolder.isServiceLeader());
+                log.info("workflowInstanceCacheCleanTask not run!  curr service not leader {} {}", ServiceRoleHolder.isCleanTask(), ServiceRoleHolder.isServiceLeader());
             }
         } catch (Exception e) {
             log.error("workflowInstanceCacheCleanTask error:{}", e.getMessage(), e);
@@ -57,7 +55,7 @@ public class ExecutionClearScheduler {
     @Scheduled(cron = "0 10 4 * * ?")
     private void workFlowExecutionLogCleanTask() {
         try {
-            if (ServiceActionHolder.isCleanTask()) {
+            if (ServiceRoleHolder.isCleanTask()) {
                 int days = innospotsWorkflowProperties.getWorkFlowExecutionKeepDays();
 
                 int keepAmount = innospotsWorkflowProperties.getWorkFlowExecutionKeepAmount();
@@ -78,7 +76,7 @@ public class ExecutionClearScheduler {
                     }
                 }
             } else {
-                log.info("workflowInstanceCacheCleanTask not run!  curr service not leader {} {}", ServiceActionHolder.isCleanTask(), ServiceActionHolder.isServiceLeader());
+                log.info("workflowInstanceCacheCleanTask not run!  curr service not leader {} {}", ServiceRoleHolder.isCleanTask(), ServiceRoleHolder.isServiceLeader());
             }
         } catch (Exception e) {
             log.error("workflowInstanceCacheCleanTask error:{}", e.getMessage(), e);

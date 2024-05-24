@@ -25,6 +25,7 @@ import io.innospots.base.connector.schema.model.SchemaField;
 import io.innospots.base.connector.schema.model.SchemaRegistry;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.schedule.exception.JobExecutionException;
+import io.innospots.schedule.model.JobExecution;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
@@ -39,6 +40,11 @@ import java.util.Optional;
 public class DbPkRangeShardingJob extends DbRangeShardingJob {
 
 
+    public DbPkRangeShardingJob(JobExecution jobExecution) {
+        super(jobExecution);
+    }
+
+    @Override
     protected String shardingColumn() {
         IDataConnectionMinder minder = DataConnectionMinderManager.getCredentialMinder(credentialKey);
         SchemaRegistry schemaRegistry = minder.schemaRegistryByCode(table);

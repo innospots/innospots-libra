@@ -18,6 +18,7 @@
 
 package io.innospots.schedule.job;
 
+import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.script.ExecutorManagerFactory;
 import io.innospots.base.script.IScriptExecutor;
@@ -26,6 +27,7 @@ import io.innospots.schedule.exception.JobExecutionException;
 import io.innospots.schedule.model.JobExecution;
 
 import javax.script.*;
+import java.util.Map;
 
 /**
  * @author Smars
@@ -37,13 +39,18 @@ public class ScriptJob extends BaseJob {
     public static String PARAM_SCRIPT_TYPE = "job.script.type";
     public static String PARAM_SCRIPT_BODY = "job.script.body";
 
+    public ScriptJob(JobExecution jobExecution) {
+        super(jobExecution);
+    }
+
     @Override
     public JobType jobType() {
         return JobType.EXECUTE;
     }
 
     @Override
-    public void execute() {
+    public InnospotResponse<Map<String, Object>> execute() {
+        InnospotResponse<Map<String, Object>> response = new InnospotResponse<>();
         String scriptType = validParamString(PARAM_SCRIPT_TYPE);
         String scriptBody = validParamString(PARAM_SCRIPT_BODY);
 
@@ -51,16 +58,17 @@ public class ScriptJob extends BaseJob {
         try {
             CompiledScript compiledScript = compilable.compile(scriptBody);
             Object val = compiledScript.eval(new SimpleBindings(jobExecution.getContext()));
-            if(val!=null){
+            if (val != null) {
                 String msg = val.toString();
-                if(msg.length()>32768){
-                    msg = msg.substring(0,32768);
+                if (msg.length() > 32768) {
+                    msg = msg.substring(0, 32768);
                 }
-                jobExecution.setMessage(msg);
+                response.setMessage(msg);
             }
         } catch (ScriptException e) {
             throw new RuntimeException(e);
         }
+        return response;
     }
 
     private Compilable compilable(String scriptType) {

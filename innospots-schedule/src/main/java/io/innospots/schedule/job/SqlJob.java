@@ -23,8 +23,12 @@ import io.innospots.base.connector.minder.IDataConnectionMinder;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.operator.IOperator;
 import io.innospots.base.data.request.SimpleRequest;
+import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.schedule.enums.JobType;
+import io.innospots.schedule.model.JobExecution;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Map;
 
 /**
  * @author Smars
@@ -41,6 +45,10 @@ public class SqlJob extends BaseJob {
     private String credentialKey;
     private IOperator operator;
 
+    public SqlJob(JobExecution jobExecution) {
+        super(jobExecution);
+    }
+
     @Override
     public JobType jobType() {
         return JobType.EXECUTE;
@@ -55,10 +63,12 @@ public class SqlJob extends BaseJob {
     }
 
     @Override
-    public void execute() {
+    public InnospotResponse<Map<String,Object>> execute() {
+        InnospotResponse<Map<String,Object>> response = new InnospotResponse<>();
         SimpleRequest simpleRequest = new SimpleRequest(credentialKey, sqlScript);
         log.info("execute sql job, credentialKey:{}, sqlScript:{}", credentialKey, sqlScript);
         DataBody dataBody = operator.execute(simpleRequest);
         log.info("sql execute job:{}", dataBody);
+        return response;
     }
 }

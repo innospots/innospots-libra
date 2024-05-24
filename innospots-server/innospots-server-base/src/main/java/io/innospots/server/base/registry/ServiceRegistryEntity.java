@@ -91,6 +91,15 @@ public class ServiceRegistryEntity {
     @Enumerated(EnumType.STRING)
     private ServiceRole serviceRole;
 
+    /**
+     * set service group name
+     */
+    @Column(length = 8)
+    private String groupName;
+
+    @Column(length = 32)
+    private String tags;
+
     @TableField(fill = FieldFill.INSERT)
     @Column
     private LocalDateTime createdTime;

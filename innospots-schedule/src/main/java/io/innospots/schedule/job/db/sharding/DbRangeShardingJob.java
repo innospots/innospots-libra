@@ -19,20 +19,15 @@
 package io.innospots.schedule.job.db.sharding;
 
 import io.innospots.base.condition.Opt;
-import io.innospots.base.connector.minder.DataConnectionMinderManager;
-import io.innospots.base.connector.minder.IDataConnectionMinder;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.operator.IDataOperator;
 import io.innospots.base.data.operator.jdbc.SelectClause;
 import io.innospots.base.model.Pair;
-import io.innospots.base.utils.BeanContextAwareUtils;
-import io.innospots.schedule.dispatch.ReadJobDispatcher;
 import io.innospots.schedule.enums.JobType;
-import io.innospots.schedule.job.BaseJob;
+import io.innospots.schedule.model.JobExecution;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +44,10 @@ public class DbRangeShardingJob extends AbstractShardingJob<Pair<String, String>
 
 
     protected IDataOperator dataOperator;
+
+    public DbRangeShardingJob(JobExecution jobExecution) {
+        super(jobExecution);
+    }
 
     @Override
     public JobType jobType() {

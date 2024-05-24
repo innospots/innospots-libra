@@ -146,6 +146,12 @@ public class JobExecutionEntity extends PBaseEntity {
     private String message;
 
     /**
+     * next input params
+     */
+    @Column(columnDefinition = "MEDIUMTEXT")
+    private String output;
+
+    /**
      * execution sequence
      */
     @Column

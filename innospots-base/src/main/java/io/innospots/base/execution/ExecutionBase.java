@@ -103,6 +103,8 @@ public class ExecutionBase {
      */
     protected Map<String,Object> context;
 
+    protected Map<String,Object> output;
+
 
     protected String createdBy;
 

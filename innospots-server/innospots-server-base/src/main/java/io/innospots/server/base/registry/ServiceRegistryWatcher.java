@@ -18,14 +18,12 @@
 
 package io.innospots.server.base.registry;
 
-import io.innospots.base.utils.ServiceActionHolder;
+import io.innospots.base.utils.ServiceRoleHolder;
 import io.innospots.server.base.registry.enums.ServiceRole;
 import io.innospots.base.watcher.AbstractWatcher;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -66,9 +64,9 @@ public class ServiceRegistryWatcher extends AbstractWatcher {
 
         checkAvailableService();
         if(ServiceRegistryHolder.getCurrentServer()!=null){
-            ServiceActionHolder.setServiceLeader(ServiceRegistryHolder.isLeader());
-            ServiceActionHolder.setServiceType(ServiceRegistryHolder.serverType());
-            ServiceActionHolder.setServerKey(ServiceRegistryHolder.getCurrentServer().getServerKey());
+            ServiceRoleHolder.setServiceLeader(ServiceRegistryHolder.isLeader());
+            ServiceRoleHolder.setServiceType(ServiceRegistryHolder.serverType());
+            ServiceRoleHolder.setServerKey(ServiceRegistryHolder.getCurrentServer().getServerKey());
         }
         return checkIntervalMills;
     }

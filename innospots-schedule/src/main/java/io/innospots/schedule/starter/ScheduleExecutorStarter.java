@@ -18,7 +18,7 @@
 
 package io.innospots.schedule.starter;
 
-import io.innospots.base.utils.ServiceActionHolder;
+import io.innospots.base.utils.ServiceRoleHolder;
 import io.innospots.schedule.config.InnospotsScheduleProperties;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -41,6 +41,6 @@ public class ScheduleExecutorStarter implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        ServiceActionHolder.setGroupKeys(scheduleProperties.getGroupKeys());
+        ServiceRoleHolder.setGroupKeys(scheduleProperties.getGroupKeys());
     }
 }

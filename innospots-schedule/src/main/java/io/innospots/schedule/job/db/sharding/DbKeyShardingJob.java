@@ -3,6 +3,7 @@ package io.innospots.schedule.job.db.sharding;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.operator.jdbc.SelectClause;
 import io.innospots.base.model.field.FieldValueType;
+import io.innospots.schedule.model.JobExecution;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -18,6 +19,10 @@ import java.util.Map;
 @Slf4j
 public class DbKeyShardingJob extends AbstractShardingJob<List<Object>> {
 
+
+    public DbKeyShardingJob(JobExecution jobExecution) {
+        super(jobExecution);
+    }
 
     @Override
     public void prepare() {
@@ -48,6 +53,7 @@ public class DbKeyShardingJob extends AbstractShardingJob<List<Object>> {
         return selectClause;
     }
 
+    @Override
     protected List<List<Object>> shardingList() {
         List<Object> shardingValues = shardingValues();
         List<List<Object>> ll = new ArrayList<>();

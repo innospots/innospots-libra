@@ -20,6 +20,8 @@ package io.innospots.schedule.launcher;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import io.innospots.base.enums.DataStatus;
+import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.base.utils.thread.ThreadTaskExecutor;
 import io.innospots.schedule.entity.ReadyJobEntity;
@@ -31,18 +33,17 @@ import io.innospots.schedule.job.JobBuilder;
 import io.innospots.schedule.model.JobExecution;
 import io.innospots.schedule.model.ScheduleJobInfo;
 import io.innospots.schedule.queue.IReadyJobQueue;
-import io.innospots.schedule.queue.ReadyJobDbQueue;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
-import java.util.stream.Collectors;
 
 /**
  * @author Smars
@@ -69,7 +70,7 @@ public class ReadyJobLauncher {
     public ReadyJobLauncher(
             ScheduleJobInfoExplorer scheduleJobInfoExplorer,
             JobExecutionExplorer jobExecutionExplorer,
-                            IReadyJobQueue readyJobDbQueue, ThreadTaskExecutor threadTaskExecutor) {
+            IReadyJobQueue readyJobDbQueue, ThreadTaskExecutor threadTaskExecutor) {
         this.scheduleJobInfoExplorer = scheduleJobInfoExplorer;
         this.jobExecutionExplorer = jobExecutionExplorer;
         this.readyJobDbQueue = readyJobDbQueue;
@@ -78,6 +79,7 @@ public class ReadyJobLauncher {
 
     /**
      * running job executions in the current executor
+     *
      * @return
      */
     public List<JobExecution> currentCacheExecutions() {
@@ -146,20 +148,29 @@ public class ReadyJobLauncher {
 
     protected void execute(JobExecution jobExecution) {
         ScheduleJobInfo scheduleJobInfo = scheduleJobInfoExplorer.getScheduleJobInfo(jobExecution.getJobKey());
-        if(scheduleJobInfo == null){
+        if (scheduleJobInfo == null) {
             jobExecution.setExecutionStatus(ExecutionStatus.FAILED);
             jobExecution.setMessage("schedule job is missing");
-            log.warn("schedule job is missing: {}",jobExecution.info());
+            log.warn("schedule job is missing: {}", jobExecution.info());
             return;
-        }else if(scheduleJobInfo.getJobStatus() != DataStatus.ONLINE){
+        } else if (scheduleJobInfo.getJobStatus() != DataStatus.ONLINE) {
             jobExecution.setExecutionStatus(ExecutionStatus.COMPLETE);
             jobExecution.setMessage("schedule job is offline");
-            log.warn("schedule job is offline: {}",jobExecution.info());
+            log.warn("schedule job is offline: {}", jobExecution.info());
         }
         BaseJob baseJob = JobBuilder.build(jobExecution);
         baseJob.prepare();
         jobExecutionExplorer.updateJobExecution(jobExecution);
-        baseJob.execute();
+        //execute job
+        InnospotResponse<Map<String, Object>> resp = baseJob.execute();
+        if (resp != null) {
+            jobExecution.setMessage(resp.getMessage());
+            jobExecution.setOutput(resp.getBody());
+            if (StringUtils.isNoneEmpty(resp.getCode()) &&
+                    !ResponseCode.SUCCESS.code().equals(resp.getCode())) {
+                jobExecution.setExecutionStatus(ExecutionStatus.FAILED);
+            }
+        }
         if (jobExecution.getJobType() == JobType.EXECUTE) {
             jobExecution.setEndTime(LocalDateTime.now());
             if (!jobExecution.getExecutionStatus().isDone()) {
@@ -172,7 +183,7 @@ public class ReadyJobLauncher {
     protected JobExecution start(ReadyJobEntity readyJobEntity) {
         JobExecution jobExecution = jobExecutionExplorer.createJobExecution(readyJobEntity);
         log.info("Start job, jobKey:{}, jobReadyKey: {}, jobExecutionId:{}, startTime:{}"
-                ,readyJobEntity.getJobKey(), readyJobEntity.getJobReadyKey(),
+                , readyJobEntity.getJobKey(), readyJobEntity.getJobReadyKey(),
                 jobExecution.getExecutionId(), jobExecution.getStartTime());
         readyJobDbQueue.ackRead(readyJobEntity.getJobReadyKey());
         executionCache.put(jobExecution.getExecutionId(), jobExecution);

@@ -19,7 +19,6 @@
 package io.innospots.schedule.quartz;
 
 import io.innospots.base.utils.BeanContextAwareUtils;
-import io.innospots.base.utils.ServiceActionHolder;
 import io.innospots.schedule.utils.ScheduleUtils;
 import io.innospots.schedule.queue.IReadyJobQueue;
 import lombok.extern.slf4j.Slf4j;

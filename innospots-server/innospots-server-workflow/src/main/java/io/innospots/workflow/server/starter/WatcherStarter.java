@@ -23,7 +23,7 @@ import io.innospots.base.watcher.WatcherSupervisor;
 import io.innospots.server.base.registry.ServiceRegistryHolder;
 import io.innospots.workflow.core.execution.operator.IScheduledNodeExecutionOperator;
 import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
-import io.innospots.base.utils.ServiceActionHolder;
+import io.innospots.base.utils.ServiceRoleHolder;
 import io.innospots.workflow.runtime.container.RunTimeContainerManager;
 import io.innospots.workflow.runtime.flow.FlowManager;
 import io.innospots.workflow.server.watcher.ScheduledNodeExecutionWatcher;
@@ -49,7 +49,7 @@ public class WatcherStarter implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        ServiceActionHolder.setServiceType(ServiceRegistryHolder.serverType());
+        ServiceRoleHolder.setServiceType(ServiceRegistryHolder.serverType());
         WatcherSupervisor watcherSupervisor = applicationContext.getBean(WatcherSupervisor.class);
         watcherSupervisor.registry(triggerRegistryWatcher());
         watcherSupervisor.registry(workflowStatusWatcher());

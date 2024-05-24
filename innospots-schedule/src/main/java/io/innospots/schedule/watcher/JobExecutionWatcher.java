@@ -68,11 +68,12 @@ public class JobExecutionWatcher extends AbstractWatcher {
         List<JobExecution> jobExecutions = jobExecutionExplorer.fetchExecutingJobs();
         if (CollectionUtils.isNotEmpty(jobExecutions)) {
             for (JobExecution jobExecution : jobExecutions) {
-                if (isTimeout(jobExecution)) {
+                if (jobExecution.isTimeout()) {
                     //update time out job execution
                     jobExecutionExplorer.updateTimeoutExecution(jobExecution);
                     continue;
                 }
+                //update container job execution status and the process of the execution
                 processExecutingParentJob(jobExecution);
             }//end for
         }//end if
@@ -185,17 +186,6 @@ public class JobExecutionWatcher extends AbstractWatcher {
         }
     }
 
-    private boolean isTimeout(JobExecution jobExecution) {
-        Integer timeout = jobExecution.getInteger(ScheduleUtils.PARAM_TIMEOUT_SECOND);
-        if (timeout == null) {
-            return false;
-        }
-        if (jobExecution.getJobType().isJobContainer()) {
-            return false;
-        }
-        LocalDateTime timeoutTime = jobExecution.getStartTime().plusSeconds(timeout);
-        return LocalDateTime.now().isAfter(timeoutTime);
-    }
 
     /**
      * check parent job execution and fire execution event

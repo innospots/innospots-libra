@@ -18,7 +18,7 @@
 
 package io.innospots.schedule.watcher;
 
-import io.innospots.base.utils.ServiceActionHolder;
+import io.innospots.base.utils.ServiceRoleHolder;
 import io.innospots.base.watcher.AbstractWatcher;
 import io.innospots.schedule.config.InnospotsScheduleProperties;
 import io.innospots.schedule.utils.ScheduleUtils;
@@ -27,7 +27,6 @@ import io.innospots.schedule.launcher.ReadyJobLauncher;
 import io.innospots.schedule.queue.IReadyJobQueue;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -62,7 +61,7 @@ public class ReadyQueueWatcher extends AbstractWatcher {
     @Override
     public int execute() {
 
-        if (!ServiceActionHolder.isRegistry()) {
+        if (!ServiceRoleHolder.isRegistry()) {
             return checkIntervalMills;
         }
         //fetch available worker size
@@ -89,7 +88,7 @@ public class ReadyQueueWatcher extends AbstractWatcher {
     }
 
     private List<String> getGroupKeys() {
-        return scheduleProperties.getGroupKeys() != null ? scheduleProperties.getGroupKeys() : ServiceActionHolder.getGroupKeys();
+        return scheduleProperties.getGroupKeys() != null ? scheduleProperties.getGroupKeys() : ServiceRoleHolder.getGroupKeys();
     }
 
     private int intervalTime() {

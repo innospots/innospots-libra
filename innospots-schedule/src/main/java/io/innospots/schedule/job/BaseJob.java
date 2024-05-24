@@ -18,7 +18,9 @@
 
 package io.innospots.schedule.job;
 
+import io.innospots.base.execution.IExecutor;
 import io.innospots.base.json.JSONUtils;
+import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.schedule.enums.JobType;
 import io.innospots.schedule.exception.JobExecutionException;
@@ -30,7 +32,6 @@ import lombok.Setter;
 import java.util.Map;
 
 /**
- *
  * @author Smars
  * @vesion 2.0
  * @date 2023/12/3
@@ -41,24 +42,44 @@ public abstract class BaseJob {
 
     protected JobExecution jobExecution;
 
-    public void prepare(){
+    public BaseJob(JobExecution jobExecution) {
+        this.jobExecution = jobExecution;
+    }
+
+    /**
+     * read job parameter and connect to resource, service
+     */
+    public void prepare() {
     }
 
     public abstract JobType jobType();
 
-    public abstract void execute();
+    /**
+     * execute the job
+     * @return
+     */
+    public abstract InnospotResponse<Map<String,Object>> execute();
 
-    protected String validParamString(String key){
+
+    protected Integer getParamInteger(String key) {
+        return this.jobExecution.getInteger(key);
+    }
+
+    protected String getParamString(String key) {
+        return this.jobExecution.getString(key);
+    }
+
+    protected String validParamString(String key) {
         String value = jobExecution.getString(key);
-        if(value==null){
+        if (value == null) {
             throw new JobExecutionException(this.getClass(), ResponseCode.PARAM_NULL, key + " is null");
         }
         return value;
     }
 
-    protected Integer validParamInteger(String key){
+    protected Integer validParamInteger(String key) {
         Integer value = jobExecution.getInteger(key);
-        if(value==null){
+        if (value == null) {
             throw new JobExecutionException(this.getClass(), ResponseCode.PARAM_NULL, key + " is null");
         }
         return value;

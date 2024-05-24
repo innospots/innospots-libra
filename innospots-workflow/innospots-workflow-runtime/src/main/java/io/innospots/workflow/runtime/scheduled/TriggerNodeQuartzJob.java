@@ -19,7 +19,7 @@
 package io.innospots.workflow.runtime.scheduled;
 
 import io.innospots.base.utils.BeanContextAwareUtils;
-import io.innospots.base.utils.ServiceActionHolder;
+import io.innospots.base.utils.ServiceRoleHolder;
 import io.innospots.workflow.runtime.container.ScheduleRuntimeContainer;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.Job;
@@ -38,7 +38,7 @@ public class TriggerNodeQuartzJob implements Job {
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        if (ServiceActionHolder.isServiceLeader()) {
+        if (ServiceRoleHolder.isServiceLeader()) {
             JobKey jobKey = jobExecutionContext.getJobDetail().getKey();
             log.info("schedule task is trigger：{}", jobKey.getName());
             ScheduleRuntimeContainer scheduleRuntimeContainer = BeanContextAwareUtils.getBean(ScheduleRuntimeContainer.class);

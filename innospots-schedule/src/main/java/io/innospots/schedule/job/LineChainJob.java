@@ -18,6 +18,7 @@
 
 package io.innospots.schedule.job;
 
+import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.schedule.dispatch.ReadJobDispatcher;
 import io.innospots.schedule.enums.JobType;
@@ -49,11 +50,16 @@ public class LineChainJob extends BaseJob {
 
     private ReadJobDispatcher readJobDispatcher;
 
+    public LineChainJob(JobExecution jobExecution) {
+        super(jobExecution);
+    }
+
     @Override
     public JobType jobType() {
         return JobType.LINE_CHAIN;
     }
 
+    @Override
     public void prepare() {
         chainJobKeys = getChainJobKeys(this.jobExecution);
         readJobDispatcher = BeanContextAwareUtils.getBean(ReadJobDispatcher.class);
@@ -61,10 +67,12 @@ public class LineChainJob extends BaseJob {
     }
 
     @Override
-    public void execute() {
+    public InnospotResponse<Map<String,Object>> execute() {
+        InnospotResponse<Map<String,Object>> resp = new InnospotResponse<>();
         Map prm = getParamMap(PARAM_EXECUTE_JOB_PARAMS);
         log.info("dispatch sub job:{} , parentExecutionId:{}", chainJobKeys.get(0), jobExecution.getExecutionId());
         readJobDispatcher.execute(jobExecution.getExecutionId(), 1, chainJobKeys.get(0), prm);
+        return resp;
     }
 
     public static List<String> getChainJobKeys(JobExecution jobExecution) {

@@ -106,6 +106,7 @@ public class ServiceRegistryHolder {
         serviceInfo.setServiceRole(ServiceRole.FOLLOWER);
         serviceInfo.setServiceStatus(ServiceStatus.ONLINE);
         serviceInfo.setUpdatedTime(LocalDateTime.now());
+        serviceInfo.setGroupName("defaultGroup");
         serviceInfo.setServiceName(BeanContextAwareUtils.applicationId());
         return serviceInfo;
     }

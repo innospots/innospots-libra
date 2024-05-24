@@ -18,6 +18,7 @@
 
 package io.innospots.base.script;
 
+import io.innospots.base.execution.IExecutor;
 import io.innospots.base.model.Pair;
 import io.innospots.base.script.jit.MethodBody;
 
@@ -29,7 +30,7 @@ import java.util.Map;
  * @author Raydian
  * @date 2020/12/31
  */
-public interface IScriptExecutor {
+public interface IScriptExecutor extends IExecutor<Map<String,Object>,Object> {
 
     void initialize(Method method);
 
@@ -38,8 +39,6 @@ public interface IScriptExecutor {
     String scriptType();
 
     String suffix();
-
-    Object execute(Map<String, Object> env);
 
     default Object execute(Object... args){
         Map<String, Object> env = new HashMap<>();

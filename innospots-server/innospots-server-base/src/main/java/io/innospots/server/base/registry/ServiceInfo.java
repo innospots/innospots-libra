@@ -60,6 +60,10 @@ public class ServiceInfo extends BaseModelInfo implements Comparable<ServiceInfo
     //server role
     protected ServiceRole serviceRole;
 
+    protected String groupName;
+
+    protected String tags;
+
 //    @ApiModelProperty("startup time
 //    @JsonFormat(
 //            pattern = "yyyy-MM-dd HH:mm:ss"

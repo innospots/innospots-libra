@@ -25,7 +25,7 @@ import java.util.List;
  * @vesion 2.0
  * @date 2023/11/10
  */
-public class ServiceActionHolder {
+public class ServiceRoleHolder {
 
     /**
      * current service type
@@ -56,7 +56,7 @@ public class ServiceActionHolder {
     }
 
     public static void setServerKey(String serverKey) {
-        ServiceActionHolder.serverKey = serverKey;
+        ServiceRoleHolder.serverKey = serverKey;
     }
 
     public static boolean isRegistry() {
@@ -68,7 +68,7 @@ public class ServiceActionHolder {
     }
 
     public static void setGroupKeys(List<String> groupKeys) {
-        ServiceActionHolder.groupKeys = groupKeys;
+        ServiceRoleHolder.groupKeys = groupKeys;
     }
 
     public static boolean isCleanTask() {
@@ -76,7 +76,7 @@ public class ServiceActionHolder {
     }
 
     public static void setCleanTask(boolean cleanTask) {
-        ServiceActionHolder.cleanTask = cleanTask;
+        ServiceRoleHolder.cleanTask = cleanTask;
     }
 
     public static String getServiceType() {
@@ -84,7 +84,7 @@ public class ServiceActionHolder {
     }
 
     public static void setServiceType(String serviceType) {
-        ServiceActionHolder.serviceType = serviceType;
+        ServiceRoleHolder.serviceType = serviceType;
     }
 
     public static boolean isServiceLeader() {
@@ -92,6 +92,6 @@ public class ServiceActionHolder {
     }
 
     public static void setServiceLeader(boolean serviceLeader) {
-        ServiceActionHolder.serviceLeader = serviceLeader;
+        ServiceRoleHolder.serviceLeader = serviceLeader;
     }
 }

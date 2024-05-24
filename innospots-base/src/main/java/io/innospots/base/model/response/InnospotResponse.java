@@ -18,6 +18,7 @@
 
 package io.innospots.base.model.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.body.PageBody;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -35,16 +36,24 @@ import java.util.Map;
 public class InnospotResponse<T> {
 
     @Schema(title = "response message")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String message;
+
     @Schema(title = "status code")
     private String code;
+
     @Schema(title = "response detail message")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String detail;
+
     @Schema(title = "body data")
     private T body;
 
-    public static <T> boolean hasData(InnospotResponse<T> innospotResponse) {
-        return innospotResponse != null && innospotResponse.hasData();
+    @Schema(title = "response timestamp")
+    private long ts;
+
+    public static <T> boolean hasData(InnospotResponse<T> innospotsResponse) {
+        return innospotsResponse != null && innospotsResponse.hasData();
     }
 
     public boolean hasData() {
@@ -65,6 +74,7 @@ public class InnospotResponse<T> {
     public void fillResponse(ResponseCode responseCode) {
         this.code = responseCode.getCode();
         this.detail = responseCode.getInfo();
+        this.ts = System.currentTimeMillis();
     }
 
     public static <T> InnospotResponse<T> success() {
@@ -72,7 +82,6 @@ public class InnospotResponse<T> {
     }
 
     public static <T> InnospotResponse<T> success(T body) {
-
         InnospotResponse<T> response = new InnospotResponse<>();
         response.setBody(body);
         response.fillResponse(ResponseCode.SUCCESS);
@@ -97,6 +106,7 @@ public class InnospotResponse<T> {
         innospotResponse.setDetail(detail);
         innospotResponse.setCode(code);
         innospotResponse.setMessage(message);
+        innospotResponse.ts = System.currentTimeMillis();
         return innospotResponse;
     }
 
@@ -149,5 +159,14 @@ public class InnospotResponse<T> {
 
     public void setBody(T body) {
         this.body = body;
+    }
+
+    public void fillBody(T body){
+        this.setBody(body);
+        this.fillResponse(ResponseCode.SUCCESS);
+    }
+
+    public long endTimestamp() {
+        return ts;
     }
 }

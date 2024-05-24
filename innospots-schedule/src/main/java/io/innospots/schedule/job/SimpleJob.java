@@ -18,12 +18,14 @@
 
 package io.innospots.schedule.job;
 
+import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.schedule.enums.JobType;
 import io.innospots.schedule.model.JobExecution;
 import io.innospots.schedule.model.ScheduleJobInfo;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -36,13 +38,18 @@ public class SimpleJob extends BaseJob {
 
     public static final String PARAM_SLEEP_TIME = "job.sleep.time";
 
+    public SimpleJob(JobExecution jobExecution) {
+        super(jobExecution);
+    }
+
     @Override
     public JobType jobType() {
         return JobType.EXECUTE;
     }
 
     @Override
-    public void execute() {
+    public InnospotResponse<Map<String,Object>> execute() {
+        InnospotResponse<Map<String,Object>> response = new InnospotResponse<>();
         Integer sleepTime = this.jobExecution.getInteger(PARAM_SLEEP_TIME);
         if(sleepTime == null){
             sleepTime = 100;
@@ -53,6 +60,8 @@ public class SimpleJob extends BaseJob {
         } catch (InterruptedException e) {
             log.error(e.getMessage()+", info:"+jobExecution.info(),e);
         }
+        response.setMessage("sleep time:"+ sleepTime);
+        return response;
     }
 
 }

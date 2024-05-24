@@ -18,11 +18,9 @@
 
 package io.innospots.schedule.queue;
 
-import cn.hutool.crypto.digest.MD5;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import io.innospots.base.enums.DataStatus;
 import io.innospots.base.utils.InnospotsIdGenerator;
-import io.innospots.base.utils.ServiceActionHolder;
+import io.innospots.base.utils.ServiceRoleHolder;
 import io.innospots.schedule.converter.ReadyJobConverter;
 import io.innospots.schedule.dao.ReadyJobDao;
 import io.innospots.schedule.entity.ReadyJobEntity;
@@ -81,12 +79,12 @@ public class ReadyJobDbQueue implements IReadyJobQueue {
                     log.error(e.getMessage());
                 }
             }
-            readyJobEntity.setServerKey(ServiceActionHolder.getServerKey());
+            readyJobEntity.setServerKey(ServiceRoleHolder.getServerKey());
             //Update ready job with optimistic locks
             int count = readyJobDao.updateAssignedJob(readyJobEntity);
         }
         //update msg status to read and serverKey
-        return readyJobDao.selectAssignJobs(ServiceActionHolder.getServerKey());
+        return readyJobDao.selectAssignJobs(ServiceRoleHolder.getServerKey());
     }
 
     @Override
