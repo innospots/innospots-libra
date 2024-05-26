@@ -90,7 +90,7 @@ public class NodeDefinitionService {
     public NodeInfo createNodeInfo(NodeInfo nodeInfo) {
         nodeInfo.setUsed(Boolean.FALSE);
         nodeInfo.setVendor(NodeVendor.official.name());
-        nodeInfo = flowNodeDefinitionOperator.createAppInfo(nodeInfo);
+        nodeInfo = flowNodeDefinitionOperator.createNodeInfo(nodeInfo);
         Integer nodeId = nodeInfo.getNodeId();
         if (nodeId != null) {
             List<Integer> nodeIds = new ArrayList<>();
@@ -100,7 +100,7 @@ public class NodeDefinitionService {
                 EventBusCenter.async(new NewAvatarEvent(nodeId, ImageType.APP, null, nodeInfo.getIcon()));
             }
             // update app icon
-            nodeInfo = flowNodeDefinitionOperator.updateAppInfo(nodeInfo);
+            nodeInfo = flowNodeDefinitionOperator.updateNodeInfo(nodeInfo);
         }
         return nodeInfo;
     }
@@ -118,7 +118,7 @@ public class NodeDefinitionService {
         if (StringUtils.isNotEmpty(icon) && icon.startsWith(IMAGE_PREFIX)) {
             EventBusCenter.async(new NewAvatarEvent(nodeId, ImageType.APP, null, icon));
         }
-        nodeInfo = flowNodeDefinitionOperator.updateAppInfo(nodeInfo);
+        nodeInfo = flowNodeDefinitionOperator.updateNodeInfo(nodeInfo);
         List<Integer> nodeIds = new ArrayList<>();
         nodeIds.add(nodeId);
         flowNodeGroupOperator.saveOrUpdateNodeGroupNode(1, nodeInfo.getNodeGroupId(), nodeIds);

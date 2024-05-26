@@ -62,10 +62,10 @@ public class NodeReferenceListener implements IEventListener<InstanceUpdateEvent
         // 更新节点应用定义表，所有的不再此应用节点集合中的应用节点，not in and used = true， used设置为false
         // 更新节点应用定义表，所有在此应用节点集合并且used为false的节点，used更新为true
         if (NODE_USE_ADD.equalsIgnoreCase(event.getNodeUseType())) {
-            nodeDefinitionOperator.updateAppUsed(nodeDefinitionIds, Boolean.TRUE);
+            nodeDefinitionOperator.updateNodeUsed(nodeDefinitionIds, Boolean.TRUE);
 
         } else if (NODE_USE_DELETE.equalsIgnoreCase(event.getNodeUseType())) {
-            nodeDefinitionOperator.updateAppUsed(nodeDefinitionIds, Boolean.FALSE);
+            nodeDefinitionOperator.updateNodeUsed(nodeDefinitionIds, Boolean.FALSE);
         }
         return workflowInstanceId;
     }
