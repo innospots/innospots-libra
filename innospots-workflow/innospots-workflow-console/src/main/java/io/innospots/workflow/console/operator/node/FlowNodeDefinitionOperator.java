@@ -67,6 +67,10 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
     private FlowNodeGroupDao flowNodeGroupDao;
     private FlowNodeGroupNodeDao flowNodeGroupNodeDao;
 
+    public FlowNodeDefinitionOperator(FlowNodeGroupDao flowNodeGroupDao, FlowNodeGroupNodeDao flowNodeGroupNodeDao) {
+        this.flowNodeGroupDao = flowNodeGroupDao;
+        this.flowNodeGroupNodeDao = flowNodeGroupNodeDao;
+    }
 
     /**
      * node definition page info
@@ -75,12 +79,18 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
      * @return Page<NodeDefinition>
      */
     public PageBody<NodeInfo> pageNodeDefinitions(NodeQueryRequest queryRequest) {
+        PageBody<NodeInfo> result = new PageBody<>();
+
         QueryWrapper<FlowNodeGroupNodeEntity> groupQueryWrapper = new QueryWrapper<>();
         groupQueryWrapper.lambda()
                 .eq(queryRequest.getNodeGroupId()!=null, FlowNodeGroupNodeEntity::getNodeGroupId,queryRequest.getNodeGroupId())
                 .eq(queryRequest.getFlowTplId()!=null, FlowNodeGroupNodeEntity::getFlowTplId,queryRequest.getFlowTplId());
 
         List<FlowNodeGroupNodeEntity> flowNodeGroupEntities = flowNodeGroupNodeDao.selectList(groupQueryWrapper);
+        if(CollectionUtils.isEmpty(flowNodeGroupEntities)){
+            result.setMessage("empty");
+            return result;
+        }
         Set<Integer> nodeIds = flowNodeGroupEntities.stream()
                 .map(FlowNodeGroupNodeEntity::getNodeId).collect(Collectors.toSet());
 
@@ -93,7 +103,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
 
         IPage<FlowNodeDefinitionEntity> queryPage = new Page<>(queryRequest.getPage(), queryRequest.getSize());
         queryPage = this.page(queryPage, queryWrapper);
-        PageBody<NodeInfo> result = new PageBody<>();
+
 
         if (queryPage != null) {
             result.setTotal(queryPage.getTotal());

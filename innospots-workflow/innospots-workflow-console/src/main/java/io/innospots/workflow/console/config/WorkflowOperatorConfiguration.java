@@ -21,12 +21,7 @@ package io.innospots.workflow.console.config;
 import io.innospots.workflow.console.operator.WorkflowCategoryOperator;
 import io.innospots.workflow.console.operator.execution.ExecutionManagerOperator;
 import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
-import io.innospots.workflow.core.instance.operator.WorkflowDraftOperator;
-import io.innospots.workflow.core.instance.dao.WorkflowInstanceDao;
-import io.innospots.workflow.core.instance.operator.EdgeOperator;
-import io.innospots.workflow.core.instance.operator.NodeInstanceOperator;
 import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
-import io.innospots.workflow.console.operator.node.FlowCategoryOperator;
 import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
 import io.innospots.workflow.console.operator.node.FlowNodeGroupOperator;
 import io.innospots.workflow.console.operator.node.FlowTemplateOperator;
@@ -38,8 +33,6 @@ import io.innospots.workflow.core.execution.dao.ScheduledNodeExecutionDao;
 import io.innospots.workflow.core.execution.operator.IFlowExecutionOperator;
 import io.innospots.workflow.core.execution.operator.INodeExecutionOperator;
 import io.innospots.workflow.core.execution.reader.NodeExecutionReader;
-import io.innospots.workflow.core.instance.dao.WorkflowInstanceCacheDao;
-import io.innospots.workflow.core.instance.dao.WorkflowRevisionDao;
 import io.innospots.workflow.core.node.definition.dao.FlowNodeDefinitionDao;
 import io.innospots.workflow.core.node.definition.dao.FlowNodeGroupDao;
 import io.innospots.workflow.core.node.definition.dao.FlowNodeGroupNodeDao;
@@ -72,15 +65,10 @@ public class WorkflowOperatorConfiguration {
         return new ExecutionManagerOperator(executionContextDao, flowExecutionDao, nodeExecutionDao, scheduledNodeExecutionDao);
     }
 
-    @Bean
-    public FlowCategoryOperator appCategoryOperator() {
-        return new FlowCategoryOperator();
-    }
-
 
     @Bean
-    public FlowNodeDefinitionOperator nodeDefinitionOperator() {
-        return new FlowNodeDefinitionOperator();
+    public FlowNodeDefinitionOperator nodeDefinitionOperator(FlowNodeGroupDao flowNodeGroupDao, FlowNodeGroupNodeDao flowNodeGroupNodeDao) {
+        return new FlowNodeDefinitionOperator(flowNodeGroupDao,flowNodeGroupNodeDao);
     }
 
     @Bean
