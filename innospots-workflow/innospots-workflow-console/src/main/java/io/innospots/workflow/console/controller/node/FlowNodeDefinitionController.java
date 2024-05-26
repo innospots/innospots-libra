@@ -33,6 +33,7 @@ import io.innospots.workflow.core.node.NodeInfo;
 import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -62,15 +63,28 @@ public class FlowNodeDefinitionController extends BaseController {
     }
 
     /**
-     * node definition page info
-     *
-     * @param queryRequest
+     * page node definition
      * @return Page<NodeDefinition>
      */
     @GetMapping("page")
-    @Operation(summary = "node definition page info")
+    @Operation(summary = "page node definition")
     public InnospotResponse<PageBody<NodeInfo>> pageNodeDefinitions(
-            NodeQueryRequest queryRequest) {
+            @RequestParam(required = false, name = "dataStatus") DataStatus dataStatus,
+            @RequestParam(name = "flowTplId") Integer flowTplId,
+            @RequestParam(required = false,name = "nodeGroupId") Integer nodeGroupId,
+            @RequestParam(required = false, name = "queryInput") String queryInput,
+            @RequestParam(required = false, name = "page", defaultValue = "1") int page,
+            @RequestParam(required = false, name = "size", defaultValue = "20") int size,
+            @RequestParam(required = false, name = "primitive") NodePrimitive primitive
+            ) {
+        NodeQueryRequest queryRequest = new NodeQueryRequest();
+        queryRequest.setPage(page);
+        queryRequest.setSize(size);
+        queryRequest.setQueryInput(queryInput);
+        queryRequest.setFlowTplId(flowTplId);
+        queryRequest.setDataStatus(dataStatus);
+        queryRequest.setNodeGroupId(nodeGroupId);
+        queryRequest.setPrimitive(primitive);
         return success(nodeDefinitionService.pageNodeInfos(queryRequest));
     }
 

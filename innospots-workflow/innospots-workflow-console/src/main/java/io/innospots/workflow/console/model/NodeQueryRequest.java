@@ -23,6 +23,7 @@ import io.innospots.workflow.core.enums.NodePrimitive;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Getter
 @Setter
