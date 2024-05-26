@@ -65,7 +65,6 @@ public class NodeInfo {
 
     @Schema(title = "node vendor")
     protected String vendor;
-//    protected NodeSource nodeSource;
 
     @Schema(title = "node class name")
     protected String nodeType;

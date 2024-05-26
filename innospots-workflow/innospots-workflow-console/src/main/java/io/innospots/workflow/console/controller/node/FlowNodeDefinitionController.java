@@ -18,8 +18,8 @@
 
 package io.innospots.workflow.console.controller.node;
 
-import io.innospots.base.enums.DataStatus;
 import io.innospots.base.data.body.PageBody;
+import io.innospots.base.enums.DataStatus;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
@@ -33,7 +33,6 @@ import io.innospots.workflow.core.node.NodeInfo;
 import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -64,6 +63,7 @@ public class FlowNodeDefinitionController extends BaseController {
 
     /**
      * page node definition
+     *
      * @return Page<NodeDefinition>
      */
     @GetMapping("page")
@@ -71,12 +71,12 @@ public class FlowNodeDefinitionController extends BaseController {
     public InnospotResponse<PageBody<NodeInfo>> pageNodeDefinitions(
             @RequestParam(required = false, name = "dataStatus") DataStatus dataStatus,
             @RequestParam(name = "flowTplId") Integer flowTplId,
-            @RequestParam(required = false,name = "nodeGroupId") Integer nodeGroupId,
+            @RequestParam(required = false, name = "nodeGroupId") Integer nodeGroupId,
             @RequestParam(required = false, name = "queryInput") String queryInput,
             @RequestParam(required = false, name = "page", defaultValue = "1") int page,
             @RequestParam(required = false, name = "size", defaultValue = "20") int size,
             @RequestParam(required = false, name = "primitive") NodePrimitive primitive
-            ) {
+    ) {
         NodeQueryRequest queryRequest = new NodeQueryRequest();
         queryRequest.setPage(page);
         queryRequest.setSize(size);
@@ -189,7 +189,7 @@ public class FlowNodeDefinitionController extends BaseController {
 
     @GetMapping("icons")
     @Operation(summary = "node icons")
-    public InnospotResponse<Map<String,String>> getNodeIcon() {
+    public InnospotResponse<Map<String, String>> getNodeIcon() {
         return success(nodeDefinitionService.getNodeIcons());
     }
 

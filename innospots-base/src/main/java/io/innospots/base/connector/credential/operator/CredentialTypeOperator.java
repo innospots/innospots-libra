@@ -54,12 +54,12 @@ public class CredentialTypeOperator extends ServiceImpl<CredentialTypeDao, Crede
 
 
     public CredentialType createCredentialType(CredentialType credentialType) {
-        if (this.checkExist(credentialType.getName(), null)) {
+        if (this.checkNameExist(credentialType.getName())) {
             throw ResourceException.buildExistException(this.getClass(), credentialType.getName());
         }
 
         if (StringUtils.isNotEmpty(credentialType.getTypeCode())) {
-            if (this.checkExist(null, credentialType.getTypeCode())) {
+            if (this.checkCodeExist(credentialType.getTypeCode())) {
                 throw ResourceException.buildExistException(this.getClass(), credentialType.getName());
             }
         } else {
@@ -146,16 +146,25 @@ public class CredentialTypeOperator extends ServiceImpl<CredentialTypeDao, Crede
         return pageBody;
     }
 
-    private boolean checkExist(String name, String code) {
+    private boolean checkNameExist(String name) {
         QueryWrapper<CredentialTypeEntity> qw = new QueryWrapper<>();
         if (name != null) {
             qw.lambda().eq(CredentialTypeEntity::getName, name);
         }
-        if (code != null) {
-//            qw.lambda().and(qw.lambda().ne(CredentialTypeEntity::getTypeCode, code));
-            qw.lambda().ne(CredentialTypeEntity::getTypeCode, code);
-        }
         return super.count(qw) > 0;
+    }
+
+    private boolean checkCodeExist(String code) {
+        QueryWrapper<CredentialTypeEntity> qw = new QueryWrapper<>();
+        qw.lambda().eq(CredentialTypeEntity::getTypeCode, code);
+        return super.count(qw) > 0;
+    }
+
+    private boolean checkExist(String name,String code) {
+        QueryWrapper<CredentialTypeEntity> qw = new QueryWrapper<>();
+        qw.lambda().eq(CredentialTypeEntity::getTypeCode, code)
+                .or().eq(CredentialTypeEntity::getName, name);
+        return super.count(qw) > 1;
     }
 
 }
