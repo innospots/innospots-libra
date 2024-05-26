@@ -21,17 +21,16 @@ package io.innospots.workflow.console.controller.node;
 import io.innospots.base.model.response.InnospotResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.menu.ModuleMenu;
-import io.innospots.workflow.core.node.definition.converter.FlowNodeGroupConverter;
 import io.innospots.workflow.console.operator.node.FlowTemplateOperator;
-import io.innospots.workflow.core.node.definition.model.FlowTemplate;
-import io.innospots.workflow.core.node.definition.model.NodeGroupBaseInfo;
+import io.innospots.workflow.core.node.definition.model.FlowTemplateBase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 
 /**
@@ -40,37 +39,22 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
  * @date 2023/2/3
  */
 @RestController
-@RequestMapping(PATH_ROOT_ADMIN + "flow-node/category")
+@RequestMapping(PATH_ROOT_ADMIN + "flow-node/template")
 @ModuleMenu(menuKey = "node-management")
-@Tag(name = "Node Category")
-public class FlowNodeCategoryController extends BaseController {
+@Tag(name = "Node Template")
+public class FlowTemplateController extends BaseController {
 
     private FlowTemplateOperator flowTemplateOperator;
 
-    public FlowNodeCategoryController(FlowTemplateOperator flowTemplateOperator) {
+
+    public FlowTemplateController(FlowTemplateOperator flowTemplateOperator) {
         this.flowTemplateOperator = flowTemplateOperator;
     }
 
     @GetMapping("list")
-    @Operation(summary = "flow node category list")
-    public InnospotResponse<List<NodeGroupBaseInfo>> listCategories(
-            @RequestParam(required = false, defaultValue = "true") boolean onlyConnector) {
-        return InnospotResponse.success(
-                FlowNodeGroupConverter.INSTANCE.modelToBaseList(
-                        flowTemplateOperator.getTemplate(1, true, onlyConnector,false)
-                                .getNodeGroups())
-        );
+    @Operation(summary = "flow node templates")
+    public InnospotResponse<List<FlowTemplateBase>> listTemplates() {
+        return InnospotResponse.success(flowTemplateOperator.listOnlineFlowTemplates());
     }
 
-    @GetMapping("def-list/{templateCode}")
-    @Operation(summary = "list flow node definition")
-    public InnospotResponse<FlowTemplate> getTemplate(@PathVariable String templateCode) {
-        return success(flowTemplateOperator.getTemplate(1, true));
-    }
-
-    @GetMapping("def-list")
-    @Operation(summary = "list flow node definition")
-    public InnospotResponse<FlowTemplate> getTemplate() {
-        return success(flowTemplateOperator.getTemplate(1, true));
-    }
 }

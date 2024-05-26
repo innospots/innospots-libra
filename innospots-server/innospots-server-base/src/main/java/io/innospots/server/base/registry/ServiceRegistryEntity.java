@@ -94,7 +94,7 @@ public class ServiceRegistryEntity {
     /**
      * set service group name
      */
-    @Column(length = 8)
+    @Column(length = 16)
     private String groupName;
 
     @Column(length = 32)

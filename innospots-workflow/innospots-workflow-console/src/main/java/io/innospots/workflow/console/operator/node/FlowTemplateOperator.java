@@ -25,13 +25,17 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.data.body.PageBody;
+import io.innospots.base.utils.StringConverter;
+import io.innospots.workflow.core.node.definition.converter.FlowNodeGroupConverter;
 import io.innospots.workflow.core.node.definition.converter.FlowTemplateConverter;
 import io.innospots.workflow.core.node.definition.dao.FlowTemplateDao;
 import io.innospots.workflow.core.node.definition.entity.FlowTemplateEntity;
 import io.innospots.workflow.core.node.definition.model.FlowTemplate;
 import io.innospots.workflow.core.node.definition.model.FlowTemplateBase;
 import io.innospots.workflow.core.node.definition.model.NodeGroup;
+import io.innospots.workflow.core.node.definition.model.NodeGroupBaseInfo;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.transaction.annotation.Transactional;
@@ -106,7 +110,7 @@ public class FlowTemplateOperator extends ServiceImpl<FlowTemplateDao, FlowTempl
 
     @Transactional(rollbackFor = Exception.class)
     public boolean deleteTemplate(Integer flowTplId) {
-        List<NodeGroup> nodeGroups = this.flowNodeGroupOperator.getGroupByFlowTplId(flowTplId, false);
+        List<NodeGroup> nodeGroups = this.flowNodeGroupOperator.getGroupByFlowTplId(flowTplId, false,false);
         if (CollectionUtils.isNotEmpty(nodeGroups)) {
             for (NodeGroup nodeGroup : nodeGroups) {
                 flowNodeGroupOperator.removeNodeGroup(nodeGroup.getNodeGroupId());
@@ -146,20 +150,6 @@ public class FlowTemplateOperator extends ServiceImpl<FlowTemplateDao, FlowTempl
     }
 
 
-    /**
-     * get flow template info
-     *
-     * @param flowTplId    template id
-     * @param includeNodes include nodes flag
-     * @return WorkflowTemplate
-     */
-    public FlowTemplate getTemplate(Integer flowTplId, boolean includeNodes, boolean onlyConnector, boolean excludeTrigger) {
-        FlowTemplateEntity entity = this.getById(flowTplId);
-        if (entity == null) {
-            throw ResourceException.buildAbandonException(this.getClass(), "flow template " + flowTplId + " not exits");
-        }
-        return getTemplate(entity, includeNodes, onlyConnector, excludeTrigger);
-    }
 
     /**
      * exclude trigger group app node
@@ -168,32 +158,32 @@ public class FlowTemplateOperator extends ServiceImpl<FlowTemplateDao, FlowTempl
      * @return
      */
     public FlowTemplate getTemplate(Integer flowTplId, boolean includeNodes) {
-        return getTemplate(flowTplId, includeNodes, false, true);
+        return getTemplate(this.getById(flowTplId), includeNodes, true);
     }
 
-    public FlowTemplate getTemplate(String templateCode, boolean includeNodes) {
+    /**
+     * get flow template info
+     *
+     * @param templateCode    template id
+     * @param includeNodes include nodes flag
+     * @return WorkflowTemplate
+     */
+    public FlowTemplate getTemplate(String templateCode, boolean includeNodes,boolean excludeTrigger) {
         QueryWrapper<FlowTemplateEntity> query = new QueryWrapper<>();
         query.lambda().eq(FlowTemplateEntity::getTplCode, templateCode);
         FlowTemplateEntity entity = this.getOne(query);
         if (entity == null) {
             throw ResourceException.buildAbandonException(this.getClass(), "flow template " + templateCode + " not exits");
         }
-        return getTemplate(entity, includeNodes, false, true);
+        return getTemplate(entity, includeNodes, excludeTrigger);
     }
 
-    private FlowTemplate getTemplate(FlowTemplateEntity entity, boolean includeNodes, boolean onlyConnector, boolean excludeTrigger) {
+    private FlowTemplate getTemplate(FlowTemplateEntity entity, boolean includeNodes, boolean excludeTrigger) {
         FlowTemplate appFlowTemplate = FlowTemplateConverter.INSTANCE.entityToModel(entity);
-        List<NodeGroup> nodeGroups = flowNodeGroupOperator.getGroupByFlowTplId(entity.getFlowTplId(), includeNodes);
-        if (includeNodes && onlyConnector) {
-            /*
-            nodeGroups.forEach(group -> group.setNodes(group.getNodes()
-                    .stream().filter(appNode -> StringUtils.isNotEmpty(appNode.getConnectorName()) && !"None".equals(appNode.getConnectorName()))
-                    .collect(Collectors.toList())));
+        List<NodeGroup> nodeGroups = flowNodeGroupOperator.getGroupByFlowTplId(entity.getFlowTplId(), includeNodes,excludeTrigger);
 
-             */
-        }
         nodeGroups.forEach(appNodeGroup -> {
-                    if("trigger".equals(appNodeGroup.getCode())){
+                    if(excludeTrigger && "trigger".equals(appNodeGroup.getCode())){
                         appNodeGroup.setHidden(true);
                     }
                 }

@@ -22,6 +22,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.innospots.base.entity.PBaseEntity;
+import io.innospots.base.enums.DataScope;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -59,7 +60,14 @@ public class FlowNodeGroupEntity extends PBaseEntity {
     @Column
     private Integer position;
 
-    public static FlowNodeGroupEntity constructor(Integer flowTplId, String name, String code, Integer position) {
+    /**
+     * system or user
+     */
+    @Column(length = 16)
+    @Enumerated(EnumType.STRING)
+    private DataScope scopes;
+
+    public static FlowNodeGroupEntity constructor(Integer flowTplId, String name, String code, Integer position,DataScope dataScope) {
         FlowNodeGroupEntity entity = new FlowNodeGroupEntity();
         entity.flowTplId = flowTplId;
         entity.name = name;
@@ -69,6 +77,7 @@ public class FlowNodeGroupEntity extends PBaseEntity {
         } else {
             entity.position = Integer.MAX_VALUE;
         }
+        entity.scopes = dataScope;
         return entity;
     }
 

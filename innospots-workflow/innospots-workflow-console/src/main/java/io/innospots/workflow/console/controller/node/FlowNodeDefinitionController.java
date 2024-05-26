@@ -84,9 +84,9 @@ public class FlowNodeDefinitionController extends BaseController {
     }
 
     /**
-     * create app info
+     * create node info
      *
-     * @param nodeInfo app info
+     * @param nodeInfo info
      * @return AppInfo
      */
     @OperationLog(operateType = OperateType.CREATE, primaryField = "code")
@@ -98,16 +98,16 @@ public class FlowNodeDefinitionController extends BaseController {
     }
 
     /**
-     * update app info
+     * update node info
      *
      * @param nodeInfo node info
      * @return AppInfo
      */
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "nodeId")
     @PutMapping("info")
-    @Operation(summary = "update app info")
+    @Operation(summary = "update node definition info")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.save}")
-    public InnospotResponse<NodeInfo> updateNodeInfo(@Parameter(name = "app node info", required = true) @Validated @RequestBody NodeInfo nodeInfo) {
+    public InnospotResponse<NodeInfo> updateNodeInfo(@Parameter(name = "node info", required = true) @Validated @RequestBody NodeInfo nodeInfo) {
         return success(nodeDefinitionService.updateNodeInfo(nodeInfo));
     }
 
@@ -119,7 +119,7 @@ public class FlowNodeDefinitionController extends BaseController {
      */
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "nodeId")
     @PutMapping
-    @Operation(summary = "update app node definition")
+    @Operation(summary = "update node definition")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.save}")
     public InnospotResponse<NodeDefinition> updateNodeDefinition(@Parameter(name = "node definition", required = true) @Validated @RequestBody NodeDefinition appNodeDefinition) {
         return success(nodeDefinitionService.updateNodeDefinition(appNodeDefinition));

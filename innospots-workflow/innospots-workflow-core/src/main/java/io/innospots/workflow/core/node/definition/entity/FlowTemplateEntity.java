@@ -63,9 +63,6 @@ public class FlowTemplateEntity extends BaseEntity {
     @Column(length = 128)
     private String description;
 
-    @Column(length = 32)
-    private String startNodeCode;
-
 
     public FlowTemplateEntity() {
         super();

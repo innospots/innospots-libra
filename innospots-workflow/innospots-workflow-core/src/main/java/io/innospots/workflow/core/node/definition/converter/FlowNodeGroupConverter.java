@@ -75,6 +75,7 @@ public interface FlowNodeGroupConverter extends BaseBeanConverter<NodeGroup, Flo
         baseInfo.setCode(nodeGroup.getCode());
         baseInfo.setName(nodeGroup.getName());
         baseInfo.setPosition(nodeGroup.getPosition());
+        baseInfo.setScopes(nodeGroup.getScopes());
         if (CollectionUtils.isNotEmpty(nodeGroup.getNodes())) {
             baseInfo.setNodes(FlowNodeDefinitionConverter.INSTANCE.modelToInfoList(nodeGroup.getNodes()));
         }

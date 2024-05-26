@@ -43,6 +43,7 @@ import io.innospots.workflow.core.instance.dao.WorkflowRevisionDao;
 import io.innospots.workflow.core.node.definition.dao.FlowNodeDefinitionDao;
 import io.innospots.workflow.core.node.definition.dao.FlowNodeGroupDao;
 import io.innospots.workflow.core.node.definition.dao.FlowNodeGroupNodeDao;
+import io.innospots.workflow.core.node.definition.dao.FlowTemplateDao;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -60,9 +61,9 @@ import org.springframework.context.annotation.Import;
 public class WorkflowOperatorConfiguration {
 
     @Bean
-    public FlowNodeGroupOperator nodeGroupOperator(FlowNodeGroupDao flowNodeGroupDao, FlowNodeGroupNodeDao flowNodeGroupNodeDao,
+    public FlowNodeGroupOperator nodeGroupOperator(FlowTemplateDao flowTemplateDao,FlowNodeGroupDao flowNodeGroupDao, FlowNodeGroupNodeDao flowNodeGroupNodeDao,
                                                    FlowNodeDefinitionDao flowNodeDefinitionDao) {
-        return new FlowNodeGroupOperator(flowNodeGroupDao, flowNodeGroupNodeDao, flowNodeDefinitionDao);
+        return new FlowNodeGroupOperator(flowTemplateDao,flowNodeGroupDao, flowNodeGroupNodeDao, flowNodeDefinitionDao);
     }
 
     @Bean

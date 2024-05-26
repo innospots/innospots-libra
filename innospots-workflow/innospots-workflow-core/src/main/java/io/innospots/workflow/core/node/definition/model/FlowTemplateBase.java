@@ -61,8 +61,4 @@ public class FlowTemplateBase {
     @Schema(title = "template description")
     protected String description;
 
-    @NotNull
-    @Max(value = 32)
-    @Schema(title = "the start trigger node code in the workflow")
-    private String startNodeCode;
 }

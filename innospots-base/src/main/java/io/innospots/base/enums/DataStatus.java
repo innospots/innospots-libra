@@ -25,7 +25,7 @@ package io.innospots.base.enums;
 public enum DataStatus {
 
     /**
-     * 数据状态 使用  ONLINE OR OFFLINE
+     * data status
      */
     ONLINE("online"),
     DRAFT("draft"),

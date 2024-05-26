@@ -33,9 +33,13 @@ import io.innospots.libra.base.events.AvatarRemoveEvent;
 import io.innospots.workflow.core.node.NodeInfo;
 import io.innospots.workflow.core.node.definition.converter.FlowNodeDefinitionConverter;
 import io.innospots.workflow.core.node.definition.dao.FlowNodeDefinitionDao;
+import io.innospots.workflow.core.node.definition.dao.FlowNodeGroupDao;
+import io.innospots.workflow.core.node.definition.dao.FlowNodeGroupNodeDao;
 import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
 import io.innospots.workflow.console.model.NodeQueryRequest;
 import io.innospots.workflow.core.enums.NodePrimitive;
+import io.innospots.workflow.core.node.definition.entity.FlowNodeGroupEntity;
+import io.innospots.workflow.core.node.definition.entity.FlowNodeGroupNodeEntity;
 import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -47,6 +51,8 @@ import org.springframework.util.CollectionUtils;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Raydian
@@ -58,30 +64,37 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
     public static final String IMAGE_PREFIX = "data:image";
     public static final String CACHE_NAME = "CACHE_NODE_DEFINITION";
 
+    private FlowNodeGroupDao flowNodeGroupDao;
+    private FlowNodeGroupNodeDao flowNodeGroupNodeDao;
+
+
     /**
      * node definition page info
      *
      * @param queryRequest
      * @return Page<NodeDefinition>
      */
-    public PageBody<NodeInfo> pageAppDefinitions(NodeQueryRequest queryRequest) {
-        QueryWrapper<FlowNodeDefinitionEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("t.FLOW_TPL_ID", 1);
-        if (queryRequest.getDataStatus() != null) {
-            queryWrapper.eq(queryRequest.getDataStatus() != null, "s.STATUS", queryRequest.getDataStatus());
-        }
-        if (StringUtils.isNotBlank(queryRequest.getQueryInput())) {
-            queryWrapper.like("s.NAME", "%" + queryRequest.getQueryInput() + "%");
-        }
-        if (queryRequest.getCategoryId() != null && queryRequest.getCategoryId() > 1) {
-            queryWrapper.eq("t.NODE_GROUP_ID", queryRequest.getCategoryId());
-        }
+    public PageBody<NodeInfo> pageNodeDefinitions(NodeQueryRequest queryRequest) {
+        QueryWrapper<FlowNodeGroupNodeEntity> groupQueryWrapper = new QueryWrapper<>();
+        groupQueryWrapper.lambda()
+                .eq(queryRequest.getNodeGroupId()!=null, FlowNodeGroupNodeEntity::getNodeGroupId,queryRequest.getNodeGroupId())
+                .eq(queryRequest.getFlowTplId()!=null, FlowNodeGroupNodeEntity::getFlowTplId,queryRequest.getFlowTplId());
 
-        queryWrapper.orderBy(true, true, "UPDATED_TIME");
+        List<FlowNodeGroupNodeEntity> flowNodeGroupEntities = flowNodeGroupNodeDao.selectList(groupQueryWrapper);
+        Set<Integer> nodeIds = flowNodeGroupEntities.stream()
+                .map(FlowNodeGroupNodeEntity::getNodeId).collect(Collectors.toSet());
+
+        QueryWrapper<FlowNodeDefinitionEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().in(FlowNodeDefinitionEntity::getNodeId,nodeIds)
+                .eq(queryRequest.getDataStatus()!=null,FlowNodeDefinitionEntity::getStatus,queryRequest.getDataStatus())
+                .like(StringUtils.isNotBlank(queryRequest.getQueryInput()), FlowNodeDefinitionEntity::getName, queryRequest.getQueryInput())
+                        .orderByDesc(FlowNodeDefinitionEntity::getUpdatedTime);
+
 
         IPage<FlowNodeDefinitionEntity> queryPage = new Page<>(queryRequest.getPage(), queryRequest.getSize());
-        queryPage = this.baseMapper.selectNodePage(queryPage, queryWrapper);
+        queryPage = this.page(queryPage, queryWrapper);
         PageBody<NodeInfo> result = new PageBody<>();
+
         if (queryPage != null) {
             result.setTotal(queryPage.getTotal());
             result.setTotalPage(queryPage.getPages());
@@ -132,7 +145,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
      * @return AppInfo
      */
     @Transactional(rollbackFor = Exception.class)
-    public NodeInfo createAppInfo(NodeInfo nodeInfo) {
+    public NodeInfo createNodeInfo(NodeInfo nodeInfo) {
         this.checkDifferentName(nodeInfo);
         this.checkDifferentCode(nodeInfo);
         FlowNodeDefinitionEntity entity = FlowNodeDefinitionConverter.INSTANCE.infoToEntity(nodeInfo);
@@ -153,7 +166,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
      */
     @Transactional(rollbackFor = Exception.class)
     @CacheEvict(cacheNames = CACHE_NAME, key = "#nodeInfo.nodeId")
-    public NodeInfo updateAppInfo(NodeInfo nodeInfo) {
+    public NodeInfo updateNodeInfo(NodeInfo nodeInfo) {
         this.checkDifferentName(nodeInfo);
         this.checkDifferentCode(nodeInfo);
         FlowNodeDefinitionEntity entity = this.getById(nodeInfo.getNodeId());
@@ -194,7 +207,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
         return FlowNodeDefinitionConverter.INSTANCE.entityToModel(entity);
     }
 
-    public Boolean updateAppUsed(List<Integer> nodeIds, Boolean used) {
+    public Boolean updateNodeUsed(List<Integer> nodeIds, Boolean used) {
         UpdateWrapper<FlowNodeDefinitionEntity> updateWrapper = new UpdateWrapper<>();
         updateWrapper.lambda().in(FlowNodeDefinitionEntity::getNodeId, nodeIds)
                 .set(FlowNodeDefinitionEntity::getUsed, used);

@@ -69,7 +69,7 @@ public class NodeDefinitionService {
     }
 
     public PageBody<NodeInfo> pageNodeInfos(NodeQueryRequest request) {
-        PageBody<NodeInfo> body = flowNodeDefinitionOperator.pageAppDefinitions(request);
+        PageBody<NodeInfo> body = flowNodeDefinitionOperator.pageNodeDefinitions(request);
         List<NodeInfo> nodeInfos = body.getList();
         if (!CollectionUtils.isEmpty(nodeInfos)) {
             List<Integer> nodeIds = nodeInfos.stream().map(NodeInfo::getNodeId).collect(Collectors.toList());

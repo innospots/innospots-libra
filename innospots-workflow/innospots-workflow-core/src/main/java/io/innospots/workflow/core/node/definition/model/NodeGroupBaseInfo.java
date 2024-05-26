@@ -18,6 +18,7 @@
 
 package io.innospots.workflow.core.node.definition.model;
 
+import io.innospots.base.enums.DataScope;
 import io.innospots.workflow.core.node.NodeInfo;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,5 +37,6 @@ public class NodeGroupBaseInfo {
     private String name;
     private String code;
     private Integer position;
+    private DataScope scopes;
     private List<NodeInfo> nodes;
 }

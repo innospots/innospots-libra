@@ -18,6 +18,7 @@
 
 package io.innospots.workflow.core.node.definition.model;
 
+import io.innospots.base.enums.DataScope;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -35,7 +36,7 @@ public class NodeGroup {
     private String name;
     private String code;
     private Integer position;
-
+    private DataScope scopes;
     private boolean hidden;
 
     private List<NodeDefinition> nodes;

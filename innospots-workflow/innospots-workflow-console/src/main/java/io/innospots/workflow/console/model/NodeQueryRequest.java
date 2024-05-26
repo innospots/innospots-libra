@@ -31,7 +31,9 @@ public class NodeQueryRequest {
 
     private DataStatus dataStatus;
 
-    protected Integer categoryId;
+    private Integer flowTplId = 1;
+
+    protected Integer nodeGroupId;
 
     @Schema(title = "query input something")
     protected String queryInput;
