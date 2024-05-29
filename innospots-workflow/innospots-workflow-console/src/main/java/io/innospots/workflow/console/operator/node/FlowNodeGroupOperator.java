@@ -194,41 +194,44 @@ public class FlowNodeGroupOperator {
     /**
      * save or modify NodeGroup and Node relation
      *
-     * @param flowTplId
      * @param nodeGroupId
      * @param nodeIds     node ids type is list for example:[1,3,2]
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    public Boolean saveOrUpdateNodeGroupNode(Integer flowTplId, Integer nodeGroupId, List<Integer> nodeIds) {
-        List<FlowNodeGroupNodeEntity> entityList = this.getGroupNodeByNodeIds(flowTplId, nodeIds);
+    public Boolean saveOrUpdateNodeGroupNode(Integer nodeGroupId, List<Integer> nodeIds) {
+        FlowNodeGroupEntity groupEntity = flowNodeGroupDao.selectById(nodeGroupId);
+        if(groupEntity == null){
+            throw ResourceException.buildNotExistException(this.getClass(), "node group not exist",nodeGroupId);
+        }
+        List<FlowNodeGroupNodeEntity> entityList = this.getGroupNodeByNodeIds(groupEntity.getFlowTplId(), nodeIds);
 
-        List<Integer> exitsIds = new ArrayList<>();
-        List<Integer> notExitsIds = new ArrayList<>();
+        List<Integer> exitsNodeIds = new ArrayList<>();
+        List<Integer> notExitsGroupIds = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(entityList)) {
             for (FlowNodeGroupNodeEntity nodeGroupNodeEntity : entityList) {
                 if (nodeGroupId.equals(nodeGroupNodeEntity.getNodeGroupId())) {
-                    exitsIds.add(nodeGroupNodeEntity.getNodeId());
+                    exitsNodeIds.add(nodeGroupNodeEntity.getNodeId());
 
                 } else {
-                    notExitsIds.add(nodeGroupNodeEntity.getNodeGroupNodeId());
+                    notExitsGroupIds.add(nodeGroupNodeEntity.getNodeGroupNodeId());
                 }
             }
 
         }
 
-        if (CollectionUtils.isNotEmpty(notExitsIds)) {
+        if (CollectionUtils.isNotEmpty(notExitsGroupIds)) {
             //delete not exits ids
-            flowNodeGroupNodeDao.deleteBatchIds(notExitsIds);
+            flowNodeGroupNodeDao.deleteBatchIds(notExitsGroupIds);
         }
         if (CollectionUtils.isNotEmpty(nodeIds)) {
-            if (CollectionUtils.isNotEmpty(exitsIds)) {
-                nodeIds.removeAll(exitsIds);
+            if (CollectionUtils.isNotEmpty(exitsNodeIds)) {
+                nodeIds.removeAll(exitsNodeIds);
             }
 
             if (CollectionUtils.isNotEmpty(nodeIds)) {
                 nodeIds.forEach(id -> {
-                    flowNodeGroupNodeDao.insert(new FlowNodeGroupNodeEntity(flowTplId, nodeGroupId, id));
+                    flowNodeGroupNodeDao.insert(new FlowNodeGroupNodeEntity(groupEntity.getFlowTplId(), nodeGroupId, id));
                 });
 
             }

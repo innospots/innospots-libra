@@ -95,7 +95,7 @@ public class NodeDefinitionService {
         if (nodeId != null) {
             List<Integer> nodeIds = new ArrayList<>();
             nodeIds.add(nodeId);
-            flowNodeGroupOperator.saveOrUpdateNodeGroupNode(1, nodeInfo.getNodeGroupId(), nodeIds);
+            flowNodeGroupOperator.saveOrUpdateNodeGroupNode(nodeInfo.getNodeGroupId(), nodeIds);
             if (StringUtils.isNotEmpty(nodeInfo.getIcon()) && nodeInfo.getIcon().startsWith(IMAGE_PREFIX)) {
                 EventBusCenter.async(new NewAvatarEvent(nodeId, ImageType.APP, null, nodeInfo.getIcon()));
             }
@@ -121,7 +121,7 @@ public class NodeDefinitionService {
         nodeInfo = flowNodeDefinitionOperator.updateNodeInfo(nodeInfo);
         List<Integer> nodeIds = new ArrayList<>();
         nodeIds.add(nodeId);
-        flowNodeGroupOperator.saveOrUpdateNodeGroupNode(1, nodeInfo.getNodeGroupId(), nodeIds);
+        flowNodeGroupOperator.saveOrUpdateNodeGroupNode(nodeInfo.getNodeGroupId(), nodeIds);
 
         return nodeInfo;
     }

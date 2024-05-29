@@ -194,7 +194,10 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
             throw ResourceException.buildCreateException(this.getClass(), "modify app node definition error");
         }
 
-        return FlowNodeDefinitionConverter.INSTANCE.entityToSimple(entity);
+        NodeInfo newInfo = FlowNodeDefinitionConverter.INSTANCE.entityToSimple(entity);
+        newInfo.setNodeGroupId(nodeInfo.getNodeGroupId());
+
+        return newInfo;
     }
 
     /**
