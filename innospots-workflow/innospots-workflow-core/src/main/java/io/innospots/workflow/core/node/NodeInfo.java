@@ -57,7 +57,6 @@ public class NodeInfo {
     @Schema(title = "node icon image base64")
     protected String icon;
 
-    @NotNull(message = "node description cannot be empty")
     @Schema(title = "node description")
     protected String description;
 
