@@ -1,7 +1,7 @@
 package io.innospots.app.console.controller;
 
 import io.innospots.app.core.model.AppTemplate;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,9 +27,9 @@ public class AppTemplateController extends BaseController {
 
     @GetMapping("{templateKey}")
     @Operation(summary = "get application")
-    public InnospotResponse<AppTemplate> getAppDefinition(
+    public InnospotsResponse<AppTemplate> getAppDefinition(
             @Parameter(required = true, name = "templateKey") @PathVariable String templateKey) {
 
-        return InnospotResponse.success();
+        return InnospotsResponse.success();
     }
 }

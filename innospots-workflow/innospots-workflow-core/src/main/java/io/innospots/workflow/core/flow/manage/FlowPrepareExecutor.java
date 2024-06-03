@@ -16,13 +16,13 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.runtime.flow;
+package io.innospots.workflow.core.flow.manage;
 
 import io.innospots.base.utils.thread.ThreadPoolBuilder;
 import io.innospots.base.utils.thread.ThreadTaskExecutor;
+import io.innospots.workflow.core.flow.Flow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import javax.validation.constraints.NotNull;
 import java.io.Closeable;

@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.core.flow;
+package io.innospots.workflow.core.flow.model;
 
 import io.innospots.workflow.core.instance.model.WorkflowInstanceBase;
 import io.innospots.workflow.core.instance.model.Edge;
@@ -164,6 +164,10 @@ public class WorkflowBaseBody extends WorkflowInstanceBase {
 
     public boolean isEmpty() {
         return CollectionUtils.isEmpty(nodes) || CollectionUtils.isEmpty(edges);
+    }
+
+    public int nodeSize(){
+        return CollectionUtils.isEmpty(nodes) ? 0 : nodes.size();
     }
 
     public boolean equalContent(WorkflowBaseBody instanceBaseBody) {

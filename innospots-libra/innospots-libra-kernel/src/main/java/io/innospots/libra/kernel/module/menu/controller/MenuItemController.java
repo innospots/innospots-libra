@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.module.menu.controller;
 
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItem;
 import io.innospots.libra.kernel.module.menu.reader.MenuItemReader;
@@ -51,7 +51,7 @@ public class MenuItemController {
     }
 
     @GetMapping("items")
-    public InnospotResponse<List<ResourceItem>> listMenuItems() {
-        return InnospotResponse.success(menuItemReader.listMenuItems());
+    public InnospotsResponse<List<ResourceItem>> listMenuItems() {
+        return InnospotsResponse.success(menuItemReader.listMenuItems());
     }
 }

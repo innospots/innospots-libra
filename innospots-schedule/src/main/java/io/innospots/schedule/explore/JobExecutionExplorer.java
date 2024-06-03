@@ -266,7 +266,7 @@ public class JobExecutionExplorer {
         jobExecutionEntity.setExecutionStatus(ExecutionStatus.RETRY_RUNNING);
         //retry execute
         UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
-        uw.lambda().set(JobExecutionEntity::getSequenceNumber, -1)
+        uw.lambda().set(JobExecutionEntity::getSequenceNumber, -1*jobExecutionEntity.getSequenceNumber())
                 .set(JobExecutionEntity::getUpdatedTime, LocalDateTime.now())
                 .eq(JobExecutionEntity::getExecutionId, jobExecutionEntity.getOriginExecutionId());
         jobExecutionDao.insert(jobExecutionEntity);

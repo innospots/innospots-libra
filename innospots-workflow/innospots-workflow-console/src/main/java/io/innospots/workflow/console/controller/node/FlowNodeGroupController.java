@@ -18,7 +18,7 @@
 
 package io.innospots.workflow.console.controller.node;
 
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.workflow.console.operator.node.FlowNodeGroupOperator;
@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 
 /**
@@ -53,41 +53,41 @@ public class FlowNodeGroupController extends BaseController {
 
     @PostMapping
     @Operation(summary = "create node group")
-    public InnospotResponse<NodeGroupBaseInfo> createNodeGroup(String name,String templateCode){
-        return InnospotResponse.success(flowNodeGroupOperator.createNodeGroup(name,templateCode));
+    public InnospotsResponse<NodeGroupBaseInfo> createNodeGroup(String name, String templateCode){
+        return InnospotsResponse.success(flowNodeGroupOperator.createNodeGroup(name,templateCode));
     }
 
     @PutMapping("re-name")
     @Operation(summary = "re-name node group")
-    public InnospotResponse<Boolean> reNameNodeGroup(
+    public InnospotsResponse<Boolean> reNameNodeGroup(
             @Parameter(name = "nodeGroupId") @RequestParam Integer nodeGroupId,
             @Parameter(name = "name") @RequestParam String name){
-        return InnospotResponse.success(flowNodeGroupOperator.reNameNodeGroup(nodeGroupId,name));
+        return InnospotsResponse.success(flowNodeGroupOperator.reNameNodeGroup(nodeGroupId,name));
     }
 
     @DeleteMapping("{nodeGroupId}")
     @Operation(summary = "remove node group")
-    public InnospotResponse<Boolean> removeNodeGroup(@PathVariable Integer nodeGroupId){
-        return InnospotResponse.success(flowNodeGroupOperator.removeNodeGroup(nodeGroupId));
+    public InnospotsResponse<Boolean> removeNodeGroup(@PathVariable Integer nodeGroupId){
+        return InnospotsResponse.success(flowNodeGroupOperator.removeNodeGroup(nodeGroupId));
     }
 
     @PutMapping("swap-position")
     @Operation(summary = "swap node group position")
-    public InnospotResponse<List<NodeGroupBaseInfo>> swapPosition(
+    public InnospotsResponse<List<NodeGroupBaseInfo>> swapPosition(
             @Parameter(name = "targetGroupId") @RequestParam Integer targetGroupId,
             @Parameter(name = "toGroupId") @RequestParam Integer toGroupId){
-        return InnospotResponse.success(flowNodeGroupOperator.swapPosition(targetGroupId,toGroupId));
+        return InnospotsResponse.success(flowNodeGroupOperator.swapPosition(targetGroupId,toGroupId));
     }
 
 
     @GetMapping("list/{templateCode}")
     @Operation(summary = "flow node group list by template code")
-    public InnospotResponse<List<NodeGroup>> listCategories(
+    public InnospotsResponse<List<NodeGroup>> listCategories(
             @Parameter(name = "templateCode") @PathVariable String templateCode,
             @Parameter(name = "includeNodes") @RequestParam(required = false, name = "includeNodes",defaultValue = "false") boolean includeNodes,
             @Parameter(name = "excludeTrigger") @RequestParam(required = false, name = "excludeTrigger",defaultValue = "false") boolean excludeTrigger
             ) {
-        return InnospotResponse.success(
+        return InnospotsResponse.success(
                         flowNodeGroupOperator.getGroupByFlowTplCode(templateCode, includeNodes,excludeTrigger)
         );
     }

@@ -74,8 +74,8 @@ public @interface ScheduleExecutorImporter {
 
         @Bean
         @ConditionalOnMissingBean
-        public ReadJobDispatcher readJobDispatcher(IReadyJobQueue readyJobDbQueue,JobExecutionExplorer jobExecutionExplorer){
-            return new ReadJobDispatcher(readyJobDbQueue, jobExecutionExplorer);
+        public ReadJobDispatcher readJobDispatcher(IReadyJobQueue readyJobDbQueue,JobExecutionExplorer jobExecutionExplorer,ReadyJobDao readyJobDao){
+            return new ReadJobDispatcher(readyJobDbQueue, jobExecutionExplorer,readyJobDao);
         }
 
         @Bean
@@ -93,7 +93,7 @@ public @interface ScheduleExecutorImporter {
 
         @Bean
         public ThreadTaskExecutor executorThreadPool(InnospotsScheduleProperties scheduleProperties){
-            return ThreadPoolBuilder.build(scheduleProperties.getExecutorSize(),scheduleProperties.getExecutorSize(),0,"executorThreadPool");
+            return ThreadPoolBuilder.build(scheduleProperties.getExecutorSize(),scheduleProperties.getExecutorSize(),0,"job-executor");
         }
 
         @Bean

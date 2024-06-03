@@ -22,10 +22,9 @@ import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.body.ListBody;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.request.ItemRequest;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,10 +34,10 @@ import java.util.Map;
  */
 public interface IDataAccessPoint {
 
-    InnospotResponse<PageBody<Map<String, Object>>> page(ItemRequest queryBody);
+    InnospotsResponse<PageBody<Map<String, Object>>> page(ItemRequest queryBody);
 
-    InnospotResponse<DataBody<Map<String, Object>>> getOne(ItemRequest queryBody);
+    InnospotsResponse<DataBody<Map<String, Object>>> getOne(ItemRequest queryBody);
 
-    InnospotResponse<ListBody<Map<String, Object>>> list(ItemRequest queryBody);
+    InnospotsResponse<ListBody<Map<String, Object>>> list(ItemRequest queryBody);
 
 }

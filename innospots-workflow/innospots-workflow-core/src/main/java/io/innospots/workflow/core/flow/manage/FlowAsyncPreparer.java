@@ -16,9 +16,10 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.runtime.flow;
+package io.innospots.workflow.core.flow.manage;
 
 import io.innospots.base.utils.time.DateTimeUtils;
+import io.innospots.workflow.core.flow.Flow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

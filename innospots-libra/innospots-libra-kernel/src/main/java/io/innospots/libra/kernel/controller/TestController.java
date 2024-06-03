@@ -20,7 +20,7 @@ package io.innospots.libra.kernel.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.configuration.InnospotsConsoleProperties;
 import io.innospots.libra.kernel.service.TestService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -62,30 +62,30 @@ public class TestController {
 
     @GetMapping("jar/loader")
     @Operation(summary = "jar loader")
-    public InnospotResponse<Boolean> LibLoader(@Parameter(name = "jarName") @RequestParam(value = "jarName", required = false, defaultValue = "innospots-extension-apps-1.0.0-SNAPSHOT.jar") String jarName) {
+    public InnospotsResponse<Boolean> LibLoader(@Parameter(name = "jarName") @RequestParam(value = "jarName", required = false, defaultValue = "innospots-extension-apps-1.0.0-SNAPSHOT.jar") String jarName) {
 
 //        String jarUrl = "file://" + innospotsConfigProperties.getExtLibPath() + jarName;
 //        ClassJarFileLoader.loadJar(jarUrl);
-        return InnospotResponse.success(true);
+        return InnospotsResponse.success(true);
     }
 
     @GetMapping("json")
-    public InnospotResponse<Map<String, Object>> json() throws JsonProcessingException {
+    public InnospotsResponse<Map<String, Object>> json() throws JsonProcessingException {
         Map<String, Object> m = new HashMap<>();
         m.put("time", LocalDateTime.now());
         m.put("date", LocalDate.now());
         m.put("json", jsonMapper.writeValueAsString(m));
         testService.log1(m);
-        return InnospotResponse.success(m);
+        return InnospotsResponse.success(m);
     }
 
     @PostMapping("test/echo")
-    public InnospotResponse<Map<String, Object>> echo(
+    public InnospotsResponse<Map<String, Object>> echo(
             @RequestBody Map<String,Object> body,
             @RequestParam Map<String,Object> params){
         Map<String, Object> m = new HashMap<>();
         m.put("body",body);
         m.put("params", params);
-        return InnospotResponse.success(m);
+        return InnospotsResponse.success(m);
     }
 }

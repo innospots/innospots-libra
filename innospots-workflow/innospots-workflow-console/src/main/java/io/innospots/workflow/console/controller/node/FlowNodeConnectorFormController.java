@@ -19,7 +19,7 @@
 package io.innospots.workflow.console.controller.node;
 
 import io.innospots.base.connector.meta.CredentialAuthOption;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 
 /**
@@ -55,7 +55,7 @@ public class FlowNodeConnectorFormController {
 
     @GetMapping("{appNodeId}")
     @Operation(summary = "node connector form config")
-    public InnospotResponse<List<CredentialAuthOption>> selectAppNodeConnectorFormConfig(
+    public InnospotsResponse<List<CredentialAuthOption>> selectAppNodeConnectorFormConfig(
             @Parameter(name = "appNodeId") @PathVariable Integer appNodeId
     ) {
         /*

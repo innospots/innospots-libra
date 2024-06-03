@@ -18,7 +18,7 @@
 
 package io.innospots.libra.security.controller;
 
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.security.auth.model.AuthUser;
 import io.innospots.libra.security.jwt.JwtAuthManager;
 import io.innospots.libra.security.jwt.JwtToken;
@@ -76,11 +76,11 @@ public class TempTokenController {
 
     @GetMapping("{userId}")
     @Operation(summary = "temp user token")
-    public InnospotResponse<String> tempToken(@Parameter(name = "userId", required = true) @PathVariable Integer userId) {
+    public InnospotsResponse<String> tempToken(@Parameter(name = "userId", required = true) @PathVariable Integer userId) {
 
         AuthUser authUser = authUserOperator.view(AuthUser.builder().userId(userId).build());
         JwtToken jwtToken = authManager.generateToken(authUser);
-        return InnospotResponse.success("" + jwtToken.getRawToken());
+        return InnospotsResponse.success("" + jwtToken.getRawToken());
     }
 
     @GetMapping("getCoupon")

@@ -20,7 +20,7 @@ package io.innospots.libra.kernel.module.i18n.controller;
 
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
@@ -37,7 +37,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static io.innospots.base.enums.DataStatus.*;
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
 
@@ -62,7 +62,7 @@ public class I18nCurrencyController extends BaseController {
     @OperationLog(operateType = OperateType.CREATE, primaryField = "code")
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
     @Operation(summary = "create i18n currency")
-    public InnospotResponse<Boolean> createCurrency(@Valid @RequestBody I18nCurrency i18nCurrency) {
+    public InnospotsResponse<Boolean> createCurrency(@Valid @RequestBody I18nCurrency i18nCurrency) {
         if (i18nCurrency.getStatus() == null) {
             i18nCurrency.setStatus(ONLINE);
         }
@@ -74,7 +74,7 @@ public class I18nCurrencyController extends BaseController {
     @PutMapping("{currencyId}/status/{status}")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}", label = "${common.button.status}")
     @Operation(summary = "update i18n currency status")
-    public InnospotResponse<Boolean> updateStatus(@PathVariable Integer currencyId, @PathVariable Boolean status) {
+    public InnospotsResponse<Boolean> updateStatus(@PathVariable Integer currencyId, @PathVariable Boolean status) {
         DataStatus dataStatus = status ? ONLINE : OFFLINE;
         return success(i18nCurrencyOperator.updateStatus(currencyId, dataStatus));
     }
@@ -83,7 +83,7 @@ public class I18nCurrencyController extends BaseController {
     @DeleteMapping("{currencyId}")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @Operation(summary = "delete i18n currency")
-    public InnospotResponse<Boolean> deleteCurrency(@PathVariable Integer currencyId) {
+    public InnospotsResponse<Boolean> deleteCurrency(@PathVariable Integer currencyId) {
 
         return success(i18nCurrencyOperator.updateStatus(currencyId, REMOVED));
     }
@@ -92,14 +92,14 @@ public class I18nCurrencyController extends BaseController {
     @PutMapping
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
     @Operation(summary = "update i18n currency")
-    public InnospotResponse<Boolean> updateCurrency(@Valid @RequestBody I18nCurrency i18nCurrency) {
+    public InnospotsResponse<Boolean> updateCurrency(@Valid @RequestBody I18nCurrency i18nCurrency) {
 
         return success(i18nCurrencyOperator.updateCurrency(i18nCurrency));
     }
 
     @GetMapping("page")
     @Operation(summary = "page of i18n currency")
-    public InnospotResponse<PageBody<I18nCurrency>> pageCurrencies(FormQuery formRequest) {
+    public InnospotsResponse<PageBody<I18nCurrency>> pageCurrencies(FormQuery formRequest) {
         return success(i18nCurrencyOperator.pageCurrencies(formRequest));
     }
 
@@ -109,7 +109,7 @@ public class I18nCurrencyController extends BaseController {
      */
     @GetMapping("list")
     @Operation(summary = "list of i18n currency")
-    public InnospotResponse<List<I18nCurrency>> listCurrencies(@RequestParam(defaultValue = "ONLINE") DataStatus dataStatus) {
+    public InnospotsResponse<List<I18nCurrency>> listCurrencies(@RequestParam(defaultValue = "ONLINE") DataStatus dataStatus) {
         return success(i18nCurrencyOperator.listCurrencies(dataStatus));
     }
 }

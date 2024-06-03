@@ -18,8 +18,8 @@
 
 package io.innospots.schedule.dispatch;
 
-import io.innospots.schedule.converter.JobExecutionConverter;
 import io.innospots.schedule.converter.ReadyJobConverter;
+import io.innospots.schedule.dao.ReadyJobDao;
 import io.innospots.schedule.explore.JobExecutionExplorer;
 import io.innospots.schedule.model.JobExecution;
 import io.innospots.schedule.model.ReadyJob;
@@ -42,34 +42,36 @@ public class ReadJobDispatcher {
 
     private final JobExecutionExplorer jobExecutionExplorer;
 
+    private final ReadyJobDao readyJobDao;
 
-    public ReadJobDispatcher(IReadyJobQueue readyJobQueue, JobExecutionExplorer jobExecutionExplorer) {
+    public ReadJobDispatcher(IReadyJobQueue readyJobQueue, JobExecutionExplorer jobExecutionExplorer,ReadyJobDao readyJobDao) {
         this.readyJobQueue = readyJobQueue;
         this.jobExecutionExplorer = jobExecutionExplorer;
+        this.readyJobDao = readyJobDao;
     }
 
     public int stop(String jobExecutionId, String message) {
         return jobExecutionExplorer.stop(jobExecutionId, message);
     };
 
-    public int continueExecute(String jobExecutionId) {
+    public int continueDispatch(String jobExecutionId) {
         List<JobExecution> continueExecutions = jobExecutionExplorer.continueExecution(jobExecutionId);
         if (CollectionUtils.isNotEmpty(continueExecutions)) {
             for (JobExecution execution : continueExecutions) {
                 ReadyJob readyJob = ReadyJobConverter.build(execution);
-                execute(readyJob);
+                dispatch(readyJob);
             }
             return continueExecutions.size();
         }
         return 0;
     }
 
-    public int retryExecute(String jobExecutionId) {
+    public int retryDispatch(String jobExecutionId) {
         List<JobExecution> retryExecutions = jobExecutionExplorer.retryExecution(jobExecutionId);
         if (CollectionUtils.isNotEmpty(retryExecutions)) {
             for (JobExecution execution : retryExecutions) {
                 ReadyJob readyJob = ReadyJobConverter.build(execution);
-                execute(readyJob);
+                dispatch(readyJob);
             }
             return retryExecutions.size();
         }
@@ -83,19 +85,23 @@ public class ReadJobDispatcher {
      * @param jobKey
      * @param params
      */
-    public void execute(String jobKey, Map<String, Object> params) {
+    public void dispatch(String jobKey, Map<String, Object> params) {
         readyJobQueue.push(jobKey, params);
     }
 
-    public void execute(String parentExecutionId, Integer sequenceNumber, String jobKey, Map<String, Object> params) {
+    public void dispatch(String parentExecutionId, Integer sequenceNumber, String jobKey, Map<String, Object> params) {
         readyJobQueue.push(parentExecutionId, sequenceNumber, jobKey, params);
     }
 
-    public void execute(ReadyJob readyJob) {
+    public void dispatch(ReadyJob readyJob) {
         readyJobQueue.push(readyJob);
     }
 
     public int cancel(String jobKey) {
         return readyJobQueue.cancelJob(jobKey);
+    }
+
+    public List<String> readNonExecuteJobKeys(String parentExecutionId) {
+        return readyJobDao.selectNonExecuteJobKeysByParentExecutionId(parentExecutionId);
     }
 }

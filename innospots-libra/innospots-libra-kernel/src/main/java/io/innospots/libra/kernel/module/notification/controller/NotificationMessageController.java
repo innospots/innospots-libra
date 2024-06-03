@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.notification.controller;
 
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
 
@@ -58,7 +58,7 @@ public class NotificationMessageController extends BaseController {
 
     @GetMapping("page")
     @Operation(summary = "page message")
-    public InnospotResponse<PageBody<NotificationMessage>> pageMessages(MessageFormQuery request) {
+    public InnospotsResponse<PageBody<NotificationMessage>> pageMessages(MessageFormQuery request) {
         PageBody<NotificationMessage> pageModel = notificationMessageOperator.pageMessages(request);
         return success(pageModel);
     }
@@ -66,7 +66,7 @@ public class NotificationMessageController extends BaseController {
     @PutMapping("read")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}", label = "${message.list.button.read}")
     @Operation(summary = "mark read")
-    public InnospotResponse<Boolean> updateMessage(@Parameter(name = "messageIds") @RequestBody List<String> messageIds) {
+    public InnospotsResponse<Boolean> updateMessage(@Parameter(name = "messageIds") @RequestBody List<String> messageIds) {
 
         Boolean update = notificationMessageOperator.updateMessage(messageIds);
         return success(update);
@@ -74,7 +74,7 @@ public class NotificationMessageController extends BaseController {
 
     @GetMapping("count/unread")
     @Operation(summary = "count unread message")
-    public InnospotResponse<Long> countUnreadMessage() {
+    public InnospotsResponse<Long> countUnreadMessage() {
         return success(notificationMessageOperator.countUnreadMessage());
     }
 
@@ -82,7 +82,7 @@ public class NotificationMessageController extends BaseController {
     @DeleteMapping
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @Operation(summary = "delete message")
-    public InnospotResponse<Boolean> deleteMessage(@Parameter(name = "messageIds") @RequestBody List<Integer> messageIds) {
+    public InnospotsResponse<Boolean> deleteMessage(@Parameter(name = "messageIds") @RequestBody List<Integer> messageIds) {
 
         Boolean delete = notificationMessageOperator.deleteMessage(messageIds);
         return success(delete);

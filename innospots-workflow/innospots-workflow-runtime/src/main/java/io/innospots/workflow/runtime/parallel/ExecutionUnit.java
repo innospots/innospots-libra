@@ -24,7 +24,7 @@ import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
-import io.innospots.workflow.runtime.flow.Flow;
+import io.innospots.workflow.core.flow.Flow;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 

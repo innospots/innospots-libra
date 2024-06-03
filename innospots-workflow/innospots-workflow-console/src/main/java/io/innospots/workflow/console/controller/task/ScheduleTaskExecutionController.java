@@ -1,7 +1,7 @@
 package io.innospots.workflow.console.controller.task;
 
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.workflow.console.model.task.TaskNodeExecution;
 import io.innospots.workflow.core.execution.model.flow.FlowExecutionBase;
@@ -28,7 +28,7 @@ public class ScheduleTaskExecutionController {
 
     @Operation(summary ="page schedule executions")
     @GetMapping("page/{workflowInstanceId}")
-    public InnospotResponse<PageBody<FlowExecutionBase>> pageExecution(
+    public InnospotsResponse<PageBody<FlowExecutionBase>> pageExecution(
             @Parameter(name = "page") @RequestParam(required = false, defaultValue = "1") Integer page,
             @Parameter(name = "size") @RequestParam(required = false, defaultValue = "20") Integer size,
             @Parameter(name = "workflowInstanceId") @PathVariable Long workflowInstanceId
@@ -39,7 +39,7 @@ public class ScheduleTaskExecutionController {
 
     @Operation(summary ="task node execution list")
     @GetMapping("list/flow-execution/{flowExecutionId}")
-    public InnospotResponse<List<TaskNodeExecution>> pageTaskNodeExecution(
+    public InnospotsResponse<List<TaskNodeExecution>> pageTaskNodeExecution(
             @Parameter(name = "flowExecutionId") @PathVariable String flowExecutionId
     ){
         return null;
@@ -47,7 +47,7 @@ public class ScheduleTaskExecutionController {
 
     @Operation(summary ="task execution detail")
     @GetMapping("task-execution/{nodeExecutionId}")
-    public InnospotResponse<NodeExecutionDisplay> taskNodeExecution(
+    public InnospotsResponse<NodeExecutionDisplay> taskNodeExecution(
             @Parameter(name = "nodeExecutionId") @PathVariable String nodeExecutionId
     ){
         return null;

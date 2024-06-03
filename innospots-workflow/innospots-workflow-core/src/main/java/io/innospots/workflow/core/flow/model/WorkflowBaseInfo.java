@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.core.flow;
+package io.innospots.workflow.core.flow.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

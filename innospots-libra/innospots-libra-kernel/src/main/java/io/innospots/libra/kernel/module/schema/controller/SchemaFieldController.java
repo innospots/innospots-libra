@@ -22,7 +22,7 @@ import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.connector.minder.IDataConnectionMinder;
 import io.innospots.base.connector.schema.model.SchemaField;
 import io.innospots.base.connector.schema.model.SchemaRegistry;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 
 
@@ -68,7 +68,7 @@ public class SchemaFieldController extends BaseController {
 
     @GetMapping("list")
     @Operation(summary = "list schema fields", description = "support SourceType: QUEUE,JDBC Parameter. requirements: registryId is required when SourceType = QUEUE, tableName is required when SourceType = JDBC")
-    public InnospotResponse<List<SchemaField>> listSchemaFields(
+    public InnospotsResponse<List<SchemaField>> listSchemaFields(
             @Parameter(name = "credentialKey") @RequestParam(value = "credentialKey") String credentialKey,
             @Parameter(name = "tableName") @RequestParam(value = "tableName", required = false) String tableName,
             @Parameter(name = "registryId") @RequestParam(value = "registryId", required = false) String registryId) {
@@ -85,7 +85,7 @@ public class SchemaFieldController extends BaseController {
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "fieldId")
     @PostMapping("upsert")
     @Operation(summary = "upsert schema field", description = "support SourceType: QUEUE")
-    public InnospotResponse<SchemaField> upsertSchemaField(
+    public InnospotsResponse<SchemaField> upsertSchemaField(
             @Parameter(name = "schema field") @Validated @RequestBody SchemaField schemaField, BindingResult bindingResult) {
         SchemaField upsert = schemaFieldOperator.upsertSchemaField(schemaField);
         return success(upsert);
@@ -93,7 +93,7 @@ public class SchemaFieldController extends BaseController {
 
     @PostMapping("parse")
     @Operation(summary = "schema field json parse")
-    public InnospotResponse<List<SchemaField>> schemaFieldJsonParse(
+    public InnospotsResponse<List<SchemaField>> schemaFieldJsonParse(
             @Parameter(name = "json") @RequestBody String json) {
         List<SchemaField> schemaFields = schemaFieldOperator.parseToSchemaFields(json);
         return success(schemaFields);
@@ -101,7 +101,7 @@ public class SchemaFieldController extends BaseController {
 
     @DeleteMapping("{fieldId}")
     @Operation(summary = "delete schema field", description = "support SourceType: QUEUE")
-    public InnospotResponse<Boolean> deleteSchemaField(@Parameter(name = "fieldId") @PathVariable Integer fieldId) {
+    public InnospotsResponse<Boolean> deleteSchemaField(@Parameter(name = "fieldId") @PathVariable Integer fieldId) {
         Boolean delete = schemaFieldOperator.deleteSchemaField(fieldId);
         return success(delete);
     }

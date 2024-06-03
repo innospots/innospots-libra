@@ -19,13 +19,13 @@
 package io.innospots.workflow.runtime.endpoint;
 
 import io.innospots.base.constant.PathConstant;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.base.quartz.QuartzScheduleManager;
 import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.workflow.runtime.config.WorkflowRuntimeProperties;
 import io.innospots.workflow.runtime.container.RunTimeContainerManager;
-import io.innospots.workflow.runtime.flow.Flow;
-import io.innospots.workflow.runtime.flow.FlowManager;
+import io.innospots.workflow.core.flow.Flow;
+import io.innospots.workflow.core.flow.manage.FlowManager;
 import io.innospots.workflow.runtime.server.WorkflowWebhookServer;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,7 +36,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 
 /**
  * @author Smars
@@ -65,58 +65,58 @@ public class WorkflowManagementEndpoint {
 
     @PostMapping("load/{workInstanceId}/{revision}")
     @Operation(summary = "load workflow instance")
-    public InnospotResponse<Flow> load(@PathVariable Long workInstanceId, @PathVariable Integer revision) {
+    public InnospotsResponse<Flow> load(@PathVariable Long workInstanceId, @PathVariable Integer revision) {
         Flow flow = flowManager.loadFlow(workInstanceId, revision);
         return success(flow);
     }
 
     @PostMapping("load/{workInstanceId}")
     @Operation(summary = "load latest workflow instance")
-    public InnospotResponse<Flow> load(@PathVariable Long workInstanceId) {
+    public InnospotsResponse<Flow> load(@PathVariable Long workInstanceId) {
         Flow flow = flowManager.loadFlow(workInstanceId);
         return success(flow);
     }
 
     @PutMapping("clear/{workInstanceId}/{revision}")
     @Operation(summary = "clear workflow instance cache")
-    public InnospotResponse<Boolean> clear(@PathVariable Long workInstanceId, @PathVariable Integer revision) {
+    public InnospotsResponse<Boolean> clear(@PathVariable Long workInstanceId, @PathVariable Integer revision) {
         return success(flowManager.clear(workInstanceId, revision));
     }
 
     @PutMapping("clear/{workInstanceId}")
     @Operation(summary = "clear latest workflow instance")
-    public InnospotResponse<Boolean> clear(@PathVariable Long workInstanceId) {
+    public InnospotsResponse<Boolean> clear(@PathVariable Long workInstanceId) {
         return success(flowManager.clear(workInstanceId));
     }
 
     @GetMapping("info/{workInstanceId}/{revision}")
     @Operation(summary = "show workflow instance")
-    public InnospotResponse<Flow> info(@PathVariable Long workInstanceId, @PathVariable Integer revision) {
+    public InnospotsResponse<Flow> info(@PathVariable Long workInstanceId, @PathVariable Integer revision) {
         return success(flowManager.findFlow(workInstanceId, revision));
     }
 
 
     @GetMapping("info/{workInstanceId}")
     @Operation(summary = "show latest workflow instance")
-    public InnospotResponse<Flow> info(@PathVariable Long workInstanceId) {
+    public InnospotsResponse<Flow> info(@PathVariable Long workInstanceId) {
         return success(flowManager.findFlow(workInstanceId));
     }
 
     @GetMapping("runtime")
     @Operation(summary = "published workflow in runtime")
-    public InnospotResponse<Map<String, Object>> runtime() {
+    public InnospotsResponse<Map<String, Object>> runtime() {
         return success(containerManager.runtimeTriggers());
     }
 
     @GetMapping("schedule-infos")
     @Operation(summary = "published schedule workflow")
-    public InnospotResponse<List<Map<String, Object>>> scheduleInfo() {
+    public InnospotsResponse<List<Map<String, Object>>> scheduleInfo() {
         return success(quartzScheduleManager.schedulerInfo());
     }
 
     @GetMapping("webhook-address")
     @Operation(summary = "webhook address")
-    public InnospotResponse<Map<String, String>> apiAddress() {
+    public InnospotsResponse<Map<String, String>> apiAddress() {
         Map<String, String> flowInfo = new LinkedHashMap<>();
         String host = workflowRuntimeProperties.getHost();
         if (StringUtils.isEmpty(host)) {
@@ -135,7 +135,7 @@ public class WorkflowManagementEndpoint {
                         ":" + workflowRuntimeProperties.getPort() +
                         PathConstant.ROOT_PATH + PathConstant.RUNTIME_PATH
         );
-        return InnospotResponse.success(flowInfo);
+        return InnospotsResponse.success(flowInfo);
     }
 
 

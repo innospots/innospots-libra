@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.notification.controller;
 
 import io.innospots.base.enums.DataStatus;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
@@ -37,7 +37,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
 
@@ -62,7 +62,7 @@ public class NotificationChannelController extends BaseController {
     @PostMapping
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.add}")
     @Operation(summary = "create channel")
-    public InnospotResponse<NotificationChannel> createChannel(@Parameter(name = "messageChannel", required = true) @Valid @RequestBody NotificationChannel notificationChannel) {
+    public InnospotsResponse<NotificationChannel> createChannel(@Parameter(name = "messageChannel", required = true) @Valid @RequestBody NotificationChannel notificationChannel) {
 
         NotificationChannel save = notificationChannelOperator.createChannel(notificationChannel);
         return success(save);
@@ -72,7 +72,7 @@ public class NotificationChannelController extends BaseController {
     @PutMapping
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.edit}")
     @Operation(summary = "update channel")
-    public InnospotResponse<Boolean> updateChannel(@Parameter(name = "messageChannel", required = true) @Valid @RequestBody NotificationChannel notificationChannel) {
+    public InnospotsResponse<Boolean> updateChannel(@Parameter(name = "messageChannel", required = true) @Valid @RequestBody NotificationChannel notificationChannel) {
 
         Boolean update = notificationChannelOperator.updateChannel(notificationChannel);
         return success(update);
@@ -82,8 +82,8 @@ public class NotificationChannelController extends BaseController {
     @PutMapping("{channelId}/{dataStatus}")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.status}", label = "${message.channel.status.change}")
     @Operation(summary = "update channel status")
-    public InnospotResponse<Boolean> updateStatus(@Parameter(name = "channelId", required = true) @PathVariable Integer channelId,
-                                                  @Parameter(required = true, name = "dataStatus") @PathVariable DataStatus dataStatus) {
+    public InnospotsResponse<Boolean> updateStatus(@Parameter(name = "channelId", required = true) @PathVariable Integer channelId,
+                                                   @Parameter(required = true, name = "dataStatus") @PathVariable DataStatus dataStatus) {
 
         Boolean delete = notificationChannelOperator.updateStatus(channelId, dataStatus);
         return success(delete);
@@ -93,7 +93,7 @@ public class NotificationChannelController extends BaseController {
     @DeleteMapping("{channelId}")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @Operation(summary = "delete channel")
-    public InnospotResponse<Boolean> deleteChannel(@Parameter(name = "channelId", required = true) @PathVariable Integer channelId) {
+    public InnospotsResponse<Boolean> deleteChannel(@Parameter(name = "channelId", required = true) @PathVariable Integer channelId) {
 
         Boolean delete = notificationChannelOperator.deleteChannel(channelId);
         return success(delete);
@@ -101,20 +101,20 @@ public class NotificationChannelController extends BaseController {
 
     @GetMapping
     @Operation(summary = "list message channel")
-    public InnospotResponse<List<NotificationChannel>> listChannels() {
+    public InnospotsResponse<List<NotificationChannel>> listChannels() {
         List<NotificationChannel> list = notificationChannelOperator.listChannels();
         return success(list);
     }
 
     @GetMapping("mapping")
     @Operation(summary = "mapping column")
-    public InnospotResponse<List<MessageElement>> mapping() {
+    public InnospotsResponse<List<MessageElement>> mapping() {
         List<MessageElement> messageElements = new ArrayList<>();
         messageElements.add(new MessageElement("user_name", "${notification.user.label}"));
         messageElements.add(new MessageElement("user_identity", "${notification.identity.label}"));
         messageElements.add(new MessageElement("message_title", "${notification.title.label}"));
         messageElements.add(new MessageElement("message_content", "${notification.content.label}"));
 
-        return InnospotResponse.success(messageElements);
+        return InnospotsResponse.success(messageElements);
     }
 }

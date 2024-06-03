@@ -6,8 +6,7 @@ import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.node.field.ExtendField;
 import io.innospots.workflow.core.node.field.ValueParamField;
-import io.innospots.workflow.core.instance.model.NodeInstance;
-import io.innospots.workflow.node.app.utils.NodeInstanceUtils;
+import io.innospots.workflow.core.utils.NodeInstanceUtils;
 
 import java.util.*;
 

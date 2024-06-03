@@ -16,13 +16,12 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.node.app;
+package io.innospots.workflow.core.node.executor;
 
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.node.field.NodeParamField;
-import io.innospots.workflow.node.app.utils.NodeInstanceUtils;
+import io.innospots.workflow.core.utils.NodeInstanceUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -56,10 +55,10 @@ public class StateNode extends BaseNodeExecutor {
     @Override
     protected void initialize() {
         stateNodeType = StateNodeType.valueOf(this.ni.getCode());
-        if(stateNodeType == StateNodeType.START){
+        if (stateNodeType == StateNodeType.START) {
             hasInputField = ni.valueBoolean(HAS_INPUT_FIELD);
-            if(hasInputField){
-                inputFields = NodeInstanceUtils.buildParamFields(ni,FIELDS);
+            if (hasInputField) {
+                inputFields = NodeInstanceUtils.buildParamFields(ni, FIELDS);
             }
         }
     }
@@ -113,18 +112,18 @@ public class StateNode extends BaseNodeExecutor {
 
     @Override
     protected Object processItem(Map<String, Object> item) {
-        if(hasInputField && CollectionUtils.isEmpty(inputFields)){
+        if (hasInputField && CollectionUtils.isEmpty(inputFields)) {
             return item;
         }
-        Map<String,Object> nItem = new LinkedHashMap<>();
+        Map<String, Object> nItem = new LinkedHashMap<>();
         for (NodeParamField inputField : inputFields) {
-            Object v = item != null? item.getOrDefault(inputField.getCode(),inputField.getValue()) : inputField.getValue();
-            if(v!=null &&StringUtils.isNotEmpty(v.toString())){
-                nItem.put(inputField.getCode(),v);
+            Object v = item != null ? item.getOrDefault(inputField.getCode(), inputField.getValue()) : inputField.getValue();
+            if (v != null && StringUtils.isNotEmpty(v.toString())) {
+                nItem.put(inputField.getCode(), v);
             }
         }//end inputFields
-        if(log.isDebugEnabled()){
-            log.debug("start node input:{}",nItem);
+        if (log.isDebugEnabled()) {
+            log.debug("start node input:{}", nItem);
         }
         return nItem;
     }

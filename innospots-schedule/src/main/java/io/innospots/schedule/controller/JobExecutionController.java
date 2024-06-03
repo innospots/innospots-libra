@@ -20,7 +20,7 @@ package io.innospots.schedule.controller;
 
 import io.innospots.base.constant.PathConstant;
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.schedule.model.ExecutionFormQuery;
@@ -29,8 +29,6 @@ import io.innospots.schedule.operator.JobExecutionOperator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 /**
  * @author Smars
@@ -51,25 +49,25 @@ public class JobExecutionController {
 
     @GetMapping("page")
     @Operation(summary = "page job executions")
-    public InnospotResponse<PageBody<JobExecution>> pageJobExecutions(
+    public InnospotsResponse<PageBody<JobExecution>> pageJobExecutions(
             ExecutionFormQuery executionFormQuery) {
-        return InnospotResponse.success(jobExecutionOperator.
+        return InnospotsResponse.success(jobExecutionOperator.
                 pageJobExecutions(executionFormQuery));
     }
 
     @Operation(summary = "get job execution")
     @GetMapping("{jobExecutionId}")
-    public InnospotResponse<JobExecution> getJobExecution(@PathVariable String jobExecutionId,
-                                                          @RequestParam(required = false,defaultValue = "true") boolean includeSub) {
-        return InnospotResponse.success(jobExecutionOperator.getJobExecution(jobExecutionId, includeSub));
+    public InnospotsResponse<JobExecution> getJobExecution(@PathVariable String jobExecutionId,
+                                                           @RequestParam(required = false,defaultValue = "true") boolean includeSub) {
+        return InnospotsResponse.success(jobExecutionOperator.getJobExecution(jobExecutionId, includeSub));
     }
 
     @Operation(summary = "update job execution status")
     @PutMapping("{jobExecutionId}/status/{status}")
-    public InnospotResponse<Boolean> updateStatus(@PathVariable String jobExecutionId,
-                                                 @PathVariable ExecutionStatus status,
-                                                 @RequestParam(required = false) String message) {
-        return InnospotResponse.success(jobExecutionOperator.updateStatus(jobExecutionId,
+    public InnospotsResponse<Boolean> updateStatus(@PathVariable String jobExecutionId,
+                                                   @PathVariable ExecutionStatus status,
+                                                   @RequestParam(required = false) String message) {
+        return InnospotsResponse.success(jobExecutionOperator.updateStatus(jobExecutionId,
                 status, message));
     }
 

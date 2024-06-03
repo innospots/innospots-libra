@@ -33,7 +33,7 @@ import java.util.Map;
  * @date 2020/10/31
  */
 @Schema(title = "api response wrapper")
-public class InnospotResponse<T> {
+public class InnospotsResponse<T> {
 
     @Schema(title = "response message")
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -52,7 +52,7 @@ public class InnospotResponse<T> {
     @Schema(title = "response timestamp")
     private long ts;
 
-    public static <T> boolean hasData(InnospotResponse<T> innospotsResponse) {
+    public static <T> boolean hasData(InnospotsResponse<T> innospotsResponse) {
         return innospotsResponse != null && innospotsResponse.hasData();
     }
 
@@ -77,37 +77,37 @@ public class InnospotResponse<T> {
         this.ts = System.currentTimeMillis();
     }
 
-    public static <T> InnospotResponse<T> success() {
+    public static <T> InnospotsResponse<T> success() {
         return success(null);
     }
 
-    public static <T> InnospotResponse<T> success(T body) {
-        InnospotResponse<T> response = new InnospotResponse<>();
+    public static <T> InnospotsResponse<T> success(T body) {
+        InnospotsResponse<T> response = new InnospotsResponse<>();
         response.setBody(body);
         response.fillResponse(ResponseCode.SUCCESS);
         return response;
     }
 
-    public static <T> InnospotResponse<T> fail(ResponseCode responseCode, String detail) {
-        InnospotResponse<T> innospotResponse = new InnospotResponse<>();
-        innospotResponse.fillResponse(responseCode);
-        innospotResponse.setDetail(detail);
-        return innospotResponse;
+    public static <T> InnospotsResponse<T> fail(ResponseCode responseCode, String detail) {
+        InnospotsResponse<T> innospotsResponse = new InnospotsResponse<>();
+        innospotsResponse.fillResponse(responseCode);
+        innospotsResponse.setDetail(detail);
+        return innospotsResponse;
     }
 
-    public static <T> InnospotResponse<T> fail(ResponseCode responseCode) {
-        InnospotResponse<T> innospotResponse = new InnospotResponse<>();
-        innospotResponse.fillResponse(responseCode);
-        return innospotResponse;
+    public static <T> InnospotsResponse<T> fail(ResponseCode responseCode) {
+        InnospotsResponse<T> innospotsResponse = new InnospotsResponse<>();
+        innospotsResponse.fillResponse(responseCode);
+        return innospotsResponse;
     }
 
-    public static <T> InnospotResponse<T> fail(String message, String code, String detail) {
-        InnospotResponse<T> innospotResponse = new InnospotResponse<>();
-        innospotResponse.setDetail(detail);
-        innospotResponse.setCode(code);
-        innospotResponse.setMessage(message);
-        innospotResponse.ts = System.currentTimeMillis();
-        return innospotResponse;
+    public static <T> InnospotsResponse<T> fail(String message, String code, String detail) {
+        InnospotsResponse<T> innospotsResponse = new InnospotsResponse<>();
+        innospotsResponse.setDetail(detail);
+        innospotsResponse.setCode(code);
+        innospotsResponse.setMessage(message);
+        innospotsResponse.ts = System.currentTimeMillis();
+        return innospotsResponse;
     }
 
     @Override

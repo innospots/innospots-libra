@@ -27,7 +27,7 @@ import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.request.FormQuery;
 import io.innospots.base.enums.ConnectType;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
@@ -42,7 +42,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static io.innospots.base.exception.ValidatorException.buildInvalidException;
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.base.log.OperateType.*;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
@@ -74,7 +74,7 @@ public class CredentialInfoController extends BaseController {
 
     @PostMapping("connection/test")
     @Operation(summary = "test connection", description = "Connection test")
-    public InnospotResponse<Object> testConnection(@Parameter(name = "credentialInfo") @Validated @RequestBody CredentialInfo credentialInfo) {
+    public InnospotsResponse<Object> testConnection(@Parameter(name = "credentialInfo") @Validated @RequestBody CredentialInfo credentialInfo) {
         if (StringUtils.isBlank(credentialInfo.getEncryptFormValues())) {
             throw buildInvalidException(this.getClass(), "schemaDatasource formValues can not be empty");
         }
@@ -89,7 +89,7 @@ public class CredentialInfoController extends BaseController {
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
     @OperationLog(operateType = CREATE, primaryField = "credentialId")
     @Operation(summary = "create credential")
-    public InnospotResponse<CredentialInfo> createCredentialInfo(@Parameter(name = "credentialInfo") @Validated @RequestBody CredentialInfo credentialInfo) {
+    public InnospotsResponse<CredentialInfo> createCredentialInfo(@Parameter(name = "credentialInfo") @Validated @RequestBody CredentialInfo credentialInfo) {
         CredentialInfo create = credentialInfoOperator.createCredential(credentialInfo);
         return success(create);
     }
@@ -98,7 +98,7 @@ public class CredentialInfoController extends BaseController {
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
     @OperationLog(operateType = UPDATE, primaryField = "credentialId")
     @Operation(summary = "update credential")
-    public InnospotResponse<CredentialInfo> updateCredentialInfo(@Parameter(name = "credentialInfo") @Validated @RequestBody CredentialInfo appCredentialInfo) {
+    public InnospotsResponse<CredentialInfo> updateCredentialInfo(@Parameter(name = "credentialInfo") @Validated @RequestBody CredentialInfo appCredentialInfo) {
         CredentialInfo update = credentialInfoOperator.updateCredential(appCredentialInfo);
         return success(update);
     }
@@ -107,14 +107,14 @@ public class CredentialInfoController extends BaseController {
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @OperationLog(operateType = DELETE, idParamPosition = 0)
     @Operation(summary = "delete credential")
-    public InnospotResponse<Boolean> deleteCredentialInfo(@Parameter(name = "credentialKey") @PathVariable String credentialKey) {
+    public InnospotsResponse<Boolean> deleteCredentialInfo(@Parameter(name = "credentialKey") @PathVariable String credentialKey) {
         Boolean delete = credentialInfoOperator.deleteCredential(credentialKey);
         return success(delete);
     }
 
     @GetMapping("{credentialKey}")
     @Operation(summary = "get credential")
-    public InnospotResponse<CredentialInfo> getCredentialInfo(@Parameter(name = "credentialKey") @PathVariable String credentialKey) {
+    public InnospotsResponse<CredentialInfo> getCredentialInfo(@Parameter(name = "credentialKey") @PathVariable String credentialKey) {
         CredentialInfo view = credentialInfoOperator.getCredential(credentialKey);
         return success(view);
     }
@@ -122,7 +122,7 @@ public class CredentialInfoController extends BaseController {
 
     @GetMapping("page")
     @Operation(summary = "page list")
-    public InnospotResponse<PageBody<SimpleCredentialInfo>> CredentialInfoPages(FormQuery formQuery) {
+    public InnospotsResponse<PageBody<SimpleCredentialInfo>> CredentialInfoPages(FormQuery formQuery) {
         PageBody<SimpleCredentialInfo> pages = credentialInfoOperator.pageCredentials(formQuery);
         return success(pages);
     }
@@ -130,7 +130,7 @@ public class CredentialInfoController extends BaseController {
 
     @GetMapping("simple/list")
     @Operation(summary = "list credentials by credential type or connect type")
-    public InnospotResponse<List<SimpleCredentialInfo>> listSimpleCredentials(
+    public InnospotsResponse<List<SimpleCredentialInfo>> listSimpleCredentials(
             @RequestParam(required = false) String credentialTypeCode,
             @RequestParam(required = false) ConnectType connectType
     ) {

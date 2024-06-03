@@ -18,7 +18,7 @@
 
 package io.innospots.workflow.console.controller;
 
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.category.CategoryType;
 import io.innospots.libra.base.log.OperateType;
@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
 
@@ -60,7 +60,7 @@ public class WorkflowCategoryController extends BaseController {
     @PostMapping
     @Operation(summary = "create workflow category")
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${page.category.add.title}")
-    public InnospotResponse<BaseCategory> createCategory(@Parameter(required = true, name = "categoryName") @RequestParam("categoryName") String categoryName) {
+    public InnospotsResponse<BaseCategory> createCategory(@Parameter(required = true, name = "categoryName") @RequestParam("categoryName") String categoryName) {
         BaseCategory category = workflowCategoryOperator.createCategory(categoryName, CategoryType.WORKFLOW);
         return success(category);
     }
@@ -69,8 +69,8 @@ public class WorkflowCategoryController extends BaseController {
     @PutMapping("{categoryId}")
     @Operation(summary = "update strategy category")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${page.category.edit.title}")
-    public InnospotResponse<Boolean> updateCategory(@Parameter(required = true, name = "categoryId") @PathVariable Integer categoryId,
-                                                    @Parameter(required = true, name = "categoryName") @RequestParam("categoryName") String categoryName) {
+    public InnospotsResponse<Boolean> updateCategory(@Parameter(required = true, name = "categoryId") @PathVariable Integer categoryId,
+                                                     @Parameter(required = true, name = "categoryName") @RequestParam("categoryName") String categoryName) {
         Boolean update = workflowCategoryOperator.updateCategory(categoryId, categoryName, CategoryType.WORKFLOW);
         return success(update);
     }
@@ -79,14 +79,14 @@ public class WorkflowCategoryController extends BaseController {
     @DeleteMapping("{categoryId}")
     @Operation(summary = "delete strategy category")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.category.delete.title}")
-    public InnospotResponse<Boolean> deleteCategory(@Parameter(required = true, name = "categoryId") @PathVariable Integer categoryId) {
+    public InnospotsResponse<Boolean> deleteCategory(@Parameter(required = true, name = "categoryId") @PathVariable Integer categoryId) {
         return success(workflowCategoryOperator.deleteCategory(categoryId));
     }
 
 
     @GetMapping
     @Operation(summary = "strategy category list", description = "param：0-strategy category has no value 1-it has value")
-    public InnospotResponse<List<BaseCategory>> listCategories(Boolean hasNumber) {
+    public InnospotsResponse<List<BaseCategory>> listCategories(Boolean hasNumber) {
         List<BaseCategory> list = workflowCategoryOperator.list(hasNumber);
         return success(list);
 
@@ -94,7 +94,7 @@ public class WorkflowCategoryController extends BaseController {
 
     @GetMapping("check/{categoryName}")
     @Operation(summary = "check name duplicate", description = "return: true = duplicate,false = not duplicate")
-    public InnospotResponse<Boolean> checkNameExist(@Parameter(required = true, name = "categoryName") @PathVariable String categoryName) {
+    public InnospotsResponse<Boolean> checkNameExist(@Parameter(required = true, name = "categoryName") @PathVariable String categoryName) {
         return success(workflowCategoryOperator.checkNameExist(categoryName, CategoryType.WORKFLOW));
     }
 

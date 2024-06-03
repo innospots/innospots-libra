@@ -18,7 +18,7 @@
 
 package io.innospots.workflow.console.controller.node;
 
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.workflow.console.operator.node.FlowTemplateOperator;
@@ -53,8 +53,8 @@ public class FlowTemplateController extends BaseController {
 
     @GetMapping("list")
     @Operation(summary = "flow node templates")
-    public InnospotResponse<List<FlowTemplateBase>> listTemplates() {
-        return InnospotResponse.success(flowTemplateOperator.listOnlineFlowTemplates());
+    public InnospotsResponse<List<FlowTemplateBase>> listTemplates() {
+        return InnospotsResponse.success(flowTemplateOperator.listOnlineFlowTemplates());
     }
 
 }

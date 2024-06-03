@@ -29,7 +29,7 @@ import io.innospots.workflow.core.execution.operator.IFlowExecutionOperator;
 import io.innospots.workflow.core.execution.operator.INodeExecutionOperator;
 import io.innospots.workflow.core.execution.operator.IScheduledNodeExecutionOperator;
 import io.innospots.workflow.core.execution.model.scheduled.ScheduledNodeExecution;
-import io.innospots.workflow.core.flow.BuildProcessInfo;
+import io.innospots.workflow.core.flow.model.BuildProcessInfo;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;

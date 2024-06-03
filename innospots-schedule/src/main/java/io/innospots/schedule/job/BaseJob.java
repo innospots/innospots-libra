@@ -18,9 +18,7 @@
 
 package io.innospots.schedule.job;
 
-import io.innospots.base.execution.IExecutor;
-import io.innospots.base.json.JSONUtils;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.schedule.enums.JobType;
 import io.innospots.schedule.exception.JobExecutionException;
@@ -40,6 +38,8 @@ import java.util.Map;
 @Setter
 public abstract class BaseJob {
 
+    public static final String PARAM_EXECUTE_JOB_PARAMS = "job.execute.job_params";
+
     protected JobExecution jobExecution;
 
     public BaseJob(JobExecution jobExecution) {
@@ -58,7 +58,7 @@ public abstract class BaseJob {
      * execute the job
      * @return
      */
-    public abstract InnospotResponse<Map<String,Object>> execute();
+    public abstract InnospotsResponse<Map<String,Object>> execute();
 
 
     protected Integer getParamInteger(String key) {

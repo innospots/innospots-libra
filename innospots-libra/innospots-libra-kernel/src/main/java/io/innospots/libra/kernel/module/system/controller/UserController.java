@@ -20,7 +20,7 @@ package io.innospots.libra.kernel.module.system.controller;
 
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.base.model.user.UserInfo;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
@@ -42,7 +42,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
 
@@ -70,7 +70,7 @@ public class UserController extends BaseController {
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
     @OperationLog(operateType = OperateType.CREATE, primaryField = "userId")
     @Operation(summary = "create user")
-    public InnospotResponse<UserInfo> createUser(@Parameter(name = "user", required = true) @Validated @RequestBody UserForm user) {
+    public InnospotsResponse<UserInfo> createUser(@Parameter(name = "user", required = true) @Validated @RequestBody UserForm user) {
 
         UserInfo userInfo = userService.createUser(user);
         return success(userInfo);
@@ -80,7 +80,7 @@ public class UserController extends BaseController {
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
     @OperationLog(primaryField = "userId", operateType = OperateType.UPDATE)
     @Operation(summary = "update user")
-    public InnospotResponse<Boolean> updateUser(@Parameter(name = "user", required = true) @Validated @RequestBody UserForm user) {
+    public InnospotsResponse<Boolean> updateUser(@Parameter(name = "user", required = true) @Validated @RequestBody UserForm user) {
 
         Boolean update = userService.updateUser(user);
         return success(update);
@@ -90,7 +90,7 @@ public class UserController extends BaseController {
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @OperationLog(idParamPosition = 0, operateType = OperateType.DELETE)
     @Operation(summary = "delete user")
-    public InnospotResponse<Boolean> deleteUser(@Parameter(name = "userId", required = true) @PathVariable Integer userId) {
+    public InnospotsResponse<Boolean> deleteUser(@Parameter(name = "userId", required = true) @PathVariable Integer userId) {
 
         Boolean delete = userService.deleteUser(userId);
         return success(delete);
@@ -98,7 +98,7 @@ public class UserController extends BaseController {
 
     @GetMapping("{userId}")
     @Operation(summary = "view user")
-    public InnospotResponse<UserInfo> getUser(@Parameter(name = "userId", required = true) @PathVariable Integer userId) {
+    public InnospotsResponse<UserInfo> getUser(@Parameter(name = "userId", required = true) @PathVariable Integer userId) {
 
         UserInfo view = userService.getUser(userId);
         return success(view);
@@ -106,7 +106,7 @@ public class UserController extends BaseController {
 
     @GetMapping("page")
     @Operation(summary = "query user")
-    public InnospotResponse<PageBody<UserInfo>> pageUsers(FormQuery request) {
+    public InnospotsResponse<PageBody<UserInfo>> pageUsers(FormQuery request) {
         PageBody<UserInfo> pageModel = userService.pageUsers(request);
         return success(pageModel);
     }
@@ -115,7 +115,7 @@ public class UserController extends BaseController {
     @PostMapping(value = "avatar")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}", label = "${setting.account.button.header}")
     @Operation(summary = "upload avatar")
-    public InnospotResponse<String> uploadAvatar(@Parameter(name = "image", required = true) @RequestParam("image") MultipartFile uploadFile) {
+    public InnospotsResponse<String> uploadAvatar(@Parameter(name = "image", required = true) @RequestParam("image") MultipartFile uploadFile) {
 
         return success(userService.uploadAvatar(uploadFile));
     }
@@ -124,7 +124,7 @@ public class UserController extends BaseController {
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}", label = "${setting.password.button.update}")
     @OperationLog(primaryField = "userId", operateType = OperateType.UPDATE)
     @Operation(summary = "change user password")
-    public InnospotResponse<Boolean> changePassword(@Parameter(name = "user password", required = true) @Valid @RequestBody UserPassword userPassword) {
+    public InnospotsResponse<Boolean> changePassword(@Parameter(name = "user password", required = true) @Valid @RequestBody UserPassword userPassword) {
 
         Boolean update = userOperator.changePassword(userPassword);
         return success(update);
@@ -135,8 +135,8 @@ public class UserController extends BaseController {
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}", label = "${member.slip.status.button.update}")
     @OperationLog(idParamPosition = 0, operateType = OperateType.UPDATE_STATUS)
     @Operation(summary = "enable/disabled user")
-    public InnospotResponse<Boolean> updateUserStatus(@Parameter(required = true, name = "userId") @PathVariable Integer userId,
-                                                      @Parameter(required = true, name = "userStatus") @PathVariable DataStatus userStatus) {
+    public InnospotsResponse<Boolean> updateUserStatus(@Parameter(required = true, name = "userId") @PathVariable Integer userId,
+                                                       @Parameter(required = true, name = "userStatus") @PathVariable DataStatus userStatus) {
 
         Boolean update = userOperator.updateUserStatus(userId, userStatus);
         return success(update);
@@ -144,13 +144,13 @@ public class UserController extends BaseController {
 
     @GetMapping("related-user")
     @Operation(summary = "get related user")
-    public InnospotResponse<List<Integer>> getRelatedUser() {
+    public InnospotsResponse<List<Integer>> getRelatedUser() {
         return success(userService.getRelatedUser());
     }
 
     @GetMapping("admin")
     @Operation(summary = "whether the current user is admin")
-    public InnospotResponse<Boolean> isAdmin() {
+    public InnospotsResponse<Boolean> isAdmin() {
         return success(userService.currentUserAdminRole());
     }
 }

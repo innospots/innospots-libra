@@ -20,7 +20,7 @@ package io.innospots.libra.kernel.module.credential.controller;
 
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.request.FormQuery;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.base.connector.credential.model.CredentialType;
 import io.innospots.base.connector.credential.operator.CredentialTypeOperator;
 import io.innospots.libra.base.log.OperationLog;
@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.base.log.OperateType.*;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
@@ -60,7 +60,7 @@ public class CredentialTypeController {
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
     @OperationLog(operateType = CREATE, primaryField = "typeCode")
     @Operation(summary = "create credential type")
-    public InnospotResponse<CredentialType> createCredentialType(@Parameter(name = "credentialType") @RequestBody CredentialType credentialType) {
+    public InnospotsResponse<CredentialType> createCredentialType(@Parameter(name = "credentialType") @RequestBody CredentialType credentialType) {
         CredentialType create = credentialTypeOperator.createCredentialType(credentialType);
         return success(create);
     }
@@ -69,7 +69,7 @@ public class CredentialTypeController {
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
     @OperationLog(operateType = UPDATE, primaryField = "typeCode")
     @Operation(summary = "update credential type")
-    public InnospotResponse<CredentialType> updateCredentialType(@Parameter(name = "credentialType") @Validated @RequestBody CredentialType credentialType) {
+    public InnospotsResponse<CredentialType> updateCredentialType(@Parameter(name = "credentialType") @Validated @RequestBody CredentialType credentialType) {
         CredentialType update = credentialTypeOperator.updateCredentialType(credentialType);
         return success(update);
     }
@@ -78,14 +78,14 @@ public class CredentialTypeController {
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @OperationLog(operateType = DELETE, idParamPosition = 0)
     @Operation(summary = "delete credential type")
-    public InnospotResponse<Boolean> deleteCredentialType(@Parameter(name = "typeCode") @PathVariable String typeCode) {
+    public InnospotsResponse<Boolean> deleteCredentialType(@Parameter(name = "typeCode") @PathVariable String typeCode) {
         Boolean delete = credentialTypeOperator.deleteCredentialType(typeCode);
         return success(delete);
     }
 
     @GetMapping("{typeCode}")
     @Operation(summary = "get credential type")
-    public InnospotResponse<CredentialType> getCredentialType(@Parameter(name = "typeCode") @PathVariable String typeCode) {
+    public InnospotsResponse<CredentialType> getCredentialType(@Parameter(name = "typeCode") @PathVariable String typeCode) {
         CredentialType view = credentialTypeOperator.getCredentialType(typeCode);
         return success(view);
     }
@@ -93,14 +93,14 @@ public class CredentialTypeController {
 
     @GetMapping("page")
     @Operation(summary = "page list")
-    public InnospotResponse<PageBody<CredentialType>> pageCredentialTypes(FormQuery formQuery) {
+    public InnospotsResponse<PageBody<CredentialType>> pageCredentialTypes(FormQuery formQuery) {
         PageBody<CredentialType> pages = credentialTypeOperator.pageCredentialTypes(formQuery);
         return success(pages);
     }
 
     @GetMapping("list")
     @Operation(summary = "list")
-    public InnospotResponse<List<CredentialType>> listCredentialTypes(@Parameter(name = "connectorName") @RequestParam(required = false) String connectorName) {
+    public InnospotsResponse<List<CredentialType>> listCredentialTypes(@Parameter(name = "connectorName") @RequestParam(required = false) String connectorName) {
         List<CredentialType> list = credentialTypeOperator.listCredentialTypes(connectorName);
         return success(list);
     }

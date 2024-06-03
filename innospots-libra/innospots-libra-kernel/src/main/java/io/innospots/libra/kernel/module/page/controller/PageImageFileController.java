@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.module.page.controller;
 
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
@@ -32,7 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 
 /**
@@ -55,7 +55,7 @@ public class PageImageFileController {
     @ResourceItemOperation(key = "Page-publishPage")
     @PostMapping(value = "image", consumes = "multipart/form-data")
     @Operation(summary = "upload dashboard or widget background image")
-    public InnospotResponse<String> uploadVizImage(
+    public InnospotsResponse<String> uploadVizImage(
             @Parameter(name = "fileName") @RequestParam(required = false) String fileName,
             @Parameter(name = "image", required = true) @RequestPart("image") MultipartFile image) {
         return success(dashboardFileOperator.uploadFile(image, fileName));

@@ -19,9 +19,7 @@
 package io.innospots.libra.kernel.controller;
 
 import io.innospots.base.config.InnospotsConfigProperties;
-import io.innospots.base.model.response.InnospotResponse;
-import io.innospots.libra.base.configuration.AuthProperties;
-import io.innospots.libra.base.configuration.InnospotsConsoleProperties;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -49,7 +47,7 @@ public class SecretKeyController extends BaseController {
 
     @GetMapping
     @Operation(summary = "get secret Key")
-    public InnospotResponse<String> secretKey() {
-        return InnospotResponse.success(configProperties.getSecretKey());
+    public InnospotsResponse<String> secretKey() {
+        return InnospotsResponse.success(configProperties.getSecretKey());
     }
 }

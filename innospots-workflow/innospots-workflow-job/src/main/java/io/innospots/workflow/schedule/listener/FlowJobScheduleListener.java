@@ -22,7 +22,7 @@ import io.innospots.base.events.IEventListener;
 import io.innospots.schedule.enums.JobType;
 import io.innospots.schedule.events.JobExecutionEvent;
 import io.innospots.schedule.model.JobExecution;
-import io.innospots.workflow.schedule.flow.FlowJobManager;
+import io.innospots.workflow.schedule.flow.FlowJobExecutor;
 
 /**
  * @author Smars
@@ -31,7 +31,7 @@ import io.innospots.workflow.schedule.flow.FlowJobManager;
  */
 public class FlowJobScheduleListener implements IEventListener<JobExecutionEvent> {
 
-    private FlowJobManager flowJobManager;
+    private FlowJobExecutor flowJobExecutor;
 
 
     @Override
@@ -39,7 +39,7 @@ public class FlowJobScheduleListener implements IEventListener<JobExecutionEvent
         JobExecution jobExecution = event.jobExecution();
         if (jobExecution.getJobType() != JobType.FLOW) {
             //only process flow job
-            flowJobManager.executeFlowJob(jobExecution);
+            flowJobExecutor.executeNodeJob(jobExecution);
         }
         return null;
     }

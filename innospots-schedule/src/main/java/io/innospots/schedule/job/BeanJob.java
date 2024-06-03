@@ -1,7 +1,7 @@
 package io.innospots.schedule.job;
 
 import cn.hutool.extra.spring.SpringUtil;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.schedule.enums.JobType;
 import io.innospots.schedule.model.JobExecution;
@@ -47,14 +47,14 @@ public class BeanJob extends BaseJob {
 
 
     @Override
-    public InnospotResponse<Map<String, Object>> execute() {
+    public InnospotsResponse<Map<String, Object>> execute() {
         Object jobObject = SpringUtil.getBean(this.beanName);
-        InnospotResponse<Map<String, Object>> resp = new InnospotResponse<>();
+        InnospotsResponse<Map<String, Object>> resp = new InnospotsResponse<>();
         try {
             Method method = jobObject.getClass().getMethod(this.methodName, Map.class);
             Object result = method.invoke(jobObject, this.params);
-            if (result instanceof InnospotResponse) {
-                resp = (InnospotResponse<Map<String, Object>>) result;
+            if (result instanceof InnospotsResponse) {
+                resp = (InnospotsResponse<Map<String, Object>>) result;
             } else if (result instanceof Map) {
                 resp.fillBody((Map<String, Object>) result);
             } else if (result instanceof String) {

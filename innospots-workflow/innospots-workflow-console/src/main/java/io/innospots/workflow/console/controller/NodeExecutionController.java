@@ -18,7 +18,7 @@
 
 package io.innospots.workflow.console.controller;
 
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.workflow.core.execution.model.node.NodeExecutionDisplay;
@@ -53,31 +53,31 @@ public class NodeExecutionController extends BaseController {
 
     @GetMapping("list/latest/workflow-instance/{workflowInstanceId}")
     @Operation(summary = "latest node execution using workflowInstanceId")
-    public InnospotResponse<Map<String, NodeExecutionDisplay>> latestNodeExecutionsByFlowInstance(
+    public InnospotsResponse<Map<String, NodeExecutionDisplay>> latestNodeExecutionsByFlowInstance(
             @Parameter(name = "workflowInstanceId") @PathVariable Long workflowInstanceId,
             @Parameter(name = "revision") @RequestParam(required = false, defaultValue = "0") Integer revision
     ) {
 
-        return InnospotResponse.success(nodeExecutionReader.readLatestNodeExecutionByFlowInstanceId(workflowInstanceId, revision, Collections.emptyList()));
+        return InnospotsResponse.success(nodeExecutionReader.readLatestNodeExecutionByFlowInstanceId(workflowInstanceId, revision, Collections.emptyList()));
     }
 
     @GetMapping("list/workflow-execution/{flowExecutionId}")
     @Operation(summary = "list all the node executions using flowExecutionId")
-    public InnospotResponse<Map<String, NodeExecutionDisplay>> listNodeExecutionsByFlowExecution(
+    public InnospotsResponse<Map<String, NodeExecutionDisplay>> listNodeExecutionsByFlowExecution(
             @Parameter(name = "flowExecutionId") @PathVariable String flowExecutionId) {
 
-        return InnospotResponse.success(nodeExecutionReader.readExecutionByFlowExecutionId(flowExecutionId, Collections.emptyList(), true));
+        return InnospotsResponse.success(nodeExecutionReader.readExecutionByFlowExecutionId(flowExecutionId, Collections.emptyList(), true));
     }
 
 
     @GetMapping("find/node-execution/{nodeExecutionId}")
     @Operation(summary = "find the node executions using primary id, nodeExecutionId")
-    public InnospotResponse<NodeExecutionDisplay> findNodeExecution(
+    public InnospotsResponse<NodeExecutionDisplay> findNodeExecution(
             @Parameter(name = "nodeExecutionId") @PathVariable String nodeExecutionId,
             @Parameter(name = "page") @RequestParam(required = false, defaultValue = "1") Integer page,
             @Parameter(name = "size") @RequestParam(required = false, defaultValue = "50") Integer size
     ) {
-        return InnospotResponse.success(nodeExecutionReader.findNodeExecution(nodeExecutionId, page, size));
+        return InnospotsResponse.success(nodeExecutionReader.findNodeExecution(nodeExecutionId, page, size));
     }
 
 }

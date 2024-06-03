@@ -1,7 +1,7 @@
 package io.innospots.schedule.controller;
 
 import io.innospots.base.constant.PathConstant;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.base.quartz.QuartzScheduleManager;
 import io.innospots.schedule.launcher.ReadyJobLauncher;
 import io.innospots.schedule.model.JobExecution;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 
 /**
  * @author Smars
@@ -38,13 +38,13 @@ public class ExecutorStateController {
 
     @GetMapping("quartz-jobs")
     @Operation(summary = "quartz schedule job in the executor")
-    public InnospotResponse<List<Map<String, Object>>> scheduleInfo() {
+    public InnospotsResponse<List<Map<String, Object>>> scheduleInfo() {
         return success(quartzScheduleManager.schedulerInfo());
     }
 
     @GetMapping("running-jobs")
     @Operation(summary = "running schedule job in the executor")
-    public InnospotResponse<List<JobExecution>> runningJobs() {
+    public InnospotsResponse<List<JobExecution>> runningJobs() {
         return success(readyJobLauncher.currentCacheExecutions());
     }
 

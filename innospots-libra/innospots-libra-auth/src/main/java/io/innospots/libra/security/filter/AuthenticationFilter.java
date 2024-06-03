@@ -21,7 +21,7 @@ package io.innospots.libra.security.filter;
 
 import io.innospots.base.exception.AuthenticationException;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.utils.CCH;
 import io.innospots.libra.base.filter.InnospotsHttpServletRequestWrapper;
@@ -97,7 +97,7 @@ public class AuthenticationFilter implements Filter {
         response.setStatus(HttpServletResponse.SC_OK);
         try {
             PrintWriter writer = response.getWriter();
-            String rtn = JSONUtils.toJsonString(InnospotResponse.fail(code, message));
+            String rtn = JSONUtils.toJsonString(InnospotsResponse.fail(code, message));
             writer.write(rtn);
             writer.close();
         } catch (IOException e) {

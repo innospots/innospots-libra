@@ -23,8 +23,8 @@ import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.node.field.NodeParamField;
-import io.innospots.workflow.core.instance.model.NodeInstance;
-import io.innospots.workflow.node.app.utils.NodeInstanceUtils;
+import io.innospots.workflow.core.utils.NodeInstanceUtils;
+import io.innospots.workflow.node.app.utils.AppNodeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 
@@ -71,7 +71,7 @@ public class GroupTransformNode extends BaseNodeExecutor {
             dimensionFields = NodeInstanceUtils.buildParamFields(ni,FIELD_DIMENSION_LIST);
             listField = NodeInstanceUtils.buildParamField(ni,FIELD_PARENT_LIST);
         }
-        computeFields = NodeInstanceUtils.buildAggregationComputeFields(ni,FIELD_AGGREGATE);
+        computeFields = AppNodeUtils.buildAggregationComputeFields(ni,FIELD_AGGREGATE);
 
     }
 

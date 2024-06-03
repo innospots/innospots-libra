@@ -21,13 +21,13 @@ package io.innospots.workflow.server.watcher;
 import io.innospots.base.watcher.AbstractWatcher;
 import io.innospots.server.base.registry.ServiceRegistryHolder;
 import io.innospots.workflow.core.runtime.FlowRuntimeRegistry;
-import io.innospots.workflow.node.app.StateNode;
+import io.innospots.workflow.core.node.executor.StateNode;
 import io.innospots.workflow.node.app.trigger.ApiTriggerNode;
 import io.innospots.workflow.node.app.trigger.CronTimerNode;
 import io.innospots.workflow.node.app.trigger.CycleTimerNode;
 import io.innospots.workflow.node.app.trigger.QueueTriggerNode;
 import io.innospots.workflow.runtime.container.RunTimeContainerManager;
-import io.innospots.workflow.runtime.flow.FlowManager;
+import io.innospots.workflow.core.flow.manage.FlowManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

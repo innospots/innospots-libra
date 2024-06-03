@@ -20,7 +20,7 @@ package io.innospots.workflow.runtime;
 
 
 import io.innospots.workflow.runtime.config.WorkflowRuntimeConfiguration;
-import io.innospots.workflow.runtime.flow.FlowManager;
+import io.innospots.workflow.core.flow.manage.FlowManager;
 import io.innospots.workflow.runtime.starter.WorkflowStarter;
 import org.springdoc.core.GroupedOpenApi;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

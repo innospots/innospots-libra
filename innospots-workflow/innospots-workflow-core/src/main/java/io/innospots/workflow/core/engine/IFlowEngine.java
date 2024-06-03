@@ -21,7 +21,7 @@ package io.innospots.workflow.core.engine;
 
 import io.innospots.workflow.core.exception.FlowPrepareException;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
-import io.innospots.workflow.core.flow.BuildProcessInfo;
+import io.innospots.workflow.core.flow.model.BuildProcessInfo;
 
 import java.util.List;
 import java.util.Map;

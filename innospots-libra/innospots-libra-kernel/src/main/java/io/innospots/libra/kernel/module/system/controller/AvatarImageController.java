@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.system.controller;
 
 import io.innospots.base.enums.ImageType;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.kernel.module.system.entity.AvatarResourceEntity;
 import io.innospots.base.enums.ImageResource;
 import io.innospots.libra.kernel.module.system.operator.AvatarResourceOperator;
@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Base64;
 
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 
 /**
@@ -56,8 +56,8 @@ public class AvatarImageController {
 
     @PostMapping(value = "{imageType}")
     @ResponseBody
-    public InnospotResponse<String> upload(@PathVariable("imageType") ImageType imageType,
-                                           @Parameter(name = "image", required = true) @RequestParam("image") MultipartFile uploadFile) {
+    public InnospotsResponse<String> upload(@PathVariable("imageType") ImageType imageType,
+                                            @Parameter(name = "image", required = true) @RequestParam("image") MultipartFile uploadFile) {
 
         return success(avatarResourceOperator.upload(imageType, uploadFile));
     }

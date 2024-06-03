@@ -24,11 +24,10 @@ import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.field.InputField;
-import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.core.runtime.FlowEventBody;
-import io.innospots.workflow.node.app.StateNode;
+import io.innospots.workflow.core.node.executor.StateNode;
 import io.innospots.workflow.node.app.data.BaseDataNode;
-import io.innospots.workflow.node.app.utils.NodeInstanceUtils;
+import io.innospots.workflow.core.utils.NodeInstanceUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;

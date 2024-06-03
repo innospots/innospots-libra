@@ -20,7 +20,7 @@ package io.innospots.libra.kernel.module.i18n.controller;
 
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.model.system.OrganizationInfo;
 import io.innospots.libra.base.controller.BaseController;
@@ -40,8 +40,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static io.innospots.base.enums.DataStatus.*;
-import static io.innospots.base.model.response.InnospotResponse.fail;
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.fail;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
 
@@ -77,7 +77,7 @@ public class I18nLanguageController extends BaseController {
     @PostMapping
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
     @Operation(summary = "create i18n language")
-    public InnospotResponse<Boolean> createLanguage(@Valid @RequestBody I18nLanguage i18nLanguage) {
+    public InnospotsResponse<Boolean> createLanguage(@Valid @RequestBody I18nLanguage i18nLanguage) {
         if (i18nLanguage.getStatus() == null) {
             i18nLanguage.setStatus(ONLINE);
         }
@@ -92,7 +92,7 @@ public class I18nLanguageController extends BaseController {
      */
     @GetMapping("exist-locale/{locale}")
     @Operation(summary = "has i18n language")
-    public InnospotResponse<Boolean> hasLocaleLanguage(@PathVariable String locale) {
+    public InnospotsResponse<Boolean> hasLocaleLanguage(@PathVariable String locale) {
         return success(i18nLanguageOperator.hasExist(locale));
     }
 
@@ -104,7 +104,7 @@ public class I18nLanguageController extends BaseController {
      */
     @GetMapping("/{languageId}")
     @Operation(summary = "get i18n language")
-    public InnospotResponse<I18nLanguage> getLocaleLanguage(@PathVariable Integer languageId) {
+    public InnospotsResponse<I18nLanguage> getLocaleLanguage(@PathVariable Integer languageId) {
         return success(i18nLanguageOperator.getLanguage(languageId));
     }
 
@@ -120,7 +120,7 @@ public class I18nLanguageController extends BaseController {
     @PutMapping("{languageId}/status/{status}")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}", label = "${common.button.status}")
     @Operation(summary = "update i18n language status online or offline")
-    public InnospotResponse<Boolean> updateStatus(@PathVariable Integer languageId, @PathVariable Boolean status) {
+    public InnospotsResponse<Boolean> updateStatus(@PathVariable Integer languageId, @PathVariable Boolean status) {
         DataStatus dataStatus = status ? ONLINE : OFFLINE;
         if (dataStatus.equals(OFFLINE)) {
             //判断是否可以关闭
@@ -142,7 +142,7 @@ public class I18nLanguageController extends BaseController {
     @DeleteMapping("{languageId}")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @Operation(summary = "delete i18n language")
-    public InnospotResponse<Boolean> deleteLanguage(@PathVariable Integer languageId) {
+    public InnospotsResponse<Boolean> deleteLanguage(@PathVariable Integer languageId) {
         //判断是否可以关闭
         OrganizationInfo organizationInfo = sysConfigCommonService.getOrganization();
         if (organizationInfo != null && languageId.toString().equals(organizationInfo.getDefaultLanguage())) {
@@ -161,7 +161,7 @@ public class I18nLanguageController extends BaseController {
     @PutMapping
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
     @Operation(summary = "update i18n language")
-    public InnospotResponse<Boolean> updateLanguage(@Valid @RequestBody I18nLanguage i18nLanguage) {
+    public InnospotsResponse<Boolean> updateLanguage(@Valid @RequestBody I18nLanguage i18nLanguage) {
         if (i18nLanguage.getStatus().equals(OFFLINE)) {
             //判断是否可以关闭
             OrganizationInfo organizationInfo = sysConfigCommonService.getOrganization();
@@ -181,7 +181,7 @@ public class I18nLanguageController extends BaseController {
      */
     @GetMapping("page")
     @Operation(summary = "page i18n language")
-    public InnospotResponse<PageBody<I18nLanguage>> pageLanguages(FormQuery formRequest) {
+    public InnospotsResponse<PageBody<I18nLanguage>> pageLanguages(FormQuery formRequest) {
         return success(i18nLanguageOperator.pageLanguages(formRequest));
     }
 
@@ -193,7 +193,7 @@ public class I18nLanguageController extends BaseController {
      */
     @GetMapping("list")
     @Operation(summary = "list i18n language")
-    public InnospotResponse<List<I18nLanguage>> listLanguages(@RequestParam(defaultValue = "ONLINE") DataStatus dataStatus) {
+    public InnospotsResponse<List<I18nLanguage>> listLanguages(@RequestParam(defaultValue = "ONLINE") DataStatus dataStatus) {
         return success(i18nLanguageOperator.list(dataStatus));
     }
 

@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.todo.controller;
 
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
 
 /**
@@ -69,7 +69,7 @@ public class TodoTaskController extends BaseController {
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
     @OperationLog(operateType = OperateType.CREATE, primaryField = "taskId")
     @Operation(summary = "create task")
-    public InnospotResponse<TodoTask> createTodoTask(@Parameter(name = "todoTask", required = true) @Validated @RequestBody TodoTask todoTask) {
+    public InnospotsResponse<TodoTask> createTodoTask(@Parameter(name = "todoTask", required = true) @Validated @RequestBody TodoTask todoTask) {
 
         TodoTask create = todoTaskService.createTodoTask(todoTask);
         return success(create);
@@ -79,7 +79,7 @@ public class TodoTaskController extends BaseController {
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
     @OperationLog(primaryField = "taskId", operateType = OperateType.UPDATE)
     @Operation(summary = "update task")
-    public InnospotResponse<Boolean> updateTodoTask(@Parameter(name = "todoTask", required = true) @Validated @RequestBody TodoTask todoTask) {
+    public InnospotsResponse<Boolean> updateTodoTask(@Parameter(name = "todoTask", required = true) @Validated @RequestBody TodoTask todoTask) {
 
         Boolean update = todoTaskService.updateTodoTask(todoTask);
         return success(update);
@@ -89,7 +89,7 @@ public class TodoTaskController extends BaseController {
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @OperationLog(idParamPosition = 0, operateType = OperateType.DELETE)
     @Operation(summary = "delete task")
-    public InnospotResponse<Boolean> deleteTodoTask(@Parameter(name = "taskId", required = true) @PathVariable Integer taskId) {
+    public InnospotsResponse<Boolean> deleteTodoTask(@Parameter(name = "taskId", required = true) @PathVariable Integer taskId) {
 
         Boolean delete = todoTaskService.deleteTodoTask(taskId);
         return success(delete);
@@ -97,7 +97,7 @@ public class TodoTaskController extends BaseController {
 
     @GetMapping("{taskId}")
     @Operation(summary = "view task")
-    public InnospotResponse<TodoTask> getTodoTask(@Parameter(name = "taskId", required = true) @PathVariable Integer taskId) {
+    public InnospotsResponse<TodoTask> getTodoTask(@Parameter(name = "taskId", required = true) @PathVariable Integer taskId) {
 
         TodoTask view = todoTaskService.getTodoTask(taskId);
         return success(view);
@@ -107,8 +107,8 @@ public class TodoTaskController extends BaseController {
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}", label = "${common.button.status}")
     @OperationLog(idParamPosition = 0, operateType = OperateType.UPDATE_STATUS)
     @Operation(summary = "update task status")
-    public InnospotResponse<Boolean> updateTaskStatus(@Parameter(required = true, name = "taskId") @PathVariable Integer taskId,
-                                                      @Parameter(required = true, name = "taskStatus") @PathVariable TaskStatus taskStatus) {
+    public InnospotsResponse<Boolean> updateTaskStatus(@Parameter(required = true, name = "taskId") @PathVariable Integer taskId,
+                                                       @Parameter(required = true, name = "taskStatus") @PathVariable TaskStatus taskStatus) {
 
         Boolean update = todoTaskOperator.updateTaskStatus(taskId, taskStatus);
         return success(update);
@@ -116,19 +116,19 @@ public class TodoTaskController extends BaseController {
 
     @GetMapping("priority")
     @Operation(summary = "get priority")
-    public InnospotResponse<List<String>> getPriority() {
+    public InnospotsResponse<List<String>> getPriority() {
         return success(todoTaskService.getPriority());
     }
 
     @GetMapping("tag")
     @Operation(summary = "get tag")
-    public InnospotResponse<List<String>> getTag() {
+    public InnospotsResponse<List<String>> getTag() {
         return success(todoTaskTagOperator.getTag());
     }
 
     @GetMapping("page")
     @Operation(summary = "query task")
-    public InnospotResponse<PageBody<TodoTask>> pageTodoTasks(TodoTaskForm request) {
+    public InnospotsResponse<PageBody<TodoTask>> pageTodoTasks(TodoTaskForm request) {
         PageBody<TodoTask> pageModel = todoTaskService.pageTasks(request);
         return success(pageModel);
     }

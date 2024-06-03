@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.core.flow;
+package io.innospots.workflow.core.flow.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.innospots.base.utils.Initializer;

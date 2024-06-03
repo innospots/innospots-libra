@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.i18n.controller;
 
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
@@ -37,7 +37,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Map;
 
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
 
@@ -63,7 +63,7 @@ public class I18nTransMessageController extends BaseController {
 
     @GetMapping("header-column")
     @Operation(summary = "list translate header column")
-    public InnospotResponse<List<TransHeaderColumn>> transHeaderColumns() {
+    public InnospotsResponse<List<TransHeaderColumn>> transHeaderColumns() {
         return success(i18nTransMessageOperator.transHeaderColumns());
     }
 
@@ -71,29 +71,29 @@ public class I18nTransMessageController extends BaseController {
     @PutMapping("message")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
     @Operation(summary = "update translate message")
-    public InnospotResponse<Boolean> updateTransMessage(@RequestBody I18nTransMessageGroup messageGroup) {
+    public InnospotsResponse<Boolean> updateTransMessage(@RequestBody I18nTransMessageGroup messageGroup) {
         return success(i18nTransMessageOperator.updateTransMessageGroup(messageGroup));
     }
 
     @GetMapping("page")
     @Operation(summary = "page translate message")
-    public InnospotResponse<PageBody<I18nTransMessageGroup>> pageTranslations(@RequestParam(defaultValue = "") String app, @RequestParam(defaultValue = "") String module,
-                                                                              @RequestParam(defaultValue = "") String code, @RequestParam(defaultValue = "1") int page,
-                                                                              @RequestParam(defaultValue = "20") int size) {
+    public InnospotsResponse<PageBody<I18nTransMessageGroup>> pageTranslations(@RequestParam(defaultValue = "") String app, @RequestParam(defaultValue = "") String module,
+                                                                               @RequestParam(defaultValue = "") String code, @RequestParam(defaultValue = "1") int page,
+                                                                               @RequestParam(defaultValue = "20") int size) {
         return success(i18nTransMessageOperator.pageTranslations(app, module, code, page, size));
     }
 
     @OperationLog(operateType = OperateType.IMPORT)
     @PostMapping("import-path")
     @Operation(summary = "import translate message of path")
-    public InnospotResponse<Map<String, String>> importTransMessageOfPath(String filePath) {
+    public InnospotsResponse<Map<String, String>> importTransMessageOfPath(String filePath) {
         return success(i18nTransMessageService.importCsv(filePath));
     }
 
     @OperationLog(operateType = OperateType.IMPORT)
     @PostMapping("import-csv")
     @Operation(summary = "import translate message of csv file")
-    public InnospotResponse<Map<String, String>> importTransMessageOfCsv(@RequestParam("file") MultipartFile file) {
+    public InnospotsResponse<Map<String, String>> importTransMessageOfCsv(@RequestParam("file") MultipartFile file) {
 
         return success(i18nTransMessageService.importCsv(file));
     }
@@ -101,7 +101,7 @@ public class I18nTransMessageController extends BaseController {
     @OperationLog(operateType = OperateType.IMPORT)
     @PostMapping("import-excel")
     @Operation(summary = "import translate message of excel file")
-    public InnospotResponse<Map<String, String>> importTransMessageOfExcel(@RequestParam("file") MultipartFile file) {
+    public InnospotsResponse<Map<String, String>> importTransMessageOfExcel(@RequestParam("file") MultipartFile file) {
 
         return success(i18nTransMessageService.importExcel(file));
     }

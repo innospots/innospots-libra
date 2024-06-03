@@ -21,7 +21,7 @@ package io.innospots.base.data.point;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.request.BatchRequest;
 import io.innospots.base.data.request.ItemRequest;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 
 /**
  * data executor
@@ -31,8 +31,8 @@ import io.innospots.base.model.response.InnospotResponse;
  */
 public interface IDataExecutorPoint extends IDataAccessPoint {
 
-    InnospotResponse<DataBody<?>> execute(ItemRequest itemRequest);
+    InnospotsResponse<DataBody<?>> execute(ItemRequest itemRequest);
 
-    InnospotResponse<DataBody<?>> execute(BatchRequest itemRequest);
+    InnospotsResponse<DataBody<?>> execute(BatchRequest itemRequest);
 
 }

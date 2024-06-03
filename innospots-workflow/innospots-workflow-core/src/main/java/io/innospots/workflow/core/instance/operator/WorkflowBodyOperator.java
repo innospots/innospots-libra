@@ -22,7 +22,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.workflow.core.flow.WorkflowBody;
+import io.innospots.workflow.core.flow.model.WorkflowBody;
 import io.innospots.workflow.core.instance.converter.WorkflowInstanceConverter;
 import io.innospots.workflow.core.instance.dao.WorkflowInstanceDao;
 import io.innospots.workflow.core.instance.dao.WorkflowRevisionDao;
@@ -30,7 +30,6 @@ import io.innospots.workflow.core.instance.entity.WorkflowInstanceEntity;
 import io.innospots.workflow.core.instance.entity.WorkflowRevisionEntity;
 import io.innospots.workflow.core.instance.events.InstanceUpdateEvent;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
 
 import java.time.LocalDateTime;
 import java.util.List;

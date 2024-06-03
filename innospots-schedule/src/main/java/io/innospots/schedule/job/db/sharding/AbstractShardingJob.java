@@ -18,14 +18,10 @@
 
 package io.innospots.schedule.job.db.sharding;
 
-import io.innospots.base.condition.Opt;
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.connector.minder.IDataConnectionMinder;
-import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.operator.IDataOperator;
-import io.innospots.base.data.operator.jdbc.SelectClause;
-import io.innospots.base.model.Pair;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.schedule.dispatch.ReadJobDispatcher;
 import io.innospots.schedule.enums.JobType;
@@ -33,7 +29,6 @@ import io.innospots.schedule.job.BaseJob;
 import io.innospots.schedule.model.JobExecution;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,8 +58,6 @@ public abstract class AbstractShardingJob<T> extends BaseJob {
     public static final String PARAM_CREDENTIAL_KEY = "job.credential.key";
 
     public static final String PARAM_EXECUTE_JOB_KEY = "job.execute.job_key";
-
-    public static final String PARAM_EXECUTE_JOB_PARAMS = "job.execute.job_params";
 
     public static final String PARAM_EXECUTE_READ_CLAUSES = "job.execute.read_clause";
 
@@ -119,7 +112,7 @@ public abstract class AbstractShardingJob<T> extends BaseJob {
     }
 
     @Override
-    public InnospotResponse<Map<String, Object>> execute() {
+    public InnospotsResponse<Map<String, Object>> execute() {
         if (shardingList.isEmpty()) {
             log.warn("job sharding is empty,jobKey:{}, executionId:{}, credentialKey:{}, table:{}", jobExecution.getJobKey(), jobExecution.getExecutionId(), credentialKey, table);
             return null;
@@ -141,7 +134,7 @@ public abstract class AbstractShardingJob<T> extends BaseJob {
             Map<String, Object> params = buildShardingExecuteJobParam();
             fillParams(params,shardKey);
             log.info("dispatch jobKey:{}, params:{}", executeJobKey, params);
-            readJobDispatcher.execute(jobExecution.getExecutionId(), seq, executeJobKey, params);
+            readJobDispatcher.dispatch(jobExecution.getExecutionId(), seq, executeJobKey, params);
         }//end for
     }
 

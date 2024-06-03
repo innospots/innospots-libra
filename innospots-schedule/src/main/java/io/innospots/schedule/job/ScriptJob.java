@@ -18,12 +18,8 @@
 
 package io.innospots.schedule.job;
 
-import io.innospots.base.model.response.InnospotResponse;
-import io.innospots.base.model.response.ResponseCode;
-import io.innospots.base.script.ExecutorManagerFactory;
-import io.innospots.base.script.IScriptExecutor;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.schedule.enums.JobType;
-import io.innospots.schedule.exception.JobExecutionException;
 import io.innospots.schedule.model.JobExecution;
 
 import javax.script.*;
@@ -49,8 +45,8 @@ public class ScriptJob extends BaseJob {
     }
 
     @Override
-    public InnospotResponse<Map<String, Object>> execute() {
-        InnospotResponse<Map<String, Object>> response = new InnospotResponse<>();
+    public InnospotsResponse<Map<String, Object>> execute() {
+        InnospotsResponse<Map<String, Object>> response = new InnospotsResponse<>();
         String scriptType = validParamString(PARAM_SCRIPT_TYPE);
         String scriptBody = validParamString(PARAM_SCRIPT_BODY);
 

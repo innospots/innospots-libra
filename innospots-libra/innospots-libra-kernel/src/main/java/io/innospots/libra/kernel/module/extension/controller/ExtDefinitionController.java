@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.module.extension.controller;
 
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.extension.LibraExtensionInformation;
 import io.innospots.libra.base.extension.LibraExtensionProperties;
 import io.innospots.libra.base.menu.ModuleMenu;
@@ -36,8 +36,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotResponse.fail;
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.fail;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.base.model.response.ResponseCode.RESOURCE_ABANDON;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.base.extension.LibraClassPathExtPropertiesLoader.getLibraExtProperties;
@@ -71,7 +71,7 @@ public class ExtDefinitionController {
 
     @GetMapping("{extKey}/modules")
     @Operation(summary = "extension modules")
-    public InnospotResponse<List<ResourceItem>> listMenus(@PathVariable String extKey) {
+    public InnospotsResponse<List<ResourceItem>> listMenus(@PathVariable String extKey) {
         LibraExtensionProperties libraExtProperties = getLibraExtProperties(extKey);
         if (libraExtProperties == null) {
             return fail(RESOURCE_ABANDON);
@@ -89,14 +89,14 @@ public class ExtDefinitionController {
 
     @GetMapping("items/{parentMenuKey}")
     @Operation(summary = "extension dynamic sub menus")
-    public InnospotResponse<List<ResourceItem>> listSubMenus(@PathVariable String parentMenuKey) {
+    public InnospotsResponse<List<ResourceItem>> listSubMenus(@PathVariable String parentMenuKey) {
 
         return success(extMenuExporter.listMenuItems(parentMenuKey));
     }
 
     @GetMapping("list")
     @Operation(summary = "list definition extensions")
-    public InnospotResponse<List<LibraExtensionInformation>> listAppInfos() {
+    public InnospotsResponse<List<LibraExtensionInformation>> listAppInfos() {
         //return success(appDefinitionOperator.listApplications());
         return success(extensionService.listLibraAppInformation(null));
     }

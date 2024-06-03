@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.module.config.controller;
 
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.base.model.system.OrganizationInfo;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
@@ -36,7 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
 
 /**
@@ -60,7 +60,7 @@ public class SysConfigController extends BaseController {
 
     @GetMapping("email")
     @Operation(summary = "get email server info")
-    public InnospotResponse<EmailServerInfo> showEmailConfigs() {
+    public InnospotsResponse<EmailServerInfo> showEmailConfigs() {
         return success(sysConfigOperator.getEmailServerInfo());
     }
 
@@ -68,14 +68,14 @@ public class SysConfigController extends BaseController {
     @OperationLog(operateType = OperateType.UPDATE)
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${setting.email.button.save}")
     @Operation(summary = "save email server info")
-    public InnospotResponse<Boolean> saveEmailConfig(@RequestBody @Valid EmailServerInfo emailServerInfo) {
+    public InnospotsResponse<Boolean> saveEmailConfig(@RequestBody @Valid EmailServerInfo emailServerInfo) {
 
         return success(sysConfigOperator.saveEmailServerConfig(emailServerInfo) > 0);
     }
 
     @GetMapping("organization")
     @Operation(summary = "get organization info")
-    public InnospotResponse<OrganizationInfo> showOrganizationConfigs() {
+    public InnospotsResponse<OrganizationInfo> showOrganizationConfigs() {
         return success(sysConfigService.getOrganization());
     }
 
@@ -83,7 +83,7 @@ public class SysConfigController extends BaseController {
     @OperationLog(operateType = OperateType.UPDATE)
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${setting.organization.button.save}")
     @Operation(summary = "save organization info")
-    public InnospotResponse<Boolean> saveOrganizationConfig(@RequestBody @Valid OrganizationInfo organizationInfo) {
+    public InnospotsResponse<Boolean> saveOrganizationConfig(@RequestBody @Valid OrganizationInfo organizationInfo) {
         return success(sysConfigService.saveOrganizationConfig(organizationInfo) > 0);
     }
 
@@ -91,7 +91,7 @@ public class SysConfigController extends BaseController {
     @PostMapping(value = "logo")
     @ResourceItemOperation(type = BUTTON, icon = "upload", name = "${common.button.upload}")
     @Operation(summary = "upload image")
-    public InnospotResponse<String> uploadLogo(@Parameter(name = "image", required = true) @RequestParam("image") MultipartFile uploadFile) {
+    public InnospotsResponse<String> uploadLogo(@Parameter(name = "image", required = true) @RequestParam("image") MultipartFile uploadFile) {
 
         return success(sysConfigService.uploadLogo(uploadFile));
     }
@@ -100,7 +100,7 @@ public class SysConfigController extends BaseController {
     @PostMapping(value = "favicon")
     @ResourceItemOperation(type = BUTTON, icon = "upload", name = "${common.button.upload}")
     @Operation(summary = "upload image")
-    public InnospotResponse<String> uploadFavicon(@Parameter(name = "image", required = true) @RequestParam("image") MultipartFile uploadFile) {
+    public InnospotsResponse<String> uploadFavicon(@Parameter(name = "image", required = true) @RequestParam("image") MultipartFile uploadFile) {
 
         return success(sysConfigService.uploadFavicon(uploadFile));
     }

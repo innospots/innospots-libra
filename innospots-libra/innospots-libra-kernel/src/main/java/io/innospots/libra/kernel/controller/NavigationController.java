@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.controller;
 
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.menu.ResourceItem;
 import io.innospots.libra.kernel.navigation.LibraNavigationMenuReader;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -50,8 +50,8 @@ public class NavigationController {
      * @return
      */
     @GetMapping("items")
-    public InnospotResponse<List<ResourceItem>> showNavigationMenu() {
-        return InnospotResponse.success(libraNavigationMenuReader.showNavigationMenu());
+    public InnospotsResponse<List<ResourceItem>> showNavigationMenu() {
+        return InnospotsResponse.success(libraNavigationMenuReader.showNavigationMenu());
     }
 
 }

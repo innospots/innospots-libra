@@ -18,11 +18,10 @@
 
 package io.innospots.workflow.runtime.starter;
 
-import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.workflow.core.execution.AsyncExecutors;
 import io.innospots.workflow.core.execution.listener.INodeExecutionListener;
-import io.innospots.workflow.runtime.flow.FlowManager;
+import io.innospots.workflow.core.flow.manage.FlowManager;
 import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

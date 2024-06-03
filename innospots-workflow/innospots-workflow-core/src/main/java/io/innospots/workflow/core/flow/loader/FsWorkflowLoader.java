@@ -16,14 +16,12 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.runtime.loader;
+package io.innospots.workflow.core.flow.loader;
 
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
-import io.innospots.workflow.core.flow.WorkflowBody;
-import io.innospots.workflow.core.flow.loader.BaseWorkflowLoader;
-import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
+import io.innospots.workflow.core.flow.model.WorkflowBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

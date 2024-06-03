@@ -77,7 +77,7 @@ public class LineChainJobListener implements IEventListener<JobExecutionEvent> {
                     //next job will be executed that push to queue
                     Map<String, Object> prm = ParamParser.getParamMap(jobExecution, LineChainJob.PARAM_EXECUTE_JOB_PARAMS);
                     log.info("execute next job in the chain, jobKey:{}, chainExecution:{}",chainKey,jobExecution.info());
-                    readJobDispatcher.execute(jobExecution.getExecutionId(), i+1, chainKey, prm);
+                    readJobDispatcher.dispatch(jobExecution.getExecutionId(), i+1, chainKey, prm);
                     break;
                 }
             }

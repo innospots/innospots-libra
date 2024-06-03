@@ -28,6 +28,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Smars
@@ -35,6 +36,18 @@ import java.util.List;
  * @date 2023/12/5
  */
 public interface ReadyJobDao extends BaseMapper<ReadyJobEntity> {
+
+
+    default List<String> selectNonExecuteJobKeysByParentExecutionId(String parentExecutionId){
+        QueryWrapper<ReadyJobEntity> qw = new QueryWrapper<>();
+        qw.lambda().eq(ReadyJobEntity::getParentExecutionId, parentExecutionId)
+                .in(ReadyJobEntity::getMessageStatus,MessageStatus.UNREAD,MessageStatus.ASSIGNED);
+        List<ReadyJobEntity> list = this.selectList(qw);
+        if(CollectionUtils.isNotEmpty(list)){
+            return list.stream().map(ReadyJobEntity::getJobKey).collect(Collectors.toList());
+        }
+        return Collections.emptyList();
+    }
 
     default long countUnReadAndAssignedJob(String instanceKey,String parentExecutionId){
         QueryWrapper<ReadyJobEntity> qw = new QueryWrapper<>();

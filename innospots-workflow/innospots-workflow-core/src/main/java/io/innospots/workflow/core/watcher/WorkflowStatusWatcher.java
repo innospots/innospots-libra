@@ -16,14 +16,14 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.runtime.watcher;
+package io.innospots.workflow.core.watcher;
 
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.watcher.AbstractWatcher;
-import io.innospots.workflow.core.flow.WorkflowBody;
+import io.innospots.workflow.core.flow.model.WorkflowBody;
 import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
-import io.innospots.workflow.runtime.flow.Flow;
-import io.innospots.workflow.runtime.flow.FlowManager;
+import io.innospots.workflow.core.flow.Flow;
+import io.innospots.workflow.core.flow.manage.FlowManager;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

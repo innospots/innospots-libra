@@ -20,7 +20,7 @@ package io.innospots.libra.kernel.module.logger.aspect;
 
 
 import cn.hutool.core.bean.BeanUtil;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.base.model.user.UserInfo;
 import io.innospots.base.utils.CCH;
 import io.innospots.libra.base.log.OperationLog;
@@ -146,8 +146,8 @@ public class OperateLogAspect {
         String resourceId = null;
         if (StringUtils.isNotBlank(operationLog.primaryField()) && obj != null) {
             Object data = obj;
-            if (obj instanceof InnospotResponse) {
-                data = ((InnospotResponse<?>) obj).getBody();
+            if (obj instanceof InnospotsResponse) {
+                data = ((InnospotsResponse<?>) obj).getBody();
             }
             Object value = BeanUtil.getFieldValue(data, operationLog.primaryField());
             if (value != null) {

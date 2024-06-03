@@ -23,7 +23,7 @@ import datart.provider.Dataframe;
 import datart.provider.StdSqlOperator;
 import io.innospots.base.data.dataset.DatasetExecuteParam;
 import io.innospots.base.exception.ValidatorException;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.kernel.module.schema.dataset.DataframeExecutor;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import java.util.Set;
 
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 
 /**
@@ -58,7 +58,7 @@ public class DatasetDataController {
 
     @PostMapping("execute")
     @Operation(summary = "dataset execute")
-    public InnospotResponse<Dataframe> execute(
+    public InnospotsResponse<Dataframe> execute(
             @Parameter(name = "credentialKey") @RequestParam("credentialKey") String credentialKey,
             @Parameter(name = "page") @RequestParam("page") int page,
             @Parameter(name = "size") @RequestParam("size") int size,
@@ -69,7 +69,7 @@ public class DatasetDataController {
 
     @PostMapping
     @Operation(summary = "dataset data")
-    public InnospotResponse<Dataframe> datasetData(
+    public InnospotsResponse<Dataframe> datasetData(
             @Parameter(name = "viewExecuteParam") @Validated @RequestBody ViewExecuteParam viewExecuteParam,
             BindingResult bindingResult) {
         Dataframe dataframe = dataframeExecutor.datasetData(viewExecuteParam);
@@ -78,7 +78,7 @@ public class DatasetDataController {
 
     @PostMapping("function/validate")
     @Operation(summary = "dataset function validate")
-    public InnospotResponse<Boolean> functionValidate(
+    public InnospotsResponse<Boolean> functionValidate(
             @Parameter(name = "validateParam") @RequestBody Map<String, Object> validateParam) {
         if (MapUtils.isEmpty(validateParam)) {
             return success(false);
@@ -94,7 +94,7 @@ public class DatasetDataController {
 
     @GetMapping("function/support/{viewId}")
     @Operation(summary = "function support list")
-    public InnospotResponse<Set<StdSqlOperator>> functionValidate(
+    public InnospotsResponse<Set<StdSqlOperator>> functionValidate(
             @Parameter(name = "viewId") @PathVariable(name = "viewId") String viewId) {
         Set<StdSqlOperator> sqlOperators = dataframeExecutor.supportedFunctions(viewId);
         return success(sqlOperators);

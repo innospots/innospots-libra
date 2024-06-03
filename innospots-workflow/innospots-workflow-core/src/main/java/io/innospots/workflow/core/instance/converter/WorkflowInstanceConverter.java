@@ -20,9 +20,9 @@ package io.innospots.workflow.core.instance.converter;
 
 import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.workflow.core.instance.entity.WorkflowInstanceEntity;
-import io.innospots.workflow.core.flow.WorkflowBaseInfo;
-import io.innospots.workflow.core.flow.WorkflowBody;
-import io.innospots.workflow.core.flow.WorkflowInfo;
+import io.innospots.workflow.core.flow.model.WorkflowBaseInfo;
+import io.innospots.workflow.core.flow.model.WorkflowBody;
+import io.innospots.workflow.core.flow.model.WorkflowInfo;
 import io.innospots.workflow.core.instance.model.WorkflowInstance;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

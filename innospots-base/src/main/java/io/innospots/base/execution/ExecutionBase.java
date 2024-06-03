@@ -135,6 +135,10 @@ public class ExecutionBase {
         return context!=null? context.getOrDefault(key,null) :null;
     }
 
+    public Map getMap(String key){
+        return context!=null ? (Map) context.getOrDefault(key,null) :null;
+    }
+
     public LocalDateTime getLocalDateTime(String key){
         return context!=null? (LocalDateTime) context.getOrDefault(key,null) :null;
     }

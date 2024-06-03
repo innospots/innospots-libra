@@ -6,7 +6,7 @@ import io.innospots.app.core.model.AppDefinition;
 import io.innospots.app.core.operator.AppDefinitionOperator;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.enums.DataStatus;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,43 +35,43 @@ public class AppDefinitionController extends BaseController {
 
     @GetMapping("{appKey}")
     @Operation(summary = "get application")
-    public InnospotResponse<AppDefinition> getAppDefinition(
+    public InnospotsResponse<AppDefinition> getAppDefinition(
             @Parameter(required = true, name = "appKey") @PathVariable String appKey) {
         AppDefinition appDefinition = appDefinitionOperator.getAppDefinition(appKey);
-        return InnospotResponse.success(appDefinition);
+        return InnospotsResponse.success(appDefinition);
     }
 
     @PostMapping
     @Operation(summary = "create application")
-    public InnospotResponse<AppDefinition> createAppDefinition(
+    public InnospotsResponse<AppDefinition> createAppDefinition(
             @Parameter(required = true, name = "createAppFrom") @RequestBody CreateAppFrom createAppFrom) {
         AppDefinition appDefinition = appDefinitionOperator.createAppDefinition(createAppFrom);
-        return InnospotResponse.success(appDefinition);
+        return InnospotsResponse.success(appDefinition);
     }
 
     @PutMapping
     @Operation(summary = "update application")
-    public InnospotResponse<AppDefinition> updateAppDefinition(@RequestBody AppDefinition appDefinition) {
+    public InnospotsResponse<AppDefinition> updateAppDefinition(@RequestBody AppDefinition appDefinition) {
         AppDefinition updateAppDefinition = appDefinitionOperator.updateAppDefinition(appDefinition);
-        return InnospotResponse.success(updateAppDefinition);
+        return InnospotsResponse.success(updateAppDefinition);
     }
 
     @PutMapping("{appKey}/status/{status}")
     @Operation(summary = "update application status")
-    public InnospotResponse<Boolean> updateStatus(@PathVariable String appKey, @PathVariable DataStatus status) {
-        return InnospotResponse.success(appDefinitionOperator.updateStatus(appKey, status));
+    public InnospotsResponse<Boolean> updateStatus(@PathVariable String appKey, @PathVariable DataStatus status) {
+        return InnospotsResponse.success(appDefinitionOperator.updateStatus(appKey, status));
     }
 
     @DeleteMapping("{appKey}")
     @Operation(summary = "delete application")
-    public InnospotResponse<Boolean> deleteAppDefinition(@PathVariable String appKey) {
-        return InnospotResponse.success(appDefinitionOperator.deleteAppDefinition(appKey));
+    public InnospotsResponse<Boolean> deleteAppDefinition(@PathVariable String appKey) {
+        return InnospotsResponse.success(appDefinitionOperator.deleteAppDefinition(appKey));
     }
 
     @GetMapping("page")
     @Operation(summary = "application page")
-    public InnospotResponse<PageBody<AppDefinition>> pageAppInfos(AppQueryRequest queryRequest) {
-        return InnospotResponse.success(appDefinitionOperator.pageAppInfos(queryRequest));
+    public InnospotsResponse<PageBody<AppDefinition>> pageAppInfos(AppQueryRequest queryRequest) {
+        return InnospotsResponse.success(appDefinitionOperator.pageAppInfos(queryRequest));
     }
 
 }

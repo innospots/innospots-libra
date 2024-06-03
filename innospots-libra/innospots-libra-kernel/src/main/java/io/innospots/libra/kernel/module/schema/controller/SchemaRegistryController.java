@@ -25,8 +25,7 @@ import io.innospots.base.connector.schema.model.SchemaRegistry;
 import io.innospots.base.connector.schema.model.SchemaRegistryType;
 import io.innospots.base.connector.schema.operator.SchemaRegistryOperator;
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.data.dataset.Dataset;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
@@ -42,7 +41,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 
 /**
@@ -72,7 +71,7 @@ public class SchemaRegistryController extends BaseController {
     @PostMapping
     @ResourceItemOperation(key = "SchemaDatasource-updateSchemaDatasource")
     @Operation(summary = "create schema registry")
-    public InnospotResponse<SchemaRegistry> createSchemaRegistry(
+    public InnospotsResponse<SchemaRegistry> createSchemaRegistry(
             @Parameter(name = "schema registry") @Validated @RequestBody SchemaRegistry schemaRegistry, BindingResult bindingResult) {
         SchemaRegistry save = schemaRegistryOperator.createSchemaRegistry(schemaRegistry);
         return success(save);
@@ -82,7 +81,7 @@ public class SchemaRegistryController extends BaseController {
     @PutMapping
     @ResourceItemOperation
     @Operation(summary = "update schema registry", description = "")
-    public InnospotResponse<SchemaRegistry> updateSchemaRegistry(
+    public InnospotsResponse<SchemaRegistry> updateSchemaRegistry(
             @Parameter(name = "schema registry") @Validated @RequestBody SchemaRegistry schemaRegistry, BindingResult bindingResult) {
         SchemaRegistry update = schemaRegistryOperator.updateSchemaRegistry(schemaRegistry);
         return success(update);
@@ -92,7 +91,7 @@ public class SchemaRegistryController extends BaseController {
     @DeleteMapping("{registryId}")
     @ResourceItemOperation
     @Operation(summary = "delete schema registry", description = "")
-    public InnospotResponse<Boolean> deleteSchemaRegistry(
+    public InnospotsResponse<Boolean> deleteSchemaRegistry(
             @Parameter(name = "registryId") @PathVariable String registryId) {
         Boolean delete = schemaRegistryOperator.deleteSchemaRegistry(registryId);
         return success(delete);
@@ -100,7 +99,7 @@ public class SchemaRegistryController extends BaseController {
 
     @GetMapping("list/apps/{appKey}")
     @Operation(summary = "list app schema registries", description = "")
-    public InnospotResponse<List<SchemaRegistry>> listAppSchemaRegistries(
+    public InnospotsResponse<List<SchemaRegistry>> listAppSchemaRegistries(
             @Parameter(name = "appKey") @PathVariable String appKey
     ) {
         return success(schemaRegistryOperator.listAppSchemaRegistries(appKey));
@@ -108,7 +107,7 @@ public class SchemaRegistryController extends BaseController {
 
     @GetMapping("list")
     @Operation(summary = "list schema registries", description = "")
-    public InnospotResponse<List<SchemaRegistry>> listSchemaRegistries(
+    public InnospotsResponse<List<SchemaRegistry>> listSchemaRegistries(
             @Parameter(name = "credentialKey") @RequestParam(value = "credentialKey") String credentialKey,
             @Parameter(name = "includeField") @RequestParam(value = "includeField", required = false, defaultValue = "true") Boolean includeField
     ) {
@@ -119,7 +118,7 @@ public class SchemaRegistryController extends BaseController {
 
     @GetMapping("page/apps/{appKey}")
     @Operation(summary = "page schemaRegistry by appKey", description = "")
-    public InnospotResponse<PageBody<SchemaRegistry>> pageSchemaRegistryByType(
+    public InnospotsResponse<PageBody<SchemaRegistry>> pageSchemaRegistryByType(
             @Parameter(name = "appKey") @PathVariable String appKey,
             @Parameter(name = "name") @RequestParam(value = "name") String name,
             @Parameter(name = "page") @RequestParam(value = "page", defaultValue = "1") Integer page,
@@ -132,7 +131,7 @@ public class SchemaRegistryController extends BaseController {
 
     @GetMapping("page")
     @Operation(summary = "page schemaRegistry")
-    public InnospotResponse<PageBody<SchemaRegistry>> pageSchemaRegistries(
+    public InnospotsResponse<PageBody<SchemaRegistry>> pageSchemaRegistries(
             @Parameter(name = "page") @RequestParam(value = "page") Integer page,
             @Parameter(name = "size") @RequestParam(value = "size") Integer size,
             @Parameter(name = "registryType",description = "VIEW,DATASET,ENTITY,API,TABLE,TABLE_VIEW,WORKFLOW,TOPIC") @RequestParam(value = "registryType", required = false) SchemaRegistryType registryType,
@@ -153,7 +152,7 @@ public class SchemaRegistryController extends BaseController {
 
     @GetMapping("catalog/list")
     @Operation(summary = "list schema catalog from middleware", description = "")
-    public InnospotResponse<List<SchemaCatalog>> listSchemaRegistries(
+    public InnospotsResponse<List<SchemaCatalog>> listSchemaRegistries(
             @Parameter(name = "credentialKey") @RequestParam(value = "credentialKey") String credentialKey) {
         IDataConnectionMinder minder = dataConnectionMinderManager.getMinder(credentialKey);
         List<SchemaCatalog> schemaCatalogs = minder.schemaCatalogs();
@@ -162,7 +161,7 @@ public class SchemaRegistryController extends BaseController {
 
     @GetMapping
     @Operation(summary = "get schema registry", description = "support connectType: QUEUE,JDBC")
-    public InnospotResponse<SchemaRegistry> getSchemaRegistry(
+    public InnospotsResponse<SchemaRegistry> getSchemaRegistry(
             @Parameter(name = "credentialKey") @RequestParam(value = "credentialKey") String credentialKey,
             @Parameter(name = "tableName", description = "When the credential's connectType = JDBC, tableName is required")
             @RequestParam(value = "tableName", required = false) String tableName,
@@ -180,7 +179,7 @@ public class SchemaRegistryController extends BaseController {
 
     @GetMapping("fetch-sample")
     @Operation(summary = "schema registry fetch sample")
-    public InnospotResponse<Object> fetchSample(
+    public InnospotsResponse<Object> fetchSample(
             @Parameter(name = "credentialId") @RequestParam(value = "credentialKey") String credentialKey,
             @Parameter(name = "tableName") @RequestParam(value = "tableName") String tableName) {
         Object result = dataConnectionMinderManager.fetchSample(credentialKey, tableName);

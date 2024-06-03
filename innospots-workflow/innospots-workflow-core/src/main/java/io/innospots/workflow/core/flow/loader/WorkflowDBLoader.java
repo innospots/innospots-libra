@@ -18,8 +18,7 @@
 
 package io.innospots.workflow.core.flow.loader;
 
-import io.innospots.workflow.core.flow.WorkflowBody;
-import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
+import io.innospots.workflow.core.flow.model.WorkflowBody;
 import io.innospots.workflow.core.instance.operator.WorkflowBodyOperator;
 
 import java.util.List;

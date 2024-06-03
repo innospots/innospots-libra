@@ -41,7 +41,7 @@ import io.innospots.workflow.runtime.endpoint.WebhookTestEndpoint;
 import io.innospots.workflow.runtime.endpoint.WorkflowManagementEndpoint;
 import io.innospots.workflow.runtime.engine.ParallelStreamFlowEngine;
 import io.innospots.workflow.runtime.engine.StreamFlowEngine;
-import io.innospots.workflow.runtime.flow.FlowManager;
+import io.innospots.workflow.core.flow.manage.FlowManager;
 import io.innospots.workflow.runtime.flow.FlowNodeSimpleDebugger;
 import io.innospots.workflow.runtime.scheduled.NodeExecutionEventListener;
 import io.innospots.workflow.runtime.server.WorkflowWebhookServer;

@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.logger.controller;
 
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.kernel.module.logger.model.LogFormQuery;
@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 
 /**
@@ -58,7 +58,7 @@ public class SysOperateLogController extends BaseController {
 
     @GetMapping("page")
     @Operation(summary = "query the operate log", description = "query the operate log")
-    public InnospotResponse<PageBody<SysOperateLog>> pageLogs(LogFormQuery queryRequest) {
+    public InnospotsResponse<PageBody<SysOperateLog>> pageLogs(LogFormQuery queryRequest) {
 
         PageBody<SysOperateLog> pageBody = logOperator.pageLogs(queryRequest);
         return success(pageBody);
@@ -66,7 +66,7 @@ public class SysOperateLogController extends BaseController {
 
     @GetMapping("{logId}")
     @Operation(summary = "view log")
-    public InnospotResponse<SysOperateLog> getLog(@Parameter(name = "logId", required = true) @PathVariable Integer logId) {
+    public InnospotsResponse<SysOperateLog> getLog(@Parameter(name = "logId", required = true) @PathVariable Integer logId) {
 
         SysOperateLog view = logOperator.getLog(logId);
         return success(view);
@@ -74,25 +74,25 @@ public class SysOperateLogController extends BaseController {
 
     @GetMapping("newest")
     @Operation(summary = "list newest UseLog")
-    public InnospotResponse<List<UserLogInfo>> listNewestLogs() {
+    public InnospotsResponse<List<UserLogInfo>> listNewestLogs() {
         return success(logOperator.listNewestLogs());
     }
 
     @GetMapping("module")
     @Operation(summary = "get module")
-    public InnospotResponse<List<String>> getModule() {
+    public InnospotsResponse<List<String>> getModule() {
         return success(logOperator.getModule());
     }
 
     @GetMapping("operate")
     @Operation(summary = "get operate")
-    public InnospotResponse<List<String>> getOperate() {
+    public InnospotsResponse<List<String>> getOperate() {
         return success(logOperator.getOperate());
     }
 
     @GetMapping("resource")
     @Operation(summary = "get resource")
-    public InnospotResponse<List<String>> getResource() {
+    public InnospotsResponse<List<String>> getResource() {
         return success(logOperator.getResource());
     }
 }

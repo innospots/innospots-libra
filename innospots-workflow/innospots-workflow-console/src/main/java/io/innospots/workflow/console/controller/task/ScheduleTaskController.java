@@ -2,7 +2,7 @@ package io.innospots.workflow.console.controller.task;
 
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.base.quartz.ScheduleMode;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.workflow.console.model.task.ScheduleTask;
@@ -28,7 +28,7 @@ public class ScheduleTaskController {
 
     @GetMapping("{workflowInstanceId}")
     @Operation(summary = "schedule task info")
-    public InnospotResponse<ScheduleTask> getTask(
+    public InnospotsResponse<ScheduleTask> getTask(
             @Parameter(name = "workflowInstanceId") @PathVariable Long workflowInstanceId){
 
         return null;
@@ -36,7 +36,7 @@ public class ScheduleTaskController {
 
     @GetMapping("page")
     @Operation(summary = "page schedule task")
-    public InnospotResponse<PageBody<ScheduleTask>> pageTask(
+    public InnospotsResponse<PageBody<ScheduleTask>> pageTask(
             @Parameter(name = "page") @RequestParam(required = false, defaultValue = "1") Integer page,
             @Parameter(name = "size") @RequestParam(required = false, defaultValue = "20") Integer size,
             @Parameter(name = "status") @RequestParam(required = false) DataStatus status,
@@ -48,7 +48,7 @@ public class ScheduleTaskController {
 
     @PutMapping("status/{workflowInstanceId}")
     @Operation(summary = "online or offline schedule task")
-    public InnospotResponse<ScheduleTask> updateStatus(
+    public InnospotsResponse<ScheduleTask> updateStatus(
             @Parameter(name = "workflowInstanceId") @PathVariable Long workflowInstanceId,
             @Parameter(name = "status") @RequestParam DataStatus status){
 
@@ -57,7 +57,7 @@ public class ScheduleTaskController {
 
     @PostMapping("execute/{workflowInstanceId}")
     @Operation(summary = "manual execute task")
-    public InnospotResponse<ScheduleTask> executeTask(
+    public InnospotsResponse<ScheduleTask> executeTask(
             @Parameter(name = "workflowInstanceId") @PathVariable Long workflowInstanceId){
 
         return null;
@@ -66,7 +66,7 @@ public class ScheduleTaskController {
 
     @PostMapping("schedule-time")
     @Operation(summary = "schedule time")
-    public InnospotResponse<ScheduleTimeInfo> scheduleTime(
+    public InnospotsResponse<ScheduleTimeInfo> scheduleTime(
             @RequestBody ScheduleTimeInfo scheduleTime
     ){
 

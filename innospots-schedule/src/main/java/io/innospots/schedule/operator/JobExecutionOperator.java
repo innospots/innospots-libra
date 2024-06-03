@@ -33,11 +33,7 @@ import io.innospots.schedule.model.JobExecutionDisplay;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import static io.innospots.schedule.dao.JobExecutionDao.buildUpdateWrapper;
 
 /**
  * @author Smars
@@ -139,5 +135,22 @@ public class JobExecutionOperator extends ServiceImpl<JobExecutionDao, JobExecut
         return updateJobExecution(jobExecutionId, null, null, null, null, status, message);
     }
 
-
+    public List<JobExecution> getSubJobExecutions(String parentExecutionId) {
+        QueryWrapper<JobExecutionEntity> qw = new QueryWrapper<>();
+        qw.lambda().eq(JobExecutionEntity::getParentExecutionId, parentExecutionId)
+                .ge(JobExecutionEntity::getSequenceNumber, 0)
+                .select(JobExecutionEntity::getJobClass,
+                        JobExecutionEntity::getJobName,
+                        JobExecutionEntity::getExecutionId,
+                        JobExecutionEntity::getExecutionStatus,
+                        JobExecutionEntity::getJobType,
+                        JobExecutionEntity::getJobKey,
+                        JobExecutionEntity::getKeyType,
+                        JobExecutionEntity::getExtExecutionId,
+                        JobExecutionEntity::getScopes,
+                        JobExecutionEntity::getResourceKey,
+                        JobExecutionEntity::getOutput
+                );
+        return JobExecutionConverter.INSTANCE.entitiesToModels(this.list(qw));
+    }
 }

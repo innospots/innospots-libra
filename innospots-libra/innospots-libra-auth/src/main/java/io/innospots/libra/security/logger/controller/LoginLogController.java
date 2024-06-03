@@ -19,7 +19,7 @@
 package io.innospots.libra.security.logger.controller;
 
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.base.utils.CCH;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.security.logger.model.LogFormQuery;
@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 
 /**
@@ -53,14 +53,14 @@ public class LoginLogController {
 
     @GetMapping("page")
     @Operation(summary = "page logs")
-    public InnospotResponse<PageBody<LoginLog>> pageLoginLogs(LogFormQuery request) {
+    public InnospotsResponse<PageBody<LoginLog>> pageLoginLogs(LogFormQuery request) {
         PageBody<LoginLog> pageModel = loginLogOperator.pageLogs(request);
         return success(pageModel);
     }
 
     @GetMapping("{logId}")
     @Operation(summary = "view log detail")
-    public InnospotResponse<LoginLog> view(@Parameter(name = "logId", required = true) @PathVariable Integer logId) {
+    public InnospotsResponse<LoginLog> view(@Parameter(name = "logId", required = true) @PathVariable Integer logId) {
 
         LoginLog view = loginLogOperator.getLog(logId);
         return success(view);
@@ -68,7 +68,7 @@ public class LoginLogController {
 
     @GetMapping("current-user/page")
     @Operation(summary = "list login user's logs")
-    public InnospotResponse<PageBody<LoginLog>> pageCurrentUserLogs(
+    public InnospotsResponse<PageBody<LoginLog>> pageCurrentUserLogs(
             @RequestParam(defaultValue = "1", required = false) Integer page,
             @RequestParam(defaultValue = "20", required = false) Integer size) {
         return success(loginLogOperator.pageLogs(CCH.userId(), page, size));
@@ -76,19 +76,19 @@ public class LoginLogController {
 
     @GetMapping("latest")
     @Operation(summary = "current user latest login log")
-    public InnospotResponse<LoginLog> getLatest() {
+    public InnospotsResponse<LoginLog> getLatest() {
         return success(loginLogOperator.getLatest());
     }
 
     @GetMapping("browsers")
     @Operation(summary = "list browser")
-    public InnospotResponse<List<String>> listBrowsers() {
+    public InnospotsResponse<List<String>> listBrowsers() {
         return success(loginLogOperator.listBrowsers());
     }
 
     @GetMapping("operation-systems")
     @Operation(summary = "list os")
-    public InnospotResponse<List<String>> listOperationSystems() {
+    public InnospotsResponse<List<String>> listOperationSystems() {
         return success(loginLogOperator.listOperationSystems());
     }
 }

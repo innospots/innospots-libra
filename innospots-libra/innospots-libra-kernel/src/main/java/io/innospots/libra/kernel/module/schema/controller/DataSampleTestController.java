@@ -23,7 +23,7 @@ import io.innospots.base.connector.credential.reader.IConnectionCredentialReader
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.connector.minder.IDataConnectionMinder;
 import io.innospots.base.data.operator.IQueueSender;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 
 /**
@@ -59,7 +59,7 @@ public class DataSampleTestController extends BaseController {
 
     @PostMapping("send/message/{code}")
     @Operation(summary = "send message to kafka datasource")
-    public InnospotResponse<Boolean> sendMessage(
+    public InnospotsResponse<Boolean> sendMessage(
             @Parameter(name = "code") @PathVariable String credentialKey,
             @Parameter(name = "topic") @RequestParam(name = "topic") String topic,
             @Parameter(name = "data") @RequestBody Map<String, Object> data) {

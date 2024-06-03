@@ -16,22 +16,20 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.runtime.flow;
+package io.innospots.workflow.core.flow;
 
 
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ScriptException;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.script.ExecutorManagerFactory;
-import io.innospots.base.utils.BeanUtils;
-import io.innospots.workflow.core.enums.BuildStatus;
 import io.innospots.workflow.core.enums.FlowStatus;
 import io.innospots.workflow.core.execution.listener.INodeExecutionListener;
-import io.innospots.workflow.core.flow.BuildProcessInfo;
-import io.innospots.workflow.core.flow.WorkflowBody;
-import io.innospots.workflow.core.instance.model.WorkflowInstance;
-import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
+import io.innospots.workflow.core.flow.model.BuildProcessInfo;
+import io.innospots.workflow.core.flow.model.WorkflowBody;
+import io.innospots.workflow.core.flow.manage.FlowCompiler;
 import io.innospots.workflow.core.instance.model.NodeInstance;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.node.executor.NodeExecutorFactory;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;

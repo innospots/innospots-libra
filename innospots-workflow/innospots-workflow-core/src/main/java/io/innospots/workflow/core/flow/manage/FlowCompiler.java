@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.runtime.flow;
+package io.innospots.workflow.core.flow.manage;
 
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import io.innospots.base.exception.InnospotException;
@@ -26,7 +26,8 @@ import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.script.ExecutorManagerFactory;
 import io.innospots.base.script.ScriptExecutorManager;
 import io.innospots.base.script.jit.MethodBody;
-import io.innospots.workflow.core.flow.WorkflowBaseBody;
+import io.innospots.workflow.core.flow.loader.FsWorkflowLoader;
+import io.innospots.workflow.core.flow.model.WorkflowBaseBody;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.core.node.executor.NodeExecutorFactory;
@@ -36,12 +37,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
-import static io.innospots.workflow.runtime.loader.FsWorkflowLoader.DIR_FLOW_CONFIG;
 
 /**
  * @author Smars
@@ -99,7 +95,7 @@ public class FlowCompiler {
         }
         scriptExecutorManager.build();
 //        scriptEngines.values().stream().filter(Objects::nonNull).forEach(IScriptExecutorManager::build);
-        outputFlowFile(ScriptExecutorManager.getClassPath() + File.separator + DIR_FLOW_CONFIG);
+        outputFlowFile(ScriptExecutorManager.getClassPath() + File.separator + FsWorkflowLoader.DIR_FLOW_CONFIG);
     }
 
 

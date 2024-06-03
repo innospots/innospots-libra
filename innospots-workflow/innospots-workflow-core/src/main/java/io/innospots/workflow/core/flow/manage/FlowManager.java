@@ -16,18 +16,19 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.runtime.flow;
+package io.innospots.workflow.core.flow.manage;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import io.innospots.workflow.core.execution.listener.INodeExecutionListener;
-import io.innospots.workflow.core.flow.BuildProcessInfo;
-import io.innospots.workflow.core.flow.WorkflowBody;
+import io.innospots.workflow.core.flow.Flow;
+import io.innospots.workflow.core.flow.model.BuildProcessInfo;
+import io.innospots.workflow.core.flow.model.WorkflowBody;
 import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
+import io.innospots.workflow.core.node.executor.StateNode;
 import io.innospots.workflow.core.node.executor.TriggerNode;
 import io.innospots.workflow.core.runtime.FlowRuntimeRegistry;
-import io.innospots.workflow.node.app.StateNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

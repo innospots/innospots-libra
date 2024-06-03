@@ -20,7 +20,7 @@ package io.innospots.libra.kernel.module.function.controller;
 
 import io.innospots.base.function.definition.model.FunctionDefinition;
 import io.innospots.base.function.definition.operator.FunctionDefinitionOperator;
-import io.innospots.base.model.response.InnospotResponse;
+import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotResponse.success;
+import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 
 
@@ -54,7 +54,7 @@ public class FunctionController extends BaseController {
 
     @GetMapping("list")
     @Operation(summary = "function list")
-    public InnospotResponse<List<FunctionCategory>> listFunctions(
+    public InnospotsResponse<List<FunctionCategory>> listFunctions(
             @RequestParam(required = false) String functionType,
             @RequestParam(required = false) String cateType) {
         return success(functionViewOperator.listFunctionCategory(functionType, cateType));
@@ -64,23 +64,23 @@ public class FunctionController extends BaseController {
     @OperationLog(operateType = OperateType.CREATE, primaryField = "functionId", idParamPosition = 0)
     @PostMapping
     @Operation(summary = "create new function")
-    public InnospotResponse<Boolean> createFunction(@RequestBody FunctionDefinition functionDefinition) {
-        return InnospotResponse.success(functionDefinitionOperator.createFunction(functionDefinition));
+    public InnospotsResponse<Boolean> createFunction(@RequestBody FunctionDefinition functionDefinition) {
+        return InnospotsResponse.success(functionDefinitionOperator.createFunction(functionDefinition));
     }
 
 
     @OperationLog(operateType = OperateType.DELETE, idParamPosition = 0)
     @DeleteMapping("{functionId}")
     @Operation(summary = "delete function")
-    public InnospotResponse<Boolean> deleteFunction(@PathVariable Integer functionId) {
-        return InnospotResponse.success(functionDefinitionOperator.deleteFunction(functionId));
+    public InnospotsResponse<Boolean> deleteFunction(@PathVariable Integer functionId) {
+        return InnospotsResponse.success(functionDefinitionOperator.deleteFunction(functionId));
     }
 
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "functionId", idParamPosition = 0)
     @PutMapping
     @Operation(summary = "update function")
-    public InnospotResponse<Boolean> updateFunction(@RequestBody FunctionDefinition functionDefinition) {
-        return InnospotResponse.success(functionDefinitionOperator.updateFunction(functionDefinition));
+    public InnospotsResponse<Boolean> updateFunction(@RequestBody FunctionDefinition functionDefinition) {
+        return InnospotsResponse.success(functionDefinitionOperator.updateFunction(functionDefinition));
     }
 
 }
