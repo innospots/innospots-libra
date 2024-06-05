@@ -80,86 +80,87 @@ public class Flow {
             buildProcessInfo.setStartTime(System.currentTimeMillis());
             loadStatus = FlowStatus.LOADING;
             Map<String, BaseNodeExecutor> tmpNodeCache = new HashMap<>();
-            FlowCompiler flowCompiler = FlowCompiler.build(workflowBody);
-            if (force) {
-                flowCompiler.clear();
-                flowCompiler = FlowCompiler.build(workflowBody);
-            }
+            try {
 
-            if (!flowCompiler.isCompiled()) {
-                try {
+                FlowCompiler flowCompiler = FlowCompiler.build(workflowBody);
+                if (force) {
+                    flowCompiler.clear();
+                    flowCompiler = FlowCompiler.build(workflowBody);
+                }
+
+                if (!flowCompiler.isCompiled()) {
                     flowCompiler.compile();
-                } catch (ScriptException e) {
-                    logger.error(e.getMessage(), e);
-                    loadStatus = FlowStatus.FAIL;
-                    buildProcessInfo.setStatus(loadStatus);
-                    buildProcessInfo.setMessage(e.getMessage());
-                    buildProcessInfo.setBuildException(e);
-                    return buildProcessInfo;
                 }
-            }
 
-            List<BaseNodeExecutor> tmpStartNodes = new ArrayList<>();
-            for (NodeInstance nodeInstance : workflowBody.getStarts()) {
-                BaseNodeExecutor nodeExecutor = buildNodeExecutor(nodeInstance);
-                if (nodeExecutor != null) {
-                    tmpNodeCache.put(nodeExecutor.nodeKey(), nodeExecutor);
-                    tmpStartNodes.add(nodeExecutor);
-                }
-            }//end for
-
-            startNodes = tmpStartNodes;
-
-            HashSetValuedHashMap<String, String> tmpNextNodes = new HashSetValuedHashMap<>();
-            for (NodeInstance node : workflowBody.getNodes()) {
-                BaseNodeExecutor nodeExecutor = tmpNodeCache.get(node.getNodeKey());
-                if (nodeExecutor == null) {
-                    nodeExecutor = buildNodeExecutor(node);
+                List<BaseNodeExecutor> tmpStartNodes = new ArrayList<>();
+                for (NodeInstance nodeInstance : workflowBody.getStarts()) {
+                    BaseNodeExecutor nodeExecutor = buildNodeExecutor(nodeInstance);
                     if (nodeExecutor != null) {
                         tmpNodeCache.put(nodeExecutor.nodeKey(), nodeExecutor);
+                        tmpStartNodes.add(nodeExecutor);
                     }
-                }
-                //the sources of this node
-                List<String> sourceNodeKeys = workflowBody.sourceNodeKeys(node.getNodeKey());
-                if (CollectionUtils.isNotEmpty(sourceNodeKeys)) {
-                    sourceNodeCache.putAll(node.getNodeKey(), sourceNodeKeys);
-                }
+                }//end for
 
-                if (!tmpNextNodes.containsKey(node.getNodeKey())) {
-                    List<NodeInstance> nextNodes = workflowBody.nextNodes(node.getNodeKey());
-                    if (CollectionUtils.isEmpty(nextNodes)) {
-                        continue;
+                startNodes = tmpStartNodes;
+
+                HashSetValuedHashMap<String, String> tmpNextNodes = new HashSetValuedHashMap<>();
+                for (NodeInstance node : workflowBody.getNodes()) {
+                    BaseNodeExecutor nodeExecutor = tmpNodeCache.get(node.getNodeKey());
+                    if (nodeExecutor == null) {
+                        nodeExecutor = buildNodeExecutor(node);
+                        if (nodeExecutor != null) {
+                            tmpNodeCache.put(nodeExecutor.nodeKey(), nodeExecutor);
+                        }
                     }
-                    for (NodeInstance nextNode : nextNodes) {
-                        if (nextNode == null) {
-                            logger.warn("nextNode is null, sourceNode:{}", node.getNodeKey());
+                    //the sources of this node
+                    List<String> sourceNodeKeys = workflowBody.sourceNodeKeys(node.getNodeKey());
+                    if (CollectionUtils.isNotEmpty(sourceNodeKeys)) {
+                        sourceNodeCache.putAll(node.getNodeKey(), sourceNodeKeys);
+                    }
+
+                    if (!tmpNextNodes.containsKey(node.getNodeKey())) {
+                        List<NodeInstance> nextNodes = workflowBody.nextNodes(node.getNodeKey());
+                        if (CollectionUtils.isEmpty(nextNodes)) {
                             continue;
                         }
-                        nodeExecutor = tmpNodeCache.get(nextNode.getNodeKey());
-                        if (nodeExecutor == null) {
-                            nodeExecutor = buildNodeExecutor(nextNode);
-                            if (nodeExecutor != null) {
-                                tmpNodeCache.put(nodeExecutor.nodeKey(), nodeExecutor);
+                        for (NodeInstance nextNode : nextNodes) {
+                            if (nextNode == null) {
+                                logger.warn("nextNode is null, sourceNode:{}", node.getNodeKey());
+                                continue;
                             }
-                        }//end if
-                        tmpNextNodes.put(node.getNodeKey(), nextNode.getNodeKey());
-                    }//end for
+                            nodeExecutor = tmpNodeCache.get(nextNode.getNodeKey());
+                            if (nodeExecutor == null) {
+                                nodeExecutor = buildNodeExecutor(nextNode);
+                                if (nodeExecutor != null) {
+                                    tmpNodeCache.put(nodeExecutor.nodeKey(), nodeExecutor);
+                                }
+                            }//end if
+                            tmpNextNodes.put(node.getNodeKey(), nextNode.getNodeKey());
+                        }//end for
 
-                }//end if
-            }//end for
+                    }//end if
+                }//end for
 
-            this.nodeCache = tmpNodeCache;
-            this.nextNodeCache = tmpNextNodes;
-            if (buildProcessInfo.getFailCount() == 0) {
-                this.loadStatus = FlowStatus.LOADED;
-            } else {
-                this.loadStatus = FlowStatus.FAIL;
+                this.nodeCache = tmpNodeCache;
+                this.nextNodeCache = tmpNextNodes;
+                if (buildProcessInfo.getFailCount() == 0) {
+                    this.loadStatus = FlowStatus.LOADED;
+                } else {
+                    this.loadStatus = FlowStatus.FAIL;
+                }
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+                loadStatus = FlowStatus.FAIL;
+                buildProcessInfo.incrementFail();
+                buildProcessInfo.setStatus(loadStatus);
+                buildProcessInfo.setMessage(e.getMessage());
+                buildProcessInfo.setBuildException(e);
+            } finally {
+                logger.info("flowId: {}, name:{}, loadStatus: {}, node size:{}", workflowBody.getWorkflowInstanceId(), workflowBody.getName(), loadStatus, nodeCache.size());
+                buildProcessInfo.setStatus(loadStatus);
+                ExecutorManagerFactory.clear(workflowBody.identifier());
+                buildProcessInfo.setEndTime(System.currentTimeMillis());
             }
-
-            logger.info("flowId: {}, name:{}, loadStatus: {}, node size:{}", workflowBody.getWorkflowInstanceId(), workflowBody.getName(), loadStatus, nodeCache.size());
-            buildProcessInfo.setStatus(loadStatus);
-            ExecutorManagerFactory.clear(workflowBody.identifier());
-            buildProcessInfo.setEndTime(System.currentTimeMillis());
         }
         return buildProcessInfo;
     }

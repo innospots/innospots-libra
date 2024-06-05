@@ -51,7 +51,7 @@ public class FlowNodeDebugController {
     @Operation(summary = "upload debug file")
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.upload}")
     public InnospotsResponse<ExecutionResource> uploadFile
-            (@Parameter(name = "files", required = true) @RequestParam("files") MultipartFile uploadFile,@PathVariable boolean force){
+            (@Parameter(name = "files", required = true) @RequestParam("files") MultipartFile uploadFile,   @PathVariable boolean force){
 
         return InnospotsResponse.success(
                 FlowNodeDebuggerBuilder.build("nodeDebugger").updateTestFile(uploadFile,force));

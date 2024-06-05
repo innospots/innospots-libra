@@ -47,7 +47,7 @@ public class ScheduledNodeExecutionWatcher extends AbstractWatcher {
     public int execute() {
 
         if (!ServiceRegistryHolder.isRegistry()) {
-            return 0;
+            return 50;
         }
         String serverKey = ServiceRegistryHolder.getCurrentServer().getServerKey();
 
@@ -55,7 +55,7 @@ public class ScheduledNodeExecutionWatcher extends AbstractWatcher {
                 null, serverKey, ServiceRegistryHolder.currentShardingKeys(InnospotsWorkflowProperties.MAX_SHARDING_KEY));
 
         if (CollectionUtils.isEmpty(scheduledNodeExecutions)) {
-            return 15;
+            return 15000;
         }
 
         for (ScheduledNodeExecution scheduledNodeExecution : scheduledNodeExecutions) {
@@ -63,6 +63,6 @@ public class ScheduledNodeExecutionWatcher extends AbstractWatcher {
             EventBusCenter.getInstance().asyncPost(eventBody);
         }
 
-        return 0;
+        return 5000;
     }
 }

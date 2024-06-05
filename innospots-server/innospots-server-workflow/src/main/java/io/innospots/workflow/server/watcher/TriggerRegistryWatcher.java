@@ -107,6 +107,6 @@ public class TriggerRegistryWatcher extends AbstractWatcher {
         runTimeContainerManager.registerScheduleTriggers(scheduleTriggers);
         runTimeContainerManager.registerDummyTriggers(dummyTriggers);
 
-        return 5;
+        return checkIntervalMills;
     }
 }

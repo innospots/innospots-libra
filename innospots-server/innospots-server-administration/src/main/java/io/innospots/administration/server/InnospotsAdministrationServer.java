@@ -28,6 +28,7 @@ import io.innospots.server.base.ServerConfigImporter;
 import io.innospots.server.base.registry.ServiceRegistryHolder;
 import io.innospots.server.base.registry.enums.ServiceType;
 import io.innospots.workflow.console.WorkflowConsoleImporter;
+import io.innospots.workflow.server.configuration.WorkflowServerImporter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.freemarker.FreeMarkerAutoConfiguration;
@@ -50,7 +51,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @WorkflowConsoleImporter
 @ApplicationConsoleImporter
 @ScheduleConsoleImporter
-//@WorkflowServerImporter
+@WorkflowServerImporter
 @EnableScheduling
 public class InnospotsAdministrationServer {
 

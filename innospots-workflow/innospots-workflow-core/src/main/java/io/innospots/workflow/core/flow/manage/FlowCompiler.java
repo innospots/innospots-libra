@@ -115,7 +115,7 @@ public class FlowCompiler {
             }
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException |
                  InvocationTargetException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage()+","+e.getClass().getName());
             throw InnospotException.buildException(BaseNodeExecutor.class, ResponseCode.INITIALIZING, e);
         }
 //        List<MethodBody> methodBodies = null;

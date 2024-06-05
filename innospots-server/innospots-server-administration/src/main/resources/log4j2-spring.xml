@@ -80,19 +80,20 @@
         <Logger name="io.innospots.libra.kernel.module.i18n.service.I18nTransMessageService" level="debug"/>
         <Logger name="io.innospots.base.data" level="info"/>
         <Logger name="io.innospots.base.data.operator.jdbc" level="debug"/>
-        <Logger name="io.innospots.workflow.runtime.container" level="info"/>
-        <Logger name="io.innospots.workflow.runtime" level="debug"/>
-        <Logger name="io.innospots.workflow.runtime.flow.node" level="debug"/>
-        <Logger name="io.innospots.workflow.console.dao" level="info"/>
-        <Logger name="io.innospots.workflow.console.operator" level="debug"/>
-        <Logger name="io.innospots.workflow.runtime.watcher" level="info"/>
-        <Logger name="io.innospots.workflow.core.execution.store.NodeExecutionStoreListener" level="info"/>
         <Logger name="io.innospots.base.registry" level="info"/>
         <Logger name="io.innospots.base.data.operator" level="info"/>
         <Logger name="io.innospots.connector.schema.dao" level="info"/>
+        <Logger name="io.innospots.server.base.registry" level="info"/>
+        <Logger name="io.innospots.workflow.core.execution.dao" level="info"/>
+        <Logger name="io.innospots.workflow.core.instance.dao" level="info"/>
+        <Logger name="io.innospots.workflow.runtime.container" level="info"/>
+        <Logger name="io.innospots.workflow.runtime" level="debug"/>
         <Logger name="io.innospots.workflow.runtime.flow.node" level="debug"/>
         <Logger name="io.innospots.workflow.runtime.scheduled" level="debug"/>
-        <Logger name="io.innospots.server.base.registry" level="info"/>
+        <Logger name="io.innospots.workflow.runtime.watcher" level="info"/>
+        <Logger name="io.innospots.workflow.console.dao" level="info"/>
+        <Logger name="io.innospots.workflow.console.operator" level="debug"/>
+        <Logger name="io.innospots.workflow.core.execution.store.NodeExecutionStoreListener" level="info"/>
     </Loggers>
 
 </Configuration>

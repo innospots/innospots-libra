@@ -77,7 +77,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(code = HttpStatus.PAYLOAD_TOO_LARGE)
     public ErrorResponse handleException(MultipartException e) {
         logger.error("multipart exception: ", e);
-        return new ErrorResponse(ResponseCode.IMG_SIZE_ERROR.getInfo(), ResponseCode.IMG_SIZE_ERROR.getCode(), "");
+        return ErrorResponse.build(e);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
