@@ -29,7 +29,7 @@ import io.innospots.workflow.core.execution.*;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.events.NodeExecutionTaskEvent;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
-import io.innospots.workflow.core.execution.model.ExecutionResource;
+import io.innospots.base.execution.ExecutionResource;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.listener.INodeExecutionListener;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
@@ -435,7 +435,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
 
 
     public MethodBody buildScriptMethodBody() {
-        String src = this.valueString(FIELD_SCRIPT_TYPE);
+        String src = this.valueString(FIELD_ACTION_SCRIPT);
         String scriptType = scriptType();
         if (StringUtils.isEmpty(src) || StringUtils.isEmpty(scriptType)) {
             return null;

@@ -19,7 +19,7 @@
 package io.innospots.workflow.core.debug;
 
 
-import io.innospots.workflow.core.execution.model.ExecutionResource;
+import io.innospots.base.execution.ExecutionResource;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecutionDisplay;
 import io.innospots.workflow.core.runtime.webhook.WorkflowResponse;

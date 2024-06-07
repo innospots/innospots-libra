@@ -10,8 +10,9 @@ import com.alibaba.excel.write.builder.ExcelWriterSheetBuilder;
 import com.google.common.collect.Lists;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.base.utils.BeanUtils;
+import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
-import io.innospots.workflow.core.execution.model.ExecutionResource;
+import io.innospots.base.execution.ExecutionResource;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
@@ -198,7 +199,7 @@ public class ExcelFileNode extends BaseNodeExecutor {
             sheetBuilder.head(headers).needHead(firstHeader);
         }
         sheetBuilder.doWrite(items);
-        ExecutionResource executionResource = ExecutionResource.buildResource(excelFile,false);
+        ExecutionResource executionResource = ExecutionResource.buildResource(excelFile,false, InnospotsWorkflowProperties.WORKFLOW_RESOURCES);
         nodeOutput.addResource(0,executionResource);
     }
 

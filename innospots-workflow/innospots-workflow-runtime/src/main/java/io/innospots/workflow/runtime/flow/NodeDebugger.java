@@ -18,14 +18,17 @@
 
 package io.innospots.workflow.runtime.flow;
 
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.script.ExecutorManagerFactory;
+import io.innospots.base.utils.FileUtils;
+import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.debug.DebugPayload;
 import io.innospots.workflow.core.debug.DebugInput;
 import io.innospots.workflow.core.execution.enums.RecordMode;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
-import io.innospots.workflow.core.execution.model.ExecutionResource;
+import io.innospots.base.execution.ExecutionResource;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecutionDisplay;
@@ -39,7 +42,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -61,24 +66,14 @@ public class NodeDebugger {
      * @return
      */
     public static ExecutionResource updateTestFile(MultipartFile uploadFile,boolean force){
-
-        ExecutionResource res = new ExecutionResource();
-        res.setMimeType(uploadFile.getContentType());
-        res.setResourceName(uploadFile.getOriginalFilename());
+        ExecutionResource res = null;
         try {
-            Path parentPath = Files.createTempDirectory("innospots_app_files");
-            String fileName = uploadFile.getOriginalFilename();
-            File destFile = new File(parentPath.toFile().getAbsolutePath(),fileName);
-            res.setResourceUri(destFile.getAbsolutePath());
-            if(force){
-                if(destFile.exists()){
-                    destFile.delete();
-                }
-                //destFile = ImageFileUploader.upload(uploadFile,destFile, ImageType.OTHER);
-            }else if(!destFile.exists()){
-                //destFile = ImageFileUploader.upload(uploadFile,destFile, ImageType.OTHER);
-            }
-            res.setResourceId(DigestUtil.sha1Hex(destFile));
+            Path parentPath = Files.createTempDirectory("innospots_files");
+//            Path parentPath = Path.of("/Users/yxy/temp/abc1");
+            File pPath = parentPath.toFile();
+            res = FileUtils.getInstance().upload(uploadFile.getInputStream(),
+                    pPath.getAbsolutePath(), uploadFile.getOriginalFilename(),
+                    InnospotsWorkflowProperties.WORKFLOW_RESOURCES, force);
         } catch (IOException e) {
             log.error(e.getMessage(),e);
         }

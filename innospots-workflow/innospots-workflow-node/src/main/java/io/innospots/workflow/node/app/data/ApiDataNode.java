@@ -25,6 +25,7 @@ import com.google.common.base.Enums;
 import io.innospots.base.condition.Factor;
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.connector.minder.IDataConnectionMinder;
+import io.innospots.base.crypto.EncryptorBuilder;
 import io.innospots.base.data.request.BaseRequest;
 import io.innospots.base.data.request.ItemRequest;
 import io.innospots.base.json.JSONUtils;
@@ -34,7 +35,6 @@ import io.innospots.base.utils.PlaceholderUtils;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
-import io.innospots.workflow.core.utils.WorkflowUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -347,7 +347,7 @@ public class ApiDataNode extends DataNode {
             String fileValue = String.valueOf(value);
             if(fileValue.startsWith("file://")){
                 fileValue = fileValue.replace("file://","");
-                String filePath = WorkflowUtils.encryptor.decode(fileValue);
+                String filePath = EncryptorBuilder.encryptor.decode(fileValue);
                 File file = new File(filePath);
                 if(!file.exists()){
                     return null;

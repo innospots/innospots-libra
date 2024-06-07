@@ -16,11 +16,11 @@
  * limitations under the License.
  */
 
-package io.innospots.workflow.core.execution.model;
+package io.innospots.base.execution;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.innospots.base.constant.PathConstant;
-import io.innospots.workflow.core.utils.WorkflowUtils;
+import io.innospots.base.crypto.EncryptorBuilder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -94,7 +94,7 @@ public class ExecutionResource {
         return meta;
     }
 
-    public static ExecutionResource buildResource(File localFile, boolean executionCache) {
+    public static ExecutionResource buildResource(File localFile, boolean executionCache,String contextPath) {
         ExecutionResource resource = new ExecutionResource();
 
         resource.resourceName = localFile.getName();
@@ -115,11 +115,13 @@ public class ExecutionResource {
         if(resource.mimeType == null){
             resource.mimeType = URLConnection.getFileNameMap().getContentTypeFor(localFile.getName());
         }
-        if(WorkflowUtils.encryptor!=null){
-            resource.resourceId = WorkflowUtils.encryptor.encode(localFile.getAbsolutePath());
+        if(EncryptorBuilder.encryptor!=null){
+            resource.resourceId = EncryptorBuilder.encryptor.encode(localFile.getAbsolutePath());
         }
 
-        resource.resourceUri = PathConstant.ROOT_PATH +"workflow/flow-execution/resources?resourceId="+resource.resourceId;
+        resource.resourceUri = PathConstant.ROOT_PATH +contextPath+"?resourceId="+resource.resourceId;
+
+//        resource.resourceUri = PathConstant.ROOT_PATH +"workflow/flow-execution/resources?resourceId="+resource.resourceId;
         resource.localUri = localFile.getAbsolutePath();
         if(log.isDebugEnabled()){
             log.debug("resource info:{}",resource);

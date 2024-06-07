@@ -18,14 +18,15 @@
 
 package io.innospots.workflow.console.controller;
 
+import io.innospots.base.crypto.EncryptorBuilder;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.menu.ModuleMenu;
-import io.innospots.workflow.core.execution.model.ExecutionResource;
+import io.innospots.base.execution.ExecutionResource;
+import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.execution.model.flow.FlowExecutionBase;
 import io.innospots.workflow.core.execution.reader.FlowExecutionReader;
-import io.innospots.workflow.core.utils.WorkflowUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -108,10 +109,10 @@ public class FlowExecutionController extends BaseController {
     @GetMapping(value = "resources")
     @ResponseBody
     public ResponseEntity resource(@RequestParam("resourceId") String resourceId) throws IOException {
-        String uri = WorkflowUtils.encryptor.decode(resourceId);
+        String uri = EncryptorBuilder.encryptor.decode(resourceId);
         File resFile = new File(uri);
         log.debug("resource file:{}",uri);
-        ExecutionResource executionResource = ExecutionResource.buildResource(resFile,true);
+        ExecutionResource executionResource = ExecutionResource.buildResource(resFile,true, InnospotsWorkflowProperties.WORKFLOW_RESOURCES);
         InputStreamSource resource = executionResource.buildInputStreamSource();
         String[] ss = executionResource.getMimeType().split("/");
         return ResponseEntity.ok().contentType(new MediaType(ss[0], ss[1])).body(resource);

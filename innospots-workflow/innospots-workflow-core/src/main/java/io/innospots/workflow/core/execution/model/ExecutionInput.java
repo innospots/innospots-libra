@@ -18,6 +18,7 @@
 
 package io.innospots.workflow.core.execution.model;
 
+import io.innospots.base.execution.ExecutionResource;
 import lombok.Getter;
 import lombok.Setter;
 

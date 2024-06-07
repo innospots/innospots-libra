@@ -19,7 +19,7 @@
 package io.innospots.workflow.core.execution.model.node;
 
 import io.innospots.base.data.body.PageBody;
-import io.innospots.workflow.core.execution.model.ExecutionResource;
+import io.innospots.base.execution.ExecutionResource;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;

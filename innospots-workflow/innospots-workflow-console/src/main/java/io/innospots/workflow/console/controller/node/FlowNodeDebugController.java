@@ -25,7 +25,7 @@ import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
 import io.innospots.workflow.core.debug.DebugPayload;
 import io.innospots.workflow.core.debug.FlowNodeDebuggerBuilder;
-import io.innospots.workflow.core.execution.model.ExecutionResource;
+import io.innospots.base.execution.ExecutionResource;
 import io.innospots.workflow.core.execution.model.node.NodeExecutionDisplay;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

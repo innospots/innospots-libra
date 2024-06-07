@@ -21,8 +21,9 @@ package io.innospots.workflow.core.execution.operator;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.utils.time.DateTimeUtils;
+import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
-import io.innospots.workflow.core.execution.model.ExecutionResource;
+import io.innospots.base.execution.ExecutionResource;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
@@ -195,7 +196,7 @@ public interface IExecutionContextOperator {
                     logger.error(e.getMessage(), e);
                 }
             }
-            ExecutionResource executionResource = ExecutionResource.buildResource(resourceFile, false);
+            ExecutionResource executionResource = ExecutionResource.buildResource(resourceFile, false, InnospotsWorkflowProperties.WORKFLOW_RESOURCES);
             outResources.add(executionResource);
         }//end for
 

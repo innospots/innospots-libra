@@ -27,6 +27,14 @@ import io.innospots.base.exception.CryptoException;
  */
 public class EncryptorBuilder {
 
+    public static IEncryptor encryptor;
+
+    public static void initialize(String secretKey){
+        if(encryptor==null){
+            encryptor = build(EncryptType.BLOWFISH, secretKey);
+        }
+    }
+
 
     public static IEncryptor build(EncryptType encryptType, String secretKey) {
         switch (encryptType) {

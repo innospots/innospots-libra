@@ -18,11 +18,11 @@
 
 package io.innospots.workflow.runtime.starter;
 
+import io.innospots.base.crypto.EncryptorBuilder;
 import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
 import io.innospots.workflow.core.runtime.lisenter.WorkflowRuntimeListener;
-import io.innospots.workflow.core.utils.WorkflowUtils;
 import io.innospots.workflow.runtime.container.RunTimeContainerManager;
 import io.innospots.workflow.runtime.server.WorkflowWebhookServer;
 import org.slf4j.Logger;
@@ -68,7 +68,7 @@ public class RuntimePrepareStarter implements ApplicationRunner {
         Map<String, WorkflowRuntimeListener> listeners =
                 BeanContextAwareUtils.getBeansOfType(WorkflowRuntimeListener.class);
         runTimeContainerManager.addListener(listeners.values());
-        WorkflowUtils.initialize(workflowProperties);
+        EncryptorBuilder.initialize(workflowProperties.getResourceSecretKey());
         logger.info("server liveness state:{}", applicationAvailability.getLivenessState());
         logger.info("server readiness state:{}", applicationAvailability.getReadinessState());
         logger.info("workflow context file store path:{}", WorkflowRuntimeContext.contextResourcePath);

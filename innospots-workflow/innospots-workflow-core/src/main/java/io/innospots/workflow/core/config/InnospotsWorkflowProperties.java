@@ -31,8 +31,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "innospots.workflow")
 public class InnospotsWorkflowProperties {
 
+    public static final String WORKFLOW_RESOURCES = "workflow/flow-execution/resources";
 
-    public static int MAX_SHARDING_KEY = 16;
+    public static final int MAX_SHARDING_KEY = 16;
 
     /**
      * the maximum amount number of versions

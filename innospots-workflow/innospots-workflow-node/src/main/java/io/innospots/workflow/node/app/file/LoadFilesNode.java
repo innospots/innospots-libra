@@ -18,11 +18,11 @@
 
 package io.innospots.workflow.node.app.file;
 
-import io.innospots.workflow.core.execution.model.ExecutionResource;
+import io.innospots.base.execution.ExecutionResource;
+import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
-import io.innospots.workflow.core.instance.model.NodeInstance;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -63,7 +63,7 @@ public class LoadFilesNode extends BaseNodeExecutor {
         if (readFiles != null) {
             for (int i = 0; i < readFiles.length; i++) {
                 File rFile = readFiles[i];
-                ExecutionResource executionResource = ExecutionResource.buildResource(rFile, true);
+                ExecutionResource executionResource = ExecutionResource.buildResource(rFile, true, InnospotsWorkflowProperties.WORKFLOW_RESOURCES);
                 nodeOutput.addResource(i,executionResource);
                 if(StringUtils.isNotEmpty(fileVar)){
                     Map<String, Object> files = new HashMap<>();

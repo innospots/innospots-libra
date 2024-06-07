@@ -19,7 +19,7 @@
 package io.innospots.workflow.runtime.webhook;
 
 import io.innospots.workflow.core.execution.model.ExecutionInput;
-import io.innospots.workflow.core.execution.model.ExecutionResource;
+import io.innospots.base.execution.ExecutionResource;
 import io.innospots.workflow.core.runtime.webhook.FlowWebhookConfig;
 import lombok.Getter;
 import lombok.Setter;
