@@ -23,7 +23,10 @@ import io.innospots.workflow.core.execution.dao.ExecutionContextDao;
 import io.innospots.workflow.core.execution.dao.FlowExecutionDao;
 import io.innospots.workflow.core.execution.dao.NodeExecutionDao;
 import io.innospots.workflow.core.execution.dao.ScheduledNodeExecutionDao;
+import io.innospots.workflow.core.execution.entity.ExecutionContextEntity;
 import io.innospots.workflow.core.execution.entity.FlowExecutionEntity;
+import io.innospots.workflow.core.execution.entity.NodeExecutionEntity;
+import io.innospots.workflow.core.execution.entity.ScheduledNodeExecutionEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -79,18 +82,18 @@ public class ExecutionManagerOperator {
 
     public int deleteExecutionLog(Long flowInstanceId) {
         QueryWrapper<FlowExecutionEntity> wrapper = new QueryWrapper<>();
-        wrapper.select("flow_execution_id");
-        wrapper.lambda().eq(FlowExecutionEntity::getFlowInstanceId, flowInstanceId);
-        List<FlowExecutionEntity> list = this.flowExecutionDao.selectList(wrapper);
-        if (list == null || list.isEmpty()) {
-            return 0;
-        }
-        List<String> executionIdList = list.stream().map(FlowExecutionEntity::getFlowExecutionId).collect(Collectors.toList());
-        this.flowExecutionDao.deleteBatchIds(executionIdList);
-        this.nodeExecutionDao.deleteBatchIds(executionIdList);
-        this.executionContextDao.deleteBatchIds(executionIdList);
-        this.scheduledNodeExecutionDao.deleteBatchIds(executionIdList);
-        return executionIdList.size();
+        wrapper.lambda().eq(FlowExecutionEntity::getFlowInstanceId,flowInstanceId);
+        int cnt = this.flowExecutionDao.delete(wrapper);
+        QueryWrapper<NodeExecutionEntity> nQuery = new QueryWrapper<>();
+        nQuery.lambda().eq(NodeExecutionEntity::getFlowInstanceId,flowInstanceId);
+        this.nodeExecutionDao.delete(nQuery);
+        QueryWrapper<ExecutionContextEntity> cQuery = new QueryWrapper<>();
+        cQuery.lambda().eq(ExecutionContextEntity::getFlowInstanceId,flowInstanceId);
+        this.executionContextDao.delete(cQuery);
+        QueryWrapper<ScheduledNodeExecutionEntity> sQuery = new QueryWrapper<>();
+        sQuery.lambda().eq(ScheduledNodeExecutionEntity::getFlowInstanceId,flowInstanceId);
+        this.scheduledNodeExecutionDao.delete(sQuery);
+        return cnt;
     }
 
 }

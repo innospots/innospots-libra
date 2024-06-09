@@ -18,18 +18,15 @@
 
 package io.innospots.workflow.console.controller;
 
-import io.innospots.base.enums.DataStatus;
 import io.innospots.base.data.body.PageBody;
+import io.innospots.base.data.request.FormQuery;
+import io.innospots.base.enums.DataStatus;
 import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
-import io.innospots.base.data.request.FormQuery;
-import io.innospots.workflow.console.operator.execution.ExecutionManagerOperator;
-import io.innospots.workflow.core.instance.operator.WorkflowBodyOperator;
-import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
 import io.innospots.workflow.console.service.WorkflowService;
 import io.innospots.workflow.core.flow.model.WorkflowBaseInfo;
 import io.innospots.workflow.core.flow.model.WorkflowInfo;
@@ -40,7 +37,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
 import java.util.List;
 
 import static io.innospots.base.model.response.InnospotsResponse.success;
@@ -57,21 +53,10 @@ import static io.innospots.libra.base.menu.ItemType.BUTTON;
 @Tag(name = "Workflow Instance")
 public class WorkflowInstanceController extends BaseController {
 
-    private final WorkflowInstanceOperator workflowInstanceOperator;
-
-    private final WorkflowBodyOperator workflowBodyOperator;
-
-    private final ExecutionManagerOperator executionManagerOperator;
 
     private final WorkflowService workflowService;
 
-    public WorkflowInstanceController(WorkflowInstanceOperator workflowInstanceOperator,
-                                      WorkflowBodyOperator workflowBodyOperator,
-                                      ExecutionManagerOperator executionManagerOperator,
-                                      WorkflowService workflowService) {
-        this.workflowInstanceOperator = workflowInstanceOperator;
-        this.workflowBodyOperator = workflowBodyOperator;
-        this.executionManagerOperator = executionManagerOperator;
+    public WorkflowInstanceController(WorkflowService workflowService) {
         this.workflowService = workflowService;
     }
 
@@ -86,7 +71,7 @@ public class WorkflowInstanceController extends BaseController {
     @OperationLog(operateType = OperateType.CREATE, primaryField = "workflowInstanceId")
     @Operation(summary = "create workflow")
     public InnospotsResponse<WorkflowInstance> createWorkflow(@Parameter(name = "workflow") @Valid @RequestBody WorkflowInfo workflow) {
-        WorkflowInstance workflowInstance = workflowInstanceOperator.createWorkflow(workflow);
+        WorkflowInstance workflowInstance = workflowService.createWorkflow(workflow);
         return success(workflowInstance);
     }
 
@@ -101,7 +86,7 @@ public class WorkflowInstanceController extends BaseController {
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.save}")
     @Operation(summary = "update workflow")
     public InnospotsResponse<Boolean> updateWorkflow(@Parameter(name = "workflow") @Valid @RequestBody WorkflowInstance workflow) {
-        Boolean updateInfo = workflowInstanceOperator.updateWorkflow(workflow);
+        Boolean updateInfo = workflowService.updateWorkflow(workflow);
         return success(updateInfo);
     }
 
@@ -116,7 +101,7 @@ public class WorkflowInstanceController extends BaseController {
     @Operation(summary = "remove workflow to recycle bin", description = "remove workflow to recycle bin")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.tooltip.recycle_bin}")
     public InnospotsResponse<Boolean> removeWorkflowToRecycle(@Parameter(required = true, name = "workflowInstanceId") @PathVariable Long workflowInstanceId) {
-        Boolean delete = workflowInstanceOperator.removeWorkflowToRecycle(workflowInstanceId);
+        Boolean delete = workflowService.removeWorkflowToRecycle(workflowInstanceId);
         return success(delete);
     }
 
@@ -125,10 +110,7 @@ public class WorkflowInstanceController extends BaseController {
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @OperationLog(idParamPosition = 0, operateType = OperateType.DELETE)
     public InnospotsResponse<Boolean> deleteWorkflowInstance(@Parameter(required = true, name = "workflowInstanceId") @PathVariable Long workflowInstanceId) {
-        Boolean delete = workflowBodyOperator.deleteByWorkflowBody(workflowInstanceId);
-        if (delete) {
-            executionManagerOperator.deleteExecutionLog(workflowInstanceId);
-        }
+        Boolean delete = workflowService.deleteByWorkflowBody(workflowInstanceId);
         return success(delete);
     }
 
@@ -143,7 +125,7 @@ public class WorkflowInstanceController extends BaseController {
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.text.status}")
     public InnospotsResponse<Boolean> updateDataStatus(@Parameter(required = true, name = "workflowInstanceId") @PathVariable Long workflowInstanceId,
                                                        @Parameter(required = true, name = "dataStatus") @PathVariable DataStatus dataStatus) {
-        Boolean update = workflowInstanceOperator.updateWorkflowStatus(workflowInstanceId, dataStatus);
+        Boolean update = workflowService.updateWorkflowStatus(workflowInstanceId, dataStatus);
         return success(update);
     }
 
@@ -156,7 +138,7 @@ public class WorkflowInstanceController extends BaseController {
     @GetMapping("{workflowInstanceId}")
     @Operation(summary = "get workflowInfo")
     public InnospotsResponse<WorkflowInstance> getWorkflowInstance(@Parameter(required = true, name = "workflowInstanceId") @PathVariable Long workflowInstanceId) {
-        WorkflowInstance info = workflowInstanceOperator.getWorkflowInstance(workflowInstanceId);
+        WorkflowInstance info = workflowService.getWorkflowInstance(workflowInstanceId);
         return success(info);
     }
 
@@ -175,7 +157,7 @@ public class WorkflowInstanceController extends BaseController {
     @GetMapping("list/trigger-code/{triggerCode}")
     @Operation(summary = "list workflows")
     public List<WorkflowBaseInfo> listWorkflows(@PathVariable String triggerCode) {
-        return workflowInstanceOperator.listWorkflows(triggerCode);
+        return workflowService.listWorkflows(triggerCode);
     }
 
 }

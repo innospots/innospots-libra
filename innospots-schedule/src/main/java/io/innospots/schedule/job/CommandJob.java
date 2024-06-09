@@ -20,7 +20,7 @@ package io.innospots.schedule.job;
 
 import cn.hutool.core.util.RuntimeUtil;
 import io.innospots.base.model.response.InnospotsResponse;
-import io.innospots.schedule.enums.JobType;
+import io.innospots.base.quartz.JobType;
 import io.innospots.schedule.model.JobExecution;
 import lombok.extern.slf4j.Slf4j;
 

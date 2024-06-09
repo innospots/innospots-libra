@@ -23,7 +23,7 @@ import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.operator.IDataOperator;
 import io.innospots.base.data.operator.jdbc.SelectClause;
 import io.innospots.base.model.Pair;
-import io.innospots.schedule.enums.JobType;
+import io.innospots.base.quartz.JobType;
 import io.innospots.schedule.model.JobExecution;
 import lombok.extern.slf4j.Slf4j;
 

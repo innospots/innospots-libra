@@ -29,6 +29,7 @@ import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.CCH;
 import io.innospots.base.utils.InnospotsIdGenerator;
 import io.innospots.base.watcher.WatcherSupervisor;
+import io.innospots.server.base.registry.ContextClosedEventListener;
 import io.innospots.server.base.registry.ServiceRegistryDao;
 import io.innospots.server.base.registry.ServiceRegistryManager;
 import io.innospots.server.base.registry.ServiceRegistryStarter;
@@ -57,8 +58,7 @@ import java.io.File;
 @Import({CCH.class})
 public class BaseServerConfiguration {
 
-    @PostConstruct
-    public void buildPath(InnospotsServerProperties configProperties) {
+    public static void buildPath(InnospotsServerProperties configProperties) {
         ScriptExecutorManager.setPath(configProperties.getScriptBuildPath() + File.separator + "src", configProperties.getScriptBuildPath());
     }
 
@@ -112,6 +112,11 @@ public class BaseServerConfiguration {
     @Primary
     public ObjectMapper jackson2ObjectMapper() {
         return JSONUtils.customMapper();
+    }
+
+    @Bean
+    public ContextClosedEventListener contextClosedEventListener(){
+        return new ContextClosedEventListener();
     }
 
 }

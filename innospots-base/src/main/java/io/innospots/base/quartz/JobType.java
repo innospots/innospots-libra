@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.enums;
+package io.innospots.base.quartz;
 
 /**
  * @author Smars

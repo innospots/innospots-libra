@@ -16,13 +16,11 @@
  * limitations under the License.
  */
 
-package io.innospots.schedule.model;
+package io.innospots.base.quartz;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.innospots.base.enums.DataStatus;
-import io.innospots.base.quartz.ScheduleMode;
 import io.innospots.base.utils.Initializer;
-import io.innospots.schedule.enums.JobType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;

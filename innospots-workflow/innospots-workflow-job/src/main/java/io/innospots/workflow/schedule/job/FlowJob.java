@@ -2,7 +2,7 @@ package io.innospots.workflow.schedule.job;
 
 import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.base.utils.BeanContextAwareUtils;
-import io.innospots.schedule.enums.JobType;
+import io.innospots.base.quartz.JobType;
 import io.innospots.schedule.job.BaseJob;
 import io.innospots.schedule.model.JobExecution;
 import io.innospots.workflow.core.flow.model.WorkflowBody;

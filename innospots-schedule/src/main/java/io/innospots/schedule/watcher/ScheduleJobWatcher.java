@@ -18,17 +18,14 @@
 
 package io.innospots.schedule.watcher;
 
-import io.innospots.base.enums.DataStatus;
 import io.innospots.base.quartz.QuartzScheduleManager;
 import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.base.watcher.AbstractWatcher;
 import io.innospots.schedule.explore.ScheduleJobInfoExplorer;
-import io.innospots.schedule.model.ScheduleJobInfo;
+import io.innospots.base.quartz.ScheduleJobInfo;
 import io.innospots.schedule.quartz.QuartzJobScheduler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.math3.analysis.function.Identity;
 
 import java.util.*;
 import java.util.stream.Collectors;

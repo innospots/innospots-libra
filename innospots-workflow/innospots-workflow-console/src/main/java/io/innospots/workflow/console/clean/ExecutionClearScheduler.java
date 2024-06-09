@@ -1,4 +1,4 @@
-package io.innospots.workflow.console.schedule;
+package io.innospots.workflow.console.clean;
 
 import io.innospots.base.utils.ServiceRoleHolder;
 import io.innospots.workflow.console.operator.execution.ExecutionManagerOperator;

@@ -18,18 +18,11 @@
 
 package io.innospots.schedule.model;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.Version;
-import io.innospots.schedule.enums.JobType;
+import io.innospots.base.quartz.JobType;
 import io.innospots.schedule.enums.MessageStatus;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
 import java.util.Map;
 
 /**

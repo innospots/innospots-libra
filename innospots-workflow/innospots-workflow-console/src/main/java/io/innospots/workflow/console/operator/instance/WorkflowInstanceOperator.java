@@ -33,6 +33,7 @@ import io.innospots.base.utils.StringConverter;
 import io.innospots.libra.base.events.NewPageEvent;
 import io.innospots.libra.base.events.NotificationAnnotation;
 import io.innospots.base.data.request.FormQuery;
+import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
 import io.innospots.workflow.core.instance.converter.WorkflowInstanceConverter;
 import io.innospots.workflow.core.instance.dao.WorkflowInstanceDao;
 import io.innospots.workflow.core.instance.entity.WorkflowInstanceEntity;
@@ -42,7 +43,9 @@ import io.innospots.workflow.console.operator.node.FlowTemplateOperator;
 import io.innospots.workflow.core.flow.model.WorkflowBaseInfo;
 import io.innospots.workflow.core.flow.model.WorkflowInfo;
 import io.innospots.workflow.core.instance.model.WorkflowInstance;
+import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -51,6 +54,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static io.innospots.workflow.core.instance.operator.WorkflowBodyOperator.CACHE_NAME;
@@ -67,6 +72,8 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
 
 
     private FlowTemplateOperator flowTemplateOperator;
+
+    private FlowNodeDefinitionOperator flowNodeDefinitionOperator;
 
     public WorkflowInstanceOperator(FlowTemplateOperator flowTemplateOperator) {
         this.flowTemplateOperator = flowTemplateOperator;
@@ -140,6 +147,17 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
         pageBody.setTotal(entityPage.getTotal());
         pageBody.setTotalPage(entityPage.getPages());
         pageBody.setList(entities.stream().map(WorkflowInstanceConverter.INSTANCE::entityToModel).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size()))));
+
+        if (CollectionUtils.isNotEmpty(entities)) {
+            List<String> triggerCodes = pageBody.getList().stream().map(WorkflowInstance::getTriggerCode).distinct().collect(Collectors.toList());
+            List<FlowNodeDefinitionEntity> appNodeDefinitionEntities = flowNodeDefinitionOperator.listByCodes(triggerCodes);
+            Map<String, FlowNodeDefinitionEntity> nodeDefinitionEntityMap = appNodeDefinitionEntities.stream()
+                    .collect(Collectors.toMap(FlowNodeDefinitionEntity::getCode, Function.identity()));
+            for (WorkflowInstance workflowInstance : pageBody.getList()) {
+                workflowInstance.setIcon(nodeDefinitionEntityMap.get(workflowInstance.getTriggerCode()).getIcon());
+            }
+        }
+
         return pageBody;
     }
 

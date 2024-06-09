@@ -20,13 +20,12 @@ package io.innospots.workflow.node.app.trigger;
 
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.connector.minder.IQueueConnectionMinder;
+import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.operator.IQueueReceiver;
 import io.innospots.base.exception.ConfigException;
-import io.innospots.base.data.body.DataBody;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.TriggerNode;
-import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -73,12 +72,12 @@ public class QueueTriggerNode extends TriggerNode {
             dataOffset = "latest";
         }
 
-        eventBody.put(FIELD_CREDENTIAL_KEY, credentialKey);
-        eventBody.put(FIELD_TOPIC, topic);
-        eventBody.put(FIELD_GROUP_ID, groupId);
-        eventBody.put(FIELD_MSG_FORMAT, messageFormat);
-        eventBody.put(FIELD_PARALLEL_NUM, parallelNum);
-        eventBody.put(FIELD_DATA_OFFSET, dataOffset);
+        triggerInfo.put(FIELD_CREDENTIAL_KEY, credentialKey);
+        triggerInfo.put(FIELD_TOPIC, topic);
+        triggerInfo.put(FIELD_GROUP_ID, groupId);
+        triggerInfo.put(FIELD_MSG_FORMAT, messageFormat);
+        triggerInfo.put(FIELD_PARALLEL_NUM, parallelNum);
+        triggerInfo.put(FIELD_DATA_OFFSET, dataOffset);
 
 //        DataConnectionMinderManager minderManager = ApplicationContextUtils.getBean(DataConnectionMinderManager.class);
         IQueueConnectionMinder queueConnectionMinder = (IQueueConnectionMinder) DataConnectionMinderManager.getCredentialMinder(credentialKey);
@@ -105,26 +104,26 @@ public class QueueTriggerNode extends TriggerNode {
 
 
     public String topic() {
-        return (String) eventBody.get(FIELD_TOPIC);
+        return (String) triggerInfo.get(FIELD_TOPIC);
     }
 
     public String topicGroup() {
-        return (String) eventBody.get(FIELD_GROUP_ID);
+        return (String) triggerInfo.get(FIELD_GROUP_ID);
     }
 
     public String credentialKey() {
-        return (String) eventBody.get(FIELD_CREDENTIAL_KEY);
+        return (String) triggerInfo.get(FIELD_CREDENTIAL_KEY);
     }
 
     public String messageFormat() {
-        return (String) eventBody.get(FIELD_MSG_FORMAT);
+        return (String) triggerInfo.get(FIELD_MSG_FORMAT);
     }
 
     public Integer parallelNumber() {
-        return (Integer) eventBody.get(FIELD_PARALLEL_NUM);
+        return (Integer) triggerInfo.get(FIELD_PARALLEL_NUM);
     }
 
     public String dataOffset() {
-        return (String) eventBody.get(FIELD_DATA_OFFSET);
+        return (String) triggerInfo.get(FIELD_DATA_OFFSET);
     }
 }

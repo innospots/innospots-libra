@@ -21,6 +21,7 @@ package io.innospots.workflow.node.app.trigger;
 import com.google.common.base.Enums;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.quartz.ScheduleMode;
+import io.innospots.base.quartz.TimeConfig;
 import io.innospots.base.quartz.TimePeriod;
 import io.innospots.base.utils.time.CronUtils;
 import io.innospots.base.utils.time.DateTimeUtils;
@@ -42,153 +43,36 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CronTimerNode extends TriggerNode {
 
-
-    /**
-     * 周期单位
-     */
-    public static final String FIELD_PERIOD_UNIT = "period_unit";
-
-
-    /**
-     * 时间周期
-     */
-//    public static final String FIELD_PERIOD_TIME = "period_times";
-
-    public static final String FIELD_PERIOD_DAY_TIME = "period_day_times";
-
-    public static final String FIELD_PERIOD_MINUTE_TIME = "period_minute_times";
-
-    public static final String FIELD_PERIOD_HOUR_TIME = "period_hour_times";
-
-    public static final String FIELD_PERIOD_WEEK_TIME = "period_week_times";
-
-    public static final String FIELD_PERIOD_MONTH_TIME = "period_month_times";
-
-    public static final String FIELD_PERIOD_TIME_VALUES = "period_time_values";
-
-    /**
-     * 运行时间
-     */
-    public static final String FIELD_RUN_TIME = "run_time";
-
-
-    public static final String FIELD_RUN_DATE_TIME = "run_date_time";
-
-    /**
-     * 调度模式
-     */
-    public static final String FIELD_SCHEDULE_MODE = "schedule_mode";
+    private TimeConfig timeConfig;
 
     private String cronExpression;
 
 
     @Override
     protected void initialize() {
-
-        String scheduleModeStr = valueString(FIELD_SCHEDULE_MODE);
-        ScheduleMode scheduleMode = scheduleModeStr != null ? Enums.getIfPresent(ScheduleMode.class, scheduleModeStr).orNull() : null;
-        String runDateTime = null;
-        eventBody.put(FIELD_SCHEDULE_MODE, scheduleMode);
-
-        if (scheduleMode == ScheduleMode.ONCE) {
-            validFieldConfig(FIELD_RUN_DATE_TIME);
-            runDateTime = valueString(FIELD_RUN_DATE_TIME);
-            eventBody.put(FIELD_RUN_TIME, runDateTime);
-            return;
-        }
-
-
-
-        String periodUnitStr = valueString(FIELD_PERIOD_UNIT);
-        TimePeriod timePeriod = periodUnitStr != null ? Enums.getIfPresent(TimePeriod.class, periodUnitStr).orNull() : null;
-        if (timePeriod == null) {
-            throw ConfigException.buildMissingException(this.getClass(), FIELD_PERIOD_UNIT);
-        }
-        String periodTimesStr = null;
-        String runTime = valueString(FIELD_RUN_TIME);
-        List<String> periodTimes = null;
-        switch (timePeriod) {
-            case MONTH:
-                periodTimesStr = valueString(FIELD_PERIOD_MONTH_TIME);
-                validFieldConfig(FIELD_RUN_TIME);
-                break;
-            case WEEK:
-                periodTimesStr = valueString(FIELD_PERIOD_WEEK_TIME);
-                validFieldConfig(FIELD_RUN_TIME);
-                break;
-            case DAY:
-                periodTimesStr = valueString(FIELD_PERIOD_DAY_TIME);
-                validFieldConfig(FIELD_RUN_TIME);
-                break;
-            case HOUR:
-                periodTimesStr = valueString(FIELD_PERIOD_HOUR_TIME);
-                break;
-            case MINUTE:
-                periodTimesStr = valueString(FIELD_PERIOD_MINUTE_TIME);
-                break;
-            default:
-                break;
-        }
-
-        if (runTime != null) {
-            eventBody.put(FIELD_RUN_TIME, runTime);
-        }
-
-        if (StringUtils.isNotEmpty(periodTimesStr)) {
-            periodTimes = Arrays.stream(periodTimesStr.split(","))
-                    .map(String::valueOf).collect(Collectors.toList());
-        } else {
-            periodTimes = new ArrayList<>();
-        }
-
-
-        eventBody.put(FIELD_PERIOD_UNIT, timePeriod);
-
-        eventBody.put(FIELD_PERIOD_TIME_VALUES, periodTimes);
-
+        timeConfig = TimeConfig.build(ni.getData(), this.getClass());
         cronExpression = cronExpression();
+        triggerInfo.put(TimeConfig.class.getSimpleName(),timeConfig);
 
-        eventBody.put("cron_expression", cronExpression);
+        triggerInfo.put("cronExpression", cronExpression);
 
-        log.info("cronTimeNode: {} , {}", this.nodeKey(), eventBody);
+        log.info("cronTimeNode: {} , {}", this.nodeKey(), triggerInfo);
     }
 
     @Override
     public void invoke(NodeExecution nodeExecution) {
         super.invoke(nodeExecution);
-        nodeExecution.setMessage(eventBody.toString());
+        nodeExecution.setMessage(triggerInfo.toString());
     }
 
     public ScheduleMode scheduleMode() {
-        return (ScheduleMode) eventBody.get(FIELD_SCHEDULE_MODE);
-    }
-
-    public TimePeriod timePeriod() {
-        return (TimePeriod) eventBody.get(FIELD_PERIOD_UNIT);
-    }
-
-    public List<String> periodTimes() {
-        return eventBody.containsKey(FIELD_PERIOD_TIME_VALUES) ?
-                (List<String>) eventBody.get(FIELD_PERIOD_TIME_VALUES) : Collections.emptyList();
-    }
-
-    public String runTimes() {
-        return (String) eventBody.get(FIELD_RUN_TIME);
+        return timeConfig.getScheduleMode();
     }
 
     public Date startTime() {
-        return DateTimeUtils.parseDate(this.runTimes(), this.getRunTimesFormat());
+        return timeConfig.runDateTime();
     }
 
-
-    private String getRunTimesFormat() {
-        ScheduleMode scheduleMode = scheduleMode();
-        if (ScheduleMode.ONCE.equals(scheduleMode)) {
-            return "yyyy-MM-dd HH:mm";
-        } else {
-            return "HH:mm";
-        }
-    }
 
     /**
      * build crontab expression
@@ -196,18 +80,7 @@ public class CronTimerNode extends TriggerNode {
      * @return
      */
     public String cronExpression() {
-        try {
-            if (cronExpression == null) {
-                LocalTime localTime = this.runTimes() == null ? null : LocalTime.parse(this.runTimes(), DateTimeFormatter.ofPattern(this.getRunTimesFormat()));
-                cronExpression = CronUtils.createCronExpression(this.timePeriod(), this.periodTimes(), localTime);
-                log.info("cronTimeNode: {}, cron expression:{}", this.nodeKey(), cronExpression);
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            throw ConfigException.buildParamException(this.getClass(), "cronExpression is error, " + e.getMessage() + " , config: " + eventBody);
-        }
-
-        return cronExpression;
+        return timeConfig.cronExpression();
     }
 
 }

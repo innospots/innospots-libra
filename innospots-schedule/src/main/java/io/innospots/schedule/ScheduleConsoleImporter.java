@@ -11,7 +11,7 @@ import io.innospots.schedule.dao.ScheduleJobInfoDao;
 import io.innospots.schedule.dispatch.ReadJobDispatcher;
 import io.innospots.schedule.explore.JobExecutionExplorer;
 import io.innospots.schedule.explore.ScheduleJobInfoExplorer;
-import io.innospots.schedule.listener.CreatedScheduleJobListener;
+import io.innospots.schedule.listener.ScheduleJobInfoListener;
 import io.innospots.schedule.operator.JobExecutionOperator;
 import io.innospots.schedule.operator.ScheduleJobInfoOperator;
 import io.innospots.schedule.queue.IReadyJobQueue;
@@ -57,8 +57,8 @@ public @interface ScheduleConsoleImporter {
         }
 
         @Bean
-        public CreatedScheduleJobListener scheduleJobListener(ScheduleJobInfoOperator scheduleJobInfoOperator){
-            return new CreatedScheduleJobListener(scheduleJobInfoOperator);
+        public ScheduleJobInfoListener scheduleJobListener(ScheduleJobInfoOperator scheduleJobInfoOperator){
+            return new ScheduleJobInfoListener(scheduleJobInfoOperator);
         }
 
         @Bean

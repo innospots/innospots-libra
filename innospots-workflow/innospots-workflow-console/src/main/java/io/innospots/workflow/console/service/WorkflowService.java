@@ -19,29 +19,19 @@
 package io.innospots.workflow.console.service;
 
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.base.data.request.FormQuery;
-import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
-import io.innospots.workflow.console.model.flow.WorkflowChart;
-import io.innospots.workflow.console.model.flow.WorkflowStatistics;
-import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
+import io.innospots.base.enums.DataStatus;
 import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
-import io.innospots.base.quartz.ExecutionStatus;
-import io.innospots.workflow.core.execution.model.flow.FlowExecutionBase;
-import io.innospots.workflow.core.execution.operator.IFlowExecutionOperator;
+import io.innospots.workflow.core.flow.model.WorkflowBaseInfo;
+import io.innospots.workflow.core.flow.model.WorkflowInfo;
+import io.innospots.workflow.core.instance.entity.WorkflowInstanceEntity;
 import io.innospots.workflow.core.instance.model.WorkflowInstance;
+import io.innospots.workflow.core.instance.operator.WorkflowBodyOperator;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.List;
 
 /**
  * @author Jegy
@@ -55,164 +45,63 @@ public class WorkflowService {
 
     private final WorkflowInstanceOperator workflowInstanceOperator;
 
-    private final IFlowExecutionOperator IFlowExecutionOperator;
+    private final WorkflowBodyOperator workflowBodyOperator;
 
-    private final FlowNodeDefinitionOperator flowNodeDefinitionOperator;
+    private final ScheduleFlowJobService scheduleFlowJobService;
+
+    private final WorkflowExecutionService executionService;
 
     public WorkflowService(WorkflowInstanceOperator workflowInstanceOperator,
-                           IFlowExecutionOperator IFlowExecutionOperator,
-                           FlowNodeDefinitionOperator flowNodeDefinitionOperator) {
+                           WorkflowBodyOperator workflowBodyOperator, ScheduleFlowJobService scheduleFlowJobService,
+                           WorkflowExecutionService executionService) {
         this.workflowInstanceOperator = workflowInstanceOperator;
-        this.IFlowExecutionOperator = IFlowExecutionOperator;
-        this.flowNodeDefinitionOperator = flowNodeDefinitionOperator;
+        this.workflowBodyOperator = workflowBodyOperator;
+        this.scheduleFlowJobService = scheduleFlowJobService;
+        this.executionService = executionService;
+    }
+
+    public WorkflowInstance createWorkflow(WorkflowInfo workflow) {
+        return workflowInstanceOperator.createWorkflow(workflow);
+    }
+
+    public boolean updateWorkflow(WorkflowInstance workflow){
+        return workflowInstanceOperator.updateWorkflow(workflow);
+    }
+
+    public boolean removeWorkflowToRecycle(Long workflowInstanceId){
+        return workflowInstanceOperator.removeWorkflowToRecycle(workflowInstanceId);
+    }
+
+    public boolean deleteByWorkflowBody(Long workflowInstanceId){
+        Boolean delete = workflowBodyOperator.deleteByWorkflowBody(workflowInstanceId);
+        if (delete) {
+            executionService.deleteExecutionByFlowInstanceId(workflowInstanceId);
+            WorkflowInstanceEntity instanceEntity = workflowInstanceOperator.getWorkflowInstanceEntity(workflowInstanceId);
+            scheduleFlowJobService.deleteSchedule(instanceEntity);
+        }
+        return delete;
+    }
+
+    public boolean updateWorkflowStatus(long workflowInstanceId, DataStatus dataStatus){
+        boolean up = workflowInstanceOperator.updateWorkflowStatus(workflowInstanceId, dataStatus);
+        if (up) {
+            WorkflowInstanceEntity instanceEntity = workflowInstanceOperator.getWorkflowInstanceEntity(workflowInstanceId);
+            instanceEntity.setStatus(dataStatus);
+            scheduleFlowJobService.updateScheduleStatus(instanceEntity);
+        }
+        return up;
+    }
+
+    public WorkflowInstance getWorkflowInstance(long workflowInstanceId) {
+        return workflowInstanceOperator.getWorkflowInstance(workflowInstanceId);
+    }
+
+    public List<WorkflowBaseInfo> listWorkflows(@PathVariable String triggerCode){
+        return workflowInstanceOperator.listWorkflows(triggerCode);
     }
 
     public PageBody<WorkflowInstance> getWorkflows(FormQuery request) {
-        PageBody<WorkflowInstance> results = workflowInstanceOperator.pageWorkflows(request);
-        List<WorkflowInstance> workflowInstances = results.getList();
-        if (CollectionUtils.isNotEmpty(workflowInstances)) {
-            List<String> triggerCodes = workflowInstances.stream().map(WorkflowInstance::getTriggerCode).distinct().collect(Collectors.toList());
-            List<FlowNodeDefinitionEntity> appNodeDefinitionEntities = flowNodeDefinitionOperator.listByCodes(triggerCodes);
-            Map<String, FlowNodeDefinitionEntity> appNodeDefinitionEntityMap = appNodeDefinitionEntities.stream()
-                    .collect(Collectors.toMap(FlowNodeDefinitionEntity::getCode, Function.identity()));
-            for (WorkflowInstance workflowInstance : workflowInstances) {
-                workflowInstance.setIcon(appNodeDefinitionEntityMap.get(workflowInstance.getTriggerCode()).getIcon());
-            }
-        }
-        return results;
-    }
-
-    public WorkflowStatistics getWorkflowStat(Long workflowInstanceId) {
-        WorkflowInstance instance = workflowInstanceOperator.getWorkflowInstance(workflowInstanceId);
-        String end = DateTimeUtils.formatDate(new Date(), "yyyyMMdd") + "999999.999";
-        String start = DateTimeUtils.formatDate(DateUtils.addDays(new Date(), -30), "yyyyMMdd") + "000000.000";
-        PageBody<FlowExecutionBase> thirtyDaysBodies = IFlowExecutionOperator.pageFlowExecutions(workflowInstanceId, instance.getRevision(), start, end, null, null);
-        List<FlowExecutionBase> thirtyDaysFlowExecutions = thirtyDaysBodies.getList();
-        WorkflowStatistics workflowStatistics = new WorkflowStatistics();
-        String today = DateTimeUtils.formatDate(new Date(), "yyyyMMdd");
-        String yesterday = DateTimeUtils.formatDate(DateUtils.addDays(new Date(), -1), "yyyyMMdd");
-        Map<String, WorkflowChart> strategyChartMap = new HashMap<>();
-
-        strategyChartMap = this.generateEveryDayFlowExecutionMap(thirtyDaysFlowExecutions);
-        int todayWebhookCount = strategyChartMap.get(today).getCount();
-        int yesterdayWebhookCount = strategyChartMap.get(yesterday).getCount();
-        workflowStatistics.setTodayTimes(todayWebhookCount);
-        BigDecimal rate = BigDecimal.ZERO;
-        if (todayWebhookCount > 0 && yesterdayWebhookCount > 0) {
-            rate = new BigDecimal((todayWebhookCount - yesterdayWebhookCount) + "").divide(new BigDecimal(yesterdayWebhookCount), 2, RoundingMode.HALF_DOWN).multiply(new BigDecimal("100"));
-        }
-        workflowStatistics.setGrowthRate(rate);
-        PageBody<FlowExecutionBase> allBodies = IFlowExecutionOperator.pageFlowExecutions(workflowInstanceId, instance.getRevision(), null, null, null, null);
-        List<FlowExecutionBase> allFlowExecutions = allBodies.getList();
-        workflowStatistics.setCumulativeTimes(allFlowExecutions.size());
-
-        /*
-        switch (Objects.requireNonNull(WorkflowType.getWorkflowType(instance.getTemplateCode()))) {
-            case SCHEDULE:
-                strategyChartMap = this.generateEveryDaySuccessFlowExecutionMap(thirtyDaysFlowExecutions);
-                WorkflowChart chart = strategyChartMap.get(today);
-                workflowStatistics.setSuccessJob(chart.getSuccessCount());
-                workflowStatistics.setFailJob(chart.getFailCount());
-                break;
-            case WEBHOOK:
-            case STREAM:
-
-                break;
-            default:
-                break;
-        }
-
-         */
-        if (MapUtils.isNotEmpty(strategyChartMap)) {
-            workflowStatistics.setCharts(IntStream.range(0, 30)
-                    .mapToObj(i -> DateTimeUtils.formatDate(DateUtils.addDays(new Date(), -i), "yyyyMMdd"))
-                    .map(strategyChartMap::get).collect(Collectors.toCollection(() -> new ArrayList<>(30))));
-        }
-        return workflowStatistics;
-    }
-
-
-    /**
-     * generate execute every day success and fail
-     *
-     * @param thirtyDaysFlowExecutions
-     * @return
-     */
-    private Map<String, WorkflowChart> generateEveryDaySuccessFlowExecutionMap(List<FlowExecutionBase> thirtyDaysFlowExecutions) {
-        Map<String, WorkflowChart> flowExecutionMap = new HashMap<>(30);
-        if (CollectionUtils.isNotEmpty(thirtyDaysFlowExecutions)) {
-            for (FlowExecutionBase flowExecution : thirtyDaysFlowExecutions) {
-                String key = DateTimeUtils.formatLocalDateTime(flowExecution.getStartTime(), DateTimeUtils.DATETIME_DATA_PATTERN);
-                WorkflowChart chart;
-                if (MapUtils.isEmpty(flowExecutionMap) || flowExecutionMap.get(key) == null) {
-                    chart = new WorkflowChart();
-                    chart.setTime(key);
-                    if (ExecutionStatus.COMPLETE == flowExecution.getStatus()) {
-                        chart.setSuccessCount(1);
-
-                    } else if (ExecutionStatus.FAILED == flowExecution.getStatus()) {
-                        chart.setFailCount(1);
-                    }
-
-                } else {
-                    chart = flowExecutionMap.get(key);
-                    if (ExecutionStatus.COMPLETE == flowExecution.getStatus()) {
-                        chart.setSuccessCount(chart.getSuccessCount() + 1);
-
-                    } else if (ExecutionStatus.FAILED == flowExecution.getStatus()) {
-                        chart.setFailCount(chart.getFailCount() + 1);
-                    }
-                }
-                flowExecutionMap.put(key, chart);
-            }
-        }
-        if (flowExecutionMap.size() < 30) {
-            IntStream.range(0, 30).mapToObj(i -> DateTimeUtils.formatDate(DateUtils.addDays(new Date(), -i), "yyyyMMdd"))
-                    .filter(key -> flowExecutionMap.get(key) == null).forEach(key -> {
-                        WorkflowChart chart = new WorkflowChart();
-                        chart.setTime(key);
-                        chart.setSuccessCount(0);
-                        chart.setFailCount(0);
-                        flowExecutionMap.put(key, chart);
-                    });
-        }
-        return flowExecutionMap;
-    }
-
-    /**
-     * generate execute every day map
-     *
-     * @param thirtyDaysFlowExecutions
-     * @return
-     */
-    private Map<String, WorkflowChart> generateEveryDayFlowExecutionMap(List<FlowExecutionBase> thirtyDaysFlowExecutions) {
-        Map<String, WorkflowChart> flowExecutionMap = new HashMap<>(30);
-        if (CollectionUtils.isNotEmpty(thirtyDaysFlowExecutions)) {
-            for (FlowExecutionBase flowExecution : thirtyDaysFlowExecutions) {
-                String key = DateTimeUtils.formatLocalDateTime(flowExecution.getStartTime(), DateTimeUtils.DATETIME_DATA_PATTERN);
-                WorkflowChart chart;
-                if (MapUtils.isEmpty(flowExecutionMap) || flowExecutionMap.get(key) == null) {
-                    chart = new WorkflowChart();
-                    chart.setTime(key);
-                    chart.setCount(1);
-                    flowExecutionMap.put(key, chart);
-                } else {
-                    chart = flowExecutionMap.get(key);
-                    chart.setCount(chart.getCount() + 1);
-                    flowExecutionMap.put(key, chart);
-                }
-            }
-        }
-        if (flowExecutionMap.size() < 30) {
-            IntStream.range(0, 30).mapToObj(i -> DateTimeUtils.formatDate(DateUtils.addDays(new Date(), -i), "yyyyMMdd"))
-                    .forEach(key -> {
-                        WorkflowChart chart = new WorkflowChart();
-                        chart.setTime(key);
-                        chart.setCount(0);
-                        flowExecutionMap.putIfAbsent(key, chart);
-                    });
-        }
-        return flowExecutionMap;
+        return workflowInstanceOperator.pageWorkflows(request);
     }
 
 }

@@ -43,9 +43,15 @@
             <groupId>io.innospots</groupId>
             <artifactId>innospots-workflow-core</artifactId>
         </dependency>
+
         <dependency>
             <groupId>io.innospots</groupId>
             <artifactId>innospots-workflow-node</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.innospots</groupId>
+            <artifactId>innospots-workflow-runtime</artifactId>
         </dependency>
     </dependencies>
 

@@ -28,21 +28,25 @@ import java.util.Objects;
  */
 public class TriggerNode extends BaseNodeExecutor {
 
-    protected Map<String, Object> eventBody = new HashMap<>();
+    protected Map<String, Object> triggerInfo = new HashMap<>();
 
     public static final String FIELD_NEXT_NODES = "next_nodes";
 
     @Override
     protected void initialize() {
-        eventBody.put(FIELD_NEXT_NODES, ni.getNextNodeKeys());
-        eventBody.put("node_key", this.nodeKey());
-        eventBody.put("node_instance_id", ni.getNodeInstanceId());
-        eventBody.put("node_code", ni.getCode());
+        triggerInfo.put(FIELD_NEXT_NODES, ni.getNextNodeKeys());
+        triggerInfo.put("node_key", this.nodeKey());
+        triggerInfo.put("node_instance_id", ni.getNodeInstanceId());
+        triggerInfo.put("node_code", ni.getCode());
     }
 
     @Override
     protected Object processItem(Map<String, Object> item) {
         return item;
+    }
+
+    public Map<String, Object> triggerInfo() {
+        return triggerInfo;
     }
 
     @Override
@@ -54,12 +58,12 @@ public class TriggerNode extends BaseNodeExecutor {
             return false;
         }
         TriggerNode that = (TriggerNode) o;
-        return Objects.equals(eventBody, that.eventBody) &&
+        return Objects.equals(triggerInfo, that.triggerInfo) &&
                 Objects.equals(ni.getNextNodeKeys(), that.ni.getNextNodeKeys());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(eventBody, ni.getNextNodeKeys());
+        return Objects.hash(triggerInfo, ni.getNextNodeKeys());
     }
 }

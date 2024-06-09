@@ -27,7 +27,7 @@ import io.innospots.schedule.entity.ReadyJobEntity;
 import io.innospots.schedule.enums.MessageStatus;
 import io.innospots.schedule.explore.ScheduleJobInfoExplorer;
 import io.innospots.schedule.model.ReadyJob;
-import io.innospots.schedule.model.ScheduleJobInfo;
+import io.innospots.base.quartz.ScheduleJobInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.RandomUtils;

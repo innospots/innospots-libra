@@ -19,7 +19,9 @@
 package io.innospots.server.base.registry;
 
 import io.innospots.base.utils.BeanContextAwareUtils;
+import io.innospots.base.utils.ServiceRoleHolder;
 import io.innospots.base.watcher.WatcherSupervisor;
+import io.innospots.server.base.configuration.BaseServerConfiguration;
 import io.innospots.server.base.configuration.InnospotsServerProperties;
 import io.innospots.server.base.registry.enums.ServiceRole;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.util.Assert;
 
+import javax.annotation.PreDestroy;
+
 /**
  * @author Raydian
  * @date 2020/12/14
@@ -39,13 +43,11 @@ import org.springframework.util.Assert;
 public class ServiceRegistryStarter implements ApplicationRunner {
 
 
-    private ServiceRegistryManager serviceRegistryManager;
+    private final ServiceRegistryManager serviceRegistryManager;
 
-    private WatcherSupervisor watcherSupervisor;
+    private final WatcherSupervisor watcherSupervisor;
 
-    private InnospotsServerProperties configProperties;
-
-    private static ApplicationContext applicationContext;
+    private final InnospotsServerProperties configProperties;
 
 
     public ServiceRegistryStarter(
@@ -61,6 +63,7 @@ public class ServiceRegistryStarter implements ApplicationRunner {
     public void run(ApplicationArguments args) {
 
         try {
+            BaseServerConfiguration.buildPath(configProperties);
             ServiceRegistryHolder.setDebugMode(configProperties.isDebugMode());
             ServiceInfo serviceInfo = ServiceRegistryHolder.buildCurrentNewService();
             if (configProperties.isEnableRegistry()) {
@@ -73,7 +76,7 @@ public class ServiceRegistryStarter implements ApplicationRunner {
             }
             ServiceRegistryHolder.register(serviceInfo);
             ServiceRegistryHolder.registerStartupTime();
-
+            log.info("service has registered: {}",serviceInfo);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             BeanContextAwareUtils.serviceShutdown();
@@ -94,27 +97,5 @@ public class ServiceRegistryStarter implements ApplicationRunner {
             }
         }
     }
-
-
-    public static Environment environment() {
-        Assert.notNull(applicationContext, "application context is null.");
-        return applicationContext.getEnvironment();
-    }
-
-    public static String serverIpAddress() {
-        Environment environment = environment();
-        return environment.getProperty("spring.cloud.client.ip-address");
-    }
-
-
-    public static Integer serverPort() {
-        Environment environment = environment();
-        String port = environment.getProperty("server.port");
-        if (port != null) {
-            return Integer.valueOf(port);
-        }
-        return 0;
-    }
-
 
 }

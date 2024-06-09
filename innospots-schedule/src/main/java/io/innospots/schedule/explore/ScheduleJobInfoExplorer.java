@@ -20,12 +20,11 @@ package io.innospots.schedule.explore;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.innospots.base.enums.DataStatus;
-import io.innospots.base.exception.ResourceException;
 import io.innospots.base.quartz.ScheduleMode;
 import io.innospots.schedule.converter.ScheduleJobInfoConverter;
 import io.innospots.schedule.dao.ScheduleJobInfoDao;
 import io.innospots.schedule.entity.ScheduleJobInfoEntity;
-import io.innospots.schedule.model.ScheduleJobInfo;
+import io.innospots.base.quartz.ScheduleJobInfo;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.time.LocalDateTime;

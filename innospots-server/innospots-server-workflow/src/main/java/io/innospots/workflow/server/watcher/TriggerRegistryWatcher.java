@@ -59,6 +59,7 @@ public class TriggerRegistryWatcher extends AbstractWatcher {
 
     @Override
     public int execute() {
+
         List<FlowRuntimeRegistry> flowTriggers = flowManager.currentFlowTriggers();
         //event trigger
         List<FlowRuntimeRegistry> eventTriggers = new ArrayList<>();

@@ -3,7 +3,7 @@ package io.innospots.schedule.job;
 import cn.hutool.extra.spring.SpringUtil;
 import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.base.utils.BeanUtils;
-import io.innospots.schedule.enums.JobType;
+import io.innospots.base.quartz.JobType;
 import io.innospots.schedule.model.JobExecution;
 
 import java.lang.reflect.Method;

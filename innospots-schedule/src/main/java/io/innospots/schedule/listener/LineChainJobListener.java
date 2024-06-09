@@ -22,7 +22,7 @@ import io.innospots.base.events.IEventListener;
 import io.innospots.base.model.Pair;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.schedule.dispatch.ReadJobDispatcher;
-import io.innospots.schedule.enums.JobType;
+import io.innospots.base.quartz.JobType;
 import io.innospots.schedule.events.JobExecutionEvent;
 import io.innospots.schedule.explore.JobExecutionExplorer;
 import io.innospots.schedule.job.LineChainJob;

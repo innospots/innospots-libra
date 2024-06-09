@@ -22,6 +22,7 @@ import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.workflow.console.model.flow.WorkflowStatistics;
+import io.innospots.workflow.console.service.WorkflowExecutionService;
 import io.innospots.workflow.console.service.WorkflowService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -44,16 +45,16 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 @Tag(name = "Workflow Statistics")
 public class WorkflowStatController extends BaseController {
 
-    private final WorkflowService workflowService;
+    private final WorkflowExecutionService workflowExecutionService;
 
-    public WorkflowStatController(WorkflowService workflowService) {
-        this.workflowService = workflowService;
+    public WorkflowStatController(WorkflowExecutionService workflowExecutionService) {
+        this.workflowExecutionService = workflowExecutionService;
     }
 
     @GetMapping("{workflowInstanceId}")
     @Operation(summary = "get statistics")
     public InnospotsResponse<WorkflowStatistics> getWorkflowStat(@Parameter(name = "workflowInstanceId", required = true) @PathVariable Long workflowInstanceId) {
-        WorkflowStatistics statistics = workflowService.getWorkflowStat(workflowInstanceId);
+        WorkflowStatistics statistics = workflowExecutionService.getWorkflowStat(workflowInstanceId);
         return success(statistics);
     }
 }

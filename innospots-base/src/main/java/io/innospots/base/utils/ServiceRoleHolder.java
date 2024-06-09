@@ -19,6 +19,7 @@
 package io.innospots.base.utils;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author Smars
@@ -50,6 +51,20 @@ public class ServiceRoleHolder {
 
 
     private static boolean serviceLeader;
+
+    private static AtomicBoolean shutdown = new AtomicBoolean(false);
+
+    public static boolean isShutdown() {
+        return shutdown.get();
+    }
+
+    public static boolean isRunning(){
+        return !shutdown.get();
+    }
+
+    public static void shutdown() {
+        shutdown.set(true);
+    }
 
     public static String getServerKey() {
         return serverKey;

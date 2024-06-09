@@ -20,7 +20,7 @@ package io.innospots.workflow.schedule.flow;
 
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.schedule.dispatch.ReadJobDispatcher;
-import io.innospots.schedule.enums.JobType;
+import io.innospots.base.quartz.JobType;
 import io.innospots.schedule.enums.MessageStatus;
 import io.innospots.schedule.job.BaseJob;
 import io.innospots.schedule.model.JobExecution;

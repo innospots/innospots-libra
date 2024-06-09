@@ -271,7 +271,7 @@ public class WorkflowDraftOperator {
 
     @Transactional(rollbackFor = {Exception.class})
     @CacheEvict(cacheNames = CACHE_NAME, allEntries = true)
-    public synchronized boolean publish(Long workflowInstanceId, String description,int maxVersionKeep) {
+    public synchronized WorkflowBody publish(Long workflowInstanceId, String description,int maxVersionKeep) {
         //check instance exits
         WorkflowInstanceEntity entity = workflowInstanceDao.selectById(workflowInstanceId);
         if (entity == null) {
@@ -343,8 +343,8 @@ public class WorkflowDraftOperator {
 
 
         log.info("publish workflow, workflowInstanceId:{}, revision:{}, nodeSize:{},edgeSize:{}", workflowInstanceId, revision, nodeSize, edgeSize);
-        //ApplicationContextUtils.sendAppEvent(new FlowPublishEvent(workflowInstanceId,revision));
-        return revision > 0;
+
+        return draftWorkflowBody;
     }
 
 

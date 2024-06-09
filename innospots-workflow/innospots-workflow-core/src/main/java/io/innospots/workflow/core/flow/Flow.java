@@ -143,7 +143,9 @@ public class Flow {
 
                 this.nodeCache = tmpNodeCache;
                 this.nextNodeCache = tmpNextNodes;
-                if (buildProcessInfo.getFailCount() == 0) {
+                if (buildProcessInfo.getFailCount() == 0 &&
+                        buildProcessInfo.getBuildException() == null &&
+                        buildProcessInfo.getErrorInfo().size() == 0) {
                     this.loadStatus = FlowStatus.LOADED;
                 } else {
                     this.loadStatus = FlowStatus.FAIL;

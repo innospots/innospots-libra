@@ -44,8 +44,8 @@ public class CycleTimerNode extends TriggerNode {
         validFieldConfig(FIELD_TIME_UNIT);
         this.timeInterval = validInteger(FIELD_TIME_INTERVAL);
         timeUnit = TimeUnit.valueOf(validString(FIELD_TIME_UNIT));
-        eventBody.put(FIELD_TIME_INTERVAL, timeInterval);
-        eventBody.put(FIELD_TIME_UNIT, timeUnit);
+        triggerInfo.put(FIELD_TIME_INTERVAL, timeInterval);
+        triggerInfo.put(FIELD_TIME_UNIT, timeUnit);
     }
 
 

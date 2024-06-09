@@ -45,6 +45,7 @@ public interface ExecutionContextConverter {
 
     static ExecutionContextEntity toExecutionContextEntity(FlowExecution flowExecution) {
         ExecutionContextEntity context = new ExecutionContextEntity();
+        context.setFlowInstanceId(flowExecution.getFlowInstanceId());
         context.setExecutionId(flowExecution.getFlowExecutionId());
         context.setInputs(JSONUtils.toJsonString(flowExecution.getInput().copy()));
         context.setInputSize(flowExecution.getInput().getData().size());
@@ -59,6 +60,7 @@ public interface ExecutionContextConverter {
 
     static ExecutionContextEntity toExecutionContextEntity(NodeExecution nodeExecution) {
         ExecutionContextEntity contextEntity = new ExecutionContextEntity();
+        contextEntity.setFlowInstanceId(nodeExecution.getFlowInstanceId());
         contextEntity.setContextType(ExecutionContextEntity.ContextType.NODE.name());
         contextEntity.setExecutionId(nodeExecution.getNodeExecutionId());
         contextEntity.setNodePaths(nodeExecution.getNodeKey());

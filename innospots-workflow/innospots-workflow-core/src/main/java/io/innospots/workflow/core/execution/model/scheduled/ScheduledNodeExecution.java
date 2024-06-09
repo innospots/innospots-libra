@@ -26,6 +26,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.RandomUtils;
 
+import javax.persistence.Column;
 import java.time.LocalDateTime;
 
 import static io.innospots.workflow.core.config.InnospotsWorkflowProperties.MAX_SHARDING_KEY;
@@ -63,11 +64,14 @@ public class ScheduledNodeExecution {
 
     private LocalDateTime updatedTime;
 
+    private Long flowInstanceId;
+
     public ScheduledNodeExecution() {
     }
 
     public static ScheduledNodeExecution build(NodeExecution nodeExecution) {
         ScheduledNodeExecution scheduledNodeExecution = new ScheduledNodeExecution();
+        scheduledNodeExecution.setFlowInstanceId(nodeExecution.getFlowInstanceId());
         scheduledNodeExecution.setNodeExecutionId(nodeExecution.getNodeExecutionId());
         scheduledNodeExecution.setFlowExecutionId(nodeExecution.getFlowExecutionId());
         scheduledNodeExecution.setNodeKey(nodeExecution.getNodeKey());

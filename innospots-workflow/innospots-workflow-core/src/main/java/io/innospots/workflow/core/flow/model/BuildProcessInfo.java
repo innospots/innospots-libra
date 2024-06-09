@@ -71,6 +71,7 @@ public class BuildProcessInfo {
 
     public void addNodeProcess(String nodeKey, Exception exception) {
         this.errorInfo.put(nodeKey, exception);
+        incrementFail();
     }
 
     public String getBuildMessage(String nodeKey) {

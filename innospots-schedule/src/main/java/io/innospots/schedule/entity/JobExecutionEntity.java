@@ -21,10 +21,9 @@ package io.innospots.schedule.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.Version;
 import io.innospots.base.entity.PBaseEntity;
 import io.innospots.base.quartz.ExecutionStatus;
-import io.innospots.schedule.enums.JobType;
+import io.innospots.base.quartz.JobType;
 import lombok.Getter;
 import lombok.Setter;
 

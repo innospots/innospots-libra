@@ -57,6 +57,9 @@ public class ScheduledNodeExecutionEntity extends PBaseEntity {
     @Column(length = 64)
     private String flowExecutionId;
 
+    @Column
+    private Long flowInstanceId;
+
     /**
      * 定时延时执行时间
      */

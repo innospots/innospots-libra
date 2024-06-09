@@ -67,7 +67,6 @@ public class ApiTriggerNode extends TriggerNode {
         validFieldConfig(FIELD_REQUEST_TYPE);
         validFieldConfig(FIELD_RESPONSE_MODE);
         validFieldConfig(FIELD_RESPONSE_DATA);
-        eventBody.put("node_key", this.nodeKey());
         flowWebhookConfig = new FlowWebhookConfig();
         flowWebhookConfig.setRequestMethod(FlowWebhookConfig.RequestMethod.valueOf(valueString(FIELD_REQUEST_TYPE)));
         flowWebhookConfig.setPath(valueString(FIELD_API_PATH));

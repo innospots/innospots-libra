@@ -21,8 +21,8 @@ package io.innospots.schedule.converter;
 import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.schedule.entity.ScheduleJobInfoEntity;
-import io.innospots.schedule.model.ScheduleJobInfo;
-import io.innospots.schedule.model.TimeConfig;
+import io.innospots.base.quartz.ScheduleJobInfo;
+import io.innospots.base.quartz.TimeConfig;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

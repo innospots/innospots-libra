@@ -118,6 +118,17 @@ public class ServiceInfo extends BaseModelInfo implements Comparable<ServiceInfo
         return intervalSecond;
     }
 
+    public String info(){
+        return "serverKey=" +
+                getServerKey()+
+                ", serviceName='" + serviceName +
+                ", serviceStatus=" + serviceStatus +
+                ", serviceType=" + serviceType +
+                ", serviceRole=" + serviceRole +
+                ", groupName=" + groupName +
+                "";
+    }
+
     @Override
     public String toString() {
         return "{" + "serviceName='" + serviceName + '\'' +

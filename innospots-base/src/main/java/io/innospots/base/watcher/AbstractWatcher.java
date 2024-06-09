@@ -18,6 +18,7 @@
 
 package io.innospots.base.watcher;
 
+import io.innospots.base.utils.ServiceRoleHolder;
 import io.innospots.base.utils.time.DateTimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,7 @@ public abstract class AbstractWatcher implements IWatcher {
 
     @Override
     public boolean check() {
-        return true;
+        return ServiceRoleHolder.isRunning();
     }
 
     protected void prepare() {
@@ -71,6 +72,7 @@ public abstract class AbstractWatcher implements IWatcher {
                     Thread.currentThread().interrupt();
                 }
             }
+            running = ServiceRoleHolder.isRunning();
         }
         String timeDuration = DateTimeUtils.consume(startTime);
         logger.info("Watcher {} is stopped, total running time:{}", name, timeDuration);

@@ -24,7 +24,7 @@ import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.operator.IOperator;
 import io.innospots.base.data.request.SimpleRequest;
 import io.innospots.base.model.response.InnospotsResponse;
-import io.innospots.schedule.enums.JobType;
+import io.innospots.base.quartz.JobType;
 import io.innospots.schedule.model.JobExecution;
 import lombok.extern.slf4j.Slf4j;
 

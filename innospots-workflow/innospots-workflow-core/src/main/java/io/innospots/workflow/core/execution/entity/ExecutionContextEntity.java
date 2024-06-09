@@ -70,6 +70,9 @@ public class ExecutionContextEntity {
     @Column
     private LocalDateTime createdTime;
 
+    @Column
+    private Long flowInstanceId;
+
     public enum ContextType {
         /**
          *

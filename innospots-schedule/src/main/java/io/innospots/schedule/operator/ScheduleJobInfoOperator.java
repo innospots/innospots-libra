@@ -32,17 +32,9 @@ import io.innospots.base.quartz.ScheduleMode;
 import io.innospots.schedule.converter.ScheduleJobInfoConverter;
 import io.innospots.schedule.dao.ScheduleJobInfoDao;
 import io.innospots.schedule.entity.ScheduleJobInfoEntity;
-import io.innospots.schedule.enums.JobType;
-import io.innospots.schedule.model.ScheduleJobInfo;
-import org.apache.commons.collections4.CollectionUtils;
+import io.innospots.base.quartz.JobType;
+import io.innospots.base.quartz.ScheduleJobInfo;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.expression.ExpressionParser;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
-import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * @author Smars
@@ -57,6 +49,12 @@ public class ScheduleJobInfoOperator extends ServiceImpl<ScheduleJobInfoDao, Sch
         checkJobKey(scheduleJobInfo);
         this.save(scheduleJobInfoEntity);
         return ScheduleJobInfoConverter.INSTANCE.entityToModel(scheduleJobInfoEntity);
+    }
+
+    public ScheduleJobInfo saveScheduleInfo(ScheduleJobInfo scheduleJobInfo){
+        ScheduleJobInfoEntity scheduleJobInfoEntity = checkScheduleInfo(scheduleJobInfo);
+
+        return scheduleJobInfo;
     }
 
     private void checkJobKey(ScheduleJobInfo scheduleJobInfo) {

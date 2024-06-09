@@ -16,8 +16,9 @@
  * limitations under the License.
  */
 
-package io.innospots.libra.kernel.events;
+package io.innospots.libra.base.events;
 
+import io.innospots.base.enums.DataStatus;
 import io.innospots.base.events.EventBody;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,14 +34,18 @@ import org.springframework.context.ApplicationEvent;
 @Setter
 public class ResourceActionEvent extends EventBody {
 
-    private Number primaryId;
+    private Object primaryId;
 
-    private String resourceType;
+    private String module;
 
     private ResourceAction resourceAction;
 
-    public ResourceActionEvent(Object source) {
+    private DataStatus status;
+
+    public ResourceActionEvent(String module, ResourceAction resourceAction,Object source) {
         super(source);
+        this.module = module;
+        this.resourceAction = resourceAction;
     }
 
     public enum ResourceAction {
@@ -48,7 +53,10 @@ public class ResourceActionEvent extends EventBody {
          *
          */
         CREATE,
+        //create or update
+        SAVE,
         UPDATE,
+        STATUS,
         DELETE
     }
 }

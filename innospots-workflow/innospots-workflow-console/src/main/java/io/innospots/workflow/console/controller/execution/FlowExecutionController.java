@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.console.controller;
+package io.innospots.workflow.console.controller.execution;
 
 import io.innospots.base.crypto.EncryptorBuilder;
 import io.innospots.base.data.body.PageBody;
