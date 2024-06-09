@@ -49,7 +49,7 @@ import static io.innospots.libra.base.menu.ItemType.BUTTON;
  * @author Smars
  */
 @RestController
-@RequestMapping(PATH_ROOT_ADMIN + "flow-node/management")
+@RequestMapping(PATH_ROOT_ADMIN + "flow-node/definition")
 @ModuleMenu(menuKey = "node-management")
 @Tag(name = "Node Definition")
 public class FlowNodeDefinitionController extends BaseController {

@@ -19,10 +19,17 @@ public class NodeSetting {
     @Schema(title = "node css style")
     private Map<String, Object> style;
 
+    @Schema(title = "node icon color")
     private String color;
 
     @Schema(title = "the node running method when click the execution button")
     private RunMethod runMethod;
+
+    @Schema(title = "node width")
+    private int width=150;
+
+    @Schema(title = "node height")
+    private int height=150;
 
     public enum RunMethod {
         /**
