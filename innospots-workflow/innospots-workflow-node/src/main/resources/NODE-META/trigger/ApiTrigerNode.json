@@ -1,0 +1,241 @@
+{
+  "name": "Webhook触发器",
+  "code": "WEBHOOK",
+  "primitive": "trigger",
+  "vendor": "innospots",
+  "description": "api触发器节点",
+  "icon": "webhook",
+  "nodeType": "io.innospots.workflow.node.app.trigger.ApiTriggerNode",
+  "inPorts": "1",
+  "outPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "api触发器"
+      }
+    },
+    {
+      "name": "path",
+      "type": "WebhookInput",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "Webhook地址",
+        "minLength": 4
+      }
+    },
+    {
+      "name": "requestType",
+      "type": "radio",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "请求方式",
+        "default": "GET",
+        "options": [
+          {"value": "GET", "label": "GET"},
+          {"value": "POST", "label": "POST"}
+        ],
+        "props": {
+          "optionType": "default"
+        }
+      }
+    },
+    {
+      "name": "authType",
+      "type": "Select",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "授权类型",
+        "default": "NONE",
+        "options": [
+          {"value": "NONE", "label": "No Auth"},
+          {"value": "BASIC_AUTH", "label": "Basic Auth"},
+          {"value": "BEARER_AUTH", "label": "Bearer Token"}
+        ],
+        "optionsType": "customOptions"
+      }
+    },
+    {
+      "name": "authBody.token",
+      "type": "Input",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "Token",
+        "placeholder": "请输入Token",
+        "props": {
+          "allowClear": true
+        }
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "code": "authType",
+              "opt": "EQUAL",
+              "value": "BEARER_AUTH"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "authBody.username",
+      "type": "Input",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "用户名",
+        "placeholder": "请输入用户名"
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "code": "authType",
+              "opt": "EQUAL",
+              "value": "BASIC_AUTH"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "authBody.password",
+      "type": "Input",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "密码",
+        "format": "Password",
+        "placeholder": "请输入密码",
+        "allowClear": false
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "code": "authType",
+              "opt": "EQUAL",
+              "value": "BASIC_AUTH"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "responseMode",
+      "type": "radio",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "响应方式",
+        "default": "RESULT",
+        "options": [
+          {"value": "ACK", "label": "立即返回"},
+          {"value": "RESULT", "label": "返回工作流结果"}
+        ],
+        "props": {
+          "optionType": "default"
+        }
+      }
+    },
+    {
+      "name": "responseCode",
+      "type": "Input",
+      "vType": "string",
+      "required": false,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "响应代码",
+        "placeholder": "请输入响应代码",
+        "default": "200"
+      }
+    },
+    {
+      "name": "responseFields",
+      "type": "TableFields",
+      "vType": "array",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "返回字段"
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "code": "responseMode",
+              "opt": "EQUAL",
+              "value": "ACK"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "responseData",
+      "type": "CustomRadio",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "响应数据",
+        "options": [
+          {"value": "ALL", "label": "所有数据", "description": "返回工作流执行结果所有数据"},
+          {"value": "FIRST_ITEM", "label": "首个JSON对象", "description": "返回工作流执行结果第一个JSON对象。永远返回JSON对象"}
+        ],
+        "default": "ALL"
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "code": "responseMode",
+              "opt": "EQUAL",
+              "value": "RESULT"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+
+}

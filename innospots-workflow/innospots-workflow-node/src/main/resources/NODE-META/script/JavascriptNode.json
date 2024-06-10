@@ -1,0 +1,36 @@
+{
+  "name": "Js节点",
+  "code": "JAVASCRIPT",
+  "primitive": "script",
+  "vendor": "innospots",
+  "description": "javascript脚本",
+  "icon": "script",
+  "nodeType": "io.innospots.workflow.node.app.script.JavaScriptNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "required":true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "Js节点"
+      }
+    },{
+      "name": "action",
+      "type": "CodeEditor",
+      "required":true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "JS脚本",
+        "placeholder": "输入JS代码",
+        "initialValue": "return item;"
+      }
+    }
+  ]
+}

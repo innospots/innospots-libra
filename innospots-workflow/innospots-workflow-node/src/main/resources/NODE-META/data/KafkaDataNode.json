@@ -1,0 +1,14 @@
+{
+  "name": "Kafka队列触发器",
+  "code": "KAFKA_TRIGGER",
+  "primitive": "trigger",
+  "vendor": "innospots",
+  "description": "Kafka队列触发器节点",
+  "icon": "kafka-trigger",
+  "nodeType": "io.innospots.workflow.node.app.trigger.KafkaTriggerNode",
+  "inPorts": "1",
+  "outPorts": "1",
+  "components": [
+
+  ]
+}

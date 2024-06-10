@@ -1,0 +1,138 @@
+{
+  "name": "等待节点",
+  "code": "WAIT",
+  "primitive": "logic",
+  "vendor": "innospots",
+  "description": "等待节点",
+  "icon": "interval",
+  "nodeType": "io.innospots.workflow.node.app.logic.WaitNode",
+  "inPorts": "1",
+  "outPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "分支节点"
+      }
+    },
+    {
+      "name": "delay_mode",
+      "type": "radio",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "延迟执行方式",
+        "default": "PERIOD",
+        "optionType": "default",
+        "options": [
+          {"value": "PERIOD", "label": "时间间隔"},
+          {"value": "FIXED", "label": "指定时间"}
+        ],
+        "enum": [
+          "PERIOD",
+          "FIXED"
+        ],
+        "enumNames": [
+          "时间间隔",
+          "指定时间"
+        ]
+      }
+    },
+    {
+      "name": "interval_time",
+      "type": "Input",
+      "vType": "number",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "延迟时长",
+        "props": {
+          "step": 1,
+          "min": 1
+        }
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "code": "delay_mode",
+              "opt": "EQUAL",
+              "value": "PERIOD"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "time_period",
+      "type": "Select",
+      "vType": "string",
+      "required": true,
+      "settings": {
+        "label": "时间单位",
+        "default": "MINUTE",
+        "optionsType": "customOptions",
+        "options": [
+          {"value": "MINUTE", "label": "分"},
+          {"value": "HOUR", "label": "时"},
+          {"value": "DAY", "label": "天"},
+          {"value": "WEEK", "label": "周"},
+          {"value": "MONTH", "label": "月"}
+        ]
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "code": "delay_mode",
+              "opt": "EQUAL",
+              "value": "PERIOD"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "running_date_time",
+      "type": "DateTimePicker",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "日期时间",
+        "props": {
+          "showTime": true,
+          "format": "YYYY-MM-DD HH:mm:ss"
+        }
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "code": "delay_mode",
+              "opt": "EQUAL",
+              "value": "FIXED"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

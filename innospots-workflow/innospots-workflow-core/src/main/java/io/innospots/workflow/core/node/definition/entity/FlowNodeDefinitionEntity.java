@@ -59,7 +59,7 @@ public class FlowNodeDefinitionEntity extends BaseEntity {
     @Column(length = 256)
     private String description;
 
-    @Column(length = 32)
+    @Column(length = 64)
     private String icon;
 
 

@@ -1,0 +1,41 @@
+{
+  "primitive": "normal",
+  "vendor": "innospots",
+  "description": "",
+  "settings": {
+    "formWidth": 420,
+    "formMinWidth": 360,
+    "formMaxWidth": 700,
+    "isFixedWidth": false,
+    "runMethod": "DEFAULT|CONFIG",
+    "color": "#fffff"
+  },
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "required":true,
+      "copyAble": true,
+      "deleteAble": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": ""
+      },
+      "layout": {
+        "h": 2,
+        "maxH": 2,
+        "minH": 2,
+        "w": 1,
+        "resizeHandles": [],
+        "x": 0,
+        "y": 0,
+        "i": "WI_0_TljIlAtz",
+        "moved": false,
+        "static": false
+      }
+    }
+  ],
+  "output": [],
+  "scripts": {}
+}

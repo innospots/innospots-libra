@@ -1,0 +1,430 @@
+{
+  "name": "SQL",
+  "code": "SQL",
+  "primitive": "data",
+  "vendor": "innospots",
+  "description": "SQL数据节点",
+  "icon": "mysql",
+  "nodeType": "io.innospots.workflow.node.app.data.SqlDataNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "SQL数据节点"
+      },
+    },
+    {
+      "name": "credential",
+      "type": "CredentialSelect",
+      "vType": "number",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "凭据",
+        "showAddButton": true,
+        "showEditButton": true
+      }
+    },
+    {
+      "name": "data_operation",
+      "type": "radio",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "操作方式",
+        "default": "GET_LIST",
+        "optionType": "default",
+        "options": [
+          {"value": "GET_LIST", "label": "查询"},
+          {"value": "INSERT", "label": "插入"},
+          {"value": "UPDATE", "label": "更新"},
+          {"value": "UPSERT", "label": "插入更新"}
+        ],
+        "enum": [
+          "GET_LIST",
+          "INSERT",
+          "UPDATE",
+          "UPSERT"
+        ],
+        "enumNames": [
+          "查询",
+          "插入",
+          "更新",
+          "插入更新"
+        ]
+      }
+    },
+    {
+      "name": "sql_clause",
+      "type": "CodeEditor",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "查询语句",
+        "codeType": "SQL",
+        "isFixedType": true
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "code": "data_operation",
+              "opt": "EQUAL",
+              "value": "GET_LIST"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "table_name",
+      "type": "DataTableSelect",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "数据表",
+        "dataSource": "credential",
+        "showAddButton": true,
+        "showEditButton": true,
+        "dependencies": "credential"
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "code": "data_operation",
+              "opt": "EQUAL",
+              "value": "INSERT"
+            },
+            {
+              "code": "data_operation",
+              "opt": "EQUAL",
+              "value": "UPDATE"
+            },
+            {
+              "code": "data_operation",
+              "opt": "EQUAL",
+              "value": "UPSERT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "key_column",
+      "type": "KeyFieldSelect",
+      "vType": "array",
+      "required": false,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "主键字段"
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "code": "data_operation",
+              "opt": "EQUAL",
+              "value": "UPSERT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "query_conditions",
+      "type": "QueryParams",
+      "vType": "array",
+      "required": false,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "查询参数",
+        "widget": "QueryParams",
+        "dependencies": "sql_clause"
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "code": "data_operation",
+              "opt": "EQUAL",
+              "value": "GET_LIST"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "update_conditions",
+      "type": "FieldMapping",
+      "vType": "array",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "更新键",
+        "tableName": "table_name",
+        "dataSourceId": "credential",
+        "bind": "",
+        "dependencies": "credential"
+      },
+      "widgetRules": [
+        {
+          "result": "hidden",
+          "relation": "OR",
+          "children": [
+            {
+              "code": "data_operation",
+              "opt": "NOTEQUAL",
+              "value": "UPDATE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "updated_time",
+      "type": "Input",
+      "vType": "string",
+      "required": false,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "更新时间字段",
+        "default": "updated_time"
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "code": "data_operation",
+              "opt": "EQUAL",
+              "value": "UPDATE"
+            },
+            {
+              "code": "data_operation",
+              "opt": "EQUAL",
+              "value": "UPSERT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "column_mapping",
+      "type": "FieldMappingTable",
+      "vType": "array",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "字段映射",
+        "tableName": "table_name",
+        "dataSourceId": "datasource_id",
+        "dependencies": "credential",
+        "columns": [
+          {
+            "width": "auto",
+            "title": "表字段",
+            "dataIndex": "name"
+          },
+          {
+            "width": "auto",
+            "title": "数据类型",
+            "dataIndex": "valueType"
+          },
+          {
+            "width": "160",
+            "title": "映射字段",
+            "dataIndex": "code"
+          }
+        ]
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "code": "data_operation",
+              "opt": "NOTEQUAL",
+              "value": "GET_LIST"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "output_field_type",
+      "type": "radio",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "返回数据类型",
+        "options": [
+          {"value": "LIST", "label": "列表"},
+          {"value": "MAP", "label": "单条(对象)"}
+        ],
+        "default": "LIST"
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "code": "data_operation",
+              "opt": "EQUAL",
+              "value": "GET_LIST"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "output_mode_map",
+      "type": "Select",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "存储方式",
+        "optionsType": "customOptions",
+        "options": [
+          {"value": "FIELD", "label": "存入变量"},
+          {"value": "PAYLOAD", "label": "合并入Payload"},
+          {"value": "OVERWRITE", "label": "覆盖Payload"}
+        ]
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "AND",
+          "children": [
+            {
+              "code": "output_field_type",
+              "opt": "EQUAL",
+              "value": "MAP"
+            },
+            {
+              "code": "data_operation",
+              "opt": "EQUAL",
+              "value": "GET_LIST"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "output_mode_list",
+      "type": "Select",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "存储方式",
+        "optionsType": "customOptions",
+        "options": [
+          {"value": "FIELD", "label": "存入变量"},
+          {"value": "PAYLOAD", "label": "合并入Payload"},
+          {"value": "OVERWRITE", "label": "覆盖Payload"}
+        ]
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "AND",
+          "children": [
+            {
+              "code": "output_field_type",
+              "opt": "EQUAL",
+              "value": "LIST"
+            },
+            {
+              "code": "data_operation",
+              "opt": "EQUAL",
+              "value": "GET_LIST"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "variable_name",
+      "type": "Input",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "存储变量名称"
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "AND",
+          "children": [
+            {
+              "code": "output_mode_map",
+              "opt": "EQUAL",
+              "value": "FIELD"
+            },
+            {
+              "code": "data_operation",
+              "opt": "EQUAL",
+              "value": "GET_LIST"
+            }
+          ]
+        },
+        {
+          "result": "visible",
+          "relation": "AND",
+          "children": [
+            {
+              "code": "output_mode_list",
+              "opt": "EQUAL",
+              "value": "FIELD"
+            },
+            {
+              "code": "data_operation",
+              "opt": "EQUAL",
+              "value": "GET_LIST"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

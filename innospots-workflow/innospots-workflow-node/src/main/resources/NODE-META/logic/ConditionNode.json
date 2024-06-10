@@ -1,0 +1,36 @@
+{
+  "name": "条件节点",
+  "code": "CONDITIONS",
+  "primitive": "logic",
+  "vendor": "innospots",
+  "description": "IF条件",
+  "icon": "condition",
+  "nodeType": "io.innospots.workflow.node.app.logic.ConditionNode",
+  "outPorts": "2",
+  "inPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "vType": "string",
+      "required":true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "条件节点"
+      }
+    },{
+      "name": "conditions",
+      "type": "RuleEditor",
+      "vType": "object",
+      "required":true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "条件字段"
+      }
+    }
+  ]
+}

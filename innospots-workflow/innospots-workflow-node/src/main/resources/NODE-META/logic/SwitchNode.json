@@ -1,0 +1,49 @@
+{
+  "name": "分支节点",
+  "code": "SWITCH",
+  "primitive": "logic",
+  "vendor": "innospots",
+  "description": "多分支",
+  "icon": "branch",
+  "nodeType": "io.innospots.workflow.node.app.logic.SwitchNode",
+  "outPorts": "4",
+  "inPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "vType": "string",
+      "required":true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "分支节点"
+      }
+    },{
+      "name": "conditionField",
+      "type": "Cascader",
+      "vType": "array",
+      "required":true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "条件字段",
+        "optionsType": "inputFields",
+        "options": [{}]
+      }
+    },{
+      "name": "conditions",
+      "type": "BranchConfig",
+      "vType": "array",
+      "required":true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "分支条件",
+        "dependencies": "conditionField"
+      }
+    }
+  ]
+}

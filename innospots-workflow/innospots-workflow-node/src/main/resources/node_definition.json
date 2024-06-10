@@ -1,0 +1,78 @@
+{
+  "name": "中文、英文字符，数字，非空，32个字符以内",
+  "code": "英文，数字，下划线，中划线，非空，32个字符以内",
+  "primitive": "trigger｜normal|script|interaction|dataset|execute|data|logic",
+  "vendor": "vendor name,32个字符以内",
+  "description": "256个字符以内",
+  "icon": "icon的相对路径,/xx/xx.png",
+  "credentialTypeCode": "凭据类型标识，可为空",
+  "nodeType": "节点的执行类,io.innospots.workflow.core.node.executor.StateNode",
+  "settings": {
+    "formWidth": 420,
+    "formMinWidth": 360,
+    "formMaxWidth": 700,
+    "isFixedWidth": false,
+    "runMethod": "DEFAULT|CONFIG",
+    "color": "#fffff"
+  },
+  "outPorts": [
+    {
+      "label": "abc",
+      "count": 1
+    }
+  ],
+  "inPorts": "2",
+  "components": [
+    {
+      "id": "WI_0_TljIlAtz",
+      "name": "Input1",
+      "type": "Input",
+      "isDefault":true,
+      "required":true,
+      "copyAble": true,
+      "deleteAble": true,
+      "settings": {
+        "label": "aaa",
+        "placeholder": "请输入",
+        "initialValue": "123"
+      },
+      "layout": {
+        "h": 2,
+        "maxH": 2,
+        "minH": 2,
+        "w": 1,
+        "resizeHandles": [],
+        "x": 0,
+        "y": 0,
+        "i": "WI_0_TljIlAtz",
+        "moved": false,
+        "static": false
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation":"OR",
+          "children":[
+            {
+              "code": "auth_type",
+              "opt": "EQUAL｜UNEQUAL|IN|NOT_IN|NULL|HASVAL|NOTNULL",
+              "value": ""
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "output": [
+    {
+      "name": "1",
+      "code": "1",
+      "valueType": "STRING",
+      "format": "1"
+    }
+  ],
+  "scripts": {
+    "scriptType": "javascript",
+    "actionScript": "var a = 1"
+  }
+}

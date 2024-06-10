@@ -1,0 +1,88 @@
+{
+  "name": "开始节点",
+  "code": "START",
+  "primitive": "trigger",
+  "vendor": "innospots",
+  "description": "开始节点",
+  "icon": "start",
+  "nodeType": "io.innospots.workflow.core.node.executor.StateNode",
+  "outPorts": [
+    {
+      "label": "out1",
+      "count": 1
+    }
+  ],
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "vType": "string",
+      "required":true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "开始节点"
+      }
+    },{
+      "name": "has_input_field",
+      "type": "Switch",
+      "vType": "boolean",
+      "required":true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "是否输入字段",
+        "placeholder": "请输入节点名称",
+        "initialValue": "false"
+      }
+    },{
+      "name": "input_fields",
+      "type": "FieldList",
+      "vType": "array",
+      "required":true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "输入字段",
+        "placeholder": "请输入节点名称",
+        "initialValue": "",
+        "customColumns": [
+          {
+            "type": "INPUT",
+            "width": "120px",
+            "code": "code",
+            "title": "字段标识"
+          },
+          {
+            "code": "name",
+            "type": "INPUT",
+            "width": "100px",
+            "title": "字段名称",
+            "default": ""
+          },
+          {
+            "type": "INPUT",
+            "width": "120px",
+            "code": "value",
+            "title": "默认值"
+          }
+        ]
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation":"OR",
+          "children":[
+            {
+              "code": "has_input_field",
+              "opt": "EQUAL",
+              "value": "true"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

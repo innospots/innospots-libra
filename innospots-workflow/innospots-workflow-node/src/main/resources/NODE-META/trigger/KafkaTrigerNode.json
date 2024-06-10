@@ -1,0 +1,109 @@
+{
+  "name": "Kafka队列触发器",
+  "code": "KAFKA_TRIGGER",
+  "primitive": "trigger",
+  "vendor": "innospots",
+  "description": "Kafka队列触发器节点",
+  "icon": "kafka-trigger",
+  "nodeType": "io.innospots.workflow.node.app.trigger.KafkaTriggerNode",
+  "inPorts": "1",
+  "outPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "Kafka队列触发器"
+      }
+    },
+    {
+      "name": "credential",
+      "type": "CredentialSelect",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "凭据",
+        "showAddButton": true,
+        "showEditButton": true
+      }
+    },
+    {
+      "name": "topic",
+      "type": "Input",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "消费Topic",
+        "placeholder": ""
+      }
+    },
+    {
+      "name": "group_id",
+      "type": "Input",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "消费分组标识",
+        "placeholder": "请输入Group ID 如 inno-kafka",
+        "default": "inno_groups"
+      }
+    },
+    {
+      "name": "parallel_num",
+      "type": "Input",
+      "vType": "number",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "消费并行数",
+        "default": 1,
+        "props": {
+          "min": 1,
+          "max": 10
+        }
+      }
+    },
+    {
+      "name": "data_offset",
+      "type": "Select",
+      "vType": "string",
+      "required": false,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "消费起始位置",
+        "options": [
+          {"value": "earliest", "label": "从最早消息开始"},
+          {"value": "latest", "label": "从最新消息开始"}
+        ],
+        "default": "latest"
+      }
+    },
+    {
+      "name": "msg_format",
+      "type": "Input",
+      "vType": "string",
+      "required": false,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "消息格式",
+        "default": "JSON"
+      }
+    }
+  ]
+
+}
