@@ -19,5 +19,5 @@ public class NodePage {
     private String pageKey;
 
     @Schema(title = "form element components")
-    private Map<String,Object> components;
+    private Map<String,Map<String,Object>> components;
 }

@@ -1,14 +1,101 @@
 {
-  "name": "Kafka队列触发器",
-  "code": "KAFKA_TRIGGER",
+  "name": "Kafka数据节点",
+  "code": "KAFKA",
   "primitive": "trigger",
   "vendor": "innospots",
-  "description": "Kafka队列触发器节点",
-  "icon": "kafka-trigger",
-  "nodeType": "io.innospots.workflow.node.app.trigger.KafkaTriggerNode",
+  "description": "Kafka数据节点",
+  "icon": "kafka",
+  "nodeType": "io.innospots.workflow.node.app.data.KafkaDataNode",
   "inPorts": "1",
   "outPorts": "1",
   "components": [
-
+    {
+      "name": "displayName",
+      "type": "Input",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "Kafka队列"
+      }
+    },
+    {
+      "name": "credential",
+      "type": "CredentialSelect",
+      "vType": "number",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "凭据",
+        "showAddButton": true,
+        "showEditButton": true
+      }
+    },
+    {
+      "name": "registry_topic",
+      "type": "Input",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "Topic",
+        "placeholder": "请输入Topic"
+      }
+    },
+    {
+      "name": "config_field",
+      "type": "Switch",
+      "vType": "boolean",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "是否配置字段"
+      }
+    },
+    {
+      "name": "column_mapping",
+      "type": "FieldMappingTable",
+      "vType": "array",
+      "required": false,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "字段映射",
+        "tableName": "table_name",
+        "dataSourceId": "datasource_id",
+        "columns": [
+          {
+            "width": "50%",
+            "title": "表字段",
+            "dataIndex": "name"
+          },
+          {
+            "width": "50%",
+            "title": "映射字段",
+            "dataIndex": "code"
+          }
+        ]
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "code": "config_field",
+              "opt": "EQUAL",
+              "value": "true"
+            }
+          ]
+        }
+      ]
+    }
   ]
+
 }

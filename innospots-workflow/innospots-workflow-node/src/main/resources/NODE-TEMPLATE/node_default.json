@@ -1,4 +1,6 @@
 {
+  "name": "default",
+  "code": "default",
   "primitive": "normal",
   "vendor": "innospots",
   "description": "",
@@ -14,9 +16,10 @@
     {
       "name": "displayName",
       "type": "Input",
+      "valueType": "String",
       "required":true,
-      "copyAble": true,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "节点名称",
         "placeholder": "请输入节点名称",

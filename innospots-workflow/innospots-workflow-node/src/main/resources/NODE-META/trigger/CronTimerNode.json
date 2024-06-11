@@ -1,14 +1,450 @@
 {
-  "name": "Kafka队列触发器",
-  "code": "KAFKA_TRIGGER",
+  "name": "定时触发器",
+  "code": "CRONTIMER",
   "primitive": "trigger",
   "vendor": "innospots",
-  "description": "Kafka队列触发器节点",
-  "icon": "kafka-trigger",
-  "nodeType": "io.innospots.workflow.node.app.trigger.KafkaTriggerNode",
+  "description": "定时触发器节点",
+  "icon": "dingshi",
+  "nodeType": "io.innospots.workflow.node.app.trigger.CronTimerNode",
   "inPorts": "1",
   "outPorts": "1",
   "components": [
-
+    {
+      "name": "displayName",
+      "type": "Input",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称"
+      }
+    },
+    {
+      "name": "schedule_mode",
+      "type": "radio",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "执行模式",
+        "default": "ONCE",
+        "options": [
+          {
+            "value": "ONCE",
+            "label": "单次执行"
+          },
+          {
+            "value": "SCHEDULED",
+            "label": "循环执行"
+          }
+        ],
+        "enum": [
+          "ONCE",
+          "SCHEDULED"
+        ],
+        "enumNames": [
+          "单次执行",
+          "循环执行"
+        ]
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "code": "schedule_mode",
+              "opt": "EQUAL",
+              "value": "ONCE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "run_date_time",
+      "type": "Input",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "运行时间",
+        "format": "dateTime",
+        "props": {
+          "format": "YYYY-MM-DD HH:mm",
+          "showTime": true
+        }
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "code": "schedule_mode",
+              "opt": "EQUAL",
+              "value": "ONCE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "period_unit",
+      "type": "radio",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "时间单位",
+        "default": "DAY",
+        "options": [
+          {
+            "value": "MINUTE",
+            "label": "分"
+          },
+          {
+            "value": "HOUR",
+            "label": "时"
+          },
+          {
+            "value": "DAY",
+            "label": "天"
+          },
+          {
+            "value": "WEEK",
+            "label": "周"
+          },
+          {
+            "value": "MONTH",
+            "label": "月"
+          }
+        ],
+        "enum": [
+          "MINUTE",
+          "HOUR",
+          "DAY",
+          "WEEK",
+          "MONTH"
+        ],
+        "enumNames": [
+          "分",
+          "时",
+          "天",
+          "周",
+          "月"
+        ]
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "code": "schedule_mode",
+              "opt": "EQUAL",
+              "value": "SCHEDULED"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "period_day_times",
+      "type": "Input",
+      "vType": "number",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "时间周期",
+        "props": {
+          "addonBefore": "每",
+          "addonAfter": "天",
+          "step": 1,
+          "min": 1
+        }
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "AND",
+          "children": [
+            {
+              "code": "schedule_mode",
+              "opt": "EQUAL",
+              "value": "SCHEDULED"
+            },
+            {
+              "code": "period_unit",
+              "opt": "EQUAL",
+              "value": "DAY"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "period_minute_times",
+      "type": "Input",
+      "vType": "number",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "时间周期",
+        "props": {
+          "addonBefore": "每",
+          "addonAfter": "分钟",
+          "step": 1,
+          "min": 1
+        }
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "AND",
+          "children": [
+            {
+              "code": "schedule_mode",
+              "opt": "EQUAL",
+              "value": "SCHEDULED"
+            },
+            {
+              "code": "period_unit",
+              "opt": "EQUAL",
+              "value": "MINUTE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "period_hour_times",
+      "type": "Input",
+      "vType": "number",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "时间周期",
+        "props": {
+          "addonBefore": "每",
+          "addonAfter": "小时",
+          "step": 1,
+          "min": 1
+        }
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "AND",
+          "children": [
+            {
+              "code": "schedule_mode",
+              "opt": "EQUAL",
+              "value": "SCHEDULED"
+            },
+            {
+              "code": "period_unit",
+              "opt": "EQUAL",
+              "value": "HOUR"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "period_week_times",
+      "type": "Checkbox",
+      "vType": "array",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "时间周期",
+        "options": [
+          {
+            "value": "2",
+            "label": "周一"
+          },
+          {
+            "value": "3",
+            "label": "周二"
+          },
+          {
+            "value": "4",
+            "label": "周三"
+          },
+          {
+            "value": "5",
+            "label": "周四"
+          },
+          {
+            "value": "6",
+            "label": "周五"
+          },
+          {
+            "value": "7",
+            "label": "周六"
+          },
+          {
+            "value": "1",
+            "label": "周日"
+          }
+        ]
+      },
+      "widgetRules": [
+        {
+          "result": "visible",
+          "relation": "AND",
+          "children": [
+            {
+              "code": "schedule_mode",
+              "opt": "EQUAL",
+              "value": "SCHEDULED"
+            },
+            {
+              "code": "period_unit",
+              "opt": "EQUAL",
+              "value": "WEEK"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "period_month_times",
+      "type": "Select",
+      "vType": "array",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "时间周期",
+        "options": [
+          {
+            "value": "1",
+            "label": "1"
+          },
+          {
+            "value": "2",
+            "label": "2"
+          },{
+            "value": "3",
+            "label": "3"
+          },
+          {
+            "value": "4",
+            "label": "4"
+          },
+          {
+            "value": "5",
+            "label": "5"
+          },
+          {
+            "value": "6",
+            "label": "6"
+          },
+          {
+            "value": "7",
+            "label": "7"
+          },
+          {
+            "value": "8",
+            "label": "8"
+          },
+          {
+            "value": "9",
+            "label": "9"
+          },
+          {
+            "value": "10",
+            "label": "10"
+          },
+          {
+            "value": "11",
+            "label": "11"
+          },
+          {
+            "value": "12",
+            "label": "12"
+          },
+          {
+            "value": "13",
+            "label": "13"
+          },
+          {
+            "value": "14",
+            "label": "14"
+          },
+          {
+            "value": "31",
+            "label": "31"
+          }
+        ]
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "AND",
+          "children": [
+            {
+              "name": "schedule_mode",
+              "opt": "EQUAL",
+              "value": "SCHEDULED"
+            },
+            {
+              "name": "period_unit",
+              "opt": "EQUAL",
+              "value": "MONTH"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "run_time",
+      "type": "Input",
+      "vType": "string",
+      "required": true,
+      "copyAble": false,
+      "deleteAble": false,
+      "settings": {
+        "label": "运行时间",
+        "format": "time",
+        "props": {
+          "format": "HH:mm"
+        }
+      },
+      "widgetRules": [
+        {
+          "result": "hidden",
+          "relation": "OR",
+          "children": [
+            {
+              "code": "schedule_mode",
+              "opt": "EQUAL",
+              "value": "ONCE"
+            },
+            {
+              "code": "period_unit",
+              "opt": "EQUAL",
+              "value": "MINUTE"
+            },
+            {
+              "code": "period_unit",
+              "opt": "EQUAL",
+              "value": "HOUR"
+            }
+          ]
+        }
+      ]
+    }
   ]
 }

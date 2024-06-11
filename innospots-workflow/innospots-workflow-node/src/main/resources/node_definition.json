@@ -27,10 +27,9 @@
       "id": "WI_0_TljIlAtz",
       "name": "Input1",
       "type": "Input",
-      "isDefault":true,
       "required":true,
-      "copyAble": true,
-      "deleteAble": true,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "aaa",
         "placeholder": "请输入",
@@ -48,13 +47,13 @@
         "moved": false,
         "static": false
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "visible",
           "relation":"OR",
           "children":[
             {
-              "code": "auth_type",
+              "name": "auth_type",
               "opt": "EQUAL｜UNEQUAL|IN|NOT_IN|NULL|HASVAL|NOTNULL",
               "value": ""
             }

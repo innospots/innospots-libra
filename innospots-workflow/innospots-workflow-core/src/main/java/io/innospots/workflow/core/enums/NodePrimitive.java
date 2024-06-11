@@ -29,6 +29,7 @@ public enum NodePrimitive {
      * Data node.
      */
     data,
+    dataset,
     /**
      * Execute node.
      */

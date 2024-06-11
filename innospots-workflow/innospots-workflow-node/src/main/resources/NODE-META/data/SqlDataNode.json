@@ -12,23 +12,23 @@
     {
       "name": "displayName",
       "type": "Input",
-      "vType": "string",
+      "valueType": "string",
       "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "节点名称",
         "placeholder": "请输入节点名称",
         "initialValue": "SQL数据节点"
-      },
+      }
     },
     {
       "name": "credential",
       "type": "CredentialSelect",
-      "vType": "number",
+      "valueType": "string",
       "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "凭据",
         "showAddButton": true,
@@ -38,10 +38,10 @@
     {
       "name": "data_operation",
       "type": "radio",
-      "vType": "string",
+      "valueType": "string",
       "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "操作方式",
         "default": "GET_LIST",
@@ -51,40 +51,28 @@
           {"value": "INSERT", "label": "插入"},
           {"value": "UPDATE", "label": "更新"},
           {"value": "UPSERT", "label": "插入更新"}
-        ],
-        "enum": [
-          "GET_LIST",
-          "INSERT",
-          "UPDATE",
-          "UPSERT"
-        ],
-        "enumNames": [
-          "查询",
-          "插入",
-          "更新",
-          "插入更新"
         ]
       }
     },
     {
       "name": "sql_clause",
       "type": "CodeEditor",
-      "vType": "string",
+      "valueType": "string",
       "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "查询语句",
         "codeType": "SQL",
         "isFixedType": true
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "visible",
           "relation": "OR",
           "children": [
             {
-              "code": "data_operation",
+              "name": "data_operation",
               "opt": "EQUAL",
               "value": "GET_LIST"
             }
@@ -95,10 +83,10 @@
     {
       "name": "table_name",
       "type": "DataTableSelect",
-      "vType": "string",
+      "valueType": "string",
       "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "数据表",
         "dataSource": "credential",
@@ -106,23 +94,23 @@
         "showEditButton": true,
         "dependencies": "credential"
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "visible",
           "relation": "OR",
           "children": [
             {
-              "code": "data_operation",
+              "name": "data_operation",
               "opt": "EQUAL",
               "value": "INSERT"
             },
             {
-              "code": "data_operation",
+              "name": "data_operation",
               "opt": "EQUAL",
               "value": "UPDATE"
             },
             {
-              "code": "data_operation",
+              "name": "data_operation",
               "opt": "EQUAL",
               "value": "UPSERT"
             }
@@ -133,20 +121,20 @@
     {
       "name": "key_column",
       "type": "KeyFieldSelect",
-      "vType": "array",
+      "valueType": "array",
       "required": false,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "主键字段"
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "visible",
           "relation": "OR",
           "children": [
             {
-              "code": "data_operation",
+              "name": "data_operation",
               "opt": "EQUAL",
               "value": "UPSERT"
             }
@@ -157,22 +145,22 @@
     {
       "name": "query_conditions",
       "type": "QueryParams",
-      "vType": "array",
+      "valueType": "array",
       "required": false,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "查询参数",
         "widget": "QueryParams",
         "dependencies": "sql_clause"
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "visible",
           "relation": "OR",
           "children": [
             {
-              "code": "data_operation",
+              "name": "data_operation",
               "opt": "EQUAL",
               "value": "GET_LIST"
             }
@@ -183,10 +171,10 @@
     {
       "name": "update_conditions",
       "type": "FieldMapping",
-      "vType": "array",
+      "valueType": "array",
       "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "更新键",
         "tableName": "table_name",
@@ -194,13 +182,13 @@
         "bind": "",
         "dependencies": "credential"
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "hidden",
           "relation": "OR",
           "children": [
             {
-              "code": "data_operation",
+              "name": "data_operation",
               "opt": "NOTEQUAL",
               "value": "UPDATE"
             }
@@ -211,7 +199,7 @@
     {
       "name": "updated_time",
       "type": "Input",
-      "vType": "string",
+      "valueType": "string",
       "required": false,
       "copyAble": false,
       "deleteAble": false,
@@ -219,18 +207,18 @@
         "label": "更新时间字段",
         "default": "updated_time"
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "visible",
           "relation": "OR",
           "children": [
             {
-              "code": "data_operation",
+              "name": "data_operation",
               "opt": "EQUAL",
               "value": "UPDATE"
             },
             {
-              "code": "data_operation",
+              "name": "data_operation",
               "opt": "EQUAL",
               "value": "UPSERT"
             }
@@ -241,10 +229,10 @@
     {
       "name": "column_mapping",
       "type": "FieldMappingTable",
-      "vType": "array",
+      "valueType": "array",
       "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "字段映射",
         "tableName": "table_name",
@@ -268,13 +256,13 @@
           }
         ]
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "visible",
           "relation": "OR",
           "children": [
             {
-              "code": "data_operation",
+              "name": "data_operation",
               "opt": "NOTEQUAL",
               "value": "GET_LIST"
             }
@@ -285,10 +273,10 @@
     {
       "name": "output_field_type",
       "type": "radio",
-      "vType": "string",
+      "valueType": "string",
       "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "返回数据类型",
         "options": [
@@ -297,13 +285,13 @@
         ],
         "default": "LIST"
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "visible",
           "relation": "OR",
           "children": [
             {
-              "code": "data_operation",
+              "name": "data_operation",
               "opt": "EQUAL",
               "value": "GET_LIST"
             }
@@ -314,7 +302,7 @@
     {
       "name": "output_mode_map",
       "type": "Select",
-      "vType": "string",
+      "valueType": "string",
       "required": true,
       "copyAble": false,
       "deleteAble": false,
@@ -327,18 +315,18 @@
           {"value": "OVERWRITE", "label": "覆盖Payload"}
         ]
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "visible",
           "relation": "AND",
           "children": [
             {
-              "code": "output_field_type",
+              "name": "output_field_type",
               "opt": "EQUAL",
               "value": "MAP"
             },
             {
-              "code": "data_operation",
+              "name": "data_operation",
               "opt": "EQUAL",
               "value": "GET_LIST"
             }
@@ -349,10 +337,10 @@
     {
       "name": "output_mode_list",
       "type": "Select",
-      "vType": "string",
+      "valueType": "string",
       "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "存储方式",
         "optionsType": "customOptions",
@@ -362,18 +350,18 @@
           {"value": "OVERWRITE", "label": "覆盖Payload"}
         ]
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "visible",
           "relation": "AND",
           "children": [
             {
-              "code": "output_field_type",
+              "name": "output_field_type",
               "opt": "EQUAL",
               "value": "LIST"
             },
             {
-              "code": "data_operation",
+              "name": "data_operation",
               "opt": "EQUAL",
               "value": "GET_LIST"
             }
@@ -384,25 +372,25 @@
     {
       "name": "variable_name",
       "type": "Input",
-      "vType": "string",
+      "valueType": "string",
       "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "存储变量名称"
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "visible",
           "relation": "AND",
           "children": [
             {
-              "code": "output_mode_map",
+              "name": "output_mode_map",
               "opt": "EQUAL",
               "value": "FIELD"
             },
             {
-              "code": "data_operation",
+              "name": "data_operation",
               "opt": "EQUAL",
               "value": "GET_LIST"
             }
@@ -413,12 +401,12 @@
           "relation": "AND",
           "children": [
             {
-              "code": "output_mode_list",
+              "name": "output_mode_list",
               "opt": "EQUAL",
               "value": "FIELD"
             },
             {
-              "code": "data_operation",
+              "name": "data_operation",
               "opt": "EQUAL",
               "value": "GET_LIST"
             }

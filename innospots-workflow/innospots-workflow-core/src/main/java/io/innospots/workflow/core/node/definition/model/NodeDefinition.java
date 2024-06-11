@@ -48,14 +48,15 @@ public class NodeDefinition extends NodeInfo {
 //    private List<Map<String, Object>> outPorts;
 
     @Schema(title = "the node has delete icon in the canvas")
-    private Boolean enableDelete;
+    private Boolean deletable;
 
     @Schema(title = "node config form element")
 //    private Map<String, Object> config;
     private NodeResource resources;
 
     @Schema(title = "node setting")
-    private NodeSetting settings;
+    private Map<String,Object> settings;
+//    private NodeSetting settings;
 
 //    @Schema(title = "connector config info")
 //    private List<Map<String, Object>> configs;

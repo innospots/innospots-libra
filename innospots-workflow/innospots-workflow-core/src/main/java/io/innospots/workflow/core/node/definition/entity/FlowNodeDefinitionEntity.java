@@ -93,7 +93,7 @@ public class FlowNodeDefinitionEntity extends BaseEntity {
     private DataStatus status;
 
     @Column
-    private Boolean enableDelete;
+    private Boolean deletable;
 
     @Column
     private Boolean used;
