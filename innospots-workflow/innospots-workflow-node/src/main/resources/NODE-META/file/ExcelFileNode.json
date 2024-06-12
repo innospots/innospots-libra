@@ -1,0 +1,12 @@
+{
+  "name": "Excel文件",
+  "code": "excel_file",
+  "primitive": "file",
+  "vendor": "innospots",
+  "description": "excel file读写",
+  "icon": "excel",
+  "nodeType": "io.innospots.workflow.node.app.file.ExcelFileNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": []
+}

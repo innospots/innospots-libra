@@ -1,0 +1,12 @@
+{
+  "name": "JS Payload",
+  "code": "JSPAYLOAD",
+  "primitive": "script",
+  "vendor": "innospots",
+  "description": "通知节点",
+  "icon": "script",
+  "nodeType": "io.innospots.workflow.node.app.script.PayloadScriptNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": []
+}

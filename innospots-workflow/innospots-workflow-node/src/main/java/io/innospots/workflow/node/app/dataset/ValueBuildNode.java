@@ -1,4 +1,4 @@
-package io.innospots.workflow.node.app.execute;
+package io.innospots.workflow.node.app.dataset;
 
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;

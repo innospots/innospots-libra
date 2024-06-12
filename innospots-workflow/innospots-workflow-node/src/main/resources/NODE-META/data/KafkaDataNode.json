@@ -12,10 +12,9 @@
     {
       "name": "displayName",
       "type": "Input",
-      "vType": "string",
-      "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "节点名称",
         "placeholder": "请输入节点名称",
@@ -25,10 +24,9 @@
     {
       "name": "credential",
       "type": "CredentialSelect",
-      "vType": "number",
-      "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "number",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "凭据",
         "showAddButton": true,
@@ -38,10 +36,9 @@
     {
       "name": "registry_topic",
       "type": "Input",
-      "vType": "string",
-      "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "Topic",
         "placeholder": "请输入Topic"
@@ -50,10 +47,9 @@
     {
       "name": "config_field",
       "type": "Switch",
-      "vType": "boolean",
-      "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "boolean",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "是否配置字段"
       }
@@ -61,10 +57,9 @@
     {
       "name": "column_mapping",
       "type": "FieldMappingTable",
-      "vType": "array",
-      "required": false,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "字段映射",
         "tableName": "table_name",
@@ -82,13 +77,13 @@
           }
         ]
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "visible",
           "relation": "OR",
           "children": [
             {
-              "code": "config_field",
+              "name": "config_field",
               "opt": "EQUAL",
               "value": "true"
             }

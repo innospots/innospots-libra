@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.node.app.execute;
+package io.innospots.workflow.node.app.dataset;
 
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.exception.ResourceException;
@@ -27,7 +27,6 @@ import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.field.NodeParamField;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
-import io.innospots.workflow.core.instance.model.NodeInstance;
 
 import java.util.HashSet;
 import java.util.List;

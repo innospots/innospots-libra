@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.node.app.execute;
+package io.innospots.workflow.node.app.compute;
 
 import io.innospots.base.model.field.ComputeField;
 import io.innospots.base.model.field.compute.ComputeItem;

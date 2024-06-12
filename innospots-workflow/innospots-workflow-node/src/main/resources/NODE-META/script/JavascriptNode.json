@@ -12,9 +12,8 @@
     {
       "name": "displayName",
       "type": "Input",
-      "required":true,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "节点名称",
         "placeholder": "请输入节点名称",
@@ -23,9 +22,8 @@
     },{
       "name": "action",
       "type": "CodeEditor",
-      "required":true,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "JS脚本",
         "placeholder": "输入JS代码",

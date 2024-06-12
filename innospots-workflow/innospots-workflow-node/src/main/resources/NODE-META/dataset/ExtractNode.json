@@ -1,0 +1,12 @@
+{
+  "name": "数据提取",
+  "code": "EXTRACT",
+  "primitive": "dataset",
+  "vendor": "innospots",
+  "description": "数据提取节点",
+  "icon": "extract",
+  "nodeType": "io.innospots.workflow.node.app.dataset.ExtractNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": []
+}

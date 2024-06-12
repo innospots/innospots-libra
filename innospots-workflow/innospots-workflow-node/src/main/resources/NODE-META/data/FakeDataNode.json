@@ -1,0 +1,12 @@
+{
+  "name": "模拟数据",
+  "code": "FAKER",
+  "primitive": "data",
+  "vendor": "innospots",
+  "description": "Faker节点",
+  "icon": "faker",
+  "nodeType": "io.innospots.workflow.node.app.data.FakeDataNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": []
+}

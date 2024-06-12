@@ -1,0 +1,12 @@
+{
+  "name": "子流程",
+  "code": "SUBFLOW",
+  "primitive": "logic",
+  "vendor": "innospots",
+  "description": "子流程节点",
+  "icon": "sub-flow",
+  "nodeType": "io.innospots.workflow.node.app.logic.FlowNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": []
+}

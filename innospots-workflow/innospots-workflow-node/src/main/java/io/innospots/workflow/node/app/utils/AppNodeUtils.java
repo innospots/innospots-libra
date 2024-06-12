@@ -1,23 +1,10 @@
 package io.innospots.workflow.node.app.utils;
 
-import io.innospots.base.condition.EmbedCondition;
-import io.innospots.base.condition.Factor;
-import io.innospots.base.condition.Mode;
-import io.innospots.base.exception.ConfigException;
-import io.innospots.base.json.JSONUtils;
-import io.innospots.base.script.IScriptExecutor;
-import io.innospots.base.script.aviator.AviatorExpressionExecutor;
-import io.innospots.base.utils.BeanUtils;
-import io.innospots.base.utils.Initializer;
 import io.innospots.workflow.core.instance.model.NodeInstance;
-import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
-import io.innospots.workflow.core.node.field.NodeParamField;
-import io.innospots.workflow.node.app.execute.AggregationComputeField;
+import io.innospots.workflow.node.app.compute.AggregationComputeField;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 

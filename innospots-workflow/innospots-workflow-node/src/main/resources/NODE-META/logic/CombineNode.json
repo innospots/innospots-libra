@@ -1,0 +1,12 @@
+{
+  "name": "合并分支",
+  "code": "COMBINE",
+  "primitive": "logic",
+  "vendor": "innospots",
+  "description": "多个分支合并",
+  "icon": "combine",
+  "nodeType": "io.innospots.workflow.node.app.logic.CombineNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": []
+}

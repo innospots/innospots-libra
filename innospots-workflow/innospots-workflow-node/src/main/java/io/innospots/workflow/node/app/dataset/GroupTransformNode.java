@@ -16,14 +16,15 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.node.app.execute;
+package io.innospots.workflow.node.app.dataset;
 
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
-import io.innospots.workflow.core.node.field.NodeParamField;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
+import io.innospots.workflow.core.node.field.NodeParamField;
 import io.innospots.workflow.core.utils.NodeInstanceUtils;
+import io.innospots.workflow.node.app.compute.AggregationComputeField;
 import io.innospots.workflow.node.app.utils.AppNodeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
@@ -32,23 +33,29 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * group by the dimension field and aggregate the summary field values
+ * like pandas group transform
+ *
  * @author Smars
  * @date 2021/3/16
  */
 @Slf4j
-public class AggregationNode extends BaseNodeExecutor {
+public class GroupTransformNode extends BaseNodeExecutor {
 
 
     private List<NodeParamField> dimensionFields;
+
     private NodeParamField listField;
 
     private List<AggregationComputeField> computeFields;
 
     public static final String FIELD_AGGREGATE = "aggregate_field";
+
     public static final String FIELD_DIMENSION_PAYLOAD = "dim_field_payload";
+
     public static final String FIELD_DIMENSION_LIST = "dim_field_list";
+
     public static final String FIELD_SOURCE_TYPE = "source_field_type";
+
     public static final String FIELD_PARENT_LIST = "list_parent_field";
 
     private String sourceFieldType;
@@ -56,15 +63,15 @@ public class AggregationNode extends BaseNodeExecutor {
 
     @Override
     protected void initialize() {
+        validFieldConfig(FIELD_SOURCE_TYPE);
         validFieldConfig(FIELD_AGGREGATE);
-        sourceFieldType = validString(FIELD_SOURCE_TYPE);
+        sourceFieldType = valueString(FIELD_SOURCE_TYPE);
         if("payload".equals(sourceFieldType)){
             dimensionFields = NodeInstanceUtils.buildParamFields(ni,FIELD_DIMENSION_PAYLOAD);
         }else if("list".equals(sourceFieldType)){
             dimensionFields = NodeInstanceUtils.buildParamFields(ni,FIELD_DIMENSION_LIST);
             listField = NodeInstanceUtils.buildParamField(ni,FIELD_PARENT_LIST);
         }
-
         computeFields = AppNodeUtils.buildAggregationComputeFields(ni,FIELD_AGGREGATE);
 
     }
@@ -72,7 +79,9 @@ public class AggregationNode extends BaseNodeExecutor {
 
     @Override
     public void invoke(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = this.buildOutput(nodeExecution);
+        NodeOutput nodeOutput = new NodeOutput();
+        nodeOutput.addNextKey(this.nextNodeKeys());
+        nodeExecution.addOutput(nodeOutput);
         List<Map<String, Object>> items = new ArrayList<>();
         ArrayListValuedHashMap<String, Map<String, Object>> groupItems = new ArrayListValuedHashMap<>();
         for (ExecutionInput executionInput : nodeExecution.getInputs()) {
@@ -81,17 +90,17 @@ public class AggregationNode extends BaseNodeExecutor {
                 groupItems.put(key, item);
             }//end for item
         }//end for execution input
+
         for (Map.Entry<String, Collection<Map<String, Object>>> entry : groupItems.asMap().entrySet()) {
-            Map<String, Object> item = new HashMap<>();
+            Map<String, Object> aggItem = new HashMap<>();
             //item.put(dimensionField.getCode(), entry.getKey());
             for (AggregationComputeField computeField : computeFields) {
-                item.put(computeField.getCode(), computeField.compute(entry.getValue()));
+                aggItem.put(computeField.getCode(), computeField.compute(entry.getValue()));
             }
-            String[] dims = entry.getKey().split("~");
-            for (int i = 0; i < dims.length; i++) {
-                item.put(dimensionFields.get(i).getCode(),dims[i]);
+            for (Map<String, Object> groupItem : entry.getValue()) {
+                groupItem.putAll(aggItem);
+                items.add(groupItem);
             }
-            items.add(item);
         }
         nodeOutput.setResults(items);
     }

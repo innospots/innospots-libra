@@ -1,0 +1,12 @@
+{
+  "name": "Email",
+  "code": "EMAIL",
+  "primitive": "interaction",
+  "vendor": "innospots",
+  "description": "邮件发送节点",
+  "icon": "email",
+  "nodeType": "io.innospots.workflow.node.app.interaction.EmailSendNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": []
+}

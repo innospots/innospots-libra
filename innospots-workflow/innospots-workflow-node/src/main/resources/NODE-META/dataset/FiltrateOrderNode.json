@@ -1,0 +1,12 @@
+{
+  "name": "筛选排序",
+  "code": "sort_filter",
+  "primitive": "dataset",
+  "vendor": "innospots",
+  "description": "按条件筛选并过滤",
+  "icon": "sort-filter",
+  "nodeType": "io.innospots.workflow.node.app.dataset.FiltrateOrderNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": []
+}

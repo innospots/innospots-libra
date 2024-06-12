@@ -16,14 +16,13 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.node.app.execute;
+package io.innospots.workflow.node.app.dataset;
 
 import io.innospots.base.model.Pair;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
-import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
-import static io.innospots.workflow.node.app.execute.FilterNode.splitSet;
+import static io.innospots.workflow.node.app.dataset.FilterNode.splitSet;
 
 /**
  * @author Smars

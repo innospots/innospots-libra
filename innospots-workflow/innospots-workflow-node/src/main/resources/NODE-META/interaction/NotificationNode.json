@@ -1,0 +1,12 @@
+{
+  "name": "站内通知",
+  "code": "NOTIFICATION",
+  "primitive": "interaction",
+  "vendor": "innospots",
+  "description": "通知节点",
+  "icon": "notification",
+  "nodeType": "io.innospots.workflow.node.app.interaction.NotificationNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": []
+}

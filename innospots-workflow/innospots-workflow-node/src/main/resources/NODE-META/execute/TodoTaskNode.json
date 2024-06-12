@@ -1,0 +1,12 @@
+{
+  "name": "待办工作项",
+  "code": "TODO_TASK",
+  "primitive": "execute",
+  "vendor": "innospots",
+  "description": "待办工作项",
+  "icon": "todo-task",
+  "nodeType": "io.innospots.workflow.node.app.execute.TodoTaskNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": []
+}

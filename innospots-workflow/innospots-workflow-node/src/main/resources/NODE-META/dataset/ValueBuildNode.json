@@ -1,0 +1,12 @@
+{
+  "name": "数据值处理",
+  "code": "data_value",
+  "primitive": "dataset",
+  "vendor": "innospots",
+  "description": "替换空值，指定值",
+  "icon": "data_value",
+  "nodeType": "io.innospots.workflow.node.app.dataset.ValueBuildNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": []
+}

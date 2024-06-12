@@ -13,7 +13,6 @@
       "name": "displayName",
       "type": "Input",
       "valueType": "string",
-      "required": true,
       "copyable": false,
       "deletable": false,
       "settings": {
@@ -26,7 +25,6 @@
       "name": "credential",
       "type": "CredentialSelect",
       "valueType": "string",
-      "required": true,
       "copyable": false,
       "deletable": false,
       "settings": {
@@ -39,7 +37,6 @@
       "name": "data_operation",
       "type": "radio",
       "valueType": "string",
-      "required": true,
       "copyable": false,
       "deletable": false,
       "settings": {
@@ -58,7 +55,6 @@
       "name": "sql_clause",
       "type": "CodeEditor",
       "valueType": "string",
-      "required": true,
       "copyable": false,
       "deletable": false,
       "settings": {
@@ -84,7 +80,6 @@
       "name": "table_name",
       "type": "DataTableSelect",
       "valueType": "string",
-      "required": true,
       "copyable": false,
       "deletable": false,
       "settings": {
@@ -122,7 +117,6 @@
       "name": "key_column",
       "type": "KeyFieldSelect",
       "valueType": "array",
-      "required": false,
       "copyable": false,
       "deletable": false,
       "settings": {
@@ -146,7 +140,6 @@
       "name": "query_conditions",
       "type": "QueryParams",
       "valueType": "array",
-      "required": false,
       "copyable": false,
       "deletable": false,
       "settings": {
@@ -172,7 +165,6 @@
       "name": "update_conditions",
       "type": "FieldMapping",
       "valueType": "array",
-      "required": true,
       "copyable": false,
       "deletable": false,
       "settings": {
@@ -200,9 +192,8 @@
       "name": "updated_time",
       "type": "Input",
       "valueType": "string",
-      "required": false,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "更新时间字段",
         "default": "updated_time"
@@ -230,7 +221,6 @@
       "name": "column_mapping",
       "type": "FieldMappingTable",
       "valueType": "array",
-      "required": true,
       "copyable": false,
       "deletable": false,
       "settings": {
@@ -274,7 +264,6 @@
       "name": "output_field_type",
       "type": "radio",
       "valueType": "string",
-      "required": true,
       "copyable": false,
       "deletable": false,
       "settings": {
@@ -303,9 +292,8 @@
       "name": "output_mode_map",
       "type": "Select",
       "valueType": "string",
-      "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "存储方式",
         "optionsType": "customOptions",
@@ -338,7 +326,6 @@
       "name": "output_mode_list",
       "type": "Select",
       "valueType": "string",
-      "required": true,
       "copyable": false,
       "deletable": false,
       "settings": {
@@ -373,7 +360,6 @@
       "name": "variable_name",
       "type": "Input",
       "valueType": "string",
-      "required": true,
       "copyable": false,
       "deletable": false,
       "settings": {

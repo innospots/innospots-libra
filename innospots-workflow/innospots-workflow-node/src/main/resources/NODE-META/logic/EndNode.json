@@ -11,10 +11,9 @@
     {
       "name": "displayName",
       "type": "Input",
-      "vType": "string",
-      "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "节点名称",
         "placeholder": "请输入节点名称",
@@ -24,10 +23,9 @@
     {
       "name": "return_value_type",
       "type": "Select",
-      "vType": "string",
-      "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "返回数据",
         "optionsType": "customOptions",
@@ -62,21 +60,20 @@
     {
       "name": "response_fields",
       "type": "InputFieldTable",
-      "vType": "array",
-      "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "输出字段",
         "tooltip": "inputFields"
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "visible",
           "relation": "OR",
           "children": [
             {
-              "code": "return_value_type",
+              "name": "return_value_type",
               "opt": "EQUAL",
               "value": "FIELD"
             }

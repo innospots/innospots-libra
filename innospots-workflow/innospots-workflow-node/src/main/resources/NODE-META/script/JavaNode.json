@@ -1,0 +1,12 @@
+{
+  "name": "Java",
+  "code": "JAVA",
+  "primitive": "script",
+  "vendor": "innospots",
+  "description": "Java节点",
+  "icon": "java",
+  "nodeType": "io.innospots.workflow.node.app.script.ScriptNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": []
+}

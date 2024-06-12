@@ -16,26 +16,38 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.node.app.interaction;
-
-import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
-import io.innospots.workflow.core.instance.model.NodeInstance;
+package io.innospots.workflow.node.app.dataset;
 
 /**
- * @author Smars
- * @date 2023/5/12
+ * table associated join query
+ * only use left join and inner join
+ *
+ * @author Raydian
+ * @version 1.0.0
+ * @date 2020/11/3
  */
-public class TodoTaskNode extends BaseNodeExecutor {
+public enum JoinType {
 
+    /**
+     *
+     */
+    CROSS_JOIN("CROSS JOIN"),
 
-    @Override
-    protected void initialize() {
+    INNER_JOIN("INNER JOIN"),
 
+    LEFT_JOIN("LEFT JOIN"),
+
+    RIGHT_JOIN("RIGHT JOIN"),
+
+    FULL_JOIN("FULL OUTER JOIN");
+
+    private final String joiner;
+
+    JoinType(String joiner) {
+        this.joiner = joiner;
     }
 
-    @Override
-    public void invoke(NodeExecution nodeExecution) {
-        super.invoke(nodeExecution);
+    public String joiner() {
+        return this.joiner;
     }
 }

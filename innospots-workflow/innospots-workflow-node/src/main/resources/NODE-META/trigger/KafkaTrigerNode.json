@@ -12,10 +12,9 @@
     {
       "name": "displayName",
       "type": "Input",
-      "vType": "string",
-      "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "节点名称",
         "placeholder": "请输入节点名称",
@@ -25,10 +24,9 @@
     {
       "name": "credential",
       "type": "CredentialSelect",
-      "vType": "string",
-      "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "凭据",
         "showAddButton": true,
@@ -38,10 +36,9 @@
     {
       "name": "topic",
       "type": "Input",
-      "vType": "string",
-      "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "消费Topic",
         "placeholder": ""
@@ -50,10 +47,9 @@
     {
       "name": "group_id",
       "type": "Input",
-      "vType": "string",
-      "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "消费分组标识",
         "placeholder": "请输入Group ID 如 inno-kafka",
@@ -63,10 +59,9 @@
     {
       "name": "parallel_num",
       "type": "Input",
-      "vType": "number",
-      "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "number",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "消费并行数",
         "default": 1,
@@ -79,15 +74,20 @@
     {
       "name": "data_offset",
       "type": "Select",
-      "vType": "string",
-      "required": false,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "消费起始位置",
         "options": [
-          {"value": "earliest", "label": "从最早消息开始"},
-          {"value": "latest", "label": "从最新消息开始"}
+          {
+            "value": "earliest",
+            "label": "从最早消息开始"
+          },
+          {
+            "value": "latest",
+            "label": "从最新消息开始"
+          }
         ],
         "default": "latest"
       }
@@ -95,15 +95,13 @@
     {
       "name": "msg_format",
       "type": "Input",
-      "vType": "string",
-      "required": false,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "消息格式",
         "default": "JSON"
       }
     }
   ]
-
 }

@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.node.app.execute;
+package io.innospots.workflow.node.app.dataset;
 
 import io.innospots.base.model.Pair;
 import io.innospots.base.utils.BeanUtils;
@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
-import static io.innospots.workflow.node.app.execute.FilterNode.splitSet;
+import static io.innospots.workflow.node.app.dataset.FilterNode.splitSet;
 
 /**
  * @author Smars

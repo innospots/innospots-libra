@@ -12,10 +12,9 @@
     {
       "name": "displayName",
       "type": "Input",
-      "vType": "string",
-      "required":true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "节点名称",
         "placeholder": "请输入节点名称",
@@ -24,10 +23,9 @@
     },{
       "name": "conditionField",
       "type": "Cascader",
-      "vType": "array",
-      "required":true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "条件字段",
         "optionsType": "inputFields",
@@ -36,10 +34,9 @@
     },{
       "name": "conditions",
       "type": "BranchConfig",
-      "vType": "array",
-      "required":true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "分支条件",
         "dependencies": "conditionField"

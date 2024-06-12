@@ -12,10 +12,9 @@
     {
       "name": "displayName",
       "type": "Input",
-      "vType": "string",
-      "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "节点名称",
         "placeholder": "请输入节点名称",
@@ -25,10 +24,9 @@
     {
       "name": "path",
       "type": "WebhookInput",
-      "vType": "string",
-      "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "Webhook地址",
         "minLength": 4
@@ -37,10 +35,9 @@
     {
       "name": "requestType",
       "type": "radio",
-      "vType": "string",
-      "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "请求方式",
         "default": "GET",
@@ -56,10 +53,9 @@
     {
       "name": "authType",
       "type": "Select",
-      "vType": "string",
-      "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "授权类型",
         "default": "NONE",
@@ -74,10 +70,9 @@
     {
       "name": "authBody.token",
       "type": "Input",
-      "vType": "string",
-      "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "Token",
         "placeholder": "请输入Token",
@@ -85,13 +80,13 @@
           "allowClear": true
         }
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "visible",
           "relation": "OR",
           "children": [
             {
-              "code": "authType",
+              "name": "authType",
               "opt": "EQUAL",
               "value": "BEARER_AUTH"
             }
@@ -102,21 +97,20 @@
     {
       "name": "authBody.username",
       "type": "Input",
-      "vType": "string",
-      "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "用户名",
         "placeholder": "请输入用户名"
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "visible",
           "relation": "OR",
           "children": [
             {
-              "code": "authType",
+              "name": "authType",
               "opt": "EQUAL",
               "value": "BASIC_AUTH"
             }
@@ -127,23 +121,22 @@
     {
       "name": "authBody.password",
       "type": "Input",
-      "vType": "string",
-      "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "密码",
         "format": "Password",
         "placeholder": "请输入密码",
         "allowClear": false
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "visible",
           "relation": "OR",
           "children": [
             {
-              "code": "authType",
+              "name": "authType",
               "opt": "EQUAL",
               "value": "BASIC_AUTH"
             }
@@ -154,10 +147,9 @@
     {
       "name": "responseMode",
       "type": "radio",
-      "vType": "string",
-      "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "响应方式",
         "default": "RESULT",
@@ -173,10 +165,9 @@
     {
       "name": "responseCode",
       "type": "Input",
-      "vType": "string",
-      "required": false,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "响应代码",
         "placeholder": "请输入响应代码",
@@ -186,20 +177,19 @@
     {
       "name": "responseFields",
       "type": "TableFields",
-      "vType": "array",
-      "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "返回字段"
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "visible",
           "relation": "OR",
           "children": [
             {
-              "code": "responseMode",
+              "name": "responseMode",
               "opt": "EQUAL",
               "value": "ACK"
             }
@@ -210,10 +200,9 @@
     {
       "name": "responseData",
       "type": "CustomRadio",
-      "vType": "string",
-      "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "响应数据",
         "options": [
@@ -222,13 +211,13 @@
         ],
         "default": "ALL"
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "visible",
           "relation": "OR",
           "children": [
             {
-              "code": "responseMode",
+              "name": "responseMode",
               "opt": "EQUAL",
               "value": "RESULT"
             }

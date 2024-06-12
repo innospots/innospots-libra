@@ -1,0 +1,12 @@
+{
+  "name": "分组计算",
+  "code": "group_compute",
+  "primitive": "dataset",
+  "vendor": "innospots",
+  "description": "pandas transform计算",
+  "icon": "group_compute",
+  "nodeType": "io.innospots.workflow.node.app.dataset.GroupTransformNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": []
+}

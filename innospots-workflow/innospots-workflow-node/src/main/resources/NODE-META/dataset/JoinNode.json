@@ -1,0 +1,12 @@
+{
+  "name": "数据合并",
+  "code": "JOIN",
+  "primitive": "dataset",
+  "vendor": "innospots",
+  "description": "数据合并节点",
+  "icon": "join",
+  "nodeType": "io.innospots.workflow.node.app.dataset.JoinNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": []
+}

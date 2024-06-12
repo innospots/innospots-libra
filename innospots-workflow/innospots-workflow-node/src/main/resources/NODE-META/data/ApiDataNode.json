@@ -13,7 +13,6 @@
       "name": "displayName",
       "type": "Input",
       "valueType": "string",
-      "required": true,
       "copyable": false,
       "deletable": false,
       "settings": {
@@ -26,7 +25,6 @@
       "name": "auth_type",
       "type": "Select",
       "valueType": "string",
-      "required": false,
       "copyable": false,
       "deletable": false,
       "settings": {
@@ -53,7 +51,6 @@
       "name": "credential",
       "type": "CredentialSelect",
       "valueType": "string",
-      "required": false,
       "copyable": false,
       "deletable": false,
       "settings": {
@@ -78,7 +75,6 @@
       "name": "url_address",
       "type": "HttpURLInput",
       "valueType": "array",
-      "required": true,
       "copyable": true,
       "deletable": true,
       "settings": {
@@ -90,7 +86,6 @@
       "name": "request_params",
       "type": "HttpRequest",
       "valueType": "array",
-      "required": true,
       "copyable": false,
       "deletable": false,
       "settings": {
@@ -103,7 +98,6 @@
       "name": "pre_action",
       "type": "CodeEditor",
       "valueType": "string",
-      "required": false,
       "copyable": false,
       "deletable": false,
       "settings": {
@@ -116,7 +110,6 @@
       "name": "action",
       "type": "CodeEditor",
       "valueType": "string",
-      "required": false,
       "copyable": false,
       "deletable": false,
       "settings": {
@@ -130,7 +123,6 @@
       "name": "output_payload",
       "type": "Switch",
       "valueType": "boolean",
-      "required": false,
       "copyable": false,
       "deletable": false,
       "settings": {
@@ -141,7 +133,6 @@
       "name": "extract_path",
       "type": "Input",
       "valueType": "string",
-      "required": false,
       "copyable": false,
       "deletable": false,
       "settings": {
@@ -166,7 +157,6 @@
       "name": "output_field_type",
       "type": "radio",
       "valueType": "string",
-      "required": true,
       "copyable": false,
       "deletable": false,
       "settings": {
@@ -204,7 +194,6 @@
       "name": "output_mode_map",
       "type": "Select",
       "valueType": "string",
-      "required": true,
       "copyable": false,
       "deletable": false,
       "settings": {
@@ -255,7 +244,6 @@
       "name": "output_mode_list",
       "type": "Select",
       "valueType": "string",
-      "required": true,
       "copyable": false,
       "deletable": false,
       "settings": {
@@ -302,7 +290,6 @@
       "name": "variable_name",
       "type": "Input",
       "valueType": "string",
-      "required": true,
       "copyable": false,
       "deletable": false,
       "settings": {
