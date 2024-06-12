@@ -30,28 +30,30 @@ public enum Opt {
     /**
      *
      */
-    GREATER(">", ">", "greater than"),
-    GREATER_EQUAL(">=", ">=", "greater than or equal to"),
-    LESS_EQUAL("<=", "<=", "less than or equal to"),
-    LESS("<", "<", "less than"),
-    EQUAL("=", "==", "equal"),
-    IN("in", "in", "match in set"),
-    NOT_IN("not in", "notin", ""),
-    UNEQUAL("!=", "!=", "not equal"),
-    LIKE("like", "like", "wildcard match"),
-    NULL("is null", "==", "null value"),
-    HASVAL("has value", "!=", "null value"),
-    NOTNULL("is not null", "!=", "not null value"),
-    BETWEEN("between", "between", "two value range scope");
+    GREATER(">", ">", "greater than","大于"),
+    GREATER_EQUAL(">=", ">=", "greater than or equal to","大于等于"),
+    LESS_EQUAL("<=", "<=", "less than or equal to","小于等于"),
+    LESS("<", "<", "less than","小于"),
+    EQUAL("=", "==", "equal","等于"),
+    IN("in", "in", "match in set","包含"),
+    NOT_IN("not in", "notin", "","不包含"),
+    UNEQUAL("!=", "!=", "not equal","不等于"),
+    LIKE("like", "like", "wildcard match","类似"),
+    NULL("is null", "==", "null value","为空"),
+    HASVAL("has value", "!=", "null value","有值"),
+    NOTNULL("is not null", "!=", "not null value","不为空"),
+    BETWEEN("between", "between", "two value range scope","范围");
 
     private String symbol;
     private String aSymbol;
     private String desc;
+    private String descZh;
 
-    Opt(String symbol, String aSymbol, String desc) {
+    Opt(String symbol, String aSymbol, String desc,String descZh) {
         this.symbol = symbol;
         this.aSymbol = aSymbol;
         this.desc = desc;
+        this.descZh = descZh;
     }
 
     public String symbol(Mode mode) {
@@ -64,5 +66,9 @@ public enum Opt {
 
     public String desc() {
         return this.desc;
+    }
+
+    public String descZh(){
+        return descZh;
     }
 }

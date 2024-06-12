@@ -56,7 +56,7 @@ public class NodeDefinitionBuilder {
             String id = (String) compMap.get("id");
             nameToIdMap.put(nodeComponent.getName(), id);
             if (!compMap.containsKey("layout")) {
-                Map<String, Object> defaultLayout = defaultLayout(id);
+                Map<String, Object> defaultLayout = defaultLayout(id,i);
                 compMap.put("layout", defaultLayout);
             }
             tartgetIdMap.put(id, compMap);
@@ -73,7 +73,7 @@ public class NodeDefinitionBuilder {
 
     private static void fillConditions(Map<String, Object> compMap, NodeComponent nodeComponent, Map<String, String> nameToIdMap) {
         if (nodeComponent.getConditions() != null) {
-            List<Map<String, Object>> conditions = new ArrayList<>();
+            Map<String, List<Map<String,Object>>> conditionListMap = new LinkedHashMap<>();
             for (CompCondition condition : nodeComponent.getConditions()) {
                 Map<String, Object> conditionMap = new LinkedHashMap<>();
                 conditionMap.put("result", condition.getResult());
@@ -82,8 +82,14 @@ public class NodeDefinitionBuilder {
                     List<Map<String, Object>> children = new ArrayList<>();
                     for (Factor factor : condition.getChildren()) {
                         Map<String, Object> factorMap = new LinkedHashMap<>();
-                        factorMap.put("name", nameToIdMap.get(factor.getName()));
-                        factorMap.put("opt", factor.getOpt());
+                        Map<String,Object> source = new LinkedHashMap<>();
+                        source.put("value",nameToIdMap.get(factor.getName()));
+                        source.put("label",nodeComponent.getName() + "-" + nodeComponent.getSettings().get("label"));
+                        factorMap.put("source", source);
+                        Map<String,Object> opt = new LinkedHashMap<>();
+                        opt.put("label",factor.getOpt().descZh());
+                        opt.put("value",factor.getOpt());
+                        factorMap.put("opt", opt);
                         if (factor.getValue() != null) {
                             factorMap.put("value", factor.getValue());
                         }
@@ -91,9 +97,10 @@ public class NodeDefinitionBuilder {
                     }//end for factor
                     conditionMap.put("children", children);
                 }//end if children
-                conditions.add(conditionMap);
+                List<Map<String,Object>> condList = conditionListMap.computeIfAbsent(condition.getResult(), k -> new ArrayList<>());
+                condList.add(conditionMap);
             }//end for condition
-            compMap.put("conditions", conditions);
+            compMap.put("conditions", conditionListMap);
         }
     }
 
@@ -154,10 +161,11 @@ public class NodeDefinitionBuilder {
         return new LinkedHashMap<>(defaultNodeMetaInfo.getSettings());
     }
 
-    private static Map<String, Object> defaultLayout(String id) {
+    private static Map<String, Object> defaultLayout(String id,int index_y) {
         NodeMetaInfo defaultNodeMetaInfo = NodeMetaInfoLoader.getDefaultNodeMetaTemplate();
         Map<String, Object> m = new LinkedHashMap<>(defaultNodeMetaInfo.getComponents().get(0).getLayout());
         m.put("i", id);
+        m.put("y",index_y);
         return m;
     }
 }

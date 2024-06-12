@@ -189,7 +189,7 @@
           "children": [
             {
               "name": "data_operation",
-              "opt": "NOTEQUAL",
+              "opt": "UNEQUAL",
               "value": "UPDATE"
             }
           ]
@@ -263,7 +263,7 @@
           "children": [
             {
               "name": "data_operation",
-              "opt": "NOTEQUAL",
+              "opt": "UNEQUAL",
               "value": "GET_LIST"
             }
           ]

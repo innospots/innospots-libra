@@ -25,8 +25,6 @@ public class NodeComponent {
 
     private String valueType;
 
-    private boolean required;
-
     private boolean copyable;
 
     private boolean deletable;
@@ -43,7 +41,6 @@ public class NodeComponent {
         map.put("name",name);
         map.put("type",type);
         map.put("valueType",valueType);
-        map.put("required",required);
         map.put("copyable",copyable);
         map.put("deletable",deletable);
         map.put("settings",settings);

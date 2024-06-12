@@ -12,10 +12,10 @@
     {
       "name": "displayName",
       "type": "Input",
-      "vType": "string",
+      "valueType": "string",
       "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "节点名称",
         "placeholder": "请输入节点名称",
@@ -25,10 +25,10 @@
     {
       "name": "auth_type",
       "type": "Select",
-      "vType": "string",
+      "valueType": "string",
       "required": false,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "鉴权方式",
         "showAddButton": false,
@@ -52,22 +52,22 @@
     {
       "name": "credential",
       "type": "CredentialSelect",
-      "vType": "string",
+      "valueType": "string",
       "required": false,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "凭据",
         "showAddButton": true,
         "showEditButton": true
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "visible",
           "relation": "OR",
           "children": [
             {
-              "code": "auth_type",
+              "name": "auth_type",
               "opt": "NOTNULL"
             }
           ]
@@ -77,10 +77,10 @@
     {
       "name": "url_address",
       "type": "HttpURLInput",
-      "vType": "array",
+      "valueType": "array",
       "required": true,
-      "copyAble": true,
-      "deleteAble": true,
+      "copyable": true,
+      "deletable": true,
       "settings": {
         "label": "请求地址",
         "placeholder": "请输入请求地址"
@@ -89,10 +89,10 @@
     {
       "name": "request_params",
       "type": "HttpRequest",
-      "vType": "array",
+      "valueType": "array",
       "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "HTTP请求参数",
         "isSelect": true,
@@ -102,10 +102,10 @@
     {
       "name": "pre_action",
       "type": "CodeEditor",
-      "vType": "string",
+      "valueType": "string",
       "required": false,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "前置脚本(JAVA)",
         "codeType": "JAVA",
@@ -115,10 +115,10 @@
     {
       "name": "action",
       "type": "CodeEditor",
-      "vType": "string",
+      "valueType": "string",
       "required": false,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "结果脚本(JS)",
         "codeType": "JAVASCRIPT",
@@ -129,10 +129,10 @@
     {
       "name": "output_payload",
       "type": "Switch",
-      "vType": "boolean",
+      "valueType": "boolean",
       "required": false,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "返回数据是否存入Payload"
       }
@@ -140,21 +140,21 @@
     {
       "name": "extract_path",
       "type": "Input",
-      "vType": "string",
+      "valueType": "string",
       "required": false,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "数据提取",
         "default": "$"
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "visible",
           "relation": "OR",
           "children": [
             {
-              "code": "output_payload",
+              "name": "output_payload",
               "opt": "EQUAL",
               "value": "true"
             }
@@ -165,10 +165,10 @@
     {
       "name": "output_field_type",
       "type": "radio",
-      "vType": "string",
+      "valueType": "string",
       "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "返回数据类型",
         "options": [
@@ -186,13 +186,13 @@
           "optionType": "default"
         }
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "visible",
           "relation": "OR",
           "children": [
             {
-              "code": "output_payload",
+              "name": "output_payload",
               "opt": "EQUAL",
               "value": "true"
             }
@@ -203,10 +203,10 @@
     {
       "name": "output_mode_map",
       "type": "Select",
-      "vType": "string",
+      "valueType": "string",
       "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "存储方式",
         "default": "PAYLOAD",
@@ -226,13 +226,13 @@
         ],
         "optionsType": "customOptions"
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "visible",
           "relation": "OR",
           "children": [
             {
-              "code": "output_field_type",
+              "name": "output_field_type",
               "opt": "EQUAL",
               "value": "LIST"
             }
@@ -243,7 +243,7 @@
           "relation": "OR",
           "children": [
             {
-              "code": "output_payload",
+              "name": "output_payload",
               "opt": "EQUAL",
               "value": "false"
             }
@@ -254,10 +254,10 @@
     {
       "name": "output_mode_list",
       "type": "Select",
-      "vType": "string",
+      "valueType": "string",
       "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "存储方式",
         "default": "OVERWRITE",
@@ -273,13 +273,13 @@
         ],
         "optionsType": "customOptions"
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "visible",
           "relation": "OR",
           "children": [
             {
-              "code": "output_field_type",
+              "name": "output_field_type",
               "opt": "EQUAL",
               "value": "MAP"
             }
@@ -290,7 +290,7 @@
           "relation": "OR",
           "children": [
             {
-              "code": "output_payload",
+              "name": "output_payload",
               "opt": "EQUAL",
               "value": "false"
             }
@@ -301,21 +301,21 @@
     {
       "name": "variable_name",
       "type": "Input",
-      "vType": "string",
+      "valueType": "string",
       "required": true,
-      "copyAble": false,
-      "deleteAble": false,
+      "copyable": false,
+      "deletable": false,
       "settings": {
         "label": "存储变量名称",
         "default": "var_item"
       },
-      "widgetRules": [
+      "conditions": [
         {
           "result": "visible",
           "relation": "OR",
           "children": [
             {
-              "code": "output_mode",
+              "name": "output_mode",
               "opt": "EQUAL",
               "value": "FIELD"
             }
@@ -326,7 +326,7 @@
           "relation": "OR",
           "children": [
             {
-              "code": "output_mode_2",
+              "name": "output_mode_2",
               "opt": "EQUAL",
               "value": "FIELD"
             }
@@ -337,7 +337,7 @@
           "relation": "OR",
           "children": [
             {
-              "code": "output_payload",
+              "name": "output_payload",
               "opt": "EQUAL",
               "value": "false"
             }
