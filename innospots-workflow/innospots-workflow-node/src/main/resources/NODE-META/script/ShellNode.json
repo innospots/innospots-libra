@@ -8,5 +8,82 @@
   "nodeType": "io.innospots.workflow.node.app.script.ShellNode",
   "outPorts": "1",
   "inPorts": "1",
-  "components": []
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "shell节点"
+      }
+    },
+    {
+      "name": "action",
+      "type": "CodeEditor",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "脚本详情",
+        "codeType": "SHELL",
+        "isFixedType": true
+      }
+    },
+    {
+      "name": "output_mode",
+      "type": "Select",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "输出数据",
+        "options": [
+          {
+            "value": "FIELD",
+            "label": "存入变量"
+          },
+          {
+            "value": "PAYLOAD",
+            "label": "合并输出"
+          },
+          {
+            "value": "OVERWRITE",
+            "label": "覆盖输出"
+          },
+          {
+            "value": "LOG",
+            "label": "日志输出"
+          }
+        ]
+      }
+    },
+    {
+      "name": "variable_name",
+      "type": "ReadOnlyWidget",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "存储变量名称",
+        "placeholder": "请输入"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "output_mode",
+              "opt": "EQUAL",
+              "value": "FIELD"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

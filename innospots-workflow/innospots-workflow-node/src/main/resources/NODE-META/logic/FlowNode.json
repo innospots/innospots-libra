@@ -8,5 +8,214 @@
   "nodeType": "io.innospots.workflow.node.app.logic.FlowNode",
   "outPorts": "1",
   "inPorts": "1",
-  "components": []
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "子流程"
+      }
+    },
+    {
+      "name": "sub_flow_key",
+      "type": "Select",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "子流程选择",
+        "dynamicOptions": {
+          "url": "/innospots/api/workflow/instance/list/trigger-code/START",
+          "method": "GET",
+          "fieldNames": {
+            "value": "flowKey",
+            "label": "name"
+          }
+        }
+      }
+    },
+    {
+      "name": "input_fields",
+      "type": "FieldList",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "输入参数",
+        "tooltip": "将选中的字段值按选择的处置方式进行加工处理\n如替换空值。替换枚举值等",
+        "customColumns": [
+          {
+            "code": "field",
+            "type": "FIELD",
+            "width": "120px",
+            "title": "字段",
+            "default": ""
+          },
+          {
+            "code": "code",
+            "type": "INPUT",
+            "width": "120px",
+            "title": "输入字段标识",
+            "default": ""
+          }
+        ]
+      }
+    },
+    {
+      "name": "sync_switch",
+      "type": "switch",
+      "valueType": "boolean",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "是否同步调用",
+        "default": true
+      }
+    },
+    {
+      "name": "output_field_type",
+      "type": "radio",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "返回数据",
+        "options": [
+          {
+            "value": "NONE",
+            "label": "无"
+          },
+          {
+            "value": "LIST",
+            "label": "列表"
+          },
+          {
+            "value": "MAP",
+            "label": "单条(对象)"
+          }
+        ],
+        "default": "LIST"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "AND",
+          "children": [
+            {
+              "name": "sync_switch",
+              "opt": "EQUAL",
+              "value": "true"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "output_mode_map",
+      "type": "Select",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "存储方式",
+        "options": [
+          {
+            "value": "FIELD",
+            "label": "存入变量"
+          },
+          {
+            "value": "PAYLOAD",
+            "label": "合并入输入"
+          },
+          {
+            "value": "OVERWRITE",
+            "label": "覆盖输入"
+          }
+        ]
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "output_field_type",
+              "opt": "EQUAL",
+              "value": "MAP"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "output_mode_list",
+      "type": "Select",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "存储方式",
+        "options": [
+          {
+            "value": "FIELD",
+            "label": "存入变量"
+          },
+          {
+            "value": "PAYLOAD",
+            "label": "合并入输入"
+          },
+          {
+            "value": "OVERWRITE",
+            "label": "覆盖输入"
+          }
+        ]
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "output_field_type",
+              "opt": "EQUAL",
+              "value": "LIST"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "variable_name",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "存储变量名称"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "output_mode_map",
+              "opt": "EQUAL",
+              "value": "FIELD"
+            },
+            {
+              "name": "output_mode_list",
+              "opt": "EQUAL",
+              "value": "FIELD"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

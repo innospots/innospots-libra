@@ -8,5 +8,53 @@
   "nodeType": "io.innospots.workflow.node.app.script.SqlScriptNode",
   "outPorts": "1",
   "inPorts": "1",
-  "components": []
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "SQL脚本节点"
+      }
+    },
+    {
+      "name": "datasource_id",
+      "type": "DataSourceSelect",
+      "valueType": "number",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "数据源",
+        "sourceType": "JDBC",
+        "showAddButton": true,
+        "showEditButton": true
+      }
+    },
+    {
+      "name": "sql_clause",
+      "type": "CodeEditor",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "SQL脚本",
+        "codeType": "SQL",
+        "isFixedType": true
+      }
+    },
+    {
+      "name": "query_conditions",
+      "type": "QueryParams",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "参数映射"
+      }
+    }
+  ]
 }
