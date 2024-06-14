@@ -8,5 +8,42 @@
   "nodeType": "io.innospots.workflow.node.app.compute.DerivedVariableNode",
   "outPorts": "1",
   "inPorts": "1",
-  "components": []
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": ""
+      }
+    },
+    {
+      "name": "output_restricted",
+      "type": "Input",
+      "valueType": "boolean",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "是否仅输出变量列表中的变量",
+        "placeholder": "",
+        "initialValue": false
+      }
+    },
+    {
+      "name": "compute_fields",
+      "type": "Input",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "衍生变量",
+        "placeholder": "",
+        "initialValue": ""
+      }
+    }
+  ]
 }

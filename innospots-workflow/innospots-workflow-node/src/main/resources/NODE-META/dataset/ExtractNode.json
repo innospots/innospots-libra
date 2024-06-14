@@ -8,5 +8,259 @@
   "nodeType": "io.innospots.workflow.node.app.dataset.ExtractNode",
   "outPorts": "1",
   "inPorts": "1",
-  "components": []
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "数据提取"
+      }
+    },
+    {
+      "name": "extract_mode",
+      "type": "Select",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "操作类型",
+        "options": [
+          {
+            "value": "FIELD",
+            "label": "提取字段"
+          },
+          {
+            "value": "EMBED",
+            "label": "提取嵌套数据"
+          },
+          {
+            "value": "REMOVE_EMPTY",
+            "label": "去空"
+          },
+          {
+            "value": "REMOVE_DUPLICATE",
+            "label": "去重"
+          },
+          {
+            "value": "HEAD",
+            "label": "前n行"
+          },
+          {
+            "value": "TAIL",
+            "label": "后n行"
+          },
+          {
+            "value": "RANGE",
+            "label": "范围"
+          }
+        ],
+        "default": "FIELD"
+      }
+    },
+    {
+      "name": "extract_fields",
+      "type": "InputFieldTable",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "字段列表"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "extract_mode",
+              "opt": "EQUAL",
+              "value": "FIELD"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "embed_fields",
+      "type": "InputFieldSelect",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "嵌套字段"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "extract_mode",
+              "opt": "EQUAL",
+              "value": "EMBED"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "order_fields",
+      "type": "InputFieldSelect2",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "排序字段"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "extract_mode",
+              "opt": "NOTEQUAL",
+              "value": "EMBED"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "order_type",
+      "type": "Select",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "排序",
+        "options": [
+          {
+            "value": "ASC",
+            "label": "升序"
+          },
+          {
+            "value": "DESC",
+            "label": "降序"
+          }
+        ]
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "order_fields",
+              "opt": "NOTNULL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "line_count",
+      "type": "number",
+      "valueType": "number",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "行数",
+        "description": "提取数据的数量"
+      }
+    },
+    {
+      "name": "start_line",
+      "type": "number",
+      "valueType": "number",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "开始行数",
+        "description": "范围开始的行数"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "extract_mode",
+              "opt": "EQUAL",
+              "value": "RANGE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "end_line",
+      "type": "number",
+      "valueType": "number",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "结束行数",
+        "description": "范围结束的行数"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "extract_mode",
+              "opt": "EQUAL",
+              "value": "RANGE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "extract_condition",
+      "type": "RuleEditor",
+      "valueType": "object",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "提取条件",
+        "tooltip": "条件规则组合",
+        "description": "满足条件时提取"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "extract_mode",
+              "opt": "EQUAL",
+              "value": "FIELD"
+            },
+            {
+              "name": "extract_mode",
+              "opt": "EQUAL",
+              "value": "HEAD"
+            },
+            {
+              "name": "extract_mode",
+              "opt": "EQUAL",
+              "value": "TAIL"
+            },
+            {
+              "name": "extract_mode",
+              "opt": "EQUAL",
+              "value": "RANGE"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

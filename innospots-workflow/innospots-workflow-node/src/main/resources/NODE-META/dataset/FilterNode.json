@@ -8,5 +8,48 @@
   "nodeType": "io.innospots.workflow.node.app.dataset.FilterNode",
   "outPorts": "1",
   "inPorts": "1",
-  "components": []
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称"
+      }
+    },
+    {
+      "name": "filter_mode",
+      "type": "Select",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "过滤方式",
+        "options": [
+          {
+            "value": "RESERVED",
+            "label": "命中键则保留 (Keep Key Matches)"
+          },
+          {
+            "value": "REJECT",
+            "label": "命中键则剔除（Remove key Matches)"
+          }
+        ],
+        "default": "RESERVED"
+      }
+    },
+    {
+      "name": "filter_fields",
+      "type": "JoinFields",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "过滤键"
+      }
+    }
+  ]
 }

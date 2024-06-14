@@ -8,5 +8,236 @@
   "nodeType": "io.innospots.workflow.node.app.dataset.AggregationNode",
   "outPorts": "1",
   "inPorts": "1",
-  "components": []
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称"
+      }
+    },
+    {
+      "name": "source_field_type",
+      "type": "Radio",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "聚合数据源",
+        "options": [
+          {
+            "value": "payload",
+            "label": "Payload"
+          },
+          {
+            "value": "list",
+            "label": "列表字段"
+          }
+        ],
+        "default": "payload"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "source_field_type",
+              "opt": "EQUAL",
+              "value": "list"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "list_parent_field",
+      "type": "InputFieldSelect2",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "列表字段"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "source_field_type",
+              "opt": "EQUAL",
+              "value": "list"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dim_field_list",
+      "type": "InputFieldSelect2",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "聚合维度"
+      },
+      "dependencies": "list_parent_field",
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "source_field_type",
+              "opt": "EQUAL",
+              "value": "list"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dim_field_payload",
+      "type": "InputFieldSelect2",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "聚合维度"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "source_field_type",
+              "opt": "EQUAL",
+              "value": "payload"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "aggregate_field",
+      "type": "AggregateVariables",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "聚合变量",
+        "dependencies": "source_field_type",
+        "options": [
+          {
+            "label": "总计",
+            "value": "SUM"
+          },
+          {
+            "label": "次数",
+            "value": "COUNT"
+          },
+          {
+            "label": "非重复计数",
+            "value": "DISCOUNT"
+          },
+          {
+            "label": "平均值",
+            "value": "AVG"
+          },
+          {
+            "label": "最大值",
+            "value": "MAX"
+          },
+          {
+            "label": "最小值",
+            "value": "MIN"
+          },
+          {
+            "label": "标准差",
+            "value": "STD_DEV"
+          },
+          {
+            "label": "中位数",
+            "value": "MEDIAN"
+          },
+          {
+            "label": "众数",
+            "value": "MODE"
+          },
+          {
+            "label": "无偏方差",
+            "value": "VARIANCE"
+          },
+          {
+            "label": "均值的标准误差",
+            "value": "SEM"
+          },
+          {
+            "label": "平均绝对差",
+            "value": "MAD"
+          },
+          {
+            "label": "样本偏度（第三阶）",
+            "value": "SKEW"
+          },
+          {
+            "label": "样本偏度（第四阶）",
+            "value": "KURT"
+          },
+          {
+            "label": "平方和",
+            "value": "SOS"
+          },
+          {
+            "label": "半方差",
+            "value": "SEMI_VAR"
+          },
+          {
+            "label": "连乘",
+            "value": "PROD"
+          },
+          {
+            "label": "总体标准差",
+            "value": "POP_STD_DEV"
+          },
+          {
+            "label": "总体方差",
+            "value": "POP_VARIANCE"
+          },
+          {
+            "label": "几何平均数",
+            "value": "GEOMETRIC_MEAN"
+          },
+          {
+            "label": "log求和",
+            "value": "SUM_OF_LOGS"
+          }
+        ]
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "source_field_type",
+              "opt": "EQUAL",
+              "value": "list"
+            },
+            {
+              "name": "source_field_type",
+              "opt": "EQUAL",
+              "value": "payload"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
