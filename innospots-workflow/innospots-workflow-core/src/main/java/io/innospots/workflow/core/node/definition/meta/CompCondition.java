@@ -1,4 +1,4 @@
-package io.innospots.workflow.core.node.definition.loader;
+package io.innospots.workflow.core.node.definition.meta;
 
 import io.innospots.base.condition.Factor;
 import io.innospots.base.condition.Relation;

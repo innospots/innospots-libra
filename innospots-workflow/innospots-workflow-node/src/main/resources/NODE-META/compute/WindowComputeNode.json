@@ -74,7 +74,7 @@
           "children": [
             {
               "name": "func_type",
-              "opt": "EQUALS",
+              "opt": "EQUAL",
               "value": "ROLLING"
             }
           ]
@@ -98,7 +98,7 @@
           "children": [
             {
               "name": "func_type",
-              "opt": "EQUALS",
+              "opt": "EQUAL",
               "value": "ACCUM"
             }
           ]
@@ -122,7 +122,7 @@
           "children": [
             {
               "name": "func_type",
-              "opt": "EQUALS",
+              "opt": "EQUAL",
               "value": "COLUMN"
             }
           ]

@@ -1,4 +1,4 @@
-package io.innospots.workflow.core.node.definition.loader;
+package io.innospots.workflow.core.node.definition.meta;
 
 import io.innospots.base.condition.Factor;
 import io.innospots.base.enums.DataStatus;
@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author Smars

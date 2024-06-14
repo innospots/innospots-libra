@@ -1,6 +1,5 @@
-package io.innospots.workflow.core.node.definition.loader;
+package io.innospots.workflow.core.node.definition.meta;
 
-import io.innospots.base.utils.StringConverter;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections4.MapUtils;

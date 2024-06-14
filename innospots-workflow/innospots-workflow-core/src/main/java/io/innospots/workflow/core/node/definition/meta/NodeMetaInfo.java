@@ -1,5 +1,6 @@
-package io.innospots.workflow.core.node.definition.loader;
+package io.innospots.workflow.core.node.definition.meta;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.workflow.core.enums.NodePrimitive;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,6 +19,9 @@ import java.util.Map;
 @Getter
 @Setter
 public class NodeMetaInfo {
+
+    @JsonIgnore
+    private String metaFile;
 
     @NotNull(message = "node name cannot be empty")
     @Schema(title = "node display name")

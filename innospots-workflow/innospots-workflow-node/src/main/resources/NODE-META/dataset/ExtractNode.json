@@ -124,7 +124,7 @@
           "children": [
             {
               "name": "extract_mode",
-              "opt": "NOTEQUAL",
+              "opt": "UNEQUAL",
               "value": "EMBED"
             }
           ]

@@ -1,15 +1,15 @@
-package io.innospots.workflow.core.node.definition.loader;
+package io.innospots.workflow.core.node.definition.meta;
 
 import io.innospots.base.json.JSONUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,7 +44,7 @@ public class NodeMetaInfoLoader {
                 NodeMetaInfo tplMeta = JSONUtils.parseObject(content, NodeMetaInfo.class);
                 if (tplMeta != null) {
                     tplMetaInfoMap.put(tplMeta.getCode(), tplMeta);
-                    log.info("loaded node meta template: {}", tplMeta);
+                    log.debug("loaded node meta template: {}", tplMeta);
                 }
             }//end for
 
@@ -55,12 +55,14 @@ public class NodeMetaInfoLoader {
                 NodeMetaInfo nodeMeta = JSONUtils.parseObject(content, NodeMetaInfo.class);
                 if (nodeMeta != null) {
                     nodeMetaInfoMap.put(nodeMeta.getCode(), nodeMeta);
-                    log.info("loaded node meta: {}", nodeMeta);
+                    log.debug("loaded node meta: {}", nodeMeta);
                 }
             }
         } catch (IOException e) {
             log.error(e.getMessage(),e);
         }
+        log.info("node meta loaded, size:{}",nodeMetaInfoMap.size());
+        log.info("node template meta loaded, size:{}",tplMetaInfoMap.size());
     }
 
     public static NodeMetaInfo getNodeMetaInfo(String code) {
@@ -69,6 +71,10 @@ public class NodeMetaInfoLoader {
 
     public static NodeMetaInfo getNodeMetaInfoTemplate(String code) {
         return tplMetaInfoMap.get(code);
+    }
+
+    public static Collection<NodeMetaInfo> nodeMetaInfos(){
+        return nodeMetaInfoMap.values();
     }
 
     public static NodeMetaInfo getDefaultNodeMetaTemplate() {
