@@ -8,5 +8,18 @@
   "nodeType": "io.innospots.workflow.node.app.execute.TodoTaskNode",
   "outPorts": "1",
   "inPorts": "1",
-  "components": []
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "待办工作项"
+      }
+    }
+  ]
 }

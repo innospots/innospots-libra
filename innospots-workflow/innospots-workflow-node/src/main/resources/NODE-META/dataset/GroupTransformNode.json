@@ -8,5 +8,228 @@
   "nodeType": "io.innospots.workflow.node.app.dataset.GroupTransformNode",
   "outPorts": "1",
   "inPorts": "1",
-  "components": []
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "筛选排序"
+      }
+    },
+    {
+      "name": "output_restricted",
+      "type": "switch",
+      "valueType": "boolean",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "只输出计算字段"
+      }
+    },
+    {
+      "name": "source_field_type",
+      "type": "radio",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "聚合数据源",
+        "options": [
+          {
+            "value": "payload",
+            "label": "Payload"
+          },
+          {
+            "value": "list",
+            "label": "列表字段"
+          }
+        ],
+        "default": "payload"
+      }
+    },
+    {
+      "name": "list_parent_field",
+      "type": "InputFieldSelect2",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "列表字段"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "source_field_type",
+              "opt": "EQUAL",
+              "value": "list"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dim_field_list",
+      "type": "InputFieldSelect2",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "分组字段"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "source_field_type",
+              "opt": "EQUAL",
+              "value": "list"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dim_field_payload",
+      "type": "InputFieldSelect2",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "分组字段"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "source_field_type",
+              "opt": "EQUAL",
+              "value": "payload"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "func_type",
+      "type": "Select",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "计算类型",
+        "options": [
+          {
+            "value": "ROLLING",
+            "label": "滚动计算"
+          },
+          {
+            "value": "ACCUM",
+            "label": "累计计算"
+          },
+          {
+            "value": "COLUMN",
+            "label": "列计算"
+          },
+          {
+            "value": "AGGRE",
+            "label": "聚合计算"
+          }
+        ]
+      }
+    },
+    {
+      "name": "aggregate_field",
+      "type": "AggregateVariables",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "聚合变量"
+      }
+    },
+    {
+      "name": "rolling_fields",
+      "type": "FieldList",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "计算字段",
+        "tooltip": "将选中的字段值按选择的处置方式进行加工处理\n如替换空值。替换枚举值等"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "func_type",
+              "opt": "EQUAL",
+              "value": "ROLLING"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "accum_fields",
+      "type": "FieldList",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "计算字段",
+        "tooltip": "将选中的字段值按选择的处置方式进行加工处理\n如替换空值。替换枚举值等"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "func_type",
+              "opt": "EQUAL",
+              "value": "ACCUM"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "shift_fields",
+      "type": "FieldList",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "计算字段",
+        "tooltip": "将选中的字段值按选择的处置方式进行加工处理\n如替换空值。替换枚举值等"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "func_type",
+              "opt": "EQUAL",
+              "value": "COLUMN"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

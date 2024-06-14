@@ -1,12 +1,81 @@
 {
-  "name": "数据合并",
+  "name": "数据连接",
   "code": "JOIN",
   "primitive": "dataset",
   "vendor": "innospots",
-  "description": "数据合并节点",
+  "description": "数据连接节点",
   "icon": "join",
   "nodeType": "io.innospots.workflow.node.app.dataset.JoinNode",
   "outPorts": "1",
   "inPorts": "1",
-  "components": []
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "数据连接"
+      }
+    },
+    {
+      "name": "join_type",
+      "type": "Select",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "连接方式",
+        "options": [
+          {
+            "value": "LEFT_JOIN",
+            "label": "左连接（Left Join）"
+          },
+          {
+            "value": "INNER_JOIN",
+            "label": "內连接（Inner Join）"
+          },
+          {
+            "value": "RIGHT_JOIN",
+            "label": "右连接（Right Join) "
+          },
+          {
+            "value": "FULL_JOIN",
+            "label": "外连接（Outer Join）"
+          },
+          {
+            "value": "CROSS_JOIN",
+            "label": "交叉连接（Cross Join）"
+          }
+        ],
+        "default": "LEFT_JOIN"
+      }
+    },
+    {
+      "name": "join_fields",
+      "type": "JoinFields",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "连接键"
+      },
+      "conditions": [
+        {
+          "result": "hidden",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "join_type",
+              "opt": "EQUAL",
+              "value": "CROSS_JOIN"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

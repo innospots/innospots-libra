@@ -8,5 +8,59 @@
   "nodeType": "io.innospots.workflow.node.app.dataset.FiltrateOrderNode",
   "outPorts": "1",
   "inPorts": "1",
-  "components": []
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "筛选排序"
+      }
+    },
+    {
+      "name": "filter_condition",
+      "type": "RuleEditor",
+      "valueType": "object",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "筛选条件",
+        "tooltip": "条件规则组合",
+        "description": "保留满足条件数据"
+      }
+    },
+    {
+      "name": "asc_fields",
+      "type": "InputFieldSelect2",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "升序字段",
+        "tooltip": "聚合维度，选择上一个输入数据的多个字段\n下拉选择多个字段，用于聚合计算使用"
+      }
+    },
+    {
+      "name": "desc_fields",
+      "type": "InputFieldSelect2",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "降序字段",
+        "tooltip": "聚合维度，选择上一个输入数据的多个字段\n下拉选择多个字段，用于聚合计算使用"
+      }
+    },
+    {
+      "name": "line_count",
+      "type": "Input",
+      "valueType": "number",
+      "copyable": false,
+      "deletable": false
+    }
+  ]
 }

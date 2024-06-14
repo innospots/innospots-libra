@@ -8,5 +8,41 @@
   "nodeType": "io.innospots.workflow.node.app.interaction.NotificationNode",
   "outPorts": "1",
   "inPorts": "1",
-  "components": []
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "站内通知"
+      }
+    },
+    {
+      "name": "title",
+      "type": "Input",
+      "valueType": "string",
+     "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "通知标题",
+        "placeholder": "请输入通知标题",
+        "initialValue": ""
+      }
+    },{
+      "name": "content",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "通知内容",
+        "placeholder": "请输入通知内容",
+        "initialValue": ""
+      }
+    }
+  ]
 }

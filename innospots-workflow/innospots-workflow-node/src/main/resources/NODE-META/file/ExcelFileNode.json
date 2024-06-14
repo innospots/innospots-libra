@@ -8,5 +8,222 @@
   "nodeType": "io.innospots.workflow.node.app.file.ExcelFileNode",
   "outPorts": "1",
   "inPorts": "1",
-  "components": []
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "Excel文件"
+      }
+    },
+    {
+      "name": "operation",
+      "type": "Select",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "文件操作",
+        "options": [
+          {
+            "value": "READ",
+            "label": "读取"
+          },
+          {
+            "value": "WRITE",
+            "label": "写入"
+          }
+        ],
+        "initialValue": "READ"
+      }
+    },
+    {
+      "name": "file_path",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "文件路径"
+      }
+    },
+    {
+      "name": "file_format",
+      "type": "Select",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "文件格式",
+        "options": [
+          {
+            "value": "CSV",
+            "label": "CSV"
+          },
+          {
+            "value": "XLSX",
+            "label": "XLSX"
+          }
+        ],
+        "initialValue": "CSV"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "file_format",
+              "opt": "EQUAL",
+              "value": "CSV"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "separator",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "分隔符",
+        "initialValue": ","
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "file_format",
+              "opt": "EQUAL",
+              "value": "CSV"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "encoding",
+      "type": "Select",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "文件编码",
+        "options": [
+          {
+            "value": "UTF-8",
+            "label": "UTF-8"
+          },
+          {
+            "value": "GBK",
+            "label": "GBK"
+          }
+        ],
+        "initialValue": "UTF-8"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "file_format",
+              "opt": "EQUAL",
+              "value": "CSV"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "first_header",
+      "type": "Checkbox",
+      "valueType": "boolean",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "是否包含表头"
+      }
+    },
+    {
+      "name": "max_read_line",
+      "type": "Input",
+      "valueType": "number",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "最大读取行数"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "operation",
+              "opt": "EQUAL",
+              "value": "READ"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "is_select_column",
+      "type": "Switch",
+      "valueType": "boolean",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "是否指定字段",
+        "initialValue": false
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "operation",
+              "opt": "EQUAL",
+              "value": "WRITE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "select_fields",
+      "type": "InputFieldTable",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "选定字段",
+        "tooltip": "数据提取，列表结构，选择上一个输入数据中的字段形成的列表，主要用于筛选使用的字段"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "AND",
+          "children": [
+            {
+              "name": "is_select_column",
+              "opt": "EQUAL",
+              "value": "true"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

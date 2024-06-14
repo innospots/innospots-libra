@@ -8,5 +8,42 @@
   "nodeType": "io.innospots.workflow.node.app.file.OutputFilesNode",
   "outPorts": "1",
   "inPorts": "1",
-  "components": []
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "文件输出"
+      }
+    },
+    {
+      "name": "output_path",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "存储目录",
+        "placeholder": "/home/user/store",
+        "initialValue": ""
+      }
+    },
+    {
+      "name": "file_pattern",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "来源文件",
+        "placeholder": "*.后缀名，例如: *.png",
+        "initialValue": ".*"
+      }
+    }
+  ]
 }

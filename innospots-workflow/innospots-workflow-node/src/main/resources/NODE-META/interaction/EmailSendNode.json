@@ -8,5 +8,66 @@
   "nodeType": "io.innospots.workflow.node.app.interaction.EmailSendNode",
   "outPorts": "1",
   "inPorts": "1",
-  "components": []
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "Email"
+      }
+    },
+    {
+      "name": "email_from",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "发件人",
+        "placeholder": "请输入发件人",
+        "initialValue": ""
+      }
+    },
+    {
+      "name": "email_to",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "收件人",
+        "placeholder": "请输入收件人",
+        "initialValue": ""
+      }
+    },
+    {
+      "name": "email_subject",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "邮件主题",
+        "placeholder": "请输入邮件主题",
+        "initialValue": ""
+      }
+    },
+    {
+      "name": "email_content",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "邮件内容",
+        "placeholder": "请输入邮件内容",
+        "initialValue": ""
+      }
+    }
+  ]
 }

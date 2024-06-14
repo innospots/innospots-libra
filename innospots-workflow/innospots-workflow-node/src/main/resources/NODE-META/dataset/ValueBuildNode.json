@@ -8,5 +8,219 @@
   "nodeType": "io.innospots.workflow.node.app.dataset.ValueBuildNode",
   "outPorts": "1",
   "inPorts": "1",
-  "components": []
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "数值处理"
+      }
+    },
+    {
+      "name": "field_action",
+      "type": "Select",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "字段处理方式",
+        "optionsType": "customOptions",
+        "options": [
+          {
+            "value": "REPLACE",
+            "label": "替换"
+          },
+          {
+            "value": "FUNCTION",
+            "label": "函数扩展"
+          }
+        ]
+      }
+    },
+    {
+      "name": "replace_fields",
+      "type": "FieldList",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "字段替换",
+        "tooltip": "将选中的字段值按选择的处置方式进行加工处理\n如替换空值。替换枚举值等",
+        "description": "逗号分隔参数和字典项",
+        "customColumns": [
+          {
+            "code": "field",
+            "type": "FIELD",
+            "width": "80px",
+            "title": "字段",
+            "default": ""
+          },
+          {
+            "code": "method",
+            "type": "SELECT",
+            "width": "80px",
+            "title": "处置方式",
+            "default": "",
+            "options": [
+              {
+                "label": "空值替换",
+                "value": "rp_null"
+              },
+              {
+                "label": "正则替换",
+                "value": "rp_rexp"
+              },
+              {
+                "label": "字典替换",
+                "value": "rp_dict"
+              },
+              {
+                "label": "函数替换",
+                "value": "rp_func"
+              }
+            ]
+          },
+          {
+            "code": "value",
+            "type": "INPUT",
+            "width": "80px",
+            "title": "字段值",
+            "default": ""
+          }
+        ]
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "field_action",
+              "opt": "EQUAL",
+              "value": "REPLACE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "output_restricted",
+      "type": "switch",
+      "valueType": "boolean",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "是否仅输出列表中的字段"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "field_action",
+              "opt": "EQUAL",
+              "value": "FUNCTION"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "extend_fields",
+      "type": "FieldList",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "字段扩展",
+        "tooltip": "将选中的字段值按选择的处置方式进行加工处理\n如替换空值。替换枚举值等",
+        "customColumns": [
+          {
+            "type": "INPUT",
+            "width": "120px",
+            "code": "code",
+            "title": "字段标识"
+          },
+          {
+            "code": "function",
+            "type": "SELECT",
+            "width": "130px",
+            "title": "函数",
+            "default": "",
+            "options": [
+              {
+                "value": "crt_date",
+                "label": "当前日期"
+              },
+              {
+                "value": "crt_date_time",
+                "label": "当前时间"
+              },
+              {
+                "value": "date_format",
+                "label": "日期格式化"
+              },
+              {
+                "value": "plus_day",
+                "label": "天数增减"
+              },
+              {
+                "value": "plus_year",
+                "label": "年数增减"
+              },
+              {
+                "value": "plus_month",
+                "label": "月数增减"
+              },
+              {
+                "value": "plus_hour",
+                "label": "小时增减"
+              },
+              {
+                "value": "dict_map",
+                "label": "字典映射"
+              },
+              {
+                "value": "regular_exp",
+                "label": "正则提取"
+              }
+            ]
+          },
+          {
+            "code": "field",
+            "type": "FIELD",
+            "width": "130px",
+            "title": "字段",
+            "default": ""
+          },
+          {
+            "code": "param",
+            "type": "INPUT",
+            "width": "120px",
+            "title": "函数参数",
+            "default": ""
+          }
+        ]
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "field_action",
+              "opt": "EQUAL",
+              "value": "FUNCTION"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

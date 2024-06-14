@@ -8,5 +8,31 @@
   "nodeType": "io.innospots.workflow.node.app.file.LoadFilesNode",
   "outPorts": "1",
   "inPorts": "1",
-  "components": []
+  "components": [
+    {
+      "name": "source_files",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "源文件",
+        "placeholder": "请输入源文件名称，支持通配符格式如：/tmp/*.jpg",
+        "allowClear": true
+      }
+    },
+    {
+      "name": "file_var",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "文件存储变量名称",
+        "placeholder": "请输入存储文件的变量名称",
+        "allowClear": true,
+        "initialValue": "files"
+      }
+    }
+  ]
 }

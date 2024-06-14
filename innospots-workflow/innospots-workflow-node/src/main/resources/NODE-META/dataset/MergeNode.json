@@ -8,5 +8,46 @@
   "nodeType": "io.innospots.workflow.node.app.dataset.MergeNode",
   "outPorts": "1",
   "inPorts": "1",
-  "components": []
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "数据合并"
+      }
+    },{
+      "name": "merge_mode",
+      "type": "Select",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "合并规则",
+        "optionsType": "customOptions",
+        "options": [
+          {
+            "value": "JOIN_DISTINCT",
+            "label": "去重合并（Union）"
+          },
+          {
+            "value": "JOIN_ALL",
+            "label": "合并（Union All）"
+          },
+          {
+            "value": "INTERSECT",
+            "label": "获取交集（Intersect）"
+          },
+          {
+            "value": "EXCEPT",
+            "label": "获取差集（Except）"
+          }
+        ]
+      }
+    }
+  ]
 }
