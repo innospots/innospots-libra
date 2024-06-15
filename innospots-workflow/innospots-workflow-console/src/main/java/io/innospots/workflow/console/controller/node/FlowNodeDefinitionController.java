@@ -125,6 +125,18 @@ public class FlowNodeDefinitionController extends BaseController {
         return success(nodeDefinitionService.updateNodeInfo(nodeInfo));
     }
 
+    @OperationLog(operateType = OperateType.UPDATE, idParamPosition = 0)
+    @PutMapping("group")
+    @Operation(summary = "update node definition group")
+    @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.save}")
+    public InnospotsResponse<NodeInfo> updateNodeInfo(
+            @Parameter(name = "nodeId", required = true) @RequestParam Integer nodeId,
+            @Parameter(name = "nodeGroupId", required = true) @RequestParam Integer nodeGroupId) {
+        return success(nodeDefinitionService.updateNodeGroup(nodeId,nodeGroupId));
+    }
+
+
+
     /**
      * update node definition
      *

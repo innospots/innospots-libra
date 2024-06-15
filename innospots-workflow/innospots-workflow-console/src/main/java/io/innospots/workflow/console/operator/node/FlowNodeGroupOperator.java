@@ -213,7 +213,6 @@ public class FlowNodeGroupOperator {
             for (FlowNodeGroupNodeEntity nodeGroupNodeEntity : entityList) {
                 if (nodeGroupId.equals(nodeGroupNodeEntity.getNodeGroupId())) {
                     exitsNodeIds.add(nodeGroupNodeEntity.getNodeId());
-
                 } else {
                     notExitsGroupIds.add(nodeGroupNodeEntity.getNodeGroupNodeId());
                 }
