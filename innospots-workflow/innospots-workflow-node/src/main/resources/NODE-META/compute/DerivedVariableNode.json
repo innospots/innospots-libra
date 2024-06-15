@@ -1,6 +1,7 @@
 {
   "name": "计算节点",
   "code": "DERIVED_VARIABLES",
+  "flowCode": "EVENTS",
   "primitive": "compute",
   "vendor": "innospots",
   "description": "计算字段",

@@ -1,6 +1,7 @@
 {
   "name": "合并分支",
   "code": "COMBINE",
+  "flowCode": "EVENTS",
   "primitive": "logic",
   "vendor": "innospots",
   "description": "多个分支合并",

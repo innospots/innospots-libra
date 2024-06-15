@@ -31,6 +31,10 @@ public class NodeMetaInfo {
     @Schema(title = "node code")
     protected String code;
 
+    @NotNull(message = "flow template code cannot be empty")
+    @Schema(title = "flow template code")
+    protected String flowCode;
+
     @NotNull(message = "node primitive type cannot be empty")
     @Schema(title = "node primitive type")
     protected NodePrimitive primitive;

@@ -1,6 +1,7 @@
 {
   "name": "SqlScript",
   "code": "SQL_SCRIPT",
+  "flowCode": "EVENTS",
   "primitive": "script",
   "vendor": "innospots",
   "description": "sql脚本节点",

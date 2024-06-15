@@ -73,10 +73,12 @@ public class NodeDefinitionService {
         List<NodeInfo> nodeInfos = body.getList();
         if (!CollectionUtils.isEmpty(nodeInfos)) {
             List<Integer> nodeIds = nodeInfos.stream().map(NodeInfo::getNodeId).collect(Collectors.toList());
-            List<FlowNodeGroupNodeEntity> entityList = flowNodeGroupOperator.getGroupNodeByNodeIds(1, nodeIds);
-            Map<Integer, Integer> entityMap = entityList.stream().collect(Collectors.toMap(FlowNodeGroupNodeEntity::getNodeId, FlowNodeGroupNodeEntity::getNodeGroupId));
-            for (NodeInfo nodeInfo : nodeInfos) {
-                nodeInfo.setNodeGroupId(entityMap.get(nodeInfo.getNodeId()));
+            List<FlowNodeGroupNodeEntity> entityList = flowNodeGroupOperator.getGroupNodeByNodeIds(request.getFlowTplId(), nodeIds);
+            if (!CollectionUtils.isEmpty(entityList)) {
+                Map<Integer, Integer> entityMap = entityList.stream().collect(Collectors.toMap(FlowNodeGroupNodeEntity::getNodeId, FlowNodeGroupNodeEntity::getNodeGroupId));
+                for (NodeInfo nodeInfo : nodeInfos) {
+                    nodeInfo.setNodeGroupId(entityMap.get(nodeInfo.getNodeId()));
+                }
             }
         }
         return body;
@@ -99,7 +101,7 @@ public class NodeDefinitionService {
             if (StringUtils.isNotEmpty(nodeInfo.getIcon()) && nodeInfo.getIcon().startsWith(IMAGE_PREFIX)) {
                 EventBusCenter.async(new NewAvatarEvent(nodeId, ImageType.APP, null, nodeInfo.getIcon()));
             }
-            // update app icon
+            // update node icon
             nodeInfo = flowNodeDefinitionOperator.updateNodeInfo(nodeInfo);
         }
         return nodeInfo;
@@ -144,17 +146,17 @@ public class NodeDefinitionService {
         return flowNodeDefinitionOperator.deleteNodeDefinition(nodeId);
     }
 
-    public NodeDefinition updateNodeDefinition(NodeDefinition appNodeDefinition) {
-        return flowNodeDefinitionOperator.updateNodeDefinition(appNodeDefinition);
+    public NodeDefinition updateNodeDefinition(NodeDefinition nodeDefinition) {
+        return flowNodeDefinitionOperator.updateNodeDefinition(nodeDefinition);
     }
 
     public NodeDefinition getNodeDefinitionById(Integer nodeId) {
-        NodeDefinition appNodeDefinition = flowNodeDefinitionOperator.getNodeDefinition(nodeId);
+        NodeDefinition nodeDefinition = flowNodeDefinitionOperator.getNodeDefinition(nodeId);
         List<FlowNodeGroupNodeEntity> entityList = flowNodeGroupOperator.getGroupNodeByNodeIds(1, Collections.singletonList(nodeId));
         if (!CollectionUtils.isEmpty(entityList)) {
-            appNodeDefinition.setNodeGroupId(entityList.get(0).getNodeGroupId());
+            nodeDefinition.setNodeGroupId(entityList.get(0).getNodeGroupId());
         }
-        return appNodeDefinition;
+        return nodeDefinition;
     }
 
     public Map<String, String> getNodeIcons() {

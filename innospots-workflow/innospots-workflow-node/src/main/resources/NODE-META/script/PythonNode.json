@@ -1,6 +1,7 @@
 {
   "name": "Python",
   "code": "PYTHON",
+  "flowCode": "EVENTS",
   "primitive": "script",
   "vendor": "innospots",
   "description": "python 脚本节点",

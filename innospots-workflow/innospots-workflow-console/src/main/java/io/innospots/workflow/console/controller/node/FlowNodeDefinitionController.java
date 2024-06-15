@@ -128,15 +128,15 @@ public class FlowNodeDefinitionController extends BaseController {
     /**
      * update node definition
      *
-     * @param appNodeDefinition node definition info
-     * @return AppNodeDefinition
+     * @param nodeDefinition node definition info
+     * @return NodeDefinition
      */
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "nodeId")
     @PutMapping
     @Operation(summary = "update node definition")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.save}")
-    public InnospotsResponse<NodeDefinition> updateNodeDefinition(@Parameter(name = "node definition", required = true) @Validated @RequestBody NodeDefinition appNodeDefinition) {
-        return success(nodeDefinitionService.updateNodeDefinition(appNodeDefinition));
+    public InnospotsResponse<NodeDefinition> updateNodeDefinition(@Parameter(name = "node definition", required = true) @Validated @RequestBody NodeDefinition nodeDefinition) {
+        return success(nodeDefinitionService.updateNodeDefinition(nodeDefinition));
     }
 
     /**

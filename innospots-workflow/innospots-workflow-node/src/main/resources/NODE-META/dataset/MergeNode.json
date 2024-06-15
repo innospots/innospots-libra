@@ -1,6 +1,7 @@
 {
   "name": "数据合并",
   "code": "MERGE",
+  "flowCode": "EVENTS",
   "primitive": "dataset",
   "vendor": "innospots",
   "description": "数据合并节点",

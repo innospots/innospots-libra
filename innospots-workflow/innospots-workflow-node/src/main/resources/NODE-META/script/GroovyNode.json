@@ -1,6 +1,7 @@
 {
   "name": "Groovy",
   "code": "GROOVY",
+  "flowCode": "EVENTS",
   "primitive": "script",
   "vendor": "innospots",
   "description": "groovy 脚本节点",

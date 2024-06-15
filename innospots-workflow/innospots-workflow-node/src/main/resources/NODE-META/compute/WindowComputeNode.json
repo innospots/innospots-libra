@@ -1,6 +1,7 @@
 {
   "name": "列字段计算",
   "code": "win_compute",
+  "flowCode": "EVENTS",
   "primitive": "compute",
   "vendor": "innospots",
   "description": "窗口，累计，排序",

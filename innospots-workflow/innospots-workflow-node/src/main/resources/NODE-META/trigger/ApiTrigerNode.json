@@ -1,6 +1,7 @@
 {
   "name": "Webhook触发器",
   "code": "WEBHOOK",
+  "flowCode": "EVENTS",
   "primitive": "trigger",
   "vendor": "innospots",
   "description": "api触发器节点",

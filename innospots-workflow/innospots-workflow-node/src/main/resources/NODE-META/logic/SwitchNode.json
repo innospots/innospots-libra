@@ -1,6 +1,7 @@
 {
   "name": "分支节点",
   "code": "SWITCH",
+  "flowCode": "EVENTS",
   "primitive": "logic",
   "vendor": "innospots",
   "description": "多分支",

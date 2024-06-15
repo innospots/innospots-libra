@@ -1,6 +1,7 @@
 {
   "name": "default",
   "code": "default",
+  "flowCode": "EVENTS",
   "primitive": "normal",
   "vendor": "innospots",
   "description": "",
@@ -9,7 +10,7 @@
     "formMinWidth": 360,
     "formMaxWidth": 700,
     "isFixedWidth": false,
-    "runMethod": "DEFAULT|CONFIG",
+    "runMethod": "DEFAULT",
     "color": "#fffff"
   },
   "components": [

@@ -1,6 +1,7 @@
 {
   "name": "等待节点",
   "code": "WAIT",
+  "flowCode": "EVENTS",
   "primitive": "logic",
   "vendor": "innospots",
   "description": "等待节点",

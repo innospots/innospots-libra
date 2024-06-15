@@ -38,6 +38,7 @@ public class NodeGroup {
     private Integer position;
     private DataScope scopes;
     private boolean hidden;
+    private boolean deletable;
 
     private List<NodeDefinition> nodes;
 

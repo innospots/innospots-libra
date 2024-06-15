@@ -1,6 +1,7 @@
 {
   "name": "文件加载",
   "code": "LOAD_FILES",
+  "flowCode": "EVENTS",
   "primitive": "file",
   "vendor": "innospots",
   "description": "扫描文件目录，加载文件，不读取文件内容",

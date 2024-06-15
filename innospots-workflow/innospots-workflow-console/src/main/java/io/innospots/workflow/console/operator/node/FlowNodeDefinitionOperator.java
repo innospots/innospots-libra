@@ -29,17 +29,20 @@ import io.innospots.base.enums.ImageType;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.data.body.PageBody;
+import io.innospots.base.exception.ValidatorException;
 import io.innospots.libra.base.events.AvatarRemoveEvent;
 import io.innospots.workflow.core.node.NodeInfo;
 import io.innospots.workflow.core.node.definition.converter.FlowNodeDefinitionConverter;
 import io.innospots.workflow.core.node.definition.dao.FlowNodeDefinitionDao;
 import io.innospots.workflow.core.node.definition.dao.FlowNodeGroupDao;
 import io.innospots.workflow.core.node.definition.dao.FlowNodeGroupNodeDao;
+import io.innospots.workflow.core.node.definition.dao.FlowTemplateDao;
 import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
 import io.innospots.workflow.console.model.NodeQueryRequest;
 import io.innospots.workflow.core.enums.NodePrimitive;
 import io.innospots.workflow.core.node.definition.entity.FlowNodeGroupEntity;
 import io.innospots.workflow.core.node.definition.entity.FlowNodeGroupNodeEntity;
+import io.innospots.workflow.core.node.definition.entity.FlowTemplateEntity;
 import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -50,6 +53,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -64,11 +68,15 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
     public static final String IMAGE_PREFIX = "data:image";
     public static final String CACHE_NAME = "CACHE_NODE_DEFINITION";
 
-    private FlowNodeGroupDao flowNodeGroupDao;
-    private FlowNodeGroupNodeDao flowNodeGroupNodeDao;
+    private final FlowTemplateDao flowTemplateDao;
+    private final FlowNodeGroupDao flowNodeGroupDao;
+    private final FlowNodeGroupNodeDao flowNodeGroupNodeDao;
 
-    public FlowNodeDefinitionOperator(FlowNodeGroupDao flowNodeGroupDao, FlowNodeGroupNodeDao flowNodeGroupNodeDao) {
+    public FlowNodeDefinitionOperator(FlowTemplateDao flowTemplateDao,
+                                      FlowNodeGroupDao flowNodeGroupDao,
+                                      FlowNodeGroupNodeDao flowNodeGroupNodeDao) {
         this.flowNodeGroupDao = flowNodeGroupDao;
+        this.flowTemplateDao = flowTemplateDao;
         this.flowNodeGroupNodeDao = flowNodeGroupNodeDao;
     }
 
@@ -80,29 +88,57 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
      */
     public PageBody<NodeInfo> pageNodeDefinitions(NodeQueryRequest queryRequest) {
         PageBody<NodeInfo> result = new PageBody<>();
+        if (queryRequest.getFlowTplId() == null) {
+            throw ValidatorException.buildMissingException(this.getClass(), "flowTplId is null");
+        }
+        if (queryRequest.getNodeGroupId() != null) {
+            QueryWrapper<FlowNodeGroupEntity> gQuery = new QueryWrapper<>();
+            gQuery.lambda().eq(queryRequest.getFlowTplId() != null, FlowNodeGroupEntity::getFlowTplId, queryRequest.getFlowTplId())
+                    .eq(queryRequest.getNodeGroupId() != null, FlowNodeGroupEntity::getNodeGroupId, queryRequest.getNodeGroupId());
+            FlowNodeGroupEntity nodeGroup = this.flowNodeGroupDao.selectOne(gQuery);
+            if (nodeGroup == null) {
+                throw ResourceException.buildNotExistException(this.getClass(), "node group not found", queryRequest.getNodeGroupId());
+            }
+            if ("all".equalsIgnoreCase(nodeGroup.getCode())) {
+                queryRequest.setNodeGroupId(null);
+            }
+        }
+
 
         QueryWrapper<FlowNodeGroupNodeEntity> groupQueryWrapper = new QueryWrapper<>();
         groupQueryWrapper.lambda()
-                .eq(queryRequest.getNodeGroupId()!=null, FlowNodeGroupNodeEntity::getNodeGroupId,queryRequest.getNodeGroupId())
-                .eq(queryRequest.getFlowTplId()!=null, FlowNodeGroupNodeEntity::getFlowTplId,queryRequest.getFlowTplId());
+                .eq(queryRequest.getNodeGroupId() != null, FlowNodeGroupNodeEntity::getNodeGroupId, queryRequest.getNodeGroupId())
+                .eq(queryRequest.getFlowTplId() != null, FlowNodeGroupNodeEntity::getFlowTplId, queryRequest.getFlowTplId());
 
         List<FlowNodeGroupNodeEntity> flowNodeGroupEntities = flowNodeGroupNodeDao.selectList(groupQueryWrapper);
-        if(CollectionUtils.isEmpty(flowNodeGroupEntities)){
+        QueryWrapper<FlowNodeDefinitionEntity> nodeQueryWrapper = new QueryWrapper<>();
+        if (queryRequest.getNodeGroupId() == null) {
+            FlowTemplateEntity flowTemplate = flowTemplateDao.selectById(queryRequest.getFlowTplId());
+            if (flowTemplate == null) {
+                throw ResourceException.buildNotExistException(this.getClass(), "flow template not found", queryRequest.getFlowTplId());
+            }
+            nodeQueryWrapper.lambda().eq(FlowNodeDefinitionEntity::getFlowCode, flowTemplate.getTplCode());
+        } else if (CollectionUtils.isEmpty(flowNodeGroupEntities)) {
+            result.setPageSize((long) queryRequest.getSize());
+            result.setTotal(0L);
+            result.setTotalPage(0L);
+            result.setCurrent((long) queryRequest.getPage());
             result.setMessage("empty");
+            result.setList(Collections.emptyList());
             return result;
+        } else {
+            Set<Integer> nodeIds = flowNodeGroupEntities.stream()
+                    .map(FlowNodeGroupNodeEntity::getNodeId).collect(Collectors.toSet());
+
+            nodeQueryWrapper.lambda().in(FlowNodeDefinitionEntity::getNodeId, nodeIds);
         }
-        Set<Integer> nodeIds = flowNodeGroupEntities.stream()
-                .map(FlowNodeGroupNodeEntity::getNodeId).collect(Collectors.toSet());
 
-        QueryWrapper<FlowNodeDefinitionEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().in(FlowNodeDefinitionEntity::getNodeId,nodeIds)
-                .eq(queryRequest.getDataStatus()!=null,FlowNodeDefinitionEntity::getStatus,queryRequest.getDataStatus())
+        nodeQueryWrapper.lambda().eq(queryRequest.getDataStatus() != null, FlowNodeDefinitionEntity::getStatus, queryRequest.getDataStatus())
                 .like(StringUtils.isNotBlank(queryRequest.getQueryInput()), FlowNodeDefinitionEntity::getName, queryRequest.getQueryInput())
-                        .orderByDesc(FlowNodeDefinitionEntity::getUpdatedTime);
-
+                .orderByDesc(FlowNodeDefinitionEntity::getUpdatedTime);
 
         IPage<FlowNodeDefinitionEntity> queryPage = new Page<>(queryRequest.getPage(), queryRequest.getSize());
-        queryPage = this.page(queryPage, queryWrapper);
+        queryPage = this.page(queryPage, nodeQueryWrapper);
 
 
         if (queryPage != null) {
@@ -139,19 +175,19 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
         return FlowNodeDefinitionConverter.INSTANCE.entitiesToModels(this.list(queryWrapper));
     }
 
-    public List<FlowNodeDefinitionEntity> listByCodes(List<String> codes) {
+    public List<NodeDefinition> listByCodes(List<String> codes) {
         if (CollectionUtils.isEmpty(codes)) {
             return new ArrayList<>();
         }
         QueryWrapper<FlowNodeDefinitionEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().in(FlowNodeDefinitionEntity::getCode, codes);
-        return this.list(queryWrapper);
+        return FlowNodeDefinitionConverter.INSTANCE.entitiesToModels(this.list(queryWrapper));
     }
 
     /**
-     * create app info
+     * create node info
      *
-     * @param nodeInfo app info
+     * @param nodeInfo info
      * @return AppInfo
      */
     @Transactional(rollbackFor = Exception.class)
@@ -162,16 +198,35 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
         entity.setIcon(null);
         boolean s = this.save(entity);
         if (!s) {
-            throw ResourceException.buildCreateException(this.getClass(), "create app node definition error");
+            throw ResourceException.buildCreateException(this.getClass(), "create node definition error");
         }
         nodeInfo.setNodeId(entity.getNodeId());
         return nodeInfo;
     }
 
+    public NodeDefinition createNodeDefinition(NodeDefinition nodeDefinition) {
+        this.checkDifferentName(nodeDefinition);
+        this.checkDifferentCode(nodeDefinition);
+        FlowNodeDefinitionEntity entity = FlowNodeDefinitionConverter.INSTANCE.modelToEntity(nodeDefinition);
+        boolean s = this.save(entity);
+        if (!s) {
+            throw ResourceException.buildCreateException(this.getClass(), "create node definition error");
+        }
+        nodeDefinition.setNodeId(entity.getNodeId());
+
+        return nodeDefinition;
+    }
+
+    public List<FlowNodeDefinitionEntity> listByNodeCodes(List<String> codes) {
+        QueryWrapper<FlowNodeDefinitionEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().in(FlowNodeDefinitionEntity::getCode, codes);
+        return this.list(queryWrapper);
+    }
+
     /**
-     * modify app info
+     * modify node info
      *
-     * @param nodeInfo app info
+     * @param nodeInfo info
      * @return AppInfo
      */
     @Transactional(rollbackFor = Exception.class)
@@ -184,14 +239,14 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
             throw ResourceException.buildAbandonException(this.getClass(), "node definition not exits");
         }
         FlowNodeDefinitionConverter.INSTANCE.infoToEntity(nodeInfo, entity);
-        if(StringUtils.isNotEmpty(nodeInfo.getIcon()) && nodeInfo.getIcon().startsWith(IMAGE_PREFIX)){
+        if (StringUtils.isNotEmpty(nodeInfo.getIcon()) && nodeInfo.getIcon().startsWith(IMAGE_PREFIX)) {
             entity.setIcon("/image/APP/" + nodeInfo.getNodeId() + "?t=" + RandomStringUtils.randomNumeric(5));
         }
 
         entity.setUpdatedTime(LocalDateTime.now());
         boolean s = this.updateById(entity);
         if (!s) {
-            throw ResourceException.buildCreateException(this.getClass(), "modify app node definition error");
+            throw ResourceException.buildCreateException(this.getClass(), "modify node definition error");
         }
 
         NodeInfo newInfo = FlowNodeDefinitionConverter.INSTANCE.entityToSimple(entity);
@@ -203,22 +258,37 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
     /**
      * modify node definition
      *
-     * @param appNodeDefinition node definition info
+     * @param nodeDefinition node definition info
      * @return NodeDefinition
      */
-    @CacheEvict(cacheNames = CACHE_NAME, key = "#appNodeDefinition.nodeId")
-    public NodeDefinition updateNodeDefinition(NodeDefinition appNodeDefinition) {
-        FlowNodeDefinitionEntity entity = this.getById(appNodeDefinition.getNodeId());
+    @CacheEvict(cacheNames = CACHE_NAME, key = "#nodeDefinition.nodeId")
+    public NodeDefinition updateNodeDefinition(NodeDefinition nodeDefinition) {
+        FlowNodeDefinitionEntity entity = this.getById(nodeDefinition.getNodeId());
         if (entity == null) {
             throw ResourceException.buildAbandonException(this.getClass(), "node definition not exits");
         }
-        FlowNodeDefinitionConverter.INSTANCE.modelToEntity(appNodeDefinition, entity);
+        FlowNodeDefinitionConverter.INSTANCE.modelToEntity(nodeDefinition, entity);
         boolean s = this.updateById(entity);
         if (!s) {
             throw ResourceException.buildCreateException(this.getClass(), "modify node definition error");
         }
         return FlowNodeDefinitionConverter.INSTANCE.entityToModel(entity);
     }
+
+    @CacheEvict(cacheNames = CACHE_NAME, key = "#nodeDefinition.nodeId")
+    public NodeDefinition updateAllNodeDefinition(NodeDefinition nodeDefinition) {
+        FlowNodeDefinitionEntity entity = this.getById(nodeDefinition.getNodeId());
+        if (entity == null) {
+            throw ResourceException.buildAbandonException(this.getClass(), "node definition not exits");
+        }
+        entity = FlowNodeDefinitionConverter.INSTANCE.modelToEntity(nodeDefinition);
+        boolean s = this.updateById(entity);
+        if (!s) {
+            throw ResourceException.buildCreateException(this.getClass(), "modify node definition error");
+        }
+        return FlowNodeDefinitionConverter.INSTANCE.entityToModel(entity);
+    }
+
 
     public Boolean updateNodeUsed(List<Integer> nodeIds, Boolean used) {
         UpdateWrapper<FlowNodeDefinitionEntity> updateWrapper = new UpdateWrapper<>();
@@ -239,8 +309,8 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
         if (entity == null) {
             throw ResourceException.buildAbandonException(this.getClass(), "get node definition not exits", nodeId);
         }
-        NodeDefinition appNodeDefinition = FlowNodeDefinitionConverter.INSTANCE.entityToModel(entity);
-        return appNodeDefinition;
+        NodeDefinition nodeDefinition = FlowNodeDefinitionConverter.INSTANCE.entityToModel(entity);
+        return nodeDefinition;
     }
 
     @CacheEvict(cacheNames = CACHE_NAME, key = "#nodeId")
@@ -255,14 +325,14 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
     @CacheEvict(cacheNames = CACHE_NAME, key = "#nodeId")
     public Boolean deleteNodeDefinition(Integer nodeId) {
         boolean res = this.removeById(nodeId);
-        if(res){
+        if (res) {
             EventBusCenter.async(new AvatarRemoveEvent(nodeId, ImageType.APP));
         }
         return res;
     }
 
     /**
-     * check different app have the same name
+     * check different node have the same name
      *
      * @param nodeInfo
      */
@@ -275,12 +345,12 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
         }
         long count = super.count(queryWrapper);
         if (count > 0) {
-            throw ResourceException.buildExistException(this.getClass(), "app name", nodeInfo.getName());
+            throw ResourceException.buildExistException(this.getClass(), "node name", nodeInfo.getName());
         }
     }
 
     /**
-     * check different app have the same code
+     * check different node have the same code
      *
      * @param nodeInfo
      */
@@ -293,7 +363,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
         }
         long count = super.count(queryWrapper);
         if (count > 0) {
-            throw ResourceException.buildExistException(this.getClass(), "app code", nodeInfo.getCode());
+            throw ResourceException.buildExistException(this.getClass(), "node code", nodeInfo.getCode());
         }
     }
 }

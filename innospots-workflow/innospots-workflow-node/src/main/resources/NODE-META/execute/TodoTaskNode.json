@@ -1,6 +1,7 @@
 {
   "name": "待办工作项",
   "code": "TODO_TASK",
+  "flowCode": "EVENTS",
   "primitive": "execute",
   "vendor": "innospots",
   "description": "待办工作项",

@@ -1,6 +1,7 @@
 {
   "name": "文件输出",
   "code": "OUTPUT_FILES",
+  "flowCode": "EVENTS",
   "primitive": "file",
   "vendor": "innospots",
   "description": "文件输出到指定目录",

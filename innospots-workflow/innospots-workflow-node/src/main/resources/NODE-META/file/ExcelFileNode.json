@@ -1,6 +1,7 @@
 {
   "name": "Excel文件",
   "code": "excel_file",
+  "flowCode": "EVENTS",
   "primitive": "file",
   "vendor": "innospots",
   "description": "excel file读写",

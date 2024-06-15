@@ -1,6 +1,7 @@
 {
   "name": "Java",
   "code": "JAVA",
+  "flowCode": "EVENTS",
   "primitive": "script",
   "vendor": "innospots",
   "description": "Java节点",

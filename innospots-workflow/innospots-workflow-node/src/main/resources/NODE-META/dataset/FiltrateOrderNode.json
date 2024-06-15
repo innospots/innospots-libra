@@ -1,6 +1,7 @@
 {
   "name": "筛选排序",
   "code": "sort_filter",
+  "flowCode": "EVENTS",
   "primitive": "dataset",
   "vendor": "innospots",
   "description": "按条件筛选并过滤",

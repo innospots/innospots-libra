@@ -1,8 +1,10 @@
 {
   "name": "SQL",
   "code": "SQL",
+  "flowCode": "EVENTS",
   "primitive": "data",
   "vendor": "innospots",
+  "credentialTypeCode": "SQL",
   "description": "SQL数据节点",
   "icon": "mysql",
   "nodeType": "io.innospots.workflow.node.app.data.SqlDataNode",

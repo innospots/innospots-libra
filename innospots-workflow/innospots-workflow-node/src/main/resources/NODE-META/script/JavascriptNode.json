@@ -1,6 +1,7 @@
 {
   "name": "Js节点",
   "code": "JAVASCRIPT",
+  "flowCode": "EVENTS",
   "primitive": "script",
   "vendor": "innospots",
   "description": "javascript脚本",

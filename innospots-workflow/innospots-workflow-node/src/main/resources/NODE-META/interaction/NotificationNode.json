@@ -1,6 +1,7 @@
 {
   "name": "站内通知",
   "code": "NOTIFICATION",
+  "flowCode": "EVENTS",
   "primitive": "interaction",
   "vendor": "innospots",
   "description": "通知节点",

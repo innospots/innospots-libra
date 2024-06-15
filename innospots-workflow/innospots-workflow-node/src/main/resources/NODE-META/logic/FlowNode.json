@@ -1,6 +1,7 @@
 {
   "name": "子流程",
   "code": "SUBFLOW",
+  "flowCode": "EVENTS",
   "primitive": "logic",
   "vendor": "innospots",
   "description": "子流程节点",

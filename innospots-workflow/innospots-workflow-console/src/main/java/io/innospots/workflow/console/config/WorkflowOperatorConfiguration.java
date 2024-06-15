@@ -67,8 +67,8 @@ public class WorkflowOperatorConfiguration {
 
 
     @Bean
-    public FlowNodeDefinitionOperator nodeDefinitionOperator(FlowNodeGroupDao flowNodeGroupDao, FlowNodeGroupNodeDao flowNodeGroupNodeDao) {
-        return new FlowNodeDefinitionOperator(flowNodeGroupDao,flowNodeGroupNodeDao);
+    public FlowNodeDefinitionOperator nodeDefinitionOperator(FlowTemplateDao flowTemplateDao,FlowNodeGroupDao flowNodeGroupDao, FlowNodeGroupNodeDao flowNodeGroupNodeDao) {
+        return new FlowNodeDefinitionOperator(flowTemplateDao,flowNodeGroupDao,flowNodeGroupNodeDao);
     }
 
     @Bean

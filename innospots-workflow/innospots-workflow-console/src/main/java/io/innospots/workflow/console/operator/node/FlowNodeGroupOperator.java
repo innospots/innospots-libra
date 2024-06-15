@@ -23,6 +23,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import io.innospots.base.enums.DataScope;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ResourceException;
+import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.utils.StringConverter;
 import io.innospots.workflow.core.node.definition.converter.FlowNodeGroupConverter;
 import io.innospots.workflow.core.node.definition.converter.FlowNodeDefinitionConverter;
@@ -241,6 +242,9 @@ public class FlowNodeGroupOperator {
     }
 
     public List<NodeGroup> getGroupByFlowTplCode(String flowTplCode, boolean includeNodes,boolean excludeTrigger){
+        if(flowTplCode == null){
+            throw ValidatorException.buildMissingException(this.getClass(), "flow template code is null");
+        }
         FlowTemplateEntity flowTemplateEntity = flowTemplateDao.selectOne(new QueryWrapper<FlowTemplateEntity>().lambda().eq(FlowTemplateEntity::getTplCode, flowTplCode));
         return getGroupByFlowTplId(flowTemplateEntity.getFlowTplId(),includeNodes,excludeTrigger);
     }
@@ -274,6 +278,7 @@ public class FlowNodeGroupOperator {
         List<NodeGroup> resultList = new ArrayList<>();
         for (FlowNodeGroupEntity nodeGroupEntity : list) {
             NodeGroup nodeGroup = FlowNodeGroupConverter.INSTANCE.entityToModel(nodeGroupEntity);
+            nodeGroup.setDeletable(nodeGroupEntity.getScopes() != DataScope.system);
             if(excludeTrigger && "trigger".equals(nodeGroup.getCode())){
                 nodeGroup.setHidden(true);
             }

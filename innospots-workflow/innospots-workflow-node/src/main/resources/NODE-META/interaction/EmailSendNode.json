@@ -1,6 +1,7 @@
 {
   "name": "Email",
   "code": "EMAIL",
+  "flowCode": "EVENTS",
   "primitive": "interaction",
   "vendor": "innospots",
   "description": "邮件发送节点",

@@ -1,6 +1,7 @@
 {
   "name": "开始节点",
   "code": "START",
+  "flowCode": "EVENTS",
   "primitive": "trigger",
   "vendor": "innospots",
   "description": "开始节点",

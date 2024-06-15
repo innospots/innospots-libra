@@ -34,22 +34,6 @@ import java.util.Map;
 @Schema(title = "NodeDefinition")
 public class NodeDefinition extends NodeInfo {
 
-
-//    @Schema(title = "node css style")
-//    protected Map<String, Object> style;
-
-//    @Schema(title = "the node running method when click the execution button")
-//    private RunMethod runMethod;
-
-//    @Schema(title = "input ports, only use in frontend which define the input ports")
-//    private List<Map<String, Object>> inPorts;
-
-//    @Schema(title = "output ports, only use in frontend which define the output ports")
-//    private List<Map<String, Object>> outPorts;
-
-    @Schema(title = "the node has delete icon in the canvas")
-    private Boolean deletable;
-
     @Schema(title = "node config form element")
 //    private Map<String, Object> config;
     private NodeResource resources;

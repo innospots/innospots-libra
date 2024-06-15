@@ -1,8 +1,10 @@
 {
   "name": "Kafka数据节点",
   "code": "KAFKA",
+  "flowCode": "EVENTS",
   "primitive": "trigger",
   "vendor": "innospots",
+  "credentialTypeCode": "KAFKA",
   "description": "Kafka数据节点",
   "icon": "kafka",
   "nodeType": "io.innospots.workflow.node.app.data.KafkaDataNode",

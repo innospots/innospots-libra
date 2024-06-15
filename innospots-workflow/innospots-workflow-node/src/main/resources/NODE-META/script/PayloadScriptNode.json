@@ -1,6 +1,7 @@
 {
   "name": "JS Payload",
   "code": "JSPAYLOAD",
+  "flowCode": "EVENTS",
   "primitive": "script",
   "vendor": "innospots",
   "description": "js payload",

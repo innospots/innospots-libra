@@ -1,6 +1,7 @@
 {
   "name": "shell脚本",
   "code": "SHELL",
+  "flowCode": "EVENTS",
   "primitive": "script",
   "vendor": "innospots",
   "description": "shell 脚本节点",

@@ -29,6 +29,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -47,6 +48,18 @@ import java.util.Set;
 public class GlobalExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    @ExceptionHandler(value = {Exception.class})
+    public ErrorResponse handleException(Exception e) {
+        logger.error("exception: {}, msg: {}", e.getClass(), e.getMessage());
+        return ErrorResponse.build(ResponseCode.FAIL,"system", e.getMessage());
+    }
+
+    @ExceptionHandler(value = {MissingServletRequestParameterException.class})
+    public ErrorResponse handleException(MissingServletRequestParameterException e) {
+        logger.error("exception: {}, msg: {}", e.getClass(), e.getMessage());
+        return ErrorResponse.build(ResponseCode.PARAM_NULL,"servlet" ,e.getMessage());
+    }
 
     @ExceptionHandler(AuthenticationException.class)
     public ErrorResponse handleAuthenticationException(AuthenticationException e) {

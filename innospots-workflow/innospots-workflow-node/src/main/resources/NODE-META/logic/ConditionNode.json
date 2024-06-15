@@ -1,6 +1,7 @@
 {
   "name": "条件节点",
   "code": "CONDITIONS",
+  "flowCode": "EVENTS",
   "primitive": "logic",
   "vendor": "innospots",
   "description": "IF条件",

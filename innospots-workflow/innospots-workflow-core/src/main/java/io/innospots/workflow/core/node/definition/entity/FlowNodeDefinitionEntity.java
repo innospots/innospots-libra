@@ -22,6 +22,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.innospots.base.entity.PBaseEntity;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.entity.BaseEntity;
 import io.innospots.workflow.core.enums.NodePrimitive;
@@ -40,8 +41,11 @@ import javax.persistence.*;
 @Setter
 @Entity
 @TableName(value = FlowNodeDefinitionEntity.TABLE_NAME)
-@Table(name = FlowNodeDefinitionEntity.TABLE_NAME)
-public class FlowNodeDefinitionEntity extends BaseEntity {
+@Table(name = FlowNodeDefinitionEntity.TABLE_NAME,indexes = {
+        @Index(name = "idx_flow_code",columnList = "flowCode"),
+        @Index(name = "idx_node_code",columnList = "code")}
+)
+public class FlowNodeDefinitionEntity extends PBaseEntity {
 
     public static final String TABLE_NAME = "flow_node_definition";
 
@@ -62,21 +66,8 @@ public class FlowNodeDefinitionEntity extends BaseEntity {
     @Column(length = 64)
     private String icon;
 
-
-//    @Column(length = 32)
-//    private String connectorName;
-
-//    @Column(length = 32)
-//    private String configCode;
-
-    /**
-     * connectorSchema default form config
-     */
-//    @Column(columnDefinition = "TEXT")
-//    private String connectorConfigs;
-
-//    @Column(length = 2048)
-//    private String configs;
+    @Column(length = 32)
+    private String flowCode;
 
     @Column(length = 128)
     private String nodeType;
@@ -101,9 +92,6 @@ public class FlowNodeDefinitionEntity extends BaseEntity {
     @Column(length = 32)
     private String vendor;
 
-//    @Column(columnDefinition = "MEDIUMTEXT")
-//    private String config;
-
     /**
      * include inPorts, outPorts
      */
@@ -119,27 +107,5 @@ public class FlowNodeDefinitionEntity extends BaseEntity {
 
     @Column(columnDefinition = "MEDIUMTEXT")
     private String scripts;
-
-//    @Column(length = 32)
-//    private String color;
-
-//    @Column(length = 256)
-//    private String style;
-
-//    @Column(length = 16)
-//    @Enumerated(value = EnumType.STRING)
-//    private NodeDefinition.RunMethod runMethod;
-
-//    @Column(length = 512)
-//    private String inPorts;
-
-//    @Column(length = 512)
-//    private String outPorts;
-
-    /**
-     * 非数据库字段，用户关联查询获取数据使用
-     */
-//    @TableField(exist = false)
-//    private Integer nodeGroupId;
 
 }

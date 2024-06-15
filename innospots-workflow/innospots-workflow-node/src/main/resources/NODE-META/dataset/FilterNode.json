@@ -1,6 +1,7 @@
 {
   "name": "数据过滤",
   "code": "FILTER",
+  "flowCode": "EVENTS",
   "primitive": "dataset",
   "vendor": "innospots",
   "description": "数据过滤节点",

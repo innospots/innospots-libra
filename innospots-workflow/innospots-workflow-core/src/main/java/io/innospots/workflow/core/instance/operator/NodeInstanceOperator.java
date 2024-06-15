@@ -115,15 +115,6 @@ public class NodeInstanceOperator extends ServiceImpl<NodeInstanceDao, NodeInsta
             this.updateBatchById(updateEntityList);
         }
 
-        /*
-        List<Integer> nodeIds = entityList.stream().map(NodeInstanceEntity::getNodeDefinitionId).distinct().collect(Collectors.toList());
-        Map<Boolean, List<Integer>> nodeIdMap = this.countByNodeIds(nodeIds);
-        if (MapUtils.isNotEmpty(nodeIdMap)) {
-            for (Map.Entry<Boolean, List<Integer>> map : nodeIdMap.entrySet()) {
-                appNodeDefinitionOperator.updateAppUsed(map.getValue(), map.getKey());
-            }
-        }
-         */
         return true;
     }
 

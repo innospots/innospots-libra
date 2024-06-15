@@ -46,6 +46,10 @@ public class NodeInfo {
     @Schema(title = "node code")
     protected String code;
 
+    @NotNull(message = "flow template code cannot be empty")
+    @Schema(title = "flow template code")
+    protected String flowCode;
+
     @NotNull(message = "node primitive type cannot be empty")
     @Schema(title = "node primitive type")
     protected NodePrimitive primitive;
@@ -60,7 +64,11 @@ public class NodeInfo {
     @Schema(title = "node description")
     protected String description;
 
+    @Schema(title = "has been used")
     protected Boolean used;
+
+    @Schema(title = "the node can be delete")
+    private Boolean deletable;
 
     @Schema(title = "node vendor")
     protected String vendor;

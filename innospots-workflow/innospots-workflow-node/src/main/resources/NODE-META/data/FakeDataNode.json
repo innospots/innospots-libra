@@ -1,6 +1,7 @@
 {
   "name": "模拟数据",
   "code": "FAKER",
+  "flowCode": "EVENTS",
   "primitive": "data",
   "vendor": "innospots",
   "description": "Faker节点",

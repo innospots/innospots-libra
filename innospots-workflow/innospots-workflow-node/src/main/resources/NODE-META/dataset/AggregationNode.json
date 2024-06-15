@@ -1,6 +1,7 @@
 {
   "name": "数据聚合",
   "code": "AGGREGATION",
+  "flowCode": "EVENTS",
   "primitive": "dataset",
   "vendor": "innospots",
   "description": "数据聚合节点",

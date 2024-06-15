@@ -19,13 +19,8 @@ import java.util.Map;
  */
 public class NodeDefinitionBuilder {
 
-
-    public static NodeDefinition build(String code) {
+    public static NodeDefinition build(NodeMetaInfo nodeMetaInfo){
         NodeDefinition nodeDefinition = new NodeDefinition();
-        NodeMetaInfo nodeMetaInfo = NodeMetaInfoLoader.getNodeMetaInfo(code);
-        if (nodeMetaInfo == null) {
-            return null;
-        }
         Map<String, Object> settings = defaultSettings();
         if (nodeMetaInfo.getSettings() != null) {
             settings.putAll(nodeMetaInfo.getSettings());
@@ -35,6 +30,14 @@ public class NodeDefinitionBuilder {
         fillInfo(nodeMetaInfo, nodeDefinition);
         rebuildComp(nodeMetaInfo, nodeDefinition);
         return nodeDefinition;
+    }
+
+    public static NodeDefinition build(String code) {
+        NodeMetaInfo nodeMetaInfo = NodeMetaInfoLoader.getNodeMetaInfo(code);
+        if (nodeMetaInfo == null) {
+            return null;
+        }
+        return build(nodeMetaInfo);
     }
 
     private static void rebuildComp(NodeMetaInfo nodeMetaInfo, NodeDefinition nodeDefinition) {
@@ -99,7 +102,9 @@ public class NodeDefinitionBuilder {
                 List<Map<String,Object>> condList = conditionListMap.computeIfAbsent(condition.getResult(), k -> new ArrayList<>());
                 condList.add(conditionMap);
             }//end for condition
-            compMap.put("conditions", conditionListMap);
+            Map<String,Object> settings = (Map<String, Object>) compMap.get("settings");
+            settings.put("conditions", conditionListMap);
+//            compMap.put("conditions", conditionListMap);
         }
     }
 
@@ -142,6 +147,7 @@ public class NodeDefinitionBuilder {
         }else{
             nodeDefinition.setScripts(new LinkedHashMap<>());
         }
+        nodeDefinition.setFlowCode(metaInfo.getFlowCode());
         nodeDefinition.setStatus(DataStatus.OFFLINE);
         nodeDefinition.setName(metaInfo.getName());
         nodeDefinition.setCode(metaInfo.getCode());

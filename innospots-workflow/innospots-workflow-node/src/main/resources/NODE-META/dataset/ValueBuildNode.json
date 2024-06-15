@@ -1,6 +1,7 @@
 {
   "name": "数据值处理",
   "code": "data_value",
+  "flowCode": "EVENTS",
   "primitive": "dataset",
   "vendor": "innospots",
   "description": "替换空值，指定值",

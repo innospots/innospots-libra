@@ -65,6 +65,10 @@ public class ErrorResponse {
         return new ErrorResponse(responseCode.getInfo(), responseCode.getCode(), module);
     }
 
+    public static ErrorResponse build(ResponseCode responseCode, String module, String detail) {
+        return new ErrorResponse(responseCode.getInfo(), responseCode.getCode(), module, detail);
+    }
+
     public static ErrorResponse build(RuntimeException exception) {
         return new ErrorResponse(exception.getMessage(), ResponseCode.FAIL.getCode(), "kernel");
     }

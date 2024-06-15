@@ -1,8 +1,10 @@
 {
   "name": "HTTP API",
   "code": "HTTPAPI",
+  "flowCode": "EVENTS",
   "primitive": "data",
   "vendor": "innospots",
+  "credentialTypeCode": "Http",
   "description": "HttpAPI节点",
   "icon": "http-api",
   "nodeType": "io.innospots.workflow.node.app.data.ApiDataNode",

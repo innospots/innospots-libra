@@ -1,6 +1,7 @@
 {
   "name": "分组计算",
   "code": "group_compute",
+  "flowCode": "EVENTS",
   "primitive": "dataset",
   "vendor": "innospots",
   "description": "pandas transform计算",

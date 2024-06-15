@@ -44,6 +44,7 @@ import io.innospots.workflow.core.flow.model.WorkflowBaseInfo;
 import io.innospots.workflow.core.flow.model.WorkflowInfo;
 import io.innospots.workflow.core.instance.model.WorkflowInstance;
 import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
+import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -150,9 +151,9 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
 
         if (CollectionUtils.isNotEmpty(entities)) {
             List<String> triggerCodes = pageBody.getList().stream().map(WorkflowInstance::getTriggerCode).distinct().collect(Collectors.toList());
-            List<FlowNodeDefinitionEntity> appNodeDefinitionEntities = flowNodeDefinitionOperator.listByCodes(triggerCodes);
-            Map<String, FlowNodeDefinitionEntity> nodeDefinitionEntityMap = appNodeDefinitionEntities.stream()
-                    .collect(Collectors.toMap(FlowNodeDefinitionEntity::getCode, Function.identity()));
+            List<NodeDefinition> nodeDefinitionEntities = flowNodeDefinitionOperator.listByCodes(triggerCodes);
+            Map<String, NodeDefinition> nodeDefinitionEntityMap = nodeDefinitionEntities.stream()
+                    .collect(Collectors.toMap(NodeDefinition::getCode, Function.identity()));
             for (WorkflowInstance workflowInstance : pageBody.getList()) {
                 workflowInstance.setIcon(nodeDefinitionEntityMap.get(workflowInstance.getTriggerCode()).getIcon());
             }

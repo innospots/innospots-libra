@@ -46,6 +46,7 @@ public class NodeMetaInfoLoader {
                 String content = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
                 NodeMetaInfo tplMeta = JSONUtils.parseObject(content, NodeMetaInfo.class);
                 if (tplMeta != null) {
+                    tplMeta.setMetaFile(nodeTplResource.getFilename());
                     tmpTplMetaInfoMap.put(tplMeta.getCode(), tplMeta);
                     log.debug("loaded node meta template: {}", tplMeta);
                 }
@@ -57,6 +58,7 @@ public class NodeMetaInfoLoader {
                 String content = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
                 NodeMetaInfo nodeMeta = JSONUtils.parseObject(content, NodeMetaInfo.class);
                 if (nodeMeta != null) {
+                    nodeMeta.setMetaFile(nodeMetaResource.getFilename());
                     tmpMetaInfoMap.put(nodeMeta.getCode(), nodeMeta);
                     log.debug("loaded node meta: {}", nodeMeta);
                 }

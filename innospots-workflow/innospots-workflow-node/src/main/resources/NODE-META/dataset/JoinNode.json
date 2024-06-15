@@ -1,6 +1,7 @@
 {
   "name": "数据连接",
   "code": "JOIN",
+  "flowCode": "EVENTS",
   "primitive": "dataset",
   "vendor": "innospots",
   "description": "数据连接节点",

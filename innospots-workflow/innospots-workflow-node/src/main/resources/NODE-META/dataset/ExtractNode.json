@@ -1,6 +1,7 @@
 {
   "name": "数据提取",
   "code": "EXTRACT",
+  "flowCode": "EVENTS",
   "primitive": "dataset",
   "vendor": "innospots",
   "description": "数据提取节点",
