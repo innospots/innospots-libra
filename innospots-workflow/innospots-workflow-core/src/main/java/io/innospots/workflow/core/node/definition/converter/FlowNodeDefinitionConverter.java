@@ -22,6 +22,7 @@ import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.workflow.core.node.NodeInfo;
 import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
+import io.innospots.workflow.core.node.definition.meta.NodeMetaInfo;
 import io.innospots.workflow.core.node.definition.model.NodeConnectorConfig;
 import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import io.innospots.workflow.core.node.definition.model.NodeResource;
@@ -42,6 +43,10 @@ import java.util.List;
 public interface FlowNodeDefinitionConverter extends BaseBeanConverter<NodeDefinition, FlowNodeDefinitionEntity> {
 
     FlowNodeDefinitionConverter INSTANCE = Mappers.getMapper(FlowNodeDefinitionConverter.class);
+
+    NodeInfo metaToInfo(NodeMetaInfo meta);
+
+    List<NodeInfo> metaToInfoList(List<NodeMetaInfo> metaList);
 
     FlowNodeDefinitionEntity infoToEntity(NodeInfo nodeInfo);
 

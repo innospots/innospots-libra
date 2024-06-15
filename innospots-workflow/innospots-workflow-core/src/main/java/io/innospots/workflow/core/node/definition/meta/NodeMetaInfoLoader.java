@@ -30,7 +30,10 @@ public class NodeMetaInfoLoader {
     private static Map<String, NodeMetaInfo> tplMetaInfoMap = new HashMap<>();
 
     public static void load() {
+        Map<String,NodeMetaInfo> tmpMetaInfoMap = new HashMap<>();
+        Map<String,NodeMetaInfo> tmpTplMetaInfoMap = new HashMap<>();
         try {
+
             Resource[] nodeMetaResources = new PathMatchingResourcePatternResolver()
                     .getResources(NODE_META_PATH);
 
@@ -39,30 +42,32 @@ public class NodeMetaInfoLoader {
 
             for (Resource nodeTplResource : nodeTplResources) {
                 InputStream inputStream = nodeTplResource.getInputStream();
-                log.info("loading node meta template: {}", nodeTplResource.getFilename());
+                log.debug("loading node meta template: {}", nodeTplResource.getFilename());
                 String content = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
                 NodeMetaInfo tplMeta = JSONUtils.parseObject(content, NodeMetaInfo.class);
                 if (tplMeta != null) {
-                    tplMetaInfoMap.put(tplMeta.getCode(), tplMeta);
+                    tmpTplMetaInfoMap.put(tplMeta.getCode(), tplMeta);
                     log.debug("loaded node meta template: {}", tplMeta);
                 }
             }//end for
 
             for (Resource nodeMetaResource : nodeMetaResources) {
-                log.info("loading node meta: {}", nodeMetaResource.getFilename());
+                log.debug("loading node meta: {}", nodeMetaResource.getFilename());
                 InputStream inputStream = nodeMetaResource.getInputStream();
                 String content = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
                 NodeMetaInfo nodeMeta = JSONUtils.parseObject(content, NodeMetaInfo.class);
                 if (nodeMeta != null) {
-                    nodeMetaInfoMap.put(nodeMeta.getCode(), nodeMeta);
+                    tmpMetaInfoMap.put(nodeMeta.getCode(), nodeMeta);
                     log.debug("loaded node meta: {}", nodeMeta);
                 }
             }
         } catch (IOException e) {
             log.error(e.getMessage(),e);
         }
-        log.info("node meta loaded, size:{}",nodeMetaInfoMap.size());
-        log.info("node template meta loaded, size:{}",tplMetaInfoMap.size());
+        log.info("node meta loaded, size:{}",tmpMetaInfoMap.size());
+        log.info("node template meta loaded, size:{}",tmpTplMetaInfoMap.size());
+        nodeMetaInfoMap = tmpMetaInfoMap;
+        tplMetaInfoMap = tmpTplMetaInfoMap;
     }
 
     public static NodeMetaInfo getNodeMetaInfo(String code) {
