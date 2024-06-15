@@ -75,12 +75,13 @@
     },
     {
       "name": "data_offset",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "消费起始位置",
+		"viewType": "picker",
         "options": [
           {
             "value": "earliest",

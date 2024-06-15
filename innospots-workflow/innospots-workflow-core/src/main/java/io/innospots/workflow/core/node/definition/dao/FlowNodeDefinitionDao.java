@@ -35,25 +35,9 @@ import java.util.List;
  */
 public interface FlowNodeDefinitionDao extends BaseMapper<FlowNodeDefinitionEntity> {
 
-    /**
-     * get node definition of flow template
-     *
-     * @param flowTplId
-     * @return
-     */
-    @Select("select nd.* from flow_node_group_node ngn left join flow_node_definition nd " +
-            "on ngn.node_id=nd.node_id where ngn.flow_tpl_id=#{flowTplId}")
-    List<FlowNodeDefinitionEntity> getNodeDefinitionByFlowTplId(@Param("flowTplId") Integer flowTplId);
-
 
     @Select("select nd.* from flow_node_group_node ngn left join flow_node_definition nd " +
             "on ngn.node_id=nd.node_id where ngn.flow_tpl_id=#{flowTplId} and nd.status=#{status}")
     List<FlowNodeDefinitionEntity> getNodeDefinitionByFlowTplIdAndStatus(@Param("flowTplId") Integer flowTplId,@Param("status") DataStatus status);
 
-
-    /**
-     * 使用@Select注解，将SQL的where条件部分用${ew.customSqlSegment}代替
-     */
-    @Select("select s.* from flow_node_definition s left join flow_node_group_node t on s.node_id = t.node_id ${ew.customSqlSegment}")
-    IPage<FlowNodeDefinitionEntity> selectNodePage(IPage<FlowNodeDefinitionEntity> page, @Param(Constants.WRAPPER) Wrapper queryWrapper);
 }

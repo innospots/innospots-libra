@@ -23,12 +23,13 @@
     },
     {
       "name": "schedule_mode",
-      "type": "radio",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "执行模式",
+		"viewType": "radio",
         "default": "ONCE",
         "options": [
           {
@@ -85,12 +86,13 @@
     },
     {
       "name": "period_unit",
-      "type": "radio",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "时间单位",
+		"viewType": "radio",
         "default": "DAY",
         "options": [
           {
@@ -291,12 +293,13 @@
     },
     {
       "name": "period_month_times",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "array",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "时间周期",
+		"viewType": "picker",
         "options": [
           {
             "value": "1",

@@ -23,12 +23,13 @@
     },
     {
       "name": "return_value_type",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "返回数据",
+		"viewType": "picker",
         "optionsType": "customOptions",
         "initialValue": "false",
         "options": [

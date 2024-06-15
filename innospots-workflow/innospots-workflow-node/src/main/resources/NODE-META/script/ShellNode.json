@@ -36,12 +36,13 @@
     },
     {
       "name": "output_mode",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "输出数据",
+		"viewType": "picker",
         "options": [
           {
             "value": "FIELD",

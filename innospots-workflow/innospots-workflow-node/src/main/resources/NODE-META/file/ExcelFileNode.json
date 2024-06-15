@@ -24,12 +24,13 @@
     },
     {
       "name": "operation",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "文件操作",
+		"viewType": "picker",
         "options": [
           {
             "value": "READ",
@@ -55,12 +56,13 @@
     },
     {
       "name": "file_format",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "文件格式",
+		"viewType": "picker",
         "options": [
           {
             "value": "CSV",
@@ -113,12 +115,13 @@
     },
     {
       "name": "encoding",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "文件编码",
+		"viewType": "picker",
         "options": [
           {
             "value": "UTF-8",

@@ -24,12 +24,13 @@
     },
     {
       "name": "actionScriptType",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "脚本类型",
+		"viewType": "picker",
         "default": "JAVASCRIPT",
         "optionsType": "customOptions",
         "options": [

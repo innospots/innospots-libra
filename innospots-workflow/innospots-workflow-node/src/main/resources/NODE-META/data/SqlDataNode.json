@@ -37,12 +37,13 @@
     },
     {
       "name": "data_operation",
-      "type": "radio",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "操作方式",
+		"viewType": "radio",
         "default": "GET_LIST",
         "optionType": "default",
         "options": [
@@ -264,12 +265,13 @@
     },
     {
       "name": "output_field_type",
-      "type": "radio",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "返回数据类型",
+		"viewType": "radio",
         "options": [
           {"value": "LIST", "label": "列表"},
           {"value": "MAP", "label": "单条(对象)"}
@@ -292,12 +294,13 @@
     },
     {
       "name": "output_mode_map",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "存储方式",
+		"viewType": "picker",
         "optionsType": "customOptions",
         "options": [
           {"value": "FIELD", "label": "存入变量"},
@@ -326,13 +329,14 @@
     },
     {
       "name": "output_mode_list",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "存储方式",
         "optionsType": "customOptions",
+		"viewType": "picker",
         "options": [
           {"value": "FIELD", "label": "存入变量"},
           {"value": "PAYLOAD", "label": "合并入Payload"},

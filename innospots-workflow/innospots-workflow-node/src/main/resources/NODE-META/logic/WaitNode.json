@@ -24,12 +24,13 @@
     },
     {
       "name": "delay_mode",
-      "type": "radio",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "延迟执行方式",
+		"viewType": "radio",
         "default": "PERIOD",
         "optionType": "default",
         "options": [
@@ -67,11 +68,12 @@
     },
     {
       "name": "time_period",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "settings": {
         "label": "时间单位",
         "default": "MINUTE",
+		"viewType": "picker",
         "optionsType": "customOptions",
         "options": [
           {"value": "MINUTE", "label": "分"},

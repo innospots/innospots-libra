@@ -23,12 +23,13 @@
     },
     {
       "name": "filter_mode",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "过滤方式",
+		"viewType": "picker",
         "options": [
           {
             "value": "RESERVED",

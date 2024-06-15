@@ -38,7 +38,7 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 @TableName(value = FlowTemplateEntity.TABLE_NAME)
-@Table(name = FlowTemplateEntity.TABLE_NAME)
+@Table(name = FlowTemplateEntity.TABLE_NAME,indexes = {@Index(name = "idx_tpl_code",columnList = "tplCode")})
 public class FlowTemplateEntity extends PBaseEntity {
 
     public static final String TABLE_NAME = "flow_template";

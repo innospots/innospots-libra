@@ -24,12 +24,13 @@
     },
     {
       "name": "field_action",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "字段处理方式",
+		"viewType": "picker",
         "optionsType": "customOptions",
         "options": [
           {
@@ -63,7 +64,7 @@
           },
           {
             "code": "method",
-            "type": "SELECT",
+            "type": "Select",
             "width": "80px",
             "title": "处置方式",
             "default": "",
@@ -150,7 +151,7 @@
           },
           {
             "code": "function",
-            "type": "SELECT",
+            "type": "Select",
             "width": "130px",
             "title": "函数",
             "default": "",
@@ -195,7 +196,7 @@
           },
           {
             "code": "field",
-            "type": "FIELD",
+            "type": "INPUT",
             "width": "130px",
             "title": "字段",
             "default": ""

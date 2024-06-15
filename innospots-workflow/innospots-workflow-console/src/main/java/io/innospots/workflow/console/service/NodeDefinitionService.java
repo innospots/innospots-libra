@@ -128,6 +128,21 @@ public class NodeDefinitionService {
         return nodeInfo;
     }
 
+    /**
+     * update node group id
+     * @param nodeId
+     * @param nodeGroupId new group id
+     * @return
+     */
+    public NodeInfo updateNodeGroup(Integer nodeId, Integer nodeGroupId) {
+        NodeInfo nodeInfo = flowNodeDefinitionOperator.getNodeDefinition(nodeId);
+        nodeInfo.setNodeGroupId(nodeGroupId);
+        List<Integer> nodeIds = new ArrayList<>();
+        nodeIds.add(nodeId);
+        flowNodeGroupOperator.saveOrUpdateNodeGroupNode(nodeGroupId, nodeIds);
+        return nodeInfo;
+    }
+
     public Boolean updateNodeDefinitionStatus(Integer nodeId, DataStatus status) {
         if (DataStatus.OFFLINE == status) {
             long count = nodeInstanceOperator.countByNodeDefinitionId(nodeId);

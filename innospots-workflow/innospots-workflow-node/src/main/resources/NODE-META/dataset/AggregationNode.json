@@ -23,12 +23,13 @@
     },
     {
       "name": "source_field_type",
-      "type": "Radio",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "聚合数据源",
+		"viewType": "radio",
         "options": [
           {
             "value": "payload",

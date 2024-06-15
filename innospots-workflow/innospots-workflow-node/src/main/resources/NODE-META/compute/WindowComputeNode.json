@@ -35,12 +35,13 @@
     },
     {
       "name": "func_type",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "函数类型",
+		"viewType": "picker",
         "options": [
           {
             "value": "ROLLING",

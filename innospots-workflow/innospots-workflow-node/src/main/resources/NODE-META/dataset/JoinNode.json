@@ -24,12 +24,13 @@
     },
     {
       "name": "join_type",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "连接方式",
+		"viewType": "picker",
         "options": [
           {
             "value": "LEFT_JOIN",

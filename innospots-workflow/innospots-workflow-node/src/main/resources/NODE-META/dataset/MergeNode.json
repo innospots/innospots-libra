@@ -23,13 +23,14 @@
       }
     },{
       "name": "merge_mode",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "合并规则",
         "optionsType": "customOptions",
+		"viewType": "picker",
         "options": [
           {
             "value": "JOIN_DISTINCT",

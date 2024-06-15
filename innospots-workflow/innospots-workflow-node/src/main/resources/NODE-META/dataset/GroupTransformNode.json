@@ -34,12 +34,13 @@
     },
     {
       "name": "source_field_type",
-      "type": "radio",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "聚合数据源",
+		"viewType": "radio",
         "options": [
           {
             "value": "payload",
@@ -124,12 +125,13 @@
     },
     {
       "name": "func_type",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "计算类型",
+		"viewType": "picker",
         "options": [
           {
             "value": "ROLLING",

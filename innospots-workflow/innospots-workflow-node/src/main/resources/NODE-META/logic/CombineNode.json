@@ -24,12 +24,13 @@
     },
     {
       "name": "output_setting",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "输出设置",
+		"viewType": "picker",
         "optionsType": "customOptions",
         "options": [
           {

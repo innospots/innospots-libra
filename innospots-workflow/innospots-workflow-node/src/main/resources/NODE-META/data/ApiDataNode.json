@@ -25,12 +25,13 @@
     },
     {
       "name": "auth_type",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "鉴权方式",
+		"viewType": "picker",
         "showAddButton": false,
         "showEditButton": false,
         "options": [
@@ -157,12 +158,13 @@
     },
     {
       "name": "output_field_type",
-      "type": "radio",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "返回数据类型",
+		"viewType": "radio",
         "options": [
           {
             "value": "LIST",
@@ -194,13 +196,14 @@
     },
     {
       "name": "output_mode_map",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "存储方式",
         "default": "PAYLOAD",
+		"viewType": "picker",
         "options": [
           {
             "value": "FIELD",
@@ -244,13 +247,14 @@
     },
     {
       "name": "output_mode_list",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "存储方式",
         "default": "OVERWRITE",
+		"viewType": "picker",
         "options": [
           {
             "value": "FIELD",

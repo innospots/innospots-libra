@@ -24,12 +24,13 @@
     },
     {
       "name": "sub_flow_key",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "子流程选择",
+		"viewType": "picker",
         "dynamicOptions": {
           "url": "/innospots/api/workflow/instance/list/trigger-code/START",
           "method": "GET",
@@ -80,12 +81,13 @@
     },
     {
       "name": "output_field_type",
-      "type": "radio",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "返回数据",
+		"viewType": "radio",
         "options": [
           {
             "value": "NONE",
@@ -118,12 +120,13 @@
     },
     {
       "name": "output_mode_map",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "存储方式",
+		"viewType": "picker",
         "options": [
           {
             "value": "FIELD",
@@ -155,12 +158,13 @@
     },
     {
       "name": "output_mode_list",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "存储方式",
+		"viewType": "picker",
         "options": [
           {
             "value": "FIELD",

@@ -35,12 +35,13 @@
     },
     {
       "name": "requestType",
-      "type": "radio",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "请求方式",
+		"viewType": "radio",
         "default": "GET",
         "options": [
           {"value": "GET", "label": "GET"},
@@ -147,12 +148,13 @@
     },
     {
       "name": "responseMode",
-      "type": "radio",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "响应方式",
+		"viewType": "radio",
         "default": "RESULT",
         "options": [
           {"value": "ACK", "label": "立即返回"},

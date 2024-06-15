@@ -1,8 +1,6 @@
 package io.innospots.workflow.console.service;
 
 import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
-import io.innospots.workflow.core.node.definition.converter.FlowNodeDefinitionConverter;
-import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
 import io.innospots.workflow.core.node.definition.meta.NodeDefinitionBuilder;
 import io.innospots.workflow.core.node.definition.meta.NodeMetaInfo;
 import io.innospots.workflow.core.node.definition.meta.NodeMetaInfoLoader;

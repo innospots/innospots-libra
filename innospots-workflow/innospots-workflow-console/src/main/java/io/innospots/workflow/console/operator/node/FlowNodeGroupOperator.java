@@ -25,6 +25,7 @@ import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.utils.StringConverter;
+import io.innospots.workflow.core.enums.NodePrimitive;
 import io.innospots.workflow.core.node.definition.converter.FlowNodeGroupConverter;
 import io.innospots.workflow.core.node.definition.converter.FlowNodeDefinitionConverter;
 import io.innospots.workflow.core.node.definition.dao.FlowNodeDefinitionDao;
@@ -61,7 +62,7 @@ public class FlowNodeGroupOperator {
     private FlowNodeDefinitionDao flowNodeDefinitionDao;
     private FlowTemplateDao flowTemplateDao;
 
-    public FlowNodeGroupOperator(FlowTemplateDao flowTemplateDao,FlowNodeGroupDao flowNodeGroupDao, FlowNodeGroupNodeDao flowNodeGroupNodeDao,
+    public FlowNodeGroupOperator(FlowTemplateDao flowTemplateDao, FlowNodeGroupDao flowNodeGroupDao, FlowNodeGroupNodeDao flowNodeGroupNodeDao,
                                  FlowNodeDefinitionDao flowNodeDefinitionDao) {
         this.flowTemplateDao = flowTemplateDao;
         this.flowNodeGroupDao = flowNodeGroupDao;
@@ -70,15 +71,15 @@ public class FlowNodeGroupOperator {
     }
 
 
-    public NodeGroupBaseInfo createNodeGroup(String name, String templateCode){
+    public NodeGroupBaseInfo createNodeGroup(String name, String templateCode) {
         QueryWrapper<FlowTemplateEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(FlowTemplateEntity::getTplCode, templateCode);
         FlowTemplateEntity templateEntity = flowTemplateDao.selectOne(queryWrapper);
-        if(templateEntity == null){
+        if (templateEntity == null) {
             throw ResourceException.buildNotExistException(this.getClass(), "flow template note exist");
         }
         String groupCode = StringConverter.randomKey(8);
-        NodeGroup nodeGroup = this.createNodeGroup(templateEntity.getFlowTplId(),name,groupCode);
+        NodeGroup nodeGroup = this.createNodeGroup(templateEntity.getFlowTplId(), name, groupCode);
         return FlowNodeGroupConverter.INSTANCE.modelToBase(nodeGroup);
     }
 
@@ -103,13 +104,13 @@ public class FlowNodeGroupOperator {
         QueryWrapper<FlowNodeGroupEntity> maxGroupQuery = new QueryWrapper<>();
         maxGroupQuery.lambda().eq(FlowNodeGroupEntity::getFlowTplId, flowTplId)
                 .orderByDesc(FlowNodeGroupEntity::getPosition);
-        FlowNodeGroupEntity maxGroup = flowNodeGroupDao.selectOne(maxGroupQuery,false);
+        FlowNodeGroupEntity maxGroup = flowNodeGroupDao.selectOne(maxGroupQuery, false);
         int position = 1;
-        if(maxGroup!=null){
+        if (maxGroup != null) {
             position = maxGroup.getPosition() + 1;
         }
         //save
-        FlowNodeGroupEntity entity = FlowNodeGroupEntity.constructor(flowTplId, name, code, position,DataScope.user);
+        FlowNodeGroupEntity entity = FlowNodeGroupEntity.constructor(flowTplId, name, code, position, DataScope.user);
         int row = flowNodeGroupDao.insert(entity);
         if (row != 1) {
             throw ResourceException.buildCreateException(this.getClass(), "create node group error");
@@ -120,6 +121,7 @@ public class FlowNodeGroupOperator {
 
     /**
      * modify node group
+     *
      * @param nodeGroupId group id
      * @param name        group name
      * @return Boolean
@@ -129,7 +131,7 @@ public class FlowNodeGroupOperator {
         QueryWrapper<FlowNodeGroupEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().select(FlowNodeGroupEntity::getNodeGroupId)
                 .ne(FlowNodeGroupEntity::getNodeGroupId, nodeGroupId)
-                .eq(FlowNodeGroupEntity::getName,name);
+                .eq(FlowNodeGroupEntity::getName, name);
         long count = flowNodeGroupDao.selectCount(queryWrapper);
         if (count > 0) {
             throw ResourceException.buildDuplicateException(this.getClass(), "node group name exits");
@@ -145,18 +147,18 @@ public class FlowNodeGroupOperator {
         return Boolean.TRUE;
     }
 
-    public List<NodeGroupBaseInfo> swapPosition(Integer fromGroupId,Integer toGroupId){
+    public List<NodeGroupBaseInfo> swapPosition(Integer fromGroupId, Integer toGroupId) {
         FlowNodeGroupEntity fromGroup = flowNodeGroupDao.selectById(fromGroupId);
         FlowNodeGroupEntity toGroup = flowNodeGroupDao.selectById(toGroupId);
         flowNodeGroupDao.update(new UpdateWrapper<FlowNodeGroupEntity>().lambda()
-                .set(FlowNodeGroupEntity::getPosition,toGroup.getPosition())
-                .eq(FlowNodeGroupEntity::getNodeGroupId,fromGroup.getNodeGroupId()));
+                .set(FlowNodeGroupEntity::getPosition, toGroup.getPosition())
+                .eq(FlowNodeGroupEntity::getNodeGroupId, fromGroup.getNodeGroupId()));
 
         flowNodeGroupDao.update(new UpdateWrapper<FlowNodeGroupEntity>().lambda()
-                .set(FlowNodeGroupEntity::getPosition,fromGroup.getPosition())
-                .eq(FlowNodeGroupEntity::getNodeGroupId,toGroup.getNodeGroupId()));
+                .set(FlowNodeGroupEntity::getPosition, fromGroup.getPosition())
+                .eq(FlowNodeGroupEntity::getNodeGroupId, toGroup.getNodeGroupId()));
         return FlowNodeGroupConverter.INSTANCE.modelToBaseList(
-                getGroupByFlowTplId(fromGroup.getFlowTplId(),false,false));
+                getGroupByFlowTplId(fromGroup.getFlowTplId(), false, false));
     }
 
     /**
@@ -168,11 +170,11 @@ public class FlowNodeGroupOperator {
     @Transactional(rollbackFor = Exception.class)
     public Boolean removeNodeGroup(Integer nodeGroupId) {
         FlowNodeGroupEntity nodeGroupEntity = flowNodeGroupDao.selectById(nodeGroupId);
-        if(nodeGroupEntity == null){
+        if (nodeGroupEntity == null) {
             throw ResourceException.buildDeleteException(this.getClass(), "node group not exist");
         }
         //can't delete system scope
-        if(nodeGroupEntity.getScopes() == DataScope.system){
+        if (nodeGroupEntity.getScopes() == DataScope.system) {
             return false;
         }
         int row = flowNodeGroupDao.deleteById(nodeGroupId);
@@ -181,7 +183,7 @@ public class FlowNodeGroupOperator {
         }
         UpdateWrapper<FlowNodeGroupNodeEntity> queryWrapper = new UpdateWrapper<>();
         queryWrapper.lambda()
-                .set(FlowNodeGroupNodeEntity::getNodeGroupNodeId,-1)
+                .set(FlowNodeGroupNodeEntity::getNodeGroupNodeId, -1)
                 .eq(FlowNodeGroupNodeEntity::getNodeGroupId, nodeGroupId);
         this.flowNodeGroupNodeDao.delete(queryWrapper);
         /*
@@ -202,8 +204,8 @@ public class FlowNodeGroupOperator {
     @Transactional(rollbackFor = Exception.class)
     public Boolean saveOrUpdateNodeGroupNode(Integer nodeGroupId, List<Integer> nodeIds) {
         FlowNodeGroupEntity groupEntity = flowNodeGroupDao.selectById(nodeGroupId);
-        if(groupEntity == null){
-            throw ResourceException.buildNotExistException(this.getClass(), "node group not exist",nodeGroupId);
+        if (groupEntity == null) {
+            throw ResourceException.buildNotExistException(this.getClass(), "node group not exist", nodeGroupId);
         }
         List<FlowNodeGroupNodeEntity> entityList = this.getGroupNodeByNodeIds(groupEntity.getFlowTplId(), nodeIds);
 
@@ -213,7 +215,6 @@ public class FlowNodeGroupOperator {
             for (FlowNodeGroupNodeEntity nodeGroupNodeEntity : entityList) {
                 if (nodeGroupId.equals(nodeGroupNodeEntity.getNodeGroupId())) {
                     exitsNodeIds.add(nodeGroupNodeEntity.getNodeId());
-
                 } else {
                     notExitsGroupIds.add(nodeGroupNodeEntity.getNodeGroupNodeId());
                 }
@@ -241,50 +242,73 @@ public class FlowNodeGroupOperator {
         return Boolean.TRUE;
     }
 
-    public List<NodeGroup> getGroupByFlowTplCode(String flowTplCode, boolean includeNodes,boolean excludeTrigger){
-        if(flowTplCode == null){
+    public List<NodeGroup> getGroupByFlowTplCode(String flowTplCode, boolean includeNodes, boolean excludeTrigger) {
+        if (flowTplCode == null) {
             throw ValidatorException.buildMissingException(this.getClass(), "flow template code is null");
         }
-        FlowTemplateEntity flowTemplateEntity = flowTemplateDao.selectOne(new QueryWrapper<FlowTemplateEntity>().lambda().eq(FlowTemplateEntity::getTplCode, flowTplCode));
-        return getGroupByFlowTplId(flowTemplateEntity.getFlowTplId(),includeNodes,excludeTrigger);
+        FlowTemplateEntity templateEntity = flowTemplateDao.selectOne(new QueryWrapper<FlowTemplateEntity>().lambda().eq(FlowTemplateEntity::getTplCode, flowTplCode));
+        return fillNodeGroup(flowTplCode, templateEntity.getFlowTplId(), includeNodes, excludeTrigger);
     }
 
 
-    public List<NodeGroup> getGroupByFlowTplId(Integer flowTplId, boolean includeNodes,boolean excludeTrigger) {
+    public List<NodeGroup> getGroupByFlowTplId(Integer flowTplId, boolean includeNodes, boolean excludeTrigger) {
+        FlowTemplateEntity templateEntity = flowTemplateDao.selectById(flowTplId);
+        return fillNodeGroup(templateEntity.getTplCode(), flowTplId, includeNodes, excludeTrigger);
+    }
+
+    private List<NodeGroup> fillNodeGroup(String tplCode, Integer flowTplId, boolean includeNodes, boolean excludeTrigger) {
         QueryWrapper<FlowNodeGroupEntity> ngEntityQuery = new QueryWrapper<>();
         ngEntityQuery.lambda().eq(FlowNodeGroupEntity::getFlowTplId, flowTplId).orderByAsc(FlowNodeGroupEntity::getPosition)
                 .orderByDesc(FlowNodeGroupEntity::getUpdatedTime);
-
         List<FlowNodeGroupEntity> list = flowNodeGroupDao.selectList(ngEntityQuery);
         if (CollectionUtils.isEmpty(list)) {
             return null;
         }
+
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        }
         Map<Integer, List<NodeDefinition>> ndMap = new HashMap<>();
+        List<NodeDefinition> allNodes = new ArrayList<>();
         if (includeNodes) {
-            List<FlowNodeDefinitionEntity> ndList = flowNodeDefinitionDao.getNodeDefinitionByFlowTplIdAndStatus(flowTplId, DataStatus.ONLINE);
+            QueryWrapper<FlowNodeDefinitionEntity> nodeQuery = new QueryWrapper<>();
+            nodeQuery.lambda().eq(FlowNodeDefinitionEntity::getFlowCode, tplCode);
+            List<FlowNodeDefinitionEntity> ndList = this.flowNodeDefinitionDao.selectList(nodeQuery);
             if (CollectionUtils.isNotEmpty(ndList)) {
-                Map<Integer,NodeDefinition> fMap = ndList.stream()
+                Map<Integer, NodeDefinition> nodeDefinitionMap = ndList.stream()
                         .map(FlowNodeDefinitionConverter.INSTANCE::entityToModel)
                         .collect(Collectors.toMap(NodeDefinition::getNodeId, Function.identity()));
+                if (excludeTrigger) {
+                    allNodes.addAll(nodeDefinitionMap.values().stream().filter(n -> n.getPrimitive() != NodePrimitive.trigger).collect(Collectors.toList()));
+                } else {
+                    allNodes.addAll(nodeDefinitionMap.values());
+                }
+
                 QueryWrapper<FlowNodeGroupNodeEntity> gnq = new QueryWrapper<>();
-                gnq.lambda().eq(FlowNodeGroupNodeEntity::getFlowTplId,flowTplId);
+                gnq.lambda().eq(FlowNodeGroupNodeEntity::getFlowTplId, flowTplId);
                 List<FlowNodeGroupNodeEntity> groupNodeList = flowNodeGroupNodeDao.selectList(gnq);
                 for (FlowNodeGroupNodeEntity groupNode : groupNodeList) {
                     List<NodeDefinition> nodeDefinitions = ndMap.computeIfAbsent(groupNode.getNodeGroupId(), k -> new ArrayList<>());
-                    nodeDefinitions.add(fMap.get(groupNode.getNodeId()));
-                }//end for
-            }
-        }
+                    nodeDefinitions.add(nodeDefinitionMap.get(groupNode.getNodeId()));
+                }//end for group
+            }//end for node definition list
+        }//end include
+
         List<NodeGroup> resultList = new ArrayList<>();
         for (FlowNodeGroupEntity nodeGroupEntity : list) {
             NodeGroup nodeGroup = FlowNodeGroupConverter.INSTANCE.entityToModel(nodeGroupEntity);
             nodeGroup.setDeletable(nodeGroupEntity.getScopes() != DataScope.system);
-            if(excludeTrigger && "trigger".equals(nodeGroup.getCode())){
+            if (excludeTrigger && "trigger".equals(nodeGroup.getCode())) {
                 nodeGroup.setHidden(true);
             }
-            nodeGroup.setNodes(ndMap.getOrDefault(nodeGroup.getNodeGroupId(), new ArrayList<>()));
-            resultList.add(nodeGroup);
-        }
+            if ("all".equalsIgnoreCase(nodeGroup.getCode())) {
+                nodeGroup.setNodes(allNodes);
+                resultList.add(nodeGroup);
+            } else {
+                nodeGroup.setNodes(ndMap.getOrDefault(nodeGroup.getNodeGroupId(), new ArrayList<>()));
+                resultList.add(nodeGroup);
+            }
+        }//end for node group
         return resultList;
     }
 

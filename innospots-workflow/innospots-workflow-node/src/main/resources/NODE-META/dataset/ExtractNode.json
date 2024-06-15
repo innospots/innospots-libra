@@ -24,12 +24,13 @@
     },
     {
       "name": "extract_mode",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "操作类型",
+		"viewType": "picker",
         "options": [
           {
             "value": "FIELD",
@@ -134,12 +135,13 @@
     },
     {
       "name": "order_type",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "排序",
+		"viewType": "picker",
         "options": [
           {
             "value": "ASC",
