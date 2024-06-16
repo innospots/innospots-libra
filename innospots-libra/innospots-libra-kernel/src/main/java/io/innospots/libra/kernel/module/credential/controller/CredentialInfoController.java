@@ -87,7 +87,7 @@ public class CredentialInfoController extends BaseController {
 
     @PostMapping
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
-    @OperationLog(operateType = CREATE, primaryField = "credentialId")
+    @OperationLog(operateType = CREATE, primaryField = "credentialKey")
     @Operation(summary = "create credential")
     public InnospotsResponse<CredentialInfo> createCredentialInfo(@Parameter(name = "credentialInfo") @Validated @RequestBody CredentialInfo credentialInfo) {
         CredentialInfo create = credentialInfoOperator.createCredential(credentialInfo);
@@ -96,7 +96,7 @@ public class CredentialInfoController extends BaseController {
 
     @PutMapping
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
-    @OperationLog(operateType = UPDATE, primaryField = "credentialId")
+    @OperationLog(operateType = UPDATE, primaryField = "credentialKey")
     @Operation(summary = "update credential")
     public InnospotsResponse<CredentialInfo> updateCredentialInfo(@Parameter(name = "credentialInfo") @Validated @RequestBody CredentialInfo appCredentialInfo) {
         CredentialInfo update = credentialInfoOperator.updateCredential(appCredentialInfo);

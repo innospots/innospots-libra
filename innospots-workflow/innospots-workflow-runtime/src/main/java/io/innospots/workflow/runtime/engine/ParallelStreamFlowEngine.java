@@ -28,7 +28,7 @@ import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.node.executor.TriggerNode;
 import io.innospots.workflow.core.flow.Flow;
 import io.innospots.workflow.core.flow.manage.FlowManager;
-import io.innospots.workflow.runtime.parallel.ExecutionUnit;
+import io.innospots.workflow.runtime.execution.ExecutionUnit;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
