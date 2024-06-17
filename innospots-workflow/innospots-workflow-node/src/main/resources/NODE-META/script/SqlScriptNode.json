@@ -37,13 +37,13 @@
     },
     {
       "name": "sql_clause",
-      "type": "CodeEditor",
+      "type": "ScriptEditor",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "SQL脚本",
-        "codeType": "SQL",
+        "scriptType": "SQL",
         "isFixedType": true
       }
     },

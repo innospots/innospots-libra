@@ -99,25 +99,25 @@
     },
     {
       "name": "pre_action",
-      "type": "CodeEditor",
+      "type": "ScriptEditor",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "前置脚本(JAVA)",
-        "codeType": "JAVA",
+        "scriptType": "JAVA",
         "isFixedType": true
       }
     },
     {
       "name": "action",
-      "type": "CodeEditor",
+      "type": "ScriptEditor",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "结果脚本(JS)",
-        "codeType": "JAVASCRIPT",
+        "scriptType": "JAVASCRIPT",
         "isFixedType": true,
         "default": "return item;"
       }

@@ -22,7 +22,7 @@
       }
     },{
       "name": "action",
-      "type": "CodeEditor",
+      "type": "ScriptEditor",
       "copyable": false,
       "deletable": false,
       "settings": {
