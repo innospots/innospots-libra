@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class EcUnit {
 
-    private final BaseNodeExecutor nodeExecutor;
+    final BaseNodeExecutor nodeExecutor;
 
     CompletableFuture<NodeExecution> future;
 
@@ -128,16 +128,16 @@ public class EcUnit {
 
     NodeExecution execute() {
         this.threadName = Thread.currentThread().getName();
-        unitStatus = ExecutionStatus.STARTING;
+//        unitStatus = ExecutionStatus.STARTING;
         try {
-            //Check whether the previous nodes has bean executed completely
-            boolean b = executePreviousNodes();
-            if (!b) {
-                unitStatus = ExecutionStatus.NOT_PREPARED;
-                log.warn("execution unit quit, the pre-execution dependency condition is not met, node:{}", nodeKey());
+            //Check whether the previous nodes have been executed completely
+//            boolean b = executePreviousNodes();
+//            if (!b) {
+//                unitStatus = ExecutionStatus.NOT_PREPARED;
+//                log.warn("execution unit quit, the pre-execution dependency condition is not met, node:{}", nodeKey());
                 //this.executionUnits.remove(nodeKey());
-                return null;
-            }
+//                return null;
+//            }
             unitStatus = ExecutionStatus.RUNNING;
             if (carrier.hasExecuted(this.nodeKey())) {
                 nodeExecution = carrier.getNodeExecution(nodeKey());
@@ -153,8 +153,7 @@ public class EcUnit {
             if (carrier.isStoppedNode(this.nodeKey())) {
                 return nodeExecution;
             }
-
-            executeNextNode();
+//            executeNextNode();
 
         } catch (Exception e) {
             log.error("execute node error:{}", nodeExecutor, e);
@@ -167,6 +166,7 @@ public class EcUnit {
     /**
      * next node execute
      */
+    /*
     private void executeNextNode() {
 
         List<String> nextNodes = new ArrayList<>();
@@ -207,11 +207,14 @@ public class EcUnit {
     }
 
 
+     */
+
     /**
      * execute previous node, if has not execute dependency node
      *
      * @return should execute
      */
+    /*
     private boolean executePreviousNodes() {
         //not execute node list
         List<String> unDoneList = carrier.previousNotExecuteNodes(this.nodeExecutor);
@@ -254,6 +257,8 @@ public class EcUnit {
 
         return allDone;
     }
+
+     */
 
     @Override
     public String toString() {

@@ -1,5 +1,6 @@
 package io.innospots.workflow.runtime.execution;
 
+import cn.hutool.core.util.ArrayUtil;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.base.utils.thread.ThreadTaskExecutor;
 import io.innospots.base.utils.time.DateTimeUtils;
@@ -33,8 +34,6 @@ public class ExecutionCarrier {
 
     private Map<String, EcUnit> executionUnits = new ConcurrentHashMap<>();
 
-    private TimeoutTask timeoutTask;
-
     Flow flow;
 
     FlowExecution flowExecution;
@@ -43,7 +42,7 @@ public class ExecutionCarrier {
         this.flow = flow;
         this.flowExecution = flowExecution;
         this.taskExecutor = taskExecutor;
-        this.timeoutTask = new TimeoutTask(this);
+
     }
 
     public static ExecutionCarrier build(Flow flow, FlowExecution flowExecution, ThreadTaskExecutor taskExecutor) {
@@ -91,7 +90,7 @@ public class ExecutionCarrier {
             for (EcUnit unit : executionUnits.values()) {
                 if (unit.unitStatus() == ExecutionStatus.READY) {
                     try {
-                        TimeUnit.MILLISECONDS.sleep(5);
+                        TimeUnit.MILLISECONDS.sleep(1);
                     } catch (InterruptedException e) {
                         log.error(e.getMessage());
                     }
@@ -113,7 +112,7 @@ public class ExecutionCarrier {
             }
             times++;
         } while ((!isDone || count < executionUnits.size()) && times < MAX_TIMES);
-        timeoutTask.interrupt();
+
 
         if (log.isDebugEnabled()) {
             log.debug("times:{}, unitCount:{},size:{}, flow execution: {}", times, count, executionUnits.size(), flowExecution);
@@ -128,35 +127,44 @@ public class ExecutionCarrier {
         return flowExecution.shouldStopped();
     }
 
-    void runNodeExecutor(BaseNodeExecutor nodeExecutor, boolean async) {
+    EcUnit runNodeExecutor(BaseNodeExecutor nodeExecutor, boolean async) {
         EcUnit ecUnit = EcUnit.build(nodeExecutor, this);
-        runUnit(ecUnit, async);
+        runUnitAndPrevious(ecUnit, async, true);
+        return ecUnit;
     }
 
-    void runNodeExecutor(String nodeKey, boolean async) {
+    EcUnit runNodeExecutor(String nodeKey, boolean async, boolean runNext) {
         if (hasExecuted(nodeKey)) {
             log.warn("node has executed, nodeKey:{}", nodeKey);
-            return;
+            return null;
         }
+
         BaseNodeExecutor nodeExecutor = flow.findNode(nodeKey);
         EcUnit ecUnit = executionUnits.get(nodeKey);
         if (ecUnit == null) {
             ecUnit = EcUnit.build(nodeExecutor, this);
-            runUnit(ecUnit, async);
+            runUnitAndPrevious(ecUnit, async, runNext);
         } else if (ecUnit.nodeExecution == null && !ecUnit.unitStatus.isDone()) {
-            runUnit(ecUnit, async);
+            runUnitAndPrevious(ecUnit, async, runNext);
         } else {
             log.warn("node has bean executed, node key:{}", nodeKey);
         }
+        return ecUnit;
     }
+
+    void runUnitAndPrevious(EcUnit ecUnit, boolean async, boolean runNext) {
+        CompletableFuture cf = executePreviousNodes(ecUnit);
+        cf.thenAccept(p -> runUnit(ecUnit, async, runNext));
+    }
+
 
     /**
      * run flow node
      *
      * @param ecUnit unit
-     * @param async async
+     * @param async  async
      */
-    void runUnit(EcUnit ecUnit, boolean async) {
+    void runUnit(EcUnit ecUnit, boolean async, boolean runNext) {
         if (shouldStopped()) {
             return;
         }
@@ -166,9 +174,88 @@ public class ExecutionCarrier {
             ecUnit.future = future;
         } else {
             future = CompletableFuture.completedFuture(ecUnit.execute());
+            ecUnit.future = future;
         }
         if (log.isDebugEnabled()) {
             log.debug("run node:{}, async:{}, isDone:{}, hashcode:{}", ecUnit.nodeKey(), async, future.isDone(), future.hashCode());
+        }
+
+        if (runNext) {
+            future.thenAccept(this::runNextNodes);
+        }
+    }
+
+    private CompletableFuture executePreviousNodes(EcUnit ecUnit) {
+        CompletableFuture prev = null;
+        //not execute node list
+        List<String> unDoneList = this.previousNotExecuteNodes(ecUnit.nodeExecutor);
+
+        if (unDoneList.isEmpty()) {
+            return CompletableFuture.completedFuture(null);
+        }
+
+        if (log.isDebugEnabled()) {
+            log.debug("node: {}, undone nodes: {}, previous nodes: {}", ecUnit.nodeExecutor.simpleInfo(), unDoneList, this.sourceKey(ecUnit.nodeKey()));
+        }
+        boolean allDone = true;
+
+        //have not execute source nodes in the current node
+
+        if (unDoneList.size() == 1) {
+            this.runNodeExecutor(unDoneList.get(0), false, false);
+        } else {
+            for (String unDoneNode : unDoneList) {
+                //recursively invoke the node that needs to be executed in the unDoneList
+                this.runNodeExecutor(unDoneNode, true, false);
+            }
+        }
+
+        List<CompletableFuture> cfs = new ArrayList<>();
+        for (String unDoneNode : unDoneList) {
+            EcUnit unit = this.getEcUnit(unDoneNode);
+            if (unit == null) {
+                continue;
+            }
+            cfs.add(unit.future);
+        }//end for
+
+        prev = CompletableFuture.allOf(ArrayUtil.toArray(cfs, CompletableFuture.class));
+
+        return prev;
+    }
+
+    /**
+     * flow next node
+     *
+     * @param nodeExecution
+     */
+    private void runNextNodes(NodeExecution nodeExecution) {
+        List<String> nextNodes = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(nodeExecution.getNextNodeKeys())) {
+            nextNodes.addAll(nodeExecution.getNextNodeKeys());
+            nextNodes = nextNodes.stream().filter(this::shouldExecute).collect(Collectors.toList());
+        }
+
+        if (nextNodes.isEmpty()) {
+            if (log.isDebugEnabled()) {
+                log.debug("the node is the leaf node, node key:{}", nodeExecution.getNodeKey());
+            }
+            return;
+        }
+
+        //only one next node
+        if (nextNodes.size() == 1) {
+            this.runNodeExecutor(nextNodes.get(0), false, true);
+        } else {
+            //parallel execute
+            for (String nextNode : nextNodes) {
+                if (this.hasDone(nextNode)) {
+                    //log.error("The flow is a directed acyclic graph, which has the loop node, please check the flow node config, the loop node key:{}",nextNode);
+                    log.warn("next nodes has bean executed, node key:{}", nextNode);
+                    continue;
+                }
+                this.runNodeExecutor(nextNode, true, true);
+            }
         }
     }
 
@@ -228,56 +315,5 @@ public class ExecutionCarrier {
         return this.executionUnits.get(nodeKey);
     }
 
-
-    private static final class TimeoutTask extends Thread {
-
-        private final ExecutionCarrier carrier;
-        private boolean running = false;
-
-        public TimeoutTask(ExecutionCarrier carrier) {
-            this.carrier = carrier;
-        }
-
-        @SneakyThrows
-        @Override
-        public void run() {
-            this.running = true;
-            long startTime = System.currentTimeMillis();
-
-            int totalCount = carrier.executionUnits.size();
-            if (log.isDebugEnabled()) {
-                log.debug("start timeout task:{}, unit size:{}", carrier.flowExecution.getFlowExecutionId(), totalCount);
-            }
-            int doneCount = 0;
-            try {
-                while (running && doneCount < totalCount) {
-                    totalCount = 0;
-                    doneCount = 0;
-                    for (EcUnit ecUnit : carrier.executionUnits.values()) {
-                        totalCount++;
-                        if (ecUnit.isTaskDone()) {
-                            doneCount++;
-                        }
-                        if (ecUnit.isTimeout()) {
-                            ecUnit.cancel();
-                        }
-                        TimeUnit.MILLISECONDS.sleep(5);
-                    }//end for
-                }//end while
-            } catch (Exception e) {
-                log.error(e.getMessage());
-            }
-
-            if (log.isDebugEnabled()) {
-                log.debug("execution unit:{}", carrier.executionUnits.keySet());
-                String consume = DateTimeUtils.consume(startTime);
-                log.debug("timeout task consume:{} unit done:{}, total:{}", consume, doneCount, totalCount);
-            }
-        }
-
-        public void close() {
-            this.running = false;
-        }
-    }
 
 }
