@@ -22,12 +22,12 @@
       }
     },{
       "name": "action",
-      "type": "CodeEditor",
+      "type": "ScriptEditor",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "脚本详情",
-        "codeType": "JAVA",
+        "scriptType": "JAVA",
         "isFixedType": true,
         "placeholder": "输入JS代码",
         "initialValue": "return item;"

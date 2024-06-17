@@ -24,13 +24,13 @@
     },
     {
       "name": "action",
-      "type": "CodeEditor",
+      "type": "ScriptEditor",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "脚本详情",
-        "codeType": "SHELL",
+        "scriptType": "SHELL",
         "isFixedType": true
       }
     },
