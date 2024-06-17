@@ -54,7 +54,7 @@
           "children":[
             {
               "name": "auth_type",
-              "opt": "EQUAL｜UNEQUAL|IN|NOT_IN|NULL|HASVAL|NOTNULL",
+              "opt": "EQUAL|UNEQUAL|IN|NOT_IN|NULL|HASVAL|NOTNULL",
               "value": ""
             }
           ]

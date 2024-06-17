@@ -235,12 +235,13 @@
     },
     {
       "name": "period_week_times",
-      "type": "Checkbox",
+      "type": "MultiSelectPicker",
       "valueType": "array",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "时间周期",
+		"viewType": "checkbox",
         "options": [
           {
             "value": "2",

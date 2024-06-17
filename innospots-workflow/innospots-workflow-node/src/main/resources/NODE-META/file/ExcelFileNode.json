@@ -150,11 +150,12 @@
     },
     {
       "name": "first_header",
-      "type": "Checkbox",
+      "type": "MultiSelectPicker",
       "valueType": "boolean",
       "copyable": false,
       "deletable": false,
       "settings": {
+		"viewType": "checkbox",
         "label": "是否包含表头"
       }
     },
