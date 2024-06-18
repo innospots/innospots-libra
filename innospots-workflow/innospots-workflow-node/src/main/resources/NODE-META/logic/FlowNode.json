@@ -70,7 +70,7 @@
     },
     {
       "name": "sync_switch",
-      "type": "switch",
+      "type": "Switch",
       "valueType": "boolean",
       "copyable": false,
       "deletable": false,

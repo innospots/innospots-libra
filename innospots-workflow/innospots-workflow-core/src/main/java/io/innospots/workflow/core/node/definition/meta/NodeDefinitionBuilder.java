@@ -86,7 +86,7 @@ public class NodeDefinitionBuilder {
                         Map<String, Object> factorMap = new LinkedHashMap<>();
                         Map<String,Object> source = new LinkedHashMap<>();
                         source.put("value",factor.getName());
-//                        source.put("value",nameToIdMap.get(factor.getName()));
+                        source.put("widgetId",nameToIdMap.get(factor.getName()));
                         source.put("label",nodeComponent.getName() + "-" + nodeComponent.getSettings().get("label"));
                         factorMap.put("source", source);
                         Map<String,Object> opt = new LinkedHashMap<>();

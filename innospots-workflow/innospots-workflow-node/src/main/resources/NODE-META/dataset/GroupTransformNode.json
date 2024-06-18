@@ -24,7 +24,7 @@
     },
     {
       "name": "output_restricted",
-      "type": "switch",
+      "type": "Switch",
       "valueType": "boolean",
       "copyable": false,
       "deletable": false,
