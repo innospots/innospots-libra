@@ -138,6 +138,9 @@ public class BaseException extends RuntimeException {
     }
 
     private Object[] convert(Object... params) {
+        if(params == null){
+            return null;
+        }
         for (int i = 0; i < params.length; i++) {
             if (params[i] instanceof String && ((String) params[i]).startsWith("${") && ((String) params[i]).endsWith("}")) {
                 params[i] = LocaleMessageUtils.message(((String) params[i]).substring(2, ((String) params[i]).length() - 1));

@@ -61,6 +61,7 @@ public class JavaCodeScriptExecutor implements IScriptExecutor {
             String scriptBody = (String) method.invoke(null);
             scriptEvaluator.cook(scriptBody);
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
     }
@@ -85,6 +86,7 @@ public class JavaCodeScriptExecutor implements IScriptExecutor {
         try {
             return scriptEvaluator.evaluate(env);
         } catch (InvocationTargetException e) {
+            log.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
     }

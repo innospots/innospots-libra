@@ -1,111 +1,55 @@
 {
-  "description": "节点描述信息",
-  "name": "if节点测试",
-  "color": "#98221",
-  "icon": "if_icon",
-  "nodeKey": "n99ifnodeKey",
-  "displayName": "判断节点",
-  "code": "IF",
-  "nodeType": "io.innospots.strategy.event.flow.node.logic.IfNode",
-  "actionScriptType": "CONDITION",
-  "action": "abc > 10 && bc < user_age",
-  "inputFields": [
-    {
-      "name": "f1",
-      "code": "f1",
-      "valueType": "STRING"
-    },
-    {
-      "name": "f2",
-      "code": "f2",
-      "valueType": "INTEGER"
-    },
-    {
-      "name": "f3",
-      "code": "f3",
-      "valueType": "DOUBLE"
-    }
-  ],
-  "continueOnFail": true,
-  "retryOnFail": false,
-  "maxTries": 5,
-  "retryWaitTimeMills": 100,
-  "async": false,
-  "nodeInstanceId": 8922,
-  "width": 200,
-  "height": 300,
-  "x": 25,
-  "y": 30,
-  "pauseFlag": false,
   "data": {
-    "node_true": [
-      "n81723221"
-    ],
-    "node_false": [
-      "n92812353"
-    ],
     "conditions": {
-      "relation": "OR",
-      "statement": "(f1 == 'v1' && f2 > 1 && f3 < 45.8) || (f1 == 'v1' && f2 > 1 && f3 < 45.8)",
-      "mode": "SCRIPT",
       "embeds": [
         {
+          "relation": "AND",
           "factors": [
             {
-              "name": "字段1",
-              "code": "f1",
-              "opt": "EQUAL",
-              "value": "v1",
+              "value": [
+                "2021-08-09",
+                "2021-08-22"
+              ],
+              "opt": "BETWEEN",
+              "name": "id_number",
+              "code": "id_number",
               "valueType": "STRING"
             },
             {
-              "name": "字段2",
-              "code": "f2",
-              "opt": "GREATER",
-              "value": 1,
-              "valueType": "INTEGER"
-            },
-            {
-              "name": "字段3",
-              "code": "f3",
-              "opt": "LESS",
-              "value": 45.8,
-              "valueType": "DOUBLE"
+              "value": "",
+              "opt": "NULL",
+              "name": "customer_name",
+              "code": "customer_name",
+              "valueType": "STRING"
             }
           ],
-          "relation": "AND",
-          "statement": "f1 == 'v1' && f2 > 1 && f3 < 45.8",
-          "mode": "SCRIPT"
+          "statement": " && NULL"
         },
         {
+          "relation": "OR",
           "factors": [
             {
-              "name": "字段1",
-              "code": "f1",
-              "opt": "EQUAL",
-              "value": "v1",
+              "value": "2021-08-09",
+              "opt": "UNEQUAL",
+              "name": "mobile",
+              "code": "mobile",
               "valueType": "STRING"
-            },
-            {
-              "name": "字段2",
-              "code": "f2",
-              "opt": "GREATER",
-              "value": 1,
-              "valueType": "INTEGER"
-            },
-            {
-              "name": "字段3",
-              "code": "f3",
-              "opt": "LESS",
-              "value": 45.8,
-              "valueType": "DOUBLE"
             }
           ],
-          "relation": "AND",
-          "statement": "f1 == 'v1' && f2 > 1 && f3 < 45.8",
-          "mode": "SCRIPT"
+          "statement": "mobile != 2021-08-09"
         }
-      ]
+      ],
+      "relation": "OR"
     }
-  }
+  },
+  "nodeKey": "fnHPsyFPa",
+  "nodeDefinitionId": 4,
+  "name": "if",
+  "code": "IF",
+  "color": "",
+  "nodeType": "io.innospots.workflow.node.app.logic.IfNode",
+  "displayName": "判断",
+  "description": "判断节点",
+  "outputFields": null,
+  "nodeInstanceId": 125
 }

@@ -1,0 +1,11 @@
+{
+  "name": "python脚本执行",
+  "nodeKey": "PythonNodeKey",
+  "code": "PYTHON",
+  "nodeType": "io.innospots.workflow.node.app.script.ScriptPythonNode",
+  "nodeInstanceId": 8922,
+  "data": {
+    "script_type": "pythonJsr",
+    "action_script": "td={'Alice': 112, 'Beth': '9102', 'Cecil': '3258'};print(td)"
+  }
+}

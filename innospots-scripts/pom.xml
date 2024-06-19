@@ -30,17 +30,27 @@
             </dependency>
             <dependency>
                 <groupId>io.innospots</groupId>
-                <artifactId>innospots-javascript</artifactId>
+                <artifactId>innospots-script-javascript</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.innospots</groupId>
-                <artifactId>innospots-python</artifactId>
+                <artifactId>innospots-script-python</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.innospots</groupId>
-                <artifactId>innospots-groovy</artifactId>
+                <artifactId>innospots-script-groovy</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-script-java</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-script-graaljs</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

@@ -1,0 +1,40 @@
+{
+  "name": "脚本节点测试",
+  "code": "SCRIPT",
+  "nodeKey": "JavaScriptNodeKey",
+  "nodeType": "io.innospots.workflow.node.app.script.ScriptJavaNode",
+  "inputFields": [
+    {
+      "name": "i1",
+      "code": "i1",
+      "valueType": "STRING"
+    },
+    {
+      "name": "i2",
+      "code": "i2",
+      "valueType": "STRING"
+    }
+  ],
+  "outputFields": [
+    {
+      "name": "o1",
+      "code": "o1",
+      "valueType": "STRING"
+    },
+    {
+      "name": "o2",
+      "code": "o2",
+      "valueType": "STRING"
+    },
+    {
+      "name": "res",
+      "code": "res",
+      "valueType": "STRING"
+    }
+  ],
+  "nodeInstanceId": 8922,
+  "data": {
+    "script_type": "java",
+    "action_script": "import java.util.*; Map<String, Object> res = new HashMap();  res.put(\\\"res\\\",i1+i2); return res;"
+  }
+}

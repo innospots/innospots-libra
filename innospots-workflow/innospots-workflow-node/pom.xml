@@ -54,6 +54,26 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>io.innospots</groupId>
+            <artifactId>innospots-script-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.innospots</groupId>
+            <artifactId>innospots-script-graaljs</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.innospots</groupId>
+            <artifactId>innospots-script-groovy</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.innospots</groupId>
+            <artifactId>innospots-script-javascript</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.innospots</groupId>
+            <artifactId>innospots-script-python</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

@@ -7,7 +7,7 @@
   "actionScriptType": "CONDITION",
   "displayName": "分支节点",
   "code": "SWITCH",
-  "nodeType": "io.innospots.strategy.event.flow.node.logic.SwitchNode",
+  "nodeType": "io.innospots.workflow.node.app.logic.SwitchNode",
   "inputFields": [
     {
       "name": "total_level",
@@ -28,49 +28,44 @@
   "data": {
     "conditions": [
       {
-        "nodeKeys": [
-          "n12345675",
-          "ddsps"
-        ],
+        "nodeKey": "n12345676",
         "desc": "单条件",
-        "branch": {
+        "condition": {
           "factors": [
             {
-              "name": "用户级别",
-              "code": "user_level",
+              "name": "字段1",
+              "code": "f1",
               "opt": "EQUAL",
               "value": "v1",
               "valueType": "STRING"
             }
           ],
-          "relation": "AND",
-          "statement": "user_level == 'v1'",
+          "relation": "and",
+          "statement": "f1 == 'v1'",
           "mode": "SCRIPT"
         }
       },
       {
-        "nodeKeys": [
-          "n12345676"
-        ],
+        "nodeKey": "n12345676",
         "desc": "单条件",
-        "branch": {
+        "condition": {
           "factors": [
             {
-              "name": "用户级别",
-              "code": "user_level",
+              "name": "字段1",
+              "code": "f1",
               "opt": "EQUAL",
               "value": "v2",
               "valueType": "STRING"
             }
           ],
-          "relation": "AND",
-          "statement": "user_level == 'v2'",
+          "relation": "and",
+          "statement": "f1 == 'v2'",
           "mode": "SCRIPT"
         }
       },
       {
-        "nodeKeys": [],
-        "branch": null,
+        "nodeKey": "n12345677",
+        "condition": null,
         "desc": "默认分支"
       }
     ]

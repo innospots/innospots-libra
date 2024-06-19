@@ -18,6 +18,9 @@
 
 package io.innospots.workflow.core.node.executor;
 
+import io.innospots.base.script.ExecutorManagerFactory;
+import io.innospots.base.script.ScriptExecutorManager;
+import io.innospots.base.script.jit.MethodBody;
 import io.innospots.workflow.core.exception.NodeBuildException;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
@@ -51,5 +54,48 @@ public class NodeExecutorFactory {
         }
         return nodeExecutor;
     }
+
+        /**
+     * Compiles and constructs a node executor based on the provided identifier and node instance.
+     *
+     * @param identifier A unique identifier for the node, used to fetch the corresponding executor manager.
+     * @param nodeInstance The instance of the node that needs to be compiled and constructed.
+     * @return The compiled and constructed node executor.
+     *
+     * This method retrieves the executor manager by the given identifier, initializes a node executor from the node instance,
+     * compiles the script method body for the executor, registers it with the executor manager if not null, and proceeds
+     * to build both the executor manager and the node executor itself. In case of exceptions during this process, a
+     * NodeBuildException is thrown encapsulating the error details.
+     */
+    public static BaseNodeExecutor compileBuild(String identifier, NodeInstance nodeInstance) {
+        BaseNodeExecutor nodeExecutor;
+        // Retrieves the executor manager corresponding to the identifier
+        ScriptExecutorManager executorManager = ExecutorManagerFactory.getInstance(identifier);
+        try {
+            // Initializes the node executor instance
+            nodeExecutor = newInstance(nodeInstance);
+            // Sets the flow identifier for the node executor
+            nodeExecutor.flowIdentifier = identifier;
+            // Constructs the method body for the script
+            MethodBody methodBody = nodeExecutor.buildScriptMethodBody();
+            // Registers the method body with the executor manager if available
+            if(methodBody != null) {
+                executorManager.register(methodBody);
+            }
+            // Executes build and reload operations on the executor manager to ensure readiness
+            executorManager.build();
+            executorManager.reload();
+            // Completes the construction of the node executor
+            nodeExecutor.build();
+            //ExecutorManagerFactory.clear(identifier);
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException |
+                 InvocationTargetException e) {
+            // Throws a NodeBuildException with the node type and underlying exception details
+            throw NodeBuildException.build(nodeInstance.getNodeType(), e);
+        }
+        // Returns the completed node executor
+        return nodeExecutor;
+    }
+
 
 }

@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author Smars
@@ -19,7 +21,7 @@ import java.util.Map;
  */
 public class NodeDefinitionBuilder {
 
-    public static NodeDefinition build(NodeMetaInfo nodeMetaInfo){
+    public static NodeDefinition build(NodeMetaInfo nodeMetaInfo) {
         NodeDefinition nodeDefinition = new NodeDefinition();
         Map<String, Object> settings = defaultSettings();
         if (nodeMetaInfo.getSettings() != null) {
@@ -51,6 +53,9 @@ public class NodeDefinitionBuilder {
         Map<String, NodeComponent> componentMap = new LinkedHashMap<>();
         Map<String, Map<String, Object>> tartgetIdMap = new LinkedHashMap<>();
         Map<String, String> nameToIdMap = new LinkedHashMap<>();
+
+        Map<String, NodeComponent> ncDefault = defaultComponents();
+
         for (int i = 0; i < nodeMetaInfo.getComponents().size(); i++) {
             NodeComponent nodeComponent = nodeMetaInfo.getComponents().get(i);
             componentMap.put(nodeComponent.getName(), nodeComponent);
@@ -58,7 +63,11 @@ public class NodeDefinitionBuilder {
             String id = (String) compMap.get("id");
             nameToIdMap.put(nodeComponent.getName(), id);
             if (!compMap.containsKey("layout")) {
-                Map<String, Object> defaultLayout = defaultLayout(id,i);
+                Map<String, Object> defaultLayout = defaultLayout(id, i);
+                NodeComponent dnc = ncDefault.get(nodeComponent.getType());
+                if (dnc != null && dnc.getLayout() != null) {
+                    defaultLayout.putAll(dnc.getLayout());
+                }
                 compMap.put("layout", defaultLayout);
             }
             tartgetIdMap.put(id, compMap);
@@ -75,7 +84,7 @@ public class NodeDefinitionBuilder {
 
     private static void fillConditions(Map<String, Object> compMap, NodeComponent nodeComponent, Map<String, String> nameToIdMap) {
         if (nodeComponent.getConditions() != null) {
-            Map<String, List<Map<String,Object>>> conditionListMap = new LinkedHashMap<>();
+            Map<String, List<Map<String, Object>>> conditionListMap = new LinkedHashMap<>();
             for (CompCondition condition : nodeComponent.getConditions()) {
                 Map<String, Object> conditionMap = new LinkedHashMap<>();
                 conditionMap.put("result", condition.getResult());
@@ -84,14 +93,14 @@ public class NodeDefinitionBuilder {
                     List<Map<String, Object>> children = new ArrayList<>();
                     for (Factor factor : condition.getChildren()) {
                         Map<String, Object> factorMap = new LinkedHashMap<>();
-                        Map<String,Object> source = new LinkedHashMap<>();
-                        source.put("value",factor.getName());
-                        source.put("widgetId",nameToIdMap.get(factor.getName()));
-                        source.put("label",nodeComponent.getName() + "-" + nodeComponent.getSettings().get("label"));
+                        Map<String, Object> source = new LinkedHashMap<>();
+                        source.put("value", factor.getName());
+                        source.put("widgetId", nameToIdMap.get(factor.getName()));
+                        source.put("label", nodeComponent.getName() + "-" + nodeComponent.getSettings().get("label"));
                         factorMap.put("source", source);
-                        Map<String,Object> opt = new LinkedHashMap<>();
-                        opt.put("label",factor.getOpt().descZh());
-                        opt.put("value",factor.getOpt());
+                        Map<String, Object> opt = new LinkedHashMap<>();
+                        opt.put("label", factor.getOpt().descZh());
+                        opt.put("value", factor.getOpt());
                         factorMap.put("opt", opt);
                         if (factor.getValue() != null) {
                             factorMap.put("value", factor.getValue());
@@ -100,10 +109,10 @@ public class NodeDefinitionBuilder {
                     }//end for factor
                     conditionMap.put("children", children);
                 }//end if children
-                List<Map<String,Object>> condList = conditionListMap.computeIfAbsent(condition.getResult(), k -> new ArrayList<>());
+                List<Map<String, Object>> condList = conditionListMap.computeIfAbsent(condition.getResult(), k -> new ArrayList<>());
                 condList.add(conditionMap);
             }//end for condition
-            Map<String,Object> settings = (Map<String, Object>) compMap.get("settings");
+            Map<String, Object> settings = (Map<String, Object>) compMap.get("settings");
             settings.put("conditions", conditionListMap);
 //            compMap.put("conditions", conditionListMap);
         }
@@ -143,9 +152,9 @@ public class NodeDefinitionBuilder {
     }
 
     private static void fillInfo(NodeMetaInfo metaInfo, NodeDefinition nodeDefinition) {
-        if(metaInfo.getScripts()!=null){
+        if (metaInfo.getScripts() != null) {
             nodeDefinition.setScripts(metaInfo.getScripts());
-        }else{
+        } else {
             nodeDefinition.setScripts(new LinkedHashMap<>());
         }
         nodeDefinition.setFlowCode(metaInfo.getFlowCode());
@@ -167,11 +176,15 @@ public class NodeDefinitionBuilder {
         return new LinkedHashMap<>(defaultNodeMetaInfo.getSettings());
     }
 
-    private static Map<String, Object> defaultLayout(String id,int index_y) {
+    private static Map<String, NodeComponent> defaultComponents() {
+        return NodeMetaInfoLoader.getDefaultNodeMetaTemplate().getComponents().stream().collect(Collectors.toMap(NodeComponent::getType, Function.identity()));
+    }
+
+    private static Map<String, Object> defaultLayout(String id, int index_y) {
         NodeMetaInfo defaultNodeMetaInfo = NodeMetaInfoLoader.getDefaultNodeMetaTemplate();
         Map<String, Object> m = new LinkedHashMap<>(defaultNodeMetaInfo.getComponents().get(0).getLayout());
         m.put("i", id);
-        m.put("y",index_y);
+        m.put("y", index_y);
         return m;
     }
 }

@@ -115,6 +115,7 @@ public abstract class Jsr223ScriptExecutor implements IScriptExecutor {
                 throw ScriptException.buildInvokeException(this.getClass(), ScriptType.JAVASCRIPT.name(), "script compile fail");
             }
             v = compiledScript.eval(bindings);
+
             if (log.isDebugEnabled()) {
                 if (v != null) {
                     //log.debug("script out:{}, clazz:{}", v, v.getClass());

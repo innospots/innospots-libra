@@ -443,9 +443,11 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
         MethodBody methodBody = new MethodBody();
         methodBody.setReturnType(Object.class);
         methodBody.setScriptType(scriptType);
+        /*
         if (CollectionUtils.isNotEmpty(ni.getInputFields())) {
             methodBody.setParams(ni.getInputFields());
         }
+         */
         methodBody.setMethodName(ni.expName());
         methodBody.setSrcBody(src);
         return methodBody;

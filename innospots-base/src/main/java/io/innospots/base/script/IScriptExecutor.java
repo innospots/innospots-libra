@@ -25,6 +25,7 @@ import io.innospots.base.script.jit.MethodBody;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Raydian
@@ -75,6 +76,8 @@ public interface IScriptExecutor extends IExecutor<Map<String,Object>,Object> {
             String[] ss= args[i].split(" ");
             if (ss.length == 2) {
                 pairs[i] = Pair.of(Class.forName(ss[0]),ss[1]);
+            }else if(ss.length == 1){
+                pairs[i] = Pair.of(Objects.class,ss[0]);
             }
         }
         return pairs;

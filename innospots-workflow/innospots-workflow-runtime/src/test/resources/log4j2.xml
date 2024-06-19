@@ -3,9 +3,7 @@
     <Properties>
         <Property name="LOG_PATTERN">%sn %d{yyyy-MM-dd HH:mm:ss,SSS} [%-6p] ${sys:PID} [%t] %C{3}.%M:%L – %m%n
         </Property>
-        <Property name="LOG_PATTERN_CONSOLE">%clr{%d{yyyy-MM-dd HH:mm:ss.SSS}}{faint} %clr{%5p}
-            %clr{${sys:PID}}{magenta} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%C{3}}{cyan}.%clr{%M:%L}{yellow}
-            %clr{:}{faint} %m%n%xwEx
+        <Property name="LOG_PATTERN_CONSOLE">%clr{%d{yyyy-MM-dd HH:mm:ss.SSS}}{faint} %clr{%5p} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%C{3}}{cyan}.%clr{%M:%L}{yellow} %clr{:}{faint} %m%n%xwEx
         </Property>
         <Property name="LOG_ROOT">logs</Property>
     </Properties>
