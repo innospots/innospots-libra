@@ -1,8 +1,9 @@
-package io.innospots.workflow.runtime.flow.node;
+package io.innospots.workflow.runtime.flow.node.compute;
 
 
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
+import io.innospots.workflow.runtime.flow.node.BaseNodeTest;
 import org.junit.jupiter.api.Test;
 
 

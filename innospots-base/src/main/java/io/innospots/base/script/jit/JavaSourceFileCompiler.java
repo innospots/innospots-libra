@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import javax.tools.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -84,6 +85,9 @@ public class JavaSourceFileCompiler {
             logger.warn(errorInfo.toString());
         }
         if (!success) {
+            for (File sourceFile : sourceFiles) {
+                logger.error("compile error fail:{}",Files.readString(sourceFile.toPath()));
+            }
             logger.error("java source file compiler error:{}", errorInfo);
             throw ScriptException.buildCompileException(this.getClass(), ScriptType.JAVA.name(), errorInfo.toString());
         }

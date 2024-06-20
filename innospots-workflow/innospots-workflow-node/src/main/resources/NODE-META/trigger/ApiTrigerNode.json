@@ -54,11 +54,12 @@
     },
     {
       "name": "authType",
-      "type": "Select",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
+        "viewType": "picker",
         "label": "授权类型",
         "default": "NONE",
         "options": [

@@ -142,6 +142,14 @@
         "w": 1, "x": 0, "y": 0, "moved": true, "static": false,
         "resizeHandles": ["s", "n"]
       }
+    },{
+      "type": "BranchConfig",
+      "valueType": "string",
+      "layout": {
+        "h": 3, "minH": 3,
+        "w": 1, "x": 0, "y": 0, "moved": true, "static": false,
+        "resizeHandles": ["s", "n"]
+      }
     }
   ],
   "output": [],

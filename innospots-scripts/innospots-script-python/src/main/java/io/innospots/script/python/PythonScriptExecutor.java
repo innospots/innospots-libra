@@ -19,10 +19,12 @@
 package io.innospots.script.python;
 
 import cn.hutool.core.annotation.AnnotationUtil;
+import cn.hutool.core.text.StrFormatter;
 import io.innospots.base.enums.ScriptType;
 import io.innospots.base.exception.ScriptException;
 import io.innospots.base.model.Pair;
 import io.innospots.base.script.java.ScriptMeta;
+import io.innospots.base.script.jit.MethodBody;
 import io.innospots.base.script.jrs223.Jsr223ScriptExecutor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,6 +33,8 @@ import javax.script.Compilable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -59,10 +63,11 @@ public class PythonScriptExecutor extends Jsr223ScriptExecutor {
             return;
         }
         ScriptMeta scriptMeta = AnnotationUtil.getAnnotation(method, ScriptMeta.class);
+        String scriptBody = "";
         try {
             method.setAccessible(true);
-            String scriptBody = (String) method.invoke(null);
-            returnVar = PythonVariableParser.parseReturnVariable(scriptBody);
+            scriptBody = (String) method.invoke(null);
+            returnVar = parseReturnVariable(scriptBody);
             Compilable compilable = compilable();
             compiledScript = compilable.compile(scriptBody);
             if (scriptMeta != null) {
@@ -71,6 +76,7 @@ public class PythonScriptExecutor extends Jsr223ScriptExecutor {
             }
         } catch (IllegalAccessException | InvocationTargetException | javax.script.ScriptException |
                 ClassNotFoundException e) {
+            log.error("source error:{}",scriptBody);
             log.error(e.getMessage(), e);
         }
 
@@ -107,14 +113,29 @@ public class PythonScriptExecutor extends Jsr223ScriptExecutor {
     }
 
 
-    public static class PythonVariableParser {
 
-        public static String parseReturnVariable(String script) {
-            String[] lines = script.trim().split("\n");
-            String lastLine = lines[lines.length - 1];
-            String[] tokens = lastLine.split("=");
-            return tokens[0].trim();
+    @Override
+    public void reBuildMethodBody(MethodBody methodBody) {
+        String args = null;
+        if (methodBody.getParams() == null || methodBody.getParams().size() == 0) {
+            args = "item";
+        } else {
+            args = methodBody.getParams().get(0).getCode();
         }
+        String srcBody = methodBody.getSrcBody();
+        srcBody = srcBody.replaceAll("\n", "\\\\n");
+        srcBody = srcBody.replaceAll("\"", "\\\\\"");
+
+        methodBody.setSrcBody(srcBody);
+
+    }
+
+
+    private String parseReturnVariable(String script) {
+        String[] lines = script.trim().split("\n");
+        String lastLine = lines[lines.length - 1];
+        String[] tokens = lastLine.split("=");
+        return tokens[0].trim();
     }
 
 }

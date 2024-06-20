@@ -136,7 +136,7 @@ public class ScriptExecutorManager {
         JavaSourceFileCompiler compiler = new JavaSourceFileCompiler(classPath());
         if (this.sourceBuilder.hasSourceBody()) {
             try {
-                logger.info("compile engine:{}, write source file:{}", className(), sourceBuilder.getSourceFile());
+                logger.info("compile engine:{}, write source file:{}", className(), sourceBuilder.getSourceFile().getAbsolutePath());
                 this.sourceBuilder.writeToFile();
             } catch (IOException e) {
                 throw ScriptException.buildCompileException(this.getClass(), ScriptType.JAVA.name(), e, e.getMessage());

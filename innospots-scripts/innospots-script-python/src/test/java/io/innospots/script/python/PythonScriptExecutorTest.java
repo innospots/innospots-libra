@@ -3,9 +3,7 @@ package io.innospots.script.python;
 import io.innospots.base.script.java.ScriptMeta;
 import org.junit.jupiter.api.Test;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import javax.script.*;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +31,7 @@ class PythonScriptExecutorTest {
         System.out.println("out:"+obj);
     }
 
-    @ScriptMeta(scriptType = "pythonJsr",suffix = "py",returnType = Object.class,
+    @ScriptMeta(scriptType = "jython",suffix = "py",returnType = Object.class,
             args = {"item"})
     public static String scriptMethod() {
         String ps =  "def add(a, b):\n" +
@@ -45,11 +43,34 @@ class PythonScriptExecutorTest {
                 "\n" +
                 "td"
                 ;
-
 //        String ps = "td={'Alice': 112, 'Beth': '9102', 'Cecil': '3258'};print(td)";
 
         return ps;
     }
+
+    @Test
+    void execute2() throws NoSuchMethodException {
+        PythonScriptExecutor executor = new PythonScriptExecutor();
+        Method method2 = PythonScriptExecutorTest.class.getMethod("scriptMethod2");
+        executor.initialize(method2);
+        Map<String,Object> input = new HashMap<>();
+        input.put("p1","param1");
+        input.put("p2","param2");
+        Object obj = executor.execute(input);
+        System.out.println("out:"+obj);
+    }
+
+    @ScriptMeta(scriptType = "jython",suffix = "py",returnType = Object.class,
+            args = {"item"})
+    public static String scriptMethod2() {
+//        String ps = "def add(a, b):\n    return a + b\nresult = add(1, 2)\ntdict={'Name': 'Runoob'}\ntdict";
+//        String ps = "td = {'Alice': 112, 'beth':'abc','cecil':'9988'};";
+        String ps = "td={'Alice': 112, 'Beth': '9102', 'Cecil': '3258'}\ntd";
+//        String ps = "td={'Alice': 112, 'Beth': '9102', 'Cecil': '3258'};print(td)";
+
+        return ps;
+    }
+
 
     @Test
     void test1(){
@@ -63,6 +84,7 @@ class PythonScriptExecutorTest {
         }
 
         try {
+            Bindings bindings = new SimpleBindings();
             // Python脚本内容，例如计算两个数的和
             String script = "def add(a, b):\n" +
                     "    return a + b\n" +
@@ -70,7 +92,11 @@ class PythonScriptExecutorTest {
                     "result";
 
             // 执行Python脚本
-            Object result = engine.eval(script);
+            Object result = engine.eval(script,bindings);
+
+            if(result == null){
+                result = bindings.get("result");
+            }
 
             // 输出执行结果
             System.out.println("The result of the Python script is: " + result);
