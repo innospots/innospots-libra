@@ -20,6 +20,10 @@
         <module>innospots-script-graaljs</module>
     </modules>
 
+    <properties>
+        <spring-integration-scripting.version>5.5.18</spring-integration-scripting.version>
+    </properties>
+
 
     <dependencyManagement>
         <dependencies>
@@ -53,6 +57,12 @@
                 <artifactId>innospots-script-graaljs</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.integration</groupId>
+                <artifactId>spring-integration-scripting</artifactId>
+                <version>${spring-integration-scripting.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

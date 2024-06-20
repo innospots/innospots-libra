@@ -18,23 +18,103 @@
 
 package io.innospots.script.python;
 
+import cn.hutool.core.annotation.AnnotationUtil;
+import io.innospots.base.enums.ScriptType;
+import io.innospots.base.exception.ScriptException;
+import io.innospots.base.model.Pair;
+import io.innospots.base.script.java.ScriptMeta;
 import io.innospots.base.script.jrs223.Jsr223ScriptExecutor;
+import lombok.extern.slf4j.Slf4j;
+
+import javax.script.Bindings;
+import javax.script.Compilable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * @author Smars
  * @version 1.0.0
  * @date 2022/11/12
  */
+@Slf4j
 public class PythonScriptExecutor extends Jsr223ScriptExecutor {
+
+    private String returnVar;
 
     @Override
     public String scriptType() {
-        return "python";
+        return "jython";
     }
 
     @Override
     public String suffix() {
         return "py";
+    }
+
+    @Override
+    public void initialize(Method method) {
+        if (compiledScript != null) {
+            return;
+        }
+        ScriptMeta scriptMeta = AnnotationUtil.getAnnotation(method, ScriptMeta.class);
+        try {
+            method.setAccessible(true);
+            String scriptBody = (String) method.invoke(null);
+            returnVar = PythonVariableParser.parseReturnVariable(scriptBody);
+            Compilable compilable = compilable();
+            compiledScript = compilable.compile(scriptBody);
+            if (scriptMeta != null) {
+                Pair<Class<?>, String>[] pairs = this.argsPair(scriptMeta.args());
+                arguments = Arrays.stream(pairs).map(Pair::getRight).collect(Collectors.toList()).toArray(String[]::new);
+            }
+        } catch (IllegalAccessException | InvocationTargetException | javax.script.ScriptException |
+                ClassNotFoundException e) {
+            log.error(e.getMessage(), e);
+        }
+
+    }
+
+
+    @Override
+    protected Object execute(Bindings bindings) {
+        Object v = null;
+        try {
+            if (compiledScript == null) {
+                throw ScriptException.buildInvokeException(this.getClass(), ScriptType.JAVASCRIPT.name(), "script compile fail");
+            }
+            compiledScript.eval(bindings);
+            Object vv = bindings.get(returnVar);
+            if (vv == null) {
+                vv = compiledScript.getEngine().get(returnVar);
+            }
+
+            if (log.isDebugEnabled()) {
+                if (vv != null) {
+                    //log.debug("script out:{}, clazz:{}", v, v.getClass());
+                } else {
+                    log.debug("output is null.");
+                }
+            }
+//            v = normalizeValue(v);
+            v = parseObject(vv);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw ScriptException.buildInvokeException(this.getClass(), ScriptType.JAVASCRIPT.name(), e, e.getMessage());
+        }
+        return v;
+    }
+
+
+    public static class PythonVariableParser {
+
+        public static String parseReturnVariable(String script) {
+            String[] lines = script.trim().split("\n");
+            String lastLine = lines[lines.length - 1];
+            String[] tokens = lastLine.split("=");
+            return tokens[0].trim();
+        }
     }
 
 }

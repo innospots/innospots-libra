@@ -27,23 +27,27 @@ class PythonScriptExecutorTest {
         Method method2 = PythonScriptExecutorTest.class.getMethod("scriptMethod");
         executor.initialize(method2);
         Map<String,Object> input = new HashMap<>();
-        input.put("p1","1");
-        input.put("p2","2");
+        input.put("p1","param1");
+        input.put("p2","param2");
         Object obj = executor.execute(input);
-        System.out.println(obj);
+        System.out.println("out:"+obj);
     }
 
     @ScriptMeta(scriptType = "pythonJsr",suffix = "py",returnType = Object.class,
             args = {"item"})
     public static String scriptMethod() {
-        /*
         String ps =  "def add(a, b):\n" +
                 "    return a + b\n" +
                 "result = add(1, 2)\n" +
-                "print(result)";
+                "print(result) \n" +
+                "print(p1) \n" +
+                "td={'Alice': 112, 'Beth': '9102', 'Cecil': '3258'};print(td)" +
+                "\n" +
+                "td"
+                ;
 
-         */
-        String ps = "td={'Alice': 112, 'Beth': '9102', 'Cecil': '3258'};print(td)";
+//        String ps = "td={'Alice': 112, 'Beth': '9102', 'Cecil': '3258'};print(td)";
+
         return ps;
     }
 

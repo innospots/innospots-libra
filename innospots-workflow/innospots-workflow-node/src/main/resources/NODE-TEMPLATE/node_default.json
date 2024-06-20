@@ -110,6 +110,38 @@
         "w": 1, "x": 0, "y": 0, "moved": true, "static": false,
         "resizeHandles": ["s", "n"]
       }
+    },{
+      "type": "InputFieldTable",
+      "valueType": "array",
+      "layout": {
+        "h": 6, "minH": 3,
+        "w": 1, "x": 0, "y": 0, "moved": true, "static": false,
+        "resizeHandles": ["s", "n"]
+      }
+    },{
+      "type": "SqlEditor",
+      "valueType": "array",
+      "layout": {
+        "h": 4, "minH": 4,
+        "w": 1, "x": 0, "y": 0, "moved": true, "static": false,
+        "resizeHandles": ["s", "n"]
+      }
+    },{
+      "type": "ScriptEditor",
+      "valueType": "string",
+      "layout": {
+        "h": 4, "minH": 4,
+        "w": 1, "x": 0, "y": 0, "moved": true, "static": false,
+        "resizeHandles": ["s", "n"]
+      }
+    },{
+      "type": "RuleEditor",
+      "valueType": "string",
+      "layout": {
+        "h": 5, "minH": 5,
+        "w": 1, "x": 0, "y": 0, "moved": true, "static": false,
+        "resizeHandles": ["s", "n"]
+      }
     }
   ],
   "output": [],

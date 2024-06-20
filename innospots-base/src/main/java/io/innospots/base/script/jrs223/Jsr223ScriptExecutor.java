@@ -69,7 +69,7 @@ public abstract class Jsr223ScriptExecutor implements IScriptExecutor {
 
     }
 
-    private Compilable compilable() {
+    protected Compilable compilable() {
         ScriptEngineManager engineManager = new ScriptEngineManager();
         return (Compilable) engineManager.getEngineByName(scriptType());
     }
@@ -142,6 +142,9 @@ public abstract class Jsr223ScriptExecutor implements IScriptExecutor {
     protected Object parseObject(Object value) {
         if (value == null) {
             return null;
+        }
+        if(value instanceof Map){
+            return new LinkedHashMap((Map)value);
         }
         String json = value.toString();
         if (json.startsWith("[")) {
