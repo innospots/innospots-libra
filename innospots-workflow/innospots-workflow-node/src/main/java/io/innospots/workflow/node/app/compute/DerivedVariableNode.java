@@ -144,37 +144,53 @@ public class DerivedVariableNode extends BaseNodeExecutor {
     public static List<ComputeField> buildFields(NodeInstance nodeInstance) {
         List<Map<String, Object>> fieldMaps = (List<Map<String, Object>>) nodeInstance.value(FIELD_COMPUTE);
 
+        List<ComputeField> computeFields = BeanUtils.toBean(fieldMaps, ComputeField.class);
+        /*
         List<ComputeField> computeFields = new ArrayList<>();
         if (CollectionUtils.isEmpty(fieldMaps)) {
             return computeFields;
         }
         for (Map<String, Object> fieldMap : fieldMaps) {
             ComputeField cf = BeanUtils.toBean(fieldMap, ComputeField.class);
-            List<Map<String, Object>> items = (List<Map<String, Object>>) fieldMap.get("computeItems");
-            cf.setComputeItems(convertItems(items));
+            //List<Map<String, Object>> items = (List<Map<String, Object>>) fieldMap.get("computeItems");
+            //cf.setComputeItems(convertItems(items));
             computeFields.add(cf);
         }
+
+         */
         return computeFields;
     }
 
     private static List<ComputeItem> convertItems(List<Map<String, Object>> items) {
         List<ComputeItem> computeItems = new ArrayList<>();
         for (Map<String, Object> item : items) {
-            computeItems.add(convert(item));
+
+            //computeItems.add(convert(item));
         }
         return computeItems;
     }
 
     private static ComputeItem convert(Map<String, Object> item) {
         Object data = item.get("data");
-        List<List<ComputeItem>> computeItems = null;
-        if (data instanceof List && !((List) data).isEmpty()) {
-            computeItems = convertItemData((List<List<Map<String, Object>>>) data);
-        }
+        //List<List<ComputeItem>> computeItems = null;
         ComputeItem computeItem = BeanUtils.toBean(item, ComputeItem.class);
+        if (data instanceof List && !((List) data).isEmpty()) {
+            //computeItems = new ArrayList<>();
+            List ld = (List) data;
+            for (Object o : ld) {
+                if(o instanceof List){
+                    computeItem.addItems(convertItems((List<Map<String, Object>>) o));
+                }else if(o instanceof Map){
+                    computeItem.addItem(convert((Map<String, Object>) o));
+                }
+            }
+//            computeItems = convertItemData((List<List<Map<String, Object>>>) data);
+        }
+        /*
         if (computeItems != null) {
             computeItem.setData(computeItems);
         }
+         */
         return computeItem;
     }
 
