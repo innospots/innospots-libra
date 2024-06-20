@@ -67,6 +67,8 @@ public class NodeDefinitionBuilder {
                 NodeComponent dnc = ncDefault.get(nodeComponent.getType());
                 if (dnc != null && dnc.getLayout() != null) {
                     defaultLayout.clear();
+                    defaultLayout.put("i", id);
+                    defaultLayout.put("y", i);
                     defaultLayout.putAll(dnc.getLayout());
                 }
                 compMap.put("layout", defaultLayout);
