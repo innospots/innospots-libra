@@ -1,4 +1,9 @@
 {
+  "nodeInstanceId": 128,
+  "nodeKey": "dnsdsyePb",
+  "name": "compute",
+  "code": "COMPUTE",
+  "nodeType": "io.innospots.workflow.node.app.compute.DerivedVariableNode",
   "data": {
     "compute_fields": [
       {
@@ -106,15 +111,5 @@
         ]
       }
     ]
-  },
-  "nodeKey": "dnsdsyePb",
-  "nodeDefinitionId": 4,
-  "name": "compute",
-  "code": "COMPUTE",
-  "color": "",
-  "nodeType": "io.innospots.workflow.node.app.ComputeFieldNode",
-  "displayName": "计算节点",
-  "description": "计算节点",
-  "outputFields": null,
-  "nodeInstanceId": 128
+  }
 }

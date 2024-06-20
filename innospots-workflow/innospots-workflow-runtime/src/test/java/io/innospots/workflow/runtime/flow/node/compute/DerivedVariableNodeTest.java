@@ -2,6 +2,7 @@ package io.innospots.workflow.runtime.flow.node.compute;
 
 
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.runtime.flow.node.BaseNodeTest;
 import org.junit.jupiter.api.Test;
@@ -14,15 +15,18 @@ import java.util.Map;
  * @author Smars
  * @date 2021/8/30
  */
-public class DerivedVariableNodeTest extends BaseNodeTest {
+public class DerivedVariableNodeTest {
+
+    private static String nodeFileName = "DerivedVariableNodeTest";
 
     @Test
     public void buildExpression() {
-
         NodeExecution nodeExecution = nodeExecution();
-        BaseNodeExecutor appNode = buildExecutor(DerivedVariableNodeTest.class.getSimpleName());
-
-        appNode.invoke(nodeExecution);
+        BaseNodeExecutor nodeExecutor = BaseNodeTest.buildExecutor("compute",nodeFileName);
+        nodeExecutor.invoke(nodeExecution);
+        for (NodeOutput output : nodeExecution.getOutputs()) {
+            System.out.println(output);
+        }
         //System.out.println(v);
     }
 
