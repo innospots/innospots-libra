@@ -30,13 +30,20 @@
         "resizeHandles": [],
         "x": 0,
         "y": 0,
-        "i": ""
+        "i": "",
+        "h": 2,
+        "maxH": 2,
+        "minH": 2,
+        "w": 1,
+        "moved": true,
+        "static": false
       }
     },{
       "type": "KeyValueEditor",
       "valueType": "String",
       "layout": {
         "h": 3, "minH": 3,
+        "w": 1, "x": 0, "y": 0, "moved": true, "static": false,
         "resizeHandles": ["s", "n"]
       }
     },{
@@ -44,6 +51,7 @@
       "valueType": "array",
       "layout": {
         "h": 3, "minH": 3,
+        "w": 1, "x": 0, "y": 0, "moved": true, "static": false,
         "resizeHandles": ["s", "n"]
       }
     },{
@@ -51,6 +59,7 @@
       "valueType": "array",
       "layout": {
         "h": 6, "minH": 3,
+        "w": 1, "x": 0, "y": 0, "moved": true, "static": false,
         "resizeHandles": ["s", "n"]
       }
     },{
@@ -58,6 +67,7 @@
       "valueType": "array",
       "layout": {
         "h": 6, "minH": 3,
+        "w": 1, "x": 0, "y": 0, "moved": true, "static": false,
         "resizeHandles": ["s", "n"]
       }
     },{
@@ -65,6 +75,7 @@
       "valueType": "array",
       "layout": {
         "h": 7, "minH": 7,
+        "w": 1, "x": 0, "y": 0, "moved": true, "static": false,
         "resizeHandles": ["s", "n"]
       }
     },{
@@ -72,6 +83,7 @@
       "valueType": "String",
       "layout": {
         "h": 3, "maxH": 3, "minH": 3,
+        "w": 1, "x": 0, "y": 0, "moved": true, "static": false,
         "resizeHandles": []
       }
     },{
@@ -79,6 +91,7 @@
       "valueType": "array",
       "layout": {
         "h": 2, "minH": 2,
+        "w": 1, "x": 0, "y": 0, "moved": true, "static": false,
         "resizeHandles": ["s", "n"]
       }
     },{
@@ -86,6 +99,7 @@
       "valueType": "array",
       "layout": {
         "h": 2, "minH": 2,
+        "w": 1, "x": 0, "y": 0, "moved": true, "static": false,
         "resizeHandles": ["s", "n"]
       }
     },{
@@ -93,6 +107,7 @@
       "valueType": "array",
       "layout": {
         "h": 6, "minH": 3,
+        "w": 1, "x": 0, "y": 0, "moved": true, "static": false,
         "resizeHandles": ["s", "n"]
       }
     }
