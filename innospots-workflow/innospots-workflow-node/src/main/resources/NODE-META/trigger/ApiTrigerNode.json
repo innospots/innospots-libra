@@ -203,11 +203,12 @@
     },
     {
       "name": "responseData",
-      "type": "CustomRadio",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
+        "viewType": "radio",
         "label": "响应数据",
         "options": [
           {"value": "ALL", "label": "所有数据", "description": "返回工作流执行结果所有数据"},
