@@ -26,6 +26,7 @@ import io.innospots.base.json.JSONUtils;
 import io.innospots.base.script.IScriptExecutor;
 import io.innospots.base.script.aviator.AviatorExpressionExecutor;
 import io.innospots.base.script.aviator.AviatorScriptExecutor;
+import io.innospots.base.utils.BeanUtils;
 import io.innospots.base.utils.Initializer;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
@@ -55,7 +56,7 @@ public class SwitchNode extends BaseNodeExecutor {
     public static final String FIELD_CONDITIONS = "conditions";
     public static final String FIELD_CONDITION_FIELD = "conditionField";
 
-    private SwitchCondition[] switchConditions;
+    private List<SwitchCondition> switchConditions;
 
     private List<String> defaultNextNodeKeys = new ArrayList<>();
 
@@ -64,7 +65,7 @@ public class SwitchNode extends BaseNodeExecutor {
         switchConditions = buildConditions(ni);
         List<String> nextNodes = new ArrayList<>(this.nextNodeKeys());
         for (SwitchCondition switchCondition : switchConditions) {
-            if (switchCondition.getBranch() == null) {
+            if (switchCondition.getCondition() == null) {
                 defaultNextNodeKeys.addAll(nextNodes);
             }
             if (!nextNodes.isEmpty() && CollectionUtils.isNotEmpty(switchCondition.getNodeKeys())) {
@@ -82,11 +83,12 @@ public class SwitchNode extends BaseNodeExecutor {
         Map<String, NodeOutput> outCache = new LinkedHashMap<>();
         NodeOutput defaultOutput = new NodeOutput("#default");
         if (switchConditions != null) {
-            for (int i = 0; i < switchConditions.length; i++) {
-                String nName = switchConditions[i].name(i + 1);
+            for (int i = 0; i < switchConditions.size(); i++) {
+                SwitchCondition sc = switchConditions.get(i);
+                String nName = sc.name(i + 1);
                 NodeOutput nodeOutput = new NodeOutput(nName);
-                nodeOutput.addNextKey(switchConditions[i].getNodeKeys());
-                outCache.put(switchConditions[i].sourceAnchor, nodeOutput);
+                nodeOutput.addNextKey(sc.getNodeKeys());
+                outCache.put(sc.sourceAnchor, nodeOutput);
             }
             for (ExecutionInput executionInput : nodeExecution.getInputs()) {
                 for (Map<String, Object> data : executionInput.getData()) {
@@ -116,14 +118,16 @@ public class SwitchNode extends BaseNodeExecutor {
     }
 
 
-    private SwitchCondition[] buildConditions(NodeInstance nodeInstance) {
+    private List<SwitchCondition> buildConditions(NodeInstance nodeInstance) {
         Object v = nodeInstance.getData().get(FIELD_CONDITIONS);
         if (v == null) {
             throw ConfigException.buildMissingException(this.getClass(), "nodeKey:" + nodeKey() + ", field:" + FIELD_CONDITIONS);
         }
-        SwitchCondition[] switchConditions = null;
+        List<SwitchCondition> switchConditions = null;
         try {
-            switchConditions = JSONUtils.parseObject(JSONUtils.toJsonString(v), SwitchCondition[].class);
+            List<Map<String,Object>> conditionsMap = (List<Map<String, Object>>) v;
+            switchConditions = BeanUtils.toBean(conditionsMap,SwitchCondition.class);
+//            switchConditions = JSONUtils.parseObject(JSONUtils.toJsonString(v), SwitchCondition[].class);
             assert switchConditions != null;
             for (SwitchCondition switchCondition : switchConditions) {
                 switchCondition.initialize();
@@ -143,9 +147,9 @@ public class SwitchNode extends BaseNodeExecutor {
         @JsonIgnore
         private List<String> nodeKeys;
         private String sourceAnchor;
-        private BaseCondition branch;
+        private BaseCondition condition;
         @JsonIgnore
-        private String condition;
+        private String statement;
         private String desc;
 
         @JsonIgnore
@@ -157,11 +161,11 @@ public class SwitchNode extends BaseNodeExecutor {
 
         @Override
         public void initialize() {
-            if (branch != null) {
-                branch.initialize();
-                this.condition = branch.getStatement();
+            if (condition != null) {
+                condition.initialize();
+                this.statement = condition.getStatement();
                 if (condition != null) {
-                    expression = new AviatorExpressionExecutor(this.condition);
+                    expression = new AviatorExpressionExecutor(this.statement);
                 }
             }
         }

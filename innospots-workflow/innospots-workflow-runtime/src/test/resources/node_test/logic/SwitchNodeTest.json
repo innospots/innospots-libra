@@ -1,11 +1,6 @@
 {
-  "description": "节点描述信息",
   "name": "switch节点测试",
-  "color": "#98221",
-  "icon": "switch_icon",
   "nodeKey": "n99switchNodeKey",
-  "actionScriptType": "CONDITION",
-  "displayName": "分支节点",
   "code": "SWITCH",
   "nodeType": "io.innospots.workflow.node.app.logic.SwitchNode",
   "inputFields": [
@@ -28,8 +23,8 @@
   "data": {
     "conditions": [
       {
-        "nodeKey": "n12345676",
-        "desc": "单条件",
+        "nodeKey": "sw1",
+        "desc": "单条件1",
         "condition": {
           "factors": [
             {
@@ -40,14 +35,13 @@
               "valueType": "STRING"
             }
           ],
-          "relation": "and",
-          "statement": "f1 == 'v1'",
+          "relation": "AND",
           "mode": "SCRIPT"
         }
       },
       {
-        "nodeKey": "n12345676",
-        "desc": "单条件",
+        "nodeKey": "sw2",
+        "desc": "单条件2",
         "condition": {
           "factors": [
             {
@@ -58,8 +52,7 @@
               "valueType": "STRING"
             }
           ],
-          "relation": "and",
-          "statement": "f1 == 'v2'",
+          "relation": "AND",
           "mode": "SCRIPT"
         }
       },

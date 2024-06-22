@@ -396,7 +396,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
 
 
     public List<String> nextNodeKeys() {
-        return ni.getNextNodeKeys();
+        return ni.getNextNodeKeys() == null?Collections.emptyList() : ni.getNextNodeKeys();
     }
 
     public List<String> prevNodeKeys() {

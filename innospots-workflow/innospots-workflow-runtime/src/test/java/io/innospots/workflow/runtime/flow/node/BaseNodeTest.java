@@ -3,6 +3,8 @@ package io.innospots.workflow.runtime.flow.node;
 import io.innospots.base.exception.ScriptException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.script.ScriptExecutorManager;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.core.node.executor.NodeExecutorFactory;
@@ -46,6 +48,11 @@ public class BaseNodeTest {
         return nodeExecutor;
     }
 
+    public static void output(NodeExecution nodeExecution){
+        for (NodeOutput output : nodeExecution.getOutputs()) {
+            System.out.println(output);
+        }
+    }
 
     public static NodeInstance build(String fileName) {
         return build("",fileName);
