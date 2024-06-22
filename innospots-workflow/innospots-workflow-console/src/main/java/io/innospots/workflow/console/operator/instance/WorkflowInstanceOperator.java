@@ -76,8 +76,9 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
 
     private FlowNodeDefinitionOperator flowNodeDefinitionOperator;
 
-    public WorkflowInstanceOperator(FlowTemplateOperator flowTemplateOperator) {
+    public WorkflowInstanceOperator(FlowTemplateOperator flowTemplateOperator,FlowNodeDefinitionOperator flowNodeDefinitionOperator) {
         this.flowTemplateOperator = flowTemplateOperator;
+        this.flowNodeDefinitionOperator = flowNodeDefinitionOperator;
     }
 
     /**

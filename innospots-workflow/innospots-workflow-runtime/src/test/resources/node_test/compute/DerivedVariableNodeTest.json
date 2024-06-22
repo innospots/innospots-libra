@@ -44,21 +44,14 @@
           {
             "id": "JracOU",
             "element": "function",
-            "value": "string.startsWith(${s1},${s2})",
-            "displayValue": "string.startsWith(s1,s2)",
+            "value": "math.round(${d})",
+            "displayValue": "math.round(d)",
             "data": [
               {
                 "id": "UpniFZ",
                 "element": "field",
                 "value": "user_number",
                 "displayValue": "user_number",
-                "data": []
-              },
-              {
-                "id": "eLzzKL",
-                "element": "input",
-                "value": "2",
-                "displayValue": "2",
                 "data": []
               }
             ]

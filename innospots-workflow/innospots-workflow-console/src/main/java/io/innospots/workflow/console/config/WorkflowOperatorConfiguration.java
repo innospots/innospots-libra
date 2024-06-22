@@ -83,8 +83,10 @@ public class WorkflowOperatorConfiguration {
     }
 
     @Bean
-    public WorkflowInstanceOperator workflowInstanceOperator(FlowTemplateOperator flowTemplateOperator) {
-        return new WorkflowInstanceOperator(flowTemplateOperator);
+    public WorkflowInstanceOperator workflowInstanceOperator(FlowTemplateOperator flowTemplateOperator,
+                                                             FlowNodeDefinitionOperator flowNodeDefinitionOperator
+                                                             ) {
+        return new WorkflowInstanceOperator(flowTemplateOperator,flowNodeDefinitionOperator);
     }
 
     @Bean

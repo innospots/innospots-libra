@@ -1,14 +1,8 @@
 {
-  "description": "节点描述信息",
   "name": "if节点测试",
-  "color": "#98221",
-  "icon": "if_icon",
   "nodeKey": "n99ifnodeKey",
-  "displayName": "判断节点",
   "code": "IF",
-  "nodeType": "io.innospots.workflow.node.app.logic.IfNode",
-  "actionScriptType": "CONDITION",
-  "action": "abc > 10 && bc < user_age",
+  "nodeType": "io.innospots.workflow.node.app.logic.ConditionNode",
   "inputFields": [
     {
       "name": "abc",
@@ -26,23 +20,11 @@
       "valueType": "INTEGER"
     }
   ],
-  "continueOnFail": true,
-  "retryOnFail": false,
-  "maxTries": 5,
-  "retryWaitTimeMills": 100,
-  "async": false,
-  "nodeInstanceId": 8922,
-  "width": 200,
-  "height": 300,
-  "x": 25,
-  "y": 30,
-  "pauseFlag": false,
   "data": {
     "node_true": "n81723221",
     "node_false": "n92812353",
     "conditions": {
-      "relation": "or",
-      "statement": "(f1 == 'v1' && f2 > 1 && f3 < 45.8) || (f1 == 'v1' && f2 > 1 && f3 < 45.8)",
+      "relation": "OR",
       "mode": "SCRIPT",
       "embeds": [
         {
@@ -69,8 +51,7 @@
               "valueType": "DOUBLE"
             }
           ],
-          "relation": "and",
-          "statement": "f1 == 'v1' && f2 > 1 && f3 < 45.8",
+          "relation": "AND",
           "mode": "SCRIPT"
         },
         {
@@ -97,8 +78,7 @@
               "valueType": "DOUBLE"
             }
           ],
-          "relation": "and",
-          "statement": "f1 == 'v1' && f2 > 1 && f3 < 45.8",
+          "relation": "AND",
           "mode": "SCRIPT"
         }
       ]

@@ -75,7 +75,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
             initialize();
             buildStatus = BuildStatus.DONE;
         } catch (Exception e) {
-            logger.error("node build fail, nodeKey:{}, {}", this.nodeKey(), e.getMessage());
+            logger.error("node build fail, nodeKey:{}, {},err: {}", this.nodeKey(), e.getMessage(),ExceptionUtil.stacktraceToString(e,2048));
             buildStatus = BuildStatus.FAIL;
             buildException = e;
             //throw e;

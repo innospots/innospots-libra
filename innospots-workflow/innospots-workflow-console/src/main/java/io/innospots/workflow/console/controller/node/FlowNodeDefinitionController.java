@@ -92,9 +92,10 @@ public class FlowNodeDefinitionController extends BaseController {
     @GetMapping("list/online")
     @Operation(summary = "list online nodes")
     public InnospotsResponse<List<NodeDefinition>> listOnlineNodeDefinitions(
-            @Parameter(name = "primitive") @RequestParam(required = false, name = "primitive")
-            NodePrimitive primitive) {
-        return success(nodeDefinitionService.listOnlineNodes(primitive));
+            @Parameter(name = "primitive") @RequestParam(required = false, name = "primitive") NodePrimitive primitive,
+            @Parameter(name = "tplFlowCode") @RequestParam(required = false, name = "tplFlowCode",defaultValue = "EVENTS") String tplFlowCode
+            ) {
+        return success(nodeDefinitionService.listOnlineNodes(primitive,tplFlowCode));
     }
 
     /**

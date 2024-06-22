@@ -1,10 +1,12 @@
-package io.innospots.workflow.runtime.flow.node;
+package io.innospots.workflow.runtime.flow.node.logic;
 
 import io.innospots.base.exception.ScriptException;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.logic.ConditionNode;
+import io.innospots.workflow.runtime.flow.node.BaseNodeTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
@@ -17,16 +19,22 @@ import java.util.Map;
  * @date 2021/5/23
  */
 @Slf4j
-public class ConditionNodeTest extends BaseNodeTest {
+public class ConditionNodeTest {
+
+    private static String nodeFileName = "ConditionNodeTest";
 
     @Test
     public void invoke() throws ScriptException {
         NodeExecution nodeExecution = nodeExecution();
-        ConditionNode appNode = (ConditionNode) buildExecutor(ConditionNodeTest.class.getSimpleName());
+        ConditionNode executor = (ConditionNode) BaseNodeTest.buildExecutor("logic",nodeFileName);
 
-        appNode.invoke(nodeExecution);
-
+        executor.invoke(nodeExecution);
         log.info("nodeExecution:{}", nodeExecution);
+
+        for (NodeOutput output : nodeExecution.getOutputs()) {
+            System.out.println(output);
+        }
+
     }
 
 
@@ -39,14 +47,13 @@ public class ConditionNodeTest extends BaseNodeTest {
 
         ExecutionInput input = new ExecutionInput();
         input.addInput(data);
-
-//        execution.addInput(input);
+        execution.addInput(input);
         return execution;
     }
 
 
     public static NodeInstance build() {
-        return build(ConditionNodeTest.class.getSimpleName() + ".json");
+        return BaseNodeTest.build("logic",nodeFileName);
     }
 
 }

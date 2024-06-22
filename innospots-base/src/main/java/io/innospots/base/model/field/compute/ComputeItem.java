@@ -95,7 +95,8 @@ public class ComputeItem {
         switch (element) {
             case function:
                 if (data != null) {
-                    String v = FunctionDefinitionManager.getFunctionDefine(this.displayValue, scriptType);
+                    String v = this.value;
+//                    String v = FunctionDefinitionManager.getFunctionDefine(this.displayValue, scriptType);
                     if (v == null) {
                         log.error("function isn't defined, {}, {}", this.displayValue, scriptType);
                     } else {

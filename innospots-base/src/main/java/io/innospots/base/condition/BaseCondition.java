@@ -28,6 +28,7 @@ import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.utils.Initializer;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ import java.util.List;
  */
 @Getter
 @Setter
+@Slf4j
 public class BaseCondition implements Initializer {
 
     @JsonInclude(value = JsonInclude.Include.NON_NULL)
@@ -68,6 +70,7 @@ public class BaseCondition implements Initializer {
                 initialized = true;
             }
         } catch (Exception e) {
+            log.error(e.getMessage(),e);
             throw InnospotException.buildException(this.getClass(), ResponseCode.INITIALIZING, e);
         }
     }

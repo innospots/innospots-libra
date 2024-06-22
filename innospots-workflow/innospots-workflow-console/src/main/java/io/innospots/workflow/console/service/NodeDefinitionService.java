@@ -84,8 +84,8 @@ public class NodeDefinitionService {
         return body;
     }
 
-    public List<NodeDefinition> listOnlineNodes(NodePrimitive primitive) {
-        return flowNodeDefinitionOperator.listOnlineNodes(primitive);
+    public List<NodeDefinition> listOnlineNodes(NodePrimitive primitive, String tplFlowCode) {
+        return flowNodeDefinitionOperator.listOnlineNodes(primitive,tplFlowCode);
     }
 
     @Transactional(rollbackFor = Exception.class)

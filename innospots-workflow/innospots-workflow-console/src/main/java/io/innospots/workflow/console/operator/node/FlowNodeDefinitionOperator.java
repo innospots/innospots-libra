@@ -164,13 +164,16 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
         return result;
     }
 
-    public List<NodeDefinition> listOnlineNodes(NodePrimitive primitive) {
+    public List<NodeDefinition> listOnlineNodes(NodePrimitive primitive,String flowCode) {
         QueryWrapper<FlowNodeDefinitionEntity> queryWrapper = new QueryWrapper<>();
 
         queryWrapper.lambda()
                 .eq(FlowNodeDefinitionEntity::getStatus, DataStatus.ONLINE);
         if (primitive != null) {
             queryWrapper.lambda().eq(FlowNodeDefinitionEntity::getPrimitive, primitive);
+        }
+        if(flowCode != null){
+            queryWrapper.lambda().eq(FlowNodeDefinitionEntity::getFlowCode, flowCode);
         }
         return FlowNodeDefinitionConverter.INSTANCE.entitiesToModels(this.list(queryWrapper));
     }

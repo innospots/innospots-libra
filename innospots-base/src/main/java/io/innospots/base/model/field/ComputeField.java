@@ -21,6 +21,7 @@ package io.innospots.base.model.field;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.innospots.base.model.field.compute.ComputeItem;
 import io.innospots.base.script.IScriptExecutor;
+import io.innospots.base.script.aviator.AviatorExpressionExecutor;
 import io.innospots.base.script.aviator.AviatorScriptExecutor;
 import io.innospots.base.utils.Initializer;
 import lombok.Getter;
@@ -48,12 +49,12 @@ public class ComputeField extends BaseField implements Initializer {
     private List<ComputeItem> computeItems;
 
     @JsonIgnore
-    private IScriptExecutor expression;
+    private IScriptExecutor scriptExecutor;
 
     private String expr;
 
     public Object compute(Map<String, Object> env) {
-        return expression.execute(env);
+        return scriptExecutor.execute(env);
     }
 
 
@@ -72,7 +73,7 @@ public class ComputeField extends BaseField implements Initializer {
     public void initialize() {
         expr = toExpScript("aviator");
         log.debug("field,{},{} expression:{},", code, name, expr);
-//        expression = new AviatorScriptExecutor(expr, null);
+        scriptExecutor = new AviatorExpressionExecutor(expr);
     }
 
     @Override
