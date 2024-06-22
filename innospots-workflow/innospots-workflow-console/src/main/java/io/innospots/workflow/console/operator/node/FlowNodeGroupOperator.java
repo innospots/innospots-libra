@@ -39,6 +39,7 @@ import io.innospots.workflow.core.node.definition.entity.FlowTemplateEntity;
 import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import io.innospots.workflow.core.node.definition.model.NodeGroup;
 import io.innospots.workflow.core.node.definition.model.NodeGroupBaseInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,6 +55,7 @@ import java.util.stream.Collectors;
  * @author Raydian
  * @date 2020/11/28
  */
+@Slf4j
 public class FlowNodeGroupOperator {
 
 
@@ -289,7 +291,13 @@ public class FlowNodeGroupOperator {
                 List<FlowNodeGroupNodeEntity> groupNodeList = flowNodeGroupNodeDao.selectList(gnq);
                 for (FlowNodeGroupNodeEntity groupNode : groupNodeList) {
                     List<NodeDefinition> nodeDefinitions = ndMap.computeIfAbsent(groupNode.getNodeGroupId(), k -> new ArrayList<>());
-                    nodeDefinitions.add(nodeDefinitionMap.get(groupNode.getNodeId()));
+                    NodeDefinition node = nodeDefinitionMap.get(groupNode.getNodeId());
+                    if(node != null){
+                        nodeDefinitions.add(node);
+                    }else{
+                        log.warn("node definition has been removed, but node group have this relation record, nodeId:{}, groupId:{}, primaryId:{}",
+                                groupNode.getNodeId(),groupNode.getNodeGroupId(),groupNode.getNodeGroupNodeId());
+                    }
                 }//end for group
             }//end for node definition list
         }//end include
