@@ -1,4 +1,4 @@
-package io.innospots.workflow.runtime.flow.node;
+package io.innospots.workflow.runtime.flow.node.data;
 
 import org.junit.jupiter.api.Test;
 import org.noear.snack.ONode;

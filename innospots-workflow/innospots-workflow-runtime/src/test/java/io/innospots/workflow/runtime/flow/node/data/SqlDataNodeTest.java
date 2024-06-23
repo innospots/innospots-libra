@@ -1,4 +1,4 @@
-package io.innospots.workflow.runtime.flow.node;
+package io.innospots.workflow.runtime.flow.node.data;
 
 import io.innospots.base.data.enums.DataOperation;
 import io.innospots.base.model.field.FieldValueType;

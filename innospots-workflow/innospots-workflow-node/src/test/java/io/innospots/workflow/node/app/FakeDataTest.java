@@ -1,4 +1,4 @@
-package io.innospots.workflow.runtime.flow.node;
+package io.innospots.workflow.node.app;
 
 import net.datafaker.Faker;
 import org.junit.jupiter.api.Test;
@@ -164,6 +164,7 @@ public class FakeDataTest {
 
 
         Faker faker = new Faker(new Locale("zh-CN"));
+
         Set<String> skips = new HashSet<>();
         skips.add("wait");
         skips.add("csv");
@@ -186,6 +187,7 @@ public class FakeDataTest {
         skipClass.add("bodyString");
         Method[] methods = Faker.class.getMethods();
         List<String> exps = new ArrayList<>();
+        List<String> expsll = new ArrayList<>();
         for (Method method : methods) {
             String f = method.getName();
             f += ":";
@@ -213,6 +215,7 @@ public class FakeDataTest {
 //                            System.out.print(exp);
 //                            System.out.println(" : "+vv);
                             exps.add(v.getClass().getSimpleName() + "|" + exp + "|" + vv);
+                            expsll.add(exp);
                         } catch (Exception e) {
                             System.err.println(e.getMessage() + ", method: " + vMethod.getName());
                             e.printStackTrace();
@@ -277,6 +280,11 @@ public class FakeDataTest {
         exps.sort(Comparator.naturalOrder());
         for (String exp : exps) {
             System.out.println(exp);
+        }
+
+        System.out.println("============\n\n\n");
+        for (String s : expsll) {
+            System.out.println(s);
         }
     }
 }

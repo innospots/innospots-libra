@@ -1,5 +1,7 @@
 package io.innospots.workflow.runtime.flow.node.file;
 
+import io.innospots.base.crypto.EncryptorBuilder;
+import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.base.execution.ExecutionResource;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
@@ -7,10 +9,14 @@ import io.innospots.workflow.core.execution.model.node.NodeExecutionDisplay;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
+import io.innospots.workflow.node.app.file.LoadFilesNode;
+import io.innospots.workflow.node.app.file.OutputFilesNode;
 import io.innospots.workflow.runtime.flow.node.BaseNodeTest;
+import io.innospots.workflow.runtime.flow.node.IDataNodeTest;
 import io.innospots.workflow.runtime.flow.node.NodeExecutionTest;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -18,34 +24,30 @@ import java.util.List;
  * @version 1.2.0
  * @date 2023/2/25
  */
-class OutputFilesNodeTest {
-
-
-    @Test
-    void testInstance(){
-        NodeInstance nodeInstance = BaseNodeTest.build(OutputFilesNodeTest.class.getSimpleName()+".json");
-        System.out.println(nodeInstance);
-        System.out.println(System.getenv("HOME"));
-        BaseNodeExecutor appNode = BaseNodeTest.buildExecutor(OutputFilesNodeTest.class.getSimpleName());
-        NodeExecution ne2 = LoadFilesNodeTest.readExecution();
-        NodeExecution nodeExecution = NodeExecutionTest.build("key12345");
-
-        ExecutionInput executionInput = new ExecutionInput();
-        for (NodeOutput output : ne2.getOutputs()) {
-            for (List<ExecutionResource> value : output.getResources().values()) {
-                executionInput.addResource(value);
-            }
-        }//end for
-
-        nodeExecution.addInput(executionInput);
-
-        appNode.invoke(nodeExecution);
-        System.out.println(NodeExecutionDisplay.build(nodeExecution,null));
-    }
+class OutputFilesNodeTest implements IDataNodeTest {
 
     @Test
     void testFile() {
-
+        this.testExecute();
     }
 
+    @Override
+    public NodeExecution buildExecution(String nodeKey, int size, boolean in) {
+        NodeExecution ne = NodeExecutionTest.build(nodeKey);
+        File[] files = LoadFilesNode.selectFiles(System.getProperty("user.home")+"/temp/*.pdf");
+        ExecutionInput input = new ExecutionInput("abcs");
+        EncryptorBuilder.initialize("abc");
+        int c = 0;
+        for (File rFile : files) {
+            ExecutionResource executionResource = ExecutionResource.buildResource(rFile, true, InnospotsWorkflowProperties.WORKFLOW_RESOURCES);
+            input.addResource(executionResource);
+        }
+        ne.addInput(input);
+        return ne;
+    }
+
+    @Override
+    public NodeInstance build() {
+        return BaseNodeTest.build("file","OutputFilesNodeTest");
+    }
 }

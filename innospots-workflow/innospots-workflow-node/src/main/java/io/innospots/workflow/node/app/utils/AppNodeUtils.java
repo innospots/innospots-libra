@@ -1,5 +1,6 @@
 package io.innospots.workflow.node.app.utils;
 
+import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.compute.AggregationComputeField;
 import org.apache.commons.collections4.CollectionUtils;
@@ -18,6 +19,10 @@ public class AppNodeUtils {
         List<Map<String, Object>> fieldMaps = (List<Map<String, Object>>) nodeInstance.value(fieldName);
 
         List<AggregationComputeField> computeFields = new ArrayList<>();
+        computeFields = BeanUtils.toBean(fieldMaps, AggregationComputeField.class);
+        computeFields.forEach(AggregationComputeField::initialize);
+
+        /*
         if (CollectionUtils.isEmpty(fieldMaps)) {
             return computeFields;
         }
@@ -26,6 +31,7 @@ public class AppNodeUtils {
             cf.initialize();
             computeFields.add(cf);
         }
+         */
         return computeFields;
     }
 }

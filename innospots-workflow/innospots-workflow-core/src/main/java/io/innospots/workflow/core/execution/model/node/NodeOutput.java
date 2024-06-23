@@ -140,10 +140,12 @@ public class NodeOutput {
         Map<String,Object> logs = new LinkedHashMap<>();
         logs.put("size",results.size());
         logs.put("total", total);
+        logs.put("nextNodeKeys",this.nextNodeKeys);
         if(results.size()>0){
             logs.put("columns",results.get(0).keySet().size());
         }
         if(MapUtils.isNotEmpty(resources)){
+            logs.put("resource_size",resources.size());
             List<Map<String,Object>> metas = new ArrayList<>();
             for (List<ExecutionResource> executionResources : resources.values()) {
                 metas.addAll(executionResources.stream().map(ExecutionResource::toMetaInfo).collect(Collectors.toList()));

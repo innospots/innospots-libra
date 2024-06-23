@@ -16,9 +16,10 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.runtime.flow.node.file;
+package io.innospots.workflow.node.app.file;
 
 import io.innospots.base.execution.ExecutionResource;
+import io.innospots.base.utils.PlaceholderUtils;
 import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
@@ -46,10 +47,10 @@ public class LoadFilesNode extends BaseNodeExecutor {
 
     @Override
     protected void initialize() {
-
         validFieldConfig(FIELD_SOURCE_FILES);
         //validFieldConfig(FIELD_FILE_VAR);
         sourceFiles = valueString(FIELD_SOURCE_FILES);
+        convertFiles();
         fileVar = valueString(FIELD_FILE_VAR);
     }
 
@@ -77,7 +78,15 @@ public class LoadFilesNode extends BaseNodeExecutor {
         }//end if
     }
 
-    protected File[] selectFiles(String sourceDir) {
+    private void convertFiles(){
+        Map<String,String> props = new HashMap<>();
+        System.getProperties().forEach((k,v)->{
+            props.put(String.valueOf(k),String.valueOf(v));
+        });
+        this.sourceFiles = PlaceholderUtils.replacePlaceholders(this.sourceFiles,props);
+    }
+
+    public static File[] selectFiles(String sourceDir) {
         File sourceFile = new File(sourceDir);
         File[] files;
         if (sourceFile.isDirectory()) {

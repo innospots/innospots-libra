@@ -1,4 +1,4 @@
-package io.innospots.workflow.runtime.flow.node.execute;
+package io.innospots.workflow.runtime.flow.node.compute;
 
 import org.apache.commons.math3.stat.descriptive.moment.Variance;
 import org.apache.commons.math3.stat.descriptive.rank.Percentile;

@@ -51,6 +51,7 @@ public class CmdlineScriptNode extends ScriptBaseNode {
 
     @Override
     protected void initialize() {
+        super.initialize();
         outputMode = OutputMode.valueOf(validString(FIELD_OUTPUT_MODE));
         if (outputMode == OutputMode.FIELD) {
             outputField = validString(FIELD_VARIABLE_NAME);

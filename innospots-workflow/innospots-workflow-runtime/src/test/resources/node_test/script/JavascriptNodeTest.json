@@ -1,0 +1,11 @@
+{
+  "name": "js脚本执行",
+  "nodeKey": "jsNodeKey",
+  "code": "javascript",
+  "nodeType": "io.innospots.workflow.node.app.script.ScriptNode",
+  "nodeInstanceId": 8922,
+  "data": {
+    "script_type": "javascript",
+    "action_script": "console.log('script item out:'+JSON.stringify(item));\n return item;"
+  }
+}

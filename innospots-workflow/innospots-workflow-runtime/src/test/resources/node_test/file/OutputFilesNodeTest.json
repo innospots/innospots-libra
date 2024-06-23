@@ -7,7 +7,7 @@
   "nodeDefinitionId": 51,
   "name": "文件存储",
   "code": "WRITE_FILES",
-  "nodeType": "io.innospots.workflow.node.app.file.WriteFilesNode",
+  "nodeType": "io.innospots.workflow.node.app.file.OutputFilesNode",
   "displayName": "文件存储",
   "description": "文件存储",
   "nodeInstanceId": 125

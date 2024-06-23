@@ -155,11 +155,15 @@ public class WorkflowBody extends WorkflowBaseBody implements Initializer {
         Set<String> sourceKeys = sourceNodeCache.get(nodeInstance.getNodeKey());
         if (CollectionUtils.isNotEmpty(sourceKeys)) {
             for (String sourceKey : sourceKeys) {
+                if(sourceKey == null){
+                    log.error("source key is null:{}",nodeInstance);
+                    continue;
+                }
                 NodeInstance ni = nodeCache.get(sourceKey);
                 if(ni!=null){
                     sourceList.add(ni);
                 }
-                log.error("source key is null:{} , {}",sourceKey,nodeInstance);
+
             }
         }
         sourceNodes.putIfAbsent(nodeInstance.getNodeKey(), sourceList);

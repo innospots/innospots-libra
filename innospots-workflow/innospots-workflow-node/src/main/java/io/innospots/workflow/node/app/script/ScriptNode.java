@@ -18,7 +18,6 @@
 
 package io.innospots.workflow.node.app.script;
 
-import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 
 /**
  * script execute node

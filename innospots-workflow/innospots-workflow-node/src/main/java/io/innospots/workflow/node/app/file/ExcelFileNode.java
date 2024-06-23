@@ -1,4 +1,4 @@
-package io.innospots.workflow.runtime.flow.node.file;
+package io.innospots.workflow.node.app.file;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.context.AnalysisContext;
@@ -91,8 +91,8 @@ public class ExcelFileNode extends BaseNodeExecutor {
 
     @Override
     protected void initialize() {
-        this.fileOperation = FileOperation.valueOf(this.valueString(FILE_OPT));
-        this.filePath = this.valueString(FILE_PATH);
+        this.fileOperation = FileOperation.valueOf(this.validString(FILE_OPT));
+        this.filePath = this.validString(FILE_PATH);
         this.fileFormat = ExcelTypeEnum.valueOf(this.valueString(FILE_FORMAT).toUpperCase());
         if (fileFormat == ExcelTypeEnum.CSV) {
             this.lineSeparator = this.valueString(LINE_SEPARATOR);

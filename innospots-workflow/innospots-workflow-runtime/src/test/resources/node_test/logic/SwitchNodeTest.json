@@ -25,6 +25,7 @@
       {
         "nodeKey": "sw1",
         "desc": "单条件1",
+        "sourceAnchor":"sa1",
         "condition": {
           "factors": [
             {
@@ -42,6 +43,7 @@
       {
         "nodeKey": "sw2",
         "desc": "单条件2",
+        "sourceAnchor": "sa2",
         "condition": {
           "factors": [
             {
@@ -55,11 +57,6 @@
           "relation": "AND",
           "mode": "SCRIPT"
         }
-      },
-      {
-        "nodeKey": "n12345677",
-        "condition": null,
-        "desc": "默认分支"
       }
     ]
   }

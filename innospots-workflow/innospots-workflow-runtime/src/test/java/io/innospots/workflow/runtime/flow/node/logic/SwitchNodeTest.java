@@ -36,8 +36,16 @@ public class SwitchNodeTest {
         data.put("total_level", "1");
         data.put("user_level", "v5");
         data.put("user_age", 10);
+        data.put("f1", "v1");
 
         ExecutionInput input = new ExecutionInput();
+        input.addInput(data);
+
+        data = new HashMap<>();
+        data.put("total_level", "1");
+        data.put("user_level", "v5");
+        data.put("user_age", 10);
+        data.put("f1", "v2");
         input.addInput(data);
 
         execution.addInput(input);

@@ -1,10 +1,13 @@
 package io.innospots.workflow.runtime.flow.node.file;
 
+import io.innospots.base.crypto.EncryptorBuilder;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecutionDisplay;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
+import io.innospots.workflow.node.app.file.LoadFilesNode;
 import io.innospots.workflow.runtime.flow.node.BaseNodeTest;
+import io.innospots.workflow.runtime.flow.node.IDataNodeTest;
 import io.innospots.workflow.runtime.flow.node.NodeExecutionTest;
 import org.junit.jupiter.api.Test;
 
@@ -17,8 +20,13 @@ import java.util.Arrays;
  * @version 1.2.0
  * @date 2023/2/25
  */
-class LoadFilesNodeTest {
+class LoadFilesNodeTest implements IDataNodeTest {
 
+    @Test
+    void test(){
+        EncryptorBuilder.initialize("abc");
+        testExecute(1);
+    }
 
     @Test
     void testInstance(){
@@ -66,7 +74,7 @@ class LoadFilesNodeTest {
         LoadFilesNode loadFilesNode = new LoadFilesNode();
         File[] files = loadFilesNode.selectFiles("/tmp/*.img");
         System.out.println(Arrays.toString(files));
-        files = loadFilesNode.selectFiles("/tmp/*");
+        files = loadFilesNode.selectFiles("~/temp/*");
         System.out.println(Arrays.toString(files));
         files = loadFilesNode.selectFiles(System.getProperty("user.home") + "/Downloads/*.pdf");
         System.out.println(Arrays.toString(files));
@@ -75,4 +83,8 @@ class LoadFilesNodeTest {
         });
     }
 
+    @Override
+    public NodeInstance build() {
+        return BaseNodeTest.build("file","ReadFilesNodeTest");
+    }
 }

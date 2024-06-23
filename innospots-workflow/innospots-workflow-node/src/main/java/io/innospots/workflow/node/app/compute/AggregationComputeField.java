@@ -74,6 +74,8 @@ public class AggregationComputeField extends BaseField implements Initializer {
         if (fieldMap.containsKey("valueType")) {
             computeField.valueType = FieldValueType.valueOf((String) fieldMap.get("valueType"));
         }
+
+
         computeField.functionType = StatisticFunctionType.valueOf((String) fieldMap.get("functionType"));
         Map<String, Object> sf = (Map<String, Object>) fieldMap.get("summaryField");
         if (sf != null) {
@@ -103,88 +105,14 @@ public class AggregationComputeField extends BaseField implements Initializer {
                 conditionExpression = new AviatorExpressionExecutor(expr);
             }
         }
+
         this.aggregateFunction = AggregationFunctionBuilder.build(functionType, summaryField,weightField, conditionExpression);
         log.debug("field,{},{} expression:{},", code, name, expr);
     }
 
     public Object compute(Collection<Map<String, Object>> items) {
         return this.aggregateFunction.compute(items);
-        /*
-        Object val = null;
-        try {
-            switch (functionType) {
-                case AVG:
-                    val = avg(items);
-                    break;
-                case MAX:
-                    val = max(items);
-                    break;
-                case MIN:
-                    val = min(items);
-                    break;
-                case SUM:
-                    val = sum(items);
-                    break;
-                case COUNT:
-                    val = count(items);
-                    break;
-                case DISCOUNT:
-                    val = distinctCount(items);
-                    break;
-                case STD_DEV:
-                    val = stdDev(items);
-                    break;
-                case VARIANCE:
-                    val = variance(items);
-                    break;
-                case POP_STD_DEV:
-                    val = popStdDev(items);
-                    break;
-                case POP_VARIANCE:
-                    val = popVariance(items);
-                    break;
-                case KURT:
-                    val = kurtosis(items);
-                    break;
-                case MAD:
-                    val = meanAbsDev(items);
-                    break;
-                case SEM:
-                    val = stdErrOfMean(items);
-                    break;
-                case SOS:
-                    val = sumOfSquares(items);
-                    break;
-                case MODE:
-                    val = mode(items);
-                    break;
-                case PROD:
-                    val = product(items);
-                    break;
-                case SKEW:
-                    val = skewness(items);
-                    break;
-                case SEMI_VAR:
-                    val = semiVariance(items);
-                    break;
-                case SumOfLogs:
-                    val = sumOfLogs(items);
-                    break;
-                case GeometricMean:
-                    val = geometricMean(items);
-                    break;
-                case MEDIAN:
-                    val = median(items);
-                    break;
-                case PERCENTILE:
-                default:
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-        return val;
 
-         */
     }
 
     /*

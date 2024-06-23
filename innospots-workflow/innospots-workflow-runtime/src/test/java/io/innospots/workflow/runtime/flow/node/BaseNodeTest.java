@@ -1,6 +1,7 @@
 package io.innospots.workflow.runtime.flow.node;
 
 import io.innospots.base.exception.ScriptException;
+import io.innospots.base.execution.ExecutionResource;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.script.ScriptExecutorManager;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
@@ -9,6 +10,7 @@ import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.core.node.executor.NodeExecutorFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -17,6 +19,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 
 /**
  * @author Smars
@@ -43,15 +46,30 @@ public class BaseNodeTest {
         ScriptExecutorManager.setPath("target/classes", "target/classes");
         log.info("classpath: {}",ScriptExecutorManager.getClassPath());
 
-        BaseNodeExecutor nodeExecutor = NodeExecutorFactory.compileBuild(fileName,instance);;
+        BaseNodeExecutor nodeExecutor = NodeExecutorFactory.compileBuild(fileName,instance);
 
         return nodeExecutor;
     }
 
     public static void output(NodeExecution nodeExecution){
         for (NodeOutput output : nodeExecution.getOutputs()) {
-            System.out.println(output);
+            System.out.println(output.log());
+            for (Map<String, Object> result : output.getResults()) {
+                System.out.println(result);
+            }
+            if(MapUtils.isNotEmpty(output.getResources())){
+                output.getResources().forEach((k,v)->{
+                    for (ExecutionResource executionResource : v) {
+                        System.out.println(executionResource.toMetaInfo());
+                    }
+                });
+            }
         }
+    }
+
+    public static BaseNodeExecutor buildExecutor(NodeInstance nodeInstance) {
+        ScriptExecutorManager.setPath("target/classes", "target/classes");
+        return NodeExecutorFactory.compileBuild(nodeInstance.getNodeKey(),nodeInstance);
     }
 
     public static NodeInstance build(String fileName) {
@@ -66,7 +84,7 @@ public class BaseNodeTest {
         try {
             URL url = BaseNodeTest.class.getResource(uri);
             if (url == null) {
-                throw new RuntimeException("文件不存在：" + url);
+                throw new RuntimeException("文件不存在：" + uri);
             }
             Path p = Paths.get(url.toURI());
             log.info("node json file:{}",p);

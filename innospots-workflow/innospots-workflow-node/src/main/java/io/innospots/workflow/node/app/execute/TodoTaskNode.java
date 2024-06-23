@@ -16,17 +16,25 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.node.app.script;
+package io.innospots.workflow.node.app.execute;
 
-import lombok.extern.slf4j.Slf4j;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 
 /**
  * @author Smars
- * @version 1.0.0
- * @date 2022/11/11
+ * @date 2023/5/12
  */
-@Slf4j
-public class PythonNode extends CmdlineScriptNode {
+public class TodoTaskNode extends BaseNodeExecutor {
 
 
+    @Override
+    protected void initialize() {
+
+    }
+
+    @Override
+    public void invoke(NodeExecution nodeExecution) {
+        super.invoke(nodeExecution);
+    }
 }

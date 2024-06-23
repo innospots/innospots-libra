@@ -39,21 +39,23 @@ public class FakeDataNode extends BaseNodeExecutor {
 
     public static final String FIELD_FAKE_DATA = "fake_data";
     public static final String FIELD_ITEM_SIZE = "item_size";
+    public static final String WAITING_MILLIS = "waiting_mills";
 
     private Map<String, Object> fakeData;
     private Integer itemSize;
     private Faker faker;
+    private Integer waitingMills;
 
     @Override
     protected void initialize() {
         String fakeString = validString(FIELD_FAKE_DATA);
-
         fakeData = JSONUtils.toMap(fakeString);
         itemSize = valueInteger(FIELD_ITEM_SIZE);
         if (itemSize == null) {
             itemSize = 1;
         }
         faker = new Faker(LocaleMessageUtils.getLocale());
+        waitingMills = valueInteger(WAITING_MILLIS);
     }
 
     @Override
@@ -73,6 +75,13 @@ public class FakeDataNode extends BaseNodeExecutor {
                 }
             }
             nodeOutput.addResult(item);
+        }
+        if (waitingMills != null) {
+            try {
+                Thread.sleep(waitingMills);
+            } catch (InterruptedException e) {
+                log.error(e.getMessage());
+            }
         }
     }
 

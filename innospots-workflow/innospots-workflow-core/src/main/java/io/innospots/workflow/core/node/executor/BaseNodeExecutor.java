@@ -335,7 +335,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
     }
 
     protected List<Map<String, Object>> valueMapList(String field) {
-        validFieldConfig(field);
+        //validFieldConfig(field);
         return (List<Map<String, Object>>) ni.value(field);
     }
 

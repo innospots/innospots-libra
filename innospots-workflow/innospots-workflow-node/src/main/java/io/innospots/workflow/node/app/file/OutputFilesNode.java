@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.runtime.flow.node.file;
+package io.innospots.workflow.node.app.file;
 
 import cn.hutool.core.io.FileUtil;
 import io.innospots.workflow.core.config.InnospotsWorkflowProperties;

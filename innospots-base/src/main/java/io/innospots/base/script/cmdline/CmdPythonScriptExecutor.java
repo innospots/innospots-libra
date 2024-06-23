@@ -18,6 +18,11 @@
 
 package io.innospots.base.script.cmdline;
 
+import io.innospots.base.exception.ScriptException;
+import io.innospots.base.json.JSONUtils;
+
+import java.util.Map;
+
 /**
  * @author Smars
  * @vesion 2.0
@@ -26,6 +31,12 @@ package io.innospots.base.script.cmdline;
 public class CmdPythonScriptExecutor extends CmdLineScriptExecutor{
 
 
+    @Override
+    public Object execute(Map<String, Object> env) throws ScriptException {
+        Object[] val = new Object[1];
+        val[0] = JSONUtils.toJsonString(env);
+        return super.execute(val);
+    }
 
     @Override
     public String scriptType() {

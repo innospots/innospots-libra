@@ -1,0 +1,15 @@
+{
+  "nodeKey": "DnHPsyFPa",
+  "nodeDefinitionId": 51,
+  "name": "excel file",
+  "code": "EXCEL_FILES",
+  "nodeType": "io.innospots.workflow.node.app.file.ExcelFileNode",
+  "nodeInstanceId": 125,
+  "data": {
+    "first_header":"true",
+    "encoding":"UTF-8",
+    "operation":"READ",
+    "file_format":"XLSX",
+    "file_path": "/tmp/pdf_out/out.xlsx"
+  }
+}

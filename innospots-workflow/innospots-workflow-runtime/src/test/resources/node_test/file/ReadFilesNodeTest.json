@@ -1,0 +1,11 @@
+{
+  "data": {
+    "source_files":"${user.home}/temp/*.pdf"
+  },
+  "nodeKey": "fnHPsyFPa",
+  "nodeDefinitionId": 51,
+  "name": "文件读取",
+  "code": "READ_FILES",
+  "nodeType": "io.innospots.workflow.node.app.file.LoadFilesNode",
+  "nodeInstanceId": 125
+}

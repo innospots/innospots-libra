@@ -1,4 +1,4 @@
-package io.innospots.workflow.runtime.flow.node;
+package io.innospots.workflow.runtime.flow.node.script;
 
 
 import io.innospots.workflow.core.execution.model.ExecutionInput;
@@ -6,7 +6,8 @@ import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
-import io.innospots.workflow.node.app.script.PythonNode;
+import io.innospots.workflow.node.app.script.CmdLinePythonNode;
+import io.innospots.workflow.runtime.flow.node.BaseNodeTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
@@ -19,14 +20,15 @@ import java.util.Map;
  * @date 2022/11/25
  */
 @Slf4j
-class PythonNodeTest extends BaseNodeTest {
+class CmdLinePythonNodeTest {
+
 
 
     @Test
     void test11() {
-        PythonNode baseAppNode = (PythonNode) buildExecutor(this.getClass().getSimpleName());
-        NodeExecution nodeExecution = nodeExecution(baseAppNode);
-        baseAppNode.invoke(nodeExecution);
+        CmdLinePythonNode executor = (CmdLinePythonNode) BaseNodeTest.buildExecutor("script",this.getClass().getSimpleName());
+        NodeExecution nodeExecution = nodeExecution(executor);
+        executor.invoke(nodeExecution);
         log.info("nodeExecution:{}", nodeExecution.getOutputs());
         for (NodeOutput output : nodeExecution.getOutputs()) {
             System.out.println(output);
@@ -48,6 +50,6 @@ class PythonNodeTest extends BaseNodeTest {
 
 
     public NodeInstance build() {
-        return build(this.getClass().getSimpleName() + ".json");
+        return BaseNodeTest.build("script",this.getClass().getSimpleName());
     }
 }

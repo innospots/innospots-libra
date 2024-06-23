@@ -47,7 +47,7 @@
         <commons-codec.version>1.15</commons-codec.version>
         <commons-compress.version>1.24.0</commons-compress.version>
         <commons-io.version>2.7</commons-io.version>
-        <datafaker.version>1.7.0</datafaker.version>
+        <datafaker.version>1.9.0</datafaker.version>
         <disruptor.version>3.4.4</disruptor.version>
         <fabric8.maven.plugin.version>0.35.0</fabric8.maven.plugin.version>
         <guava.version>32.1.3-jre</guava.version>

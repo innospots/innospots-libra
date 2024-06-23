@@ -63,9 +63,13 @@ public abstract class CmdLineScriptExecutor implements IScriptExecutor {
             scriptPath = scriptMeta.path();
             String scriptBody = (String) method.invoke(null);
             File scriptFile = new File(scriptPath);
-            if(!scriptFile.exists()){
-                FileUtil.writeBytes(scriptBody.getBytes(), scriptFile);
+            if(scriptFile.exists()){
+                if(!scriptFile.delete()){
+                    log.warn("delete script file {} failed", scriptPath);
+                }
             }
+            FileUtil.writeBytes(scriptBody.getBytes(), scriptFile);
+
             Pair<Class<?>,String>[] pairs = this.argsPair(scriptMeta.args());
             arguments = Arrays.stream(pairs).map(Pair::getRight).collect(Collectors.toList()).toArray(String[]::new);
         } catch (IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {

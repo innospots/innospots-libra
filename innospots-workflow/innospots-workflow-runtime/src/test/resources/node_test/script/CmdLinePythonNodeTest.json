@@ -1,0 +1,13 @@
+{
+  "name": "python脚本执行",
+  "nodeKey": "PythonNodeKey",
+  "code": "PYTHON",
+  "nodeType": "io.innospots.workflow.node.app.script.CmdLinePythonNode",
+  "nodeInstanceId": 8922,
+  "data": {
+    "output_mode": "FIELD",
+    "script_type": "python",
+    "variable_name": "vars",
+    "action_script": "def add(a, b):\n    return a + b\nresult = add(1, 2)\ntd={'Name': 'i1','i2':'i2'}\ntd\nprint(args)"
+  }
+}

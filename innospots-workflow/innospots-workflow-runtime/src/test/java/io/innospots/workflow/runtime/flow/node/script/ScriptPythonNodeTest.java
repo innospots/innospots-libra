@@ -22,7 +22,7 @@ import java.util.Map;
 @Slf4j
 public class ScriptPythonNodeTest {
 
-    private static String nodeFileName = "ScriptPythonNodeSample";
+    private static String nodeFileName = "ScriptPythonNodeTest";
 
     @Test
     public void invoke() throws ScriptException {
