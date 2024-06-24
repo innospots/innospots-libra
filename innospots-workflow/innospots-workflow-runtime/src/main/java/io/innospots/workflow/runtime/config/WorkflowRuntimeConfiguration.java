@@ -36,6 +36,7 @@ import io.innospots.workflow.core.instance.operator.WorkflowDraftOperator;
 import io.innospots.workflow.core.runtime.webhook.DefaultResponseBuilder;
 import io.innospots.workflow.runtime.container.*;
 import io.innospots.workflow.runtime.container.listener.WorkflowRuntimeEventListener;
+import io.innospots.workflow.runtime.endpoint.SseEventEndpoint;
 import io.innospots.workflow.runtime.endpoint.WebhookRuntimeEndpoint;
 import io.innospots.workflow.runtime.endpoint.WebhookTestEndpoint;
 import io.innospots.workflow.runtime.endpoint.WorkflowManagementEndpoint;
@@ -73,6 +74,11 @@ public class WorkflowRuntimeConfiguration {
     @Bean
     public NodeExecutionStoreListener nodeExecutionStoreListener(INodeExecutionOperator nodeExecutionOperator) {
         return new NodeExecutionStoreListener(nodeExecutionOperator);
+    }
+
+    @Bean
+    public SseEventEndpoint sseEventEndpoint() {
+        return new SseEventEndpoint();
     }
 
     @Bean

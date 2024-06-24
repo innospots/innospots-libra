@@ -19,7 +19,10 @@
 package io.innospots.workflow.core.execution.listener;
 
 
+import io.innospots.base.execution.ExecutionResource;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
+
+import java.util.Map;
 
 /**
  * @author Raydian
@@ -32,5 +35,17 @@ public interface INodeExecutionListener {
     void complete(NodeExecution nodeExecution);
 
     void fail(NodeExecution nodeExecution);
+
+    default void item(NodeExecution nodeExecution,Map<String,Object> item){
+
+    }
+
+    default void item(NodeExecution nodeExecution,ExecutionResource executionResource){
+
+    }
+
+    default void log(NodeExecution nodeExecution,Map<String,Object> log){
+
+    }
 
 }

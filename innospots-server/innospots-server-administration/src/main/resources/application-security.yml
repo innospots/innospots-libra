@@ -29,6 +29,7 @@ innospots:
       - /innospots/api/test/**
       - /innospots/api/image/**
       - /innospots/api/workflow/flow-execution/resources/**
+      - /innospots/api/workflow/sse/**
       - /innospots/api/oauth2/callback/**
       - /
       - /403
