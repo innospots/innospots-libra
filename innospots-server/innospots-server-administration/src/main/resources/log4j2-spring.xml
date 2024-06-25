@@ -79,7 +79,8 @@
         <Logger name="io.innospots.libra.kernel.interceptor" level="info"/>
         <Logger name="io.innospots.libra.kernel.module.i18n.service.I18nTransMessageService" level="debug"/>
         <Logger name="io.innospots.base.data" level="info"/>
-        <Logger name="io.innospots.base.data.operator.jdbc" level="debug"/>
+        <!-- scan schedule execution -->
+        <Logger name="io.innospots.base.data.operator.jdbc" level="info"/>
         <Logger name="io.innospots.base.registry" level="info"/>
         <Logger name="io.innospots.base.data.operator" level="info"/>
         <Logger name="io.innospots.connector.schema.dao" level="info"/>
@@ -96,6 +97,7 @@
         <Logger name="io.innospots.workflow.console.dao" level="info"/>
         <Logger name="io.innospots.workflow.console.operator" level="debug"/>
         <Logger name="io.innospots.workflow.core.execution.store.NodeExecutionStoreListener" level="info"/>
+        <Logger name="io.innospots.workflow.core.execution.operator.jdbc" level="info"/>
     </Loggers>
 
 </Configuration>

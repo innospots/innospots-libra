@@ -64,10 +64,12 @@ public class GlobalExceptionHandler {
             resp += "event:error-event\n";
             resp += "data:";
             resp += e.getMessage();
+            return ResponseEntity.status(response.getStatus()).build();
         }else{
             resp = JSONUtils.toJsonString(ErrorResponse.build(ResponseCode.FAIL,"system", e.getMessage()));
+            return ResponseEntity.status(response.getStatus()).body(resp);
         }
-        return ResponseEntity.status(response.getStatus()).body(resp);
+
     }
 
     @ExceptionHandler(value = {MissingServletRequestParameterException.class})
