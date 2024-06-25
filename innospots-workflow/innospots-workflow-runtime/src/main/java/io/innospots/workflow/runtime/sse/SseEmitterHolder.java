@@ -35,6 +35,7 @@ public class SseEmitterHolder {
     }
 
     public void send(String id,Object data,String eventName){
+        id = id + "-" + counter;
         SseEmitter.SseEventBuilder event = SseEmitter.event()
                 .data(data)
                 .id(id)
@@ -47,16 +48,19 @@ public class SseEmitterHolder {
         }
     }
 
-    public void onCompletion(Runnable onComplete){
+    public SseEmitterHolder onCompletion(Runnable onComplete){
         sseEmitter.onCompletion(onComplete);
+        return this;
     }
 
-    public void onError(Consumer<Throwable> callback){
+    public SseEmitterHolder onError(Consumer<Throwable> callback){
         sseEmitter.onError(callback);
+        return this;
     }
 
-    public void onTimeout(Runnable onTimeout){
+    public SseEmitterHolder onTimeout(Runnable onTimeout){
         sseEmitter.onTimeout(onTimeout);
+        return this;
     }
 
     public void complete(){

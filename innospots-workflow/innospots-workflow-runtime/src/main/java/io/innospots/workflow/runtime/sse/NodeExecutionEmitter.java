@@ -4,6 +4,7 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.RemovalCause;
 import com.github.benmanes.caffeine.cache.RemovalListener;
+import io.innospots.base.execution.ExecutionResource;
 import io.innospots.base.utils.CCH;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import lombok.extern.slf4j.Slf4j;
@@ -45,10 +46,16 @@ public class NodeExecutionEmitter {
             List<SseEmitterHolder> holders = nodeExecutionEmitter.getIfPresent(nodeExecutionId);
             if(holders != null){
                 for (SseEmitterHolder holder : holders) {
-                    if(holder.getStreamId().equals(streamId)){
-                        holders.remove(holder);
-                        break;
+                    if(streamId!=null){
+                        if(holder.getStreamId().equals(streamId)){
+                            holder.complete();
+                            holders.remove(holder);
+                            break;
+                        }
+                    }else{
+                        holder.complete();
                     }
+
                 }//end for
                 if(holders.isEmpty()){
                     nodeExecutionEmitter.invalidate(nodeExecutionId);
@@ -57,8 +64,17 @@ public class NodeExecutionEmitter {
         }//end sync
     }
 
+    public boolean hasExist(String nodeExecutionId, String streamId){
+        List<SseEmitterHolder> holders = nodeExecutionEmitter.getIfPresent(nodeExecutionId);
+        if(holders == null){
+            return false;
+        }
+        return holders.stream().anyMatch(s -> s.getStreamId().equals(streamId));
+    }
 
-    public SseEmitter getEmitter(String nodeExecutionId, String streamId) {
+
+
+    public SseEmitter getOrCreateEmitter(String nodeExecutionId, String streamId) {
         synchronized(this){
             List<SseEmitterHolder> holders = nodeExecutionEmitter.getIfPresent(nodeExecutionId);
             if (holders == null) {
@@ -72,6 +88,11 @@ public class NodeExecutionEmitter {
             if (optional.isEmpty()) {
                 holder = SseEmitterHolder.create(streamId, MAX_TIMEOUT_MINUTES * 60 * 1000);
                 holders.add(holder);
+                holder.onCompletion(()->{
+                    close(nodeExecutionId,streamId);
+                }).onTimeout(()->{
+                    close(nodeExecutionId,streamId);
+                });
             } else {
                 holder = optional.get();
             }
@@ -80,15 +101,24 @@ public class NodeExecutionEmitter {
     }
 
     public void sendItem(String nodeExecutionId, Map<String,Object> item){
-
+        List<SseEmitterHolder> holders = this.nodeExecutionEmitter.getIfPresent(nodeExecutionId);
+        if(holders!=null){
+            holders.forEach(holder -> {holder.send(nodeExecutionId,item,"nodeExecution-event");});
+        }
     }
 
-    public void sendResources(String nodeExecutionId, Map<String,Object> item){
-
+    public void sendResources(String nodeExecutionId, ExecutionResource executionResource){
+        List<SseEmitterHolder> holders = this.nodeExecutionEmitter.getIfPresent(nodeExecutionId);
+        if(holders!=null){
+            holders.forEach(holder -> {holder.send(executionResource.getResourceId(),executionResource,"nodeExecution-resource");});
+        }
     }
 
     public void sendLog(String nodeExecutionId, Map<String,Object> item){
-
+        List<SseEmitterHolder> holders = this.nodeExecutionEmitter.getIfPresent(nodeExecutionId);
+        if(holders!=null){
+            holders.forEach(holder -> {holder.send(nodeExecutionId,item,"nodeExecution-log");});
+        }
     }
 
 }

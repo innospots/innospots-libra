@@ -91,6 +91,8 @@
         <Logger name="io.innospots.workflow.runtime.flow.node" level="debug"/>
         <Logger name="io.innospots.workflow.runtime.scheduled" level="debug"/>
         <Logger name="io.innospots.workflow.runtime.watcher" level="info"/>
+        <Logger name="io.innospots.workflow.server.watcher" level="info"/>
+        <Logger name="io.innospots.workflow.core.watcher" level="info"/>
         <Logger name="io.innospots.workflow.console.dao" level="info"/>
         <Logger name="io.innospots.workflow.console.operator" level="debug"/>
         <Logger name="io.innospots.workflow.core.execution.store.NodeExecutionStoreListener" level="info"/>

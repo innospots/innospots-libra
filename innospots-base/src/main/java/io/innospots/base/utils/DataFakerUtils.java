@@ -1,6 +1,7 @@
 package io.innospots.base.utils;
 
 import cn.hutool.core.util.RandomUtil;
+import io.innospots.base.utils.time.DateTimeUtils;
 import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;
 import net.datafaker.providers.base.AbstractProvider;
@@ -96,6 +97,33 @@ public class DataFakerUtils {
 
     public Map<String,String> gen(){
         return genObject(faker.name());
+    }
+
+    public Map<String,Object> sample(){
+        Map<String,Object> sample = new LinkedHashMap<>();
+        sample.put("hex",faker.random().hex(16));
+        sample.put("double_value",faker.random().nextDouble(10,500));
+        sample.put("int_value",faker.random().nextInt(10,200));
+        sample.put("option",this.gen("11","22","33","ab","cd"));
+        sample.put("birthday",faker.date().birthday(18,80));
+        sample.put("future_time",this.faker.date().future(90,TimeUnit.MINUTES,new Date(),DateTimeUtils.DEFAULT_TIME_PATTERN));
+        sample.put("future_date",this.faker.date().future(50,TimeUnit.DAYS,new Date()));
+        sample.put("past_date",this.faker.date().past(10,TimeUnit.DAYS,new Date(), DateTimeUtils.DEFAULT_DATE_PATTERN));
+        sample.put("address",this.faker.address().fullAddress());
+        sample.put("country",this.faker.address().country());
+        sample.put("city",this.faker.address().city());
+        sample.put("full_name",this.faker.name().fullName());
+        sample.put("user_name",this.faker.name().username());
+        sample.put("watch",this.faker.brand().watch());
+        sample.put("pesel_number",this.faker.idNumber().peselNumber());
+        sample.put("en_ssn",this.faker.idNumber().validEnZaSsn());
+        sample.put("cn_ssn",this.faker.idNumber().validZhCNSsn());
+        sample.put("program_lang",this.faker.programmingLanguage().name());
+        return sample;
+    }
+
+    public Faker faker(){
+        return this.faker;
     }
 
     public Map<String, String> genAddress() {

@@ -18,14 +18,17 @@
 
 package io.innospots.server.base.exception;
 
+import cn.hutool.http.ContentType;
 import io.innospots.base.exception.*;
 import io.innospots.base.exception.ScriptException;
 import io.innospots.base.i18n.LocaleMessageUtils;
+import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.response.ResponseCode;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -34,7 +37,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MultipartException;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -50,9 +56,18 @@ public class GlobalExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(value = {Exception.class})
-    public ErrorResponse handleException(Exception e) {
+    public ResponseEntity<String> handleException(Exception e, HttpServletRequest request, HttpServletResponse response) {
         logger.error("exception: {}, msg: {}", e.getClass(), e.getMessage());
-        return ErrorResponse.build(ResponseCode.FAIL,"system", e.getMessage());
+        String resp;
+        if(response.getContentType().contains(ContentType.EVENT_STREAM.getValue())){
+            resp = "id:\n";
+            resp += "event:error-event\n";
+            resp += "data:";
+            resp += e.getMessage();
+        }else{
+            resp = JSONUtils.toJsonString(ErrorResponse.build(ResponseCode.FAIL,"system", e.getMessage()));
+        }
+        return ResponseEntity.status(response.getStatus()).body(resp);
     }
 
     @ExceptionHandler(value = {MissingServletRequestParameterException.class})
@@ -81,9 +96,19 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ErrorResponse handleException(RuntimeException e) {
+    public ResponseEntity<String> handleException(RuntimeException e, HttpServletRequest request, HttpServletResponse response) {
         logger.error("runtime exception: ", e);
-        return ErrorResponse.build(e);
+        String resp;
+        if(response.getContentType().contains(ContentType.EVENT_STREAM.getValue())){
+            resp = "id:\n";
+            resp += "event:error-event\n";
+            resp += "data:";
+            resp += e.getMessage();
+        }else{
+            resp = JSONUtils.toJsonString(ErrorResponse.build(e));
+        }
+        return ResponseEntity.status(response.getStatus()).body(resp);
+        //return ErrorResponse.build(e);
     }
 
     @ExceptionHandler(MultipartException.class)
