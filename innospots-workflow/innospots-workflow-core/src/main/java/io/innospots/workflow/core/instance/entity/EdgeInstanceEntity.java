@@ -60,10 +60,10 @@ public class EdgeInstanceEntity extends PBaseEntity {
     @Column(length = 64)
     private String target;
 
-    @Column(length = 32)
+    @Column(length = 64)
     private String sourceAnchor;
 
-    @Column(length = 32)
+    @Column(length = 64)
     private String targetAnchor;
 
     @Column(length = 32)
@@ -78,7 +78,7 @@ public class EdgeInstanceEntity extends PBaseEntity {
     @Column(length = 128)
     private String endPoint;
 
-    @Column(length = 512)
+    @Column(columnDefinition = "TEXT")
     private String data;
 
     @Column
