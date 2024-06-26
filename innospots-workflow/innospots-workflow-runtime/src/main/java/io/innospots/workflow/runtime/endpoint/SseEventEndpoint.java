@@ -6,6 +6,7 @@ import io.innospots.base.utils.DataFakerUtils;
 import io.innospots.base.utils.FakerExpression;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.runtime.sse.BaseEventEmitter;
 import io.innospots.workflow.runtime.sse.NodeExecutionEmitter;
 import io.innospots.workflow.runtime.sse.SseEmitterNodeExecutionListener;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -100,11 +101,11 @@ public class SseEventEndpoint {
             @RequestParam(required = false,defaultValue = "25") Integer size,
             @RequestParam(required = false, defaultValue = "10") Integer rsize
             ) {
-        if (nodeExecutionEmitter.hasExist(nodeExecutionId, streamId)) {
-            return nodeExecutionEmitter.getEmitter(nodeExecutionId, streamId);
+        if (BaseEventEmitter.hasExist(nodeExecutionId, streamId)) {
+            return BaseEventEmitter.getEmitter(nodeExecutionId, streamId);
         }
 
-        SseEmitter emitter = nodeExecutionEmitter.createEmitter(nodeExecutionId, streamId);
+        SseEmitter emitter = BaseEventEmitter.createEmitter(nodeExecutionId, streamId);
         sentNodeExecution(nodeExecutionId, emitter, size, rsize);
         log.info("create emmitter node execution:{}",nodeExecutionId);
         return emitter;
@@ -113,10 +114,10 @@ public class SseEventEndpoint {
     private void sentNodeExecution(String executionId,SseEmitter emitter, int size, int rsize) {
         sseMvcExecutor.execute(() -> {
             NodeExecution ne = sample(executionId, size, rsize);
-            SseEmitterNodeExecutionListener listener = new SseEmitterNodeExecutionListener(nodeExecutionEmitter);
+            SseEmitterNodeExecutionListener listener = new SseEmitterNodeExecutionListener();
             try {
                 log.info("send log");
-                listener.log(ne,ne.getLogs());
+                //listener.log(ne,null);
                 for (NodeOutput output : ne.getOutputs()) {
                     log.info("send item");
                     for (Map<String, Object> result : output.getResults()) {

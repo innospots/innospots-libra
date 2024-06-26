@@ -36,6 +36,7 @@ import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;
 import io.innospots.workflow.core.instance.model.NodeInstance;
+import io.innospots.workflow.core.logger.IFlowLogger;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -65,6 +66,8 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
 
     protected String flowIdentifier;
 
+    protected IFlowLogger flowLogger;
+
 
     protected abstract void initialize();
 
@@ -75,7 +78,8 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
             initialize();
             buildStatus = BuildStatus.DONE;
         } catch (Exception e) {
-            logger.error("node build fail, nodeKey:{}, {},err: {}", this.nodeKey(), e.getMessage(),ExceptionUtil.stacktraceToString(e,2048));
+            flowLogger.flowError("node build fail, nodeKey:{}, {},err: {}", this.nodeKey(), e.getMessage(),ExceptionUtil.stacktraceToString(e,1024));
+            logger.error("node build fail, nodeKey:{}, {},err: {}", this.nodeKey(), e.getMessage(),ExceptionUtil.stacktraceToString(e,1024));
             buildStatus = BuildStatus.FAIL;
             buildException = e;
             //throw e;
@@ -395,10 +399,12 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
     }
 
 
+    @Override
     public List<String> nextNodeKeys() {
         return ni.getNextNodeKeys() == null?Collections.emptyList() : ni.getNextNodeKeys();
     }
 
+    @Override
     public List<String> prevNodeKeys() {
         return ni.getPrevNodeKeys();
     }
@@ -416,6 +422,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
     }
 
 
+    @Override
     public Map<String, List<String>> nodeAnchors() {
         return ni.getNodeAnchors();
     }

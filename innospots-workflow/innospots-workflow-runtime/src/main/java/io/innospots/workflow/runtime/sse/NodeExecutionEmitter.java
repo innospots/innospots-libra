@@ -24,19 +24,27 @@ import java.util.concurrent.TimeUnit;
  * @date 2024/6/24
  */
 @Slf4j
-public class NodeExecutionEmitter extends BaseEventEmitter{
+public class NodeExecutionEmitter extends BaseEventEmitter {
 
 
-    public void sendItem(String eventEmitterId, Map<String,Object> item){
-        send(eventEmitterId,"node-execution-item",item);
+    public static void sendItem(String eventEmitterId, Map<String, Object> item) {
+        send(eventEmitterId, "node-execution-item", item);
     }
 
-    public void sendResources(String eventEmitterId, ExecutionResource executionResource){
-        send(eventEmitterId,"node-execution-resource",executionResource);
+    public static void sendResources(String eventEmitterId, ExecutionResource executionResource) {
+        send(eventEmitterId, "node-execution-resource", executionResource);
     }
 
-    public void sendLog(String eventEmitterId, Map<String,Object> item){
-        send(eventEmitterId,"node-execution-log",item);
+    public static void sendErrorLog(String flowExecutionId, Object message) {
+        sendErrorLog(flowExecutionId, "flow-execution-log", message);
+    }
+
+    public static void sendLog(String eventEmitterId, Map<String, Object> item) {
+        sendInfoLog(eventEmitterId, "node-execution-log", item);
+    }
+
+    public static void sendLog(String eventEmitterId, Object message) {
+        sendInfoLog(eventEmitterId, "node-execution-log", message);
     }
 
 }
