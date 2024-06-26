@@ -129,7 +129,7 @@ public class SqlScriptNode extends ScriptBaseNode {
                     SimpleRequest request = new SimpleRequest();
                     request.setBody(sql);
                     DataBody dataBody =  dataOperator.execute(request);
-                    processOutput(dataBody.getBody(),nodeOutput);
+                    processOutput(nodeExecution,dataBody.getBody(),nodeOutput);
 //                    InnospotResponse<Integer> innospotResponse = sqlOperatorPoint.executeForSql(datasourceId, sql);
                     if (logger.isDebugEnabled()) {
                         logger.debug("sql query:{}, response:{}", sql, request);
@@ -143,7 +143,7 @@ public class SqlScriptNode extends ScriptBaseNode {
             SimpleRequest request = new SimpleRequest();
             request.setBody(sql);
             DataBody dataBody = dataOperator.execute(request);
-            processOutput(dataBody.getBody(),nodeOutput);
+            processOutput(nodeExecution,dataBody.getBody(),nodeOutput);
 //            InnospotResponse<Integer> innospotResponse = sqlOperatorPoint.executeForSql(datasourceId, sql);
             if (logger.isDebugEnabled()) {
                 logger.debug("execute sql:{}, response:{}", sql, request);

@@ -123,15 +123,26 @@ public class BaseEventEmitter {
     }
 
     public static void sendLog(String eventEmitterId, String eventName, String level, Object message) {
+        String sessionId = CCH.sessionId();
         List<SseEmitterHolder> holders = eventEmitter.getIfPresent(eventEmitterId);
+        if (holders != null) {
+            sendLog(holders, eventEmitterId, eventName, level, message);
+        } else if (sessionId != null && !Objects.equals(sessionId, eventEmitterId)) {
+            holders = eventEmitter.getIfPresent(eventEmitterId);
+            if (holders != null) {
+                eventEmitter.put(eventEmitterId, holders);
+                sendLog(holders, eventEmitterId, eventName, level, message);
+            }
+        }
+    }
+
+    static void sendLog(List<SseEmitterHolder> holders, String eventEmitterId, String eventName, String level, Object message) {
         if (holders != null) {
             Map<String, Object> item = new LinkedHashMap<>();
             item.put("log_time", DateTimeUtils.formatLocalDateTime(LocalDateTime.now(), DateTimeUtils.DEFAULT_DATETIME_PATTERN));
             item.put("level", level);
             item.put("message", message);
-            holders.forEach(holder -> {
-                holder.send(eventEmitterId, item, eventName);
-            });
+            holders.forEach(holder -> holder.send(eventEmitterId, item, eventName));
         }
     }
 

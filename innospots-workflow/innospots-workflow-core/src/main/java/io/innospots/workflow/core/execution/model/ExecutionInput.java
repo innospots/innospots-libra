@@ -23,6 +23,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -95,6 +96,14 @@ public class ExecutionInput {
         if(this.resources!=null){
             this.resources.clear();
         }
+    }
+
+    public Map<String,Object> log(){
+        Map<String,Object> l = new LinkedHashMap<>();
+        l.put("sourceKey",this.sourceKey);
+        l.put("item_size", this.data.size());
+        l.put("resource_size", this.resources == null ? 0 : this.resources.size());
+        return l;
     }
 
 }

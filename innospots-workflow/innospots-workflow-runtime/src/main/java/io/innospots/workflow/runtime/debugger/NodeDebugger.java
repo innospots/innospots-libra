@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.runtime.flow;
+package io.innospots.workflow.runtime.debugger;
 
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.crypto.digest.DigestUtil;
@@ -87,26 +87,19 @@ public class NodeDebugger {
         if(StringUtils.isEmpty(ni.getNodeKey())){
             ni.setNodeKey("nodeKey_"+id);
         }
-        String identifier = "AppNodeDebug"+debugPayload.getNi().getCode()+"_"+ id;
-//        GenericExpressionEngine genericExpressionEngine = ExpressionEngineFactory.build(identifier);
-//        genericExpressionEngine.deleteBuildFile();
-//        genericExpressionEngine.prepare();
+        String identifier = "NodeDebug"+debugPayload.getNi().getCode()+"_"+ id;
         if(StringUtils.isEmpty(ni.getNodeType())){
             ni.setNodeType(ScriptNode.class.getName());
         }
-        FlowCompiler flowCompiler = FlowCompiler.build(identifier);
-        WorkflowBaseBody tmpFlow =new WorkflowBaseBody(999999999L,ni.getName(),ni.getCode(),0);
-        tmpFlow.addNode(ni);
-        flowCompiler = FlowCompiler.build(tmpFlow);
-//        BaseNodeExecutor appNode = flowCompiler.registerToEngine(debugPayload.getNi());
-        flowCompiler.compile();
-        BaseNodeExecutor nodeExecutor = NodeExecutorFactory.build(tmpFlow.identifier(),ni);
-        //        BaseAppNode appNode = FlowCompiler.registerToEngine(genericExpressionEngine,debugPayload.getNi());
-//        genericExpressionEngine.compile();
-//        appNode.build();
+
+        BaseNodeExecutor nodeExecutor = NodeExecutorFactory.compileBuild(identifier,ni);
+
+
         FlowExecution flowExecution = FlowExecution.buildNewFlowExecution(1L,0);
         flowExecution.setRecordMode(RecordMode.SYNC);
-        NodeExecution nodeExecution = NodeExecution.buildNewNodeExecution(ni.getNodeKey(),flowExecution);
+
+        NodeExecution nodeExecution = NodeExecution.buildNewNodeExecution(ni.getNodeKey(),1L,1,identifier,true);
+        nodeExecution.setRecordMode(RecordMode.SYNC);
         List<ExecutionInput> inputs = new ArrayList<>();
         for (DebugInput input : debugPayload.getInputs()) {
             ExecutionInput executionInput = new ExecutionInput();
@@ -116,7 +109,7 @@ public class NodeDebugger {
         }
         nodeExecution.setInputs(inputs);
         nodeExecutor.innerExecute(nodeExecution,flowExecution);
-        ExecutorManagerFactory.clear(identifier);
+
         return NodeExecutionDisplay.build(nodeExecution,ni);
     }
 }

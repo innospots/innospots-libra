@@ -49,7 +49,7 @@ public class PayloadScriptNode extends ScriptBaseNode {
                 items.addAll(executionInput.getData());
             }//end execution input
             Object result = scriptExecutor.execute(items);
-            processOutput(result, nodeOutput);
+            processOutput(nodeExecution,result, nodeOutput);
         }//end if
         nodeExecution.addOutput(nodeOutput);
         log.debug("node execution, nodeOutput:{} {}", nodeOutput, nodeExecution);

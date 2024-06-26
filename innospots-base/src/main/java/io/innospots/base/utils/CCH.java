@@ -158,7 +158,7 @@ public class CCH {
     public static String sessionId() {
         Object sid = localHolder.get().get(SESSION_ID);
         if (sid == null) {
-            sid = "";
+            sid = null;
         }
         return (String) sid;
     }

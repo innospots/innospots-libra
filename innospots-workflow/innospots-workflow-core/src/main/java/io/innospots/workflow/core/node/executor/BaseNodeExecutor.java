@@ -78,8 +78,8 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
             initialize();
             buildStatus = BuildStatus.DONE;
         } catch (Exception e) {
-            flowLogger.flowError("node build fail, nodeKey:{}, {},err: {}", this.nodeKey(), e.getMessage(),ExceptionUtil.stacktraceToString(e,1024));
-            logger.error("node build fail, nodeKey:{}, {},err: {}", this.nodeKey(), e.getMessage(),ExceptionUtil.stacktraceToString(e,1024));
+            flowLogger.flowError("node build fail, nodeKey:{}, {},err: {}", this.nodeKey(), e.getMessage(), ExceptionUtil.stacktraceToString(e, 1024));
+            logger.error("node build fail, nodeKey:{}, {},err: {}", this.nodeKey(), e.getMessage(), ExceptionUtil.stacktraceToString(e, 1024));
             buildStatus = BuildStatus.FAIL;
             buildException = e;
             //throw e;
@@ -141,14 +141,15 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
 
         if (CollectionUtils.isNotEmpty(nodeExecution.getInputs())) {
             for (ExecutionInput executionInput : nodeExecution.getInputs()) {
+                flowLogger.flowInfo(nodeExecution.getFlowExecutionId(), "nodeKey:{}, node input:{}", nodeExecution.getNodeKey(), executionInput.log());
                 if (CollectionUtils.isNotEmpty(executionInput.getData())) {
                     for (Map<String, Object> item : executionInput.getData()) {
                         Object result = processItem(item);
-                        processOutput(result, nodeOutput);
+                        processOutput(nodeExecution, result, nodeOutput);
                     }//end for
                 } else {
                     Object result = processItem(null);
-                    processOutput(result, nodeOutput);
+                    processOutput(nodeExecution, result, nodeOutput);
                 }
                 if (CollectionUtils.isNotEmpty(executionInput.getResources())) {
                     List<ExecutionResource> outputResources = new ArrayList<>();
@@ -164,11 +165,12 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
             }//end execution input
         } else {
             Object result = processItem(null);
-            processOutput(result, nodeOutput);
+            processOutput(nodeExecution, result, nodeOutput);
         }
         if (logger.isDebugEnabled()) {
             logger.debug("node execution, nodeOutput:{} {}", nodeOutput, nodeExecution);
         }
+        flowLogger.flowInfo(nodeExecution.getFlowExecutionId(), "node execution, nodeExecutionId:{}, nodeOutput: {}", nodeExecution.getNodeExecutionId(), nodeOutput.log());
     }
 
 
@@ -179,6 +181,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
     public void innerExecute(NodeExecution nodeExecution, FlowExecution flowExecution) {
         boolean isFail;
         nodeExecution.setStatus(ExecutionStatus.RUNNING);
+        flowLogger.flowInfo(flowExecution.getFlowExecutionId(), "node execution is running, nodeKey:{}", nodeExecution.getNodeKey());
         int tryTimes = 0;
         String msg = "";
         do {
@@ -190,6 +193,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
                 }
             } catch (Exception e) {
                 isFail = true;
+                flowLogger.flowError(flowExecution.getFlowExecutionId(), "node execution error, nodeKey:{}, err:{}", nodeExecution.getNodeKey(), e.getMessage());
                 logger.error("node inner execute error:{}", nodeExecution, e);
                 nodeExecution.clearOutput();
                 msg = ExceptionUtil.stacktraceToString(e, 2048);
@@ -211,6 +215,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
 
         if (isFail && nodeExecution.getStatus() != ExecutionStatus.FAILED) {
             nodeExecution.setStatus(ExecutionStatus.FAILED);
+            flowLogger.flowError(flowExecution.getFlowExecutionId(), "node execution failed, nodeKey:{}, tryTimes:{}", nodeExecution.getNodeKey(), tryTimes);
         }
 
         if (!isFail || ni.isContinueOnFail()) {
@@ -219,6 +224,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
         }
         if (nodeExecution.getStatus() == null) {
             nodeExecution.end(msg, ExecutionStatus.COMPLETE, true);
+//            flowLogger.flowInfo(flowExecution.getFlowExecutionId(), "node execution complete, nodeKey:{}", nodeExecution.getNodeKey());
         } else if (nodeExecution.getStatus().isDone()) {
             nodeExecution.end(msg);
         }
@@ -232,25 +238,41 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
     }
 
     //    @Override
-    protected void processOutput(Object result, NodeOutput nodeOutput) {
+    protected void processOutput(NodeExecution nodeExecution, Object result, NodeOutput nodeOutput) {
         if (result == null) {
             return;
         }
         if (result instanceof Map) {
             Map<String, Object> respMap = (Map<String, Object>) result;
+            flowLogger.item(nodeExecution.getFlowExecutionId(), nodeExecution.getNodeExecutionId(), respMap);
             nodeOutput.addResult(respMap);
         } else if (result instanceof Collection) {
             Collection resCol = (Collection) result;
+            for (Object o : resCol) {
+                flowLogger.item(nodeExecution.getFlowExecutionId(), nodeExecution.getNodeExecutionId(), (Map<String, Object>) o);
+            }
             nodeOutput.addResult(resCol);
 
         } else {
             if (CollectionUtils.isNotEmpty(ni.getOutputFields())) {
-                for (ParamField outputField : ni.getOutputFields()) {
+                if (result instanceof Map) {
                     Map<String, Object> res = new HashMap<>();
-                    res.put(outputField.getCode(), result);
+                    Map<String, Object> item = (Map<String, Object>) result;
+                    for (ParamField outputField : ni.getOutputFields()) {
+                        res.put(outputField.getCode(), item.get(outputField.getCode()));
+                    }
+                    flowLogger.item(nodeExecution.getFlowExecutionId(), nodeExecution.getNodeExecutionId(), res);
                     nodeOutput.addResult(res);
-                    break;
+                } else {
+                    Map<String, Object> res = new HashMap<>();
+                    for (ParamField outputField : ni.getOutputFields()) {
+                        res.put(outputField.getCode(), result);
+                        break;
+                    }
+                    flowLogger.item(nodeExecution.getFlowExecutionId(), nodeExecution.getNodeExecutionId(), res);
+                    nodeOutput.addResult(res);
                 }
+
             } else {
                 logger.warn("node: {}, The output field is not set, the result of the node is not a Map structure, the result is not saved in the node execution. The output result type of the node is: {}",
                         this.nodeKey(), result.getClass().getName());
@@ -288,8 +310,10 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
             for (INodeExecutionListener nodeExecutionListener : nodeExecutionListeners) {
                 if (nodeExecution.getStatus() == ExecutionStatus.COMPLETE) {
                     nodeExecutionListener.complete(nodeExecution);
+                    flowLogger.flowInfo(nodeExecution.getFlowExecutionId(), "node execution complete, nodeKey:{}", nodeExecution.getNodeKey());
                 } else if (nodeExecution.getStatus() == ExecutionStatus.FAILED) {
                     nodeExecutionListener.fail(nodeExecution);
+                    flowLogger.flowInfo(nodeExecution.getFlowExecutionId(), "node execution failed, nodeKey:{}", nodeExecution.getNodeKey());
                 } else {
                     logger.error("nodeExecutionListeners other status:{} nodeExecution:{}", nodeExecution.getStatus(), nodeExecution);
                 }
@@ -401,7 +425,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
 
     @Override
     public List<String> nextNodeKeys() {
-        return ni.getNextNodeKeys() == null?Collections.emptyList() : ni.getNextNodeKeys();
+        return ni.getNextNodeKeys() == null ? Collections.emptyList() : ni.getNextNodeKeys();
     }
 
     @Override

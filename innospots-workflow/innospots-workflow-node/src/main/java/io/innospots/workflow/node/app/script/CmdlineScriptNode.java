@@ -70,7 +70,7 @@ public class CmdlineScriptNode extends ScriptBaseNode {
                     if (CollectionUtils.isNotEmpty(executionInput.getData())) {
                         for (Map<String, Object> data : executionInput.getData()) {
                             Object result = scriptExecutor.execute(data);
-                            processOutput(result, data, nodeOutput);
+                            processOutput(nodeExecution,result, data, nodeOutput);
                             if (this.outputMode == OutputMode.LOG) {
                                 msg.append(result);
                                 msg.append("-----\n");
@@ -78,7 +78,7 @@ public class CmdlineScriptNode extends ScriptBaseNode {
                         }//end for
                     } else {
                         Object result = scriptExecutor.execute();
-                        processOutput(result, null, nodeOutput);
+                        processOutput(nodeExecution,result, null, nodeOutput);
                         if (this.outputMode == OutputMode.LOG) {
                             msg.append(result);
                         }
@@ -86,7 +86,7 @@ public class CmdlineScriptNode extends ScriptBaseNode {
                 }//end execution input
             } else {
                 Object result = scriptExecutor.execute();
-                processOutput(result, null, nodeOutput);
+                processOutput(nodeExecution,result, null, nodeOutput);
                 if (this.outputMode == OutputMode.LOG) {
                     msg.append(result);
                 }
@@ -106,7 +106,7 @@ public class CmdlineScriptNode extends ScriptBaseNode {
         nodeExecution.addOutput(nodeOutput);
     }
 
-    protected void processOutput(Object result, Map<String, Object> input, NodeOutput nodeOutput) {
+    protected void processOutput(NodeExecution nodeExecution,Object result, Map<String, Object> input, NodeOutput nodeOutput) {
         if (log.isDebugEnabled()) {
             log.debug("nodeKey:{}, script output:{}", this.nodeKey(), result);
         }
@@ -120,10 +120,10 @@ public class CmdlineScriptNode extends ScriptBaseNode {
             if (result != null) {
                 data.put(this.outputField, result);
             }
-            super.processOutput(data, nodeOutput);
+            super.processOutput(nodeExecution,data, nodeOutput);
         } else if (this.outputMode == OutputMode.OVERWRITE) {
             result = parseObject(result);
-            super.processOutput(result, nodeOutput);
+            super.processOutput(nodeExecution,result, nodeOutput);
         } else if (this.outputMode == OutputMode.PAYLOAD) {
             result = parseObject(result);
             Map<String, Object> data = new HashMap<>(10);
@@ -137,7 +137,7 @@ public class CmdlineScriptNode extends ScriptBaseNode {
                 data.put(this.nodeKey(), result);
             }
 
-            super.processOutput(data, nodeOutput);
+            super.processOutput(nodeExecution,data, nodeOutput);
         }
     }
 
