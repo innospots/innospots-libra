@@ -18,11 +18,14 @@
 
 package io.innospots.workflow.core.node.executor;
 
+import cn.hutool.core.util.StrUtil;
 import io.innospots.base.script.ExecutorManagerFactory;
 import io.innospots.base.script.ScriptExecutorManager;
 import io.innospots.base.script.jit.MethodBody;
 import io.innospots.workflow.core.exception.NodeBuildException;
 import io.innospots.workflow.core.instance.model.NodeInstance;
+import io.innospots.workflow.core.logger.FlowLoggerFactory;
+import io.innospots.workflow.core.logger.IFlowLogger;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationTargetException;
@@ -44,12 +47,16 @@ public class NodeExecutorFactory {
 
     public static BaseNodeExecutor build(String flowIdentifier, NodeInstance nodeInstance) {
         BaseNodeExecutor nodeExecutor;
+        IFlowLogger flowLogger = FlowLoggerFactory.getLogger();
         try {
             nodeExecutor = newInstance(nodeInstance);
             nodeExecutor.flowIdentifier = flowIdentifier;
+            nodeExecutor.flowLogger = flowLogger;
             nodeExecutor.build();
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException |
                  InvocationTargetException e) {
+            flowLogger.flowError("node instance fail, flowKey:{}, nodeCode:{} ,nodeType: {}, error:{}",
+                    flowIdentifier,nodeInstance.getCode(),nodeInstance.getNodeType(),e.getMessage());
             throw NodeBuildException.build(nodeInstance.getNodeType(),e);
         }
         return nodeExecutor;
@@ -71,11 +78,13 @@ public class NodeExecutorFactory {
         BaseNodeExecutor nodeExecutor;
         // Retrieves the executor manager corresponding to the identifier
         ScriptExecutorManager executorManager = ExecutorManagerFactory.getInstance(identifier);
+        IFlowLogger flowLogger = FlowLoggerFactory.getLogger();
         try {
             // Initializes the node executor instance
             nodeExecutor = newInstance(nodeInstance);
             // Sets the flow identifier for the node executor
             nodeExecutor.flowIdentifier = identifier;
+            nodeExecutor.flowLogger = flowLogger;
             // Constructs the method body for the script
             MethodBody methodBody = nodeExecutor.buildScriptMethodBody();
             // Registers the method body with the executor manager if available

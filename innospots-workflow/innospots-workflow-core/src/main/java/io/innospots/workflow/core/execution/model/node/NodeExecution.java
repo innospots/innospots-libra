@@ -18,6 +18,7 @@
 
 package io.innospots.workflow.core.execution.model.node;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.InnospotsIdGenerator;
@@ -60,10 +61,10 @@ public class NodeExecution extends NodeExecutionBase {
     /**
      * shareContext variables
      */
-    private List<Map<String, Object>> shareContext = new ArrayList<>();;
+    private List<Map<String, Object>> shareContext = new ArrayList<>();
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Map<String, Object> logs = new LinkedHashMap<>();
+    @JsonIgnore
+    private List<Map<String, Object>> logs = new ArrayList<>();
 
     private File contextDataPath;
 
@@ -149,9 +150,27 @@ public class NodeExecution extends NodeExecutionBase {
         outputs.add(nodeOutput);
     }
 
+    public Map<String, Object> logInfo() {
+        Map<String, Object> log = new LinkedHashMap<>();
+        log.put("nodeExecutionId", this.getNodeExecutionId());
+        log.put("nodeKey", this.nodeKey);
+        log.put("nodeCode", this.getNodeCode());
+        log.put("status", this.getStatus());
+        log.put("consume", this.consume());
+        log.put("startTime", this.getStartTime());
+        log.put("endTime", this.getEndTime());
+        log.put("sequence", this.getSequenceNumber());
+        log.put("output_table", this.outputLog());
+        return log;
+    }
+
     public Map<String, Object> outputLog() {
+        return outputLog(true);
+    }
+
+    public Map<String, Object> outputLog(boolean detail) {
         Map<String, Object> logs = new LinkedHashMap<>();
-        if(this.outputs == null){
+        if (this.outputs == null) {
             return logs;
         }
         for (int i = 0; i < this.outputs.size(); i++) {
@@ -166,13 +185,19 @@ public class NodeExecution extends NodeExecutionBase {
     }
 
     public void addLog(String key, Object value) {
-        this.logs.put(key, value);
+        Map<String, Object> l = new LinkedHashMap<>();
+        l.put(key, value);
+        this.addLog(l);
     }
 
-    public void addLog(Map<String, Object> logData) {
-        if (logData != null) {
-            this.logs.putAll(logData);
+    public void addLog(Map<String, Object> logItem) {
+        if (logItem != null) {
+            this.logs.add(logItem);
         }
+    }
+
+    public void clearLog() {
+        this.logs.clear();
     }
 
     public void clearOutput() {
@@ -183,11 +208,11 @@ public class NodeExecution extends NodeExecutionBase {
         this.inputs.clear();
     }
 
-    public void addShareContext(Map<String,Object> context){
+    public void addShareContext(Map<String, Object> context) {
         this.shareContext.add(context);
     }
 
-    public void clearShareContext(){
+    public void clearShareContext() {
         this.shareContext.clear();
     }
 
@@ -202,20 +227,20 @@ public class NodeExecution extends NodeExecutionBase {
     }
 
     public boolean inputIsEmpty() {
-        if(CollectionUtils.isEmpty(this.inputs)){
+        if (CollectionUtils.isEmpty(this.inputs)) {
             return true;
         }
-        if(this.inputs.get(0)!=null && CollectionUtils.isEmpty(this.inputs.get(0).getData())){
+        if (this.inputs.get(0) != null && CollectionUtils.isEmpty(this.inputs.get(0).getData())) {
             return true;
         }
         return false;
     }
 
-    public int inputSize(){
+    public int inputSize() {
         return this.inputs.size();
     }
 
-    public void fillTotal(){
+    public void fillTotal() {
         this.outputs.forEach(NodeOutput::fillTotal);
     }
 

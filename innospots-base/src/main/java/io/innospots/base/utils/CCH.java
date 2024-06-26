@@ -69,6 +69,8 @@ public class CCH {
      */
     private static String DEFAULT_USER = "sys_user";
 
+    private static String SESSION_ID = "sessionId";
+
 
     /**
      * register current thread organization and user name
@@ -151,6 +153,18 @@ public class CCH {
     public static String contextInfo() {
         return "authUser: " + authUser() +
                 ", projectId: " + projectId();
+    }
+
+    public static String sessionId() {
+        Object sid = localHolder.get().get(SESSION_ID);
+        if (sid == null) {
+            sid = "";
+        }
+        return (String) sid;
+    }
+
+    public static void sessionId(String sessionId) {
+        localHolder.get().put(SESSION_ID, sessionId);
     }
 
 }

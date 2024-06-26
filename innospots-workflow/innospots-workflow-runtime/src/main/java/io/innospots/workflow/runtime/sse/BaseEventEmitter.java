@@ -4,13 +4,12 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import io.innospots.base.execution.ExecutionResource;
 import io.innospots.base.utils.CCH;
+import io.innospots.base.utils.time.DateTimeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -26,7 +25,7 @@ public class BaseEventEmitter {
     /**
      * key : execution id
      */
-    protected Cache<String, List<SseEmitterHolder>> eventEmitter = Caffeine.newBuilder()
+    protected static Cache<String, List<SseEmitterHolder>> eventEmitter = Caffeine.newBuilder()
             .expireAfterAccess(MAX_TIMEOUT_MINUTES, TimeUnit.MINUTES)
             .<String, List<SseEmitterHolder>>removalListener((key, list, removalCause) -> {
                 log.info("remove event emitter:{}", key);
@@ -36,30 +35,28 @@ public class BaseEventEmitter {
             }).build();
 
 
-    public void close(String eventEmitterId, String streamId) {
-        synchronized (this) {
-            List<SseEmitterHolder> holders = eventEmitter.getIfPresent(eventEmitterId);
-            if (holders != null) {
-                for (SseEmitterHolder holder : holders) {
-                    if (streamId != null) {
-                        if (holder.getStreamId().equals(streamId)) {
-                            holder.complete();
-                            holders.remove(holder);
-                            break;
-                        }
-                    } else {
+    public static void close(String eventEmitterId, String streamId) {
+        List<SseEmitterHolder> holders = eventEmitter.getIfPresent(eventEmitterId);
+        if (holders != null) {
+            for (SseEmitterHolder holder : holders) {
+                if (streamId != null) {
+                    if (holder.getStreamId().equals(streamId)) {
                         holder.complete();
+                        holders.remove(holder);
+                        break;
                     }
-
-                }//end for
-                if (holders.isEmpty()) {
-                    eventEmitter.invalidate(eventEmitterId);
+                } else {
+                    holder.complete();
                 }
-            }//end holders
-        }//end sync
+
+            }//end for
+            if (holders.isEmpty()) {
+                eventEmitter.invalidate(eventEmitterId);
+            }
+        }//end holders
     }
 
-    public boolean hasExist(String eventEmitterId, String streamId) {
+    public static boolean hasExist(String eventEmitterId, String streamId) {
         List<SseEmitterHolder> holders = eventEmitter.getIfPresent(eventEmitterId);
         if (holders == null) {
             return false;
@@ -68,8 +65,8 @@ public class BaseEventEmitter {
     }
 
 
-    public SseEmitter createEmitter(String eventEmitterId, String streamId) {
-        synchronized (this) {
+    public static SseEmitter createEmitter(String eventEmitterId, String streamId) {
+        synchronized (eventEmitterId) {
             List<SseEmitterHolder> holders = eventEmitter.getIfPresent(eventEmitterId);
             if (holders == null) {
                 holders = new ArrayList<>();
@@ -96,7 +93,7 @@ public class BaseEventEmitter {
         }
     }
 
-    public SseEmitter getEmitter(String nodeExecutionId, String streamId) {
+    public static SseEmitter getEmitter(String nodeExecutionId, String streamId) {
         List<SseEmitterHolder> holders = eventEmitter.getIfPresent(nodeExecutionId);
         if (holders == null) {
             return null;
@@ -108,9 +105,30 @@ public class BaseEventEmitter {
 
     }
 
-    public void send(String eventEmitterId,String eventName, Object item) {
-        List<SseEmitterHolder> holders = this.eventEmitter.getIfPresent(eventEmitterId);
+    public static void send(String eventEmitterId, String eventName, Object item) {
+        List<SseEmitterHolder> holders = eventEmitter.getIfPresent(eventEmitterId);
         if (holders != null) {
+            holders.forEach(holder -> {
+                holder.send(eventEmitterId, item, eventName);
+            });
+        }
+    }
+
+    public static void sendInfoLog(String eventEmitterId, String eventName, Object message) {
+        sendLog(eventEmitterId, eventName, "INFO", message);
+    }
+
+    public static void sendErrorLog(String eventEmitterId, String eventName, Object message) {
+        sendLog(eventEmitterId, eventName, "ERROR", message);
+    }
+
+    public static void sendLog(String eventEmitterId, String eventName, String level, Object message) {
+        List<SseEmitterHolder> holders = eventEmitter.getIfPresent(eventEmitterId);
+        if (holders != null) {
+            Map<String, Object> item = new LinkedHashMap<>();
+            item.put("log_time", DateTimeUtils.formatLocalDateTime(LocalDateTime.now(), DateTimeUtils.DEFAULT_DATETIME_PATTERN));
+            item.put("level", level);
+            item.put("message", message);
             holders.forEach(holder -> {
                 holder.send(eventEmitterId, item, eventName);
             });

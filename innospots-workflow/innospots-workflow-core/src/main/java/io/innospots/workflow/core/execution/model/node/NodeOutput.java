@@ -43,7 +43,7 @@ public class NodeOutput {
     /**
      * key : item position
      */
-    private Map<Integer,List<ExecutionResource>> resources;
+    private Map<Integer, List<ExecutionResource>> resources;
 
     private Set<String> nextNodeKeys = new HashSet<>();
 
@@ -51,7 +51,7 @@ public class NodeOutput {
 
     private long total;
 
-    private Map<String,Object> logs = new LinkedHashMap<>();
+    private Map<String, Object> logs = new LinkedHashMap<>();
 
     public NodeOutput() {
     }
@@ -78,25 +78,25 @@ public class NodeOutput {
         results.addAll(items);
     }
 
-    public void fillTotal(){
+    public void fillTotal() {
         total = results.size();
     }
 
     public List<ExecutionResource> itemResources(Integer position) {
-        if(resources!=null && position < resources.size()){
+        if (resources != null && position < resources.size()) {
             return this.resources.get(position);
         }
         return null;
     }
 
-    public void addResource(Integer position,ExecutionResource executionResource) {
+    public void addResource(Integer position, ExecutionResource executionResource) {
         if (resources == null) {
             this.resources = new LinkedHashMap<>();
         }
         List<ExecutionResource> executionResources = null;
-        if(this.resources.containsKey(position)){
+        if (this.resources.containsKey(position)) {
             executionResources = this.resources.get(position);
-        }else {
+        } else {
             executionResources = new ArrayList<>();
             this.resources.put(position, executionResources);
         }
@@ -136,21 +136,27 @@ public class NodeOutput {
         return nodeOutput;
     }
 
-    public Map<String,Object> log(){
-        Map<String,Object> logs = new LinkedHashMap<>();
-        logs.put("size",results.size());
+    public Map<String, Object> log() {
+        return log(true);
+    }
+
+    public Map<String, Object> log(boolean detail) {
+        Map<String, Object> logs = new LinkedHashMap<>();
+        logs.put("size", results.size());
         logs.put("total", total);
-        logs.put("nextNodeKeys",this.nextNodeKeys);
-        if(results.size()>0){
-            logs.put("columns",results.get(0).keySet().size());
+        logs.put("nextNodeKeys", this.nextNodeKeys);
+        if (results.size() > 0 && detail) {
+            logs.put("columns", results.get(0).keySet().size());
         }
-        if(MapUtils.isNotEmpty(resources)){
-            logs.put("resource_size",resources.size());
-            List<Map<String,Object>> metas = new ArrayList<>();
-            for (List<ExecutionResource> executionResources : resources.values()) {
-                metas.addAll(executionResources.stream().map(ExecutionResource::toMetaInfo).collect(Collectors.toList()));
+        if (MapUtils.isNotEmpty(resources)) {
+            logs.put("resource_size", resources.size());
+            if (detail) {
+                List<Map<String, Object>> metas = new ArrayList<>();
+                for (List<ExecutionResource> executionResources : resources.values()) {
+                    metas.addAll(executionResources.stream().map(ExecutionResource::toMetaInfo).collect(Collectors.toList()));
+                }
+                logs.put("resources", metas);
             }
-            logs.put("resources",metas);
         }
         logs.putAll(this.logs);
         return logs;
@@ -166,7 +172,7 @@ public class NodeOutput {
         }
     }
 
-    public int size(){
+    public int size() {
         return this.results.size();
     }
 }

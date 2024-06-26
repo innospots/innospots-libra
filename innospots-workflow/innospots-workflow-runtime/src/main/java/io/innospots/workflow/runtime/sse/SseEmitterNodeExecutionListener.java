@@ -13,11 +13,6 @@ import java.util.Map;
  */
 public class SseEmitterNodeExecutionListener implements INodeExecutionListener {
 
-    private NodeExecutionEmitter nodeExecutionEmitter;
-
-    public SseEmitterNodeExecutionListener(NodeExecutionEmitter nodeExecutionEmitter) {
-        this.nodeExecutionEmitter = nodeExecutionEmitter;
-    }
 
     @Override
     public void start(NodeExecution nodeExecution) {
@@ -26,7 +21,7 @@ public class SseEmitterNodeExecutionListener implements INodeExecutionListener {
 
     @Override
     public void complete(NodeExecution nodeExecution) {
-        nodeExecutionEmitter.close(nodeExecution.getNodeExecutionId(),null);
+        NodeExecutionEmitter.close(nodeExecution.getNodeExecutionId(),null);
     }
 
     @Override
@@ -36,16 +31,16 @@ public class SseEmitterNodeExecutionListener implements INodeExecutionListener {
 
     @Override
     public void item(NodeExecution nodeExecution, Map<String, Object> item) {
-        nodeExecutionEmitter.sendItem(nodeExecution.getNodeExecutionId(),item);
+        NodeExecutionEmitter.sendItem(nodeExecution.getNodeExecutionId(),item);
     }
 
     @Override
     public void item(NodeExecution nodeExecution, ExecutionResource executionResource) {
-        nodeExecutionEmitter.sendResources(nodeExecution.getNodeExecutionId(),executionResource);
+        NodeExecutionEmitter.sendResources(nodeExecution.getNodeExecutionId(),executionResource);
     }
 
     @Override
     public void log(NodeExecution nodeExecution, Map<String, Object> log) {
-        nodeExecutionEmitter.sendLog(nodeExecution.getNodeExecutionId(),log);
+        NodeExecutionEmitter.sendLog(nodeExecution.getNodeExecutionId(),log);
     }
 }
