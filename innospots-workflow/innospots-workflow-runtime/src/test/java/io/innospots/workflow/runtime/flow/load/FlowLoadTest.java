@@ -43,6 +43,22 @@ public class FlowLoadTest {
 
     }
 
+    public static Flow buildFlow(String fileName){
+        WorkflowBody body = null;
+        try {
+            body = build(fileName);
+        } catch (URISyntaxException | IOException e) {
+            throw new RuntimeException(e);
+        }
+        Flow flow = new Flow(body,true);
+        BuildProcessInfo processInfo = flow.prepare();
+        if(!processInfo.isLoaded()){
+            throw new RuntimeException(processInfo.getMessage());
+        }
+
+        return flow;
+    }
+
     public static WorkflowBody build(String filename) throws URISyntaxException, IOException {
         ScriptExecutorManager.setPath("target/classes", "target/classes");
         URL url = FlowLoadTest.class.getResource(filename);
