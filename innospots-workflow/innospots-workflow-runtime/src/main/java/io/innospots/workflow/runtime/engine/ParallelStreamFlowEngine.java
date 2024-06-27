@@ -182,8 +182,4 @@ public class ParallelStreamFlowEngine extends BaseFlowEngine {
     }
 
 
-    @Override
-    public FlowExecution run(Long workflowInstanceId, Integer revisionId, String targetNodeKey, List<Map<String, Object>> payloads) {
-        return null;
-    }
 }

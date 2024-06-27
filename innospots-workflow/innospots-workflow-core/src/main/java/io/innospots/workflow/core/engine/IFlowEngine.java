@@ -46,9 +46,17 @@ public interface IFlowEngine {
 
     FlowExecution stopByFlowKey(String flowKey);
 
-    FlowExecution run(Long workflowInstanceId,
+    default FlowExecution run(Long workflowInstanceId,
                       Integer revisionId,
                       String targetNodeKey,
-                      List<Map<String, Object>> payloads);
+                      List<Map<String, Object>> payloads){
+        FlowExecution flowExecution = FlowExecution.buildNewFlowExecution(
+                workflowInstanceId,revisionId,payloads);
+        flowExecution.resetCurrentNodeKey(targetNodeKey);
+
+        execute(flowExecution);
+
+        return flowExecution;
+    }
 
 }
