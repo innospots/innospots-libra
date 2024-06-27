@@ -26,9 +26,16 @@ import java.nio.file.Paths;
 @Slf4j
 public class FlowLoadTest {
 
+    private String uri = "/flow/flow_sample.json";
+
+    void testRun() throws IOException, URISyntaxException {
+        WorkflowBody body = build(uri);
+        Flow flow = new Flow(body,true);
+        flow.prepare();
+    }
+
     @Test
     void testLoad() throws URISyntaxException, IOException {
-        ScriptExecutorManager.setPath("target/classes", "target/classes");
         String uri = "/flow/flow_sample.json";
         WorkflowBody body =  build(uri);
         Flow flow = new Flow(body,true);
@@ -37,8 +44,8 @@ public class FlowLoadTest {
     }
 
     public static WorkflowBody build(String filename) throws URISyntaxException, IOException {
-        String uri = "/flow/flow_sample.json";
-        URL url = FlowLoadTest.class.getResource(uri);
+        ScriptExecutorManager.setPath("target/classes", "target/classes");
+        URL url = FlowLoadTest.class.getResource(filename);
         Path p = Paths.get(url.toURI());
         log.info("flow json file:{}",p);
         byte[] bytes = Files.readAllBytes(p);
