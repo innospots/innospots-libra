@@ -112,7 +112,7 @@ public class StateNode extends BaseNodeExecutor {
 
     @Override
     protected Object processItem(Map<String, Object> item) {
-        if (hasInputField && CollectionUtils.isEmpty(inputFields)) {
+        if (!hasInputField || CollectionUtils.isEmpty(inputFields)) {
             return item;
         }
         Map<String, Object> nItem = new LinkedHashMap<>();

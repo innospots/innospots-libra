@@ -222,10 +222,11 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
             processNextKeys(nodeExecution);
             nodeExecution.setNext(true);
         }
-        if (nodeExecution.getStatus() == null) {
+        boolean isDone = nodeExecution.getStatus() != null && nodeExecution.getStatus().isDone();
+        if (nodeExecution.getStatus() == null || !isDone) {
             nodeExecution.end(msg, ExecutionStatus.COMPLETE, true);
-//            flowLogger.flowInfo(flowExecution.getFlowExecutionId(), "node execution complete, nodeKey:{}", nodeExecution.getNodeKey());
-        } else if (nodeExecution.getStatus().isDone()) {
+            flowLogger.flowInfo(flowExecution.getFlowExecutionId(), "node execution complete, nodeKey:{}", nodeExecution.getNodeKey());
+        } else if (isDone) {
             nodeExecution.end(msg);
         }
         //after process node execution

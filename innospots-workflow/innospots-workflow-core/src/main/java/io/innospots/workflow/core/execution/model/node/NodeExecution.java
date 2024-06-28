@@ -153,13 +153,13 @@ public class NodeExecution extends NodeExecutionBase {
     public Map<String, Object> logInfo() {
         Map<String, Object> log = new LinkedHashMap<>();
         log.put("nodeExecutionId", this.getNodeExecutionId());
+        log.put("sequence", this.getSequenceNumber());
         log.put("nodeKey", this.nodeKey);
         log.put("nodeCode", this.getNodeCode());
         log.put("status", this.getStatus());
         log.put("consume", this.consume());
         log.put("startTime", this.getStartTime());
         log.put("endTime", this.getEndTime());
-        log.put("sequence", this.getSequenceNumber());
         log.put("output_table", this.outputLog());
         return log;
     }

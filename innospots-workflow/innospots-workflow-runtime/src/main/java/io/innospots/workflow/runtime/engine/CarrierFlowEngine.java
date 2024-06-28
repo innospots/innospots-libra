@@ -25,6 +25,10 @@ public class CarrierFlowEngine extends BaseFlowEngine{
         taskExecutor = ThreadPoolBuilder.build(8,32,0, "carrier-flow");
     }
 
+    public CarrierFlowEngine(FlowManager flowManager) {
+        this(null,flowManager);
+    }
+
     @Override
     protected void execute(Flow flow, FlowExecution flowExecution) {
         ExecutionCarrier carrier = ExecutionCarrier.build(flow,flowExecution,taskExecutor);

@@ -77,10 +77,10 @@ public class ExecutionCarrier {
             }
         }
 
-        scanDone();
+        waitForComplete();
     }
 
-    void scanDone() {
+    void waitForComplete() {
         boolean isDone;
         int times = 0;
         int count = 0;

@@ -66,6 +66,10 @@ public abstract class BaseFlowEngine implements IFlowEngine {
         this.flowManager = flowManager;
     }
 
+    public BaseFlowEngine(FlowManager flowManager) {
+        this.flowManager = flowManager;
+    }
+
     @Override
     public BuildProcessInfo prepare(Long flowInstanceId, Integer version, boolean force) throws FlowPrepareException {
         Flow flow = flowManager.loadFlow(flowInstanceId, version, force, false);
@@ -199,7 +203,7 @@ public abstract class BaseFlowEngine implements IFlowEngine {
         flowKeyCache.invalidate(flowExecution.getFlowKey());
     }
 
-    private Flow getFlow(FlowExecution flowExecution) {
+    protected Flow getFlow(FlowExecution flowExecution) {
         Flow flow = null;
         if(flowExecution.getFlowKey()!=null){
             flow = flowManager.loadFlow(flowExecution.getFlowKey());

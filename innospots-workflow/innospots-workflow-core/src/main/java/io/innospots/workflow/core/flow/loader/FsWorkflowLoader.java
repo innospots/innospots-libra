@@ -18,6 +18,7 @@
 
 package io.innospots.workflow.core.flow.loader;
 
+import cn.hutool.core.io.resource.ResourceUtil;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
@@ -39,7 +40,7 @@ public class FsWorkflowLoader extends BaseWorkflowLoader {
 
     private static final Logger logger = LoggerFactory.getLogger(FsWorkflowLoader.class);
 
-    public static final String DIR_FLOW_CONFIG = "flow_conf";
+//    public static final String DIR_FLOW_CONFIG = "flow_conf";
 
     private String workflowBuildPath;
 
@@ -53,12 +54,15 @@ public class FsWorkflowLoader extends BaseWorkflowLoader {
     }
 
     private WorkflowBody loadInstanceFormFile(String key) {
-        String[] ks = key.split("_");
-        Long workflowInstanceId = Long.valueOf(ks[1]);
-        Integer revision = Integer.valueOf(ks[2]);
-        File flowJsonFile = new File(workflowBuildPath + File.separator + DIR_FLOW_CONFIG, key + ".json");
-        if (!flowJsonFile.exists()) {
-            logger.warn("workflowInstance config not exist, file:{}", flowJsonFile.getAbsolutePath());
+        String flowJsonFile = null;
+        try {
+            flowJsonFile = ResourceUtil.readUtf8Str(workflowBuildPath  + key + ".json");
+        }catch (Exception e){
+            logger.warn("workflowInstance config not exist, file:{}", workflowBuildPath + key + ".json");
+            return null;
+        }
+
+        if (flowJsonFile == null) {
             return null;
         }
         WorkflowBody workflowBody = null;
@@ -81,7 +85,7 @@ public class FsWorkflowLoader extends BaseWorkflowLoader {
 
     @Override
     public WorkflowBody loadWorkflow(String flowKey) {
-        return null;
+        return flowInstanceCache.get(flowKey);
     }
 
 }

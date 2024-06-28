@@ -303,6 +303,21 @@ public class FlowExecution extends FlowExecutionBase {
         return sb.toString();
     }
 
+    public String info(){
+        final StringBuffer sb = new StringBuffer("{");
+        sb.append("executionId='").append(flowExecutionId).append('\'');
+        sb.append(", status=").append(status);
+        sb.append(", consume=").append(getConsume());
+        sb.append(", startTime=").append(startTime);
+        sb.append(", endTime=").append(endTime);
+        sb.append(", counter=").append(counter.intValue());
+        sb.append(", input=").append(input.log());
+        sb.append(", output=").append(output.size());
+        sb.append(", context=").append(contexts.size());
+        sb.append('}');
+        return sb.toString();
+    }
+
     private String valueOf(Object v) {
         if (v == null) {
             return null;

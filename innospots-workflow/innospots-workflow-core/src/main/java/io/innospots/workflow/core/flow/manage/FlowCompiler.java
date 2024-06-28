@@ -26,6 +26,7 @@ import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.script.ExecutorManagerFactory;
 import io.innospots.base.script.ScriptExecutorManager;
 import io.innospots.base.script.jit.MethodBody;
+import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.flow.loader.FsWorkflowLoader;
 import io.innospots.workflow.core.flow.model.WorkflowBaseBody;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
@@ -95,7 +96,7 @@ public class FlowCompiler {
         }
         scriptExecutorManager.build();
 //        scriptEngines.values().stream().filter(Objects::nonNull).forEach(IScriptExecutorManager::build);
-        outputFlowFile(ScriptExecutorManager.getClassPath() + File.separator + FsWorkflowLoader.DIR_FLOW_CONFIG);
+        outputFlowFile(ScriptExecutorManager.getClassPath() + File.separator + InnospotsWorkflowProperties.FLOW_JSON_PATH);
     }
 
 
