@@ -51,10 +51,10 @@ public interface FlowNodeDefinitionConverter extends BaseBeanConverter<NodeDefin
 
     FlowNodeDefinitionEntity infoToEntity(NodeInfo nodeInfo);
 
-    @Mapping(target = "deletable", expression = "java( !model.getDeletable() || \"innospots\".equals(model.getVendor()) ? false : true )")
+    @Mapping(target = "deletable", expression = "java( !(model.getDeletable() !=null && model.getDeletable()) || !\"innospots\".equals(model.getVendor()) )")
     NodeInfo modelToSimple(NodeDefinition model);
 
-    @Mapping(target = "deletable", expression = "java( !entity.getDeletable() || \"innospots\".equals(entity.getVendor()) ? false : true )")
+    @Mapping(target = "deletable", expression = "java( !(entity.getDeletable() !=null && entity.getDeletable()) || !\"innospots\".equals(entity.getVendor()) )")
     NodeInfo entityToSimple(FlowNodeDefinitionEntity entity);
 
     List<NodeInfo> modelToInfoList(List<NodeDefinition> nodeDefinitionList);
