@@ -32,6 +32,8 @@
             <AppenderRef ref="appender_console"/>
         </Logger>
 
+        <Logger name="io.innospots.workflow.runtime.execution" level="debug"/>
+
         <Root level="info">
             <AppenderRef ref="appender_console"/>
         </Root>

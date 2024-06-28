@@ -22,7 +22,7 @@ public class CarrierFlowEngine extends BaseFlowEngine{
 
     public CarrierFlowEngine(List<IFlowExecutionListener> flowExecutionListeners, FlowManager flowManager) {
         super(flowExecutionListeners, flowManager);
-        taskExecutor = ThreadPoolBuilder.build(8,32,0, "parallel-flow");
+        taskExecutor = ThreadPoolBuilder.build(8,32,0, "carrier-flow");
     }
 
     @Override
