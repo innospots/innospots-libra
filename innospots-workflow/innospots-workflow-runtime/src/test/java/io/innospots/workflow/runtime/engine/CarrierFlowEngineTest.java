@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static io.innospots.workflow.runtime.engine.BaseEngineTest.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -51,25 +52,4 @@ class CarrierFlowEngineTest {
         outputFlowExecution(flowExecution);
     }
 
-    public void outputFlowExecution(FlowExecution flowExecution) {
-        System.out.println(flowExecution.info());
-        int i = 1;
-        for (Map.Entry<String, NodeExecution> entry : flowExecution.getNodeExecutions().entrySet()) {
-            System.out.println(i++ + ": " + entry.getValue().logInfo());
-        }
-    }
-
-    public FlowExecution buildFlowExecution(String flowKey,List<Map<String,Object>> payloads){
-        FlowExecution flowExecution = FlowExecution.buildNewFlowExecution(flowKey,payloads);
-        flowExecution.setFlowExecutionId(InnospotsIdGenerator.generateIdStr());
-        return flowExecution;
-    }
-
-    public static CarrierFlowEngine build(String workflowPath) {
-        InnospotsIdGenerator.build("127.0.0.1",9880);
-        CCH.sessionId("sid_"+RandomUtil.randomNumbers(8));
-        FsWorkflowLoader workflowLoader = new FsWorkflowLoader(workflowPath+"/");
-        FlowManager flowManager = new FlowManager(workflowLoader);
-        return new CarrierFlowEngine(flowManager);
-    }
 }

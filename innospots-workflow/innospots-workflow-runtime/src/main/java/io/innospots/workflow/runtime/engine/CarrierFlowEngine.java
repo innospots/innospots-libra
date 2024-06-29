@@ -7,6 +7,7 @@ import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.flow.Flow;
 import io.innospots.workflow.core.flow.manage.FlowManager;
 import io.innospots.workflow.runtime.execution.ExecutionCarrier;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import java.util.Map;
  * @author Smars
  * @date 2024/6/27
  */
+@Slf4j
 public class CarrierFlowEngine extends BaseFlowEngine{
 
 
@@ -33,6 +35,7 @@ public class CarrierFlowEngine extends BaseFlowEngine{
     protected void execute(Flow flow, FlowExecution flowExecution) {
         ExecutionCarrier carrier = ExecutionCarrier.build(flow,flowExecution,taskExecutor);
         carrier.execute();
+        log.debug("flow execute: {}",carrier.info());
     }
 
 

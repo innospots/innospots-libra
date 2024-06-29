@@ -1,0 +1,90 @@
+{
+  "workflowInstanceId": 5,
+  "revision": 1,
+  "name": "测试实例",
+  "templateCode": "EVENTS",
+  "flowKey": "flowKey12345",
+  "triggerCode": "START",
+  "edges": [
+    {
+      "edgeId": 1,
+      "source": "nk1",
+      "target": "nk2"
+    },{
+      "edgeId": 2,
+      "source": "nk2",
+      "target": "nk3"
+    },{
+      "edgeId": 3,
+      "source": "nk3",
+      "target": "nk99"
+    },{
+      "edgeId": 4,
+      "source": "nk3",
+      "target": "nk4"
+    },{
+      "edgeId": 5,
+      "source": "nk4",
+      "target": "nk5"
+    }
+  ],
+  "nodes": [
+    {
+      "name": "start",
+      "code": "START",
+      "nodeType": "io.innospots.workflow.core.node.executor.StateNode",
+      "nodeKey": "nk1",
+      "nodeInstanceId": 1
+    },{
+      "name": "fk2",
+      "code": "fk2",
+      "nodeType": "io.innospots.workflow.node.app.data.FakeDataNode",
+      "nodeKey": "nk2",
+      "nodeInstanceId": 2,
+      "data": {
+        "item_size": "7",
+        "waiting_mills": 100,
+        "fake_data": "{\n          \"birthday\": \"#{Date.birthday 'yyyy-MM-dd'}\",\n          \"numbers\": \"#{Random.nextInt '100','300'}\",\n          \"spouse\": \"#{Relationship.spouse}\",\n          \"rex\": \"[a-z]{4,10}\",\n          \"date_future\": \"#{Date.future '15','MINUTES','dd/MM/yyyy hh:mm:ss'}\",\n          \"options\": \"#{options.option 'a','b','c','d','e','f'}\",\n          \"country\": \"#{Address.country}\",\n          \"job_title\": \"#{Job.title}\",\n          \"fullName\": \"#{Name.fullName}\"\n        }"
+      }
+    },{
+      "name": "fk3",
+      "code": "fk3",
+      "nodeType": "io.innospots.workflow.node.app.data.FakeDataNode",
+      "nodeKey": "nk3",
+      "nodeInstanceId": 3,
+      "data": {
+        "item_size": "7",
+        "waiting_mills": 100,
+        "fake_data": "{\n          \"birthday\": \"#{Date.birthday 'yyyy-MM-dd'}\",\n          \"numbers\": \"#{Random.nextInt '100','300'}\",\n          \"spouse\": \"#{Relationship.spouse}\",\n          \"rex\": \"[a-z]{4,10}\",\n          \"date_future\": \"#{Date.future '15','MINUTES','dd/MM/yyyy hh:mm:ss'}\",\n          \"options\": \"#{options.option \\\\'a\\\\','b','c','d','e','f'}\",\n          \"country\": \"#{Address.country}\",\n          \"job_title\": \"#{Job.title}\",\n          \"fullName\": \"#{Name.fullName}\"\n        }"
+      }
+    },{
+      "name": "fk4",
+      "code": "fk4",
+      "nodeType": "io.innospots.workflow.node.app.data.FakeDataNode",
+      "nodeKey": "nk4",
+      "nodeInstanceId": 4,
+      "data": {
+        "item_size": "7",
+        "waiting_mills": 100,
+        "fake_data": "{\n          \"birthday\": \"#{Date.birthday 'yyyy-MM-dd'}\",\n          \"numbers\": \"#{Random.nextInt '100','300'}\",\n          \"spouse\": \"#{Relationship.spouse}\",\n          \"rex\": \"[a-z]{4,10}\",\n          \"date_future\": \"#{Date.future '15','MINUTES','dd/MM/yyyy hh:mm:ss'}\",\n          \"options\": \"#{options.option \\\\'a\\\\','b','c','d','e','f'}\",\n          \"country\": \"#{Address.country}\",\n          \"job_title\": \"#{Job.title}\",\n          \"fullName\": \"#{Name.fullName}\"\n        }"
+      }
+    },{
+      "name": "fk5",
+      "code": "fk5",
+      "nodeType": "io.innospots.workflow.node.app.data.FakeDataNode",
+      "nodeKey": "nk5",
+      "nodeInstanceId": 5,
+      "data": {
+        "item_size": "7",
+        "waiting_mills": 100,
+        "fake_data": "{\n          \"birthday\": \"#{Date.birthday 'yyyy-MM-dd'}\",\n          \"numbers\": \"#{Random.nextInt '100','300'}\",\n          \"spouse\": \"#{Relationship.spouse}\",\n          \"rex\": \"[a-z]{4,10}\",\n          \"date_future\": \"#{Date.future '15','MINUTES','dd/MM/yyyy hh:mm:ss'}\",\n          \"options\": \"#{options.option \\\\'a\\\\','b','c','d','e','f'}\",\n          \"country\": \"#{Address.country}\",\n          \"job_title\": \"#{Job.title}\",\n          \"fullName\": \"#{Name.fullName}\"\n        }"
+      }
+    },{
+      "name": "end",
+      "code": "END",
+      "nodeType": "io.innospots.workflow.core.node.executor.StateNode",
+      "nodeKey": "nk99",
+      "nodeInstanceId": 99
+    }
+  ]
+}

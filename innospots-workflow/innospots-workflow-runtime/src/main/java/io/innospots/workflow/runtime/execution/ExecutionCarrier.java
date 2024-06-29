@@ -13,7 +13,10 @@ import io.innospots.workflow.runtime.engine.ParallelStreamFlowEngine;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -87,7 +90,8 @@ public class ExecutionCarrier {
         do {
             isDone = true;
             count = 0;
-            for (EcUnit unit : executionUnits.values()) {
+            for (Map.Entry<String, EcUnit> unitEntry : executionUnits.entrySet()) {
+                EcUnit unit = unitEntry.getValue();
                 if (unit.unitStatus() == ExecutionStatus.READY) {
                     try {
                         TimeUnit.MILLISECONDS.sleep(1);
@@ -97,10 +101,11 @@ public class ExecutionCarrier {
                 }
                 isDone = unit.isDone() && isDone;
                 if (log.isDebugEnabled()) {
-                    log.debug("unit output:{},{},{}", unit.nodeKey(), unit.unitStatus(), unit.isTaskDone());
+                    log.debug("unit result:{},{},{},{},{},{}", unit.sequence(), unit.nodeKey(), unit.threadName(), unit.unitStatus(), unit.consume(), unit.isTaskDone());
                 }
                 count++;
             }
+
             if (flowExecution.shouldStopped()) {
                 if (!isDone) {
                     List<EcUnit> ll = executionUnits.values().stream()
@@ -168,13 +173,20 @@ public class ExecutionCarrier {
         if (shouldStopped()) {
             return;
         }
-        CompletableFuture<NodeExecution> future = null;
-        if (async) {
-            future = CompletableFuture.supplyAsync(ecUnit::execute, taskExecutor);
-            ecUnit.future = future;
-        } else {
-            future = CompletableFuture.completedFuture(ecUnit.execute());
-            ecUnit.future = future;
+        CompletableFuture<NodeExecution> future = ecUnit.future;
+        if (future == null) {
+            if (async) {
+                future = CompletableFuture.supplyAsync(ecUnit::execute, taskExecutor);
+                //log.debug("execute async ecUnit:{}",ecUnit);
+                ecUnit.future = future;
+            } else {
+                future = new CompletableFuture<>();
+                ecUnit.future = future;
+                NodeExecution nodeExecution = ecUnit.execute();
+                ecUnit.future.complete(nodeExecution);
+                //CompletableFuture.completedFuture(ecUnit.execute());
+                //log.debug("execute sync ecUnit:{}",ecUnit);
+            }
         }
         if (log.isDebugEnabled()) {
             log.debug("run node:{}, async:{}, isDone:{}, hashcode:{}", ecUnit.nodeKey(), async, future.isDone(), future.hashCode());
@@ -313,6 +325,45 @@ public class ExecutionCarrier {
 
     EcUnit getEcUnit(String nodeKey) {
         return this.executionUnits.get(nodeKey);
+    }
+
+    public Map<String,Object> info(){
+        Map<String,Object> info = new LinkedHashMap<>();
+        info.put("flowKey",flow.getFlowKey());
+        info.put("flowExecutionId",flowExecution.getFlowExecutionId());
+        info.put("flowInstanceId",flowExecution.getFlowInstanceId());
+        info.put("status",flowExecution.getStatus());
+        info.put("consume",flowExecution.getConsume());
+        info.put("execution_size",executionUnits.size());
+        List<EcUnit> units = new ArrayList<>();
+        units.addAll(executionUnits.values());
+        Collections.sort(units);
+        List<String> paths = new ArrayList<>();
+        HashMap<String,List<String>> threads = new HashMap<>();
+        LocalDateTime firstStartTime = units.get(0).nodeExecution.getStartTime();
+        for (int i = 0; i < units.size(); i++) {
+            String s = (i+1) +":";
+            EcUnit unit = units.get(i);
+            LocalDateTime endTime = unit.nodeExecution.getEndTime();
+            LocalDateTime startTime = unit.nodeExecution.getStartTime();
+            long mills = Duration.between(startTime,endTime).toMillis();
+            long slot = Duration.between(firstStartTime,startTime).toMillis();
+            s += "<offset="+slot + "|";
+            s += "consume="+mills + "|";
+            s += "key="+unit.nodeKey() +"|";
+            s += "code=" + unit.nodeExecutor.nodeCode() + "|";
+            s += "next="+unit.nodeExecution.getNextNodeKeys()+"|";
+            s += "source="+unit.nodeExecution.sourceKeys()+">";
+            paths.add(s);
+            List<String> keys = threads.computeIfAbsent(unit.threadName(), k -> new ArrayList<>());
+            keys.add(unit.nodeKey());
+        }
+        info.put("paths",paths);
+        info.put("threads",threads);
+        info.put("units",units);
+
+
+        return info;
     }
 
 

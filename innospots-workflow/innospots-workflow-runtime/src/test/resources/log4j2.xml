@@ -33,6 +33,7 @@
         </Logger>
 
         <Logger name="io.innospots.workflow.runtime.execution" level="debug"/>
+        <Logger name="io.innospots.workflow.runtime.engine" level="debug"/>
 
         <Root level="info">
             <AppenderRef ref="appender_console"/>

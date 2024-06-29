@@ -27,6 +27,7 @@ import io.innospots.workflow.core.flow.Flow;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,7 @@ import java.util.stream.Collectors;
  * @date 2024/10/3
  */
 @Slf4j
-public class EcUnit {
+public class EcUnit implements Comparable<EcUnit>{
 
     final BaseNodeExecutor nodeExecutor;
 
@@ -116,7 +117,7 @@ public class EcUnit {
         }
         if (log.isDebugEnabled()) {
             if (!done) {
-                log.debug("future out key: {}, status:{}, {}", this.nodeKey(), unitStatus, nodeExecution);
+                log.debug("future:{}, out key: {}, status:{}, {}",future, this.nodeKey(), unitStatus, nodeExecution);
             }
         }
         return done;
@@ -162,6 +163,15 @@ public class EcUnit {
         }
         return nodeExecution;
     }
+
+    String consume(){
+        return nodeExecution.getConsume();
+    }
+
+    int sequence(){
+        return nodeExecution.getSequenceNumber();
+    }
+
 
     /**
      * next node execute
@@ -262,9 +272,19 @@ public class EcUnit {
 
     @Override
     public String toString() {
-        return "{" + "node=" + this.nodeExecutor.simpleInfo() +
-                ", status=" + unitStatus +
-                ", tName='" + threadName + '\'' +
-                '}';
+        return this.sequence() + ": " +
+                this.threadName() + ", " +
+                this.nodeKey() + ", " +
+                this.nodeExecutor.nodeCode() + ", " +
+                this.unitStatus() + ", " +
+                this.consume() + ", " +
+                this.isTaskDone();
+    }
+
+
+
+    @Override
+    public int compareTo(@NotNull EcUnit o) {
+        return Integer.compare(this.sequence(), o.sequence());
     }
 }

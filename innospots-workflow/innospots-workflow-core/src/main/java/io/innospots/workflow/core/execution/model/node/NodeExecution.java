@@ -244,4 +244,14 @@ public class NodeExecution extends NodeExecutionBase {
         this.outputs.forEach(NodeOutput::fillTotal);
     }
 
+    public List<String> sourceKeys() {
+        List<String> sourceKeys = new ArrayList<>();
+        this.inputs.forEach(input -> {
+            if (input.getSourceKey() != null) {
+                sourceKeys.add(input.getSourceKey());
+            }
+        });
+        return sourceKeys;
+    }
+
 }
