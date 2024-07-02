@@ -6,9 +6,9 @@ import io.innospots.base.utils.DataFakerUtils;
 import io.innospots.base.utils.FakerExpression;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
-import io.innospots.workflow.runtime.sse.BaseEventEmitter;
-import io.innospots.workflow.runtime.sse.NodeExecutionEmitter;
-import io.innospots.workflow.runtime.sse.SseEmitterNodeExecutionListener;
+import io.innospots.workflow.core.sse.BaseEventEmitter;
+import io.innospots.workflow.core.sse.NodeExecutionEmitter;
+import io.innospots.workflow.core.sse.SseEmitterNodeExecutionListener;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -35,7 +35,7 @@ import java.util.concurrent.Executors;
 @Slf4j
 @RequestMapping(PathConstant.ROOT_PATH + "workflow/sse")
 @RestController
-@Tag(name = "workflow node execution")
+@Tag(name = "server send event")
 public class SseEventEndpoint {
 
     private ExecutorService sseMvcExecutor = Executors.newCachedThreadPool();
@@ -105,7 +105,7 @@ public class SseEventEndpoint {
             return BaseEventEmitter.getEmitter(nodeExecutionId, streamId);
         }
 
-        SseEmitter emitter = BaseEventEmitter.createEmitter(nodeExecutionId, streamId);
+        SseEmitter emitter = BaseEventEmitter.createEmitter(nodeExecutionId,"node-execution", streamId);
         sentNodeExecution(nodeExecutionId, emitter, size, rsize);
         log.info("create emmitter node execution:{}",nodeExecutionId);
         return emitter;

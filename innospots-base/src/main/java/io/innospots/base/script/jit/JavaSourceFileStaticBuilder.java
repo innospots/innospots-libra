@@ -265,8 +265,8 @@ public class JavaSourceFileStaticBuilder {
 
 
     public void deleteSourceFile() {
-        log.debug("remove source file:{}", sourceFile);
         if (sourceFile.exists()) {
+            log.debug("remove source file:{}", sourceFile);
             sourceFile.delete();
         }
     }

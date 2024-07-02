@@ -20,6 +20,8 @@ package io.innospots.server.base.configuration;
 
 import cn.hutool.extra.spring.SpringUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.mweirauch.micrometer.jvm.extras.ProcessMemoryMetrics;
+import io.github.mweirauch.micrometer.jvm.extras.ProcessThreadMetrics;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.script.ScriptExecutorManager;
 import io.innospots.base.watcher.WatcherStarter;
@@ -33,6 +35,7 @@ import io.innospots.server.base.registry.ContextClosedEventListener;
 import io.innospots.server.base.registry.ServiceRegistryDao;
 import io.innospots.server.base.registry.ServiceRegistryManager;
 import io.innospots.server.base.registry.ServiceRegistryStarter;
+import io.micrometer.core.instrument.binder.MeterBinder;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -58,7 +61,21 @@ import java.io.File;
 @Import({CCH.class})
 public class BaseServerConfiguration {
 
+    /*
+    @Bean
+    public MeterBinder processMemoryMetrics() {
+        return new ProcessMemoryMetrics();
+    }
+
+    @Bean
+    public MeterBinder processThreadMetrics() {
+        return new ProcessThreadMetrics();
+    }
+
+     */
+
     public static void buildPath(InnospotsServerProperties configProperties) {
+        ScriptExecutorManager.setRetainSource(configProperties.isDebugMode());
         ScriptExecutorManager.setPath(configProperties.getScriptBuildPath() + File.separator + "src", configProperties.getScriptBuildPath());
     }
 

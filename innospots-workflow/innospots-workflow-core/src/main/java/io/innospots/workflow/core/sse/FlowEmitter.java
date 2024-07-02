@@ -1,7 +1,8 @@
-package io.innospots.workflow.runtime.sse;
+package io.innospots.workflow.core.sse;
 
 import io.innospots.base.execution.ExecutionResource;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.Map;
 
@@ -49,5 +50,11 @@ public class FlowEmitter {
         NodeExecutionEmitter.sendResources(nodeExecutionId,executionResource);
     }
 
+    public static SseEmitter createExecutionLogEmitter(String flowExecutionId, String streamId){
+        return FlowExecutionEmitter.createEmitter("log-"+flowExecutionId,"flow-execution",streamId);
+    }
 
+    public static SseEmitter createResponseEmitter(String flowExecutionId, String streamId){
+        return FlowExecutionEmitter.createEmitter("response-"+flowExecutionId,"flow-response",streamId);
+    }
 }

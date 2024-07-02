@@ -23,6 +23,7 @@ import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
+import io.innospots.workflow.core.debug.FlowNodeDebugger;
 import io.innospots.workflow.core.debug.FlowNodeDebuggerBuilder;
 import io.innospots.workflow.core.execution.model.flow.FlowExecutionBase;
 import io.innospots.workflow.core.execution.model.node.NodeExecutionDisplay;
@@ -46,41 +47,28 @@ import static io.innospots.libra.base.menu.ItemType.BUTTON;
  * @date 2021/5/10
  */
 @RestController
-@RequestMapping(PATH_ROOT_ADMIN + "workflow/execute")
+@RequestMapping(PATH_ROOT_ADMIN + "workflow/debug")
 @ModuleMenu(menuKey = "workflow-management")
-@Tag(name = "Workflow Executor")
-public class FlowExecutorController {
+@Tag(name = "Workflow Debug",description = "debug execute the workflow in the canvas")
+public class FlowExecuteDebugController {
+
+    private FlowNodeDebugger flowNodeDebugger;
+
+    public FlowExecuteDebugController(FlowNodeDebugger flowNodeDebugger) {
+        this.flowNodeDebugger = flowNodeDebugger;
+    }
 
     @OperationLog(operateType = OperateType.EXECUTE, idParamPosition = 0)
     @PostMapping("workflow-instance/{workflowInstanceId}")
-    @Operation(summary = "execute flow")
-    @ResourceItemOperation(key = "workflow-builder-execute", type = BUTTON, name = "${common.button.run}")
-    public InnospotsResponse<Map<String, NodeExecutionDisplay>> executeFlow(@Parameter(name = "workflowInstanceId") @PathVariable Long workflowInstanceId,
-                                                                            @Parameter(name = "input") @RequestBody(required = false) Map<String, Object> input) {
-        return executeNode(workflowInstanceId, null, input);
-    }
-
-    @OperationLog(operateType = OperateType.EXECUTE, idParamPosition = 0)
-    @PostMapping("workflow-instance/{workflowInstanceId}/node-instance/{nodeKey}/data")
-    @Operation(summary = "execute this node using json input")
+    @Operation(summary = "debug execute workflow")
     @ResourceItemOperation(key = "workflow-builder-execute")
     public InnospotsResponse<Map<String, NodeExecutionDisplay>> executeNode(@Parameter(name = "workflowInstanceId") @PathVariable Long workflowInstanceId,
-                                                                            @Parameter(name = "nodeKey") @PathVariable String nodeKey,
-                                                                            @Parameter(name = "input") @RequestBody(required = false) Map<String, Object> input) {
-        return executeNode(workflowInstanceId, nodeKey, input == null ? null : newArrayList(input));
-    }
-
-    @OperationLog(operateType = OperateType.EXECUTE, idParamPosition = 0)
-    @PostMapping("workflow-instance/{workflowInstanceId}/node-instance/{nodeKey}/data-list")
-    @Operation(summary = "execute this node using array input")
-    @ResourceItemOperation(key = "workflow-builder-execute")
-    public InnospotsResponse<Map<String, NodeExecutionDisplay>> executeNode(@Parameter(name = "workflowInstanceId") @PathVariable Long workflowInstanceId,
-                                                                            @Parameter(name = "nodeKey") @PathVariable String nodeKey,
+                                                                            @Parameter(name = "nodeKey") @RequestParam(required = false) String nodeKey,
                                                                             @Parameter(name = "inputs") @RequestBody(required = false) List<Map<String, Object>> inputs) {
         if (inputs == null) {
             inputs = new ArrayList<>();
         }
-        return success(FlowNodeDebuggerBuilder.build("nodeDebugger").execute(workflowInstanceId, nodeKey, inputs));
+        return success(flowNodeDebugger.execute(workflowInstanceId, nodeKey, inputs));
     }
 
 
@@ -91,13 +79,13 @@ public class FlowExecutorController {
     public InnospotsResponse<Map<String, NodeExecutionDisplay>> nodeExecutionOutput(@Parameter(name = "workflowInstanceId") @PathVariable Long workflowInstanceId,
                                                                                     @Parameter(name = "nodeKeys") @RequestBody(required = false) List<String> nodeKeys) {
         nodeKeys = new ArrayList<>();
-        return success(FlowNodeDebuggerBuilder.build("nodeDebugger").readNodeExecutions(workflowInstanceId, nodeKeys));
+        return success(flowNodeDebugger.readNodeExecutions(workflowInstanceId, nodeKeys));
     }
 
     @GetMapping("current/{workflowInstanceId}")
     @Operation(summary = "current workflow execution")
     public InnospotsResponse<FlowExecutionBase> currentFlowExecution(@PathVariable Long workflowInstanceId) {
-        return success(FlowNodeDebuggerBuilder.build("nodeDebugger").currentExecuting(workflowInstanceId));
+        return success(flowNodeDebugger.currentExecuting(workflowInstanceId));
     }
 
     @OperationLog(operateType = OperateType.UPDATE, idParamPosition = 0)
@@ -105,7 +93,7 @@ public class FlowExecutorController {
     @Operation(summary = "stop workflow execution")
     @ResourceItemOperation(key = "workflow-builder-execute")
     public InnospotsResponse<FlowExecutionBase> currentFlowExecution(@PathVariable String workflowExecutionId) {
-        return success(FlowNodeDebuggerBuilder.build("nodeDebugger").stop(workflowExecutionId));
+        return success(flowNodeDebugger.stop(workflowExecutionId));
     }
 
     @OperationLog(operateType = OperateType.UPDATE, idParamPosition = 0)
@@ -113,7 +101,9 @@ public class FlowExecutorController {
     @Operation(summary = "stop current executing workflow by key")
     @ResourceItemOperation(key = "workflow-builder-execute")
     public InnospotsResponse<FlowExecutionBase> stopWorkflowByKey(@PathVariable String flowKey) {
-        return success(FlowNodeDebuggerBuilder.build("nodeDebugger").stop(flowKey));
+        return success(flowNodeDebugger.stop(flowKey));
     }
+
+
 
 }

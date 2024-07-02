@@ -16,27 +16,19 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.core.engine;
+package io.innospots.workflow.node.app.script;
 
-import io.innospots.base.utils.BeanContextAware;
-import io.innospots.base.utils.BeanContextAwareUtils;
 
 /**
+ * script execute node
+ *
  * @author Smars
- * @date 2021/3/17
+ * @date 2021/4/20
  */
-public class FlowEngineManager {
+public class JavaScriptNode extends ScriptBaseNode {
 
-
-    public static IFlowEngine eventFlowEngine() {
-        return flowEngine("carrierFlowEngine");
-//        return flowEngine("parallelStreamFlowEngine");
-//        return flowEngine("streamFlowEngine");
+    @Override
+    protected String scriptType() {
+        return "graaljs";
     }
-
-    public static IFlowEngine flowEngine(String engineName) {
-        return BeanContextAwareUtils.getBean(engineName, IFlowEngine.class);
-    }
-
-
 }

@@ -1,8 +1,8 @@
-package io.innospots.workflow.runtime.sse;
+package io.innospots.workflow.core.sse;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import io.innospots.base.execution.ExecutionResource;
+import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.utils.CCH;
 import io.innospots.base.utils.time.DateTimeUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -65,7 +65,7 @@ public class BaseEventEmitter {
     }
 
 
-    public static SseEmitter createEmitter(String eventEmitterId, String streamId) {
+    public static SseEmitter createEmitter(String eventEmitterId,String eventType, String streamId) {
         synchronized (eventEmitterId) {
             List<SseEmitterHolder> holders = eventEmitter.getIfPresent(eventEmitterId);
             if (holders == null) {
@@ -78,6 +78,7 @@ public class BaseEventEmitter {
             SseEmitterHolder holder;
             if (optional.isEmpty()) {
                 holder = SseEmitterHolder.create(streamId, MAX_TIMEOUT_MINUTES * 60 * 1000);
+                EventBusCenter.postSync(new SseEmitterEvent(eventEmitterId, streamId,eventType));
                 holders.add(holder);
                 holder.onCompletion(() -> {
                     log.info("complete sse emitter, eventEmitterId: {}, streamId: {}", eventEmitterId, streamId);

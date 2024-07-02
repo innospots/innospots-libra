@@ -69,6 +69,9 @@ public class ScriptExecutorManager {
 
     protected String packageName;
 
+
+    private static boolean retainSource = true;
+
     protected Map<String, IScriptExecutor> executors = new HashMap<>();
 
     /**
@@ -149,7 +152,9 @@ public class ScriptExecutorManager {
                 compiler.compile();
                 //reload();
                 sourceBuilder.clear();
-                sourceBuilder.deleteSourceFile();
+                if(!retainSource){
+                    sourceBuilder.deleteSourceFile();
+                }
                 logger.info("engine class file write complete, classFile:{} , loaded executor size:{}", className(), executors.size());
                 return true;
             } catch (IOException e) {
@@ -188,6 +193,10 @@ public class ScriptExecutorManager {
         System.setProperty(SOURCE_PATH_EVN, sourcePath);
     }
 
+    public static void setRetainSource(boolean retainSource){
+        ScriptExecutorManager.retainSource = retainSource;
+    }
+
     public static String getClassPath() {
         return System.getProperty(CLASS_PATH_ENV);
     }
@@ -203,8 +212,8 @@ public class ScriptExecutorManager {
      */
     public void clear() {
         File clsFile = new File(classPath().toFile(), className().replace(".", File.separator) + ".class");
-        logger.debug("remove class file:{}", clsFile.getPath());
         if (clsFile.exists()) {
+            logger.debug("remove class file:{}", clsFile.getPath());
             clsFile.delete();
         }
         sourceBuilder.deleteSourceFile();

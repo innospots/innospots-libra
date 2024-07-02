@@ -58,7 +58,8 @@ public class NodeExecutionReader {
     }
 
     public Map<String, NodeExecutionDisplay> readExecutionByFlowExecutionId(String flowExecutionId, List<String> nodeKeys) {
-        return readExecutionByFlowExecutionId(flowExecutionId, nodeKeys, true);
+        return readExecutionByFlowExecutionId(flowExecutionId, nodeKeys, false);
+//        return readExecutionByFlowExecutionId(flowExecutionId, nodeKeys, true);
     }
 
     public Map<String, NodeExecutionDisplay> readExecutionByFlowExecutionId(String flowExecutionId, List<String> nodeKeys, boolean includeContext) {

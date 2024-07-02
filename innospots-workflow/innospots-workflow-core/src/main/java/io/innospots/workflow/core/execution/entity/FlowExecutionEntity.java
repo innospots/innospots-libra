@@ -139,6 +139,7 @@ public class FlowExecutionEntity extends PBaseEntity {
     private String resultCode;
 
     @Column(length = 16)
+    @Enumerated(value = EnumType.STRING)
     private ExecMode execMode;
 
 }

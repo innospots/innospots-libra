@@ -41,6 +41,7 @@ import io.innospots.workflow.runtime.endpoint.WebhookRuntimeEndpoint;
 import io.innospots.workflow.runtime.endpoint.WebhookTestEndpoint;
 import io.innospots.workflow.runtime.endpoint.WorkflowManagementEndpoint;
 import io.innospots.workflow.runtime.endpoint.WorkflowStreamEndpoint;
+import io.innospots.workflow.runtime.engine.CarrierFlowEngine;
 import io.innospots.workflow.runtime.engine.ParallelStreamFlowEngine;
 import io.innospots.workflow.runtime.engine.StreamFlowEngine;
 import io.innospots.workflow.core.flow.manage.FlowManager;
@@ -120,6 +121,11 @@ public class WorkflowRuntimeConfiguration {
             IScheduledNodeExecutionOperator scheduledNodeExecutionOperator
     ) {
         return new NodeExecutionEventListener(flowExecutionOperator, nodeExecutionOperator, scheduledNodeExecutionOperator);
+    }
+
+    @Bean
+    public CarrierFlowEngine carrierFlowEngine(FlowManager flowManager, List<IFlowExecutionListener> flowExecutionListeners) {
+        return new CarrierFlowEngine(flowExecutionListeners, flowManager);
     }
 
     @Bean

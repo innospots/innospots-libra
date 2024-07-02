@@ -20,6 +20,7 @@ package io.innospots.workflow.runtime.endpoint;
 
 
 import io.innospots.base.constant.PathConstant;
+import io.innospots.workflow.core.sse.FlowEmitter;
 import io.innospots.workflow.runtime.webhook.WebhookPayload;
 import io.innospots.workflow.core.runtime.webhook.WorkflowResponse;
 import io.innospots.workflow.runtime.container.WebhookRuntimeContainer;
@@ -29,6 +30,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -41,7 +43,7 @@ import java.util.Map;
 
 @RequestMapping(PathConstant.ROOT_PATH + PathConstant.RUNTIME_PATH)
 @RestController
-@Tag(name = "Webhook Runtime Api")
+@Tag(name = "webhook runtime api")
 public class WebhookRuntimeEndpoint {
 
 
@@ -93,5 +95,10 @@ public class WebhookRuntimeEndpoint {
         return webhookRuntimeContainer.execute(payload);
     }
 
+    @GetMapping("stream/{flowKey}")
+    @Operation(summary = "api stream webhook")
+    public SseEmitter apiStream(String flowExecutionId,String flowKey){
+        return FlowEmitter.createResponseEmitter(flowExecutionId,flowKey);
+    }
 
 }

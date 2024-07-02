@@ -19,6 +19,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.mapdb</groupId>
             <artifactId>mapdb</artifactId>
         </dependency>
@@ -37,7 +43,7 @@
 
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
+            <artifactId>spring-webmvc</artifactId>
         </dependency>
     </dependencies>
 

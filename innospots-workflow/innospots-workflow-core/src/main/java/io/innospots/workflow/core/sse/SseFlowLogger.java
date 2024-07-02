@@ -1,4 +1,4 @@
-package io.innospots.workflow.runtime.sse;
+package io.innospots.workflow.core.sse;
 
 import io.innospots.base.execution.ExecutionResource;
 import io.innospots.workflow.core.logger.IFlowLogger;

@@ -22,10 +22,8 @@ import cn.hutool.db.Db;
 import cn.hutool.db.Entity;
 import cn.hutool.db.Page;
 import cn.hutool.db.PageResult;
-import cn.hutool.db.sql.Condition;
-import cn.hutool.db.sql.Direction;
-import cn.hutool.db.sql.Order;
-import cn.hutool.db.sql.SqlBuilder;
+import cn.hutool.db.sql.*;
+import cn.hutool.log.level.Level;
 import com.google.common.base.Enums;
 import io.innospots.base.condition.Factor;
 import io.innospots.base.condition.Mode;
@@ -183,11 +181,12 @@ public class JdbcDataOperator implements IDataOperator {
     @Override
     public DataBody<Map<String, Object>> selectForObject(String tableName, String key, String value) {
         DataBody<Map<String, Object>> dataBody = new DataBody<>();
-        SqlBuilder sqlBuilder = SqlBuilder.create().from(tableName).select("*");
-        sqlBuilder.where(key + Opt.EQUAL.symbol(Mode.DB) + "'" + value + "'");
+        SqlBuilder sqlBuilder = SqlBuilder.create().select("*").from(tableName)
+                        .where(key + Opt.EQUAL.symbol(Mode.DB) + "'" + value + "'");
 //        SQL sql = new SQL().SELECT("*").FROM(tableName).WHERE(key + Opt.EQUAL.symbol(Mode.DB) + "'" + value + "'");
         List<Map<String, Object>> result = new ArrayList<>();
         try {
+
             Entity entity = db.queryOne(sqlBuilder.build());
             dataBody.setBody(entity);
         } catch (SQLException e) {
@@ -232,9 +231,16 @@ public class JdbcDataOperator implements IDataOperator {
 
 
         int insert;
+        //SqlLog.INSTANCE.init(true,false,true, Level.INFO);
         Entity entity = new Entity();
         entity.setTableName(tableName);
-        entity.putAll(data);
+        data.forEach((k,v)->{
+            if(v instanceof Enum){
+                v = ((Enum)v).name();
+            }
+            entity.put(k,v);
+        });
+        //entity.putAll(data);
         try {
             insert = db.insert(entity);
             //db.execute(sql.toString());
@@ -272,7 +278,13 @@ public class JdbcDataOperator implements IDataOperator {
             List<Entity> entities = new ArrayList<>();
             data.forEach(item -> {
                 Entity record = new Entity(tableName);
-                record.putAll(item);
+                item.forEach((k,v)->{
+                    if(v instanceof Enum){
+                        v = ((Enum)v).name();
+                    }
+                    record.put(k,v);
+                });
+                //record.putAll(item);
                 entities.add(record);
             });
             insertBatch = db.insert(entities);
@@ -315,7 +327,13 @@ public class JdbcDataOperator implements IDataOperator {
 
          */
         Entity record = new Entity(tableName);
-        record.putAll(data);
+        data.forEach((k,v)->{
+            if(v instanceof Enum){
+                v = ((Enum)v).name();
+            }
+            record.put(k,v);
+        });
+        //record.putAll(data);
         int cnt = 0;
 
         try {
@@ -428,7 +446,11 @@ public class JdbcDataOperator implements IDataOperator {
             Object[] obj = new Object[item.size()];
             int j = 0;
             for (String column : columns) {
-                obj[j++] = item.get(column);
+                Object vv = item.get(column);
+                if(vv instanceof Enum){
+                    vv = ((Enum)vv).name();
+                }
+                obj[j++] = vv;
             }
             for (String key : keys) {
                 obj[j++] = item.get(key);

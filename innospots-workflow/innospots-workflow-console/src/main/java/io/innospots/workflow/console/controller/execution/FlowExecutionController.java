@@ -27,6 +27,7 @@ import io.innospots.base.execution.ExecutionResource;
 import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.execution.model.flow.FlowExecutionBase;
 import io.innospots.workflow.core.execution.reader.FlowExecutionReader;
+import io.innospots.workflow.core.sse.FlowEmitter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,6 +36,7 @@ import org.springframework.core.io.InputStreamSource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,7 +55,7 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 @RestController
 @RequestMapping(PATH_ROOT_ADMIN + "workflow/flow-execution")
 @ModuleMenu(menuKey = "workflow-management")
-@Tag(name = "Workflow Execution")
+@Tag(name = "Workflow Execution", description = "workflow execution:list,page, get")
 public class FlowExecutionController extends BaseController {
 
     private final FlowExecutionReader flowExecutionReader;
@@ -116,6 +118,12 @@ public class FlowExecutionController extends BaseController {
         InputStreamSource resource = executionResource.buildInputStreamSource();
         String[] ss = executionResource.getMimeType().split("/");
         return ResponseEntity.ok().contentType(new MediaType(ss[0], ss[1])).body(resource);
+    }
+
+    @GetMapping("log/{flowExecutionId}")
+    public SseEmitter workflowLog(@PathVariable String flowExecutionId,
+                                  @RequestParam String streamId){
+        return FlowEmitter.createExecutionLogEmitter(flowExecutionId,streamId);
     }
 
 }

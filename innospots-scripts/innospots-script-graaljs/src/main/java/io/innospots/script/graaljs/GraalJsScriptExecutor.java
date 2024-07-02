@@ -105,7 +105,7 @@ public class GraalJsScriptExecutor implements IScriptExecutor {
 
     @Override
     public String scriptType() {
-        return "graal.js";
+        return "graaljs";
     }
 
     @Override

@@ -41,7 +41,7 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 @RestController
 @RequestMapping(PATH_ROOT_ADMIN + "workflow/node-execution")
 @ModuleMenu(menuKey = "workflow-management")
-@Tag(name = "Workflow Node Execution")
+@Tag(name = "Workflow Node Execution", description = "workflow node execution: get list,page")
 public class NodeExecutionController extends BaseController {
 
 
