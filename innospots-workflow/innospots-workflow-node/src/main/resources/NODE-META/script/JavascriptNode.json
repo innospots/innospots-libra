@@ -21,13 +21,15 @@
         "initialValue": "Js节点"
       }
     },{
-      "name": "action",
+      "name": "action_script",
       "type": "ScriptEditor",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "JS脚本",
         "placeholder": "输入JS代码",
+        "scriptType": "JAVASCRIPT",
+        "isFixedType": true,
         "initialValue": "return item;"
       }
     }

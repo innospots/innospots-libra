@@ -21,12 +21,14 @@ package io.innospots.script.graaljs;
 import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.core.text.StrFormatter;
 import io.innospots.base.model.Pair;
+import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.base.script.ExecuteMode;
 import io.innospots.base.script.IScriptExecutor;
 import io.innospots.base.script.java.ScriptMeta;
 import io.innospots.base.script.jit.MethodBody;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Engine;
 import org.graalvm.polyglot.Source;
@@ -35,10 +37,7 @@ import org.graalvm.polyglot.Value;
 import javax.script.Compilable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -76,6 +75,9 @@ public class GraalJsScriptExecutor implements IScriptExecutor {
         String args = null;
         if (methodBody.getParams() == null || methodBody.getParams().size() == 0) {
             args = "item";
+            List<ParamField> pFields = new ArrayList<>();
+            pFields.add(new ParamField(args,args, FieldValueType.MAP));
+            methodBody.setParams(pFields);
         } else {
             args = methodBody.getParams().stream().map(ParamField::getCode).collect(Collectors.joining(","));
         }
@@ -87,6 +89,7 @@ public class GraalJsScriptExecutor implements IScriptExecutor {
         methodBody.setSrcBody(source);
     }
 
+    /*
     static String wrapSource(String funName, String args, String srcBody) {
         Map<String, String> data = new HashMap<>();
         data.put("methodName", funName);
@@ -96,7 +99,17 @@ public class GraalJsScriptExecutor implements IScriptExecutor {
                 "JSON.stringify({methodName}(JSON.parse({args})))" +
                 "", data, true);
     }
+     */
 
+    static String wrapSource(String funName, String args, String srcBody) {
+        Map<String, String> data = new HashMap<>();
+        data.put("methodName", funName);
+        data.put("args", args);
+        data.put("srcBody", srcBody);
+        return StrFormatter.format("function {methodName}({args}){{srcBody}};" +
+                "{methodName}({args})" +
+                "", data, true);
+    }
 
     @Override
     public ExecuteMode executeMode() {
@@ -117,7 +130,12 @@ public class GraalJsScriptExecutor implements IScriptExecutor {
     public Object execute(Map<String, Object> env) {
         try (Context context = Context.newBuilder().allowAllAccess(true).engine(this.engine).build()) {
             Value bindings = context.getBindings("js");
-            env.forEach(bindings::putMember);
+            if(MapUtils.isNotEmpty(env)){
+                env = new HashMap<>();
+                //env.forEach(bindings::putMember);
+            }
+            bindings.putMember("item",env);
+
             Value value = context.eval(scriptSource);
 
             if (value.isBoolean()) {

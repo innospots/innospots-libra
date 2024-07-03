@@ -6,7 +6,7 @@
   "vendor": "innospots",
   "description": "Java节点",
   "icon": "java",
-  "nodeType": "io.innospots.workflow.node.app.script.ScriptNode",
+  "nodeType": "io.innospots.workflow.node.app.script.ScriptJavaNode",
   "outPorts": "1",
   "inPorts": "1",
   "components": [
@@ -21,7 +21,7 @@
         "initialValue": "Java节点"
       }
     },{
-      "name": "action",
+      "name": "action_script",
       "type": "ScriptEditor",
       "copyable": false,
       "deletable": false,
@@ -29,7 +29,7 @@
         "label": "脚本详情",
         "scriptType": "JAVA",
         "isFixedType": true,
-        "placeholder": "输入JS代码",
+        "placeholder": "输入JAVA代码",
         "initialValue": "return item;"
       }
     }

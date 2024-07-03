@@ -156,6 +156,7 @@ public class ScriptExecutorManager {
                     sourceBuilder.deleteSourceFile();
                 }
                 logger.info("engine class file write complete, classFile:{} , loaded executor size:{}", className(), executors.size());
+                reload();
                 return true;
             } catch (IOException e) {
                 throw ScriptException.buildCompileException(this.getClass(), ScriptType.JAVA.name(), e, e.getMessage());

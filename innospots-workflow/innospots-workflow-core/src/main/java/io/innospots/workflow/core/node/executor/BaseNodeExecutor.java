@@ -55,6 +55,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
 
     public static final String FIELD_SCRIPT_TYPE = "script_type";
     public static final String FIELD_ACTION_SCRIPT = "action_script";
+    public static final String FIELD_ACTION = "action";
 
     protected List<INodeExecutionListener> nodeExecutionListeners;
 

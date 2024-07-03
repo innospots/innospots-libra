@@ -23,7 +23,7 @@
       }
     },
     {
-      "name": "actionScriptType",
+      "name": "script_type",
       "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
@@ -46,7 +46,7 @@
       }
     },
     {
-      "name": "action",
+      "name": "action_script",
       "type": "ScriptEditor",
       "valueType": "string",
       "copyable": false,
@@ -54,7 +54,7 @@
       "settings": {
         "label": "脚本详情",
         "scriptType": "JAVA",
-        "dependencies": "actionScriptType",
+        "dependencies": "script_type",
         "isChangeable": true,
         "initialValue": "return items;"
       }

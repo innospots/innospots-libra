@@ -131,7 +131,9 @@ public class NodeDefinitionBuilder {
             Integer inNum = Integer.parseInt(metaInfo.getInPorts().toString());
             for (int i = 0; i < inNum; i++) {
                 Map<String, Object> port = new LinkedHashMap<>();
-                port.put("label", String.join("_", metaInfo.getCode().toLowerCase(), "in", String.valueOf(i + 1)));
+                if (inNum > 1) {
+                    port.put("label", String.join("_", "i", String.valueOf(i + 1)));
+                }
                 port.put("count", 1);
                 inPorts.add(port);
             }
@@ -146,7 +148,9 @@ public class NodeDefinitionBuilder {
             Integer outNum = Integer.parseInt(metaInfo.getOutPorts().toString());
             for (int i = 0; i < outNum; i++) {
                 Map<String, Object> port = new LinkedHashMap<>();
-                port.put("label", String.join("_", metaInfo.getCode().toLowerCase(), "out", String.valueOf(i + 1)));
+                if (outNum > 1) {
+                    port.put("label", String.join("_", "o", String.valueOf(i + 1)));
+                }
                 port.put("count", 1);
                 outPorts.add(port);
             }

@@ -23,7 +23,7 @@
       }
     },
     {
-      "name": "action",
+      "name": "action_script",
       "type": "ScriptEditor",
       "valueType": "string",
       "copyable": false,

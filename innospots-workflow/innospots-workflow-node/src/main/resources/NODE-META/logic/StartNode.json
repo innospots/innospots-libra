@@ -9,7 +9,6 @@
   "nodeType": "io.innospots.workflow.core.node.executor.StateNode",
   "outPorts": [
     {
-      "label": "out1",
       "count": 1
     }
   ],

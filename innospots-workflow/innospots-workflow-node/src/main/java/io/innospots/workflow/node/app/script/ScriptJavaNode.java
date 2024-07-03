@@ -90,4 +90,8 @@ public class ScriptJavaNode extends ScriptBaseNode {
         return methodBody;
     }
 
+    @Override
+    protected String scriptType() {
+        return "java";
+    }
 }
