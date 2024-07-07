@@ -59,20 +59,23 @@ public class NodeDefinitionBuilder {
         for (int i = 0; i < nodeMetaInfo.getComponents().size(); i++) {
             NodeComponent nodeComponent = nodeMetaInfo.getComponents().get(i);
             componentMap.put(nodeComponent.getName(), nodeComponent);
-            Map<String, Object> compMap = nodeComponent.toMap(nodeMetaInfo.getCode(), i + 1);
+            int y = i + 1;
+            Map<String, Object> compMap = nodeComponent.toMap(nodeMetaInfo.getCode(), y);
             String id = (String) compMap.get("id");
             nameToIdMap.put(nodeComponent.getName(), id);
-            if (!compMap.containsKey("layout")) {
-                Map<String, Object> defaultLayout = defaultLayout(id, i);
+            Map<String, Object> layout = (Map<String, Object>) compMap.get("layout");
+            if (layout == null) {
+                layout = defaultLayout(id, i);
                 NodeComponent dnc = ncDefault.get(nodeComponent.getType());
                 if (dnc != null && dnc.getLayout() != null) {
-                    defaultLayout.clear();
-                    defaultLayout.put("i", id);
-                    defaultLayout.put("y", i);
-                    defaultLayout.putAll(dnc.getLayout());
+                    layout.clear();
+                    layout.putAll(dnc.getLayout());
                 }
-                compMap.put("layout", defaultLayout);
+                compMap.put("layout", layout);
             }
+
+            layout.put("i", id);
+            layout.put("y", y);
             tartgetIdMap.put(id, compMap);
         }
 

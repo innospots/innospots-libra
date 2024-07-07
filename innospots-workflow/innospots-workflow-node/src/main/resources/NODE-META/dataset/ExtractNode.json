@@ -117,7 +117,8 @@
       "copyable": false,
       "deletable": false,
       "settings": {
-        "label": "排序字段"
+        "label": "排序字段",
+        "dataType": "payload"
       },
       "conditions": [
         {

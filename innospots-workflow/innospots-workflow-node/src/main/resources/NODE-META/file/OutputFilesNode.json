@@ -41,7 +41,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
-        "label": "来源文件",
+        "label": "文件名格式",
         "placeholder": "*.后缀名，例如: *.png",
         "initialValue": ".*"
       }

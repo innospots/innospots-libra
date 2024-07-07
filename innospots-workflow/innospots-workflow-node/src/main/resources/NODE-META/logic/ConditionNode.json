@@ -7,7 +7,16 @@
   "description": "IF条件",
   "icon": "condition",
   "nodeType": "io.innospots.workflow.node.app.logic.ConditionNode",
-  "outPorts": "2",
+  "outPorts": [
+    {
+      "label": "true",
+      "count": 1
+    },
+    {
+      "label": "false",
+      "count": 1
+    }
+  ],
   "inPorts": "1",
   "components": [
     {

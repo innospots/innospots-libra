@@ -67,7 +67,70 @@
       "deletable": false,
       "settings": {
         "label": "计算字段",
-        "tooltip": "将选中的字段值按选择的处置方式进行加工处理如替换空值。替换枚举值等"
+        "tooltip": "将选中的字段值按选择的处置方式进行加工处理如替换空值。替换枚举值等",
+        "customColumns": [{
+          "type": "INPUT",
+          "width": "120px",
+          "code": "fieldCode",
+          "title": "字段名"
+        }, {
+          "code": "field",
+          "type": "FIELD",
+          "width": "120px",
+          "title": "字段",
+          "default": ""
+        }, {
+          "code": "function",
+          "type": "SELECT",
+          "width": "100px",
+          "title": "函数",
+          "default": "",
+          "options": [{
+            "label": "平均数",
+            "value": "AVG"
+          }, {
+            "value": "SUM",
+            "label": "求和"
+          }, {
+            "value": "MAX",
+            "label": "最大值"
+          }, {
+            "value": "MIN",
+            "label": "最小值"
+          }, {
+            "value": "STD_DEV",
+            "label": "标准差"
+          }, {
+            "value": "VARIANCE",
+            "label": "方差"
+          }, {
+            "value": "MAD",
+            "label": "平均绝对差"
+          }, {
+            "value": "SOS",
+            "label": "平方和"
+          }, {
+            "value": "SKEW",
+            "label": "样本偏度"
+          }, {
+            "value": "KURT",
+            "label": "样本峰度"
+          }, {
+            "value": "PROD",
+            "label": "连乘"
+          }]
+        }, {
+          "code": "winLength",
+          "type": "INPUT",
+          "width": "80px",
+          "title": "窗口长度",
+          "default": ""
+        }, {
+          "type": "FIELD",
+          "width": "120px",
+          "code": "weight",
+          "title": "权重"
+        }]
       },
       "conditions": [
         {
@@ -91,7 +154,64 @@
       "deletable": false,
       "settings": {
         "label": "计算字段",
-        "tooltip": "将选中的字段值按选择的处置方式进行加工处理如替换空值。替换枚举值等"
+        "tooltip": "将选中的字段值按选择的处置方式进行加工处理如替换空值。替换枚举值等",
+        "customColumns": [{
+          "type": "INPUT",
+          "width": "120px",
+          "code": "fieldCode",
+          "title": "字段名"
+        }, {
+          "code": "field",
+          "type": "FIELD",
+          "width": "120px",
+          "title": "字段",
+          "default": ""
+        }, {
+          "code": "function",
+          "type": "SELECT",
+          "width": "100px",
+          "title": "函数",
+          "default": "",
+          "options": [{
+            "label": "平均数",
+            "value": "AVG"
+          }, {
+            "value": "SUM",
+            "label": "求和"
+          }, {
+            "value": "MAX",
+            "label": "最大值"
+          }, {
+            "value": "MIN",
+            "label": "最小值"
+          }, {
+            "value": "STD_DEV",
+            "label": "标准差"
+          }, {
+            "value": "VARIANCE",
+            "label": "方差"
+          }, {
+            "value": "MAD",
+            "label": "平均绝对差"
+          }, {
+            "value": "SOS",
+            "label": "平方和"
+          }, {
+            "value": "SKEW",
+            "label": "样本偏度"
+          }, {
+            "value": "KURT",
+            "label": "样本峰度"
+          }, {
+            "value": "PROD",
+            "label": "连乘"
+          }]
+        }, {
+          "type": "FIELD",
+          "width": "120px",
+          "code": "weight",
+          "title": "权重"
+        }]
       },
       "conditions": [
         {
@@ -115,7 +235,43 @@
       "deletable": false,
       "settings": {
         "label": "计算字段",
-        "tooltip": "将选中的字段值按选择的处置方式进行加工处理如替换空值。替换枚举值等"
+        "tooltip": "将选中的字段值按选择的处置方式进行加工处理如替换空值。替换枚举值等",
+        "customColumns": [{
+          "type": "INPUT",
+          "width": "120px",
+          "code": "fieldCode",
+          "title": "字段名"
+        }, {
+          "code": "field",
+          "type": "FIELD",
+          "width": "120px",
+          "title": "字段",
+          "default": ""
+        }, {
+          "code": "function",
+          "type": "SELECT",
+          "width": "100px",
+          "title": "函数",
+          "default": "",
+          "options": [{
+            "label": "排名",
+            "value": "RANK"
+          }, {
+            "value": "DIFF",
+            "label": "差值"
+          }, {
+            "value": "SHIFT",
+            "label": "滑动"
+          }, {
+            "value": "PCT_CHANGE",
+            "label": "百分比变化"
+          }]
+        }, {
+          "type": "INPUT",
+          "width": "80px",
+          "code": "winLength",
+          "title": "窗口长度"
+        }]
       },
       "conditions": [
         {

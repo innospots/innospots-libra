@@ -11,13 +11,25 @@
   "inPorts": "1",
   "components": [
     {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "文件加载"
+      }
+    },
+    {
       "name": "source_files",
       "type": "Input",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
-        "label": "源文件",
+        "label": "文件路径",
         "placeholder": "请输入源文件名称，支持通配符格式如：/tmp/*.jpg",
         "allowClear": true
       }

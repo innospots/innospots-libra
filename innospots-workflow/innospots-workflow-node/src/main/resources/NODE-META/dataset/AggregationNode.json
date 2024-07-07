@@ -135,6 +135,7 @@
       "settings": {
         "label": "聚合变量",
         "dependencies": "source_field_type",
+        "parentField": "list_parent_field",
         "options": [
           {
             "label": "总计",

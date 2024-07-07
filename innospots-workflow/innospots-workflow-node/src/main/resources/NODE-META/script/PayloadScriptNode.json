@@ -53,7 +53,7 @@
       "deletable": false,
       "settings": {
         "label": "脚本详情",
-        "scriptType": "JAVA",
+        "scriptType": "JAVASCRIPT",
         "dependencies": "script_type",
         "isChangeable": true,
         "initialValue": "return items;"

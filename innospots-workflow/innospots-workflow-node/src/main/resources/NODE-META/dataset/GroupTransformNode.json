@@ -19,7 +19,7 @@
       "settings": {
         "label": "节点名称",
         "placeholder": "请输入节点名称",
-        "initialValue": "筛选排序"
+        "initialValue": "分组计算"
       }
     },
     {

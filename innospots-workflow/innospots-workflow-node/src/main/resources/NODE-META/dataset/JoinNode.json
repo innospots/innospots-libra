@@ -63,7 +63,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
-        "label": "连接键"
+        "label": "连接字段"
       },
       "conditions": [
         {

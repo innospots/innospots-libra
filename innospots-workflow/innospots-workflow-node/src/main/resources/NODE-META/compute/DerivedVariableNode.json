@@ -36,7 +36,7 @@
     },
     {
       "name": "compute_fields",
-      "type": "Input",
+      "type": "VariableConfig",
       "valueType": "array",
       "copyable": false,
       "deletable": false,

@@ -31,6 +31,11 @@
         "label": "条件字段",
         "optionsType": "inputFields",
         "options": [{}]
+      },
+      "layout": {
+        "h": 7, "minH": 4,
+        "w": 1, "x": 0, "y": 0, "moved": true, "static": false,
+        "resizeHandles": ["s", "n"]
       }
     },{
       "name": "conditions",

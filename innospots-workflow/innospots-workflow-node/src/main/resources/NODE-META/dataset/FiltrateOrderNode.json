@@ -61,7 +61,11 @@
       "type": "Input",
       "valueType": "number",
       "copyable": false,
-      "deletable": false
+      "deletable": false,
+      "settings": {
+        "label": "筛选行数",
+        "tooltip": "筛选行数"
+      }
     }
   ]
 }

@@ -41,7 +41,14 @@
             "value": "FUNCTION",
             "label": "函数扩展"
           }
-        ]
+        ],
+        "dynamicOptions": {
+          "method": "GET",
+          "fieldNames": {
+            "value": "value",
+            "label": "label"
+          }
+        }
       }
     },
     {

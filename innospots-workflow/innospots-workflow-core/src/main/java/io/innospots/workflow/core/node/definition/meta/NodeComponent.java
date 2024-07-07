@@ -36,7 +36,7 @@ public class NodeComponent {
 
     public Map<String,Object> toMap(String code,int index){
         Map<String,Object> map = new LinkedHashMap<>();
-        map.put("id",String.join("_", code,name.toLowerCase(), RandomStringUtils.randomAlphabetic(4), String.valueOf(index)));
+        map.put("id",String.join("_","c", String.valueOf(index), code,name.toLowerCase(), RandomStringUtils.randomAlphabetic(4)));
         map.put("name",name);
         map.put("type",type);
         map.put("valueType",valueType);
