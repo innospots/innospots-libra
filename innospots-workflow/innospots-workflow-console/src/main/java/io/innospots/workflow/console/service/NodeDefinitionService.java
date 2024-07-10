@@ -118,7 +118,7 @@ public class NodeDefinitionService {
         String icon = nodeInfo.getIcon();
         Integer nodeId = nodeInfo.getNodeId();
         if (StringUtils.isNotEmpty(icon) && icon.startsWith(IMAGE_PREFIX)) {
-            EventBusCenter.async(new NewAvatarEvent(nodeId, ImageType.APP, null, icon));
+            EventBusCenter.async(new NewAvatarEvent(String.valueOf(nodeId), ImageType.APP, null, icon));
         }
         nodeInfo = flowNodeDefinitionOperator.updateNodeInfo(nodeInfo);
         List<Integer> nodeIds = new ArrayList<>();
