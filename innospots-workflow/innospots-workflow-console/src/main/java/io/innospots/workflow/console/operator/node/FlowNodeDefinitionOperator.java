@@ -44,6 +44,7 @@ import io.innospots.workflow.core.node.definition.entity.FlowNodeGroupEntity;
 import io.innospots.workflow.core.node.definition.entity.FlowNodeGroupNodeEntity;
 import io.innospots.workflow.core.node.definition.entity.FlowTemplateEntity;
 import io.innospots.workflow.core.node.definition.model.NodeDefinition;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
@@ -210,6 +211,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
     public NodeDefinition createNodeDefinition(NodeDefinition nodeDefinition) {
         this.checkDifferentName(nodeDefinition);
         this.checkDifferentCode(nodeDefinition);
+        fillNodeType(nodeDefinition);
         FlowNodeDefinitionEntity entity = FlowNodeDefinitionConverter.INSTANCE.modelToEntity(nodeDefinition);
         boolean s = this.save(entity);
         if (!s) {
@@ -270,6 +272,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
         if (entity == null) {
             throw ResourceException.buildAbandonException(this.getClass(), "node definition not exits");
         }
+        fillNodeType(nodeDefinition);
         FlowNodeDefinitionConverter.INSTANCE.modelToEntity(nodeDefinition, entity);
         boolean s = this.updateById(entity);
         if (!s) {
@@ -284,6 +287,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
         if (entity == null) {
             throw ResourceException.buildAbandonException(this.getClass(), "node definition not exits");
         }
+        fillNodeType(nodeDefinition);
         entity = FlowNodeDefinitionConverter.INSTANCE.modelToEntity(nodeDefinition);
         boolean s = this.updateById(entity);
         if (!s) {
@@ -367,6 +371,21 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
         long count = super.count(queryWrapper);
         if (count > 0) {
             throw ResourceException.buildExistException(this.getClass(), "node code", nodeInfo.getCode());
+        }
+    }
+
+    private void fillNodeType(NodeDefinition nodeDefinition){
+        if(nodeDefinition.getScripts()!=null){
+            try{
+                String script = (String) nodeDefinition.getScripts().get(BaseNodeExecutor.FIELD_ACTION);
+                if(script!=null && script.startsWith("class:")){
+                    script = script.split("\n")[0];
+                    String cls =script.substring(6);
+                    nodeDefinition.setNodeType(cls);
+                }
+            }catch (Exception e){
+                log.error(e.getMessage());
+            }
         }
     }
 }

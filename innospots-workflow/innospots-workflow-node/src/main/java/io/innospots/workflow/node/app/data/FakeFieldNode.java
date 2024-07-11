@@ -27,6 +27,7 @@ import io.innospots.workflow.core.node.field.InputField;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,7 +67,7 @@ public class FakeFieldNode extends BaseNodeExecutor {
         nodeExecution.addOutput(nodeOutput);
         for (int i = 0; i < itemSize; i++) {
             try {
-                Map<String, Object> item = new HashMap<>();
+                Map<String, Object> item = new LinkedHashMap<>();
                 for (InputField fakeField : fakeFields) {
                     String fieldName = fakeField.getCode();
                     Object value = dataFakerUtils.gen(fakeField.getValue());
