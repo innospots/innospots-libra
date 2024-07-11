@@ -18,8 +18,6 @@
 
 package io.innospots.workflow.node.app.data;
 
-import io.innospots.base.i18n.LocaleMessageUtils;
-import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.base.utils.DataFakerUtils;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
@@ -27,9 +25,10 @@ import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.node.field.InputField;
 import lombok.extern.slf4j.Slf4j;
-import net.datafaker.Faker;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Smars

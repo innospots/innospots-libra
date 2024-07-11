@@ -28,6 +28,14 @@ import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 public class TodoTaskNode extends BaseNodeExecutor {
 
 
+    private static final String Field_TASK_NAME = "taskName";
+    private static final String Field_TASK_DESC = "taskDesc";
+    private static final String Field_USER_NAME = "userName";
+    private static final String Field_USER_ID = "userId";
+    private static final String Field_GROUP_ID = "groupId";
+    private static final String Field_TASK_TAGS = "taskTags";
+    private static final String Field_TASK_PRIORITY = "taskPriority";
+
     @Override
     protected void initialize() {
 
