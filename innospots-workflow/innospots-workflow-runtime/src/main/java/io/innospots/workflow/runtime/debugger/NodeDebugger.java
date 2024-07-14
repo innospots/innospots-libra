@@ -23,6 +23,7 @@ import cn.hutool.crypto.digest.DigestUtil;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.script.ExecutorManagerFactory;
 import io.innospots.base.utils.FileUtils;
+import io.innospots.base.utils.InnospotsIdGenerator;
 import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.debug.DebugPayload;
 import io.innospots.workflow.core.debug.DebugInput;
@@ -97,8 +98,10 @@ public class NodeDebugger {
 
         FlowExecution flowExecution = FlowExecution.buildNewFlowExecution(1L,0);
         flowExecution.setRecordMode(RecordMode.SYNC);
+        flowExecution.setFlowExecutionId(InnospotsIdGenerator.generateIdStr());
 
         NodeExecution nodeExecution = NodeExecution.buildNewNodeExecution(ni.getNodeKey(),1L,1,identifier,true);
+        nodeExecution.setNodeExecutionId(InnospotsIdGenerator.generateIdStr());
         nodeExecution.setRecordMode(RecordMode.SYNC);
         List<ExecutionInput> inputs = new ArrayList<>();
         for (DebugInput input : debugPayload.getInputs()) {

@@ -45,6 +45,7 @@ import io.innospots.workflow.core.node.definition.entity.FlowNodeGroupNodeEntity
 import io.innospots.workflow.core.node.definition.entity.FlowTemplateEntity;
 import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
@@ -53,10 +54,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -165,7 +163,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
         return result;
     }
 
-    public List<NodeDefinition> listOnlineNodes(NodePrimitive primitive,String flowCode) {
+    public List<NodeDefinition> listOnlineNodes(NodePrimitive primitive, String flowCode) {
         QueryWrapper<FlowNodeDefinitionEntity> queryWrapper = new QueryWrapper<>();
 
         queryWrapper.lambda()
@@ -173,7 +171,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
         if (primitive != null) {
             queryWrapper.lambda().eq(FlowNodeDefinitionEntity::getPrimitive, primitive);
         }
-        if(flowCode != null){
+        if (flowCode != null) {
             queryWrapper.lambda().eq(FlowNodeDefinitionEntity::getFlowCode, flowCode);
         }
         return FlowNodeDefinitionConverter.INSTANCE.entitiesToModels(this.list(queryWrapper));
@@ -317,6 +315,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
             throw ResourceException.buildAbandonException(this.getClass(), "get node definition not exits", nodeId);
         }
         NodeDefinition nodeDefinition = FlowNodeDefinitionConverter.INSTANCE.entityToModel(entity);
+        fillNodeType(nodeDefinition);
         return nodeDefinition;
     }
 
@@ -374,17 +373,27 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
         }
     }
 
-    private void fillNodeType(NodeDefinition nodeDefinition){
-        if(nodeDefinition.getScripts()!=null){
-            try{
+    private void fillNodeType(NodeDefinition nodeDefinition) {
+        if (nodeDefinition.getScripts() != null) {
+            try {
                 String script = (String) nodeDefinition.getScripts().get(BaseNodeExecutor.FIELD_ACTION);
-                if(script!=null && script.startsWith("class:")){
+                if (script != null && script.startsWith("class:")) {
                     script = script.split("\n")[0];
-                    String cls =script.substring(6);
+                    String cls = script.substring(6);
                     nodeDefinition.setNodeType(cls);
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 log.error(e.getMessage());
+            }
+        }
+        if (nodeDefinition.getNodeType() != null) {
+            if(MapUtils.isEmpty(nodeDefinition.getScripts())){
+                nodeDefinition.setScripts(new LinkedHashMap<>());
+            }
+            Map<String,Object> scripts = nodeDefinition.getScripts();
+            String src = (String) scripts.get(BaseNodeExecutor.FIELD_ACTION);
+            if(StringUtils.isEmpty(src)){
+                scripts.put(BaseNodeExecutor.FIELD_ACTION, "class:" + nodeDefinition.getNodeType());
             }
         }
     }
