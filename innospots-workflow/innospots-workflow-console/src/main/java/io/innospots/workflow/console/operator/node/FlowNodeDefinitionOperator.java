@@ -376,7 +376,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
     private void fillNodeType(NodeDefinition nodeDefinition) {
         if (nodeDefinition.getScripts() != null) {
             try {
-                String script = (String) nodeDefinition.getScripts().get(BaseNodeExecutor.FIELD_ACTION);
+                String script = (String) nodeDefinition.getScripts().get(NodeDefinition.SCRIPT_ACTION);
                 if (script != null && script.startsWith("class:")) {
                     script = script.split("\n")[0];
                     String cls = script.substring(6);
@@ -393,7 +393,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
             Map<String,Object> scripts = nodeDefinition.getScripts();
             String src = (String) scripts.get(BaseNodeExecutor.FIELD_ACTION);
             if(StringUtils.isEmpty(src)){
-                scripts.put(BaseNodeExecutor.FIELD_ACTION, "class:" + nodeDefinition.getNodeType());
+                scripts.put(NodeDefinition.SCRIPT_ACTION, "class:" + nodeDefinition.getNodeType());
             }
         }
     }

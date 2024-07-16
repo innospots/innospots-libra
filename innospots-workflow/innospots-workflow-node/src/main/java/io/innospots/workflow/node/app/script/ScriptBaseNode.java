@@ -23,15 +23,10 @@ import io.innospots.base.exception.ScriptException;
 import io.innospots.base.script.ExecutorManagerFactory;
 import io.innospots.base.script.IScriptExecutor;
 import io.innospots.base.script.ScriptExecutorManager;
-import io.innospots.workflow.core.execution.model.ExecutionInput;
-import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Map;
 
 /**
  * @author Raydian

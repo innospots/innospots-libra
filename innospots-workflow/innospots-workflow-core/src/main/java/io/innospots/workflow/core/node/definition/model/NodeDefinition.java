@@ -34,6 +34,10 @@ import java.util.Map;
 @Schema(title = "NodeDefinition")
 public class NodeDefinition extends NodeInfo {
 
+    public static final String SCRIPT_TYPE = "scriptType";
+
+    public static final String SCRIPT_ACTION = "actionScript";
+
     @Schema(title = "node config form element")
 //    private Map<String, Object> config;
     private NodeResource resources;
@@ -63,5 +67,13 @@ public class NodeDefinition extends NodeInfo {
         sb.append(", icon='").append(icon).append('\'');
         sb.append('}');
         return sb.toString();
+    }
+
+    public String scriptAction(){
+        return scripts!=null?scripts.get(SCRIPT_ACTION).toString():null;
+    }
+
+    public String scriptType(){
+        return scripts!=null?scripts.get(SCRIPT_TYPE).toString():null;
     }
 }
