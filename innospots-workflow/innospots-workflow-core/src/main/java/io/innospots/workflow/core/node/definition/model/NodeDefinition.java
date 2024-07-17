@@ -43,7 +43,7 @@ public class NodeDefinition extends NodeInfo {
     private NodeResource resources;
 
     @Schema(title = "node setting")
-    private Map<String,Object> settings;
+    private Map<String, Object> settings;
 //    private NodeSetting settings;
 
 //    @Schema(title = "connector config info")
@@ -69,11 +69,11 @@ public class NodeDefinition extends NodeInfo {
         return sb.toString();
     }
 
-    public String scriptAction(){
-        return scripts!=null?scripts.get(SCRIPT_ACTION).toString():null;
+    public String scriptAction() {
+        return scripts != null ? scripts.get(SCRIPT_ACTION).toString() : null;
     }
 
-    public String scriptType(){
-        return scripts!=null?scripts.get(SCRIPT_TYPE).toString():null;
+    public String scriptType() {
+        return scripts != null ? scripts.get(SCRIPT_TYPE).toString() : null;
     }
 }
