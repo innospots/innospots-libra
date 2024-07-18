@@ -2,6 +2,7 @@ package io.innospots.workflow.core.node.definition.meta;
 
 import io.innospots.base.condition.Factor;
 import io.innospots.base.enums.DataStatus;
+import io.innospots.workflow.core.enums.NodePrimitive;
 import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import io.innospots.workflow.core.node.definition.model.NodePage;
 import io.innospots.workflow.core.node.definition.model.NodeResource;
@@ -34,10 +35,20 @@ public class NodeDefinitionBuilder {
         return nodeDefinition;
     }
 
-    public static NodeDefinition buildByPrimitive(String primitive){
-        NodeMetaInfo nodeMetaInfo = NodeMetaInfoLoader.getNodeMetaTemplate(primitive);
-        if(nodeMetaInfo == null){
-            nodeMetaInfo = NodeMetaInfoLoader.getNormalNodeMetaTemplate();
+    public static NodeDefinition buildByPrimitive(String primitive, boolean hasCredential) {
+        NodeMetaInfo nodeMetaInfo = null;
+        if(hasCredential && NodePrimitive.normal.name().equals(primitive)){
+            nodeMetaInfo = NodeMetaInfoLoader.getConnectorNodeMetaTemplate();
+        }else {
+            nodeMetaInfo = NodeMetaInfoLoader.getNodeMetaTemplate(primitive);
+        }
+
+        if (nodeMetaInfo == null) {
+            if(hasCredential){
+                nodeMetaInfo = NodeMetaInfoLoader.getConnectorNodeMetaTemplate();
+            }else{
+                nodeMetaInfo = NodeMetaInfoLoader.getNormalNodeMetaTemplate();
+            }
         }
         return build(nodeMetaInfo);
     }

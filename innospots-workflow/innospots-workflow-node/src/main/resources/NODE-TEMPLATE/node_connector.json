@@ -30,19 +30,7 @@
         "label": "凭据",
         "showAddButton": true,
         "showEditButton": true
-      },
-      "conditions": [
-        {
-          "result": "visible",
-          "relation": "OR",
-          "children": [
-            {
-              "name": "auth_type",
-              "opt": "NOTNULL"
-            }
-          ]
-        }
-      ]
+      }
     }
   ],
   "output": [],

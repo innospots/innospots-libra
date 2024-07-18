@@ -199,7 +199,8 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
         this.checkDifferentName(nodeInfo);
         this.checkDifferentCode(nodeInfo);
         NodeDefinition nodeDefinition = FlowNodeDefinitionConverter.INSTANCE.infoToDefinition(nodeInfo);
-        NodeDefinition nTpl = NodeDefinitionBuilder.buildByPrimitive(nodeDefinition.getPrimitive().name());
+        NodeDefinition nTpl = NodeDefinitionBuilder.buildByPrimitive(nodeDefinition.getPrimitive().name(),
+                StringUtils.isNotEmpty(nodeInfo.getCredentialTypeCode()));
         nodeDefinition.setSettings(nTpl.getSettings());
         nodeDefinition.setResources(nTpl.getResources());
         FlowNodeDefinitionEntity entity = FlowNodeDefinitionConverter.INSTANCE.modelToEntity(nodeDefinition);

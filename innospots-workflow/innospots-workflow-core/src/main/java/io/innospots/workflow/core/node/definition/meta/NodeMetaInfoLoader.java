@@ -92,6 +92,10 @@ public class NodeMetaInfoLoader {
         return tplMetaInfoMap.get("normal");
     }
 
+    public static NodeMetaInfo getConnectorNodeMetaTemplate() {
+        return tplMetaInfoMap.get("connector");
+    }
+
     public static NodeMetaInfo getNodeMetaTemplate(String primitive){
         return tplMetaInfoMap.get(primitive);
     }

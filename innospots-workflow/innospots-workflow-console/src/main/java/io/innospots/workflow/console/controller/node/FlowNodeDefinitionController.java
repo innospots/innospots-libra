@@ -20,6 +20,7 @@ package io.innospots.workflow.console.controller.node;
 
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.enums.DataStatus;
+import io.innospots.base.model.field.SelectItem;
 import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
@@ -208,8 +209,8 @@ public class FlowNodeDefinitionController extends BaseController {
 
     @GetMapping("primitives")
     @Operation(summary = "node primitives")
-    public InnospotsResponse listPrimitives() {
-        return success(NodePrimitive.values());
+    public InnospotsResponse<List<SelectItem>> listPrimitives() {
+        return success(NodePrimitive.primitiveSelectItems());
     }
 
 }

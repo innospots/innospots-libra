@@ -10,9 +10,8 @@
   "components": [
     {
       "name": "displayName",
-      "type": "Default",
-      "valueType": "String",
-      "required":true,
+      "type": "Input",
+      "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {

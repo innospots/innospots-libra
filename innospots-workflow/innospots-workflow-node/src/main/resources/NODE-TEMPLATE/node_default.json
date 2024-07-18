@@ -16,9 +16,8 @@
   "components": [
     {
       "name": "displayName",
-      "type": "Default",
-      "valueType": "String",
-      "required":true,
+      "type": "Input",
+      "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
@@ -28,15 +27,8 @@
       },
       "layout": {
         "resizeHandles": [],
-        "x": 0,
-        "y": 0,
-        "i": "",
-        "h": 2,
-        "maxH": 2,
-        "minH": 2,
-        "w": 1,
-        "moved": true,
-        "static": false
+        "x": 0, "y": 0, "i": "", "h": 2, "w": 1,
+        "maxH": 2, "minH": 2, "moved": true, "static": false
       }
     },{
       "type": "KeyValueEditor",
