@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.node.app.data;
+package io.innospots.workflow.node.app.api;
 
 import cn.hutool.core.io.FileUtil;
 import com.github.benmanes.caffeine.cache.Cache;
@@ -35,6 +35,8 @@ import io.innospots.base.utils.PlaceholderUtils;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.node.app.connector.DataNode;
+import io.innospots.workflow.node.app.connector.OutputFieldType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

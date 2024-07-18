@@ -34,6 +34,14 @@ public class NodeDefinitionBuilder {
         return nodeDefinition;
     }
 
+    public static NodeDefinition buildByPrimitive(String primitive){
+        NodeMetaInfo nodeMetaInfo = NodeMetaInfoLoader.getNodeMetaTemplate(primitive);
+        if(nodeMetaInfo == null){
+            nodeMetaInfo = NodeMetaInfoLoader.getNormalNodeMetaTemplate();
+        }
+        return build(nodeMetaInfo);
+    }
+
     public static NodeDefinition build(String code) {
         NodeMetaInfo nodeMetaInfo = NodeMetaInfoLoader.getNodeMetaInfo(code);
         if (nodeMetaInfo == null) {

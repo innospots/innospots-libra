@@ -60,7 +60,10 @@ public @interface I18n {
                     String v = LocaleMessageUtils.message(key);
                     if (StringUtils.isEmpty(v)) {
                         v = defValue != null ? defValue : key;
+                    }else if(Objects.equals(v,key) && defValue != null){
+                        v = defValue;
                     }
+
                     if (StringUtils.isNotEmpty(v)) {
                         jsonGenerator.writeString(v);
                     } else {

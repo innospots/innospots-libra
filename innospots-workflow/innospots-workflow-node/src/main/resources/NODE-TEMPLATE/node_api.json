@@ -1,13 +1,13 @@
 {
-  "name": "HTTP API",
-  "code": "HTTPAPI",
+  "name": "API",
+  "code": "api",
   "flowCode": "EVENTS",
-  "primitive": "data",
-  "vendor": "innospots",
+  "primitive": "api",
+  "vendor": "customer",
   "credentialTypeCode": "Http",
   "description": "HttpAPI节点",
   "icon": "http-api",
-  "nodeType": "io.innospots.workflow.node.app.data.ApiDataNode",
+  "nodeType": "io.innospots.workflow.node.app.api.ApiDataNode",
   "inPorts": "1",
   "outPorts": "1",
   "components": [
@@ -31,7 +31,7 @@
       "deletable": false,
       "settings": {
         "label": "鉴权方式",
-		"viewType": "picker",
+        "viewType": "picker",
         "showAddButton": false,
         "showEditButton": false,
         "options": [
@@ -98,31 +98,6 @@
       }
     },
     {
-      "name": "pre_action",
-      "type": "ScriptEditor",
-      "valueType": "string",
-      "copyable": false,
-      "deletable": false,
-      "settings": {
-        "label": "前置脚本(JAVA)",
-        "scriptType": "JAVA",
-        "isFixedType": true
-      }
-    },
-    {
-      "name": "action",
-      "type": "ScriptEditor",
-      "valueType": "string",
-      "copyable": false,
-      "deletable": false,
-      "settings": {
-        "label": "结果脚本(JS)",
-        "scriptType": "JAVASCRIPT",
-        "isFixedType": true,
-        "default": "return item;"
-      }
-    },
-    {
       "name": "output_payload",
       "type": "Switch",
       "valueType": "boolean",
@@ -164,7 +139,7 @@
       "deletable": false,
       "settings": {
         "label": "返回数据类型",
-		"viewType": "radio",
+        "viewType": "radio",
         "options": [
           {
             "value": "LIST",
@@ -203,7 +178,7 @@
       "settings": {
         "label": "存储方式",
         "default": "PAYLOAD",
-		"viewType": "picker",
+        "viewType": "picker",
         "options": [
           {
             "value": "FIELD",
@@ -254,7 +229,7 @@
       "settings": {
         "label": "存储方式",
         "default": "OVERWRITE",
-		"viewType": "picker",
+        "viewType": "picker",
         "options": [
           {
             "value": "FIELD",

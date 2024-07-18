@@ -206,4 +206,10 @@ public class FlowNodeDefinitionController extends BaseController {
         return success(nodeDefinitionService.getNodeIcons());
     }
 
+    @GetMapping("primitives")
+    @Operation(summary = "node primitives")
+    public InnospotsResponse listPrimitives() {
+        return success(NodePrimitive.values());
+    }
+
 }

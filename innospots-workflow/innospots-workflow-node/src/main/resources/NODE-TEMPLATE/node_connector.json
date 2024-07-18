@@ -1,0 +1,50 @@
+{
+  "name": "normal",
+  "code": "connector",
+  "flowCode": "EVENTS",
+  "primitive": "connector",
+  "vendor": "customer",
+  "nodeType": "io.innospots.workflow.node.app.script.ScriptNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "节点名称"
+      }
+    },
+    {
+      "name": "credential",
+      "type": "CredentialSelect",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": true,
+      "settings": {
+        "label": "凭据",
+        "showAddButton": true,
+        "showEditButton": true
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "auth_type",
+              "opt": "NOTNULL"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "output": [],
+  "scripts": {}
+}

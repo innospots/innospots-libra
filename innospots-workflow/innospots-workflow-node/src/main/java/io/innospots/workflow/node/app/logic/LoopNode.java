@@ -20,11 +20,10 @@ package io.innospots.workflow.node.app.logic;
 
 import io.innospots.base.model.field.ComputeField;
 import io.innospots.base.model.field.ParamField;
-import io.innospots.workflow.node.app.data.OutputFieldMode;
+import io.innospots.workflow.node.app.connector.OutputFieldMode;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
-import io.innospots.workflow.core.instance.model.NodeInstance;
 
 import java.util.List;
 

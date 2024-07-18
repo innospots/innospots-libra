@@ -87,4 +87,12 @@ public class NodeMetaInfoLoader {
     public static NodeMetaInfo getDefaultNodeMetaTemplate() {
         return tplMetaInfoMap.get("default");
     }
+
+    public static NodeMetaInfo getNormalNodeMetaTemplate() {
+        return tplMetaInfoMap.get("normal");
+    }
+
+    public static NodeMetaInfo getNodeMetaTemplate(String primitive){
+        return tplMetaInfoMap.get(primitive);
+    }
 }

@@ -47,4 +47,8 @@ public class I18nUtils {
     public static String getI18nName(String name) {
         return name != null && isI18nField(name) ? name.substring(PRE_CST.length(), name.length() - SUB_CST.length()) : null;
     }
+
+    public static String wrapKey(String value){
+        return PRE_CST + value + SUB_CST;
+    }
 }

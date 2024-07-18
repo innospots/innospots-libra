@@ -1,0 +1,32 @@
+{
+  "name": "normal",
+  "code": "normal",
+  "flowCode": "EVENTS",
+  "primitive": "normal",
+  "vendor": "customer",
+  "nodeType": "io.innospots.workflow.node.app.script.ScriptNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Default",
+      "valueType": "String",
+      "required":true,
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "节点名称"
+      },
+      "layout": {
+        "resizeHandles": [],
+        "x": 0, "y": 0, "i": "", "h": 2, "w": 1,
+        "maxH": 2, "minH": 2, "moved": true, "static": false
+      }
+    }
+  ],
+  "output": [],
+  "scripts": {}
+}

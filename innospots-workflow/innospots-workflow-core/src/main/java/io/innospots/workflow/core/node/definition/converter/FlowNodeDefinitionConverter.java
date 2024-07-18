@@ -75,6 +75,8 @@ public interface FlowNodeDefinitionConverter extends BaseBeanConverter<NodeDefin
     @Mapping(target = "icon", ignore = true)
     void infoToEntity(NodeInfo nodeInfo, @MappingTarget FlowNodeDefinitionEntity entity);
 
+    NodeDefinition infoToDefinition(NodeInfo nodeInfo);
+
 
     default List<NodeConnectorConfig> strToConnectorConfigs(String connectorConfig){
         return JSONUtils.toList(connectorConfig, NodeConnectorConfig.class);

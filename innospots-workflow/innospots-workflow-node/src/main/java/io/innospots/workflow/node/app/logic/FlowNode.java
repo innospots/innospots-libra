@@ -23,10 +23,10 @@ import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
+import io.innospots.workflow.core.node.executor.StateNode;
 import io.innospots.workflow.core.node.field.InputField;
 import io.innospots.workflow.core.runtime.FlowEventBody;
-import io.innospots.workflow.core.node.executor.StateNode;
-import io.innospots.workflow.node.app.data.BaseDataNode;
 import io.innospots.workflow.core.utils.NodeInstanceUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,7 +40,7 @@ import java.util.Map;
  * @date 2020/12/20
  */
 @Slf4j
-public class FlowNode extends BaseDataNode {
+public class FlowNode extends BaseNodeExecutor {
 
 
     public static final String SUB_FLOW_KEY = "sub_flow_key";

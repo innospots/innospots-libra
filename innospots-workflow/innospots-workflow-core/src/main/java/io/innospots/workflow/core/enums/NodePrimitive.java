@@ -19,43 +19,81 @@
 package io.innospots.workflow.core.enums;
 
 
+import io.innospots.base.i18n.I18nUtils;
+import io.innospots.base.model.field.SelectItem;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Enum class for node primitives.
+ *
  * @author Smars
  * @date 2021/3/22
  */
 public enum NodePrimitive {
-    /**
-     * Data node.
-     */
-    data,
-    file,
-    dataset,
 
-    compute,
+    /**
+     * create and build item date
+     */
+    data("workflow.node.primitive.data:数据"),
+
+    /**
+     *
+     */
+    api("workflow.node.primitive.api:API"),
+
+    connector("workflow.node.primitive.connector:连接器"),
+
+    file("workflow.node.primitive.file:文件"),
+
+    dataset("workflow.node.primitive.dataset:数据集"),
+
+    compute("workflow.node.primitive.compute:计算"),
     /**
      * Execute node.
      */
-    execute,
+    execute("workflow.node.primitive.execute:执行器"),
     /**
      * Logic node.
      */
-    logic,
+    logic("workflow.node.primitive.logic:逻辑"),
     /**
      * Interaction node.
      */
-    interaction,
+    interaction("workflow.node.primitive.interaction:交互"),
     /**
      * Script node.
      */
-    script,
+    script("workflow.node.primitive.script:脚本"),
     /**
      * Trigger node.
      */
-    trigger,
+    trigger("workflow.node.primitive.trigger:触发器"),
     /**
      * Normal node.
      */
-    normal;
+    normal("workflow.node.primitive.normal:通用");
+
+    private String label;
+
+    private String tips;
+
+    NodePrimitive(String label) {
+        this.label = I18nUtils.wrapKey(label);
+    }
+
+
+    public String label() {
+        return this.label;
+    }
+
+    public static List<SelectItem> primitiveSelectItems() {
+        return Arrays.stream(NodePrimitive.values())
+                .map(nodePrimitive ->
+                        new SelectItem(nodePrimitive.label(), nodePrimitive.name(), nodePrimitive.tips))
+                .collect(Collectors.toList());
+    }
 }
 

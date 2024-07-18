@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.node.app.data;
+package io.innospots.workflow.node.app.connector;
 
 import io.innospots.base.condition.Factor;
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
@@ -29,7 +29,6 @@ import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
-import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;

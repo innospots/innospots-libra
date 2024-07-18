@@ -5,8 +5,8 @@ import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.instance.model.NodeInstance;
-import io.innospots.workflow.node.app.data.DataNode;
-import io.innospots.workflow.node.app.data.SqlDataNode;
+import io.innospots.workflow.node.app.connector.DataNode;
+import io.innospots.workflow.node.app.connector.SqlDataNode;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

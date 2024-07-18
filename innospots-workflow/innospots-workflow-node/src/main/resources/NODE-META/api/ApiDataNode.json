@@ -1,0 +1,342 @@
+{
+  "name": "HTTP API",
+  "code": "HTTPAPI",
+  "flowCode": "EVENTS",
+  "primitive": "api",
+  "vendor": "innospots",
+  "credentialTypeCode": "Http",
+  "description": "HttpAPI节点",
+  "icon": "http-api",
+  "nodeType": "io.innospots.workflow.node.app.api.ApiDataNode",
+  "inPorts": "1",
+  "outPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "HttpAPI节点"
+      }
+    },
+    {
+      "name": "auth_type",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "鉴权方式",
+		"viewType": "picker",
+        "showAddButton": false,
+        "showEditButton": false,
+        "options": [
+          {
+            "value": "none",
+            "label": "None"
+          },
+          {
+            "value": "oauth2-auth-api",
+            "label": "Oauth2 Auth"
+          },
+          {
+            "value": "token-auth-api",
+            "label": "Token Auth"
+          }
+        ]
+      }
+    },
+    {
+      "name": "credential",
+      "type": "CredentialSelect",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "凭据",
+        "showAddButton": true,
+        "showEditButton": true
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "auth_type",
+              "opt": "NOTNULL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "url_address",
+      "type": "HttpURLInput",
+      "valueType": "array",
+      "copyable": true,
+      "deletable": true,
+      "settings": {
+        "label": "请求地址",
+        "placeholder": "请输入请求地址"
+      }
+    },
+    {
+      "name": "request_params",
+      "type": "HttpRequest",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "HTTP请求参数",
+        "isSelect": true,
+        "dependencies": "url_address"
+      }
+    },
+    {
+      "name": "pre_action",
+      "type": "ScriptEditor",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "前置脚本(JAVA)",
+        "scriptType": "JAVA",
+        "isFixedType": true
+      }
+    },
+    {
+      "name": "action",
+      "type": "ScriptEditor",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "结果脚本(JS)",
+        "scriptType": "JAVASCRIPT",
+        "isFixedType": true,
+        "default": "return item;"
+      }
+    },
+    {
+      "name": "output_payload",
+      "type": "Switch",
+      "valueType": "boolean",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "返回数据是否存入Payload"
+      }
+    },
+    {
+      "name": "extract_path",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "数据提取",
+        "default": "$"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "output_payload",
+              "opt": "EQUAL",
+              "value": "true"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "output_field_type",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "返回数据类型",
+		"viewType": "radio",
+        "options": [
+          {
+            "value": "LIST",
+            "label": "列表"
+          },
+          {
+            "value": "MAP",
+            "label": "单条(JSON对象)"
+          }
+        ],
+        "default": "MAP",
+        "props": {
+          "optionType": "default"
+        }
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "output_payload",
+              "opt": "EQUAL",
+              "value": "true"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "output_mode_map",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "存储方式",
+        "default": "PAYLOAD",
+		"viewType": "picker",
+        "options": [
+          {
+            "value": "FIELD",
+            "label": "存入变量"
+          },
+          {
+            "value": "PAYLOAD",
+            "label": "合并入Payload"
+          },
+          {
+            "value": "OVERWRITE",
+            "label": "覆盖Payload"
+          }
+        ],
+        "optionsType": "customOptions"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "output_field_type",
+              "opt": "EQUAL",
+              "value": "LIST"
+            }
+          ]
+        },
+        {
+          "result": "hidden",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "output_payload",
+              "opt": "EQUAL",
+              "value": "false"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "output_mode_list",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "存储方式",
+        "default": "OVERWRITE",
+		"viewType": "picker",
+        "options": [
+          {
+            "value": "FIELD",
+            "label": "存入变量"
+          },
+          {
+            "value": "OVERWRITE",
+            "label": "覆盖Payload"
+          }
+        ],
+        "optionsType": "customOptions"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "output_field_type",
+              "opt": "EQUAL",
+              "value": "MAP"
+            }
+          ]
+        },
+        {
+          "result": "hidden",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "output_payload",
+              "opt": "EQUAL",
+              "value": "false"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "variable_name",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "存储变量名称",
+        "default": "var_item"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "output_mode",
+              "opt": "EQUAL",
+              "value": "FIELD"
+            }
+          ]
+        },
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "output_mode_2",
+              "opt": "EQUAL",
+              "value": "FIELD"
+            }
+          ]
+        },
+        {
+          "result": "hidden",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "output_payload",
+              "opt": "EQUAL",
+              "value": "false"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

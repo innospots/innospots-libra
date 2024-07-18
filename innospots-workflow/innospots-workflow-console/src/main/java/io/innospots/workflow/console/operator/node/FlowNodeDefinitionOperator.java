@@ -32,6 +32,7 @@ import io.innospots.base.data.body.PageBody;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.libra.base.events.AvatarRemoveEvent;
 import io.innospots.workflow.core.node.NodeInfo;
+import io.innospots.workflow.core.node.builder.NodeDefinitionCodeBuilder;
 import io.innospots.workflow.core.node.definition.converter.FlowNodeDefinitionConverter;
 import io.innospots.workflow.core.node.definition.dao.FlowNodeDefinitionDao;
 import io.innospots.workflow.core.node.definition.dao.FlowNodeGroupDao;
@@ -43,6 +44,7 @@ import io.innospots.workflow.core.enums.NodePrimitive;
 import io.innospots.workflow.core.node.definition.entity.FlowNodeGroupEntity;
 import io.innospots.workflow.core.node.definition.entity.FlowNodeGroupNodeEntity;
 import io.innospots.workflow.core.node.definition.entity.FlowTemplateEntity;
+import io.innospots.workflow.core.node.definition.meta.NodeDefinitionBuilder;
 import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import org.apache.commons.collections4.MapUtils;
@@ -196,7 +198,11 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
     public NodeInfo createNodeInfo(NodeInfo nodeInfo) {
         this.checkDifferentName(nodeInfo);
         this.checkDifferentCode(nodeInfo);
-        FlowNodeDefinitionEntity entity = FlowNodeDefinitionConverter.INSTANCE.infoToEntity(nodeInfo);
+        NodeDefinition nodeDefinition = FlowNodeDefinitionConverter.INSTANCE.infoToDefinition(nodeInfo);
+        NodeDefinition nTpl = NodeDefinitionBuilder.buildByPrimitive(nodeDefinition.getPrimitive().name());
+        nodeDefinition.setSettings(nTpl.getSettings());
+        nodeDefinition.setResources(nTpl.getResources());
+        FlowNodeDefinitionEntity entity = FlowNodeDefinitionConverter.INSTANCE.modelToEntity(nodeDefinition);
         entity.setIcon(null);
         boolean s = this.save(entity);
         if (!s) {
@@ -210,6 +216,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
         this.checkDifferentName(nodeDefinition);
         this.checkDifferentCode(nodeDefinition);
         fillNodeType(nodeDefinition);
+        NodeDefinitionCodeBuilder.build(nodeDefinition);
         FlowNodeDefinitionEntity entity = FlowNodeDefinitionConverter.INSTANCE.modelToEntity(nodeDefinition);
         boolean s = this.save(entity);
         if (!s) {
@@ -271,6 +278,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
             throw ResourceException.buildAbandonException(this.getClass(), "node definition not exits");
         }
         fillNodeType(nodeDefinition);
+        NodeDefinitionCodeBuilder.build(nodeDefinition);
         FlowNodeDefinitionConverter.INSTANCE.modelToEntity(nodeDefinition, entity);
         boolean s = this.updateById(entity);
         if (!s) {
@@ -286,6 +294,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
             throw ResourceException.buildAbandonException(this.getClass(), "node definition not exits");
         }
         fillNodeType(nodeDefinition);
+        NodeDefinitionCodeBuilder.build(nodeDefinition);
         entity = FlowNodeDefinitionConverter.INSTANCE.modelToEntity(nodeDefinition);
         boolean s = this.updateById(entity);
         if (!s) {

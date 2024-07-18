@@ -16,11 +16,33 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.node.app.data;
+package io.innospots.workflow.node.app.connector;
+
+
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
+
+import java.util.List;
 
 /**
  * @author Smars
- * @date 2023/5/28
+ * @date 2021/3/16
  */
-public class RedisDataNode extends DataNode {
+public class EmailSendNode extends BaseNodeExecutor {
+
+
+    public static final String FIELD_KAFKA_DATA_ID = "kafka_data_id";
+
+    @Override
+    public void invoke(NodeExecution nodeExecution) {
+        List result = null;
+
+        //TODO kafka data Operation
+
+    }
+
+    @Override
+    protected void initialize() {
+        //TODO
+    }
 }

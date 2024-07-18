@@ -16,19 +16,19 @@
  * limitations under the License.
  */
 
-package io.innospots.workflow.node.app.data;
+package io.innospots.workflow.node.app.connector;
 
 /**
  * @author Smars
  * @version 1.0.0
  * @date 2022/10/7
  */
-public enum OutputFieldMode {
+public enum OutputFieldType {
 
     /**
      *
      */
-    FIELD,
-    PAYLOAD,
-    OVERWRITE;
+    NONE,
+    LIST,
+    MAP;
 }
