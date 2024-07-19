@@ -70,10 +70,12 @@ public class NodeDefinition extends NodeInfo {
     }
 
     public String scriptAction() {
-        return scripts != null ? scripts.get(SCRIPT_ACTION).toString() : null;
+        return scripts != null && scripts.containsKey(SCRIPT_ACTION) ?
+                scripts.get(SCRIPT_ACTION).toString() : null;
     }
 
     public String scriptType() {
-        return scripts != null ? scripts.get(SCRIPT_TYPE).toString() : null;
+        return scripts != null && scripts.containsKey(SCRIPT_TYPE) ?
+                scripts.get(SCRIPT_TYPE).toString() : null;
     }
 }
