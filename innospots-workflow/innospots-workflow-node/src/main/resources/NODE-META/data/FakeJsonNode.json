@@ -1,12 +1,12 @@
 {
-  "name": "模拟数据",
-  "code": "FAKER",
+  "name": "模拟JSON",
+  "code": "fake_json",
   "flowCode": "EVENTS",
   "primitive": "data",
   "vendor": "innospots",
-  "description": "Faker节点",
+  "description": "模拟JSON",
   "icon": "faker",
-  "nodeType": "io.innospots.workflow.node.app.data.FakeDataNode",
+  "nodeType": "io.innospots.workflow.node.app.data.FakeJsonNode",
   "outPorts": "1",
   "inPorts": "1",
   "components": [
@@ -19,7 +19,7 @@
       "settings": {
         "label": "节点名称",
         "placeholder": "请输入节点名称",
-        "initialValue": "模拟数据"
+        "initialValue": "模拟JSON"
       }
     },
     {

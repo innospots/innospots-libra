@@ -1,0 +1,194 @@
+{
+  "name": "模拟字段",
+  "code": "fake_json",
+  "flowCode": "EVENTS",
+  "primitive": "data",
+  "vendor": "innospots",
+  "description": "模拟字段节点",
+  "icon": "faker",
+  "nodeType": "io.innospots.workflow.node.app.data.FakeFieldNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "测试字段"
+      }
+    },{
+      "name": "fake_fields",
+      "type": "FieldList",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": true,
+      "settings": {
+        "label": "字段定义",
+        "customColumns": [{
+          "code": "code",
+          "type": "INPUT",
+          "title": "字段",
+          "width": "100px",
+          "rowKey": "SSve"
+        }, {
+          "code": "value",
+          "type": "SELECT",
+          "title": "模拟值",
+          "width": "160px",
+          "rowKey": "2NEg",
+          "options": [{
+            "key": "xZzr",
+            "label": "HEX_32",
+            "value": "#{Random.hex}"
+          }, {
+            "key": "B6u5",
+            "label": "BIRTHDAY",
+            "value": "#{Date.birthday 'yyyy-MM-dd'}"
+          }, {
+            "key": "vQ6v",
+            "label": "BIRTHDAY_HMS",
+            "value": "#{Date.birthday 'hh:mm:ss'}"
+          }, {
+            "key": "ueG1",
+            "label": "INT10_30",
+            "value": "#{Random.nextInt '10','30'}"
+          }, {
+            "key": "5e3d",
+            "label": "LONG30_80",
+            "value": "#{Random.nextLong '10','50'}"
+          }, {
+            "key": "EeG5",
+            "label": "BOOLEAN",
+            "value": "#{Random.nextBoolean}"
+          }, {
+            "key": "cpZD",
+            "label": "DOUBLE50_200",
+            "value": "#{Random.nextDouble '50','200'}"
+          }, {
+            "key": "mF6v",
+            "label": "DATE_TIMES",
+            "value": "#{Date.future '15','DAYS','yyyy-MM-dd hh:mm:ss'}"
+          }, {
+            "key": "w3st",
+            "label": "CODE_ISBN10",
+            "value": "#{Code.isbn10}"
+          }, {
+            "key": "obqT",
+            "label": "COUNTRY_NAME",
+            "value": "#{Country.name}"
+          }, {
+            "key": "miQ2",
+            "value": "#{Country.capital}",
+            "label": "COUNTRY_CAPITAL"
+          }, {
+            "key": "e1mA",
+            "label": "CURRENCY_NAME",
+            "value": "#{Currency.name}"
+          }, {
+            "key": "L3yL",
+            "label": "FULLNAME",
+            "value": "#{Name.fullName}"
+          }, {
+            "key": "07Xx",
+            "label": "NAME_TITLE",
+            "value": "#{Name.title}"
+          }, {
+            "key": "BxuX",
+            "label": "MIMETYPE",
+            "value": "#{File.mimeType}"
+          }, {
+            "key": "gUDm",
+            "label": "FULLADDRESS",
+            "value": "#{Address.fullAddress}"
+          }, {
+            "key": "AKGr",
+            "label": "APP_NAME",
+            "value": "#{App.name}"
+          }, {
+            "key": "8e7b",
+            "label": "JOB_TITLE",
+            "value": "#{Job.title}"
+          }, {
+            "key": "yHVG",
+            "label": "COMPANY_NAME",
+            "value": "#{Company.name}"
+          }, {
+            "key": "bj1c",
+            "label": "ID_VALID",
+            "value": "#{IdNumber.valid}"
+          }, {
+            "key": "Na7r",
+            "value": "#{IdNumber.validZhCNSsn}",
+            "label": "ID_VALIDZHCNSSN"
+          }, {
+            "key": "S6TT",
+            "value": "#{Mountain.name}",
+            "label": "MOUNTAIN_NAME"
+          }, {
+            "key": "1W4z",
+            "label": "UNIVERSITY_NAME",
+            "value": "#{University.name}"
+          }, {
+            "key": "rMel",
+            "label": "DEVICE_PLATFORM",
+            "value": "#{Device.platform}"
+          }, {
+            "key": "EEWD",
+            "label": "TEA_TYPE",
+            "value": "#{Tea.type}"
+          }, {
+            "key": "HPni",
+            "label": "ID_SSNVALID",
+            "value": "#{IdNumber.ssnValid}"
+          }, {
+            "key": "9mc5",
+            "label": "FIRSTNAME",
+            "value": "#{Name.firstName}"
+          }, {
+            "key": "cCYO",
+            "label": "ZIPCODEPLUS4",
+            "value": "#{Address.zipCodePlus4}"
+          }, {
+            "key": "0nSH",
+            "label": "STREETADDRESS",
+            "value": "#{Address.streetAddress}"
+          }, {
+            "key": "tkph",
+            "label": "CITY",
+            "value": "#{Address.city}"
+          }]
+        }]
+      }
+    },{
+      "name": "item_size",
+      "type": "NumberInput",
+      "copyable": true,
+      "deletable": true,
+      "valueType": "number",
+      "settings": {
+        "label": "数据行数",
+        "placeholder": "请输入",
+        "initialValue": 5,
+        "width": 100
+      }
+    },{
+      "name": "waiting_mills",
+      "type": "NumberInput",
+      "valueType": "number",
+      "copyable": true,
+      "deletable": true,
+      "settings": {
+        "label": "等待时间",
+        "placeholder": "模拟等待时间",
+        "initialValue": 100,
+        "width": 100,
+        "addonAfter": "毫秒"
+      }
+    }
+  ]
+}

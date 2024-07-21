@@ -156,9 +156,14 @@ public class NodeDefinitionService {
     public Boolean deleteNodeDefinition(Integer nodeId) {
         long count = nodeInstanceOperator.countByNodeDefinitionId(nodeId);
         if (count > 0) {
-            throw ResourceException.buildUpdateException(this.getClass(), "This App has been referenced by the workflow and cannot be deleted!");
+            throw ResourceException.buildUpdateException(this.getClass(), "This Node has been referenced by the workflow and cannot be deleted!");
         }
-        return flowNodeDefinitionOperator.deleteNodeDefinition(nodeId);
+        boolean r = flowNodeDefinitionOperator.deleteNodeDefinition(nodeId);
+        if (r) {
+            flowNodeGroupOperator.removeNodeGroupByNodeId(nodeId);
+        }
+
+        return r;
     }
 
     public NodeDefinition updateNodeDefinition(NodeDefinition nodeDefinition) {

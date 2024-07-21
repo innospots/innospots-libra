@@ -196,6 +196,13 @@ public class FlowNodeGroupOperator {
         return Boolean.TRUE;
     }
 
+    public boolean removeNodeGroupByNodeId(Integer nodeId) {
+        QueryWrapper<FlowNodeGroupNodeEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(FlowNodeGroupNodeEntity::getNodeId, nodeId);
+        int count = this.flowNodeGroupNodeDao.delete(queryWrapper);
+        return count > 0;
+    }
+
     /**
      * save or modify NodeGroup and Node relation
      *

@@ -6,7 +6,7 @@ import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
-import io.innospots.workflow.node.app.data.FakeDataNode;
+import io.innospots.workflow.node.app.data.FakeJsonNode;
 import io.innospots.workflow.runtime.flow.node.IDataNodeTest;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  * @vesion 2.0
  * @date 2024/6/23
  */
-public class FakeDataNodeTest implements IDataNodeTest {
+public class FakeJsonNodeTest implements IDataNodeTest {
 
     @Test
     void test1(){
@@ -46,16 +46,16 @@ public class FakeDataNodeTest implements IDataNodeTest {
     @Override
     public NodeInstance build() {
         NodeInstance ni = new NodeInstance();
-        ni.setName(FakeDataNodeTest.class.getSimpleName());
-        ni.setCode(FakeDataNodeTest.class.getSimpleName());
-        ni.setNodeKey("NodeKey_" + FakeDataNodeTest.class.getSimpleName());
+        ni.setName(FakeJsonNodeTest.class.getSimpleName());
+        ni.setCode(FakeJsonNodeTest.class.getSimpleName());
+        ni.setNodeKey("NodeKey_" + FakeJsonNodeTest.class.getSimpleName());
         ni.setNodeDefinitionId(1);
         ni.setNodeInstanceId(1l);
         ni.setFlowCode("EVENTS");
-        ni.setNodeType(FakeDataNode.class.getName());
+        ni.setNodeType(FakeJsonNode.class.getName());
         Map<String,Object> data = new HashMap<>();
-        data.put(FakeDataNode.FIELD_ITEM_SIZE,10);
-        data.put(FakeDataNode.FIELD_FAKE_DATA, JSONUtils.toJsonString(fakeData()));
+        data.put(FakeJsonNode.FIELD_ITEM_SIZE,10);
+        data.put(FakeJsonNode.FIELD_FAKE_DATA, JSONUtils.toJsonString(fakeData()));
         ni.setData(data);
         return ni;
     }

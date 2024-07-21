@@ -23,7 +23,6 @@ import io.innospots.base.i18n.LocaleMessageUtils;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
-import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;
 
@@ -35,7 +34,7 @@ import java.util.*;
  * @date 2022/12/19
  */
 @Slf4j
-public class FakeDataNode extends BaseNodeExecutor {
+public class FakeJsonNode extends BaseNodeExecutor {
 
     public static final String FIELD_FAKE_DATA = "fake_data";
     public static final String FIELD_ITEM_SIZE = "item_size";

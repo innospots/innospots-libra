@@ -92,7 +92,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
         if (queryRequest.getFlowTplId() == null) {
             throw ValidatorException.buildMissingException(this.getClass(), "flowTplId is null");
         }
-        if (queryRequest.getNodeGroupId() != null) {
+        if (queryRequest.getNodeGroupId() != null && queryRequest.getNodeGroupId() >=0) {
             QueryWrapper<FlowNodeGroupEntity> gQuery = new QueryWrapper<>();
             gQuery.lambda().eq(queryRequest.getFlowTplId() != null, FlowNodeGroupEntity::getFlowTplId, queryRequest.getFlowTplId())
                     .eq(queryRequest.getNodeGroupId() != null, FlowNodeGroupEntity::getNodeGroupId, queryRequest.getNodeGroupId());
@@ -340,6 +340,10 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
 
     @CacheEvict(cacheNames = CACHE_NAME, key = "#nodeId")
     public Boolean deleteNodeDefinition(Integer nodeId) {
+        FlowNodeDefinitionEntity entity = this.getById(nodeId);
+        if(entity !=null && entity.getDeletable()!=null && !entity.getDeletable()){
+            throw ResourceException.buildDeleteException(this.getClass(), "node definition can not be deleted,",nodeId);
+        }
         boolean res = this.removeById(nodeId);
         if (res) {
             EventBusCenter.async(new AvatarRemoveEvent(nodeId, ImageType.APP));

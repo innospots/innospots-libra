@@ -172,14 +172,16 @@ public class ScriptExecutorManager {
             for (Method method : clazz.getDeclaredMethods()) {
                 String methodName = method.getName();
                 if (methodName.startsWith("_")) {
-                    String[] ms = methodName.split("_");
-                    methodName = ms[ms.length-1];
+                    int f = methodName.indexOf("$");
+                    if(f > 0){
+                        methodName = methodName.substring(f);
+                    }
                 }
                 IScriptExecutor executor = this.executors.get(methodName);
                 if(executor!=null){
                     executor.initialize(method);
                 }else{
-                    logger.warn("script executor not be defined: {}", methodName);
+                    logger.error("script executor not be defined: {}", methodName);
                 }
             }
             logger.debug("executorManager:{} , loaded executor size:{}", className(), executors.size());

@@ -130,7 +130,7 @@ public class GraalJsScriptExecutor implements IScriptExecutor {
     public Object execute(Map<String, Object> env) {
         try (Context context = Context.newBuilder().allowAllAccess(true).engine(this.engine).build()) {
             Value bindings = context.getBindings("js");
-            if(MapUtils.isNotEmpty(env)){
+            if(MapUtils.isEmpty(env)){
                 env = new HashMap<>();
                 //env.forEach(bindings::putMember);
             }

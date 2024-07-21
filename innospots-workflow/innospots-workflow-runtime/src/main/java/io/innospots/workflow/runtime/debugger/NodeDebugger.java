@@ -83,10 +83,10 @@ public class NodeDebugger {
     }
 
     public static NodeExecutionDisplay execute(DebugPayload debugPayload){
-        Integer id = debugPayload.getNi().getNodeDefinitionId();
+        Integer id = debugPayload.getNi().getNodeId();
         NodeInstance ni = debugPayload.getNi();
         if(StringUtils.isEmpty(ni.getNodeKey())){
-            ni.setNodeKey("nodeKey_"+id);
+            ni.setNodeKey("nodeKey"+id);
         }
         String identifier = "NodeDebug"+debugPayload.getNi().getCode()+"_"+ id;
         if(StringUtils.isEmpty(ni.getNodeType())){
