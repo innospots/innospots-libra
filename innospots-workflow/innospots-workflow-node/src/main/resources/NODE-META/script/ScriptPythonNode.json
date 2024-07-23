@@ -6,7 +6,7 @@
   "vendor": "innospots",
   "description": "python 脚本节点",
   "icon": "python",
-  "nodeType": "io.innospots.workflow.node.app.script.PythonNode",
+  "nodeType": "io.innospots.workflow.node.app.script.ScriptPythonNode",
   "outPorts": "1",
   "inPorts": "1",
   "components": [

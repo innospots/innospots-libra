@@ -21,12 +21,14 @@ package io.innospots.workflow.runtime.debugger;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import io.innospots.base.json.JSONUtils;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.base.script.ExecutorManagerFactory;
 import io.innospots.base.utils.FileUtils;
 import io.innospots.base.utils.InnospotsIdGenerator;
 import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.debug.DebugPayload;
 import io.innospots.workflow.core.debug.DebugInput;
+import io.innospots.workflow.core.enums.BuildStatus;
 import io.innospots.workflow.core.execution.enums.RecordMode;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.base.execution.ExecutionResource;
@@ -93,25 +95,42 @@ public class NodeDebugger {
             ni.setNodeType(ScriptNode.class.getName());
         }
 
-        BaseNodeExecutor nodeExecutor = NodeExecutorFactory.compileBuild(identifier,ni);
-
-
-        FlowExecution flowExecution = FlowExecution.buildNewFlowExecution(1L,0);
-        flowExecution.setRecordMode(RecordMode.SYNC);
-        flowExecution.setFlowExecutionId(InnospotsIdGenerator.generateIdStr());
-
         NodeExecution nodeExecution = NodeExecution.buildNewNodeExecution(ni.getNodeKey(),1L,1,identifier,true);
         nodeExecution.setNodeExecutionId(InnospotsIdGenerator.generateIdStr());
         nodeExecution.setRecordMode(RecordMode.SYNC);
-        List<ExecutionInput> inputs = new ArrayList<>();
-        for (DebugInput input : debugPayload.getInputs()) {
-            ExecutionInput executionInput = new ExecutionInput();
-            executionInput.setResources(input.getResources());
-            executionInput.setData(JSONUtils.toMapList(input.getData(),Map.class));
-            inputs.add(executionInput);
+
+        try {
+            BaseNodeExecutor nodeExecutor = NodeExecutorFactory.compileBuild(identifier,ni);
+            if(nodeExecutor.getBuildException() != null){
+                throw nodeExecutor.getBuildException();
+            }
+
+            if(nodeExecutor.getBuildStatus() == BuildStatus.DONE){
+                FlowExecution flowExecution = FlowExecution.buildNewFlowExecution(1L,0);
+                flowExecution.setRecordMode(RecordMode.SYNC);
+                flowExecution.setFlowExecutionId(InnospotsIdGenerator.generateIdStr());
+                List<ExecutionInput> inputs = new ArrayList<>();
+                for (DebugInput input : debugPayload.getInputs()) {
+                    ExecutionInput executionInput = new ExecutionInput();
+                    executionInput.setResources(input.getResources());
+                    String jsonStr = input.getData();
+                    if(jsonStr.startsWith("{")){
+                        executionInput.addInput(JSONUtils.toMap(jsonStr));
+                    }else{
+                        executionInput.addInput(JSONUtils.toMapList(jsonStr,Map.class));
+                    }
+                    inputs.add(executionInput);
+                }
+                nodeExecution.setInputs(inputs);
+                nodeExecutor.innerExecute(nodeExecution,flowExecution);
+            }
+
+        }catch (Exception e){
+            nodeExecution.setStatus(ExecutionStatus.FAILED);
+            nodeExecution.setMessage(e.getMessage());
+            log.error(e.getMessage());
         }
-        nodeExecution.setInputs(inputs);
-        nodeExecutor.innerExecute(nodeExecution,flowExecution);
+
 
         return NodeExecutionDisplay.build(nodeExecution,ni);
     }

@@ -21,6 +21,7 @@ package io.innospots.workflow.console.controller.node;
 import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.menu.ModuleMenu;
+import io.innospots.libra.base.menu.ResourceItemOperation;
 import io.innospots.workflow.console.operator.node.FlowNodeGroupOperator;
 import io.innospots.workflow.core.node.definition.model.NodeGroup;
 import io.innospots.workflow.core.node.definition.model.NodeGroupBaseInfo;
@@ -33,6 +34,7 @@ import java.util.List;
 
 import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
+import static io.innospots.libra.base.menu.ItemType.BUTTON;
 
 /**
  * @author Smars
@@ -53,12 +55,14 @@ public class FlowNodeGroupController extends BaseController {
 
     @PostMapping
     @Operation(summary = "create node group")
+    @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.category.add.title}")
     public InnospotsResponse<NodeGroupBaseInfo> createNodeGroup(String name, String templateCode){
         return InnospotsResponse.success(flowNodeGroupOperator.createNodeGroup(name,templateCode));
     }
 
     @PutMapping("re-name")
     @Operation(summary = "re-name node group")
+    @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.category.edit.title}")
     public InnospotsResponse<Boolean> reNameNodeGroup(
             @Parameter(name = "nodeGroupId") @RequestParam Integer nodeGroupId,
             @Parameter(name = "name") @RequestParam String name){
@@ -67,12 +71,14 @@ public class FlowNodeGroupController extends BaseController {
 
     @DeleteMapping("{nodeGroupId}")
     @Operation(summary = "remove node group")
+    @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.category.delete.title}")
     public InnospotsResponse<Boolean> removeNodeGroup(@PathVariable Integer nodeGroupId){
         return InnospotsResponse.success(flowNodeGroupOperator.removeNodeGroup(nodeGroupId));
     }
 
     @PutMapping("swap-position")
     @Operation(summary = "swap node group position")
+    @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.category.swap.title:调序}")
     public InnospotsResponse<List<NodeGroupBaseInfo>> swapPosition(
             @Parameter(name = "targetGroupId") @RequestParam Integer targetGroupId,
             @Parameter(name = "toGroupId") @RequestParam Integer toGroupId){

@@ -19,10 +19,12 @@
 package io.innospots.script.java;
 
 import cn.hutool.core.annotation.AnnotationUtil;
+import io.innospots.base.exception.ScriptException;
 import io.innospots.base.model.Pair;
 import io.innospots.base.script.ExecuteMode;
 import io.innospots.base.script.IScriptExecutor;
 import io.innospots.base.script.java.ScriptMeta;
+import io.innospots.base.script.jit.MethodBody;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.commons.compiler.CompilerFactoryFactory;
 import org.codehaus.commons.compiler.IScriptEvaluator;
@@ -61,8 +63,8 @@ public class JavaCodeScriptExecutor implements IScriptExecutor {
             String scriptBody = (String) method.invoke(null);
             scriptEvaluator.cook(scriptBody);
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            throw new RuntimeException(e);
+            log.error(e.getMessage());
+            throw ScriptException.buildCompileException(this.getClass(), "java",e);
         }
     }
 
@@ -94,5 +96,13 @@ public class JavaCodeScriptExecutor implements IScriptExecutor {
     @Override
     public String[] arguments() {
         return arguments;
+    }
+
+    @Override
+    public void reBuildMethodBody(MethodBody methodBody) {
+        String srcBody = methodBody.getSrcBody();
+        srcBody = srcBody.replaceAll("\n", "\\\\n");
+        srcBody = srcBody.replaceAll("\"", "\\\\\"");
+        methodBody.setSrcBody(srcBody);
     }
 }

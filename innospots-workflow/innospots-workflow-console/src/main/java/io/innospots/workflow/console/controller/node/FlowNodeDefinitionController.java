@@ -122,7 +122,7 @@ public class FlowNodeDefinitionController extends BaseController {
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "nodeId")
     @PutMapping("info")
     @Operation(summary = "update node definition info")
-    @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.save}")
+    @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.save.base:更新基本信息}")
     public InnospotsResponse<NodeInfo> updateNodeInfo(@Parameter(name = "node info", required = true) @Validated @RequestBody NodeInfo nodeInfo) {
         return success(nodeDefinitionService.updateNodeInfo(nodeInfo));
     }
@@ -130,7 +130,7 @@ public class FlowNodeDefinitionController extends BaseController {
     @OperationLog(operateType = OperateType.UPDATE, idParamPosition = 0)
     @PutMapping("group")
     @Operation(summary = "update node definition group")
-    @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.save}")
+    @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update.group:变更分组}")
     public InnospotsResponse<NodeInfo> updateNodeGroup(
             @Parameter(name = "nodeId", required = true) @RequestParam Integer nodeId,
             @Parameter(name = "nodeGroupId", required = true) @RequestParam Integer nodeGroupId) {

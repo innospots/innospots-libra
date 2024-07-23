@@ -97,8 +97,7 @@ public class NodeExecutorFactory {
             // Completes the construction of the node executor
             nodeExecutor.build();
             //ExecutorManagerFactory.clear(identifier);
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException |
-                 InvocationTargetException e) {
+        } catch (Exception e) {
             // Throws a NodeBuildException with the node type and underlying exception details
             flowLogger.flowError("node instance fail, flowKey:{}, nodeCode:{} ,nodeType: {}, error:{}",
                     identifier,nodeInstance.getCode(),nodeInstance.getNodeType(),e.getMessage());
