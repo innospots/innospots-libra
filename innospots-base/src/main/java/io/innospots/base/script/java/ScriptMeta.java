@@ -18,6 +18,8 @@
 
 package io.innospots.base.script.java;
 
+import io.innospots.base.script.OutputMode;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -40,6 +42,10 @@ public @interface ScriptMeta {
     String path() default "";
 
     String[] args() default {};
+
+    String cmd() default "";
+
+    OutputMode outputMode() default OutputMode.LOG;
 
     Class<?> returnType() default Object.class;
 }

@@ -18,6 +18,7 @@
 
 package io.innospots.base.script.cmdline;
 
+import io.innospots.base.script.OutputMode;
 import io.innospots.base.script.java.ScriptMeta;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -58,17 +59,43 @@ class CmdShellScriptExecutorTest {
         CmdShellScriptExecutor executor = new CmdShellScriptExecutor();
         Method scriptMethod = CmdShellScriptExecutorTest.class.getMethod("scriptMethod2");
         executor.initialize(scriptMethod);
-        Object s = executor.execute("abd", "dds", "1234");
+        Object s = executor.execute("lVvm");
         System.out.println("out:"+s);
 
     }
 
 
-    @ScriptMeta(scriptType = "shell", suffix = "sh", returnType = String.class,
-            path = "/tmp/test.sh")
+    @ScriptMeta(scriptType = "shell", suffix = "sh", returnType = String.class,cmd = "/bin/sh",
+            path = "/tmp/test2.sh")
     public static String scriptMethod2() {
         String ps = "";
-        ps += "jps ";
+        ps += "jps -$1";
+        return ps;
+    }
+
+    @SneakyThrows
+    @Test
+    void test3() {
+        CmdShellScriptExecutor executor = new CmdShellScriptExecutor();
+        Method scriptMethod = CmdShellScriptExecutorTest.class.getMethod("scriptMethod3");
+        executor.initialize(scriptMethod);
+        Object s = executor.execute("abc=dd,cc=123,ff=91fd");
+        System.out.println(s.getClass());
+        System.out.println("out:"+s);
+
+    }
+
+
+    @ScriptMeta(scriptType = "shell", suffix = "sh", returnType = String.class,cmd = "/bin/sh",
+            path = "/tmp/test2.sh",outputMode = OutputMode.FIELD)
+    public static String scriptMethod3() {
+        String ps = "";
+        ps += "echo \"a: ${abc}\"\n";
+        ps += "echo \"c: ${cc}\"\n";
+        ps += "echo \"f: ${ff}\"\n";
+        ps += "echo '----------------'\n";
+        ps += "f=\"a=${abc}, b=${cc}, c=${ff}\"\n";
+        ps += "echo $f\n";
         return ps;
     }
 

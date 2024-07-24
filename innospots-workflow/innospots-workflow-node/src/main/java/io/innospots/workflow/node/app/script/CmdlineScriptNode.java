@@ -21,17 +21,17 @@ package io.innospots.workflow.node.app.script;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import io.innospots.base.json.JSONUtils;
+import io.innospots.base.script.OutputMode;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
-import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
-import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -111,7 +111,7 @@ public class CmdlineScriptNode extends ScriptBaseNode {
             log.debug("nodeKey:{}, script output:{}", this.nodeKey(), result);
         }
         if (this.outputMode == OutputMode.FIELD) {
-            Map<String, Object> data = new HashMap<>(10);
+            Map<String, Object> data = new LinkedHashMap<>(10);
             if (MapUtils.isNotEmpty(input)) {
                 data.putAll(input);
                 nodeOutput.addResult(input);
@@ -126,7 +126,7 @@ public class CmdlineScriptNode extends ScriptBaseNode {
             super.processOutput(nodeExecution,result, nodeOutput);
         } else if (this.outputMode == OutputMode.PAYLOAD) {
             result = parseObject(result);
-            Map<String, Object> data = new HashMap<>(10);
+            Map<String, Object> data = new LinkedHashMap<>(10);
             if (MapUtils.isNotEmpty(input)) {
                 data.putAll(input);
                 nodeOutput.addResult(input);
@@ -158,20 +158,4 @@ public class CmdlineScriptNode extends ScriptBaseNode {
         return result;
     }
 
-
-    public enum OutputMode {
-        /**
-         * set node result to the field
-         */
-        FIELD,
-        /**
-         * output current node result and input data
-         */
-        PAYLOAD,
-        /**
-         * only output current node result
-         */
-        OVERWRITE,
-        LOG;
-    }
 }

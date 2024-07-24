@@ -20,6 +20,7 @@ package io.innospots.base.script.jit;
 
 import io.innospots.base.enums.ScriptType;
 import io.innospots.base.model.field.ParamField;
+import io.innospots.base.script.OutputMode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -64,6 +65,13 @@ public class MethodBody {
      * file type suffix
      */
     private String suffix;
+
+    /**
+     * cmd path
+     */
+    private String cmdPath;
+
+    private OutputMode outputMode;
 
 
     public MethodBody() {

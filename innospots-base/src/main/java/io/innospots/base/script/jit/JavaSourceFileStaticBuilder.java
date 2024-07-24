@@ -142,6 +142,12 @@ public class JavaSourceFileStaticBuilder {
     private void fillMeta(StringBuilder buf, MethodBody methodBody) {
         buf.append("@ScriptMeta(scriptType=\"").append(methodBody.getScriptType()).append("\"");
         buf.append(" ,suffix=\"").append(methodBody.getSuffix()).append("\"");
+        if (methodBody.getCmdPath() != null) {
+            buf.append(" ,cmd=\"").append(methodBody.getCmdPath()).append("\"");
+        }
+        if(methodBody.getOutputMode()!=null){
+            buf.append(" ,outputMode=\"").append(methodBody.getOutputMode().name()).append("\"");
+        }
         if (methodBody.getParams() != null) {
             String args = methodBody.getParams().stream().map(f -> {
                         String arg = "";
