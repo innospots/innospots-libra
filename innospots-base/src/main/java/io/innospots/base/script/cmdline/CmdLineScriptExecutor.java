@@ -21,6 +21,7 @@ package io.innospots.base.script.cmdline;
 import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RuntimeUtil;
+import cn.hutool.core.util.StrUtil;
 import com.googlecode.aviator.AviatorEvaluator;
 import io.innospots.base.exception.ScriptException;
 import io.innospots.base.model.Pair;
@@ -29,6 +30,7 @@ import io.innospots.base.script.IScriptExecutor;
 import io.innospots.base.script.java.ScriptMeta;
 import io.innospots.base.script.jit.MethodBody;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -85,7 +87,7 @@ public abstract class CmdLineScriptExecutor implements IScriptExecutor {
     @Override
     public Object execute(Map<String, Object> env) throws ScriptException {
         if (arguments == null) {
-            return execute("");
+            return execute(flatInput(env));
         }
         String[] values = new String[arguments.length];
         for (int i = 0; i < this.arguments.length; i++) {
@@ -129,5 +131,30 @@ public abstract class CmdLineScriptExecutor implements IScriptExecutor {
 
     protected String cmdPath() {
         return System.getenv(this.scriptType() + ".path");
+    }
+
+    private String parseInputScript(){
+        StringBuilder sr = new StringBuilder("##!/usr/bin/env bash\n");
+        sr.append("\n").append("CRT_DIR=$(cd \"$(dirname \"${BASH_SOURCE[0]}\")\" && pwd )").append("\n");
+        sr.append("input_params=\"$1\"").append("\n");
+        sr.append("IFS=',' read -r -a pairs <<< \"$input_params\"").append("\n");
+        sr.append("for pair in \"${pairs[@]}\"; do").append("\n");
+        sr.append("    IFS='=' read -r key value <<< \"$pair\"").append("\n");
+        sr.append("    eval \"$key=\\\"$value\\\"\"").append("\n");
+        sr.append("done").append("\n");
+
+        return sr.toString();
+    }
+
+    private String flatInput(Map<String,Object> input){
+        if(MapUtils.isEmpty(input)){
+            return "";
+        }
+        StringBuilder buf = new StringBuilder("'");
+        String inputStr = input.entrySet().stream().map(e->e.getKey()+"="+e.getValue())
+                .collect(Collectors.joining(","));
+        buf.append(inputStr);
+        buf.append("'");
+        return buf.toString();
     }
 }

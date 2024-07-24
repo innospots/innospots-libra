@@ -52,4 +52,24 @@ class CmdShellScriptExecutorTest {
         return ps;
     }
 
+    @SneakyThrows
+    @Test
+    void test2() {
+        CmdShellScriptExecutor executor = new CmdShellScriptExecutor();
+        Method scriptMethod = CmdShellScriptExecutorTest.class.getMethod("scriptMethod2");
+        executor.initialize(scriptMethod);
+        Object s = executor.execute("abd", "dds", "1234");
+        System.out.println("out:"+s);
+
+    }
+
+
+    @ScriptMeta(scriptType = "shell", suffix = "sh", returnType = String.class,
+            path = "/tmp/test.sh")
+    public static String scriptMethod2() {
+        String ps = "";
+        ps += "jps ";
+        return ps;
+    }
+
 }
