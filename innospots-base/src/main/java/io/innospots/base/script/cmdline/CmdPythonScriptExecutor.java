@@ -33,9 +33,9 @@ public class CmdPythonScriptExecutor extends CmdLineScriptExecutor{
 
     @Override
     public Object execute(Map<String, Object> env) throws ScriptException {
-        Object[] val = new Object[1];
-        val[0] = JSONUtils.toJsonString(env);
-        return super.execute(val);
+        //Object[] val = new Object[1];
+        //val[0] = JSONUtils.toJsonString(env);
+        return super.execute(env);
     }
 
     @Override

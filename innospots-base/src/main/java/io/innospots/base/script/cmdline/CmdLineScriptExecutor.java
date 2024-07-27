@@ -21,6 +21,7 @@ package io.innospots.base.script.cmdline;
 import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.io.LineHandler;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import com.googlecode.aviator.AviatorEvaluator;
@@ -34,6 +35,7 @@ import io.innospots.base.script.jit.MethodBody;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -104,7 +106,7 @@ public abstract class CmdLineScriptExecutor implements IScriptExecutor {
 
     @Override
     public Object execute(Map<String, Object> env) throws ScriptException {
-        if (arguments == null) {
+        if (ArrayUtils.isEmpty(arguments)) {
             return execute(flatInput(env));
         }
         Object[] values = new String[arguments.length];
@@ -117,6 +119,10 @@ public abstract class CmdLineScriptExecutor implements IScriptExecutor {
     @Override
     public Object execute(Object... args) throws ScriptException {
         return executeProcess(null, 0, buildCmdParams(args));
+    }
+
+    public Object execute(Map<String, Object> env, Function<String,String> lineHandler) {
+        return execute(env, lineHandler, 0);
     }
 
     public Object execute(Map<String, Object> env, long timeout) {
@@ -154,31 +160,31 @@ public abstract class CmdLineScriptExecutor implements IScriptExecutor {
 
      */
 
-    public Object execute(Map<String, Object> env, Function<InputStream, Object> outputFunction) {
-        return execute(env, outputFunction, 0);
+
+    public Object execute(Map<String, Object> env, Function<String,String> lineHandler, long timeoutSecond) {
+        return executeProcess(lineHandler, timeoutSecond, buildCmdParams(flatInput(env)));
     }
 
-    public Object execute(Map<String, Object> env, Function<InputStream, String> outputFunction, long timeoutSecond) {
-        return executeProcess(outputFunction, timeoutSecond, buildCmdParams(flatInput(env)));
-    }
-
-    private Object executeProcess(Function<InputStream, String> outputFunction, long timeoutSecond, String[] args) {
+    private Object executeProcess(Function<String,String> lineHandler, long timeoutSecond, String[] args) {
         Process process = null;
 //        String[] args = buildCmdParams(flatInput(env));
         String output = null;
         try {
             process = RuntimeUtil.exec(args);
+
             CompletableFuture<Process> cf = process.onExit();
             if (timeoutSecond > 0) {
-                cf.orTimeout(timeoutSecond, TimeUnit.SECONDS);
+                cf = cf.orTimeout(timeoutSecond, TimeUnit.SECONDS);
             }
+
             InputStream in = process.getInputStream();
-            if (outputFunction == null) {
-                outputFunction = outputFunction(in);
-            }
+
+            Function<InputStream, String> outputFunction = outputFunction(in, lineHandler);
             output = outputFunction.apply(in);
             process = cf.get();
+            in.close();
         } catch (Exception e) {
+            log.error(e.getMessage(), args);
             throw ScriptException.buildInvokeException(getClass(), scriptType(), e, args);
         } finally {
             if (process != null && process.isAlive()) {
@@ -189,8 +195,19 @@ public abstract class CmdLineScriptExecutor implements IScriptExecutor {
         return processOutput(output);
     }
 
-    private Function<InputStream, String> outputFunction(InputStream in) {
-        return inputStream -> IoUtil.read(in, Charset.defaultCharset());
+    private Function<InputStream, String> outputFunction(InputStream in, Function<String,String> lineHandler) {
+        return inputStream -> {
+            StringBuilder buf = new StringBuilder();
+            IoUtil.readUtf8Lines(in, (LineHandler) line -> {
+                if (lineHandler != null) {
+                    line = lineHandler.apply(line);
+                }
+                if(line != null){
+                    buf.append(line);
+                }
+            });
+            return buf.toString();
+        };
     }
 
     private TimerTask timerTask(Process process) {
@@ -237,32 +254,23 @@ public abstract class CmdLineScriptExecutor implements IScriptExecutor {
         return params.toArray(new String[]{});
     }
 
-    private String parseInputScript() {
-        StringBuilder sr = new StringBuilder("##!/usr/bin/env bash\n");
-        sr.append("\n").append("CRT_DIR=$(cd \"$(dirname \"${BASH_SOURCE[0]}\")\" && pwd )").append("\n");
-        sr.append("input_params=\"$1\"").append("\n");
-        sr.append("IFS=',' read -r -a pairs <<< \"$input_params\"").append("\n");
-        sr.append("for pair in \"${pairs[@]}\"; do").append("\n");
-        sr.append("    IFS='=' read -r key value <<< \"$pair\"").append("\n");
-        sr.append("    eval \"$key=\\\"$value\\\"\"").append("\n");
-        sr.append("done").append("\n\n");
-
-        return sr.toString();
+    protected String parseInputScript() {
+        return "";
     }
 
-    private String flatInput(Map<String, Object> input) {
+    protected String flatInput(Map<String, Object> input) {
         if (MapUtils.isEmpty(input)) {
             return "";
         }
-        StringBuilder buf = new StringBuilder("'");
+        StringBuilder buf = new StringBuilder("");
         String inputStr = input.entrySet().stream().map(e -> e.getKey() + "=" + e.getValue())
                 .collect(Collectors.joining(","));
         buf.append(inputStr);
-        buf.append("'");
+        buf.append("");
         return buf.toString();
     }
 
-    private Object processOutput(String output) {
+    protected Object processOutput(String output) {
         Object v = null;
         switch (outputMode) {
             case FIELD:
@@ -278,13 +286,14 @@ public abstract class CmdLineScriptExecutor implements IScriptExecutor {
                 }
                 break;
             case LOG:
+                v = output;
             case STREAM:
             default:
         }
         return v;
     }
 
-    private static Map<String, Object> convertStringToMap(String input) {
+    protected static Map<String, Object> convertStringToMap(String input) {
         Map<String, Object> map = new LinkedHashMap<>();
         if (input != null && !input.isEmpty()) {
             String[] pairs = input.split(",");

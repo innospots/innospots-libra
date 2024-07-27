@@ -27,6 +27,20 @@ import io.innospots.base.script.jit.MethodBody;
  */
 public class CmdShellScriptExecutor extends CmdLineScriptExecutor {
 
+    protected String parseInputScript() {
+        StringBuilder sr = new StringBuilder("##!/usr/bin/env bash\n");
+        sr.append("\n").append("CRT_DIR=$(cd \"$(dirname \"${BASH_SOURCE[0]}\")\" && pwd )").append("\n");
+        sr.append("input_params=\"$1\"").append("\n");
+        sr.append("IFS=',' read -r -a pairs <<< \"$input_params\"").append("\n");
+        sr.append("for pair in \"${pairs[@]}\"; do").append("\n");
+        sr.append("    IFS='=' read -r key value <<< \"$pair\"").append("\n");
+        sr.append("    eval \"$key=\\\"$value\\\"\"").append("\n");
+        sr.append("done").append("\n\n");
+
+        return sr.toString();
+    }
+
+
     @Override
     public String scriptType() {
         return "shell";
