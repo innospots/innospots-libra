@@ -20,6 +20,7 @@ package io.innospots.workflow.node.app.script;
 
 import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.model.field.ParamField;
+import io.innospots.base.script.OutputMode;
 import io.innospots.base.script.jit.MethodBody;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import lombok.extern.slf4j.Slf4j;
@@ -39,30 +40,33 @@ public class CmdLinePythonNode extends CmdlineScriptNode {
     @Override
     public MethodBody buildScriptMethodBody() {
         String src = this.valueString(FIELD_ACTION_SCRIPT);
+        OutputMode oMode = OutputMode.valueOf(this.valueString(FIELD_OUTPUT_MODE));
         String scriptType = scriptType();
         if (StringUtils.isEmpty(src) || StringUtils.isEmpty(scriptType)) {
             return null;
         }
 
         MethodBody methodBody = new MethodBody();
+        methodBody.setOutputMode(oMode);
+        String cmdPath = this.valueString(FIELD_CMD_PATH);
+        methodBody.setCmdPath(cmdPath);
         methodBody.setReturnType(Object.class);
         methodBody.setScriptType(scriptType);
         methodBody.setMethodName(ni.expName());
 
+        /*
         String newSrc = "import sys\nimport ast\n\n";
         StringBuilder srb = new StringBuilder(newSrc);
         srb.append("args = ''").append("\n");
-        //srb.append("try:").append("\n");
         srb.append("if len(sys.argv) > 1:").append("\n");
         srb.append("  ").append("args = sys.argv[1]").append("\n");
-        //srb.append("  ").append("item = ast.literal_eval(args)").append("\n\n");
         srb.append(src);
         srb.append("\n\n");
-        //srb.append("except (ValueError, SyntaxError) as e:").append("\n");
-        //srb.append("  ").append("print(f\"Error: {e}\")").append("\n");
         newSrc = srb.toString();
 
-        methodBody.setSrcBody(newSrc);
+         */
+
+        methodBody.setSrcBody(src);
         return methodBody;
     }
 

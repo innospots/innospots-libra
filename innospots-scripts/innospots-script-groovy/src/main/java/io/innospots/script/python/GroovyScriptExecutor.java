@@ -20,6 +20,10 @@ package io.innospots.script.python;
 
 import io.innospots.base.script.jrs223.Jsr223ScriptExecutor;
 
+import javax.script.Bindings;
+import javax.script.SimpleBindings;
+import java.util.Map;
+
 /**
  * @author Smars
  * @version 1.0.0
@@ -37,4 +41,15 @@ public class GroovyScriptExecutor extends Jsr223ScriptExecutor {
         return "groovy";
     }
 
+    @Override
+    protected Bindings createBindings(Map<String, Object> env) {
+        Bindings bindings = new SimpleBindings();
+        bindings.put("item", env);
+        return bindings;
+    }
+
+    @Override
+    protected String parseReturnVariable(String script) {
+        return null;
+    }
 }

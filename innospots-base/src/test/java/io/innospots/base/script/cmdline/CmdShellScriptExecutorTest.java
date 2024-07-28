@@ -290,7 +290,7 @@ class CmdShellScriptExecutorTest {
     }
 
     @ScriptMeta(scriptType = "shell", suffix = "sh", returnType = String.class, cmd = "/bin/sh",
-            path = "/tmp/test7.sh", outputMode = OutputMode.LOG)
+            path = "/tmp/test8.sh", outputMode = OutputMode.LOG)
     public static String scriptMethod8() {
         String ps = "jps -lVvm\n";
         ps += "sleep 9\n";

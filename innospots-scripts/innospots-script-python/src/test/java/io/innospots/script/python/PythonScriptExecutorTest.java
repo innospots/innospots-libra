@@ -28,6 +28,7 @@ class PythonScriptExecutorTest {
         input.put("p1","param1");
         input.put("p2","param2");
         Object obj = executor.execute(input);
+        System.out.println(obj.getClass());
         System.out.println("out:"+obj);
     }
 
@@ -38,10 +39,10 @@ class PythonScriptExecutorTest {
                 "    return a + b\n" +
                 "result = add(1, 2)\n" +
                 "print(result) \n" +
-                "print(p1) \n" +
+                "print(item['p1'] +':'+item['p2']) \n" +
                 "td={'Alice': 112, 'Beth': '9102', 'Cecil': '3258'};print(td)" +
                 "\n" +
-                "td"
+                "td" + "\n" + "item"
                 ;
 //        String ps = "td={'Alice': 112, 'Beth': '9102', 'Cecil': '3258'};print(td)";
 

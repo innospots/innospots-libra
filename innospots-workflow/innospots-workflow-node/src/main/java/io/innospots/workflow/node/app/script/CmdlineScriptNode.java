@@ -22,12 +22,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.script.OutputMode;
+import io.innospots.base.script.cmdline.CmdLineScriptExecutor;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.logger.FlowLoggerFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,16 +46,19 @@ import java.util.Map;
 public class CmdlineScriptNode extends ScriptBaseNode {
 
     protected static final String FIELD_OUTPUT_MODE = "output_mode";
+    protected static final String FIELD_CMD_PATH = "cmd_path";
     protected static final String FIELD_VARIABLE_NAME = "variable_name";
     protected static final ObjectMapper OBJECT_MAPPER = JSONUtils.mapper();
 
     protected OutputMode outputMode;
     protected String outputField;
+    protected String cmdPath;
 
     @Override
     protected void initialize() {
         super.initialize();
         outputMode = OutputMode.valueOf(validString(FIELD_OUTPUT_MODE));
+        cmdPath = valueString(FIELD_CMD_PATH);
         if (outputMode == OutputMode.FIELD) {
             outputField = validString(FIELD_VARIABLE_NAME);
         }
@@ -69,27 +75,14 @@ public class CmdlineScriptNode extends ScriptBaseNode {
                 for (ExecutionInput executionInput : nodeExecution.getInputs()) {
                     if (CollectionUtils.isNotEmpty(executionInput.getData())) {
                         for (Map<String, Object> data : executionInput.getData()) {
-                            Object result = scriptExecutor.execute(data);
-                            processOutput(nodeExecution,result, data, nodeOutput);
-                            if (this.outputMode == OutputMode.LOG) {
-                                msg.append(result);
-                                msg.append("-----\n");
-                            }
+                            executeItem(data, msg, nodeExecution, nodeOutput);
                         }//end for
                     } else {
-                        Object result = scriptExecutor.execute();
-                        processOutput(nodeExecution,result, null, nodeOutput);
-                        if (this.outputMode == OutputMode.LOG) {
-                            msg.append(result);
-                        }
+                        executeItem(new HashMap<>(10), msg, nodeExecution, nodeOutput);
                     }
                 }//end execution input
             } else {
-                Object result = scriptExecutor.execute();
-                processOutput(nodeExecution,result, null, nodeOutput);
-                if (this.outputMode == OutputMode.LOG) {
-                    msg.append(result);
-                }
+                executeItem(new HashMap<>(10), msg, nodeExecution, nodeOutput);
             }
             if (msg.length() > 65000) {
                 nodeExecution.setMessage(msg.substring(0, 65000));
@@ -106,7 +99,28 @@ public class CmdlineScriptNode extends ScriptBaseNode {
         nodeExecution.addOutput(nodeOutput);
     }
 
-    protected void processOutput(NodeExecution nodeExecution,Object result, Map<String, Object> input, NodeOutput nodeOutput) {
+    private void executeItem(Map<String, Object> item, StringBuilder msg,
+                             NodeExecution nodeExecution, NodeOutput nodeOutput) {
+        CmdLineScriptExecutor cmdLineScriptExecutor = (CmdLineScriptExecutor) scriptExecutor;
+        Object result = cmdLineScriptExecutor.execute(item, (line) -> {
+            if (this.outputMode == OutputMode.STREAM) {
+                if (StringUtils.isNotEmpty(line)) {
+                    flowLogger.flowInfo(nodeExecution.getFlowExecutionId(), line);
+                    msg.append(line).append("\n");
+                }
+            }
+            return line;
+
+        });
+
+        processOutput(nodeExecution, result, item, nodeOutput);
+
+        if (this.outputMode == OutputMode.LOG) {
+            msg.append(result).append("\n");
+        }
+    }
+
+    protected void processOutput(NodeExecution nodeExecution, Object result, Map<String, Object> input, NodeOutput nodeOutput) {
         if (log.isDebugEnabled()) {
             log.debug("nodeKey:{}, script output:{}", this.nodeKey(), result);
         }
@@ -120,10 +134,10 @@ public class CmdlineScriptNode extends ScriptBaseNode {
             if (result != null) {
                 data.put(this.outputField, result);
             }
-            super.processOutput(nodeExecution,data, nodeOutput);
+            super.processOutput(nodeExecution, data, nodeOutput);
         } else if (this.outputMode == OutputMode.OVERWRITE) {
             result = parseObject(result);
-            super.processOutput(nodeExecution,result, nodeOutput);
+            super.processOutput(nodeExecution, result, nodeOutput);
         } else if (this.outputMode == OutputMode.PAYLOAD) {
             result = parseObject(result);
             Map<String, Object> data = new LinkedHashMap<>(10);
@@ -137,7 +151,7 @@ public class CmdlineScriptNode extends ScriptBaseNode {
                 data.put(this.nodeKey(), result);
             }
 
-            super.processOutput(nodeExecution,data, nodeOutput);
+            super.processOutput(nodeExecution, data, nodeOutput);
         }
     }
 

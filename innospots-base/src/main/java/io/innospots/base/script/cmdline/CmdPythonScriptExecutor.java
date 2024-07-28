@@ -18,8 +18,10 @@
 
 package io.innospots.base.script.cmdline;
 
+import cn.hutool.core.io.resource.ResourceUtil;
 import io.innospots.base.exception.ScriptException;
 import io.innospots.base.json.JSONUtils;
+import io.innospots.base.script.jit.MethodBody;
 
 import java.util.Map;
 
@@ -30,11 +32,10 @@ import java.util.Map;
  */
 public class CmdPythonScriptExecutor extends CmdLineScriptExecutor{
 
+    private static final String PY_TEMPLATE_FILE = "scripts/python_cmd_template.py";
 
     @Override
     public Object execute(Map<String, Object> env) throws ScriptException {
-        //Object[] val = new Object[1];
-        //val[0] = JSONUtils.toJsonString(env);
         return super.execute(env);
     }
 
@@ -55,5 +56,33 @@ public class CmdPythonScriptExecutor extends CmdLineScriptExecutor{
             cmd = "python";
         }
         return cmd;
+    }
+
+    @Override
+    public void reBuildMethodBody(MethodBody methodBody) {
+        String srcBody = methodBody.getSrcBody();
+        srcBody = srcBody.replaceAll("\n", "\\\\n");
+        srcBody = srcBody.replaceAll("\"", "\\\\\"");
+        methodBody.setSrcBody(srcBody);
+    }
+
+    @Override
+    protected String parseInputScript(String scriptBody) {
+        String tmpl = ResourceUtil.readUtf8Str(PY_TEMPLATE_FILE);
+        return tmpl.replace("${SCRIPT_BODY}", scriptBody);
+    }
+
+    @Override
+    protected Object processOutput(String output) {
+        return super.processOutput(output);
+    }
+
+
+    @Override
+    protected Map<String, Object> convertStringToMap(String input) {
+        if(input!=null && input.startsWith("{")){
+            return JSONUtils.toMap(input);
+        }
+        return super.convertStringToMap(input);
     }
 }

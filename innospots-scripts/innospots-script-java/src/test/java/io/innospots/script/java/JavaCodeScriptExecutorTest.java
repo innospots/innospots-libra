@@ -79,7 +79,7 @@ class JavaCodeScriptExecutorTest {
             scriptType = "java",
             suffix = "java",
             args = {"java.lang.String i1", "java.lang.String i2"},
-            path = "/Users/yxy/works/innospots/innospots_2.0/innospots-workflow/innospots-workflow-runtime/target/autogen/nativejavanodetest/$JavaScriptNodeKey.java"
+            path = "/tmp/nativejavanodetest/$JavaScriptNodeKey.java"
     )
     public static String _java_java_$JavaScriptNodeKey() {
         String var0 = "Map<String, Object> res = new HashMap();  res.put(\"res\",i1+i2); return res;";

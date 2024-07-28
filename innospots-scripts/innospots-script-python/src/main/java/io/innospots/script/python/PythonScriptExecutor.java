@@ -30,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.script.Bindings;
 import javax.script.Compilable;
+import javax.script.SimpleBindings;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -45,7 +46,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class PythonScriptExecutor extends Jsr223ScriptExecutor {
 
-    private String returnVar;
 
     @Override
     public String scriptType() {
@@ -58,84 +58,10 @@ public class PythonScriptExecutor extends Jsr223ScriptExecutor {
     }
 
     @Override
-    public void initialize(Method method) {
-        if (compiledScript != null) {
-            return;
-        }
-        ScriptMeta scriptMeta = AnnotationUtil.getAnnotation(method, ScriptMeta.class);
-        String scriptBody = "";
-        try {
-            method.setAccessible(true);
-            scriptBody = (String) method.invoke(null);
-            returnVar = parseReturnVariable(scriptBody);
-            Compilable compilable = compilable();
-            compiledScript = compilable.compile(scriptBody);
-            if (scriptMeta != null) {
-                Pair<Class<?>, String>[] pairs = this.argsPair(scriptMeta.args());
-                arguments = Arrays.stream(pairs).map(Pair::getRight).collect(Collectors.toList()).toArray(String[]::new);
-            }
-        } catch (IllegalAccessException | InvocationTargetException | javax.script.ScriptException |
-                ClassNotFoundException e) {
-            log.error("source error:{}",scriptBody);
-            log.error(e.getMessage(), e);
-        }
-
-    }
-
-
-    @Override
-    protected Object execute(Bindings bindings) {
-        Object v = null;
-        try {
-            if (compiledScript == null) {
-                throw ScriptException.buildInvokeException(this.getClass(), ScriptType.JAVASCRIPT.name(), "script compile fail");
-            }
-            compiledScript.eval(bindings);
-            Object vv = bindings.get(returnVar);
-            if (vv == null) {
-                vv = compiledScript.getEngine().get(returnVar);
-            }
-
-            if (log.isDebugEnabled()) {
-                if (vv != null) {
-                    //log.debug("script out:{}, clazz:{}", v, v.getClass());
-                } else {
-                    log.debug("output is null.");
-                }
-            }
-//            v = normalizeValue(v);
-            v = parseObject(vv);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw ScriptException.buildInvokeException(this.getClass(), ScriptType.JAVASCRIPT.name(), e, e.getMessage());
-        }
-        return v;
-    }
-
-
-
-    @Override
-    public void reBuildMethodBody(MethodBody methodBody) {
-        String args = null;
-        if (methodBody.getParams() == null || methodBody.getParams().size() == 0) {
-            args = "item";
-        } else {
-            args = methodBody.getParams().get(0).getCode();
-        }
-        String srcBody = methodBody.getSrcBody();
-        srcBody = srcBody.replaceAll("\n", "\\\\n");
-        srcBody = srcBody.replaceAll("\"", "\\\\\"");
-
-        methodBody.setSrcBody(srcBody);
-
-    }
-
-
-    private String parseReturnVariable(String script) {
-        String[] lines = script.trim().split("\n");
-        String lastLine = lines[lines.length - 1];
-        String[] tokens = lastLine.split("=");
-        return tokens[0].trim();
+    protected Bindings createBindings(Map<String, Object> env) {
+        Bindings bindings = new SimpleBindings();
+        bindings.put("item", env);
+        return bindings;
     }
 
 }

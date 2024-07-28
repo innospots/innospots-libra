@@ -89,7 +89,7 @@ public abstract class CmdLineScriptExecutor implements IScriptExecutor {
                 cmd = System.getProperty(scriptType() + ".path");
             }
 
-            scriptBody = parseInputScript() + scriptBody;
+            scriptBody = parseInputScript(scriptBody);
             FileUtil.writeBytes(scriptBody.getBytes(), scriptFile);
 
             Pair<Class<?>, String>[] pairs = this.argsPair(scriptMeta.args());
@@ -199,11 +199,11 @@ public abstract class CmdLineScriptExecutor implements IScriptExecutor {
         return inputStream -> {
             StringBuilder buf = new StringBuilder();
             IoUtil.readUtf8Lines(in, (LineHandler) line -> {
-                if (lineHandler != null) {
+                if (lineHandler != null && StringUtils.isNotEmpty(line)) {
                     line = lineHandler.apply(line);
                 }
-                if(line != null){
-                    buf.append(line);
+                if(StringUtils.isNotEmpty(line)){
+                    buf.append(line).append("\n");
                 }
             });
             return buf.toString();
@@ -254,10 +254,15 @@ public abstract class CmdLineScriptExecutor implements IScriptExecutor {
         return params.toArray(new String[]{});
     }
 
-    protected String parseInputScript() {
-        return "";
+    protected String parseInputScript(String scriptBody) {
+        return scriptBody;
     }
 
+    /**
+     * convert input map to params, for example: a=12,b=23,d=soa
+     * @param input
+     * @return
+     */
     protected String flatInput(Map<String, Object> input) {
         if (MapUtils.isEmpty(input)) {
             return "";
@@ -270,6 +275,11 @@ public abstract class CmdLineScriptExecutor implements IScriptExecutor {
         return buf.toString();
     }
 
+    /**
+     * extract data from output
+     * @param output
+     * @return
+     */
     protected Object processOutput(String output) {
         Object v = null;
         switch (outputMode) {
@@ -293,7 +303,7 @@ public abstract class CmdLineScriptExecutor implements IScriptExecutor {
         return v;
     }
 
-    protected static Map<String, Object> convertStringToMap(String input) {
+    protected Map<String, Object> convertStringToMap(String input) {
         Map<String, Object> map = new LinkedHashMap<>();
         if (input != null && !input.isEmpty()) {
             String[] pairs = input.split(",");

@@ -26,6 +26,7 @@ import io.innospots.base.model.Pair;
 import io.innospots.base.script.ExecuteMode;
 import io.innospots.base.script.IScriptExecutor;
 import io.innospots.base.script.java.ScriptMeta;
+import io.innospots.base.script.jit.MethodBody;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.script.*;
@@ -47,23 +48,28 @@ public abstract class Jsr223ScriptExecutor implements IScriptExecutor {
 
     protected String[] arguments;
 
+    protected String returnVar;
+
     @Override
     public void initialize(Method method) {
-        if(compiledScript!=null){
+        if (compiledScript != null) {
             return;
         }
         ScriptMeta scriptMeta = AnnotationUtil.getAnnotation(method, ScriptMeta.class);
+        String scriptBody = "";
         try {
             method.setAccessible(true);
-            String scriptBody = (String) method.invoke(null);
+            scriptBody = (String) method.invoke(null);
+            returnVar = parseReturnVariable(scriptBody);
             Compilable compilable = compilable();
             compiledScript = compilable.compile(scriptBody);
-            if(scriptMeta!=null){
-                Pair<Class<?>,String>[] pairs = this.argsPair(scriptMeta.args());
+            if (scriptMeta != null) {
+                Pair<Class<?>, String>[] pairs = this.argsPair(scriptMeta.args());
                 arguments = Arrays.stream(pairs).map(Pair::getRight).collect(Collectors.toList()).toArray(String[]::new);
             }
         } catch (IllegalAccessException | InvocationTargetException | javax.script.ScriptException |
                  ClassNotFoundException e) {
+            log.error("source error:{}",scriptBody);
             log.error(e.getMessage(), e);
         }
 
@@ -108,23 +114,33 @@ public abstract class Jsr223ScriptExecutor implements IScriptExecutor {
         return new SimpleBindings(env);
     }
 
+    protected Object executeScript(Bindings bindings) throws javax.script.ScriptException {
+        Object vv = compiledScript.eval(bindings);
+        if(returnVar!=null){
+            vv = bindings.get(returnVar);
+        }
+        if (vv == null) {
+            vv = compiledScript.getEngine().get(returnVar);
+        }
+        if (log.isDebugEnabled()) {
+            if (vv != null) {
+                //log.debug("script out:{}, clazz:{}", v, v.getClass());
+            } else {
+                log.debug("output is null.");
+            }
+        }
+        return vv;
+    }
+
     protected Object execute(Bindings bindings) {
         Object v = null;
         try {
-            if(compiledScript==null){
+            if (compiledScript == null) {
                 throw ScriptException.buildInvokeException(this.getClass(), ScriptType.JAVASCRIPT.name(), "script compile fail");
             }
-            v = compiledScript.eval(bindings);
-
-            if (log.isDebugEnabled()) {
-                if (v != null) {
-                    //log.debug("script out:{}, clazz:{}", v, v.getClass());
-                } else {
-                    log.debug("output is null.");
-                }
-            }
+            Object vv = executeScript(bindings);
 //            v = normalizeValue(v);
-            v = parseObject(v);
+            v = parseObject(vv);
         } catch (Exception e) {
             log.error(e.getMessage());
             throw ScriptException.buildInvokeException(this.getClass(), ScriptType.JAVASCRIPT.name(), e, e.getMessage());
@@ -155,6 +171,37 @@ public abstract class Jsr223ScriptExecutor implements IScriptExecutor {
             return value;
         }
 
+    }
+
+
+    @Override
+    public void reBuildMethodBody(MethodBody methodBody) {
+        String args = null;
+        if (methodBody.getParams() == null || methodBody.getParams().size() == 0) {
+            args = "item";
+        } else {
+            args = methodBody.getParams().get(0).getCode();
+        }
+        String srcBody = methodBody.getSrcBody();
+        srcBody = srcBody.replaceAll("\n", "\\\\n");
+        srcBody = srcBody.replaceAll("\"", "\\\\\"");
+
+        methodBody.setSrcBody(srcBody);
+
+    }
+
+
+    protected String parseReturnVariable(String script) {
+        String[] lines = script.trim().split("\n");
+        String lastLine = lines[lines.length - 1];
+        String var = null;
+        if (lastLine.startsWith("return")) {
+            var = lastLine.substring(7).trim();
+        }else {
+            String[] split = lastLine.split("=");
+            var = split[0];
+        }
+        return var;
     }
 
     private Object normalizeValue(Object value) {

@@ -18,11 +18,15 @@
 
 package io.innospots.base.script.cmdline;
 
+import cn.hutool.core.util.StrUtil;
+import io.innospots.base.script.OutputMode;
 import io.innospots.base.script.java.ScriptMeta;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Smars
@@ -38,17 +42,97 @@ class CmdPythonScriptExecutorTest {
         CmdPythonScriptExecutor executor = new CmdPythonScriptExecutor();
         Method scriptMethod = CmdPythonScriptExecutorTest.class.getMethod("scriptMethod");
         executor.initialize(scriptMethod);
-        Object s = executor.execute("abd", "dds", "1234");
+        Map<String,Object> m = new HashMap<>();
+        m.put("aa", "1");
+        m.put("bb", "22");
+        m.put("cc", "33");
+        Object s = executor.execute(m);
+        System.out.println("out:"+s);
+    }
+
+
+    @ScriptMeta(scriptType = "python", suffix = "py", returnType = String.class,
+            path = "/tmp/hello.py",outputMode = OutputMode.OVERWRITE)
+    public static String scriptMethod() {
+        String ss = String.join("\n",
+                "def process_item(item):",
+                w("td = {\"Alice\": 112, \"Beth\": \"9102\", \"Cecil\": \"3258\"};"),
+                w("#print(td)"),
+                w("return td")
+                );
+
+        return ss;
+    }
+
+
+
+    @SneakyThrows
+    @Test
+    void test2() {
+        CmdPythonScriptExecutor executor = new CmdPythonScriptExecutor();
+        Method scriptMethod = CmdPythonScriptExecutorTest.class.getMethod("scriptMethod2");
+        executor.initialize(scriptMethod);
+        Map<String,Object> m = new HashMap<>();
+        m.put("aa", "1");
+        m.put("bb", "22");
+        m.put("cc", "33");
+        Object s = executor.execute(m);
+        System.out.println(s.getClass());
         System.out.println("out:"+s);
 
     }
 
 
     @ScriptMeta(scriptType = "python", suffix = "py", returnType = String.class,
-            path = "/tmp/hello.py")
-    public static String scriptMethod() {
-        String script = "td = {\"Alice\": 112, \"Beth\": \"9102\", \"Cecil\": \"3258\"}; print(td)";
-        return script;
+            path = "/tmp/hello2.py",outputMode = OutputMode.OVERWRITE)
+    public static String scriptMethod2() {
+        String ss = String.join("\n",
+                "def process_item(item):",
+                w("td = {\"Alice\": 112, \"Beth\": \"9102\", \"Cecil\": \"3258\"};"),
+                w("return item")
+        );
+
+        return ss;
+    }
+
+    @SneakyThrows
+    @Test
+    void test3() {
+        CmdPythonScriptExecutor executor = new CmdPythonScriptExecutor();
+        Method scriptMethod = CmdPythonScriptExecutorTest.class.getMethod("scriptMethod3");
+        executor.initialize(scriptMethod);
+        Map<String,Object> m = new HashMap<>();
+        m.put("aa", "1");
+        m.put("bb", "22");
+        m.put("cc", "33");
+        Object s = executor.execute(m, (line)->{
+            System.out.println("line:"+line);
+            return  line;
+        });
+        System.out.println(s.getClass());
+        System.out.println("out:"+s);
+
+    }
+
+
+    @ScriptMeta(scriptType = "python", suffix = "py", returnType = String.class,
+            path = "/tmp/hello3.py",outputMode = OutputMode.OVERWRITE)
+    public static String scriptMethod3() {
+        String ss = String.join("\n",
+                "import datetime",
+                "def process_item(item):",
+                w("print('')"),
+                w("print('dd')"),
+                w("print('')"),
+                w("return item")
+        );
+
+        return ss;
+    }
+
+
+    private static String w(String s){
+        return "    " + s;
     }
 
 }
