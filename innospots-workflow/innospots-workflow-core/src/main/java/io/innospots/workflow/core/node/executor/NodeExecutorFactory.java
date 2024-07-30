@@ -98,6 +98,8 @@ public class NodeExecutorFactory {
             nodeExecutor.build();
             //ExecutorManagerFactory.clear(identifier);
         } catch (Exception e) {
+            log.error("node instance fail, flowKey:{}, nodeCode:{} ,nodeType: {}, error:{}",
+                    identifier,nodeInstance.getCode(),nodeInstance.getNodeType(),e.getMessage(),e);
             // Throws a NodeBuildException with the node type and underlying exception details
             flowLogger.flowError("node instance fail, flowKey:{}, nodeCode:{} ,nodeType: {}, error:{}",
                     identifier,nodeInstance.getCode(),nodeInstance.getNodeType(),e.getMessage());

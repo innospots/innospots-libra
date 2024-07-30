@@ -1,12 +1,12 @@
 {
-  "name": "Python",
-  "code": "PYTHON",
+  "name": "python程序",
+  "code": "cmdPython",
   "flowCode": "EVENTS",
   "primitive": "script",
   "vendor": "innospots",
-  "description": "python2 脚本",
-  "icon": "python",
-  "nodeType": "io.innospots.workflow.node.app.script.ScriptPythonNode",
+  "description": "命令行形式执行 python",
+  "icon": "shell",
+  "nodeType": "io.innospots.workflow.node.app.script.CmdLinePythonNode",
   "outPorts": "1",
   "inPorts": "1",
   "components": [
@@ -19,7 +19,19 @@
       "settings": {
         "label": "节点名称",
         "placeholder": "请输入节点名称",
-        "initialValue": "python 脚本节点"
+        "initialValue": "Python命令脚本"
+      }
+    },
+    {
+      "name": "cmd_path",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "脚本命令路径",
+        "placeholder": "/usr/local/bin/python",
+        "initialValue": ""
       }
     },
     {
@@ -30,9 +42,9 @@
       "deletable": false,
       "settings": {
         "label": "脚本详情",
-        "default": "return item;",
-        "isFixedType": true,
-        "scriptType": "PYTHON"
+        "scriptType": "PYTHON",
+        "initialValue": "def process_item(item):\n  return item;",
+        "isFixedType": true
       }
     },
     {
@@ -60,13 +72,17 @@
           {
             "value": "LOG",
             "label": "日志输出"
+          },
+          {
+            "value": "STREAM",
+            "label": "流式日志"
           }
         ]
       }
     },
     {
       "name": "variable_name",
-      "type": "Input",
+      "type": "ReadOnlyWidget",
       "valueType": "string",
       "copyable": false,
       "deletable": false,

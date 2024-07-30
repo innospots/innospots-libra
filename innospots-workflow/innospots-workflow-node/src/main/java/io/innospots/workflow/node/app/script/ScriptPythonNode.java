@@ -6,4 +6,10 @@ package io.innospots.workflow.node.app.script;
  * @date 2024/6/19
  */
 public class ScriptPythonNode extends ScriptBaseNode {
+
+
+    @Override
+    public String scriptType() {
+        return "jython";
+    }
 }

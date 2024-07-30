@@ -24,6 +24,12 @@ package io.innospots.workflow.node.app.script;
  * @author Smars
  * @date 2021/4/20
  */
-public class ShellNode extends CmdlineScriptNode {
+public class ShellNode extends CmdLineScriptNode {
+
+
+    @Override
+    public String scriptType() {
+        return "shell";
+    }
 
 }

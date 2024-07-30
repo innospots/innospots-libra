@@ -26,7 +26,6 @@ import io.innospots.base.script.cmdline.CmdLineScriptExecutor;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
-import io.innospots.workflow.core.logger.FlowLoggerFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -43,7 +42,7 @@ import java.util.Map;
  * @date 2022/11/11
  */
 @Slf4j
-public class CmdlineScriptNode extends ScriptBaseNode {
+public class CmdLineScriptNode extends ScriptBaseNode {
 
     protected static final String FIELD_OUTPUT_MODE = "output_mode";
     protected static final String FIELD_CMD_PATH = "cmd_path";

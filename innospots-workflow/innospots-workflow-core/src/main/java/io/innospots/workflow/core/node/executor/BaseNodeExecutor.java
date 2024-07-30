@@ -76,6 +76,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
     public BaseNodeExecutor build() {
         buildStatus = BuildStatus.BUILDING;
         try {
+            flowLogger.flowInfo("build node executor: {}-{}", ni.getCode(),ni.getName());
             initialize();
             buildStatus = BuildStatus.DONE;
         } catch (Exception e) {
@@ -246,13 +247,16 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
         }
         if (result instanceof Map) {
             Map<String, Object> respMap = (Map<String, Object>) result;
-            flowLogger.item(nodeExecution.getFlowExecutionId(), nodeExecution.getNodeExecutionId(), respMap);
+            //flowLogger.item(nodeExecution.getFlowExecutionId(), nodeExecution.getNodeExecutionId(), respMap);
             nodeOutput.addResult(respMap);
         } else if (result instanceof Collection) {
             Collection resCol = (Collection) result;
+            /*
             for (Object o : resCol) {
                 flowLogger.item(nodeExecution.getFlowExecutionId(), nodeExecution.getNodeExecutionId(), (Map<String, Object>) o);
             }
+             */
+
             nodeOutput.addResult(resCol);
 
         } else {
@@ -263,7 +267,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
                     for (ParamField outputField : ni.getOutputFields()) {
                         res.put(outputField.getCode(), item.get(outputField.getCode()));
                     }
-                    flowLogger.item(nodeExecution.getFlowExecutionId(), nodeExecution.getNodeExecutionId(), res);
+                    //flowLogger.item(nodeExecution.getFlowExecutionId(), nodeExecution.getNodeExecutionId(), res);
                     nodeOutput.addResult(res);
                 } else {
                     Map<String, Object> res = new HashMap<>();
@@ -271,7 +275,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
                         res.put(outputField.getCode(), result);
                         break;
                     }
-                    flowLogger.item(nodeExecution.getFlowExecutionId(), nodeExecution.getNodeExecutionId(), res);
+                    //flowLogger.item(nodeExecution.getFlowExecutionId(), nodeExecution.getNodeExecutionId(), res);
                     nodeOutput.addResult(res);
                 }
 

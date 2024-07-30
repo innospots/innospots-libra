@@ -54,10 +54,10 @@ public class NodeExecutionStoreListener implements INodeExecutionListener {
     public void complete(NodeExecution nodeExecution) {
         log.debug("node execution complete time:{} {}", LocalDateTime.now(), nodeExecution);
         if (!nodeExecution.isSkipNodeExecution()) {
-            if (nodeExecution.getRecordMode() == RecordMode.SYNC) {
-                nodeExecutionOperator.insert(nodeExecution);
-            } else {
+            if (nodeExecution.getRecordMode() == RecordMode.ASYNC) {
                 nodeExecutionAsyncDataStore.insert(nodeExecution);
+            } else {
+                nodeExecutionOperator.insert(nodeExecution);
             }
 
         } else {
@@ -70,9 +70,9 @@ public class NodeExecutionStoreListener implements INodeExecutionListener {
         log.debug("node execution fail time:{} {}", LocalDateTime.now(), nodeExecution);
         if (!nodeExecution.isSkipNodeExecution()) {
             if (nodeExecution.getRecordMode() == RecordMode.SYNC) {
-                nodeExecutionOperator.insert(nodeExecution);
-            } else {
                 nodeExecutionAsyncDataStore.insert(nodeExecution);
+            } else {
+                nodeExecutionOperator.insert(nodeExecution);
             }
         } else {
             log.info("node execution fail not store time:{} {}", LocalDateTime.now(), nodeExecution);

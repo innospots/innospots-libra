@@ -145,7 +145,7 @@ public class JdbcNodeExecutionOperator implements INodeExecutionOperator {
             log.debug("node execution saved: {}",execution.getNodeExecutionId());
         }
         executionContextOperator.saveExecutionContext(execution);
-        execution.clearInput();
+        //execution.clearInput();
         if (execution.getExecMode()!= ExecMode.MEMORY) {
             execution.clearOutput();
         }

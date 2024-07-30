@@ -16,29 +16,19 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.core.debug;
+package io.innospots.workflow.node.app.script;
 
-import io.innospots.workflow.core.instance.model.NodeInstance;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.util.List;
 
 /**
+ * script execute node
+ *
  * @author Smars
- * @date 2023/4/23
+ * @date 2021/4/20
  */
-@Getter
-@Setter
-@Schema(title = "app debug input payload")
-public class DebugPayload {
+public class GroovyNode extends ScriptBaseNode {
 
-    @Schema(title = "app node definition instance")
-    private NodeInstance ni;
-
-    @Schema(title = "input data")
-    private List<DebugInput> inputs;
-
-    private String sessionId;
+    @Override
+    protected String scriptType() {
+        return "groovy";
+    }
 }

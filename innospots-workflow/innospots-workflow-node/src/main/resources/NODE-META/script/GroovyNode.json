@@ -6,7 +6,7 @@
   "vendor": "innospots",
   "description": "groovy 脚本节点",
   "icon": "groovy",
-  "nodeType": "io.innospots.workflow.node.app.script.ScriptNode",
+  "nodeType": "io.innospots.workflow.node.app.script.GroovyNode",
   "outPorts": "1",
   "inPorts": "1",
   "components": [
@@ -21,7 +21,7 @@
         "initialValue": "Java节点"
       }
     },{
-      "name": "action",
+      "name": "action_script",
       "type": "ScriptEditor",
       "copyable": false,
       "deletable": false,

@@ -77,6 +77,7 @@ public class JavaSourceFileStaticBuilder {
         this.addImport("import io.innospots.base.script.java.ParamName;")
                 .addImport("import io.innospots.base.script.java.ScriptMeta;")
                 .addImport("import io.innospots.base.json.JSONUtils;")
+                .addImport("import io.innospots.base.script.OutputMode;")
                 .addImport("import java.util.*;")
                 .addImport("import java.util.regex.*;")
                 .addImport("import java.util.function.*;")
@@ -146,7 +147,7 @@ public class JavaSourceFileStaticBuilder {
             buf.append(" ,cmd=\"").append(methodBody.getCmdPath()).append("\"");
         }
         if(methodBody.getOutputMode()!=null){
-            buf.append(" ,outputMode=\"").append(methodBody.getOutputMode().name()).append("\"");
+            buf.append(" ,outputMode=OutputMode.").append(methodBody.getOutputMode()).append("");
         }
         if (methodBody.getParams() != null) {
             String args = methodBody.getParams().stream().map(f -> {

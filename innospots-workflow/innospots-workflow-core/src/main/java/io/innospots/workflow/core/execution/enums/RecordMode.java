@@ -27,5 +27,5 @@ package io.innospots.workflow.core.execution.enums;
 public enum RecordMode {
     ASYNC,
     SYNC,
-    BATCH;
+    STREAM;
 }

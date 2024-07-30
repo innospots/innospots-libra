@@ -19,10 +19,12 @@
 package io.innospots.workflow.runtime.debugger;
 
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.base.script.ExecutorManagerFactory;
+import io.innospots.base.utils.CCH;
 import io.innospots.base.utils.FileUtils;
 import io.innospots.base.utils.InnospotsIdGenerator;
 import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
@@ -86,6 +88,12 @@ public class NodeDebugger {
 
     public static NodeExecutionDisplay execute(DebugPayload debugPayload){
         Integer id = debugPayload.getNi().getNodeId();
+        if(debugPayload.getSessionId()!=null){
+            CCH.sessionId(debugPayload.getSessionId());
+        }else{
+            CCH.sessionId(RandomUtil.randomNumbers(12));
+        }
+
         NodeInstance ni = debugPayload.getNi();
         if(StringUtils.isEmpty(ni.getNodeKey())){
             ni.setNodeKey("nodeKey"+id);
@@ -128,7 +136,7 @@ public class NodeDebugger {
         }catch (Exception e){
             nodeExecution.setStatus(ExecutionStatus.FAILED);
             nodeExecution.setMessage(e.getMessage());
-            log.error(e.getMessage());
+            log.error(e.getMessage(),e);
         }
 
 

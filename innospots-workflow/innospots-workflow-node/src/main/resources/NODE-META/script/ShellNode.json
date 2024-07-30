@@ -41,7 +41,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
-        "label": "输出数据",
+        "label": "输出方式",
 		"viewType": "picker",
         "options": [
           {
@@ -59,6 +59,10 @@
           {
             "value": "LOG",
             "label": "日志输出"
+          },
+          {
+            "value": "STREAM",
+            "label": "流式日志"
           }
         ]
       }

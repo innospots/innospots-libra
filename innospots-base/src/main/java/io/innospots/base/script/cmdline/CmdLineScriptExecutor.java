@@ -281,6 +281,7 @@ public abstract class CmdLineScriptExecutor implements IScriptExecutor {
      * @return
      */
     protected Object processOutput(String output) {
+        log.debug("cmdline script:{}",output);
         Object v = null;
         switch (outputMode) {
             case FIELD:

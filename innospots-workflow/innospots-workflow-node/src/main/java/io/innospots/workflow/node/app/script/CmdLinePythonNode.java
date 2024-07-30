@@ -18,15 +18,10 @@
 
 package io.innospots.workflow.node.app.script;
 
-import io.innospots.base.model.field.FieldValueType;
-import io.innospots.base.model.field.ParamField;
 import io.innospots.base.script.OutputMode;
 import io.innospots.base.script.jit.MethodBody;
-import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-
-import java.util.List;
 
 /**
  * @author Smars
@@ -34,7 +29,7 @@ import java.util.List;
  * @date 2022/11/11
  */
 @Slf4j
-public class CmdLinePythonNode extends CmdlineScriptNode {
+public class CmdLinePythonNode extends CmdLineScriptNode {
 
 
     @Override
@@ -68,6 +63,11 @@ public class CmdLinePythonNode extends CmdlineScriptNode {
 
         methodBody.setSrcBody(src);
         return methodBody;
+    }
+
+    @Override
+    public String scriptType() {
+        return "python";
     }
 
 }

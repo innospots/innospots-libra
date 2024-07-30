@@ -56,15 +56,15 @@ public interface IFlowLogger {
         nodeError(CCH.sessionId(), StrUtil.format(format, message));
     }
 
-    default void flowInfo(String eventEmitterId, String format, Object... message) {
+    default void flowInfoById(String eventEmitterId, String format, Object... message) {
         flowInfo(eventEmitterId, StrUtil.format(format, message));
     }
 
-    default void flowError(String eventEmitterId, String format, Object... message) {
+    default void flowErrorById(String eventEmitterId, String format, Object... message) {
         flowError(eventEmitterId, StrUtil.format(format, message));
     }
 
-    default void nodeInfo(String eventEmitterId, String format, Object... message) {
+    default void nodeInfoById(String eventEmitterId, String format, Object... message) {
         nodeInfo(eventEmitterId, StrUtil.format(format, message));
     }
 
