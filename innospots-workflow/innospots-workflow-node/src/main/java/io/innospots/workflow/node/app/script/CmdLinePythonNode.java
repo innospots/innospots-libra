@@ -33,39 +33,6 @@ public class CmdLinePythonNode extends CmdLineScriptNode {
 
 
     @Override
-    public MethodBody buildScriptMethodBody() {
-        String src = this.valueString(FIELD_ACTION_SCRIPT);
-        OutputMode oMode = OutputMode.valueOf(this.valueString(FIELD_OUTPUT_MODE));
-        String scriptType = scriptType();
-        if (StringUtils.isEmpty(src) || StringUtils.isEmpty(scriptType)) {
-            return null;
-        }
-
-        MethodBody methodBody = new MethodBody();
-        methodBody.setOutputMode(oMode);
-        String cmdPath = this.valueString(FIELD_CMD_PATH);
-        methodBody.setCmdPath(cmdPath);
-        methodBody.setReturnType(Object.class);
-        methodBody.setScriptType(scriptType);
-        methodBody.setMethodName(ni.expName());
-
-        /*
-        String newSrc = "import sys\nimport ast\n\n";
-        StringBuilder srb = new StringBuilder(newSrc);
-        srb.append("args = ''").append("\n");
-        srb.append("if len(sys.argv) > 1:").append("\n");
-        srb.append("  ").append("args = sys.argv[1]").append("\n");
-        srb.append(src);
-        srb.append("\n\n");
-        newSrc = srb.toString();
-
-         */
-
-        methodBody.setSrcBody(src);
-        return methodBody;
-    }
-
-    @Override
     public String scriptType() {
         return "python";
     }

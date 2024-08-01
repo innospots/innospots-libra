@@ -43,7 +43,7 @@
       "settings": {
         "label": "脚本详情",
         "scriptType": "PYTHON",
-        "initialValue": "def process_item(item):\n  return item;",
+        "initialValue": "def process_item(item):\n  print(item)\n  return item",
         "isFixedType": true
       }
     },

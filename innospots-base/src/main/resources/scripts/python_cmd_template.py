@@ -11,13 +11,13 @@ def parse_arguments(input_str):
     return result_dict
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python script.py 'a=abc,b=dss,c=123'")
-        sys.exit(1)
-
     try:
-        input_str = sys.argv[1]
-        input_item = parse_arguments(input_str)
+        if len(sys.argv) >= 2:
+            input_str = sys.argv[1]
+            input_item = parse_arguments(input_str)
+        else:
+            input_item = {}
+
         processed_item = process_item(input_item)
         print("--------\n")
         print(processed_item)

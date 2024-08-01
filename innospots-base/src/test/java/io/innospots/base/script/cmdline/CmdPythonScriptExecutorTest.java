@@ -114,6 +114,22 @@ class CmdPythonScriptExecutorTest {
 
     }
 
+    @SneakyThrows
+    @Test
+    void test31() {
+        CmdPythonScriptExecutor executor = new CmdPythonScriptExecutor();
+        Method scriptMethod = CmdPythonScriptExecutorTest.class.getMethod("scriptMethod3");
+        executor.initialize(scriptMethod);
+        Map<String,Object> m = new HashMap<>();
+        Object s = executor.execute(m, (line)->{
+            System.out.println("line:"+line);
+            return  line;
+        });
+        System.out.println(s.getClass());
+        System.out.println("out:"+s);
+
+    }
+
 
     @ScriptMeta(scriptType = "python", suffix = "py", returnType = String.class,
             path = "/tmp/hello3.py",outputMode = OutputMode.OVERWRITE)

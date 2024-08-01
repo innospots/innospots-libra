@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.script.OutputMode;
 import io.innospots.base.script.cmdline.CmdLineScriptExecutor;
+import io.innospots.base.script.jit.MethodBody;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
@@ -170,5 +171,28 @@ public class CmdLineScriptNode extends ScriptBaseNode {
         }
         return result;
     }
+
+    @Override
+    public MethodBody buildScriptMethodBody() {
+        String src = this.valueString(FIELD_ACTION_SCRIPT);
+        OutputMode oMode = OutputMode.valueOf(this.valueString(FIELD_OUTPUT_MODE));
+        String scriptType = scriptType();
+        if (StringUtils.isEmpty(src) || StringUtils.isEmpty(scriptType)) {
+            return null;
+        }
+
+        MethodBody methodBody = new MethodBody();
+        methodBody.setOutputMode(oMode);
+        String cmdPath = this.valueString(FIELD_CMD_PATH);
+        methodBody.setCmdPath(cmdPath);
+        methodBody.setReturnType(Object.class);
+        methodBody.setScriptType(scriptType);
+        methodBody.setMethodName(ni.expName());
+
+        methodBody.setSrcBody(src);
+        return methodBody;
+    }
+
+
 
 }

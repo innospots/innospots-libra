@@ -307,6 +307,9 @@ public abstract class CmdLineScriptExecutor implements IScriptExecutor {
     protected Map<String, Object> convertStringToMap(String input) {
         Map<String, Object> map = new LinkedHashMap<>();
         if (input != null && !input.isEmpty()) {
+            if(input.startsWith("Error") || input.startsWith("Err")){
+                throw ScriptException.buildInvokeException(getClass(), scriptType(), input);
+            }
             String[] pairs = input.split(",");
             for (String pair : pairs) {
                 String[] keyValue = pair.split("=");

@@ -31,6 +31,7 @@
       "settings": {
         "label": "脚本详情",
         "scriptType": "SHELL",
+        "initialValue": "# output variable format, v1,v2,v3: input variable\nitem=\"a=${v1}, b=${v2}, c=${v3}\"\n# print param to console\necho $item",
         "isFixedType": true
       }
     },
