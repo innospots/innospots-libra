@@ -29,8 +29,8 @@
         "label": "脚本详情",
         "scriptType": "GROOVY",
         "isFixedType": true,
-        "placeholder": "输入JS代码",
-        "initialValue": "return item;"
+        "placeholder": "输入代码",
+        "initialValue": "import java.util.Date\ndef now = new Date()\nprintln \"Current: $now\"\ndef m = [:]\nm['a'] = item['a1']\nm['d'] = now\nreturn m;"
       }
     }
   ]

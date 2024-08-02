@@ -36,6 +36,9 @@ public class BaseEventEmitter {
 
 
     public static void close(String eventEmitterId, String streamId) {
+        if(eventEmitterId == null){
+            return;
+        }
         List<SseEmitterHolder> holders = eventEmitter.getIfPresent(eventEmitterId);
         if (holders != null) {
             for (SseEmitterHolder holder : holders) {
@@ -57,6 +60,9 @@ public class BaseEventEmitter {
     }
 
     public static boolean hasExist(String eventEmitterId, String streamId) {
+        if(eventEmitterId == null){
+            return false;
+        }
         List<SseEmitterHolder> holders = eventEmitter.getIfPresent(eventEmitterId);
         if (holders == null) {
             return false;
@@ -66,6 +72,9 @@ public class BaseEventEmitter {
 
 
     public static SseEmitter createEmitter(String eventEmitterId,String eventType, String streamId) {
+        if(eventEmitterId == null){
+            return null;
+        }
         synchronized (eventEmitterId) {
             List<SseEmitterHolder> holders = eventEmitter.getIfPresent(eventEmitterId);
             if (holders == null) {
@@ -95,6 +104,9 @@ public class BaseEventEmitter {
     }
 
     public static SseEmitter getEmitter(String nodeExecutionId, String streamId) {
+        if(nodeExecutionId == null){
+            return null;
+        }
         List<SseEmitterHolder> holders = eventEmitter.getIfPresent(nodeExecutionId);
         if (holders == null) {
             return null;
@@ -107,6 +119,9 @@ public class BaseEventEmitter {
     }
 
     public static void send(String eventEmitterId, String eventName, Object item) {
+        if(eventEmitterId == null){
+            return;
+        }
         List<SseEmitterHolder> holders = eventEmitter.getIfPresent(eventEmitterId);
         if (holders != null) {
             holders.forEach(holder -> {
@@ -125,11 +140,17 @@ public class BaseEventEmitter {
 
     public static void sendLog(String eventEmitterId, String eventName, String level, Object message) {
         String sessionId = CCH.sessionId();
+        if (sessionId == null) {
+            sessionId = eventEmitterId;
+        }
+        if (eventEmitterId == null) {
+            return;
+        }
         List<SseEmitterHolder> holders = eventEmitter.getIfPresent(eventEmitterId);
         if (holders != null) {
             sendLog(holders, eventEmitterId, eventName, level, message);
-        } else if (sessionId != null && !Objects.equals(sessionId, eventEmitterId)) {
-            holders = eventEmitter.getIfPresent(eventEmitterId);
+        } else if (!Objects.equals(sessionId, eventEmitterId)) {
+            holders = eventEmitter.getIfPresent(sessionId);
             if (holders != null) {
                 eventEmitter.put(eventEmitterId, holders);
                 sendLog(holders, eventEmitterId, eventName, level, message);
