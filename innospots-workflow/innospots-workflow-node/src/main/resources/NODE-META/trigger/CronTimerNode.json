@@ -41,20 +41,7 @@
             "label": "循环执行"
           }
         ]
-      },
-      "conditions": [
-        {
-          "result": "visible",
-          "relation": "OR",
-          "children": [
-            {
-              "name": "schedule_mode",
-              "opt": "EQUAL",
-              "value": "ONCE"
-            }
-          ]
-        }
-      ]
+      }
     },
     {
       "name": "run_date_time",
