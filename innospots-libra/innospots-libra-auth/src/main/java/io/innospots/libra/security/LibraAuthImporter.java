@@ -48,8 +48,6 @@ public @interface LibraAuthImporter {
 
     @ConditionalOnProperty(prefix = "innospots.security", name = "enabled", havingValue = "true")
     @Configuration
-    @MapperScan(basePackages = {"io.innospots.libra.security.logger.dao"})
-    @EntityScan(basePackages = "io.innospots.libra.security.logger.entity")
     @ComponentScan(basePackages = "io.innospots.libra.security")
     class InnospotsAuthConfiguration implements WebMvcConfigurer {
 

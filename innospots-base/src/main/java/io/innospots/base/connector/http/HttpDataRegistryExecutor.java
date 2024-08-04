@@ -32,8 +32,8 @@ import io.innospots.base.script.IScriptExecutor;
 import io.innospots.base.utils.PlaceholderUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpStatus;
-import org.apache.http.protocol.HttpContext;
+import org.apache.hc.core5.http.HttpStatus;
+import org.apache.hc.core5.http.protocol.HttpContext;
 
 import java.util.*;
 import java.util.stream.Collectors;

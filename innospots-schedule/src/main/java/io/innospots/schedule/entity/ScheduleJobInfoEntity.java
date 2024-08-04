@@ -28,7 +28,7 @@ import io.innospots.base.quartz.JobType;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 /**
@@ -47,7 +47,7 @@ public class ScheduleJobInfoEntity extends PBaseEntity {
 
     @Id
     @TableId(type = IdType.INPUT)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(length = 16)
     private String jobKey;
 

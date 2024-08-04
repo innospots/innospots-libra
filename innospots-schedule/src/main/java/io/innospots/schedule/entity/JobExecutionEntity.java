@@ -27,7 +27,7 @@ import io.innospots.base.quartz.JobType;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 import static io.innospots.schedule.entity.JobExecutionEntity.TABLE_NAME;
@@ -52,7 +52,7 @@ public class JobExecutionEntity extends PBaseEntity {
      * primary id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @GeneratedValue(strategy = GenerationType.TABLE)
     @TableId(type = IdType.INPUT)
     @Column(length = 32)
     private String executionId;

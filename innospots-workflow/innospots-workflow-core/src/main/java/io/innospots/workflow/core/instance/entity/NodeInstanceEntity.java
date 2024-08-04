@@ -27,7 +27,7 @@ import io.innospots.base.entity.PBaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * @author Raydian
@@ -90,7 +90,7 @@ public class NodeInstanceEntity extends PBaseEntity {
     private Integer revision;
 
 
-    @Column(columnDefinition = "text")
+    @Column(columnDefinition = "TEXT")
     private String data;
 
     @Column
@@ -100,17 +100,17 @@ public class NodeInstanceEntity extends PBaseEntity {
     @Enumerated(value = EnumType.STRING)
     private ScriptType actionScriptType;
 
-    @Column(columnDefinition = "text")
+    @Column(columnDefinition = "TEXT")
     private String action;
 
-    @Column(columnDefinition = "text")
+    @Column(columnDefinition = "TEXT")
     private String methods;
 
 
     @Column(length = 1024)
     private String inputFields;
 
-    @Column(columnDefinition = "text")
+    @Column(columnDefinition = "TEXT")
     private String outputFields;
 
     @Column(length = 1024)

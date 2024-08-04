@@ -26,7 +26,7 @@ import io.innospots.base.entity.PBaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * @author Raydian
@@ -46,7 +46,7 @@ public class SchemaRegistryEntity extends PBaseEntity {
 
     @TableId(type = IdType.INPUT)
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(length = 16)
     private String registryId;
 

@@ -22,8 +22,8 @@ import io.innospots.base.connector.credential.model.ConnectionCredential;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.http.HttpClientBuilder;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.protocol.HttpContext;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.core5.http.protocol.HttpContext;
 
 import java.io.Closeable;
 import java.io.IOException;

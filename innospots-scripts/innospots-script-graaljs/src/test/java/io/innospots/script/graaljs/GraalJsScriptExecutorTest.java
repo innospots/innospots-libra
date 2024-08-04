@@ -39,7 +39,7 @@ class GraalJsScriptExecutorTest {
     @Test
     void test() {
         GraalJsScriptExecutor executor = new GraalJsScriptExecutor();
-        Method method2 = GraalJsScriptExecutorTest.class.getMethod("scriptMethod2");
+        Method method2 = GraalJsScriptExecutorTest.class.getMethod("scriptMethod");
         executor.initialize(method2);
         Map<String,Object> input = new HashMap<>();
 //        Map<String,String> i = new HashMap<>();
@@ -53,14 +53,29 @@ class GraalJsScriptExecutorTest {
 
     @ScriptMeta(suffix = "js")
     public static String scriptMethod() {
-        String src = "print(k2); function f1(v1,v2){var item=new Object();item.p2=v1;item.p3=v2;return item;}; f1(k2,k3)";
+        String src = "print(item.k2); function f1(v1,v2){var item=new Object();item.p2=v1;item.p3=v2;return item;}; f1(item.k2,item.k3)";
         return src;
+    }
+
+    @SneakyThrows
+    @Test
+    void test2() {
+        GraalJsScriptExecutor executor = new GraalJsScriptExecutor();
+        Method method2 = GraalJsScriptExecutorTest.class.getMethod("scriptMethod2");
+        executor.initialize(method2);
+        Map<String,Object> input = new HashMap<>();
+//        Map<String,String> i = new HashMap<>();
+        input.put("k2","12345");
+        input.put("k3","abc12");
+        Object obj = executor.execute(input);
+        System.out.println(obj.getClass());
+        System.out.println(obj);
     }
 
     @ScriptMeta(suffix = "js")
     public static String scriptMethod2() {
-        String src = "console.log('console out log:'+k2+k3);return k2+k3;";
-        src = GraalJsScriptExecutor.wrapSource("scriptMethod2", "k2,k3", src);
+        String src = "console.log('console out log:'+item.k2+item.k3);return item.k2+item.k3;";
+        src = GraalJsScriptExecutor.wrapSource("scriptMethod2", "item", src);
         return src;
     }
 

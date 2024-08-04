@@ -18,7 +18,8 @@
 
 package io.innospots.base.crypto;
 
-import org.apache.commons.codec.binary.Base64;
+
+import cn.hutool.core.codec.Base64;
 
 /**
  * @author Smars
@@ -28,22 +29,22 @@ public class Base64Encryptor implements IEncryptor {
 
     @Override
     public byte[] encode(byte[] value) {
-        return Base64.encodeBase64(value);
+        return Base64.encode(value, false, true);
     }
 
     @Override
     public byte[] decode(byte[] value) {
-        return Base64.decodeBase64(value);
+        return Base64.decode(value);
     }
 
     @Override
     public String decode(String value) {
-        return new String(Base64.decodeBase64(value));
+        return new String(Base64.decode(value));
     }
 
     @Override
     public String encode(String value) {
-        return Base64.encodeBase64URLSafeString(value.getBytes());
+        return Base64.encodeUrlSafe(value.getBytes());
     }
 
 }

@@ -4,10 +4,12 @@ server:
 spring:
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
+    database-platform: io.innospots.server.base.CustomDialect
     show-sql: true
-    generate-ddl: true
-    open-in-view: false
+    generate-ddl: off
+
+
 
 innospots:
   db:

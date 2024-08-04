@@ -25,7 +25,7 @@ import io.innospots.base.entity.PBaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * @author Smars
@@ -45,7 +45,7 @@ public class CredentialInfoEntity extends PBaseEntity {
 
     @Id
     @TableId(type = IdType.INPUT)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(length = 8)
     private String credentialKey;
 

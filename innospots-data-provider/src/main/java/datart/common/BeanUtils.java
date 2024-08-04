@@ -21,9 +21,9 @@ package datart.common;
 import datart.base.exception.Exceptions;
 import org.springframework.util.CollectionUtils;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.ValidatorFactory;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.ValidatorFactory;
 import java.util.Set;
 import java.util.StringJoiner;
 

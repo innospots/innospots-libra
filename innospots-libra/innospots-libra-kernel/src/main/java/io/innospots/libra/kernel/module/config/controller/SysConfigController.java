@@ -34,7 +34,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import static io.innospots.base.model.response.InnospotsResponse.success;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;

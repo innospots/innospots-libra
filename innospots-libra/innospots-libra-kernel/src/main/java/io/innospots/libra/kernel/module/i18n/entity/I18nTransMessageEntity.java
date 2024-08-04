@@ -25,7 +25,7 @@ import io.innospots.base.entity.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import static io.innospots.libra.kernel.module.i18n.entity.I18nTransMessageEntity.TABLE_NAME;
 

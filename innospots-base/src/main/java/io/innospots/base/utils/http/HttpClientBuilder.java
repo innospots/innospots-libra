@@ -23,19 +23,20 @@ import io.innospots.base.connector.http.HttpData;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.json.JSONUtils;
 import org.apache.commons.collections4.MapUtils;
-import org.apache.http.*;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.*;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HttpContext;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.*;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
+import org.apache.hc.client5.http.impl.DefaultConnectionKeepAliveStrategy;
+import org.apache.hc.client5.http.impl.classic.BasicHttpClientResponseHandler;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.io.entity.StringEntity;
+import org.apache.hc.core5.http.message.BasicHeader;
+import org.apache.hc.core5.http.message.BasicNameValuePair;
+import org.apache.hc.core5.http.protocol.HttpContext;
+import org.apache.hc.core5.util.Timeout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +46,6 @@ import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.*;
 
-import static org.apache.http.HttpHeaders.CONTENT_LENGTH;
 
 /**
  * @author Raydian
@@ -76,7 +76,7 @@ public class HttpClientBuilder {
                 headers.add(new BasicHeader(k, v));
             });
         }
-        org.apache.http.impl.client.HttpClientBuilder clientBuilder = HttpClients.custom()
+        org.apache.hc.client5.http.impl.classic.HttpClientBuilder clientBuilder = HttpClients.custom()
                 .setConnectionManager(httpClientConnectionManager(maxTotal))
                 .setDefaultRequestConfig(requestConfig(timeout))
                 .setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy());
@@ -101,11 +101,8 @@ public class HttpClientBuilder {
     private static RequestConfig requestConfig(Integer maxTimeOut) {
         RequestConfig.Builder configBuilder = RequestConfig.custom();
         // http connection timeout , millisecond
-        configBuilder.setConnectTimeout(maxTimeOut);
-        // socket fetch timeout millisecond
-        configBuilder.setSocketTimeout(maxTimeOut);
-        // connection pool instance timeout
-        configBuilder.setConnectionRequestTimeout(maxTimeOut);
+        configBuilder.setConnectionRequestTimeout(Timeout.ofMicroseconds(maxTimeOut));
+        configBuilder.setResponseTimeout(Timeout.ofMicroseconds(maxTimeOut));
         return configBuilder.build();
     }
 
@@ -154,53 +151,47 @@ public class HttpClientBuilder {
                     httpGet.setHeader(entry.getKey(), entry.getValue());
                 }
             }
+            BasicHttpClientResponseHandler responseHandler = new BasicHttpClientResponseHandler();
+            String response = httpContext != null ? httpClient.execute(httpGet, httpContext,responseHandler) : httpClient.execute(httpGet,responseHandler);
+            fillResponse(httpData, response);
 
-            HttpResponse response = httpContext != null ? httpClient.execute(httpGet, httpContext) : httpClient.execute(httpGet);
-            entity = fillResponse(httpData, response);
-
-        } catch (IOException e) {
+        } catch (IOException | ParseException e) {
             logger.error(e.getMessage(), e);
             httpData.setStatus(HttpStatus.HTTP_INTERNAL_ERROR);
             httpData.setMessage(e.getMessage());
-        } finally {
-            if (entity != null) {
-                try {
-                    EntityUtils.consume(entity);
-                } catch (IOException e) {
-                }
-            }
         }
         return httpData;
     }
 
-    private static HttpEntity fillResponse(HttpData httpData, HttpResponse response) throws IOException {
-        int statusCode = response.getStatusLine().getStatusCode();
-        httpData.setStatus(statusCode);
-        httpData.setMessage(response.getStatusLine().getReasonPhrase());
-        HttpEntity entity = response.getEntity();
-        for (Header header : response.getAllHeaders()) {
-            httpData.addHeader(header.getName(), header.getValue());
-        }
+    private static void fillResponse(HttpData httpData, String resStr) throws IOException, ParseException {
+//        int statusCode = response.getCode();
+//        httpData.setStatus(statusCode);
+//        httpData.setMessage(response.getReasonPhrase());
+//        HttpEntity entity = response.getEntity();
+//        for (Header header : response.getHeaders()) {
+//            httpData.addHeader(header.getName(), header.getValue());
+//        }
         String result = null;
-        if (entity != null) {
-            result = EntityUtils.toString(entity, CONTENT_ENCODING);
-            Header contentType = entity.getContentType();
-            httpData.addHeader(CONTENT_LENGTH, entity.getContentLength());
-            if (contentType != null && contentType.getValue().contains("application/json")) {
-                if (result.startsWith("[")) {
-                    httpData.setBody(JSONUtils.toList(result, LinkedHashMap.class));
-                } else if (result.startsWith("{")) {
-                    httpData.setBody(JSONUtils.toMap(result));
-                } else {
-                    httpData.setBody(result);
-                }
-            } else {
-                httpData.setBody(result);
-            }
-
+        if (result.startsWith("[")) {
+            httpData.setBody(JSONUtils.toList(result, LinkedHashMap.class));
+        } else if (result.startsWith("{")) {
+            httpData.setBody(JSONUtils.toMap(result));
+        } else {
+            httpData.setBody(result);
         }
+//        if (entity != null) {
+//            result = EntityUtils.toString(entity, CONTENT_ENCODING);
+//            String contentType = entity.getContentType();
+//            httpData.addHeader(CONTENT_LENGTH, entity.getContentLength());
+//            if (contentType != null && contentType.contains("application/json")) {
 
-        return entity;
+//            } else {
+//                httpData.setBody(result);
+//            }
+
+//        }
+
+//        return entity;
     }
 
     public static void toStringParams(StringBuffer buffer, Object v) {
@@ -255,19 +246,15 @@ public class HttpClientBuilder {
                     httpPost.setHeader(entry.getKey(), entry.getValue());
                 }
             }
+
+            BasicHttpClientResponseHandler responseHandler = new BasicHttpClientResponseHandler();
             httpPost.setEntity(new UrlEncodedFormEntity(pairList, Charset.forName(CONTENT_ENCODING)));
-            CloseableHttpResponse response = httpClient.execute(httpPost);
-            httpEntity = fillResponse(httpData, response);
+            String s = httpClient.execute(httpPost,responseHandler);
+            fillResponse(httpData, s);
         } catch (
-                IOException e) {
+                IOException | ParseException e) {
+            httpData.setStatus(HttpStatus.HTTP_INTERNAL_ERROR);
             logger.error(e.getMessage(), e);
-        } finally {
-            if (httpEntity != null) {
-                try {
-                    EntityUtils.consume(httpEntity);
-                } catch (IOException e) {
-                }
-            }
         }
         return httpData;
     }
@@ -308,29 +295,25 @@ public class HttpClientBuilder {
         HttpEntity httpEntity = null;
         try {
             if (requestBody != null) {
-                StringEntity stringEntity = new StringEntity(requestBody, CONTENT_ENCODING);
-                stringEntity.setContentEncoding(CONTENT_ENCODING);
-                stringEntity.setContentType(APPLICATION_JSON);
+                StringEntity stringEntity = new StringEntity(requestBody,
+                        ContentType.APPLICATION_JSON, CONTENT_ENCODING,true);
+
                 httpPost.setEntity(stringEntity);
             }
-            CloseableHttpResponse response = httpContext != null ?
-                    httpClient.execute(httpPost, httpContext) : httpClient.execute(httpPost);
+            BasicHttpClientResponseHandler responseHandler = new BasicHttpClientResponseHandler();
+            String respStr = httpContext != null ?
+                    httpClient.execute(httpPost, httpContext, responseHandler) : httpClient.execute(httpPost,responseHandler);
             if (logger.isDebugEnabled()) {
                 StringBuilder out = new StringBuilder();
                 out.append("url: ").append(url).append(" ,header: ").append(headers).append(" ,param: ").append(param)
                         .append(", body: ").append(requestBody);
-                logger.debug("out:{}, response:,{}", out, response.getStatusLine());
             }
-            httpEntity = fillResponse(httpData, response);
-        } catch (IOException e) {
+            fillResponse(httpData, respStr);
+        } catch (IOException | ParseException e) {
+            httpData.setMessage(e.getMessage());
+            httpData.setStatus(HttpStatus.HTTP_INTERNAL_ERROR);
             logger.error(e.getMessage(), e);
         } finally {
-            if (httpEntity != null) {
-                try {
-                    EntityUtils.consume(httpEntity);
-                } catch (IOException e) {
-                }
-            }
         }
 
         return httpData;
@@ -343,7 +326,7 @@ public class HttpClientBuilder {
      * @param requestBody 参数数据
      * @return
      */
-    public static String doRequest(CloseableHttpClient httpClient, HttpEntityEnclosingRequestBase method, String url, Map<String, Object> params, String requestBody) throws IOException {
+    public static String doRequest(CloseableHttpClient httpClient, HttpUriRequestBase method, String url, Map<String, Object> params, String requestBody) throws IOException, ParseException {
         String httpStr = null;
         url = dualPathVar(url, params);
 
@@ -351,25 +334,13 @@ public class HttpClientBuilder {
         try {
             //encode character
             if (requestBody != null) {
-                StringEntity stringEntity = new StringEntity(requestBody, CONTENT_ENCODING);
-                stringEntity.setContentEncoding(CONTENT_ENCODING);
-                stringEntity.setContentType(APPLICATION_JSON);
+                StringEntity stringEntity = new StringEntity(requestBody,ContentType.APPLICATION_JSON, CONTENT_ENCODING,true);
                 method.setEntity(stringEntity);
             }
-            CloseableHttpResponse response = httpClient.execute(method);
-            httpEntity = response.getEntity();
-            httpStr = EntityUtils.toString(httpEntity, CONTENT_ENCODING);
+            BasicHttpClientResponseHandler responseHandler = new BasicHttpClientResponseHandler();
+            httpStr = httpClient.execute(method,responseHandler);
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
             throw e;
-        } finally {
-            if (httpEntity != null) {
-                try {
-                    EntityUtils.consume(httpEntity);
-                } catch (IOException e) {
-                    throw e;
-                }
-            }
         }
         return httpStr;
     }
@@ -381,26 +352,16 @@ public class HttpClientBuilder {
      * @param requestBody 参数数据
      * @return
      */
-    public static String deleteHttpRequest(CloseableHttpClient httpClient, String url, Map<String, Object> params, String requestBody) throws IOException {
+    public static String deleteHttpRequest(CloseableHttpClient httpClient, String url, Map<String, Object> params, String requestBody) throws IOException, ParseException {
         String httpStr = null;
         url = dualPathVar(url, params);
-        HttpRequestBase method = new HttpDelete();
+        HttpUriRequestBase method = new HttpDelete(url);
         HttpEntity httpEntity = null;
         try {
-            CloseableHttpResponse response = httpClient.execute(method);
-            httpEntity = response.getEntity();
-            httpStr = EntityUtils.toString(httpEntity, CONTENT_ENCODING);
+            BasicHttpClientResponseHandler responseHandler = new BasicHttpClientResponseHandler();
+            httpStr = httpClient.execute(method,responseHandler);
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
             throw e;
-        } finally {
-            if (httpEntity != null) {
-                try {
-                    EntityUtils.consume(httpEntity);
-                } catch (IOException e) {
-                    throw e;
-                }
-            }
         }
         return httpStr;
     }
@@ -469,15 +430,15 @@ public class HttpClientBuilder {
         return doGet(defaultHttpClient, url, param, header).getBody().toString();
     }
 
-    public static String put(String path, Map<String, Object> params, String requestBody) throws IOException {
-        HttpEntityEnclosingRequestBase method = new HttpPut();
+    public static String put(String path, Map<String, Object> params, String requestBody) throws IOException, ParseException {
+        HttpUriRequestBase method = new HttpPut(path);
         if (defaultHttpClient == null) {
             defaultHttpClient = build(15 * 1000, 20);
         }
         return doRequest(defaultHttpClient, method, path, params, requestBody);
     }
 
-    public static String delete(String path, Map<String, Object> params, String requestBody) throws IOException {
+    public static String delete(String path, Map<String, Object> params, String requestBody) throws IOException, ParseException {
 
         if (defaultHttpClient == null) {
             defaultHttpClient = build(15 * 1000, 20);

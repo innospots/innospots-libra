@@ -26,7 +26,7 @@ import io.innospots.libra.base.terminal.TerminalInfo;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 /**

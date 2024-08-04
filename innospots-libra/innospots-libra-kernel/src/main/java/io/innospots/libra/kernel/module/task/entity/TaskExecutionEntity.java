@@ -8,7 +8,7 @@ import io.innospots.libra.base.task.TaskExecutionStatus;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 import static io.innospots.libra.kernel.module.task.entity.TaskExecutionEntity.TABLE_NAME;

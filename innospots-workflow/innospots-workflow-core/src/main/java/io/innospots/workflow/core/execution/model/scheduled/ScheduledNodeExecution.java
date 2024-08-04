@@ -26,7 +26,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.RandomUtils;
 
-import javax.persistence.Column;
+import jakarta.persistence.Column;
 import java.time.LocalDateTime;
 
 import static io.innospots.workflow.core.config.InnospotsWorkflowProperties.MAX_SHARDING_KEY;

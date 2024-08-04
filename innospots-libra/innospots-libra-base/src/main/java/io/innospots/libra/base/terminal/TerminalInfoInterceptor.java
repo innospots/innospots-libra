@@ -31,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.time.Duration;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -53,7 +53,7 @@ public class TerminalInfoInterceptor implements HandlerInterceptor {
             .build();
 
     @Override
-    public boolean preHandle(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response, Object handler) throws Exception {
 
         UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader(USER_AGENT_HEADER));
         TerminalInfo terminalInfo = new TerminalInfo();

@@ -25,13 +25,13 @@ import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
 import io.innospots.workflow.core.runtime.lisenter.WorkflowRuntimeListener;
 import io.innospots.workflow.runtime.container.RunTimeContainerManager;
 import io.innospots.workflow.runtime.server.WorkflowWebhookServer;
+import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.availability.ApplicationAvailability;
 
-import javax.annotation.PreDestroy;
 import java.io.File;
 import java.util.Map;
 

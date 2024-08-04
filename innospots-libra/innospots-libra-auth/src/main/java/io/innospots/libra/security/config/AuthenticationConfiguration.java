@@ -30,12 +30,13 @@ import io.innospots.libra.security.jwt.JwtAuthManager;
 import io.innospots.libra.security.operator.AuthUserOperator;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.servlet.Filter;
+import jakarta.servlet.Filter;
 
 /**
  * @author Smars
@@ -43,7 +44,10 @@ import javax.servlet.Filter;
  */
 @Configuration
 @EnableConfigurationProperties({AuthProperties.class})
-@MapperScan({"io.innospots.libra.security.auth.basic"})
+@EntityScan(basePackages = "io.innospots.libra.security.logger.entity")
+@MapperScan(basePackages = {"io.innospots.libra.security.logger.dao",
+        "io.innospots.libra.security.auth.basic"})
+//@MapperScan({"io.innospots.libra.security.auth.basic"})
 public class AuthenticationConfiguration {
 
     @ConditionalOnProperty(prefix = "innospots.security", name = "mode", havingValue = "BASIC")

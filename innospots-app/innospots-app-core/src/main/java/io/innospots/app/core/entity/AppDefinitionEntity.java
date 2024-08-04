@@ -1,16 +1,11 @@
 package io.innospots.app.core.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.innospots.base.entity.PBaseEntity;
-import io.innospots.base.enums.DataStatus;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.checkerframework.checker.units.qual.C;
-
-import javax.persistence.*;
 
 /**
  * @author Smars
@@ -28,7 +23,7 @@ public class AppDefinitionEntity extends BaseAppEntity {
 
     @Id
     @TableId(type = IdType.INPUT)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(length = 16)
     private String appKey;
 

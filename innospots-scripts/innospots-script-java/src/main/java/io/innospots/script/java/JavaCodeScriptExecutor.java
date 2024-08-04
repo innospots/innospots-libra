@@ -86,7 +86,7 @@ public class JavaCodeScriptExecutor implements IScriptExecutor {
     @Override
     public Object execute(Map<String, Object> env) {
         try {
-            return scriptEvaluator.evaluate(env);
+            return scriptEvaluator.evaluate(new Object[]{env});
         } catch (InvocationTargetException e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException(e);

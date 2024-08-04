@@ -25,7 +25,7 @@ import io.innospots.base.entity.PBaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import static io.innospots.libra.base.temp.SystemTempCacheEntity.TABLE_NAME;
 
@@ -51,6 +51,6 @@ public class SystemTempCacheEntity extends PBaseEntity {
     @Column
     private String cacheKey;
 
-    @Column(columnDefinition = "text")
+    @Column(columnDefinition = "TEXT")
     private String cacheValue;
 }

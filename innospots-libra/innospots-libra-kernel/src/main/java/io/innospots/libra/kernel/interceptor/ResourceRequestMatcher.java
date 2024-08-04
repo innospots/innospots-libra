@@ -25,7 +25,7 @@ import io.innospots.libra.base.menu.OptElement;
 import io.innospots.libra.base.menu.ResourceItem;
 import org.apache.commons.collections4.CollectionUtils;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

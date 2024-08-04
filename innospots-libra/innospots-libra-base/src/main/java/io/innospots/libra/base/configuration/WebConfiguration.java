@@ -20,6 +20,7 @@ package io.innospots.libra.base.configuration;
 
 import io.innospots.libra.base.filter.CustomerCorsFilter;
 import io.innospots.libra.base.filter.RedirectFilter;
+import jakarta.servlet.Filter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +29,6 @@ import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.servlet.Filter;
 
 /**
  * @author Smars

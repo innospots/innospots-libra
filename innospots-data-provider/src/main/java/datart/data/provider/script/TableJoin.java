@@ -21,8 +21,8 @@ package datart.data.provider.script;
 import lombok.Data;
 import org.apache.calcite.sql.JoinType;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 @Data

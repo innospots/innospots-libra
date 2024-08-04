@@ -26,7 +26,7 @@ import io.innospots.base.entity.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * avatar_resource
@@ -54,7 +54,7 @@ public class AvatarResourceEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ImageType imageType;
 
-    @Column(columnDefinition = "mediumtext")
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String imageBase64;
 
     @Column

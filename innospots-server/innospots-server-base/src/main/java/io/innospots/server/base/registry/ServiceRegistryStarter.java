@@ -19,7 +19,6 @@
 package io.innospots.server.base.registry;
 
 import io.innospots.base.utils.BeanContextAwareUtils;
-import io.innospots.base.utils.ServiceRoleHolder;
 import io.innospots.base.watcher.WatcherSupervisor;
 import io.innospots.server.base.configuration.BaseServerConfiguration;
 import io.innospots.server.base.configuration.InnospotsServerProperties;
@@ -27,12 +26,8 @@ import io.innospots.server.base.registry.enums.ServiceRole;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.Order;
-import org.springframework.core.env.Environment;
-import org.springframework.util.Assert;
 
-import javax.annotation.PreDestroy;
 
 /**
  * @author Raydian

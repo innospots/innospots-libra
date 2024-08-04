@@ -7,7 +7,7 @@ import io.innospots.base.enums.DataStatus;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * @author Smars
@@ -28,6 +28,7 @@ public class BaseAppEntity extends PBaseEntity {
     @Column(length = 256)
     protected String description;
 
+//    @Column(columnDefinition = "varchar(32)")
     @Column(length = 32)
     @Enumerated(value = EnumType.STRING)
     protected DataStatus status;

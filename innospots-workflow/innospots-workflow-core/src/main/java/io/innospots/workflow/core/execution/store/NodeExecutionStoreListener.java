@@ -23,9 +23,9 @@ import io.innospots.workflow.core.execution.enums.RecordMode;
 import io.innospots.workflow.core.execution.listener.INodeExecutionListener;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.operator.INodeExecutionOperator;
+import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.annotation.PreDestroy;
 import java.time.LocalDateTime;
 
 /**

@@ -19,13 +19,12 @@
 package io.innospots.libra.base.filter;
 
 import io.innospots.base.constant.PathConstant;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
-import org.apache.http.HttpHeaders;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
+import org.apache.hc.core5.http.HttpHeaders;
 
 /**
  * @author Smars

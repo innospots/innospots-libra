@@ -24,6 +24,8 @@ import io.innospots.base.exception.ScriptException;
 import io.innospots.base.i18n.LocaleMessageUtils;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.response.ResponseCode;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,8 +41,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -59,7 +59,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleException(Exception e, HttpServletRequest request, HttpServletResponse response) {
         logger.error("exception: {}, msg: {}", e.getClass(), e.getMessage());
         String resp;
-        if(response.getContentType().contains(ContentType.EVENT_STREAM.getValue())){
+        if(response.getContentType()!=null && response.getContentType().contains(ContentType.EVENT_STREAM.getValue())){
             resp = "id:\n";
             resp += "event:error-event\n";
             resp += "data:";

@@ -26,7 +26,7 @@ import io.innospots.libra.kernel.module.page.enums.WidgetType;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import static io.innospots.libra.kernel.module.page.entity.WidgetEntity.TABLE_NAME;
 

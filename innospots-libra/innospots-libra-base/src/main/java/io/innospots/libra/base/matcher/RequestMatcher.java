@@ -18,7 +18,8 @@
 
 package io.innospots.libra.base.matcher;
 
-import javax.servlet.http.HttpServletRequest;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * @author Smars

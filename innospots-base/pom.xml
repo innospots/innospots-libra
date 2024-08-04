@@ -58,13 +58,27 @@
         </dependency>
 
         <dependency>
-            <groupId>javax.validation</groupId>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+<!--            <version>3.1.0</version>-->
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/jakarta.annotation/jakarta.annotation-api -->
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+<!--            <version>3.0.0</version>-->
+        </dependency>
+        <!--
+        <dependency>
+            <groupId>jakarta.validation</groupId>
             <artifactId>validation-api</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.annotation</groupId>
             <artifactId>javax.annotation-api</artifactId>
         </dependency>
+        -->
 
         <!--
         <dependency>
@@ -79,9 +93,17 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+<!--            <version>5.3.1</version>-->
+        </dependency>
+
+        <!--
+        <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
         </dependency>
+        -->
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -146,7 +168,7 @@
 
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
             <scope>provided</scope>
         </dependency>
 

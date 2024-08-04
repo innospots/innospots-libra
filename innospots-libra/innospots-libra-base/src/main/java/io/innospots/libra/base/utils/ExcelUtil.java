@@ -20,7 +20,6 @@ package io.innospots.libra.base.utils;
 
 import io.innospots.base.exception.ResourceException;
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -212,7 +211,8 @@ public class ExcelUtil {
                             value = nf.format(cell.getNumericCellValue());
                             //value = cell.getNumericCellValue()+"";
                         } else {
-                            value = sdf.format(HSSFDateUtil.getJavaDate(cell.getNumericCellValue()));
+                            value = cell.getDateCellValue();
+//                            value = sdf.format(HSSFDateUtil.getJavaDate(cell.getNumericCellValue()));
                         }
                         break;
                     case BOOLEAN:
@@ -279,7 +279,7 @@ public class ExcelUtil {
                             value = nf.format(cell.getNumericCellValue());
                             //value = cell.getNumericCellValue()+"";
                         } else {
-                            value = sdf.format(HSSFDateUtil.getJavaDate(cell.getNumericCellValue()));
+                            value = cell.getDateCellValue();
                         }
                         break;
                     case BOOLEAN:

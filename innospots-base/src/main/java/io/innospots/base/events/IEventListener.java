@@ -18,9 +18,9 @@
 
 package io.innospots.base.events;
 
-import cn.hutool.core.util.TypeUtil;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 

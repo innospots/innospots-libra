@@ -27,7 +27,7 @@ import io.innospots.libra.kernel.module.notification.model.NotificationChannel;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import static io.innospots.libra.kernel.module.notification.entity.NotificationChannelEntity.TABLE_NAME;
 
@@ -62,7 +62,7 @@ public class NotificationChannelEntity extends PBaseEntity {
     @Enumerated(value = EnumType.STRING)
     private NotificationChannel.ChannelType channelType;
 
-    @Column
+    @Column(length = 16)
     private String registryId;
 
     @Column

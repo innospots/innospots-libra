@@ -30,7 +30,7 @@
     <artifactId>innospots-script-graaljs</artifactId>
 
     <properties>
-        <graalvm.version>21.3.0</graalvm.version>
+        <graalvm.version>23.0.5</graalvm.version>
     </properties>
 
     <dependencies>

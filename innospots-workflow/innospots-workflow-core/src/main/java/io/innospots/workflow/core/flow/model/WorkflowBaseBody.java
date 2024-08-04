@@ -27,7 +27,7 @@ import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.*;
 
 import static org.slf4j.LoggerFactory.getLogger;

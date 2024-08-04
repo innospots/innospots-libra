@@ -29,7 +29,7 @@ import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.http.HttpClientBuilder;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.protocol.HttpContext;
+import org.apache.hc.core5.http.protocol.HttpContext;
 
 import java.util.Map;
 

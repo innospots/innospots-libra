@@ -23,7 +23,7 @@ import io.innospots.base.i18n.LocaleMessageUtils;
 import io.innospots.libra.kernel.module.i18n.loader.LocaleContextLoader;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Locale;
 
 /**

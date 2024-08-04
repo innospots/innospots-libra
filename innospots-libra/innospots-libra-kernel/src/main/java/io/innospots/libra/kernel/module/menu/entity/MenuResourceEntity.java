@@ -29,7 +29,7 @@ import io.innospots.libra.base.menu.ResourceItem;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import static io.innospots.libra.kernel.module.menu.entity.MenuResourceEntity.TABLE_NAME;
 
@@ -108,7 +108,7 @@ public class MenuResourceEntity extends PBaseEntity {
     @Column
     private Boolean status;
 
-    @Column(columnDefinition = "text")
+    @Column(columnDefinition = "TEXT")
     private String i18nNames;
 
     @Override

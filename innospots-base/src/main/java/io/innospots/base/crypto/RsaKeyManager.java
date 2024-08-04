@@ -18,8 +18,8 @@
 
 package io.innospots.base.crypto;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.hc.client5.http.utils.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

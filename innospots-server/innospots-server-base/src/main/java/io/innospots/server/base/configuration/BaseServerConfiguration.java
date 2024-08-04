@@ -44,7 +44,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 
-import javax.annotation.PostConstruct;
 import java.io.File;
 
 
@@ -110,10 +109,10 @@ public class BaseServerConfiguration {
         return EventBusCenter.getInstance();
     }
 
-    @Bean
-    public SpringUtil springUtil(){
-        return new SpringUtil();
-    }
+//    @Bean
+//    public SpringUtil springUtil(){
+//        return new SpringUtil();
+//    }
 
     @Bean
     public BeanContextAware applicationContextUtils(SpringUtil springUtil) {

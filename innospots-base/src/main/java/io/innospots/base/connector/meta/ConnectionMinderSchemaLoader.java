@@ -21,12 +21,13 @@ package io.innospots.base.connector.meta;
 import io.innospots.base.enums.ConnectType;
 import io.innospots.base.exception.LoadConfigurationException;
 import io.innospots.base.json.JSONUtils;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
-import javax.annotation.PostConstruct;
+
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;

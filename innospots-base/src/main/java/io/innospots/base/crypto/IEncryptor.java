@@ -19,7 +19,8 @@
 package io.innospots.base.crypto;
 
 
-import org.apache.commons.codec.binary.Base64;
+
+import cn.hutool.core.codec.Base64;
 
 import javax.crypto.*;
 import java.security.InvalidKeyException;
@@ -39,11 +40,11 @@ public interface IEncryptor {
     byte[] decode(byte[] value);
 
     default String decode(String value) {
-        return new String(decode(Base64.decodeBase64(value)));
+        return new String(decode(Base64.decode(value)));
     }
 
     default String encode(String value) {
-        return Base64.encodeBase64URLSafeString((encode(value.getBytes())));
+        return Base64.encodeUrlSafe((encode(value.getBytes())));
     }
 
     static byte[] encrypt(byte[] input, SecretKey secretKey, String transformation) throws NoSuchPaddingException, NoSuchAlgorithmException, BadPaddingException, IllegalBlockSizeException, InvalidKeyException {

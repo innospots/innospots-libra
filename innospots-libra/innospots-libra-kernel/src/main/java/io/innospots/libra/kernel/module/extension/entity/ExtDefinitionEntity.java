@@ -28,7 +28,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.DigestUtils;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
 import static io.innospots.libra.kernel.module.extension.entity.ExtDefinitionEntity.TABLE_NAME;

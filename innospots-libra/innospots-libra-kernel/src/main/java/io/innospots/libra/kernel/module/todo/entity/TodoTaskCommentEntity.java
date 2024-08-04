@@ -22,10 +22,11 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.innospots.base.entity.BaseEntity;
+import io.innospots.base.entity.PBaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import static io.innospots.libra.kernel.module.todo.entity.TodoTaskCommentEntity.TABLE_NAME;
 
@@ -39,7 +40,7 @@ import static io.innospots.libra.kernel.module.todo.entity.TodoTaskCommentEntity
 @Entity
 @Table(name = TABLE_NAME)
 @TableName(TABLE_NAME)
-public class TodoTaskCommentEntity extends BaseEntity {
+public class TodoTaskCommentEntity extends PBaseEntity {
 
     public static final String TABLE_NAME = "sys_todo_task_comment";
 
