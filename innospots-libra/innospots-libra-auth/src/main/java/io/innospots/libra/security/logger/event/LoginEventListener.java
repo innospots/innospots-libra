@@ -60,6 +60,8 @@ public class LoginEventListener implements IEventListener<LoginEvent> {
         LoginLogEntity loginLog = new LoginLogEntity();
         loginLog.setLoginTime(LocalDateTime.now());
         loginLog.setUserName(loginEvent.getUserName());
+        loginLog.setCreatedTime(LocalDateTime.now());
+        loginLog.setUpdatedTime(LocalDateTime.now());
         AuthUser user = authUserOperator.getByUserName(loginEvent.getUserName());
         if (user != null) {
             Integer userId = user.getUserId();
