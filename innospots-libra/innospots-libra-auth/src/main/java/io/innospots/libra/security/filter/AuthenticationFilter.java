@@ -83,7 +83,7 @@ public class AuthenticationFilter implements Filter {
     private boolean authToken(ServletRequest servletRequest) throws AuthenticationException {
         JwtToken jwtToken = jwtAuthManager.validToken((HttpServletRequest) servletRequest);
         servletRequest.setAttribute("token", jwtToken);
-        CCH.register(jwtToken.getOrgId(), null, jwtToken.getUserName(), jwtToken.getUserId());
+        CCH.register(jwtToken.getOrgId(), jwtToken.getProjectId(), jwtToken.getUserName(), jwtToken.getUserId());
         SecurityContextHolder.setContext(jwtToken);
         return authWebToken(jwtToken);
     }

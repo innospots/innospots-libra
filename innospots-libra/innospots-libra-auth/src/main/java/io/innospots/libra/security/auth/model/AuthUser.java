@@ -49,6 +49,8 @@ public class AuthUser {
 
     private Integer lastOrgId;
 
+    private Integer lastProjectId;
+
     private DataStatus status;
 
 }

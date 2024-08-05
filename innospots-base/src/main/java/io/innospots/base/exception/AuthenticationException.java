@@ -27,6 +27,7 @@ import io.innospots.base.model.response.ResponseCode;
  */
 public class AuthenticationException extends BaseException {
 
+    private String requestUri;
 
     private AuthenticationException(Class<?> invokeClass, ResponseCode responseCode, Throwable cause, Object... params) {
         super(invokeClass, responseCode, cause, params);
@@ -72,4 +73,11 @@ public class AuthenticationException extends BaseException {
         return new AuthenticationException(invokeClass, ResponseCode.PERMISSION_DENIED, params);
     }
 
+    public String getRequestUri() {
+        return requestUri;
+    }
+
+    public void setRequestUri(String requestUri) {
+        this.requestUri = requestUri;
+    }
 }

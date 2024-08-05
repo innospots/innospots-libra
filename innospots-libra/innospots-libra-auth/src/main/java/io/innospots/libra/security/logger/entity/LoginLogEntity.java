@@ -83,6 +83,9 @@ public class LoginLogEntity extends BaseEntity {
     private String status;
 
     public void fill(TerminalInfo terminalInfo) {
+        if(terminalInfo==null){
+            return;
+        }
         this.ip = terminalInfo.getIp();
         this.province = terminalInfo.getProvince();
         this.city = terminalInfo.getCity();

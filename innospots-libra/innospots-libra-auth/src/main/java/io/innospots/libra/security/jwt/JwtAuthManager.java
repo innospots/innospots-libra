@@ -18,6 +18,8 @@
 
 package io.innospots.libra.security.jwt;
 
+import cn.hutool.core.util.HexUtil;
+import cn.hutool.core.util.RandomUtil;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
@@ -51,6 +53,7 @@ public class JwtAuthManager {
 
 
     static final String CLAIM_KEY_TENANT_ID = "tenant_id";
+    static final String CLAIM_KEY_PROJECT_ID = "project_id";
     static final String CLAIM_KEY_USER_ID = "user_id";
 
     public static final String AUDIENCE_WEB = "WEB";
@@ -160,6 +163,7 @@ public class JwtAuthManager {
         Map<String, Object> claims = new HashMap<>(3);
         claims.put(CLAIM_KEY_USER_ID, authUser.getUserId());
         claims.put(CLAIM_KEY_TENANT_ID, authUser.getLastOrgId());
+        claims.put(CLAIM_KEY_PROJECT_ID,authUser.getLastProjectId());
 
         JwtToken jwtToken = buildJwtToken(authUser.getUserName(),ts,claims);
 
@@ -191,14 +195,16 @@ public class JwtAuthManager {
             }
 
             // create JWT Claims
-            JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
+            JWTClaimsSet.Builder claimsSetBuilder = new JWTClaimsSet.Builder()
                     .subject(userName)
                     .issuer(authProperties.getTokenIssuer())
+                    .issueTime(createdDate)
                     .audience(AUDIENCE_WEB)
-                    .jwtID(RandomStringUtils.randomAlphanumeric(9))
-                    .expirationTime(expirationDate) // expire time
-                    .build();
-            claimsSet.getClaims().putAll(claims);
+                    .jwtID(HexUtil.encodeHexStr(RandomUtil.randomString(16)))
+                    .expirationTime(expirationDate);
+
+            claims.forEach(claimsSetBuilder::claim);
+            JWTClaimsSet claimsSet = claimsSetBuilder.build();
 
             // create singer
             JWSSigner signer = new MACSigner(authProperties.getTokenSigningKey());

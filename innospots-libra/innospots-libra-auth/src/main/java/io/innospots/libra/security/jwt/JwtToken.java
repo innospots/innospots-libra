@@ -25,9 +25,7 @@ import lombok.Setter;
 
 import java.text.ParseException;
 
-
-import static io.innospots.libra.security.jwt.JwtAuthManager.CLAIM_KEY_TENANT_ID;
-import static io.innospots.libra.security.jwt.JwtAuthManager.CLAIM_KEY_USER_ID;
+import static io.innospots.libra.security.jwt.JwtAuthManager.*;
 
 /**
  * @author Smars
@@ -67,9 +65,11 @@ public class JwtToken extends AuthToken {
         this.setTimestamp(signedJWT.getJWTClaimsSet().getIssueTime().getTime());
         this.setUserName(signedJWT.getJWTClaimsSet().getSubject());
         Object uid = signedJWT.getJWTClaimsSet().getClaim(CLAIM_KEY_USER_ID);
-        this.setUserId(uid instanceof Integer? (Integer) uid :0);
+        this.setUserId(uid instanceof Number? ((Number) uid).intValue() :0);
         Object orgId = signedJWT.getJWTClaimsSet().getClaim(CLAIM_KEY_TENANT_ID);
-        this.setOrgId(orgId instanceof Integer ? (Integer) orgId :0);
+        this.setOrgId(orgId instanceof Number ? ((Number) orgId).intValue() :null);
+        Object projectId = signedJWT.getJWTClaimsSet().getClaim(CLAIM_KEY_PROJECT_ID);
+        this.setProjectId(projectId instanceof Number ? ((Number) projectId).intValue() :null);
         this.setAudience(String.join(",", signedJWT.getJWTClaimsSet().getAudience()));
     }
 
