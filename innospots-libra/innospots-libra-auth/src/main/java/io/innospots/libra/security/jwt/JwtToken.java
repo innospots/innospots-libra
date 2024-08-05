@@ -18,10 +18,13 @@
 
 package io.innospots.libra.security.jwt;
 
+import com.nimbusds.jwt.SignedJWT;
 import io.innospots.libra.security.auth.AuthToken;
-import io.jsonwebtoken.Claims;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.text.ParseException;
+
 
 import static io.innospots.libra.security.jwt.JwtAuthManager.CLAIM_KEY_TENANT_ID;
 import static io.innospots.libra.security.jwt.JwtAuthManager.CLAIM_KEY_USER_ID;
@@ -44,12 +47,30 @@ public class JwtToken extends AuthToken {
         this.expire = expire;
     }
 
+    public static JwtToken build(SignedJWT signedJWT,String token) throws ParseException {
+        JwtToken jwtToken = new JwtToken(token,signedJWT.getJWTClaimsSet().getExpirationTime().getTime());
+        jwtToken.fillClaims(signedJWT);
+        return jwtToken;
+    }
+
+    /*
     public void fillClaims(Claims claims) {
         this.setTimestamp(claims.getIssuedAt().getTime());
         this.setUserName(claims.getSubject());
         this.setUserId(claims.get(CLAIM_KEY_USER_ID, Integer.class));
         this.setOrgId(claims.get(CLAIM_KEY_TENANT_ID, Integer.class));
         this.setAudience(claims.getAudience());
+    }
+     */
+
+    private void fillClaims(SignedJWT signedJWT) throws ParseException {
+        this.setTimestamp(signedJWT.getJWTClaimsSet().getIssueTime().getTime());
+        this.setUserName(signedJWT.getJWTClaimsSet().getSubject());
+        Object uid = signedJWT.getJWTClaimsSet().getClaim(CLAIM_KEY_USER_ID);
+        this.setUserId(uid instanceof Integer? (Integer) uid :0);
+        Object orgId = signedJWT.getJWTClaimsSet().getClaim(CLAIM_KEY_TENANT_ID);
+        this.setOrgId(orgId instanceof Integer ? (Integer) orgId :0);
+        this.setAudience(String.join(",", signedJWT.getJWTClaimsSet().getAudience()));
     }
 
     public boolean isTokenNotExpired() {

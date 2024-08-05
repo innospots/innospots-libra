@@ -13,6 +13,7 @@
 
     <properties>
         <jjwt.version>0.9.1</jjwt.version>
+        <nimbus-jose-jwt.version>9.40</nimbus-jose-jwt.version>
     </properties>
 
 
@@ -29,10 +30,18 @@
         </dependency>
 
         <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+            <version>${nimbus-jose-jwt.version}</version>
+        </dependency>
+
+        <!--
+        <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>${jjwt.version}</version>
         </dependency>
+        -->
     </dependencies>
 
 </project>

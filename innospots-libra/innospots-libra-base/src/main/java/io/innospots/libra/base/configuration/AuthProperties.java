@@ -62,7 +62,7 @@ public class AuthProperties {
     /**
      * token sign key
      */
-    private String tokenSigningKey = "innospots-sign-key";
+    private String tokenSigningKey = "696e6e6f73706f74732d323032342d39";
     /**
      * token issuer
      */

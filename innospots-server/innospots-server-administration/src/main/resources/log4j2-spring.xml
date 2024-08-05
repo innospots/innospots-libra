@@ -80,25 +80,26 @@
         <Logger name="io.innospots.libra.kernel.module.i18n.service.I18nTransMessageService" level="debug"/>
         <Logger name="io.innospots.base.data" level="info"/>
         <!-- scan schedule execution -->
-        <Logger name="io.innospots.base.data.operator.jdbc" level="info"/>
-        <Logger name="io.innospots.base.registry" level="info"/>
-        <Logger name="io.innospots.base.data.operator" level="info"/>
-        <Logger name="io.innospots.connector.schema.dao" level="info"/>
-        <Logger name="io.innospots.server.base.registry" level="info"/>
-        <Logger name="io.innospots.workflow.core.execution.dao" level="info"/>
-        <Logger name="io.innospots.workflow.core.instance.dao" level="info"/>
-        <Logger name="io.innospots.workflow.runtime.container" level="info"/>
-        <Logger name="io.innospots.workflow.runtime" level="debug"/>
-        <Logger name="io.innospots.workflow.runtime.execution.ExecutionCarrier" level="debug"/>
-        <Logger name="io.innospots.workflow.runtime.flow.node" level="debug"/>
-        <Logger name="io.innospots.workflow.runtime.scheduled" level="debug"/>
-        <Logger name="io.innospots.workflow.runtime.watcher" level="info"/>
-        <Logger name="io.innospots.workflow.server.watcher" level="info"/>
-        <Logger name="io.innospots.workflow.core.watcher" level="info"/>
-        <Logger name="io.innospots.workflow.console.dao" level="info"/>
-        <Logger name="io.innospots.workflow.console.operator" level="debug"/>
-        <Logger name="io.innospots.workflow.core.execution.store.NodeExecutionStoreListener" level="info"/>
-        <Logger name="io.innospots.workflow.core.execution.operator.jdbc" level="info"/>
+        <AsyncLogger name="io.innospots.base.data.operator.jdbc" level="info"/>
+        <AsyncLogger name="io.innospots.base.registry" level="info"/>
+        <AsyncLogger name="io.innospots.base.data.operator" level="info"/>
+        <AsyncLogger name="io.innospots.connector.schema.dao" level="info"/>
+        <AsyncLogger name="io.innospots.server.base.registry" level="info"/>
+        <AsyncLogger name="io.innospots.workflow.core.execution.dao" level="info"/>
+        <AsyncLogger name="io.innospots.workflow.core.instance.dao" level="info"/>
+        <AsyncLogger name="io.innospots.workflow.runtime.container" level="info"/>
+        <AsyncLogger name="io.innospots.workflow.runtime" level="debug"/>
+        <AsyncLogger name="io.innospots.workflow.runtime.execution.ExecutionCarrier" level="debug"/>
+        <AsyncLogger name="io.innospots.workflow.runtime.flow.node" level="debug"/>
+        <AsyncLogger name="io.innospots.workflow.runtime.scheduled" level="debug"/>
+        <AsyncLogger name="io.innospots.workflow.runtime.watcher" level="info"/>
+        <AsyncLogger name="io.innospots.workflow.server.watcher" level="info"/>
+        <AsyncLogger name="io.innospots.workflow.core.watcher" level="info"/>
+        <AsyncLogger name="io.innospots.workflow.console.dao" level="info"/>
+        <AsyncLogger name="io.innospots.workflow.console.operator" level="debug"/>
+        <AsyncLogger name="io.innospots.workflow.core.execution.store.NodeExecutionStoreListener" level="info"/>
+        <AsyncLogger name="io.innospots.workflow.core.execution.operator.jdbc" level="info"/>
+        <AsyncLogger name="io.innospots.workflow.core.node.definition" level="info"/>
     </Loggers>
 
 </Configuration>

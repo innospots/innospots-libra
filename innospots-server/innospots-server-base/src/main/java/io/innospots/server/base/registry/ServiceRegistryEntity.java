@@ -40,7 +40,8 @@ import java.time.LocalDateTime;
  * @date 2020/11/30
  */
 @Entity
-@Table(name = ServiceRegistryEntity.TABLE_NAME)
+@Table(name = ServiceRegistryEntity.TABLE_NAME,
+        indexes = {@Index(name = "idx_ip_port",columnList = "domainIp,port",unique = true)})
 @TableName(value = ServiceRegistryEntity.TABLE_NAME)
 @Setter
 @Getter

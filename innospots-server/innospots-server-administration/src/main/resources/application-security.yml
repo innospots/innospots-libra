@@ -2,7 +2,7 @@ innospots:
   security:
     enabled: true
     mode: EXHIBITION
-    tokenSigningKey: innospots-sign-key
+    tokenSigningKey: 696e6e6f73706f74732d323032342d39
     tokenIssuer: innospots
     tokenExpTimeMinute: 180
     open-super-admin-permission: true
