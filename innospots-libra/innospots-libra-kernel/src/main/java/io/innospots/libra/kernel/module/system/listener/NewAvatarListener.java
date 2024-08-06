@@ -36,7 +36,7 @@ public class NewAvatarListener implements IEventListener<NewAvatarEvent> {
 
     @Override
     public Object listen(NewAvatarEvent newAvatarEvent) {
-        avatarResourceOperator.updateAvatar((String) newAvatarEvent.getBody(),
+        avatarResourceOperator.updateAvatar(String.valueOf(newAvatarEvent.getBody()),
                 newAvatarEvent.getImageType(), newAvatarEvent.getBase64(), newAvatarEvent.getImageSort());
         return null;
     }
