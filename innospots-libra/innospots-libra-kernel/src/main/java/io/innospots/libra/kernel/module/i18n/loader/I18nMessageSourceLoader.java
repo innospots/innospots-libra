@@ -56,12 +56,14 @@ public class I18nMessageSourceLoader extends StaticMessageSource {
                 localeMessage = i18nMessageOperator.getLocaleMessage(code, locale);
                 log.debug("i18n, code:{}, locale:{}, args:{}", code, locale, Arrays.toString(args));
                 // cache locale message
-                if (localeMessage != null) {
-                    this.addMessage(localeMessage.getCode(), localeMessage.locale(), localeMessage.getMessage());
-                } else {
-                    localeMessage = new LocaleMessage();
+                synchronized (this){
+                    if (localeMessage != null) {
+                        this.addMessage(localeMessage.getCode(), localeMessage.locale(), localeMessage.getMessage());
+                    } else {
+                        localeMessage = new LocaleMessage();
+                    }
+                    localCache.put(code + "_" + locale, localeMessage);
                 }
-                localCache.put(code + "_" + locale, localeMessage);
             }
 
         }

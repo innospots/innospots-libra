@@ -38,7 +38,7 @@ public class RedirectFilter implements Filter {
                          ServletResponse servletResponse,
                          FilterChain filterChain) throws IOException, ServletException {
         InnospotsHttpServletRequestWrapper httpServletRequest = (InnospotsHttpServletRequestWrapper) servletRequest;
-        log.debug("uri: {}",httpServletRequest.getServletPath());
+        //log.debug("uri: {}",httpServletRequest.getServletPath());
         if (httpServletRequest.isStaticResource()) {
             filterChain.doFilter(servletRequest, servletResponse);
         } else if (httpServletRequest.isAppPath()) {

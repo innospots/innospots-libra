@@ -8,7 +8,7 @@
   "icon": "combine",
   "nodeType": "io.innospots.workflow.node.app.logic.CombineNode",
   "outPorts": "1",
-  "inPorts": "1",
+  "inPorts": "4",
   "components": [
     {
       "name": "displayName",
@@ -32,6 +32,7 @@
         "label": "输出设置",
 		"viewType": "picker",
         "optionsType": "customOptions",
+        "dataSource": "static",
         "options": [
           {
             "value": "NONE",
