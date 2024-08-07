@@ -80,6 +80,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ErrorResponse handleAuthenticationException(AuthenticationException e) {
+
         logger.error("authenticationException: {}", e.getMessage());
         return ErrorResponse.build(e);
     }
@@ -101,7 +102,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleException(RuntimeException e, HttpServletRequest request, HttpServletResponse response) {
         logger.error("runtime exception: ", e);
         String resp;
-        if(response.getContentType().contains(ContentType.EVENT_STREAM.getValue())){
+        if(response.getContentType()!=null && response.getContentType().contains(ContentType.EVENT_STREAM.getValue())){
             resp = "id:\n";
             resp += "event:error-event\n";
             resp += "data:";

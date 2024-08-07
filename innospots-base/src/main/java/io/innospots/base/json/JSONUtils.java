@@ -19,6 +19,7 @@
 package io.innospots.base.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.StreamReadFeature;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -91,6 +92,7 @@ public class JSONUtils {
         objectMapper.configure(ALLOW_SINGLE_QUOTES,true);
         objectMapper.configure(READ_UNKNOWN_ENUM_VALUES_AS_NULL,true);
         objectMapper.configure(FAIL_ON_UNKNOWN_PROPERTIES,false);
+        objectMapper.configure(StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION.mappedFeature(),true);
 
         return objectMapper;
     }

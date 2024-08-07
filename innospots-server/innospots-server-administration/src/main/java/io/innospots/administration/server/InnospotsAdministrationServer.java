@@ -18,7 +18,6 @@
 
 package io.innospots.administration.server;
 
-
 import io.innospots.administration.schedule.LoggerClearScheduler;
 import io.innospots.app.console.ApplicationConsoleImporter;
 import io.innospots.libra.kernel.LibraKernelImporter;

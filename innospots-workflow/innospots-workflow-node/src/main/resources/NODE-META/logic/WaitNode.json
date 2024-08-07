@@ -33,6 +33,8 @@
 		"viewType": "radio",
         "default": "PERIOD",
         "optionType": "default",
+        "dataSource": "static",
+        "initialValue": "PERIOD",
         "options": [
           {"value": "PERIOD", "label": "时间间隔"},
           {"value": "FIXED", "label": "指定时间"}
@@ -41,12 +43,13 @@
     },
     {
       "name": "interval_time",
-      "type": "Input",
+      "type": "NumberInput",
       "valueType": "number",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "延迟时长",
+        "width": 100,
         "props": {
           "step": 1,
           "min": 1
@@ -75,6 +78,8 @@
         "default": "MINUTE",
 		"viewType": "picker",
         "optionsType": "customOptions",
+        "dataSource": "static",
+        "initialValue": "MINUTE",
         "options": [
           {"value": "MINUTE", "label": "分"},
           {"value": "HOUR", "label": "时"},

@@ -21,11 +21,7 @@ spring:
     include:
       - security
     active: dev
-  boot:
-    admin:
-      context-path: /monitor
-      ui:
-        title: innospots-server-monitor
+
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher

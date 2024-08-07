@@ -31,9 +31,10 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "viewType": "switch",
         "label": "是否输入字段",
         "placeholder": "请输入节点名称",
-        "initialValue": "false"
+        "initialValue": false
       }
     },{
       "name": "input_fields",
@@ -75,7 +76,7 @@
             {
               "name": "has_input_field",
               "opt": "EQUAL",
-              "value": "true"
+              "value": true
             }
           ]
         }

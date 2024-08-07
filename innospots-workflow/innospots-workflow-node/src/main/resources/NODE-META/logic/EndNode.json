@@ -31,7 +31,8 @@
         "label": "返回数据",
 		"viewType": "picker",
         "optionsType": "customOptions",
-        "initialValue": "false",
+        "dataSource": "static",
+        "initialValue": "INPUT",
         "options": [
           {
             "value": "INPUT",
@@ -49,14 +50,7 @@
             "value": "EMPTY",
             "label": "空"
           }
-        ],
-        "dynamicOptions": {
-          "method": "GET",
-          "fieldNames": {
-            "value": "value",
-            "label": "label"
-          }
-        }
+        ]
       }
     },
     {

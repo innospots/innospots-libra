@@ -48,6 +48,8 @@ innospots:
       - /apps/**
       - /js/**
       - /dashboard/image/**
+      - /monitor/**
+      - /monitor
     ignore-permission-paths:
       - /innospots/api/auth-token/**
       - /innospots/api/access/**

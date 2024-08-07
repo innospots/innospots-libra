@@ -20,22 +20,19 @@ package io.innospots.server.base.configuration;
 
 import cn.hutool.extra.spring.SpringUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.mweirauch.micrometer.jvm.extras.ProcessMemoryMetrics;
-import io.github.mweirauch.micrometer.jvm.extras.ProcessThreadMetrics;
 import io.innospots.base.events.EventBusCenter;
-import io.innospots.base.script.ScriptExecutorManager;
-import io.innospots.base.watcher.WatcherStarter;
-import io.innospots.server.base.exception.GlobalExceptionHandler;
 import io.innospots.base.json.JSONUtils;
+import io.innospots.base.script.ScriptExecutorManager;
 import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.CCH;
 import io.innospots.base.utils.InnospotsIdGenerator;
+import io.innospots.base.watcher.WatcherStarter;
 import io.innospots.base.watcher.WatcherSupervisor;
+import io.innospots.server.base.exception.GlobalExceptionHandler;
 import io.innospots.server.base.registry.ContextClosedEventListener;
 import io.innospots.server.base.registry.ServiceRegistryDao;
 import io.innospots.server.base.registry.ServiceRegistryManager;
 import io.innospots.server.base.registry.ServiceRegistryStarter;
-import io.micrometer.core.instrument.binder.MeterBinder;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -127,7 +124,12 @@ public class BaseServerConfiguration {
     @Bean
     @Primary
     public ObjectMapper jackson2ObjectMapper() {
-        return JSONUtils.customMapper();
+        ObjectMapper objectMapper = JSONUtils.customMapper();
+//        SimpleModule simpleModule = new SimpleModule();
+//        simpleModule.addDeserializer(Registration.class,new RegistrationDeserializer());
+//        objectMapper.registerModule(simpleModule);
+//        objectMapper.registerModule(new JavaTimeModule());
+        return objectMapper;
     }
 
     @Bean
