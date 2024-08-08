@@ -1,9 +1,9 @@
 From innospots-base:latest
 
-ENV APPLICATION_NAME innospots-isp-server
+ENV APPLICATION_NAME innospots-server-administration
 
-ENV SERVER_MAIN_CLASS io.innospots.workflow.runtime.server.InnospotsWorkflowServer
+ENV SERVER_MAIN_CLASS io.innospots.administration.server.InnospotsAdministrationServer
 
-ADD target/$APPLICATION_NAME.tar.gz /innospot/
+ADD target/$APPLICATION_NAME.tar.gz /innospots/
 
-ENTRYPOINT ["sh","/innospot/bin/app_entrypoint.sh"]
+ENTRYPOINT ["sh","/innospots/bin/app_entrypoint.sh"]

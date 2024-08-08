@@ -42,8 +42,7 @@
         <commons-io.version>2.16.1</commons-io.version>
         <datafaker.version>2.3.1</datafaker.version>
 <!--        <datafaker.version>1.9.0</datafaker.version>-->
-        <disruptor.version>4.0.0</disruptor.version>
-<!--        <disruptor.version>3.4.4</disruptor.version>-->
+        <disruptor.version>3.4.4</disruptor.version>
         <fabric8.maven.plugin.version>0.45.0</fabric8.maven.plugin.version>
         <guava.version>33.2.1-jre</guava.version>
         <easyexcel.version>4.0.1</easyexcel.version>
@@ -783,18 +782,21 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>io.fabric8</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>${fabric8.maven.plugin.version}</version>
+                <groupId>org.eclipse.jkube</groupId>
+                <artifactId>kubernetes-maven-plugin</artifactId>
+                <version>1.16.2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
-                    <!--                    <authConfig>-->
-                    <!--                        <username>${harbor.auth.user}</username>-->
-                    <!--                        <password>${harbor.auth.passd}</password>-->
-                    <!--                    </authConfig>-->
+                    <sourceDirectory>${project.basedir}</sourceDirectory>
                     <images>
                         <image>
-                            <name>${project.artifactId}:${project.version}</name>
-                            <!--                            <registry>${harbor.registry}</registry>-->
+                            <name>innospots/${project.artifactId}:${project.version}</name>
                             <build>
                                 <dockerFile>${project.basedir}/Dockerfile</dockerFile>
                             </build>

@@ -43,7 +43,7 @@ export JAVA_HOME
 export JAVA="${JAVA_HOME}/bin/java"
 export CONFIG_DIR=${APP_DIR}/config
 export LOG_PATH="${APP_DIR}/logs"
-export LOG_FILE="${LOG_PATH}/innospot.log"
+export LOG_FILE="${LOG_PATH}/innospots.log"
 
 
 #LOG_FILE="/dev/null"
@@ -74,6 +74,12 @@ else
   JAVA_OPT="${JAVA_OPT} -Djava.ext.dirs=${JAVA_HOME}/jre/lib/ext:${JAVA_HOME}/lib/ext"
   JAVA_OPT="${JAVA_OPT} -Xloggc:${LOG_PATH}/gc.log -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=100M"
 fi
+
+
+JAVA_OPT="${JAVA_OPT} -XX:+ParallelRefProcEnabled"
+JAVA_OPT="${JAVA_OPT} -XX:+UseG1GC"
+JAVA_OPT="${JAVA_OPT} -XX:MaxGCPauseMillis=100"
+JAVA_OPT="${JAVA_OPT} -XX:+UseStringDeduplication"
 
 if [[ ${PROFILE} ]]; then
   JAVA_OPT="${JAVA_OPT} -Dspring.profiles.active=${PROFILE}"

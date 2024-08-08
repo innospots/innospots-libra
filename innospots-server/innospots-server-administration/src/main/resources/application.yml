@@ -59,7 +59,7 @@ management:
 
 logging:
   file:
-    path: ${innospots.server.log-root-path}/logs
+    path: ${innospots.server.log-root-path}
   config: classpath:log4j2-spring.xml
 
 
@@ -82,7 +82,7 @@ innospots:
   server:
     enable-registry: true
     # set system environment variable: logRootPath
-    log-root-path: ${LOG_PATH:innospots-server}
+    log-root-path: ${LOG_PATH:innospots-server/logs}
     script-build-path: .script_build_path
     watcher-size: 10
     # open debug mode

@@ -21,7 +21,7 @@ if [[ -z "$SERVER_MAIN_CLASS" ]]; then
 fi
 
 
-INNOSPOTS_HOME=/innospot/${APPLICATION_NAME}
+INNOSPOTS_HOME=/innospots/${APPLICATION_NAME}
 
 
 if [[ ! -d "${INNOSPOTS_HOME}" ]]; then
@@ -60,15 +60,18 @@ fi
 
 JAVA_MAJOR_VERSION=$($JAVA -version 2>&1 | sed -E -n 's/.* version "([0-9]*).*$/\1/p')
 if [[ "$JAVA_MAJOR_VERSION" -ge "9" ]]; then
-  JAVA_OPT="${JAVA_OPT} -Xlog:gc*:file=${LOG_DIR}/innospot_gc.log:time,tags:filecount=10,filesize=102400"
+  JAVA_OPT="${JAVA_OPT} -Xlog:gc*:file=${LOG_DIR}/innospots_gc.log:time,tags:filecount=10,filesize=102400"
 else
   JAVA_OPT="${JAVA_OPT} -Djava.ext.dirs=${JAVA_HOME}/jre/lib/ext:${JAVA_HOME}/lib/ext"
-  JAVA_OPT="${JAVA_OPT} -Xloggc:${LOG_DIR}/innospot_gc.log -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=100M"
+  JAVA_OPT="${JAVA_OPT} -Xloggc:${LOG_DIR}/innospots_gc.log -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=100M"
 fi
 
+JAVA_OPT="${JAVA_OPT} -XX:+UseG1GC"
 JAVA_OPT="${JAVA_OPT} -XX:-OmitStackTraceInFastThrow -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=${LOG_DIR}/java_heapdump.hprof"
 JAVA_OPT="${JAVA_OPT} -XX:-UseLargePages"
-
+JAVA_OPT="${JAVA_OPT} -XX:+ParallelRefProcEnabled"
+JAVA_OPT="${JAVA_OPT} -XX:MaxGCPauseMillis=100"
+JAVA_OPT="${JAVA_OPT} -XX:+UseStringDeduplication"
 
 
 if [[ -n "${PROFILE}" ]]; then
