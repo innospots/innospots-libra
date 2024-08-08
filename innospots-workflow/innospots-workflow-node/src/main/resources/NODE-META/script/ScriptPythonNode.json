@@ -44,6 +44,8 @@
       "settings": {
         "label": "输出方式",
 		"viewType": "picker",
+        "dataSource": "static",
+        "initialValue": "OVERWRITE",
         "options": [
           {
             "value": "FIELD",

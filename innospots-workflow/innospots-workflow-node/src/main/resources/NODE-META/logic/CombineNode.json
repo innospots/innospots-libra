@@ -33,6 +33,7 @@
 		"viewType": "picker",
         "optionsType": "customOptions",
         "dataSource": "static",
+        "initialValue": "NONE",
         "options": [
           {
             "value": "NONE",
@@ -46,8 +47,7 @@
             "value": "LAST",
             "label": "最后分支输出"
           }
-        ],
-        "default": "NONE"
+        ]
       }
     }
   ]

@@ -40,6 +40,8 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "dataSource": "static",
+        "initialValue": "COLUMN",
         "label": "函数类型",
 		"viewType": "picker",
         "options": [
@@ -55,8 +57,7 @@
             "value": "COLUMN",
             "label": "列计算"
           }
-        ],
-        "default": "COLUMN"
+        ]
       }
     },
     {

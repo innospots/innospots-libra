@@ -32,6 +32,8 @@
         "label": "字段处理方式",
 		"viewType": "picker",
         "optionsType": "customOptions",
+        "dataSource": "static",
+        "initialValue": "REPLACE",
         "options": [
           {
             "value": "REPLACE",

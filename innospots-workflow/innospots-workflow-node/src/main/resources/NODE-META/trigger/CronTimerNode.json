@@ -30,7 +30,8 @@
       "settings": {
         "label": "执行模式",
 		"viewType": "radio",
-        "default": "ONCE",
+        "dataSource": "static",
+        "initialValue": "ONCE",
         "options": [
           {
             "value": "ONCE",
@@ -80,7 +81,8 @@
       "settings": {
         "label": "时间单位",
 		"viewType": "radio",
-        "default": "DAY",
+        "dataSource": "static",
+        "initialValue": "DAY",
         "options": [
           {
             "value": "MINUTE",
@@ -288,6 +290,8 @@
       "settings": {
         "label": "时间周期",
 		"viewType": "picker",
+        "dataSource": "static",
+        "initialValue": "1",
         "options": [
           {
             "value": "1",

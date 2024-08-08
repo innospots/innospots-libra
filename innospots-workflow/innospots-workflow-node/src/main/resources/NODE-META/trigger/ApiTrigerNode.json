@@ -42,7 +42,8 @@
       "settings": {
         "label": "请求方式",
 		"viewType": "radio",
-        "default": "GET",
+        "dataSource": "static",
+        "initialValue": "GET",
         "options": [
           {"value": "GET", "label": "GET"},
           {"value": "POST", "label": "POST"}
@@ -61,7 +62,8 @@
       "settings": {
         "viewType": "picker",
         "label": "授权类型",
-        "default": "NONE",
+        "dataSource": "static",
+        "initialValue": "NONE",
         "options": [
           {"value": "NONE", "label": "No Auth"},
           {"value": "BASIC_AUTH", "label": "Basic Auth"},
@@ -156,7 +158,8 @@
       "settings": {
         "label": "响应方式",
 		"viewType": "radio",
-        "default": "RESULT",
+        "dataSource": "static",
+        "initialValue": "RESULT",
         "options": [
           {"value": "ACK", "label": "立即返回"},
           {"value": "RESULT", "label": "返回工作流结果"}
@@ -210,11 +213,12 @@
       "settings": {
         "viewType": "radio",
         "label": "响应数据",
+        "dataSource": "static",
+        "initialValue": "ALL",
         "options": [
           {"value": "ALL", "label": "所有数据", "description": "返回工作流执行结果所有数据"},
           {"value": "FIRST_ITEM", "label": "首个JSON对象", "description": "返回工作流执行结果第一个JSON对象。永远返回JSON对象"}
-        ],
-        "default": "ALL"
+        ]
       },
       "conditions": [
         {

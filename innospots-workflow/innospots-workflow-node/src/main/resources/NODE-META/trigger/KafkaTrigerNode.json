@@ -82,6 +82,8 @@
       "settings": {
         "label": "消费起始位置",
 		"viewType": "picker",
+        "dataSource": "static",
+        "initialValue": "latest",
         "options": [
           {
             "value": "earliest",

@@ -31,6 +31,8 @@
       "settings": {
         "label": "连接方式",
 		"viewType": "picker",
+        "dataSource": "static",
+        "initialValue": "LEFT_JOIN",
         "options": [
           {
             "value": "LEFT_JOIN",
@@ -52,8 +54,7 @@
             "value": "CROSS_JOIN",
             "label": "交叉连接（Cross Join）"
           }
-        ],
-        "default": "LEFT_JOIN"
+        ]
       }
     },
     {

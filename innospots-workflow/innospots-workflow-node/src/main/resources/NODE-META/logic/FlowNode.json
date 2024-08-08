@@ -31,6 +31,7 @@
       "settings": {
         "label": "子流程选择",
 		"viewType": "picker",
+        "dataSource": "interface",
         "dynamicOptions": {
           "url": "/innospots/api/workflow/instance/list/trigger-code/START",
           "method": "GET",
@@ -88,6 +89,8 @@
       "settings": {
         "label": "返回数据",
 		"viewType": "radio",
+        "dataSource": "static",
+        "initialValue": "LIST",
         "options": [
           {
             "value": "NONE",
@@ -101,8 +104,7 @@
             "value": "MAP",
             "label": "单条(对象)"
           }
-        ],
-        "default": "LIST"
+        ]
       },
       "conditions": [
         {
@@ -127,6 +129,8 @@
       "settings": {
         "label": "存储方式",
 		"viewType": "picker",
+        "dataSource": "static",
+        "initialValue": "OVERWRITE",
         "options": [
           {
             "value": "FIELD",
@@ -165,6 +169,8 @@
       "settings": {
         "label": "存储方式",
 		"viewType": "picker",
+        "dataSource": "static",
+        "initialValue": "OVERWRITE",
         "options": [
           {
             "value": "FIELD",

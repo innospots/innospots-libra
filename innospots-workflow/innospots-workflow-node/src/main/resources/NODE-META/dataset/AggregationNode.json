@@ -30,6 +30,8 @@
       "settings": {
         "label": "聚合数据源",
 		"viewType": "radio",
+        "dataSource": "static",
+        "initialValue": "payload",
         "options": [
           {
             "value": "payload",
@@ -39,8 +41,7 @@
             "value": "list",
             "label": "列表字段"
           }
-        ],
-        "default": "payload"
+        ]
       },
       "conditions": [
         {

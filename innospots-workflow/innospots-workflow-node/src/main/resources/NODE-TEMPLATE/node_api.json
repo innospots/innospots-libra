@@ -34,6 +34,8 @@
         "viewType": "picker",
         "showAddButton": false,
         "showEditButton": false,
+        "dataSource": "static",
+        "initialValue": "none",
         "options": [
           {
             "value": "none",
@@ -138,6 +140,8 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "dataSource": "static",
+        "initialValue": "MAP",
         "label": "返回数据类型",
         "viewType": "radio",
         "options": [
@@ -150,7 +154,6 @@
             "label": "单条(JSON对象)"
           }
         ],
-        "default": "MAP",
         "props": {
           "optionType": "default"
         }
@@ -176,8 +179,9 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "dataSource": "static",
+        "initialValue": "PAYLOAD",
         "label": "存储方式",
-        "default": "PAYLOAD",
         "viewType": "picker",
         "options": [
           {
@@ -228,7 +232,8 @@
       "deletable": false,
       "settings": {
         "label": "存储方式",
-        "default": "OVERWRITE",
+        "dataSource": "static",
+        "initialValue": "OVERWRITE",
         "viewType": "picker",
         "options": [
           {

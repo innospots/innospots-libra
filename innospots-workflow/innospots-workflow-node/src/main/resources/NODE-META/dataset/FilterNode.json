@@ -28,6 +28,8 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "dataSource": "static",
+        "initialValue": "RESERVED",
         "label": "过滤方式",
 		"viewType": "picker",
         "options": [
@@ -39,8 +41,7 @@
             "value": "REJECT",
             "label": "命中键则剔除（Remove key Matches)"
           }
-        ],
-        "default": "RESERVED"
+        ]
       }
     },
     {

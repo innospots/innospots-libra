@@ -31,6 +31,8 @@
       "settings": {
         "label": "文件操作",
 		"viewType": "picker",
+        "dataSource": "static",
+        "initialValue": "READ",
         "options": [
           {
             "value": "READ",
@@ -40,8 +42,7 @@
             "value": "WRITE",
             "label": "写入"
           }
-        ],
-        "initialValue": "READ"
+        ]
       }
     },
     {
@@ -63,6 +64,8 @@
       "settings": {
         "label": "文件格式",
 		"viewType": "picker",
+        "dataSource": "static",
+        "initialValue": "CSV",
         "options": [
           {
             "value": "CSV",
@@ -72,8 +75,7 @@
             "value": "XLSX",
             "label": "XLSX"
           }
-        ],
-        "initialValue": "CSV"
+        ]
       },
       "conditions": [
         {
@@ -122,6 +124,8 @@
       "settings": {
         "label": "文件编码",
 		"viewType": "picker",
+        "dataSource": "static",
+        "initialValue": "UTF-8",
         "options": [
           {
             "value": "UTF-8",
@@ -131,8 +135,7 @@
             "value": "GBK",
             "label": "GBK"
           }
-        ],
-        "initialValue": "UTF-8"
+        ]
       },
       "conditions": [
         {

@@ -31,8 +31,9 @@
       "settings": {
         "label": "脚本类型",
 		"viewType": "picker",
-        "default": "JAVASCRIPT",
         "optionsType": "customOptions",
+        "dataSource": "static",
+        "initialValue": "JAVASCRIPT",
         "options": [
           {
             "value": "JAVASCRIPT",
