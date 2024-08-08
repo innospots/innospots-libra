@@ -106,6 +106,8 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "viewType": "switch",
+        "initialValue": false,
         "label": "返回数据是否存入Payload"
       }
     },

@@ -33,7 +33,7 @@
         "options": [{}]
       },
       "layout": {
-        "h": 7, "minH": 4,
+        "h": 2, "minH": 2,
         "w": 1, "x": 0, "y": 0, "moved": true, "static": false,
         "resizeHandles": ["s", "n"]
       }

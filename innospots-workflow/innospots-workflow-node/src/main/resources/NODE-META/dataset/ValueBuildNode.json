@@ -126,6 +126,8 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "viewType": "switch",
+        "initialValue": false,
         "label": "是否仅输出列表中的字段"
       },
       "conditions": [

@@ -77,7 +77,8 @@
       "deletable": false,
       "settings": {
         "label": "是否同步调用",
-        "default": true
+        "viewType": "switch",
+        "initialValue": true
       }
     },
     {

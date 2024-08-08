@@ -158,6 +158,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "viewType": "switch",
         "initialValue": false,
         "label": "是否包含表头"
       }
@@ -193,6 +194,7 @@
       "deletable": false,
       "settings": {
         "label": "是否指定字段",
+        "viewType": "switch",
         "initialValue": false
       },
       "conditions": [

@@ -29,6 +29,8 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "viewType": "switch",
+        "initialValue": false,
         "label": "只输出计算字段",
         "default": false
       }
