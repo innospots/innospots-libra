@@ -154,7 +154,7 @@
             {
               "name": "output_payload",
               "opt": "EQUAL",
-              "value": "true"
+              "value": true
             }
           ]
         }
@@ -190,7 +190,7 @@
             {
               "name": "output_payload",
               "opt": "EQUAL",
-              "value": "true"
+              "value": true
             }
           ]
         }

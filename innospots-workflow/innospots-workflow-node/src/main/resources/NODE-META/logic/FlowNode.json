@@ -115,7 +115,7 @@
             {
               "name": "sync_switch",
               "opt": "EQUAL",
-              "value": "true"
+              "value": true
             }
           ]
         }

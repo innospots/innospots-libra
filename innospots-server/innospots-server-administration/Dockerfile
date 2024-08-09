@@ -1,4 +1,4 @@
-From innospots-base:latest
+From innospots/innospots-base:latest
 
 ENV APPLICATION_NAME innospots-server-administration
 

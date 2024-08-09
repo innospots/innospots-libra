@@ -89,7 +89,7 @@
             {
               "name": "config_field",
               "opt": "EQUAL",
-              "value": "true"
+              "value": true
             }
           ]
         }

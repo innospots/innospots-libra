@@ -229,7 +229,7 @@
             {
               "name": "is_select_column",
               "opt": "EQUAL",
-              "value": "true"
+              "value": true
             }
           ]
         }
