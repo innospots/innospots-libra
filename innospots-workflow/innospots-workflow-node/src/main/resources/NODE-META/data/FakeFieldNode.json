@@ -1,6 +1,6 @@
 {
   "name": "模拟字段",
-  "code": "fake_json",
+  "code": "mock_field",
   "flowCode": "EVENTS",
   "primitive": "data",
   "vendor": "innospots",
