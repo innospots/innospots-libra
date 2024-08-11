@@ -173,6 +173,7 @@
       "deletable": false,
       "settings": {
         "label": "更新键",
+        "fieldSource": "SQL_1",
         "tableName": "table_name",
         "dataSourceId": "credential",
         "bind": "",
@@ -229,6 +230,7 @@
       "deletable": false,
       "settings": {
         "label": "字段映射",
+        "fieldSource": "SQL_1",
         "tableName": "table_name",
         "dataSourceId": "datasource_id",
         "dependencies": "credential",

@@ -24,13 +24,13 @@
     },
     {
       "name": "output_restricted",
-      "type": "Input",
+      "type": "Switch",
       "valueType": "boolean",
       "copyable": false,
       "deletable": false,
       "settings": {
+        "viewType": "switch",
         "label": "是否仅输出变量列表中的变量",
-        "placeholder": "",
         "initialValue": false
       }
     },
@@ -41,6 +41,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "fieldSource": "DERIVED_VARIABLES_1",
         "label": "衍生变量",
         "placeholder": "",
         "initialValue": ""

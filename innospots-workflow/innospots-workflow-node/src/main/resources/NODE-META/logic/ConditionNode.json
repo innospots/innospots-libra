@@ -37,6 +37,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "fieldSource": "CONDITIONS_1",
         "label": "条件字段"
       }
     }

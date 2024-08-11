@@ -8,7 +8,15 @@
   "icon": "filter",
   "nodeType": "io.innospots.workflow.node.app.dataset.FilterNode",
   "outPorts": "1",
-  "inPorts": "1",
+  "inPorts": [{
+      "label": "right",
+      "id": "join_right",
+      "count": 1
+    }, {
+      "label": "left",
+      "id": "join_left",
+      "count": 1
+    }],
   "components": [
     {
       "name": "displayName",
@@ -31,7 +39,7 @@
         "dataSource": "static",
         "initialValue": "RESERVED",
         "label": "过滤方式",
-		"viewType": "picker",
+        "viewType": "picker",
         "options": [
           {
             "value": "RESERVED",

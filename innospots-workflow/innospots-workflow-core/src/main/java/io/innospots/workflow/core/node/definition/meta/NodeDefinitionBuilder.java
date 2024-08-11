@@ -157,6 +157,7 @@ public class NodeDefinitionBuilder {
                     port.put("label", String.join("_", "i", String.valueOf(i + 1)));
                 }
                 port.put("count", 1);
+                port.put("id",String.join("_", metaInfo.getCode(), String.valueOf(i + 1)));
                 inPorts.add(port);
             }
             nodeResource.setInPorts(inPorts);

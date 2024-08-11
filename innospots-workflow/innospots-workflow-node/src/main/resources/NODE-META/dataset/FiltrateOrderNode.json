@@ -29,6 +29,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "fieldSource": "sort_filter_1",
         "label": "筛选条件",
         "tooltip": "条件规则组合",
         "description": "保留满足条件数据"
@@ -41,6 +42,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "fieldSource": "sort_filter_1",
         "label": "升序字段",
         "tooltip": "聚合维度，选择上一个输入数据的多个字段\n下拉选择多个字段，用于聚合计算使用"
       }
@@ -52,17 +54,19 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "fieldSource": "sort_filter_1",
         "label": "降序字段",
         "tooltip": "聚合维度，选择上一个输入数据的多个字段\n下拉选择多个字段，用于聚合计算使用"
       }
     },
     {
       "name": "line_count",
-      "type": "Input",
+      "type": "NumberInput",
       "valueType": "number",
       "copyable": false,
       "deletable": false,
       "settings": {
+        "width": 100,
         "label": "筛选行数",
         "tooltip": "筛选行数"
       }

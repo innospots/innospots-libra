@@ -72,6 +72,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "fieldSource": "EXTRACT_1",
         "label": "字段列表"
       },
       "conditions": [
@@ -95,6 +96,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "fieldSource": "EXTRACT_1",
         "label": "嵌套字段"
       },
       "conditions": [
@@ -118,6 +120,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "fieldSource": "EXTRACT_1",
         "label": "排序字段",
         "dataType": "payload"
       },
@@ -172,23 +175,25 @@
     },
     {
       "name": "line_count",
-      "type": "number",
+      "type": "NumberInput",
       "valueType": "number",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "行数",
+        "width": 100,
         "description": "提取数据的数量"
       }
     },
     {
       "name": "start_line",
-      "type": "number",
+      "type": "NumberInput",
       "valueType": "number",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "开始行数",
+        "width": 100,
         "description": "范围开始的行数"
       },
       "conditions": [
@@ -207,12 +212,13 @@
     },
     {
       "name": "end_line",
-      "type": "number",
+      "type": "NumberInput",
       "valueType": "number",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "结束行数",
+        "width": 100,
         "description": "范围结束的行数"
       },
       "conditions": [
@@ -236,6 +242,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "fieldSource": "EXTRACT_1",
         "label": "提取条件",
         "tooltip": "条件规则组合",
         "description": "满足条件时提取"

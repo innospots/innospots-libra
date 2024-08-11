@@ -60,6 +60,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "fieldSource": "END_1",
         "label": "输出字段",
         "tooltip": "inputFields"
       },

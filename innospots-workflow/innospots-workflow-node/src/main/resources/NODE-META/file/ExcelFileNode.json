@@ -165,11 +165,12 @@
     },
     {
       "name": "max_read_line",
-      "type": "Input",
+      "type": "NumberInput",
       "valueType": "number",
       "copyable": false,
       "deletable": false,
       "settings": {
+        "width": 100,
         "label": "最大读取行数"
       },
       "conditions": [

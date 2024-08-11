@@ -64,6 +64,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "fieldSource": "group_compute_1",
         "label": "列表字段"
       },
       "conditions": [
@@ -87,6 +88,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "fieldSource": "group_compute_1",
         "label": "分组字段"
       },
       "conditions": [
@@ -110,6 +112,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "fieldSource": "group_compute_1",
         "label": "分组字段"
       },
       "conditions": [
@@ -164,6 +167,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "fieldSource": "group_compute_1",
         "label": "聚合变量"
       }
     },
@@ -174,6 +178,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "fieldSource": "group_compute_1",
         "label": "计算字段",
         "tooltip": "将选中的字段值按选择的处置方式进行加工处理\n如替换空值。替换枚举值等"
       },
@@ -198,6 +203,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "fieldSource": "group_compute_1",
         "label": "计算字段",
         "tooltip": "将选中的字段值按选择的处置方式进行加工处理\n如替换空值。替换枚举值等"
       },
@@ -222,6 +228,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "fieldSource": "group_compute_1",
         "label": "计算字段",
         "tooltip": "将选中的字段值按选择的处置方式进行加工处理\n如替换空值。替换枚举值等"
       },

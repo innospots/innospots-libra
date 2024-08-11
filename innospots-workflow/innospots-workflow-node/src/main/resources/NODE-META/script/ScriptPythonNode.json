@@ -30,7 +30,7 @@
       "deletable": false,
       "settings": {
         "label": "脚本详情",
-        "default": "return item;",
+        "default": "def add(a,b):\n  return a+b;\n\nnItem['n1'] = add(1,2)\nnItem['item'] = item\n",
         "isFixedType": true,
         "scriptType": "PYTHON"
       }

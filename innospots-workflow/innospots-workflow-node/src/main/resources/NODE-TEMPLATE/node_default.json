@@ -50,7 +50,15 @@
       "type": "AggregateVariables",
       "valueType": "array",
       "layout": {
-        "h": 6, "minH": 3,
+        "h": 7, "minH": 4,
+        "w": 1, "x": 0, "y": 0, "moved": true, "static": false,
+        "resizeHandles": ["s", "n"]
+      }
+    },{
+      "type": "VariableConfig",
+      "valueType": "array",
+      "layout": {
+        "h": 7, "minH": 4,
         "w": 1, "x": 0, "y": 0, "moved": true, "static": false,
         "resizeHandles": ["s", "n"]
       }
@@ -72,11 +80,11 @@
       }
     },{
       "type": "TextArea",
-      "valueType": "String",
+      "valueType": "string",
       "layout": {
-        "h": 3, "maxH": 3, "minH": 3,
+        "h": 3, "maxH": 6, "minH": 3,
         "w": 1, "x": 0, "y": 0, "moved": true, "static": false,
-        "resizeHandles": []
+        "resizeHandles": ["s", "n"]
       }
     },{
       "type": "JoinFields",

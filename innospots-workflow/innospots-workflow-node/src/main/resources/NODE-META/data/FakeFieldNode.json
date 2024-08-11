@@ -45,6 +45,10 @@
             "key": "xZzr",
             "label": "HEX_32",
             "value": "#{Random.hex}"
+          },{
+            "key": "op81",
+            "label": "OPTIONS",
+            "value": "#{options.option 'A1','B2','C3','D4','E5','F6'}"
           }, {
             "key": "B6u5",
             "label": "BIRTHDAY",

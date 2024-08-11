@@ -28,6 +28,8 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "fieldSource": "SWITCH_1",
+        "dataSource": "input",
         "label": "条件字段",
         "optionsType": "inputFields",
         "options": [{}]

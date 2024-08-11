@@ -60,17 +60,14 @@
     },
     {
       "name": "parallel_num",
-      "type": "Input",
+      "type": "NumberInput",
       "valueType": "number",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "消费并行数",
-        "default": 1,
-        "props": {
-          "min": 1,
-          "max": 10
-        }
+        "initialValue": 1,
+        "width": 100
       }
     },
     {

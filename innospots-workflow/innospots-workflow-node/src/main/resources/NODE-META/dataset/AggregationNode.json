@@ -64,6 +64,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "fieldSource": "AGGREGATION_1",
         "label": "列表字段"
       },
       "conditions": [
@@ -87,6 +88,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "fieldSource": "AGGREGATION_1",
         "label": "聚合维度"
       },
       "dependencies": "list_parent_field",
@@ -111,6 +113,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "fieldSource": "AGGREGATION_1",
         "label": "聚合维度"
       },
       "conditions": [
@@ -135,6 +138,7 @@
       "deletable": false,
       "settings": {
         "label": "聚合变量",
+        "fieldSource": "AGGREGATION_1",
         "dependencies": "source_field_type",
         "parentField": "list_parent_field",
         "options": [

@@ -3,7 +3,7 @@
 - 构建基础镜像，执行命令，在当前dockerfile目录下执行
 
 ```shell script
-docker build -t innospots-base:latest . -f base.dockerfile
+docker build -t innospots/innospots-base:latest . -f base.dockerfile
 ```
 
 

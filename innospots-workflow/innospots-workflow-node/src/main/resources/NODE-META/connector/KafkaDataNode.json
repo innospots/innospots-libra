@@ -66,6 +66,7 @@
       "deletable": false,
       "settings": {
         "label": "字段映射",
+        "fieldSource": "KAFKA_1",
         "tableName": "table_name",
         "dataSource": "credential",
         "columns": [

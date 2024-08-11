@@ -302,26 +302,6 @@ public class JdbcDataConnectionMinder extends BaseDataConnectionMinder {
             throw DataConnectionException.buildException(this.getClass(), "Build data source failure, ", e);
         }
 
-//        hikariDataSource.setJdbcUrl(jdbcUrl);
-//        hikariDataSource.setJdbcUrl(String.valueOf(configs.get(JDBC_URL)));
-//        hikariDataSource.setUsername(String.valueOf(configs.get(USERNAME)));
-//        hikariDataSource.setPassword(String.valueOf(configs.get(PASSWORD)));
-//        hikariDataSource.setDriverClassName();
-
-        // parameter setting
-//        hikariDataSource.setMaximumPoolSize(5);
-//        hikariDataSource.setMinimumIdle(1);
-//        hikariDataSource.setMaxLifetime(35000);
-//        hikariDataSource.setIdleTimeout(10000);
-//        hikariDataSource.setConnectionTimeout(25000);
-//        hikariDataSource.setValidationTimeout(40000);
-//        hikariDataSource.setConnectionTestQuery("select 1");
-
-        // Get remarks configuration
-//        hikariDataSource.addDataSourceProperty("remarks", "true");
-        // Get table remarks configuration
-//        hikariDataSource.addDataSourceProperty("useInformationSchema", "true");
-
         return dataSource;
     }
 

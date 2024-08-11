@@ -180,7 +180,7 @@ public class SchemaRegistryController extends BaseController {
     @GetMapping("fetch-sample")
     @Operation(summary = "schema registry fetch sample")
     public InnospotsResponse<Object> fetchSample(
-            @Parameter(name = "credentialId") @RequestParam(value = "credentialKey") String credentialKey,
+            @Parameter(name = "credentialKey") @RequestParam(value = "credentialKey") String credentialKey,
             @Parameter(name = "tableName") @RequestParam(value = "tableName") String tableName) {
         Object result = dataConnectionMinderManager.fetchSample(credentialKey, tableName);
         return success(result);
