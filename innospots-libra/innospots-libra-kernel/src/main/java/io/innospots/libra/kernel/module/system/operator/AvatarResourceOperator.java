@@ -78,7 +78,7 @@ public class AvatarResourceOperator extends ServiceImpl<AvatarResourceDao, Avata
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void deleteResource(Integer resourceId, ImageType imageType) {
+    public void deleteResource(String resourceId, ImageType imageType) {
         LambdaQueryWrapper<AvatarResourceEntity> lambda = new QueryWrapper<AvatarResourceEntity>().lambda();
         lambda.eq(AvatarResourceEntity::getResourceId, resourceId);
         lambda.eq(AvatarResourceEntity::getImageType, imageType);

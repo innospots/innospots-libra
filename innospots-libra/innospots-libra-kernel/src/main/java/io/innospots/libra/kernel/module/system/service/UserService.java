@@ -100,7 +100,7 @@ public class UserService {
             // delete user role
             userRoleOperator.deleteByUserIds(Collections.singletonList(userId));
             // delete user avatar
-            avatarResourceOperator.deleteResource(userId, ImageType.AVATAR);
+            avatarResourceOperator.deleteResource(String.valueOf(userId), ImageType.AVATAR);
         }
         return result;
     }

@@ -37,8 +37,8 @@ public class AvatarRemoveEvent extends EventBody {
         this.imageType = imageType;
     }
 
-    public Integer getResourceId() {
-        return (Integer) this.body;
+    public String getResourceId() {
+        return (String) this.body;
     }
 
     public ImageType getImageType() {

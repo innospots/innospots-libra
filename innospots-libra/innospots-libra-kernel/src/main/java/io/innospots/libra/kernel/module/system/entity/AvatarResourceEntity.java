@@ -47,7 +47,7 @@ public class AvatarResourceEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer avatarId;
 
-    @Column(length = 16)
+    @Column(length = 32)
     private String resourceId;
 
     @Column(length = 12)

@@ -99,7 +99,7 @@ public class NodeDefinitionService {
             nodeIds.add(nodeId);
             flowNodeGroupOperator.saveOrUpdateNodeGroupNode(nodeInfo.getNodeGroupId(), nodeIds);
             if (StringUtils.isNotEmpty(nodeInfo.getIcon()) && nodeInfo.getIcon().startsWith(IMAGE_PREFIX)) {
-                EventBusCenter.async(new NewAvatarEvent(nodeId, ImageType.APP, null, nodeInfo.getIcon()));
+                EventBusCenter.async(new NewAvatarEvent(nodeInfo.getCode(), ImageType.NODE, null, nodeInfo.getIcon()));
             }
             // update node icon
             nodeInfo = flowNodeDefinitionOperator.updateNodeInfo(nodeInfo);
@@ -118,7 +118,7 @@ public class NodeDefinitionService {
         String icon = nodeInfo.getIcon();
         Integer nodeId = nodeInfo.getNodeId();
         if (StringUtils.isNotEmpty(icon) && icon.startsWith(IMAGE_PREFIX)) {
-            EventBusCenter.async(new NewAvatarEvent(String.valueOf(nodeId), ImageType.APP, null, icon));
+            EventBusCenter.async(new NewAvatarEvent(nodeInfo.getCode(), ImageType.NODE, null, icon));
         }
         nodeInfo = flowNodeDefinitionOperator.updateNodeInfo(nodeInfo);
         List<Integer> nodeIds = new ArrayList<>();

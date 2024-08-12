@@ -251,7 +251,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
         }
         FlowNodeDefinitionConverter.INSTANCE.infoToEntity(nodeInfo, entity);
         if (StringUtils.isNotEmpty(nodeInfo.getIcon()) && nodeInfo.getIcon().startsWith(IMAGE_PREFIX)) {
-            entity.setIcon("/image/APP/" + nodeInfo.getNodeId() + "?t=" + RandomStringUtils.randomNumeric(5));
+            entity.setIcon("/image/NODE/" + nodeInfo.getCode() + "?t=" + RandomStringUtils.randomNumeric(5));
         }
 
         entity.setUpdatedTime(LocalDateTime.now());
@@ -346,7 +346,8 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
         }
         boolean res = this.removeById(nodeId);
         if (res) {
-            EventBusCenter.async(new AvatarRemoveEvent(nodeId, ImageType.APP));
+            EventBusCenter.async(new AvatarRemoveEvent(nodeId, ImageType.NODE));
+//            EventBusCenter.async(new AvatarRemoveEvent(nodeId, ImageType.APP));
         }
         return res;
     }

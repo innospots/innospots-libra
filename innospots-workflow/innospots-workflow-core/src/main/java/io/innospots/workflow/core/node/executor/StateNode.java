@@ -42,7 +42,7 @@ import java.util.Map;
 public class StateNode extends BaseNodeExecutor {
 
 
-    private static final String FIELDS = "fields";
+    private static final String FIELDS = "input_fields";
 
     private static final String HAS_INPUT_FIELD = "has_input_field";
 
