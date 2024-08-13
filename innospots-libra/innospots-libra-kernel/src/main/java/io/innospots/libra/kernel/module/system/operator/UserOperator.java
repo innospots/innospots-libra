@@ -96,7 +96,7 @@ public class UserOperator extends ServiceImpl<UserDao, SysUserEntity> {
         user.setPassword(passwordEncoder.encode(password));
         UserInfoConverter userInfoConverter = UserInfoConverter.INSTANCE;
         SysUserEntity sysUser = userInfoConverter.formModel2Entity(user);
-        sysUser.setStatus(DataStatus.ONLINE);
+        sysUser.setStatus(DataStatus.ONLINE.name());
         this.save(sysUser);
         return userInfoConverter.entityToModel(sysUser);
     }

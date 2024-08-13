@@ -131,11 +131,11 @@ public class I18nLanguageOperator {
             log.error("delete I18nLanguage {} is delete", languageId);
             throw ResourceException.buildDeleteException(this.getClass(), "I18nLanguage is delete", languageId);
         }
-        if (DataStatus.REMOVED.equals(status) && !DataStatus.OFFLINE.equals(entity.getStatus())) {
+        if (DataStatus.REMOVED.equals(status) && !DataStatus.OFFLINE.name().equals(entity.getStatus())) {
             log.error("delete I18nLanguage {} not delete, status is {}", languageId, entity.getStatus());
             throw ResourceException.buildDeleteException(this.getClass(), "I18nLanguage {} not delete status is {}", languageId, entity.getStatus());
         }
-        entity.setStatus(status);
+        entity.setStatus(status.name());
         entity.setUpdatedTime(LocalDateTime.now());
         int num = i18nLanguageDao.updateById(entity);
         return num == 1;

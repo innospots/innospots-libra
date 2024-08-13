@@ -159,7 +159,7 @@ public class RoleResourceOperator extends ServiceImpl<RoleResourceDao, RoleResou
             for (String newItemKeyRoleId : newItemKeyRoleIds) {
                 String[] keyRoleIds = newItemKeyRoleId.split(":");
                 RoleResourceEntity roleResourceEntity = new RoleResourceEntity();
-                roleResourceEntity.setResourceType(roleResourceRequest.getRoleResourceType());
+                roleResourceEntity.setResourceType(roleResourceRequest.getRoleResourceType().name());
                 roleResourceEntity.setItemKey(keyRoleIds[0]);
                 roleResourceEntity.setRoleId(Integer.valueOf(keyRoleIds[1]));
                 newRoleResources.add(roleResourceEntity);

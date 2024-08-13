@@ -47,7 +47,7 @@ public class BaseCategoryOperator extends ServiceImpl<BaseCategoryDao, BaseCateg
         }
         BaseCategoryEntity entity = new BaseCategoryEntity();
         entity.setCategoryName(categoryName);
-        entity.setCategoryType(categoryType);
+        entity.setCategoryType(categoryType.name());
         super.save(entity);
         return BaseCategoryBeanConverter.INSTANCE.entityToModel(entity);
     }

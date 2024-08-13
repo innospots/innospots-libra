@@ -66,8 +66,9 @@ public class SchemaRegistryEntity extends PBaseEntity {
     private String description;
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private SchemaRegistryType registryType;
+//    @Enumerated(value = EnumType.STRING)
+    private String registryType;
+//    private SchemaRegistryType registryType;
 
     @Column(columnDefinition = "TEXT")
     private String configs;

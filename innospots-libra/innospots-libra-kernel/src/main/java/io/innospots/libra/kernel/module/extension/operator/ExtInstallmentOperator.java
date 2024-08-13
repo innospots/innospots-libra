@@ -112,7 +112,7 @@ public class ExtInstallmentOperator extends ServiceImpl<ExtInstallmentDao, ExtIn
         int flag = 0;
         if (extInstallmentEntity.getExtInstallmentId() == null) {
             extInstallmentEntity.setInstallTime(LocalDateTime.now());
-            extInstallmentEntity.setExtensionStatus(ExtensionStatus.INSTALLED);
+            extInstallmentEntity.setExtensionStatus(ExtensionStatus.INSTALLED.name());
             //TODO judge appSource
             //appInstallmentEntity.setAppSource(AppSource.MARKET);
             flag = this.baseMapper.insert(extInstallmentEntity);
@@ -137,7 +137,7 @@ public class ExtInstallmentOperator extends ServiceImpl<ExtInstallmentDao, ExtIn
             log.error("extension disabled error, extKey {} is not exits", extKey);
             throw ResourceException.buildNotExistException(this.getClass(), "extKey", extKey);
         }
-        if (extInstallmentEntity.getExtensionStatus() != null && extInstallmentEntity.getExtensionStatus().canDisabled()) {
+        if (extInstallmentEntity.getExtensionStatus() != null && ExtensionStatus.valueOf(extInstallmentEntity.getExtensionStatus()).canDisabled()) {
             UpdateWrapper<ExtInstallmentEntity> wrapper = new UpdateWrapper<>();
             wrapper.lambda().eq(ExtInstallmentEntity::getExtInstallmentId, extInstallmentEntity.getExtInstallmentId())
                     .set(ExtInstallmentEntity::getExtensionStatus, ExtensionStatus.DISABLED);
@@ -159,7 +159,7 @@ public class ExtInstallmentOperator extends ServiceImpl<ExtInstallmentDao, ExtIn
             log.error("extension available error, extKey {} is not exits", extKey);
             throw ResourceException.buildNotExistException(this.getClass(), "extKey", extKey);
         }
-        if (extInstallmentEntity.getExtensionStatus() != null && extInstallmentEntity.getExtensionStatus().canAvailable()) {
+        if (extInstallmentEntity.getExtensionStatus() != null && ExtensionStatus.valueOf(extInstallmentEntity.getExtensionStatus()).canAvailable()) {
             UpdateWrapper<ExtInstallmentEntity> wrapper = new UpdateWrapper<>();
             wrapper.lambda().eq(ExtInstallmentEntity::getExtInstallmentId, extInstallmentEntity.getExtInstallmentId())
                     .set(ExtInstallmentEntity::getExtensionStatus, ExtensionStatus.ENABLED);

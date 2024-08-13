@@ -76,8 +76,9 @@ public class ScheduledNodeExecutionEntity extends PBaseEntity {
     private String nodeKey;
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private ExecutionStatus status;
+//    @Enumerated(value = EnumType.STRING)
+    private String status;
+//    private ExecutionStatus status;
 
     @Column(length = 1024)
     private String message;

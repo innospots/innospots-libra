@@ -65,12 +65,14 @@ public class TodoTaskEntity extends PBaseEntity {
     private Integer principalUserId;
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private TaskStatus taskStatus;
+//    @Enumerated(value = EnumType.STRING)
+//    private TaskStatus taskStatus;
+    private String taskStatus;
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private TaskPriority taskPriority;
+//    @Enumerated(value = EnumType.STRING)
+//    private TaskPriority taskPriority;
+    private String taskPriority;
 
     @Column
     private LocalDate startDate;

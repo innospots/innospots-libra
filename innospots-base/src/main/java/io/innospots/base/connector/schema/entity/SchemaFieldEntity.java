@@ -62,8 +62,9 @@ public class SchemaFieldEntity extends PBaseEntity {
     private String code;
 
     @Column(length = 32)
-    @Enumerated(value = EnumType.STRING)
-    private FieldValueType valueType;
+//    @Enumerated(value = EnumType.STRING)
+    //    private FieldValueType valueType;
+    private String valueType;
 
     @Column(length = 32)
     private String defaultValue;
@@ -75,8 +76,9 @@ public class SchemaFieldEntity extends PBaseEntity {
     private String config;
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private FieldScope fieldScope;
+    private String fieldScope;
+//    @Enumerated(value = EnumType.STRING)
+//    private FieldScope fieldScope;
 
     private Boolean pkey = false;
 

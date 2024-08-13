@@ -83,7 +83,8 @@ public class I18nLanguageEntity extends BaseEntity {
     private boolean defaultLan;
 
     @Column(length = 16)
-    @Enumerated(EnumType.STRING)
-    private DataStatus status;
+//    @Enumerated(EnumType.STRING)
+    private String status;
+//    private DataStatus status;
 
 }

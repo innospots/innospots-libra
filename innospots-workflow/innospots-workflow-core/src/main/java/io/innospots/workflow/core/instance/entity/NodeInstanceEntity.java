@@ -97,8 +97,9 @@ public class NodeInstanceEntity extends PBaseEntity {
     private Boolean pauseFlag;
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private ScriptType actionScriptType;
+//    @Enumerated(value = EnumType.STRING)
+    private String actionScriptType;
+//    private ScriptType actionScriptType;
 
     @Column(columnDefinition = "TEXT")
     private String action;
@@ -133,7 +134,8 @@ public class NodeInstanceEntity extends PBaseEntity {
 
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private DataStatus status = DataStatus.ONLINE;
+//    @Enumerated(value = EnumType.STRING)
+    private String status = DataStatus.ONLINE.name();
+//    private DataStatus status = DataStatus.ONLINE;
 
 }

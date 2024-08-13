@@ -74,6 +74,7 @@ public class ExtInstallmentEntity extends PBaseEntity {
      * INSTALLED   ENABLED   DISABLED
      */
     @Column(length = 16)
-    @Enumerated(EnumType.STRING)
-    private ExtensionStatus extensionStatus;
+//    @Enumerated(EnumType.STRING)
+    private String extensionStatus;
+//    private ExtensionStatus extensionStatus;
 }

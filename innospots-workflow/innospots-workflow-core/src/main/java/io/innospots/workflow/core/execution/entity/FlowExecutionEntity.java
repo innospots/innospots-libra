@@ -88,8 +88,9 @@ public class FlowExecutionEntity extends PBaseEntity {
     private String dataTime;
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private ExecutionStatus status;
+//    @Enumerated(value = EnumType.STRING)
+    private String status;
+//    private ExecutionStatus status;
 
     @Column(length = 64)
     private String currentNodeKeys;
@@ -139,7 +140,8 @@ public class FlowExecutionEntity extends PBaseEntity {
     private String resultCode;
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private ExecMode execMode;
+//    @Enumerated(value = EnumType.STRING)
+    private String execMode;
+//    private ExecMode execMode;
 
 }

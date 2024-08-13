@@ -132,7 +132,7 @@ public class I18nCurrencyOperator {
             throw ResourceException.buildDeleteException(this.getClass(), "I18nCurrency", entity.getCode());
         }
 
-        entity.setStatus(status);
+        entity.setStatus(status.name());
         int num = i18nCurrencyDao.updateById(entity);
         return num == 1;
     }

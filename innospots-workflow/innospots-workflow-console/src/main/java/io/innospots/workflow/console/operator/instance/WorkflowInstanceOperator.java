@@ -112,7 +112,7 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
         } while (hasFlowKey);
 
         workflowInstanceEntity.setRevision(FlowVersion.DRAFT.getVersion());
-        workflowInstanceEntity.setStatus(DataStatus.OFFLINE);
+        workflowInstanceEntity.setStatus(DataStatus.OFFLINE.name());
         this.save(workflowInstanceEntity);
         EventBusCenter.postSync(new NewPageEvent(workflowInstanceEntity.getWorkflowInstanceId(), WorkflowPageListener.PAGE_TYPE));
         return WorkflowInstanceConverter.INSTANCE.entityToModel(workflowInstanceEntity);

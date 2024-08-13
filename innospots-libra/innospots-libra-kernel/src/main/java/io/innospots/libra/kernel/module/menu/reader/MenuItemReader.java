@@ -132,7 +132,7 @@ public class MenuItemReader {
                 menuResourceEntities.sort(Comparator.comparing(MenuResourceEntity::getOrders, Comparator.nullsFirst(Comparator.naturalOrder())).reversed()
                         .thenComparing(MenuResourceEntity::getCreatedTime));
 
-                List<ResourceItem> subItems = menuResourceEntities.stream().filter(menuResource -> menuResource.getItemType() == ItemType.CATEGORY)
+                List<ResourceItem> subItems = menuResourceEntities.stream().filter(menuResource -> ItemType.valueOf(menuResource.getItemType()) == ItemType.CATEGORY)
                         .map(MenuResourceConverter.INSTANCE::entityToItem).collect(Collectors.toList());
                 item.setItems(subItems);
 
@@ -140,8 +140,8 @@ public class MenuItemReader {
                     this.buildSubItems(subItems, menuResourceMap, optElementMap);
                 }
                 item.getItems().addAll(menuResourceEntities.stream()
-                        .filter(menuResourceEntity -> menuResourceEntity.getItemType() != ItemType.CATEGORY)
-                        .map(MenuResourceConverter.INSTANCE::entityToItem).collect(Collectors.toList()));
+                        .filter(menuResourceEntity -> ItemType.valueOf(menuResourceEntity.getItemType()) != ItemType.CATEGORY)
+                        .map(MenuResourceConverter.INSTANCE::entityToItem).toList());
                 if (CollectionUtils.isNotEmpty(item.getItems())) {
                     item.getItems().forEach(menuItem -> {
                         menuItem.setOpts(optElementMap.get(menuItem.getItemKey()));

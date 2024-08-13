@@ -23,6 +23,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import io.innospots.base.model.Pair;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.quartz.ExecutionStatus;
+import io.innospots.base.quartz.JobType;
 import io.innospots.schedule.converter.JobExecutionConverter;
 import io.innospots.schedule.dao.JobExecutionDao;
 import io.innospots.schedule.entity.JobExecutionEntity;
@@ -85,11 +86,12 @@ public class JobExecutionExplorer {
             }
             count++;
             entity = jobExecutionDao.selectById(jobExecutionId);
-            if (entity.getExecutionStatus().isDone()) {
+            ExecutionStatus executionStatus = ExecutionStatus.valueOf(entity.getExecutionStatus());
+            if (executionStatus.isDone()) {
                 break;
             }
-        } while (count < 3 && entity.getExecutionStatus().isStopping());
-        if (count >= 3 || entity.getExecutionStatus().isStopping()) {
+        } while (count < 3 && ExecutionStatus.valueOf(entity.getExecutionStatus()).isStopping());
+        if (count >= 3 || ExecutionStatus.valueOf(entity.getExecutionStatus()).isStopping()) {
             log.warn("job can't be set stopped, manual set stopped,{}", jobExecutionId);
             this.jobExecutionDao.update(buildUpdateWrapper(jobExecutionId, ExecutionStatus.STOPPED, message));
             return 0;
@@ -125,11 +127,11 @@ public class JobExecutionExplorer {
      */
     public List<JobExecution> retryExecution(String jobExecutionId) {
         JobExecutionEntity entity = this.jobExecutionDao.selectById(jobExecutionId);
-        if (entity.getExecutionStatus() != ExecutionStatus.FAILED) {
+        if (ExecutionStatus.valueOf(entity.getExecutionStatus()) != ExecutionStatus.FAILED) {
             throw new JobExecutionException(this.getClass(), ResponseCode.DATA_OPERATION_ERROR, "job can be executed in failed status. ", jobExecutionId);
         }
         List<JobExecutionEntity> entities = new ArrayList<>();
-        if (entity.getJobType().isJobContainer()) {
+        if (JobType.valueOf(entity.getJobType()).isJobContainer()) {
             UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
             uw.lambda().set(JobExecutionEntity::getExecutionStatus, ExecutionStatus.RETRY_RUNNING)
                     .set(JobExecutionEntity::getUpdatedTime, LocalDateTime.now())
@@ -139,7 +141,7 @@ public class JobExecutionExplorer {
             //has sub job execution
             QueryWrapper<JobExecutionEntity> qw = new QueryWrapper<>();
             qw.lambda().eq(JobExecutionEntity::getParentExecutionId, jobExecutionId)
-                    .in(JobExecutionEntity::getExecutionStatus, ExecutionStatus.STOPPED, ExecutionStatus.FAILED);
+                    .in(JobExecutionEntity::getExecutionStatus, ExecutionStatus.STOPPED.name(), ExecutionStatus.FAILED.name());
             //sub job will retry to execute
             entities = this.jobExecutionDao.selectList(qw);
             if (CollectionUtils.isNotEmpty(entities)) {
@@ -147,12 +149,12 @@ public class JobExecutionExplorer {
                         map(JobExecutionEntity::getExecutionId).collect(Collectors.toList());
                 //sub job executions
                 for (JobExecutionEntity jobExecutionEntity : entities) {
-                    if (jobExecutionEntity.getExecutionStatus() == ExecutionStatus.FAILED) {
+                    if (ExecutionStatus.valueOf(jobExecutionEntity.getExecutionStatus()) == ExecutionStatus.FAILED) {
                         this.jobExecutionDao.update(
                                 new UpdateWrapper<JobExecutionEntity>().lambda()
                                         .set(JobExecutionEntity::getExecutionStatus, ExecutionStatus.RETRYING)
                                         .eq(JobExecutionEntity::getExecutionId, jobExecutionEntity.getExecutionId()));
-                    } else if (jobExecutionEntity.getExecutionStatus() == ExecutionStatus.STOPPED) {
+                    } else if (ExecutionStatus.valueOf(jobExecutionEntity.getExecutionStatus()) == ExecutionStatus.STOPPED) {
                         this.jobExecutionDao.update(
                                 new UpdateWrapper<JobExecutionEntity>().lambda()
                                         .set(JobExecutionEntity::getExecutionStatus, ExecutionStatus.CONTINUING)
@@ -182,11 +184,11 @@ public class JobExecutionExplorer {
      */
     public List<JobExecution> continueExecution(String jobExecutionId) {
         JobExecutionEntity entity = this.jobExecutionDao.selectById(jobExecutionId);
-        if (entity.getExecutionStatus() != ExecutionStatus.STOPPED) {
+        if (ExecutionStatus.valueOf(entity.getExecutionStatus()) != ExecutionStatus.STOPPED) {
             throw new JobExecutionException(this.getClass(), ResponseCode.DATA_OPERATION_ERROR, "job can be executed in stopped status. ", jobExecutionId);
         }
         List<JobExecutionEntity> entities = new ArrayList<>();
-        if (entity.getJobType().isJobContainer()) {
+        if (JobType.valueOf(entity.getJobType()).isJobContainer()) {
             UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
             uw.lambda().set(JobExecutionEntity::getExecutionStatus, ExecutionStatus.CONTINUE_RUNNING)
                     .set(JobExecutionEntity::getUpdatedTime, LocalDateTime.now())
@@ -235,9 +237,9 @@ public class JobExecutionExplorer {
         if (jobExecutionEntity.getOriginExecutionId() != null) {
             JobExecutionEntity originJobExecutionEntity = jobExecutionDao.selectOne(new QueryWrapper<JobExecutionEntity>()
                     .lambda().eq(JobExecutionEntity::getExecutionId, jobExecutionEntity.getOriginExecutionId()));
-            if (originJobExecutionEntity.getExecutionStatus() == ExecutionStatus.CONTINUING) {
+            if (ExecutionStatus.valueOf(originJobExecutionEntity.getExecutionStatus()) == ExecutionStatus.CONTINUING) {
                 return createContinueJobExecution(originJobExecutionEntity);
-            } else if (originJobExecutionEntity.getExecutionStatus() == ExecutionStatus.RETRYING) {
+            } else if (ExecutionStatus.valueOf(originJobExecutionEntity.getExecutionStatus()) == ExecutionStatus.RETRYING) {
                 return createRetryJobExecution(jobExecutionEntity);
             }
         } else {
@@ -263,7 +265,7 @@ public class JobExecutionExplorer {
     }
 
     private JobExecution createRetryJobExecution(JobExecutionEntity jobExecutionEntity) {
-        jobExecutionEntity.setExecutionStatus(ExecutionStatus.RETRY_RUNNING);
+        jobExecutionEntity.setExecutionStatus(ExecutionStatus.RETRY_RUNNING.name());
         //retry execute
         UpdateWrapper<JobExecutionEntity> uw = new UpdateWrapper<>();
         uw.lambda().set(JobExecutionEntity::getSequenceNumber, -1*jobExecutionEntity.getSequenceNumber())
@@ -284,10 +286,10 @@ public class JobExecutionExplorer {
         jobExecutionEntity.setSuccessCount(jobExecution.getSuccessCount());
         jobExecutionEntity.setMessage(jobExecution.getMessage());
 
-        if (jobExecutionEntity.getExecutionStatus() == ExecutionStatus.STOPPING) {
-            jobExecutionEntity.setExecutionStatus(ExecutionStatus.STOPPED);
+        if (ExecutionStatus.valueOf(jobExecutionEntity.getExecutionStatus()) == ExecutionStatus.STOPPING) {
+            jobExecutionEntity.setExecutionStatus(ExecutionStatus.STOPPED.name());
         } else {
-            jobExecutionEntity.setExecutionStatus(jobExecution.getExecutionStatus());
+            jobExecutionEntity.setExecutionStatus(jobExecution.getExecutionStatus().name());
         }
         int cnt = jobExecutionDao.updateById(jobExecutionEntity);
         log.debug("update result:{}, executionId:{}",cnt,jobExecution.getExecutionId());
@@ -430,12 +432,12 @@ public class JobExecutionExplorer {
 
     public List<ExecutionStatus> subJobExecutionStatus(String parentExecutionId) {
         List<JobExecutionEntity> entities = parentExecutions(parentExecutionId);
-        return entities.stream().map(JobExecutionEntity::getExecutionStatus).collect(Collectors.toList());
+        return entities.stream().map(JobExecutionEntity::getExecutionStatus).map(ExecutionStatus::valueOf).collect(Collectors.toList());
     }
 
     public List<Pair<String, ExecutionStatus>> subJobExecutionStatusPair(String parentExecutionId) {
         List<JobExecutionEntity> entities = parentExecutions(parentExecutionId);
-        return entities.stream().map(e -> Pair.of(e.getJobKey(), e.getExecutionStatus())).collect(Collectors.toList());
+        return entities.stream().map(e -> Pair.of(e.getJobKey(), ExecutionStatus.valueOf(e.getExecutionStatus()))).collect(Collectors.toList());
     }
 
     private List<JobExecutionEntity> parentExecutions(String parentExecutionId) {

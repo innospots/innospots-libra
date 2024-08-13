@@ -55,19 +55,22 @@ public class ScheduleJobInfoEntity extends PBaseEntity {
     private String jobName;
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private ScheduleMode scheduleMode;
+//    @Enumerated(value = EnumType.STRING)
+    private String scheduleMode;
+//    private ScheduleMode scheduleMode;
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private DataStatus jobStatus;
+//    @Enumerated(value = EnumType.STRING)
+    private String jobStatus;
+//    private DataStatus jobStatus;
 
     /**
      * job type
      */
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private JobType jobType;
+//    @Enumerated(value = EnumType.STRING)
+    private String jobType;
+//    private JobType jobType;
 
     /**
      * sub job count, zero if execute

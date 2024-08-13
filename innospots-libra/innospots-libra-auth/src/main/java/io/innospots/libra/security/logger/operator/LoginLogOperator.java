@@ -31,9 +31,9 @@ import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.libra.base.enums.LoginStatus;
 import io.innospots.libra.base.terminal.TerminalInfo;
 import io.innospots.libra.base.terminal.TerminalRequestContextHolder;
+import io.innospots.libra.security.logger.converter.LoginLogConverter;
 import io.innospots.libra.security.logger.dao.LoginLogDao;
 import io.innospots.libra.security.logger.entity.LoginLogEntity;
-import io.innospots.libra.security.logger.mapper.LoginLogMapper;
 import io.innospots.libra.security.logger.model.LogFormQuery;
 import io.innospots.libra.security.logger.model.LoginLog;
 import lombok.extern.slf4j.Slf4j;
@@ -101,7 +101,7 @@ public class LoginLogOperator extends ServiceImpl<LoginLogDao, LoginLogEntity> {
         IPage<LoginLogEntity> oPage = new Page<>(request.getPage(), request.getSize());
         IPage<LoginLogEntity> entityPage = super.page(oPage, queryWrapper);
         List<LoginLogEntity> entities = entityPage.getRecords();
-        List<LoginLog> loginLogs = entities.stream().map(LoginLogMapper.INSTANCE::entity2Model).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
+        List<LoginLog> loginLogs = entities.stream().map(LoginLogConverter.INSTANCE::entity2Model).collect(Collectors.toCollection(() -> new ArrayList<>(entities.size())));
         pageBody.setCurrent(entityPage.getCurrent());
         pageBody.setPageSize(entityPage.getSize());
         pageBody.setTotal(entityPage.getTotal());
@@ -123,7 +123,7 @@ public class LoginLogOperator extends ServiceImpl<LoginLogDao, LoginLogEntity> {
         logPage.setPageSize(entityPage.getSize());
         logPage.setTotalPage(entityPage.getPages());
         logPage.setTotal(entityPage.getTotal());
-        logPage.setList(entityPage.getRecords().stream().map(LoginLogMapper.INSTANCE::entity2Model).collect(Collectors.toList()));
+        logPage.setList(entityPage.getRecords().stream().map(LoginLogConverter.INSTANCE::entity2Model).collect(Collectors.toList()));
         return logPage;
     }
 
@@ -138,7 +138,7 @@ public class LoginLogOperator extends ServiceImpl<LoginLogDao, LoginLogEntity> {
         if (log == null) {
             throw ResourceException.buildExistException(this.getClass(), "log does not exist");
         }
-        return LoginLogMapper.INSTANCE.entity2Model(log);
+        return LoginLogConverter.INSTANCE.entity2Model(log);
     }
 
     public LoginLog getLatest() {
@@ -159,7 +159,7 @@ public class LoginLogOperator extends ServiceImpl<LoginLogDao, LoginLogEntity> {
             }
             return loginLog;
         }
-        loginLog = LoginLogMapper.INSTANCE.entity2Model(entities.get(0));
+        loginLog = LoginLogConverter.INSTANCE.entity2Model(entities.get(0));
         if (entities.size() == 2) {
             loginLog.setRecentProvince(entities.get(1).getProvince());
             loginLog.setRecentCity(entities.get(1).getCity());
@@ -172,7 +172,7 @@ public class LoginLogOperator extends ServiceImpl<LoginLogDao, LoginLogEntity> {
         query.lambda().orderByDesc(LoginLogEntity::getLoginTime);
         query.last("limit 10");
         List<LoginLogEntity> entities = super.list(query);
-        return entities.stream().map(LoginLogMapper.INSTANCE::entity2Model).collect(Collectors.toList());
+        return entities.stream().map(LoginLogConverter.INSTANCE::entity2Model).collect(Collectors.toList());
     }
 
 

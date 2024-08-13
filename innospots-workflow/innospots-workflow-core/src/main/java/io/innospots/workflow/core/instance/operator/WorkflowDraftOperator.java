@@ -306,7 +306,7 @@ public class WorkflowDraftOperator {
             revision = revisionEntity.getRevision() + 1;
         }
 
-        entity.setStatus(DataStatus.ONLINE);
+        entity.setStatus(DataStatus.ONLINE.name());
 
 
         // save node instance of new revision

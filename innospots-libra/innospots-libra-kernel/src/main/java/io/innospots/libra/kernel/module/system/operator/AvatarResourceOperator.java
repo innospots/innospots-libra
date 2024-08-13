@@ -53,7 +53,7 @@ public class AvatarResourceOperator extends ServiceImpl<AvatarResourceDao, Avata
     public void createAvatar(String resourceId, ImageType imageType, String imageBase64) {
         AvatarResourceEntity entity = new AvatarResourceEntity();
         entity.setResourceId(resourceId);
-        entity.setImageType(imageType);
+        entity.setImageType(imageType.name());
         entity.setImageBase64(imageBase64);
         super.save(entity);
     }
@@ -68,7 +68,7 @@ public class AvatarResourceOperator extends ServiceImpl<AvatarResourceDao, Avata
             log.warn("avatar not exist, resourceId: {},imageType:{}", resourceId, imageType);
             entity = new AvatarResourceEntity();
             entity.setResourceId(resourceId);
-            entity.setImageType(imageType);
+            entity.setImageType(imageType.name());
             if (imageSort != null) {
                 entity.setImageSort(imageSort);
             }

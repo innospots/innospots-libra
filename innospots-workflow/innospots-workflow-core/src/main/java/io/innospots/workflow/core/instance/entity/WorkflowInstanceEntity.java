@@ -79,8 +79,9 @@ public class WorkflowInstanceEntity extends PBaseEntity {
 
 
     @Column(length = 16)
-    @Enumerated(EnumType.STRING)
-    private DataStatus status;
+//    @Enumerated(EnumType.STRING)
+    private String status;
+//    private DataStatus status;
 
 
     /**

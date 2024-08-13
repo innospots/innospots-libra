@@ -45,4 +45,8 @@ public enum DataStatus {
         return ONLINE.equals(status) || OFFLINE.equals(status);
     }
 
+    public static Boolean OnlineOrOffline(String status) {
+        return ONLINE.name().equals(status) || OFFLINE.name().equals(status);
+    }
+
 }

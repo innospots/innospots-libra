@@ -67,8 +67,9 @@ public class NodeExecutionEntity extends PBaseEntity {
 
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private ExecutionStatus status;
+//    @Enumerated(value = EnumType.STRING)
+    private String status;
+//    private ExecutionStatus status;
 
     /**
      * yyyymmddHHMMss.sss
@@ -82,6 +83,7 @@ public class NodeExecutionEntity extends PBaseEntity {
     @Column(length = 32)
     private String endTime;
 
+    @Column(length = 32)
     private String flowStartTime;
 
     @Column
@@ -109,8 +111,9 @@ public class NodeExecutionEntity extends PBaseEntity {
     private String nodeCode;
 
     @Column(length = 16)
-    @Enumerated(EnumType.STRING)
-    private ExecMode execMode;
+//    @Enumerated(EnumType.STRING)
+    private String execMode;
+//    private ExecMode execMode;
 
 
 }

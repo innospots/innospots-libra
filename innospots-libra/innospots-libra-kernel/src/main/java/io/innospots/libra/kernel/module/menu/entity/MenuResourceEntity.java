@@ -63,8 +63,9 @@ public class MenuResourceEntity extends PBaseEntity {
     private String menuGroup;
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private BaseItem.OpenMode openMode;
+//    @Enumerated(value = EnumType.STRING)
+//    private BaseItem.OpenMode openMode;
+    private String openMode;
 
     @Column
     private Boolean showMenu;
@@ -82,8 +83,10 @@ public class MenuResourceEntity extends PBaseEntity {
     private String icon;
 
     @Column(length = 32)
-    @Enumerated(value = EnumType.STRING)
-    private OptElement.UriMethod method;
+//    @Enumerated(value = EnumType.STRING)
+//    private OptElement.UriMethod method;
+    private String method;
+
 
     @Column(length = 64)
     private String itemKey;
@@ -98,12 +101,14 @@ public class MenuResourceEntity extends PBaseEntity {
     private String parentItemKeys;
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private ItemType itemType;
+//    @Enumerated(value = EnumType.STRING)
+//    private ItemType itemType;
+    private String itemType;
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private ResourceItem.LoadMode loadMode;
+//    @Enumerated(value = EnumType.STRING)
+    private String loadMode;
+//    private ResourceItem.LoadMode loadMode;
 
     @Column
     private Boolean status;

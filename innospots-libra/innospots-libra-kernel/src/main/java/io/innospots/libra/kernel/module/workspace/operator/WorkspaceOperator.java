@@ -83,7 +83,7 @@ public class WorkspaceOperator extends ServiceImpl<WorkspaceDao, WorkspaceEntity
     private void initialize(Integer userId) {
         PageEntity pageEntity = new PageEntity();
         pageEntity.setPageType("workspace");
-        pageEntity.setStatus(DataStatus.ONLINE);
+        pageEntity.setStatus(DataStatus.ONLINE.name());
         pageOperator.save(pageEntity);
 
         WorkspaceEntity workspaceEntity = new WorkspaceEntity();

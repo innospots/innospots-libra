@@ -67,7 +67,8 @@ public class I18nCurrencyEntity extends BaseEntity {
     private Integer decimalDigits;
 
     @Column(length = 16)
-    @Enumerated(EnumType.STRING)
-    private DataStatus status;
+//    @Enumerated(EnumType.STRING)
+    private String status;
+//    private DataStatus status;
 
 }

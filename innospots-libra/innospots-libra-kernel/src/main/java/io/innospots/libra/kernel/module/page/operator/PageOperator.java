@@ -125,13 +125,13 @@ public class PageOperator extends ServiceImpl<PageDao, PageEntity> {
     @Transactional(rollbackFor = Exception.class)
     public boolean deletePage(Integer pageId) {
         PageEntity entity = super.getById(pageId);
-        if (entity.getStatus() == DataStatus.ONLINE) {
+        if (DataStatus.valueOf(entity.getStatus()) == DataStatus.ONLINE) {
             throw ValidatorException.buildInvalidException(this.getClass(), "page status is enabled, cannot be delete");
         }
 
         if (!entity.getIsDelete()) {
             entity.setIsDelete(true);
-            entity.setStatus(DataStatus.OFFLINE);
+            entity.setStatus(DataStatus.OFFLINE.name());
             super.updateById(entity);
 
             widgetOperator.update(

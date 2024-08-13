@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-package io.innospots.libra.security.logger.mapper;
+package io.innospots.libra.security.logger.converter;
 
 import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.libra.security.logger.entity.LoginLogEntity;
@@ -32,8 +32,8 @@ import java.time.LocalDateTime;
  * @date 2021/12/13
  */
 @Mapper
-public interface LoginLogMapper {
-    LoginLogMapper INSTANCE = Mappers.getMapper(LoginLogMapper.class);
+public interface LoginLogConverter {
+    LoginLogConverter INSTANCE = Mappers.getMapper(LoginLogConverter.class);
 
     LoginLogEntity model2Entity(LoginLog loginLog);
 

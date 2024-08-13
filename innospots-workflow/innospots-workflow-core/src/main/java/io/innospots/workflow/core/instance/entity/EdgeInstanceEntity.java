@@ -86,6 +86,7 @@ public class EdgeInstanceEntity extends PBaseEntity {
 
 
     @Column(length = 32)
-    @Enumerated(value = EnumType.STRING)
-    private DataStatus status = DataStatus.ONLINE;
+//    @Enumerated(value = EnumType.STRING)
+    private String status = DataStatus.ONLINE.name();
+//    private DataStatus status = DataStatus.ONLINE;
 }

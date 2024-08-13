@@ -72,12 +72,14 @@ public class SysUserEntity extends BaseEntity {
     private String remark;
 
     @Column(length = 16)
-    @Enumerated(EnumType.STRING)
-    private DataStatus status;
+//    @Enumerated(EnumType.STRING)
+    private String status;
+//    private DataStatus status;
 
     @Column(length = 16)
-    @Enumerated(EnumType.STRING)
-    private OnOff onOff;
+//    @Enumerated(EnumType.STRING)
+//    private OnOff onOff;
+    private String onOff;
 
     @Column
     private Integer loginTimes;

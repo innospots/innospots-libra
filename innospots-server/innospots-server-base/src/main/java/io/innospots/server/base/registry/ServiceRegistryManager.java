@@ -79,7 +79,7 @@ public class ServiceRegistryManager {
         ServiceRegistryEntity registryEntity = serviceRegistryDao.selectOne(queryWrapper);
         LocalDateTime now = LocalDateTime.now();
         if (registryEntity != null) {
-            registryEntity.setServiceStatus(ServiceStatus.ONLINE);
+            registryEntity.setServiceStatus(ServiceStatus.ONLINE.name());
             registryEntity.setUpdatedTime(now);
             serviceRegistryDao.updateById(registryEntity);
             serviceInfo = BeanUtils.copyProperties(registryEntity, ServiceInfo.class);
@@ -101,7 +101,7 @@ public class ServiceRegistryManager {
             return null;
         }
 
-        registryEntity.setServiceStatus(ServiceStatus.OFFLINE);
+        registryEntity.setServiceStatus(ServiceStatus.OFFLINE.name());
         registryEntity.setUpdatedTime(LocalDateTime.now());
         serviceRegistryDao.updateById(registryEntity);
         return BeanUtils.copyProperties(registryEntity, ServiceInfo.class);
@@ -122,7 +122,7 @@ public class ServiceRegistryManager {
         int up = serviceRegistryDao.update(updateWrapper);
         if(up > 0){
             registryEntity.setUpdatedTime(now);
-            registryEntity.setServiceStatus(ServiceStatus.ONLINE);
+            registryEntity.setServiceStatus(ServiceStatus.ONLINE.name());
         }
         return BeanUtils.copyProperties(registryEntity, ServiceInfo.class);
     }
@@ -134,7 +134,7 @@ public class ServiceRegistryManager {
             logger.warn("serverInfo is null");
             return 0;
         }
-        registryEntity.setServiceRole(serviceRole);
+        registryEntity.setServiceRole(serviceRole.name());
         registryEntity.setUpdatedTime(LocalDateTime.now());
         return serviceRegistryDao.updateById(registryEntity);
     }

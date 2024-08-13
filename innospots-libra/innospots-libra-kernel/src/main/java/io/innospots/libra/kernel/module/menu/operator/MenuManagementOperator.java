@@ -285,7 +285,7 @@ public class MenuManagementOperator extends ServiceImpl<MenuResourceDao, MenuRes
                 menuResourceEntities.sort(Comparator.comparing(MenuResourceEntity::getOrders).reversed()
                         .thenComparing(MenuResourceEntity::getCreatedTime));
 
-                List<MenuResourceItem> subItems = menuResourceEntities.stream().filter(menuResource -> menuResource.getItemType() == ItemType.CATEGORY)
+                List<MenuResourceItem> subItems = menuResourceEntities.stream().filter(menuResource -> ItemType.valueOf(menuResource.getItemType()) == ItemType.CATEGORY)
                         .map(MenuResourceConverter.INSTANCE::entityToModel).collect(Collectors.toList());
                 item.setSubItems(subItems);
 
@@ -294,8 +294,8 @@ public class MenuManagementOperator extends ServiceImpl<MenuResourceDao, MenuRes
                 }
 
                 item.getSubItems().addAll(menuResourceEntities.stream()
-                        .filter(menuResourceEntity -> menuResourceEntity.getItemType() != ItemType.CATEGORY)
-                        .map(MenuResourceConverter.INSTANCE::entityToModel).collect(Collectors.toList()));
+                        .filter(menuResourceEntity -> ItemType.valueOf(menuResourceEntity.getItemType()) != ItemType.CATEGORY)
+                        .map(MenuResourceConverter.INSTANCE::entityToModel).toList());
 
                 if (CollectionUtils.isNotEmpty(item.getSubItems())) {
                     item.getSubItems().forEach(BaseItem::fillI18n);

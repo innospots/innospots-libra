@@ -64,7 +64,7 @@ public class ExtDefinitionOperator extends ServiceImpl<ExtDefinitionDao, ExtDefi
             //Judge whether the current application exists. If it does not exist, insert it directly into the database
             entity = ExtDefinitionConverter.INSTANCE.modelToEntity(appDefinition);
             entity.generateSignature();
-            entity.setExtensionStatus(ExtensionStatus.AVAILABLE);
+            entity.setExtensionStatus(ExtensionStatus.AVAILABLE.name());
             result = save(entity);
         } else {
             int compare = appDefinition.getVersion().compareToIgnoreCase(entity.getExtVersion());
@@ -72,8 +72,8 @@ public class ExtDefinitionOperator extends ServiceImpl<ExtDefinitionDao, ExtDefi
                 //If it exists, and the version is inconsistent and large, insert the update,
                 entity = ExtDefinitionConverter.INSTANCE.updateEntity4Model(entity, appDefinition);
                 entity.generateSignature();
-                if (entity.getExtensionStatus() == ExtensionStatus.EXPIRED) {
-                    entity.setExtensionStatus(ExtensionStatus.AVAILABLE);
+                if (ExtensionStatus.valueOf(entity.getExtensionStatus()) == ExtensionStatus.EXPIRED) {
+                    entity.setExtensionStatus(ExtensionStatus.AVAILABLE.name());
                 }
                 //result = save(entity);
                 result = updateById(entity);

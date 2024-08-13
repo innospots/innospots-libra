@@ -104,7 +104,7 @@ public class OperateLogAspect {
             operateLog.setResourceName(resourceName);
 //            operateLog.setResourceType(operationLog.resourceType());
 
-            operateLog.setOperateType(operationLog.operateType());
+            operateLog.setOperateType(operationLog.operateType().name());
 
             if (throwable != null) {
                 operateLog.setDetail(methodName + ", msg:" + throwable.getMessage() + ", exception:" + throwable.getClass().getSimpleName());

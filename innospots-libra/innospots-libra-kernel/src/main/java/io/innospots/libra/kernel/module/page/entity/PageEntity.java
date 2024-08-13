@@ -61,8 +61,9 @@ public class PageEntity extends PBaseEntity {
     private String pageType;
 
     @Column(length = 32)
-    @Enumerated(value = EnumType.STRING)
-    private DataStatus status;
+//    @Enumerated(value = EnumType.STRING)
+    private String status;
+    //    private DataStatus status;
 
     @Column(length = 128)
     private String description;

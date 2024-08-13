@@ -86,7 +86,7 @@ public class WorkflowService {
         boolean up = workflowInstanceOperator.updateWorkflowStatus(workflowInstanceId, dataStatus);
         if (up) {
             WorkflowInstanceEntity instanceEntity = workflowInstanceOperator.getWorkflowInstanceEntity(workflowInstanceId);
-            instanceEntity.setStatus(dataStatus);
+            instanceEntity.setStatus(String.valueOf(dataStatus));
             scheduleFlowJobService.updateScheduleStatus(instanceEntity);
         }
         return up;

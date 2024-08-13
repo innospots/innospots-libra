@@ -112,7 +112,7 @@ public class SysLogOperator extends ServiceImpl<SysOperateLogDao, SysOperateLogE
         List<UserLogInfo> userLogInfos = new ArrayList<>();
         for (SysOperateLogEntity logEntity : logEntities) {
             UserLogInfo logInfo = new UserLogInfo();
-            logInfo.setOperateType(logEntity.getOperateType());
+            logInfo.setOperateType(OperateType.valueOf(logEntity.getOperateType()));
             logInfo.setDetail(logEntity.getDetail());
             logInfo.setTime(DateTimeUtils.formatLocalDateTime(logEntity.getOperateTime(), DateTimeUtils.DEFAULT_DATETIME_PATTERN));
             logInfo.setUserId(logEntity.getUserId());

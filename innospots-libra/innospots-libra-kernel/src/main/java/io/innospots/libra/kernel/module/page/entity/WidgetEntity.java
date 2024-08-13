@@ -61,8 +61,9 @@ public class WidgetEntity extends PBaseEntity {
     private String name;
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private WidgetType type;
+//    @Enumerated(value = EnumType.STRING)
+    private String type;
+//    private WidgetType type;
 
     @Column(length = 128)
     private String description;

@@ -50,9 +50,10 @@ public class AvatarResourceEntity extends BaseEntity {
     @Column(length = 32)
     private String resourceId;
 
-    @Column(length = 12)
-    @Enumerated(EnumType.STRING)
-    private ImageType imageType;
+    @Column(length = 16)
+//    @Enumerated(EnumType.STRING)
+    private String imageType;
+//    private ImageType imageType;
 
     @Column(columnDefinition = "MEDIUMTEXT")
     private String imageBase64;

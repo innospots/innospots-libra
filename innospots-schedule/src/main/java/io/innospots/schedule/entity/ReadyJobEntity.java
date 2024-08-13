@@ -99,8 +99,9 @@ public class ReadyJobEntity extends PBaseEntity {
      * messsage status
      */
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private MessageStatus messageStatus;
+//    @Enumerated(value = EnumType.STRING)
+    private String messageStatus;
+//    private MessageStatus messageStatus;
 
     @Column
     private Integer sequenceNumber;
@@ -123,8 +124,9 @@ public class ReadyJobEntity extends PBaseEntity {
     private Integer version;
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private JobType jobType;
+//    @Enumerated(value = EnumType.STRING)
+    private String jobType;
+//    private JobType jobType;
 
     @Column
     private Integer subJobCount;

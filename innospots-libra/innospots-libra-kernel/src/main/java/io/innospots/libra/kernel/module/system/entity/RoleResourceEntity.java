@@ -67,6 +67,7 @@ public class RoleResourceEntity extends PBaseEntity {
     private String itemKey;
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private RoleResourceInfo.RoleResourceType resourceType;
+//    @Enumerated(value = EnumType.STRING)
+    private String resourceType;
+//    private RoleResourceInfo.RoleResourceType resourceType;
 }

@@ -71,12 +71,14 @@ public class SysConfigEntity extends PBaseEntity {
     private String tips;
 
     @Column(length = 8)
-    @Enumerated(EnumType.STRING)
-    private EncryptType encryptType;
+//    @Enumerated(EnumType.STRING)
+    private String encryptType;
+//    private EncryptType encryptType;
 
     @Column(length = 16)
-    @Enumerated(EnumType.STRING)
-    private FieldValueType valueType;
+//    @Enumerated(EnumType.STRING)
+    private String valueType;
+//    private FieldValueType valueType;
 
     @Column
     private Integer resourceId;

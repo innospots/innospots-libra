@@ -73,11 +73,11 @@ public class LibraNavigationMenuReader {
         List<RoleResourceEntity> roleResourceEntities = userResourceService.getUserResourceIds(CCH.userId());
 
         Set<String> menuItemKeys = roleResourceEntities.stream()
-                .filter(item -> item.getResourceType() == RoleResourceInfo.RoleResourceType.MENU)
+                .filter(item -> RoleResourceInfo.RoleResourceType.valueOf(item.getResourceType()) == RoleResourceInfo.RoleResourceType.MENU)
                 .map(RoleResourceEntity::getItemKey)
                 .collect(Collectors.toSet());
         Set<String> optItemKeys = roleResourceEntities.stream()
-                .filter(item -> item.getResourceType() == RoleResourceInfo.RoleResourceType.OPERATION)
+                .filter(item -> RoleResourceInfo.RoleResourceType.valueOf(item.getResourceType()) == RoleResourceInfo.RoleResourceType.OPERATION)
                 .map(RoleResourceEntity::getItemKey)
                 .collect(Collectors.toSet());
 

@@ -58,8 +58,8 @@ public class BaseCategoryEntity extends PBaseEntity {
     private String categoryName;
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private CategoryType categoryType;
+    //@Enumerated(value = EnumType.STRING)
+    private String categoryType;
 
     @Column
     private int orders;

@@ -48,7 +48,7 @@ public class NotificationChannelOperator extends ServiceImpl<NotificationChannel
     public NotificationChannel createChannel(NotificationChannel notificationChannel) {
         this.checkDifferentChannelName(notificationChannel);
         NotificationChannelEntity entity = NotificationChannelConverter.INSTANCE.modelToEntity(notificationChannel);
-        entity.setStatus(DataStatus.ONLINE);
+        entity.setStatus(DataStatus.ONLINE.name());
         super.save(entity);
         return NotificationChannelConverter.INSTANCE.entityToModel(entity);
     }
@@ -72,8 +72,8 @@ public class NotificationChannelOperator extends ServiceImpl<NotificationChannel
         this.checkChannelExist(channelId);
         NotificationChannelEntity entity = super.getById(channelId);
 
-        if (dataStatus != entity.getStatus()) {
-            entity.setStatus(dataStatus);
+        if (dataStatus != DataStatus.valueOf(entity.getStatus())) {
+            entity.setStatus(dataStatus.name());
             return super.updateById(entity);
         }
         return true;

@@ -69,7 +69,7 @@ public class NotificationMessageEntity extends PBaseEntity {
     @Column(length = 64)
     private String title;
 
-    @Column(length = 16)
+    @Column(length = 32)
     private String module;
 
     @Column(length = 32)

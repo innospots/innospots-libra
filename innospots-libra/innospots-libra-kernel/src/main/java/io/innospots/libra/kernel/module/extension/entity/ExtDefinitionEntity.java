@@ -93,8 +93,9 @@ public class ExtDefinitionEntity extends BaseEntity {
      * LOADED   AVAILABLE   EXPIRED
      */
     @Column(length = 16)
-    @Enumerated(EnumType.STRING)
-    private ExtensionStatus extensionStatus;
+//    @Enumerated(EnumType.STRING)
+    private String extensionStatus;
+//    private ExtensionStatus extensionStatus;
 
     /**
      * md5 signature from toString method
@@ -103,8 +104,9 @@ public class ExtDefinitionEntity extends BaseEntity {
     private String signature;
 
     @Column(length = 16)
-    @Enumerated(EnumType.STRING)
-    private ExtensionSource extensionSource;
+//    @Enumerated(EnumType.STRING)
+    private String extensionSource;
+//    private ExtensionSource extensionSource;
 
     /**
      * files of publish zip package

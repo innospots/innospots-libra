@@ -21,6 +21,7 @@ package io.innospots.schedule.converter;
 import cn.hutool.crypto.digest.MD5;
 import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.base.quartz.ExecutionStatus;
+import io.innospots.base.quartz.JobType;
 import io.innospots.base.utils.InnospotsIdGenerator;
 import io.innospots.schedule.entity.JobExecutionEntity;
 import io.innospots.schedule.entity.ReadyJobEntity;
@@ -52,7 +53,7 @@ public interface JobExecutionConverter extends BaseBeanConverter<JobExecution, J
     static JobExecutionEntity build(ReadyJobEntity readyJobEntity) {
         JobExecutionEntity jobExecutionEntity = INSTANCE.readyJobToJobExecution(readyJobEntity);
         jobExecutionEntity.setExecutionId(String.valueOf(InnospotsIdGenerator.generateId()));
-        jobExecutionEntity.setExecutionStatus(ExecutionStatus.RUNNING);
+        jobExecutionEntity.setExecutionStatus(ExecutionStatus.RUNNING.name());
         jobExecutionEntity.setStartTime(LocalDateTime.now());
         jobExecutionEntity.setPercent(0);
         return jobExecutionEntity;
@@ -79,14 +80,14 @@ public interface JobExecutionConverter extends BaseBeanConverter<JobExecution, J
         jobExecutionDisplay.setJobKey(entity.getJobKey());
         jobExecutionDisplay.setJobName(entity.getJobName());
         jobExecutionDisplay.setJobClass(entity.getJobClass());
-        jobExecutionDisplay.setJobType(entity.getJobType());
+        jobExecutionDisplay.setJobType(JobType.valueOf(entity.getJobType()));
         jobExecutionDisplay.setServerKey(entity.getServerKey());
         jobExecutionDisplay.setResourceKey(entity.getResourceKey());
         jobExecutionDisplay.setPercent(entity.getPercent());
         jobExecutionDisplay.setStartTime(entity.getStartTime());
         jobExecutionDisplay.setEndTime(entity.getEndTime());
         jobExecutionDisplay.setSelfEndTime(entity.getSelfEndTime());
-        jobExecutionDisplay.setExecutionStatus(entity.getExecutionStatus());
+        jobExecutionDisplay.setExecutionStatus(ExecutionStatus.valueOf(entity.getExecutionStatus()));
         jobExecutionDisplay.setMessage(entity.getMessage());
         jobExecutionDisplay.setDetailUri(entity.getDetailUri());
         jobExecutionDisplay.setScopes(entity.getScopes());

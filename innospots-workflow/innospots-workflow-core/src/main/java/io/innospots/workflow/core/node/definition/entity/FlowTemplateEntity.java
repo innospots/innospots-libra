@@ -58,8 +58,9 @@ public class FlowTemplateEntity extends PBaseEntity {
     private String type;
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private DataStatus status;
+//    @Enumerated(value = EnumType.STRING)
+    private String status;
+//    private DataStatus status;
 
     @Column(length = 128)
     private String description;
@@ -72,7 +73,7 @@ public class FlowTemplateEntity extends PBaseEntity {
     public FlowTemplateEntity(String tplName, String tplCode) {
         this.tplName = tplName;
         this.tplCode = tplCode;
-        this.setStatus(DataStatus.OFFLINE);
+        this.setStatus(DataStatus.OFFLINE.name());
         this.setCreatedTime(LocalDateTime.now());
         this.setUpdatedTime(LocalDateTime.now());
     }

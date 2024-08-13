@@ -55,7 +55,7 @@ public class MenuNavigationImporterFromApplication {
 
         MenuResourceEntity menuResourceEntity = newMenuItem(resourceItem, parentItem);
         if (menuResourceEntity != null) {
-            menuResourceEntity.setItemType(ItemType.MENU);
+            menuResourceEntity.setItemType(ItemType.MENU.name());
             int p = menuResourceDao.insert(menuResourceEntity);
         }
 
@@ -82,16 +82,16 @@ public class MenuNavigationImporterFromApplication {
         newMenuItem.setShowMenu(false);
         newMenuItem.setStatus(true);
         newMenuItem.setItemKey(parentItem.getItemKey() + optElement.getItemKey());
-        newMenuItem.setOpenMode(BaseItem.OpenMode.INTERNAL);
+        newMenuItem.setOpenMode(BaseItem.OpenMode.INTERNAL.name());
         System.out.println(newMenuItem);
         return newMenuItem;
     }
 
     private MenuResourceEntity newMenuItem(ResourceItem resourceItem, MenuResourceEntity parentItem) {
         MenuResourceEntity newMenuItem = MenuResourceConverter.INSTANCE.menuItemToEntity(resourceItem);
-        newMenuItem.setOpenMode(BaseItem.OpenMode.INTERNAL);
+        newMenuItem.setOpenMode(BaseItem.OpenMode.INTERNAL.name());
         newMenuItem.setStatus(true);
-        newMenuItem.setItemType(ItemType.MENU);
+        newMenuItem.setItemType(ItemType.MENU.name());
         if (parentItem != null) {
             newMenuItem.setParentId(parentItem.getResourceId());
             newMenuItem.setMenuGroup(parentItem.getMenuGroup());

@@ -75,10 +75,10 @@ public interface ReadyJobConverter extends BaseBeanConverter<ReadyJob, ReadyJobE
         readyJobEntity.setJobKey(scheduleJobInfo.getJobKey());
         readyJobEntity.setSequenceNumber(1);
         readyJobEntity.setResourceKey(scheduleJobInfo.getResourceKey());
-        readyJobEntity.setMessageStatus(MessageStatus.UNREAD);
+        readyJobEntity.setMessageStatus(MessageStatus.UNREAD.name());
         readyJobEntity.setJobClass(scheduleJobInfo.getJobClass());
         readyJobEntity.setScopes(scheduleJobInfo.getScopes());
-        readyJobEntity.setJobType(scheduleJobInfo.getJobType());
+        readyJobEntity.setJobType(scheduleJobInfo.getJobType().name());
         readyJobEntity.setSubJobCount(scheduleJobInfo.getSubJobCount());
         //using jobKey and context param to generate digestHex
         readyJobEntity.setVersion(1);

@@ -27,6 +27,8 @@ import lombok.Setter;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 import static io.innospots.libra.base.temp.SystemTempCacheEntity.TABLE_NAME;
 
 
@@ -44,13 +46,13 @@ public class SystemTempCacheEntity extends PBaseEntity {
     public static final String TABLE_NAME = "sys_temp_cache";
 
     @Id
-    @TableId(type = IdType.AUTO)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer cacheId;
-
-    @Column
+    @TableId(type = IdType.INPUT)
+    @Column(length = 32)
     private String cacheKey;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String cacheValue;
+
+    @Column
+    protected LocalDateTime expireTime;
 }

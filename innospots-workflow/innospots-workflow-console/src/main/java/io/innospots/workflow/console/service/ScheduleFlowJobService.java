@@ -39,7 +39,7 @@ public class ScheduleFlowJobService {
 
     public boolean updateScheduleStatus(WorkflowInstanceEntity workflowInstance) {
         ResourceActionEvent actionEvent = new ResourceActionEvent(ModuleConstants.JOB_MODULE, ResourceActionEvent.ResourceAction.STATUS, null);
-        actionEvent.setStatus(workflowInstance.getStatus());
+        actionEvent.setStatus(DataStatus.valueOf(workflowInstance.getStatus()));
         actionEvent.setPrimaryId(workflowInstance.getFlowKey());
         EventBusCenter.postSync(actionEvent);
         return true;

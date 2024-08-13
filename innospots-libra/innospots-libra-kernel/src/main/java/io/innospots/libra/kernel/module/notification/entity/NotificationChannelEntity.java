@@ -55,12 +55,14 @@ public class NotificationChannelEntity extends PBaseEntity {
     private String channelName;
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private DataStatus status;
+//    @Enumerated(value = EnumType.STRING)
+    private String status;
+//    private DataStatus status;
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private NotificationChannel.ChannelType channelType;
+//    @Enumerated(value = EnumType.STRING)
+    private String channelType;
+//    private NotificationChannel.ChannelType channelType;
 
     @Column(length = 16)
     private String registryId;

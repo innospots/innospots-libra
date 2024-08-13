@@ -64,8 +64,9 @@ public class FlowNodeGroupEntity extends PBaseEntity {
      * system or user
      */
     @Column(length = 16)
-    @Enumerated(EnumType.STRING)
-    private DataScope scopes;
+//    @Enumerated(EnumType.STRING)
+    private String scopes;
+//    private DataScope scopes;
 
     public static FlowNodeGroupEntity constructor(Integer flowTplId, String name, String code, Integer position,DataScope dataScope) {
         FlowNodeGroupEntity entity = new FlowNodeGroupEntity();
@@ -77,7 +78,7 @@ public class FlowNodeGroupEntity extends PBaseEntity {
         } else {
             entity.position = Integer.MAX_VALUE;
         }
-        entity.scopes = dataScope;
+        entity.scopes = dataScope.name();
         return entity;
     }
 

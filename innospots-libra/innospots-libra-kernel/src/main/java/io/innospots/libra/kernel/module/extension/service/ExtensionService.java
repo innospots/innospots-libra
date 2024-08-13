@@ -191,7 +191,7 @@ public class ExtensionService {
             log.error("install app error, appKey {} is not exits", appKey);
             throw ResourceException.buildNotExistException(this.getClass(), "appKey: " + appKey);
         }
-        if (!extDefinitionEntity.getExtensionStatus().canBeInstall()) {
+        if (!ExtensionStatus.valueOf(extDefinitionEntity.getExtensionStatus()).canBeInstall()) {
             throw ResourceException.buildInstallException(this.getClass(), "application is expired, appKey: " + extDefinitionEntity.getExtKey());
         }
 
@@ -212,7 +212,7 @@ public class ExtensionService {
             extInstallmentEntity.setExtKey(extDefinitionEntity.getExtKey());
             extInstallmentEntity.setInstallVersion(extDefinitionEntity.getExtVersion());
             extInstallmentEntity.setInstallTime(LocalDateTime.now());
-            extInstallmentEntity.setExtensionStatus(ExtensionStatus.INSTALLED);
+            extInstallmentEntity.setExtensionStatus(ExtensionStatus.INSTALLED.name());
         }
 
         // 复制app jar到AppClassPath目录

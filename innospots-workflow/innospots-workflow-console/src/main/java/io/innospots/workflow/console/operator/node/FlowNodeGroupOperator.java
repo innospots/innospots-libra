@@ -44,10 +44,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -176,7 +173,7 @@ public class FlowNodeGroupOperator {
             throw ResourceException.buildDeleteException(this.getClass(), "node group not exist");
         }
         //can't delete system scope
-        if (nodeGroupEntity.getScopes() == DataScope.system) {
+        if (Objects.equals(DataScope.system.name(),nodeGroupEntity.getScopes())) {
             return false;
         }
         int row = flowNodeGroupDao.deleteById(nodeGroupId);
@@ -312,7 +309,7 @@ public class FlowNodeGroupOperator {
         List<NodeGroup> resultList = new ArrayList<>();
         for (FlowNodeGroupEntity nodeGroupEntity : list) {
             NodeGroup nodeGroup = FlowNodeGroupConverter.INSTANCE.entityToModel(nodeGroupEntity);
-            nodeGroup.setDeletable(nodeGroupEntity.getScopes() != DataScope.system);
+            nodeGroup.setDeletable(!Objects.equals(DataScope.system.name(), nodeGroupEntity.getScopes()));
             if (excludeTrigger && "trigger".equals(nodeGroup.getCode())) {
                 nodeGroup.setHidden(true);
             }

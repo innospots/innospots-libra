@@ -73,15 +73,17 @@ public class FlowNodeDefinitionEntity extends PBaseEntity {
     private String nodeType;
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private NodePrimitive primitive;
+//    @Enumerated(value = EnumType.STRING)
+    private String primitive;
+//    private NodePrimitive primitive;
 
     @Column(length = 32)
     protected String credentialTypeCode;
 
-    @Column(length = 32)
-    @Enumerated(value = EnumType.STRING)
-    private DataStatus status;
+    @Column(length = 16)
+//    @Enumerated(value = EnumType.STRING)
+    private String status;
+//    private DataStatus status;
 
     @Column
     private Boolean deletable;

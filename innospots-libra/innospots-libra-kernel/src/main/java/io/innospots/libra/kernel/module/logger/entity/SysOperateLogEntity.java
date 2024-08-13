@@ -55,8 +55,9 @@ public class SysOperateLogEntity extends PBaseEntity {
     private String module;
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private OperateType operateType;
+//    @Enumerated(value = EnumType.STRING)
+    private String operateType;
+//    private OperateType operateType;
 
     @Column(length = 64)
     private String resourceId;

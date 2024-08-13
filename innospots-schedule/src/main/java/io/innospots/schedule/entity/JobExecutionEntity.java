@@ -94,8 +94,9 @@ public class JobExecutionEntity extends PBaseEntity {
     private String jobClass;
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private ExecutionStatus executionStatus;
+//    @Enumerated(value = EnumType.STRING)
+//    private ExecutionStatus executionStatus;
+    private String executionStatus;
 
     /**
      * the value of execution process percent
@@ -200,7 +201,8 @@ public class JobExecutionEntity extends PBaseEntity {
     private String serverKey;
 
     @Column(length = 16)
-    @Enumerated(value = EnumType.STRING)
-    private JobType jobType;
+//    @Enumerated(value = EnumType.STRING)
+    private String jobType;
+//    private JobType jobType;
 
 }

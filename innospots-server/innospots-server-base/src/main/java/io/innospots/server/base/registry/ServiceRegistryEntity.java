@@ -78,19 +78,21 @@ public class ServiceRegistryEntity {
     /**
      * server status
      */
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private ServiceStatus serviceStatus;
+    @Column(nullable = false,length = 16)
+//    @Enumerated(EnumType.STRING)
+    private String serviceStatus;
+//    private ServiceStatus serviceStatus;
 
-    @Column(nullable = false)
+    @Column(nullable = false,length = 32)
     private String serviceType;
 
     /**
      * serverRole
      */
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private ServiceRole serviceRole;
+    @Column(nullable = false,length = 16)
+//    @Enumerated(EnumType.STRING)
+//    private ServiceRole serviceRole;
+    private String serviceRole;
 
     /**
      * set service group name
