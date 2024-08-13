@@ -4,10 +4,16 @@ server:
 spring:
   jpa:
     hibernate:
-      ddl-auto: none
-    show-sql: false
-    generate-ddl: false
+      ddl-auto: update
+    show-sql: true
+    database-platform: io.innospots.server.base.CustomH2Dialect
+    generate-ddl: true
     open-in-view: false
+  sql:
+    init:
+      mode: always
+      platform: h2
+    data-locations: classpath:data.sql
 
 innospots:
   db:
