@@ -73,7 +73,7 @@ public class AppDefinitionOperator extends ServiceImpl<AppDefinitionDao, AppDefi
         if (entity == null) {
             throw ResourceException.buildNotExistException(this.getClass(), appKey);
         }
-        entity.setStatus(status);
+        entity.setStatus(status.name());
         super.updateById(entity);
         return true;
     }

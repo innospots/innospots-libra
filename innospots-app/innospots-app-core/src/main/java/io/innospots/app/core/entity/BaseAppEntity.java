@@ -30,8 +30,9 @@ public class BaseAppEntity extends PBaseEntity {
 
 //    @Column(columnDefinition = "varchar(32)")
     @Column(length = 32)
-    @Enumerated(value = EnumType.STRING)
-    protected DataStatus status;
+//    @Enumerated(value = EnumType.STRING)
+    protected String status;
+//    protected DataStatus status;
 
     @Column(length = 32)
     protected String icon;
