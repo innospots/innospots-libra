@@ -91,10 +91,11 @@ public class FlowNodeGroupController extends BaseController {
     public InnospotsResponse<List<NodeGroup>> listCategories(
             @Parameter(name = "templateCode") @PathVariable String templateCode,
             @Parameter(name = "includeNodes") @RequestParam(required = false, name = "includeNodes",defaultValue = "false") boolean includeNodes,
+            @Parameter(name = "includeAll") @RequestParam(required = false, name = "includeAll",defaultValue = "false") boolean includeAll,
             @Parameter(name = "excludeTrigger") @RequestParam(required = false, name = "excludeTrigger",defaultValue = "false") boolean excludeTrigger
             ) {
         return InnospotsResponse.success(
-                        flowNodeGroupOperator.getGroupByFlowTplCode(templateCode, includeNodes,excludeTrigger)
+                        flowNodeGroupOperator.getGroupByFlowTplCode(templateCode, includeNodes,excludeTrigger,includeAll)
         );
     }
 

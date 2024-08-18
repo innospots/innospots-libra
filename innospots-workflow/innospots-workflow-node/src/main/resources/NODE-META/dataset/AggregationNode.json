@@ -31,31 +31,20 @@
         "label": "聚合数据源",
 		"viewType": "radio",
         "dataSource": "static",
+        "hidden": true,
+        "disabled": true,
         "initialValue": "payload",
         "options": [
           {
             "value": "payload",
-            "label": "Payload"
+            "label": "输入数据"
           },
           {
             "value": "list",
             "label": "列表字段"
           }
         ]
-      },
-      "conditions": [
-        {
-          "result": "visible",
-          "relation": "OR",
-          "children": [
-            {
-              "name": "source_field_type",
-              "opt": "EQUAL",
-              "value": "list"
-            }
-          ]
-        }
-      ]
+      }
     },
     {
       "name": "list_parent_field",
@@ -227,25 +216,7 @@
             "value": "SUM_OF_LOGS"
           }
         ]
-      },
-      "conditions": [
-        {
-          "result": "visible",
-          "relation": "OR",
-          "children": [
-            {
-              "name": "source_field_type",
-              "opt": "EQUAL",
-              "value": "list"
-            },
-            {
-              "name": "source_field_type",
-              "opt": "EQUAL",
-              "value": "payload"
-            }
-          ]
-        }
-      ]
+      }
     }
   ]
 }

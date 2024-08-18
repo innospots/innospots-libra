@@ -173,7 +173,7 @@ public class FlowNodeGroupOperator {
             throw ResourceException.buildDeleteException(this.getClass(), "node group not exist");
         }
         //can't delete system scope
-        if (Objects.equals(DataScope.system.name(),nodeGroupEntity.getScopes())) {
+        if (Objects.equals(DataScope.system.name(), nodeGroupEntity.getScopes())) {
             return false;
         }
         int row = flowNodeGroupDao.deleteById(nodeGroupId);
@@ -248,21 +248,21 @@ public class FlowNodeGroupOperator {
         return Boolean.TRUE;
     }
 
-    public List<NodeGroup> getGroupByFlowTplCode(String flowTplCode, boolean includeNodes, boolean excludeTrigger) {
+    public List<NodeGroup> getGroupByFlowTplCode(String flowTplCode, boolean includeNodes, boolean excludeTrigger, boolean includeAll) {
         if (flowTplCode == null) {
             throw ValidatorException.buildMissingException(this.getClass(), "flow template code is null");
         }
         FlowTemplateEntity templateEntity = flowTemplateDao.selectOne(new QueryWrapper<FlowTemplateEntity>().lambda().eq(FlowTemplateEntity::getTplCode, flowTplCode));
-        return fillNodeGroup(flowTplCode, templateEntity.getFlowTplId(), includeNodes, excludeTrigger);
+        return fillNodeGroup(flowTplCode, templateEntity.getFlowTplId(), includeNodes, excludeTrigger, includeAll);
     }
 
 
     public List<NodeGroup> getGroupByFlowTplId(Integer flowTplId, boolean includeNodes, boolean excludeTrigger) {
         FlowTemplateEntity templateEntity = flowTemplateDao.selectById(flowTplId);
-        return fillNodeGroup(templateEntity.getTplCode(), flowTplId, includeNodes, excludeTrigger);
+        return fillNodeGroup(templateEntity.getTplCode(), flowTplId, includeNodes, excludeTrigger, true);
     }
 
-    private List<NodeGroup> fillNodeGroup(String tplCode, Integer flowTplId, boolean includeNodes, boolean excludeTrigger) {
+    private List<NodeGroup> fillNodeGroup(String tplCode, Integer flowTplId, boolean includeNodes, boolean excludeTrigger, boolean includeAll) {
         QueryWrapper<FlowNodeGroupEntity> ngEntityQuery = new QueryWrapper<>();
         ngEntityQuery.lambda().eq(FlowNodeGroupEntity::getFlowTplId, flowTplId).orderByAsc(FlowNodeGroupEntity::getPosition)
                 .orderByDesc(FlowNodeGroupEntity::getUpdatedTime);
@@ -296,11 +296,11 @@ public class FlowNodeGroupOperator {
                 for (FlowNodeGroupNodeEntity groupNode : groupNodeList) {
                     List<NodeDefinition> nodeDefinitions = ndMap.computeIfAbsent(groupNode.getNodeGroupId(), k -> new ArrayList<>());
                     NodeDefinition node = nodeDefinitionMap.get(groupNode.getNodeId());
-                    if(node != null){
+                    if (node != null) {
                         nodeDefinitions.add(node);
-                    }else{
+                    } else {
                         log.warn("node definition has been removed, but node group have this relation record, nodeId:{}, groupId:{}, primaryId:{}",
-                                groupNode.getNodeId(),groupNode.getNodeGroupId(),groupNode.getNodeGroupNodeId());
+                                groupNode.getNodeId(), groupNode.getNodeGroupId(), groupNode.getNodeGroupNodeId());
                     }
                 }//end for group
             }//end for node definition list
@@ -314,8 +314,11 @@ public class FlowNodeGroupOperator {
                 nodeGroup.setHidden(true);
             }
             if ("all".equalsIgnoreCase(nodeGroup.getCode())) {
-                nodeGroup.setNodes(allNodes);
-                resultList.add(nodeGroup);
+                if (includeAll) {
+                    nodeGroup.setNodes(allNodes);
+                    resultList.add(nodeGroup);
+                }
+                nodeGroup.setHidden(!includeAll);
             } else {
                 nodeGroup.setNodes(ndMap.getOrDefault(nodeGroup.getNodeGroupId(), new ArrayList<>()));
                 resultList.add(nodeGroup);

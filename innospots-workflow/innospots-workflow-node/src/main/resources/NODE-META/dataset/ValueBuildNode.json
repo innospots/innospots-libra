@@ -5,7 +5,7 @@
   "primitive": "dataset",
   "vendor": "innospots",
   "description": "替换空值，指定值",
-  "icon": "data_value",
+  "icon": "/image/NODE/data_value",
   "nodeType": "io.innospots.workflow.node.app.dataset.ValueBuildNode",
   "outPorts": "1",
   "inPorts": "1",
@@ -74,8 +74,8 @@
           },
           {
             "code": "method",
-            "type": "Select",
-            "width": "80px",
+            "type": "SELECT",
+            "width": "120px",
             "title": "处置方式",
             "default": "",
             "options": [
@@ -164,7 +164,7 @@
           },
           {
             "code": "function",
-            "type": "Select",
+            "type": "SELECT",
             "width": "130px",
             "title": "函数",
             "default": "",
@@ -209,7 +209,7 @@
           },
           {
             "code": "field",
-            "type": "INPUT",
+            "type": "FIELD",
             "width": "130px",
             "title": "字段",
             "default": ""

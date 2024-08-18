@@ -4,8 +4,8 @@
   "flowCode": "EVENTS",
   "primitive": "compute",
   "vendor": "innospots",
-  "description": "窗口，累计，排序",
-  "icon": "win_compute",
+  "description": "窗口滚动，累计，排序",
+  "icon": "/image/NODE/win_compute",
   "nodeType": "io.innospots.workflow.node.app.compute.WindowComputeNode",
   "outPorts": "1",
   "inPorts": "1",
@@ -29,6 +29,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "tooltip": "是否输出输入数据，等于 true 时，只会输出计算字段，输入数据不输出",
         "viewType": "switch",
         "initialValue": false,
         "label": "只输出计算字段",
@@ -45,6 +46,7 @@
         "dataSource": "static",
         "initialValue": "COLUMN",
         "label": "函数类型",
+        "tooltip": "字段计算的方式",
 		"viewType": "picker",
         "options": [
           {
@@ -70,8 +72,8 @@
       "deletable": false,
       "settings": {
         "fieldSource": "win_compute_1",
-        "label": "计算字段",
-        "tooltip": "将选中的字段值按选择的处置方式进行加工处理如替换空值。替换枚举值等",
+        "label": "滚动计算字段",
+        "tooltip": "按列采用滑动窗口使用函数计算新字段的值",
         "customColumns": [{
           "type": "INPUT",
           "width": "120px",
@@ -158,8 +160,8 @@
       "deletable": false,
       "settings": {
         "fieldSource": "win_compute_1",
-        "label": "计算字段",
-        "tooltip": "将选中的字段值按选择的处置方式进行加工处理如替换空值。替换枚举值等",
+        "label": "累计计算字段",
+        "tooltip": "基于选中列字段按滑动窗口采用函数累计计算值",
         "customColumns": [{
           "type": "INPUT",
           "width": "120px",
@@ -240,8 +242,8 @@
       "deletable": false,
       "settings": {
         "fieldSource": "win_compute_1",
-        "label": "计算字段",
-        "tooltip": "将选中的字段值按选择的处置方式进行加工处理如替换空值。替换枚举值等",
+        "label": "移动计算字段",
+        "tooltip": "按滑动函数移动计算新字段的值",
         "customColumns": [{
           "type": "INPUT",
           "width": "120px",

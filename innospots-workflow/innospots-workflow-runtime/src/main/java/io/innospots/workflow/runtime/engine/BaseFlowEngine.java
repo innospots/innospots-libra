@@ -87,16 +87,23 @@ public abstract class BaseFlowEngine implements IFlowEngine {
 
         startFlow(flow, flowExecution);
         try {
+            execute(flow,flowExecution);
+            /*
             if (flow.getFlowStatus() == FlowStatus.LOADED) {
                 execute(flow, flowExecution);
             } else {
                 failExecution(flow, flowExecution);
             }
+             */
         } catch (Exception e) {
             logger.error("flow execution fail!", e);
             flowExecution.setStatus(ExecutionStatus.FAILED);
         }
-        completeFlow(flowExecution, false);
+        if(flow.getFlowStatus() != FlowStatus.LOADED){
+            failExecution(flow,flowExecution);
+        }else{
+            completeFlow(flowExecution, false);
+        }
     }
 
     protected void failExecution(Flow flow, FlowExecution flowExecution) {
