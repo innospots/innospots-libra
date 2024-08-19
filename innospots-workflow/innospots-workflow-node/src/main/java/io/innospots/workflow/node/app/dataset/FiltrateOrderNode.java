@@ -20,6 +20,7 @@ package io.innospots.workflow.node.app.dataset;
 
 import cn.hutool.core.builder.CompareToBuilder;
 import cn.hutool.core.comparator.ComparatorChain;
+import cn.hutool.core.comparator.CompareUtil;
 import io.innospots.base.script.IScriptExecutor;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
@@ -97,7 +98,11 @@ public class FiltrateOrderNode extends BaseNodeExecutor {
 
     private void fillComparator(ComparatorChain<Map<String,Object>> comparatorChain,List<NodeParamField> paramFields,boolean reverse){
         for (NodeParamField orderField : paramFields) {
-            Comparator<Map<String, Object>> comparator = (o1, o2) -> CompareToBuilder.reflectionCompare(o1.get(orderField.getCode()),o2.get(orderField.getCode()));
+            Comparator<Map<String, Object>> comparator = (o1, o2) -> {
+                Comparable c1 = (Comparable) o1.get(orderField.getCode());
+                Comparable c2 = (Comparable) o2.get(orderField.getCode());
+                return CompareUtil.compare(c1,c2,false);
+            };
             comparatorChain.addComparator(comparator,reverse);
         }
     }

@@ -88,7 +88,7 @@
         }, {
           "code": "function",
           "type": "SELECT",
-          "width": "100px",
+          "width": "120px",
           "title": "函数",
           "default": "",
           "options": [{
@@ -176,7 +176,7 @@
         }, {
           "code": "function",
           "type": "SELECT",
-          "width": "100px",
+          "width": "120px",
           "title": "函数",
           "default": "",
           "options": [{
@@ -258,7 +258,7 @@
         }, {
           "code": "function",
           "type": "SELECT",
-          "width": "100px",
+          "width": "120px",
           "title": "函数",
           "default": "",
           "options": [{
