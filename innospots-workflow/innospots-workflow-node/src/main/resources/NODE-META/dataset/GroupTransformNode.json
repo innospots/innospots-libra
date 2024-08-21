@@ -23,18 +23,6 @@
       }
     },
     {
-      "name": "output_restricted",
-      "type": "Switch",
-      "valueType": "boolean",
-      "copyable": false,
-      "deletable": false,
-      "settings": {
-        "viewType": "switch",
-        "initialValue": false,
-        "label": "只输出计算字段"
-      }
-    },
-    {
       "name": "source_field_type",
       "type": "OptionPicker",
       "valueType": "string",
@@ -45,10 +33,11 @@
 		"viewType": "radio",
         "dataSource": "static",
         "initialValue": "payload",
+        "hidden": true,
         "options": [
           {
             "value": "payload",
-            "label": "Payload"
+            "label": "输入数据"
           },
           {
             "value": "list",
@@ -88,6 +77,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "multiple": true,
         "fieldSource": "group_compute_1",
         "label": "分组字段"
       },
@@ -112,6 +102,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "multiple": true,
         "fieldSource": "group_compute_1",
         "label": "分组字段"
       },
@@ -152,123 +143,9 @@
           {
             "value": "COLUMN",
             "label": "列计算"
-          },
-          {
-            "value": "AGGRE",
-            "label": "聚合计算"
           }
         ]
       }
-    },
-    {
-      "name": "aggregate_field",
-      "type": "AggregateVariables",
-      "valueType": "array",
-      "copyable": false,
-      "deletable": false,
-      "settings": {
-        "fieldSource": "group_compute_1",
-        "label": "聚合变量",
-        "options": [
-          {
-            "label": "总计",
-            "value": "SUM"
-          },
-          {
-            "label": "次数",
-            "value": "COUNT"
-          },
-          {
-            "label": "非重复计数",
-            "value": "DISCOUNT"
-          },
-          {
-            "label": "平均值",
-            "value": "AVG"
-          },
-          {
-            "label": "最大值",
-            "value": "MAX"
-          },
-          {
-            "label": "最小值",
-            "value": "MIN"
-          },
-          {
-            "label": "标准差",
-            "value": "STD_DEV"
-          },
-          {
-            "label": "中位数",
-            "value": "MEDIAN"
-          },
-          {
-            "label": "众数",
-            "value": "MODE"
-          },
-          {
-            "label": "无偏方差",
-            "value": "VARIANCE"
-          },
-          {
-            "label": "均值的标准误差",
-            "value": "SEM"
-          },
-          {
-            "label": "平均绝对差",
-            "value": "MAD"
-          },
-          {
-            "label": "样本偏度（第三阶）",
-            "value": "SKEW"
-          },
-          {
-            "label": "样本偏度（第四阶）",
-            "value": "KURT"
-          },
-          {
-            "label": "平方和",
-            "value": "SOS"
-          },
-          {
-            "label": "半方差",
-            "value": "SEMI_VAR"
-          },
-          {
-            "label": "连乘",
-            "value": "PROD"
-          },
-          {
-            "label": "总体标准差",
-            "value": "POP_STD_DEV"
-          },
-          {
-            "label": "总体方差",
-            "value": "POP_VARIANCE"
-          },
-          {
-            "label": "几何平均数",
-            "value": "GEOMETRIC_MEAN"
-          },
-          {
-            "label": "log求和",
-            "value": "SUM_OF_LOGS"
-          }
-        ]
-      },
-      "conditions": [
-        {
-          "result": "visible",
-          "relation": "OR",
-          "children": [
-            {
-              "name": "func_type",
-              "opt": "EQUAL",
-              "value": "AGGRE"
-            }
-          ]
-        }
-      ]
     },
     {
       "name": "rolling_fields",
@@ -303,8 +180,8 @@
       "deletable": false,
       "settings": {
         "fieldSource": "group_compute_1",
-        "label": "聚合计算字段",
-        "tooltip": "聚合计算字段值"
+        "label": "累计计算字段",
+        "tooltip": "累计计算字段值"
       },
       "conditions": [
         {

@@ -18,19 +18,19 @@
 
 package io.innospots.workflow.node.app.dataset;
 
-import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
-import io.innospots.workflow.core.node.field.NodeParamField;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
+import io.innospots.workflow.core.node.field.NodeParamField;
 import io.innospots.workflow.core.utils.NodeInstanceUtils;
 import io.innospots.workflow.node.app.compute.AggregationComputeField;
 import io.innospots.workflow.node.app.utils.AppNodeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * group by the dimension field and aggregate the summary field values
@@ -75,25 +75,9 @@ public class AggregationNode extends BaseNodeExecutor {
     public void invoke(NodeExecution nodeExecution) {
         NodeOutput nodeOutput = this.buildOutput(nodeExecution);
         List<Map<String, Object>> items = new ArrayList<>();
-        ArrayListValuedHashMap<String, Map<String, Object>> groupItems = new ArrayListValuedHashMap<>();
-        for (ExecutionInput executionInput : nodeExecution.getInputs()) {
-            for (Map<String, Object> item : executionInput.getData()) {
-                String key = dimensionFields.stream().map(f-> String.valueOf(item.get(f.getCode()))).collect(Collectors.joining("~"));
-                groupItems.put(key, item);
-            }//end for item
-        }//end for execution input
-        for (Map.Entry<String, Collection<Map<String, Object>>> entry : groupItems.asMap().entrySet()) {
-            Map<String, Object> item = new HashMap<>();
-            //item.put(dimensionField.getCode(), entry.getKey());
-            for (AggregationComputeField computeField : computeFields) {
-                item.put(computeField.getCode(), computeField.compute(entry.getValue()));
-            }
-            String[] dims = entry.getKey().split("~");
-            for (int i = 0; i < dims.length; i++) {
-                item.put(dimensionFields.get(i).getCode(),dims[i]);
-            }
-            items.add(item);
-        }
+        ArrayListValuedHashMap<String, Map<String, Object>> groupItems = AppNodeUtils.groupItems(nodeExecution,dimensionFields);
+
+        items = AppNodeUtils.computeAggregateFields(groupItems,computeFields,dimensionFields);
         nodeOutput.setResults(items);
     }
 

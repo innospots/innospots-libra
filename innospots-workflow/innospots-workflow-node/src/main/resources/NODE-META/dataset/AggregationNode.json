@@ -126,7 +126,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
-        "label": "聚合变量",
+        "label": "聚合字段",
         "fieldSource": "AGGREGATION_1",
         "dependencies": "source_field_type",
         "parentField": "list_parent_field",

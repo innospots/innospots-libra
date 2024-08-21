@@ -1,17 +1,11 @@
 package io.innospots.workflow.node.app.compute;
 
-import io.innospots.base.function.moving.IMovingFunction;
-import io.innospots.base.function.moving.MovingFunctionBuilder;
-import io.innospots.base.model.Pair;
-import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
-import io.innospots.workflow.core.instance.model.NodeInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static io.innospots.workflow.node.app.compute.FunctionField.buildFuncFields;
@@ -61,7 +55,7 @@ public class WindowComputeNode extends BaseNodeExecutor {
         }
     }
 
-
+    /*
     private List<Pair<FunctionField, IMovingFunction>> buildMovingFunctions(NodeExecution nodeExecution) {
         Integer total = null;
         List<FunctionField> functionFields;
@@ -85,6 +79,7 @@ public class WindowComputeNode extends BaseNodeExecutor {
         }
         return movingFunctions;
     }
+     */
 
 
     @Override

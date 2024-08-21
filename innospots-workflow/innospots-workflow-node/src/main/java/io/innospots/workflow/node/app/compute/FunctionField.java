@@ -6,6 +6,7 @@ import io.innospots.base.function.moving.MovingFunctionBuilder;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.Pair;
 import io.innospots.base.model.field.ParamField;
+import io.innospots.workflow.core.exception.NodeFieldException;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
@@ -15,10 +16,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Smars
@@ -51,11 +49,13 @@ public class FunctionField {
 
     public static List<Pair<FunctionField, IMovingFunction>> buildMovingFunctions(
             NodeExecution nodeExecution,
-            FuncType funcType,List<FunctionField> functionFields) {
-        Integer total = null;
-        if (funcType == FuncType.ACCUM) {
-            total = nodeExecution.getInputs().stream().map(ExecutionInput::size).mapToInt(Integer::intValue).sum();
-        }
+            FuncType funcType, List<FunctionField> functionFields) {
+        Integer total = nodeExecution.getInputs().stream().map(ExecutionInput::size).mapToInt(Integer::intValue).sum();
+        return buildMovingFunctions(funcType, functionFields, total);
+    }
+
+    public static List<Pair<FunctionField, IMovingFunction>> buildMovingFunctions(
+            FuncType funcType, List<FunctionField> functionFields, Integer total) {
         List<Pair<FunctionField, IMovingFunction>> movingFunctions = new ArrayList<>();
         for (FunctionField wField : functionFields) {
             Integer window = wField.getWinLength();
@@ -71,41 +71,51 @@ public class FunctionField {
         return movingFunctions;
     }
 
+
     public static void computeAccumAndRolling(NodeOutput nodeOutput, NodeExecution nodeExecution,
-                                        FuncType funcType, List<FunctionField> functionFields,boolean outputRestricted, Logger logger) {
-//        NodeOutput nodeOutput = buildOutput(nodeExecution);
+                                              FuncType funcType, List<FunctionField> functionFields, boolean outputRestricted, Logger logger) {
+        for (ExecutionInput executionInput : nodeExecution.getInputs()) {
+            try {
+                List<Map<String, Object>> computedItems = computeAccumAndRolling(executionInput.getData(), funcType, functionFields, outputRestricted, logger);
+                nodeOutput.addResult(computedItems);
+            } catch (Exception e) {
+                nodeExecution.setMessage(e.getMessage());
+                nodeExecution.setStatus(ExecutionStatus.FAILED);
+            }
+        }//end for execution input
+    }
+
+
+    public static List<Map<String, Object>> computeAccumAndRolling(Collection<Map<String, Object>> items, FuncType funcType,
+                                                                   List<FunctionField> functionFields, boolean outputRestricted, Logger logger) {
         List<Map<String, Object>> outData = new ArrayList<>();
         StringBuilder error = new StringBuilder();
-        List<Pair<FunctionField, IMovingFunction>> movingFunctions = buildMovingFunctions(nodeExecution,funcType,functionFields);
-        for (ExecutionInput executionInput : nodeExecution.getInputs()) {
-            for (Map<String, Object> item : executionInput.getData()) {
-                Map<String, Object> out = new LinkedHashMap<>();
-                for (Pair<FunctionField, IMovingFunction> functionPair : movingFunctions) {
-                    FunctionField functionField = functionPair.getLeft();
-                    try {
-                        Object result = functionPair.getRight().compute(item);
-                        out.put(functionPair.getLeft().getFieldCode(), result);
-                    } catch (Exception e) {
-                        logger.error("compute field failed:{}, data:{}", functionField, item, e);
-                        error.append(functionField.getFieldCode());
-                        error.append(", ");
-                        error.append(functionField.getFunction());
-                        error.append(" ,error: ");
-                        error.append(e.getMessage());
-                    }
-
+        List<Pair<FunctionField, IMovingFunction>> movingFunctions = buildMovingFunctions(funcType, functionFields, items.size());
+        for (Map<String, Object> item : items) {
+            Map<String, Object> out = new LinkedHashMap<>();
+            for (Pair<FunctionField, IMovingFunction> functionPair : movingFunctions) {
+                FunctionField functionField = functionPair.getLeft();
+                try {
+                    Object result = functionPair.getRight().compute(item);
+                    out.put(functionPair.getLeft().getFieldCode(), result);
+                } catch (Exception e) {
+                    logger.error("compute field failed:{}, data:{}", functionField, item, e);
+                    error.append(functionField.getFieldCode());
+                    error.append(", ");
+                    error.append(functionField.getFunction());
+                    error.append(" ,error: ");
+                    error.append(e.getMessage());
                 }
-                if (!outputRestricted) {
-                    out.putAll(item);
-                }
-                outData.add(out);
-            }//end for item
-        }//end for execution input
-        if (error.length() > 0) {
-            nodeExecution.setMessage(error.toString());
-            nodeExecution.setStatus(ExecutionStatus.FAILED);
+            }//end function pair
+            if (!outputRestricted) {
+                out.putAll(item);
+            }
+            outData.add(out);
+        }//end for item
+        if (!error.isEmpty()) {
+            throw NodeFieldException.buildException(FunctionField.class, error.toString(), "");
         }
-        nodeOutput.setResults(outData);
+        return outData;
     }
 
 }

@@ -6,6 +6,7 @@ import io.innospots.base.function.shift.ShiftFunctionType;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.base.utils.Initializer;
+import io.innospots.workflow.core.exception.NodeFieldException;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
@@ -66,6 +67,15 @@ public class ShiftFunctionField implements Initializer {
         for (ExecutionInput executionInput : nodeExecution.getInputs()) {
             outData.addAll(executionInput.getData());
         }//end for execution input
+        List<Map<String, Object>> nFData = computeShift(outData, shiftFields, outputRestricted, logger);
+        nodeOutput.setResults(nFData);
+    }
+
+
+    public static List<Map<String,Object>> computeShift(List<Map<String,Object>> outData,
+                                    List<ShiftFunctionField> shiftFields, boolean outputRestricted, Logger logger) {
+
+        StringBuilder error = new StringBuilder();
         List<Map<String, Object>> nFData = new ArrayList<>();
         for (ShiftFunctionField shiftField : shiftFields) {
             try {
@@ -76,6 +86,7 @@ public class ShiftFunctionField implements Initializer {
                     }
                     continue;
                 }//end not outputRestricted
+
                 if (nFData.isEmpty()) {
                     for (int i = 0; i < obj.length; i++) {
                         Map<String, Object> nItem = new LinkedHashMap<>();
@@ -97,14 +108,13 @@ public class ShiftFunctionField implements Initializer {
             }
 
         }//end for
-        if (error.length() > 0) {
-            nodeExecution.setMessage(error.toString());
-            nodeExecution.setStatus(ExecutionStatus.FAILED);
+        if (!error.isEmpty()) {
+            throw NodeFieldException.buildException(ShiftFunctionField.class,error.toString(),"");
         }
-        if (nFData.isEmpty()) {
-            nodeOutput.setResults(outData);
-        } else {
-            nodeOutput.setResults(nFData);
+
+        if(nFData.isEmpty()){
+            return outData;
         }
+        return nFData;
     }
 }

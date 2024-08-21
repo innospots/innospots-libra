@@ -43,6 +43,7 @@
       "deletable": false,
       "settings": {
         "fieldSource": "sort_filter_1",
+        "multiple": true,
         "label": "升序字段",
         "tooltip": "聚合维度，选择上一个输入数据的多个字段\n下拉选择多个字段，用于聚合计算使用"
       }
@@ -56,6 +57,7 @@
       "settings": {
         "fieldSource": "sort_filter_1",
         "label": "降序字段",
+        "multiple": true,
         "tooltip": "聚合维度，选择上一个输入数据的多个字段\n下拉选择多个字段，用于聚合计算使用"
       }
     },
