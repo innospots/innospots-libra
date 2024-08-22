@@ -336,7 +336,10 @@ public class ExecutionCarrier {
         Collections.sort(units);
         List<String> paths = new ArrayList<>();
         HashMap<String,List<String>> threads = new HashMap<>();
-        LocalDateTime firstStartTime = units.get(0).nodeExecution.getStartTime();
+        if(units.isEmpty()){
+            return info;
+        }
+        LocalDateTime firstStartTime = units.get(0).nodeExecution().getStartTime();
         for (int i = 0; i < units.size(); i++) {
             String s = (i+1) +":";
             EcUnit unit = units.get(i);

@@ -21,6 +21,7 @@ package io.innospots.workflow.node.app.logic;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.innospots.base.condition.BaseCondition;
+import io.innospots.base.condition.Relation;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.script.IScriptExecutor;
@@ -123,12 +124,24 @@ public class SwitchNode extends BaseNodeExecutor {
         if (v == null) {
             throw ConfigException.buildMissingException(this.getClass(), "nodeKey:" + nodeKey() + ", field:" + FIELD_CONDITIONS);
         }
-        List<SwitchCondition> switchConditions = null;
+        List<SwitchCondition> switchConditions = new ArrayList<>();
         try {
             List<Map<String,Object>> conditionsMap = (List<Map<String, Object>>) v;
-            switchConditions = BeanUtils.toBean(conditionsMap,SwitchCondition.class);
+            for (Map<String, Object> map : conditionsMap) {
+                String sourceAnchor = (String) map.get("sourceAnchor");
+                Map<String,Object> branch = (Map<String, Object>) map.get("branch");
+                if(branch == null){
+                    continue;
+                }
+                BaseCondition condition = BeanUtils.toBean(branch,BaseCondition.class);
+                SwitchCondition sw = new SwitchCondition();
+                sw.condition = condition;
+                sw.condition.setRelation(Relation.AND);
+                sw.sourceAnchor = sourceAnchor;
+                switchConditions.add(sw);
+            }
+            //switchConditions = BeanUtils.toBean(conditionsMap,SwitchCondition.class);
 //            switchConditions = JSONUtils.parseObject(JSONUtils.toJsonString(v), SwitchCondition[].class);
-            assert switchConditions != null;
             for (SwitchCondition switchCondition : switchConditions) {
                 switchCondition.initialize();
                 if (this.nodeAnchors() != null) {

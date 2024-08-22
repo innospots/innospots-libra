@@ -165,11 +165,18 @@ public class EcUnit implements Comparable<EcUnit>{
     }
 
     String consume(){
-        return nodeExecution.getConsume();
+        return nodeExecution()!=null?this.nodeExecution.getConsume():null;
     }
 
     int sequence(){
-        return nodeExecution.getSequenceNumber();
+        return nodeExecution()!=null?this.nodeExecution.getSequenceNumber():-1;
+    }
+
+    public NodeExecution nodeExecution(){
+        if(nodeExecution == null){
+            this.nodeExecution = carrier.getNodeExecution(this.nodeKey());
+        }
+        return nodeExecution;
     }
 
 
