@@ -18,6 +18,7 @@
 
 package io.innospots.workflow.core.node.definition.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.innospots.workflow.core.node.NodeInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -52,8 +53,9 @@ public class NodeDefinition extends NodeInfo {
     @Schema(title = "execute script code")
     private Map<String, Object> scripts;
 
-//    @Schema(title = "the setting of the execution pop panel, includes size and elements")
-//    private Map<String, Object> executionPreview;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Schema(title = "the setting of the execution pop panel, includes size and elements")
+    private Map<String, Object> executionPreview;
 
 
     @Override

@@ -29,6 +29,7 @@ public class NodeDefinitionBuilder {
             settings.putAll(nodeMetaInfo.getSettings());
         }
         nodeDefinition.setSettings(settings);
+        nodeDefinition.setExecutionPreview(nodeMetaInfo.getExecutionPreview());
 
         fillInfo(nodeMetaInfo, nodeDefinition);
         rebuildComp(nodeMetaInfo, nodeDefinition);

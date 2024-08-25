@@ -19,6 +19,7 @@
 package io.innospots.workflow.core.runtime.webhook;
 
 
+import io.innospots.base.connector.http.HttpField;
 import io.innospots.base.model.field.ParamField;
 import lombok.Getter;
 import lombok.Setter;
@@ -51,6 +52,8 @@ public class FlowWebhookConfig {
     private Map<String, String> authBody=new HashMap<>();
 
     private List<ParamField> responseFields;
+
+    private List<HttpField> requestFields;
 
 
     private ResponseMode responseMode;

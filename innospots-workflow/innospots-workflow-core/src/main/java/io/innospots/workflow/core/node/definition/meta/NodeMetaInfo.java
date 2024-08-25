@@ -72,6 +72,8 @@ public class NodeMetaInfo {
     @Schema(title = "execute script code")
     protected Map<String,Object> scripts;
 
+    protected Map<String,Object> executionPreview;
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{");

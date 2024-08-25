@@ -9,6 +9,19 @@
   "nodeType": "io.innospots.workflow.node.app.trigger.ApiTriggerNode",
   "inPorts": "1",
   "outPorts": "1",
+  "executionPreview": {
+    "enableExecute": false,
+    "elements": [
+      "WebhookExecution",
+      {
+        "tabs": [
+          "RESULT",
+          "JSON",
+          "LOG"
+        ]
+      }
+    ]
+  },
   "components": [
     {
       "name": "displayName",

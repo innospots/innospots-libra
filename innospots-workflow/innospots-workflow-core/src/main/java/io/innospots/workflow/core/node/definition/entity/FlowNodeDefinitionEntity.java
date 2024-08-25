@@ -110,4 +110,7 @@ public class FlowNodeDefinitionEntity extends PBaseEntity {
     @Column(columnDefinition = "MEDIUMTEXT")
     private String scripts;
 
+    @Column(columnDefinition = "TEXT")
+    private String executionPreview;
+
 }
