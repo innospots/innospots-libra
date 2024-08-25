@@ -9,10 +9,12 @@
   "nodeType": "io.innospots.workflow.node.app.logic.ConditionNode",
   "outPorts": [
     {
+      "id": "true-out",
       "label": "true",
       "count": 1
     },
     {
+      "id": "false-out",
       "label": "false",
       "count": 1
     }

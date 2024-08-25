@@ -111,7 +111,7 @@ public class BeanUtils{
     }
 
     public static <T> T toBean(Map<String, Object> beanMap, Class<T> valueType, boolean underscore) {
-        return BeanUtil.mapToBean(beanMap,valueType,underscore,CopyOptions.create().ignoreError());
+        return BeanUtil.toBean(beanMap,valueType,CopyOptions.create().ignoreError().setEditable(valueType).setAutoTransCamelCase(underscore));
         //return bean;
     }
 

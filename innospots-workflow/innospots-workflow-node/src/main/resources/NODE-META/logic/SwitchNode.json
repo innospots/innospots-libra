@@ -1,13 +1,18 @@
 {
-  "name": "分支节点",
+  "name": "条件分支",
   "code": "SWITCH",
   "flowCode": "EVENTS",
   "primitive": "logic",
   "vendor": "innospots",
-  "description": "多分支",
+  "description": "基于字段的分支条件",
   "icon": "branch",
   "nodeType": "io.innospots.workflow.node.app.logic.SwitchNode",
-  "outPorts": "4",
+  "outPorts": [
+    {"id": "#1", "label": "#1", "count": 1},
+    {"id": "#2", "label": "#2", "count": 1},
+    {"id": "#3", "label": "#3", "count": 1},
+    {"id": "#default", "label": "#default", "count": 1}
+  ],
   "inPorts": "1",
   "components": [
     {

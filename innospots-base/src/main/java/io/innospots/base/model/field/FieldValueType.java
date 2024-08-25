@@ -306,9 +306,7 @@ public enum FieldValueType {
         this.converter = converter;
     }
 
-    public static FieldValueType getTypeByBrief(String brief) {
-        return Arrays.stream(FieldValueType.values()).filter(f -> f.brief.equals(brief)).findFirst().orElse(null);
-    }
+
 
     public boolean isNumber() {
         return this == DAY_OF_MONTH ||
@@ -336,60 +334,6 @@ public enum FieldValueType {
         return this.grouping.equals(MAP.grouping);
     }
 
-    public static FieldValueType convertTypeByValue(Object value) {
-        if (value instanceof Integer) {
-            return FieldValueType.INTEGER;
-        } else if (value instanceof Boolean) {
-            return FieldValueType.BOOLEAN;
-        } else if (value instanceof Double) {
-            return FieldValueType.DOUBLE;
-        } else if (isDate(value)) {
-            return FieldValueType.DATE;
-        } else if (isDateTime(value)) {
-            return FieldValueType.DATE_TIME;
-//        } else if (value instanceof Timestamp) {
-//            return FieldValueType.TIMESTAMP;
-        } else if (value instanceof Long) {
-            return FieldValueType.LONG;
-        } else {
-            // TODO 判断字符串类型的boolean值
-            return FieldValueType.STRING;
-        }
-    }
-
-    public static FieldValueType convertJavaTypeByValue(Object value) {
-        if (value instanceof Integer) {
-            return FieldValueType.INTEGER;
-        } else if (value instanceof Boolean) {
-            return FieldValueType.BOOLEAN;
-        } else if (value instanceof Double) {
-            return FieldValueType.DOUBLE;
-        } else if (value instanceof BigDecimal) {
-            return FieldValueType.CURRENCY;
-        } else if (value instanceof Long) {
-            return FieldValueType.LONG;
-        } else if (value instanceof Map) {
-            Map<String, Object> m = (Map<String, Object>) value;
-            if (m.containsKey("resourceId") && m.containsKey("uri")) {
-                return FieldValueType.FILE;
-            }
-            return FieldValueType.MAP;
-        } else if (value instanceof List) {
-            return FieldValueType.LIST;
-        } else if (value instanceof Set) {
-            return FieldValueType.SET;
-        } else if (isDateTime(value)) {
-            return FieldValueType.DATE_TIME;
-        } else if (isDate(value)) {
-            return FieldValueType.DATE;
-        } else if (isTime(value)) {
-            return FieldValueType.TIME;
-        } else if (value instanceof String) {
-            return FieldValueType.STRING;
-        } else {
-            return FieldValueType.OBJECT;
-        }
-    }
 
     public Object normalize(Object value) {
         return converter.apply(pattern, value);
@@ -435,27 +379,6 @@ public enum FieldValueType {
             value = ((LocalTime) value).plus(amountToAdd, unit);
         }
         return (E) value;
-    }
-
-
-    private static boolean isDate(Object value) {
-        return patternMatch(DATE.pattern, value);
-    }
-
-    private static boolean isTime(Object value) {
-        return patternMatch(TIME.pattern, value);
-    }
-
-    private static boolean isDateTime(Object value) {
-        return patternMatch(DATE_TIME.pattern, value);
-    }
-
-    private static boolean patternMatch(Pattern pattern, Object value) {
-        try {
-            return pattern.matcher(String.valueOf(value)).matches();
-        } catch (Exception e) {
-            return false;
-        }
     }
 
 }

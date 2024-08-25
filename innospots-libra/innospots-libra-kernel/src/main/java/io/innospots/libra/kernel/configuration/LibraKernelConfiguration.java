@@ -24,13 +24,10 @@ import io.innospots.base.crypto.BCryptPasswordEncoder;
 import io.innospots.base.crypto.PasswordEncoder;
 import io.innospots.libra.base.configuration.LibraBaseConfiguration;
 import io.innospots.libra.base.configuration.WebConfiguration;
-import io.innospots.libra.base.model.swagger.SwaggerOpenApiBuilder;
 import io.innospots.libra.kernel.interceptor.AccessPermissionInterceptor;
 import io.innospots.libra.kernel.interceptor.PageAccessCheckInterceptor;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springdoc.core.GroupedOpenApi;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -55,12 +52,14 @@ public class LibraKernelConfiguration implements WebMvcConfigurer {
         return new BCryptPasswordEncoder();
     }
 
-
+    /*
     @Bean
     @ConditionalOnProperty(prefix = "innospots.config", name = "enable-swagger", havingValue = "true")
     public GroupedOpenApi libraKernelOpenApi() {
         return SwaggerOpenApiBuilder.buildGroupedOpenApi("libra-kernel", "io.innospots.libra.kernel");
     }
+
+     */
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

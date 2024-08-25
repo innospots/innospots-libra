@@ -8,7 +8,10 @@
   "icon": "merge",
   "nodeType": "io.innospots.workflow.node.app.dataset.MergeNode",
   "outPorts": "1",
-  "inPorts": "1",
+  "inPorts": [
+    {"label": "main", "id": "main", "count": 1},
+    {"label": "second", "id": "second", "count": 1}
+  ],
   "components": [
     {
       "name": "displayName",

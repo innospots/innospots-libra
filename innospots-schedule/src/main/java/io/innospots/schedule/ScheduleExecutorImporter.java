@@ -24,10 +24,8 @@ import io.innospots.schedule.watcher.ReadyQueueWatcher;
 import io.innospots.schedule.watcher.RunningExecutionWatcher;
 import io.innospots.schedule.watcher.ScheduleJobWatcher;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springdoc.core.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -153,6 +151,7 @@ public @interface ScheduleExecutorImporter {
             return new ExecutorStateController(quartzScheduleManager,readyJobLauncher);
         }
 
+        /*
         @Bean
         @ConditionalOnProperty(prefix = "innospots.config", name = "enable-swagger", havingValue = "true")
         public GroupedOpenApi scheduleExecutorGroupedOpenApi() {
@@ -161,6 +160,8 @@ public @interface ScheduleExecutorImporter {
                     .pathsToMatch("/**")
                     .build();
         }
+
+         */
     }
 
 }

@@ -1,0 +1,54 @@
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    persist-authorization: true
+  group-configs:
+    - group: libra-auth
+      packagesToScan:
+        - io.innospots.libra.security
+      paths-to-match:
+        - /**
+    - group: libra-kernel
+      packagesToScan:
+        - io.innospots.libra.kernel
+      paths-to-match:
+        - /**
+      display-name: libra-kernel
+    - group: job-schedule
+      packagesToScan:
+        - io.innospots.schedule
+      paths-to-match:
+        - /**
+    - group: workflow-console
+      packagesToScan:
+        - io.innospots.workflow.console
+      paths-to-match:
+        - /**
+    - group: workflow-runtime
+      packagesToScan:
+        - io.innospots.workflow.runtime
+      paths-to-match:
+        - /**
+    - group: app-console
+      packagesToScan:
+        - io.innospots.app.console
+      paths-to-match:
+        - /**
+  show-actuator: true
+  open-api:
+    info:
+      title: Innospots Open API
+      version: 2.1.0
+      description: Open source enterprise digital intelligent decision solution
+      summary: Open source enterprise digital intelligent decision solution
+      contact:
+        name: innospots
+        url: https://www.innospots.com
+        email: info@innospots.com
+      license:
+        name: Apache License 2.0
+        url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+

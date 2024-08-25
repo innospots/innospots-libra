@@ -18,15 +18,12 @@
 
 package io.innospots.workflow.console;
 
-import io.innospots.libra.base.model.swagger.SwaggerOpenApiBuilder;
 import io.innospots.workflow.console.config.WorkflowOperatorConfiguration;
 import io.innospots.workflow.console.listener.NodeReferenceListener;
 import io.innospots.workflow.console.listener.WorkflowPageListener;
 import io.innospots.workflow.core.instance.operator.NodeInstanceOperator;
 import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
 import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
-import org.springdoc.core.GroupedOpenApi;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -52,11 +49,14 @@ public @interface WorkflowConsoleImporter {
     @Configuration
     class WorkflowApiConfiguration {
 
+        /*
         @Bean
         @ConditionalOnProperty(prefix = "innospots.config", name = "enable-swagger", havingValue = "true")
         public GroupedOpenApi workflowConsoleOpenApi() {
             return SwaggerOpenApiBuilder.buildGroupedOpenApi("workflow-console", "io.innospots.workflow.console");
         }
+
+         */
 
         @Bean
         public NodeReferenceListener nodeReferenceListener(NodeInstanceOperator nodeInstanceOperator, FlowNodeDefinitionOperator nodeDefinitionOperator) {

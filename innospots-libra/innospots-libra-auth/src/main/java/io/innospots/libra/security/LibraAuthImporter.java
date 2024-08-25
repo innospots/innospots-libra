@@ -22,7 +22,6 @@ import io.innospots.base.constant.PathConstant;
 import io.innospots.libra.base.model.swagger.SwaggerOpenApiBuilder;
 import io.innospots.libra.base.terminal.TerminalInfoInterceptor;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springdoc.core.GroupedOpenApi;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -51,11 +50,14 @@ public @interface LibraAuthImporter {
     @ComponentScan(basePackages = "io.innospots.libra.security")
     class InnospotsAuthConfiguration implements WebMvcConfigurer {
 
+        /*
         @Bean
         @ConditionalOnProperty(prefix = "innospots.config", name = "enable-swagger", havingValue = "true")
         public GroupedOpenApi libraAuthGroupedOpenApi() {
             return SwaggerOpenApiBuilder.buildGroupedOpenApi("libra-auth", "io.innospots.libra.security");
         }
+
+         */
 
         @Override
         public void addInterceptors(InterceptorRegistry registry) {

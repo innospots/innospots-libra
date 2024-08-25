@@ -22,8 +22,6 @@ package io.innospots.workflow.runtime;
 import io.innospots.workflow.runtime.config.WorkflowRuntimeConfiguration;
 import io.innospots.workflow.core.flow.manage.FlowManager;
 import io.innospots.workflow.runtime.starter.WorkflowStarter;
-import org.springdoc.core.GroupedOpenApi;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -58,6 +56,7 @@ public @interface WorkflowRuntimeImporter {
          */
 
 
+        /*
         @Bean
         @ConditionalOnProperty(prefix = "innospots.config", name = "enable-swagger", havingValue = "true")
         public GroupedOpenApi workflowRuntimeOpenApi() {
@@ -66,6 +65,8 @@ public @interface WorkflowRuntimeImporter {
                     .pathsToMatch("/**")
                     .build();
         }
+
+         */
 
     }
 }

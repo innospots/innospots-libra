@@ -60,7 +60,7 @@ public class GroupTransformNode extends BaseNodeExecutor {
 
     private boolean outputRestricted;
 
-    public static final String FIELD_AGGREGATE = "aggregate_field";
+//    public static final String FIELD_AGGREGATE = "aggregate_field";
 
     public static final String ROLLING_FIELDS = "rolling_fields";
 
@@ -84,7 +84,7 @@ public class GroupTransformNode extends BaseNodeExecutor {
     @Override
     protected void initialize() {
         validFieldConfig(FIELD_SOURCE_TYPE);
-        validFieldConfig(FIELD_AGGREGATE);
+//        validFieldConfig(FIELD_AGGREGATE);
         outputRestricted = valueBoolean(FIELD_OUTPUT_RESTRICTED);
         sourceFieldType = valueString(FIELD_SOURCE_TYPE);
         funcType = FuncType.valueOf(valueString(FUNC_TYPE));

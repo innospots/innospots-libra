@@ -23,6 +23,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.innospots.base.function.definition.model.FunctionDefinition;
 import io.innospots.base.model.field.FieldValueType;
+import io.innospots.base.model.field.FieldValueTypeConverter;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -97,9 +98,9 @@ public class FunctionDefinitionEntity {
         for (String s : vt) {
             s = s.trim();
             if (s.startsWith("*")) {
-                fd.addParamType(FieldValueType.getTypeByBrief(s.substring(1)), false);
+                fd.addParamType(FieldValueTypeConverter.getTypeByBrief(s.substring(1)), false);
             } else if (!"-".equals(s)) {
-                fd.addParamType(FieldValueType.getTypeByBrief(s), true);
+                fd.addParamType(FieldValueTypeConverter.getTypeByBrief(s), true);
             }
         }//end for
 

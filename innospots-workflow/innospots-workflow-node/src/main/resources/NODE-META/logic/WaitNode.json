@@ -1,5 +1,5 @@
 {
-  "name": "等待节点",
+  "name": "延时等待",
   "code": "WAIT",
   "flowCode": "EVENTS",
   "primitive": "logic",

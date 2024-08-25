@@ -23,6 +23,7 @@ import io.innospots.base.condition.Factor;
 import io.innospots.base.condition.Opt;
 import io.innospots.base.condition.Relation;
 import io.innospots.base.model.field.FieldValueType;
+import io.innospots.base.model.field.FieldValueTypeConverter;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;
@@ -110,7 +111,7 @@ public class SelectClause {
         factor.setCode(field);
         factor.setValue(value);
         factor.setName(field);
-        factor.setValueType(FieldValueType.convertTypeByValue(value));
+        factor.setValueType(FieldValueTypeConverter.convertTypeByValue(value));
         this.condition.addFactor(factor);
     }
 
@@ -141,7 +142,7 @@ public class SelectClause {
         values.add(end);
         factor.setValue(values);
         factor.setName(field);
-        factor.setValueType(FieldValueType.convertTypeByValue(start));
+        factor.setValueType(FieldValueTypeConverter.convertTypeByValue(start));
         this.condition.addFactor(factor);
     }
 

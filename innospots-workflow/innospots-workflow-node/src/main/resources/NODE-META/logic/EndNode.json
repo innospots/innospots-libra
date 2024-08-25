@@ -1,5 +1,5 @@
 {
-  "name": "结束节点",
+  "name": "结束",
   "code": "END",
   "flowCode": "EVENTS",
   "primitive": "logic",

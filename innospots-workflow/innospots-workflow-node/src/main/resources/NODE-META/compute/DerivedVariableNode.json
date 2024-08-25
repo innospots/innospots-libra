@@ -1,5 +1,5 @@
 {
-  "name": "计算节点",
+  "name": "计算变量",
   "code": "DERIVED_VARIABLES",
   "flowCode": "EVENTS",
   "primitive": "compute",

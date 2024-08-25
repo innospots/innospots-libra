@@ -90,7 +90,7 @@
       "type": "JoinFields",
       "valueType": "array",
       "layout": {
-        "h": 2, "minH": 2,
+        "h": 5, "minH": 3,
         "w": 1, "x": 0, "y": 0, "moved": true, "static": false,
         "resizeHandles": ["s", "n"]
       }

@@ -20,6 +20,7 @@ spring:
   profiles:
     include:
       - security
+      - openapi
     active: dev
 
   mvc:
@@ -38,13 +39,13 @@ spring:
     multipart:
       max-file-size: 10MB
   jmx:
-    enabled: false
+    enabled: true
 
 management:
   endpoints:
     web:
       exposure:
-        include: info,health,metrics,prometheus
+        include: info,health,metrics,prometheus,openapi, swagger-ui
   endpoint:
     health:
       show-details: always
@@ -90,10 +91,6 @@ innospots:
   workflow:
     execution-store-path: .execution_contexts
 
-springdoc:
-  swagger-ui:
-    docExpansion: none
-    persistAuthorization: true
 
 # /actuator/info config
 info:

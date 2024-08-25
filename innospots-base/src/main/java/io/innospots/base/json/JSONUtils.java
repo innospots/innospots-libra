@@ -152,6 +152,12 @@ public class JSONUtils {
         return OBJECT_MAPPER.convertValue(object, LinkedHashMap.class);
     }
 
+    public static <T> T mapToBean(Object object,Class<T> beanClass) {
+        return OBJECT_MAPPER.convertValue(object, beanClass);
+    }
+
+
+
     public static List<String> objectToStrList(Object object) {
         if (object == null) {
             return Collections.emptyList();

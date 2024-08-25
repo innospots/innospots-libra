@@ -174,6 +174,7 @@ public class NodeDefinitionBuilder {
                 if (outNum > 1) {
                     port.put("label", String.join("_", "o", String.valueOf(i + 1)));
                 }
+                port.put("id", String.join("_","o", metaInfo.getCode().toLowerCase(), String.valueOf(i + 1)));
                 port.put("count", 1);
                 outPorts.add(port);
             }

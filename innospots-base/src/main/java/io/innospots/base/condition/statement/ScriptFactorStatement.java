@@ -103,11 +103,20 @@ public class ScriptFactorStatement implements IFactorStatement {
                         }
                         pos++;
                     }//end for
-                    stmt.append(factor.getCode()).append(Opt.GREATER_EQUAL.symbol(mode)).append(normalizeValue(v1, null));
-                    stmt.append(Relation.AND.symbol(mode))
-                            .append(factor.getCode()).append(Opt.LESS.symbol(mode)).append(normalizeValue(v2, null));
+                }else if(factor.getValue() instanceof String){
+                    String[] vs = ((String) factor.getValue()).split(",");
+                    if(vs.length >=2){
+                        v1 = vs[0];
+                        v2 = vs[1];
+                    }
                 }
-                //TODO 后续完善逻辑，判断值类型
+                if(v1!=null&& v2!=null){
+                    stmt.append(factor.getCode()).append(Opt.GREATER_EQUAL.symbol(mode))
+                            .append(normalizeValue(v1, factor.getValueType()));
+                    stmt.append(Relation.AND.symbol(mode))
+                            .append(factor.getCode()).append(Opt.LESS.symbol(mode))
+                            .append(normalizeValue(v2, factor.getValueType()));
+                }
                 break;
             case LIKE:
                 stmt.append(factor.getOpt())

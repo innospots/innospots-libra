@@ -19,6 +19,7 @@
 package io.innospots.workflow.core.execution.model.node;
 
 import io.innospots.base.json.JSONUtils;
+import io.innospots.base.model.field.FieldValueTypeConverter;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.instance.model.NodeInstance;
@@ -29,7 +30,6 @@ import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.*;
 
-import static io.innospots.base.model.field.FieldValueType.convertJavaTypeByValue;
 
 /**
  * @author Smars
@@ -156,7 +156,7 @@ public class NodeExecutionDisplay {
                 Map<String, Object> data = listResult.get(0);
                 for (String key : data.keySet()) {
                     Object v = data.get(key);
-                    ParamField pf = new ParamField(key, key, convertJavaTypeByValue(v));
+                    ParamField pf = new ParamField(key, key, FieldValueTypeConverter.convertJavaTypeByValue(v));
                     if (v instanceof Map) {
                         //the value is map object
                         pf.setSubFields(parseFieldFromValue(pf.getCode(), (Map<?, ?>) v));
@@ -176,7 +176,7 @@ public class NodeExecutionDisplay {
         List<ParamField> subFields = new ArrayList<>();
         for (Map.Entry<?, ?> entry : ((Map<?, ?>) value).entrySet()) {
             String k = entry.getKey().toString();
-            ParamField subField = new ParamField(k, k, convertJavaTypeByValue(entry.getValue()));
+            ParamField subField = new ParamField(k, k, FieldValueTypeConverter.convertJavaTypeByValue(entry.getValue()));
             subField.setParentCode(parentCode);
             subFields.add(subField);
         }

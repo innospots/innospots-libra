@@ -1,5 +1,5 @@
 {
-  "name": "HTTP API",
+  "name": "API",
   "code": "HTTPAPI",
   "flowCode": "EVENTS",
   "primitive": "api",

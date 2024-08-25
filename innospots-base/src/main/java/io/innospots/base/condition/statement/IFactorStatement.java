@@ -20,6 +20,7 @@ package io.innospots.base.condition.statement;
 
 import io.innospots.base.condition.Factor;
 import io.innospots.base.model.field.FieldValueType;
+import io.innospots.base.model.field.FieldValueTypeConverter;
 
 /**
  * 字段因子声明表达式转换
@@ -39,7 +40,7 @@ public interface IFactorStatement {
     Object normalizeValue(Object value, FieldValueType valueType);
 
     default Object normalizeValue(Object value) {
-        return normalizeValue(value, FieldValueType.convertTypeByValue(value));
+        return normalizeValue(value, FieldValueTypeConverter.convertTypeByValue(value));
     }
 
     /**

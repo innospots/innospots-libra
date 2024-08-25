@@ -1,5 +1,5 @@
 {
-  "name": "Kafka数据节点",
+  "name": "Kafka发送",
   "code": "KAFKA",
   "flowCode": "EVENTS",
   "primitive": "connector",

@@ -29,6 +29,7 @@ import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.field.FieldScope;
 import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.connector.schema.converter.SchemaFieldConverter;
+import io.innospots.base.model.field.FieldValueTypeConverter;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.*;
@@ -146,7 +147,7 @@ public class SchemaFieldOperator extends ServiceImpl<SchemaFieldDao, SchemaField
                 schemaField.setName(entry.getKey());
                 schemaField.setCode(entry.getKey());
                 schemaField.setComment(entry.getKey());
-                schemaField.setValueType(FieldValueType.convertTypeByValue(entry.getValue()));
+                schemaField.setValueType(FieldValueTypeConverter.convertTypeByValue(entry.getValue()));
                 schemaField.setFieldScope(FieldScope.COLUMN);
                 schemaFields.add(schemaField);
             }

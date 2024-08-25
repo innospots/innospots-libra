@@ -19,6 +19,7 @@
 package io.innospots.data.calcite;
 
 import io.innospots.base.model.field.FieldValueType;
+import io.innospots.base.model.field.FieldValueTypeConverter;
 import lombok.Getter;
 import org.apache.calcite.DataContext;
 import org.apache.calcite.adapter.java.JavaTypeFactory;
@@ -78,7 +79,7 @@ public class MemoryTable extends AbstractTable implements ScannableTable {
             Column column = new Column();
             column.setCode(objectEntry.getKey());
             column.setName(objectEntry.getKey());
-            column.setValueType(FieldValueType.convertJavaTypeByValue(objectEntry.getValue()));
+            column.setValueType(FieldValueTypeConverter.convertJavaTypeByValue(objectEntry.getValue()));
             cols.add(column);
         }
         return cols;

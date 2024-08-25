@@ -3,6 +3,7 @@ package io.innospots.schedule.job.db.sharding;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.operator.jdbc.SelectClause;
 import io.innospots.base.model.field.FieldValueType;
+import io.innospots.base.model.field.FieldValueTypeConverter;
 import io.innospots.schedule.model.JobExecution;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -45,7 +46,7 @@ public class DbKeyShardingJob extends AbstractShardingJob<List<Object>> {
         selectClause.setTableName(table);
         selectClause.addOrderBy(shardingColumn);
         if (values != null) {
-            selectClause.addWhereInclude(shardingColumn, values, FieldValueType.convertTypeByValue(values.get(0)));
+            selectClause.addWhereInclude(shardingColumn, values, FieldValueTypeConverter.convertTypeByValue(values.get(0)));
         }
         if (shardingClause != null) {
             selectClause.setWhereClause(shardingClause);

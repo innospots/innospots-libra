@@ -18,7 +18,7 @@
 
 package io.innospots.libra.base.model.swagger;
 
-import org.springdoc.core.GroupedOpenApi;
+
 
 /**
  * @author: Alexander
@@ -26,10 +26,14 @@ import org.springdoc.core.GroupedOpenApi;
  **/
 public class SwaggerOpenApiBuilder {
 
+
+    /*
     public static GroupedOpenApi buildGroupedOpenApi(String groupName, String basePackage) {
         return GroupedOpenApi.builder().group(groupName)
                 .packagesToScan(basePackage)
                 .pathsToMatch("/**")
                 .build();
     }
+
+     */
 }

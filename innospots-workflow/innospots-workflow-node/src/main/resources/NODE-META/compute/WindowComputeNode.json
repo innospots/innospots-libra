@@ -1,5 +1,5 @@
 {
-  "name": "列字段计算",
+  "name": "列字段扩展",
   "code": "win_compute",
   "flowCode": "EVENTS",
   "primitive": "compute",

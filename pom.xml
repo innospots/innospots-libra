@@ -78,7 +78,7 @@
         <nashorn-core.version>15.4</nashorn-core.version>
 
         <postgresql.version>42.7.3</postgresql.version>
-        <openapi-ui.version>1.8.0</openapi-ui.version>
+        <openapi-ui.version>2.6.0</openapi-ui.version>
         <reflections.version>0.10.2</reflections.version>
 
         <snack3.version>3.2.107</snack3.version>
@@ -319,7 +319,35 @@
                 <version>${postgresql.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-core-jakarta</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+
+
             <!-- swagger openapi 3 -->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${openapi-ui.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>jackson-core</artifactId>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>jackson-dataformat-yaml</artifactId>
+                        <groupId>com.fasterxml.jackson.dataformat</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>jackson-databind</artifactId>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!--
             <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-ui</artifactId>
@@ -339,6 +367,7 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+            -->
 
             <dependency>
                 <groupId>org.reflections</groupId>
@@ -583,11 +612,13 @@
                 <version>${micrometer-jvm-extras.version}</version>
             </dependency>
 
+            <!--
             <dependency>
                 <groupId>io.swagger.core.v3</groupId>
                 <artifactId>swagger-core</artifactId>
                 <version>${swagger.version}</version>
             </dependency>
+            -->
 
             <dependency>
                 <groupId>org.noear</groupId>

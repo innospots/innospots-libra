@@ -121,6 +121,20 @@
       ]
     },
     {
+      "name": "output_restricted",
+      "type": "Switch",
+      "valueType": "boolean",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "tooltip": "是否输出输入数据，等于 true 时，只会输出计算字段，输入数据不输出",
+        "viewType": "switch",
+        "initialValue": false,
+        "label": "只输出计算字段",
+        "default": false
+      }
+    },
+    {
       "name": "func_type",
       "type": "OptionPicker",
       "valueType": "string",
@@ -156,7 +170,70 @@
       "settings": {
         "fieldSource": "group_compute_1",
         "label": "滚动计算字段",
-        "tooltip": "滚动计算字段值，并输出到结果集"
+        "tooltip": "滚动计算字段值，并输出到结果集",
+        "customColumns": [{
+          "type": "INPUT",
+          "width": "120px",
+          "code": "fieldCode",
+          "title": "字段名"
+        }, {
+          "code": "field",
+          "type": "FIELD",
+          "width": "120px",
+          "title": "字段",
+          "default": ""
+        }, {
+          "code": "function",
+          "type": "SELECT",
+          "width": "120px",
+          "title": "函数",
+          "default": "",
+          "options": [{
+            "label": "平均数",
+            "value": "AVG"
+          }, {
+            "value": "SUM",
+            "label": "求和"
+          }, {
+            "value": "MAX",
+            "label": "最大值"
+          }, {
+            "value": "MIN",
+            "label": "最小值"
+          }, {
+            "value": "STD_DEV",
+            "label": "标准差"
+          }, {
+            "value": "VARIANCE",
+            "label": "方差"
+          }, {
+            "value": "MAD",
+            "label": "平均绝对差"
+          }, {
+            "value": "SOS",
+            "label": "平方和"
+          }, {
+            "value": "SKEW",
+            "label": "样本偏度"
+          }, {
+            "value": "KURT",
+            "label": "样本峰度"
+          }, {
+            "value": "PROD",
+            "label": "连乘"
+          }]
+        }, {
+          "code": "winLength",
+          "type": "INPUT",
+          "width": "80px",
+          "title": "窗口长度",
+          "default": ""
+        }, {
+          "type": "FIELD",
+          "width": "120px",
+          "code": "weight",
+          "title": "权重"
+        }]
       },
       "conditions": [
         {
@@ -181,7 +258,64 @@
       "settings": {
         "fieldSource": "group_compute_1",
         "label": "累计计算字段",
-        "tooltip": "累计计算字段值"
+        "tooltip": "累计计算字段值",
+        "customColumns": [{
+          "type": "INPUT",
+          "width": "120px",
+          "code": "fieldCode",
+          "title": "字段名"
+        }, {
+          "code": "field",
+          "type": "FIELD",
+          "width": "120px",
+          "title": "字段",
+          "default": ""
+        }, {
+          "code": "function",
+          "type": "SELECT",
+          "width": "120px",
+          "title": "函数",
+          "default": "",
+          "options": [{
+            "label": "平均数",
+            "value": "AVG"
+          }, {
+            "value": "SUM",
+            "label": "求和"
+          }, {
+            "value": "MAX",
+            "label": "最大值"
+          }, {
+            "value": "MIN",
+            "label": "最小值"
+          }, {
+            "value": "STD_DEV",
+            "label": "标准差"
+          }, {
+            "value": "VARIANCE",
+            "label": "方差"
+          }, {
+            "value": "MAD",
+            "label": "平均绝对差"
+          }, {
+            "value": "SOS",
+            "label": "平方和"
+          }, {
+            "value": "SKEW",
+            "label": "样本偏度"
+          }, {
+            "value": "KURT",
+            "label": "样本峰度"
+          }, {
+            "value": "PROD",
+            "label": "连乘"
+          }]
+        }, {
+          "type": "FIELD",
+          "width": "120px",
+          "code": "weight",
+          "title": "权重"
+        }]
       },
       "conditions": [
         {
@@ -206,7 +340,43 @@
       "settings": {
         "fieldSource": "group_compute_1",
         "label": "移动列计算字段",
-        "tooltip": "移动列计算字段"
+        "tooltip": "移动列计算字段",
+        "customColumns": [{
+          "type": "INPUT",
+          "width": "120px",
+          "code": "fieldCode",
+          "title": "字段名"
+        }, {
+          "code": "field",
+          "type": "FIELD",
+          "width": "120px",
+          "title": "字段",
+          "default": ""
+        }, {
+          "code": "function",
+          "type": "SELECT",
+          "width": "120px",
+          "title": "函数",
+          "default": "",
+          "options": [{
+            "label": "排名",
+            "value": "RANK"
+          }, {
+            "value": "DIFF",
+            "label": "差值"
+          }, {
+            "value": "SHIFT",
+            "label": "滑动"
+          }, {
+            "value": "PCT_CHANGE",
+            "label": "百分比变化"
+          }]
+        }, {
+          "type": "INPUT",
+          "width": "80px",
+          "code": "winLength",
+          "title": "窗口长度"
+        }]
       },
       "conditions": [
         {

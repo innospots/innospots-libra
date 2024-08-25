@@ -1,6 +1,5 @@
 package io.innospots.schedule;
 
-import io.innospots.libra.base.model.swagger.SwaggerOpenApiBuilder;
 import io.innospots.schedule.config.InnospotsScheduleProperties;
 import io.innospots.schedule.controller.JobExecutionController;
 import io.innospots.schedule.controller.JobExecutorController;
@@ -17,8 +16,6 @@ import io.innospots.schedule.operator.ScheduleJobInfoOperator;
 import io.innospots.schedule.queue.IReadyJobQueue;
 import io.innospots.schedule.queue.ReadyJobDbQueue;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springdoc.core.GroupedOpenApi;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -96,11 +93,14 @@ public @interface ScheduleConsoleImporter {
             return new ScheduleJobInfoController(scheduleJobInfoOperator);
         }
 
+        /*
         @Bean
         @ConditionalOnProperty(prefix = "innospots.config", name = "enable-swagger", havingValue = "true")
         public GroupedOpenApi scheduleConsoleGroupedOpenApi() {
             return SwaggerOpenApiBuilder.buildGroupedOpenApi("schedule-console", "io.innospots.schedule");
         }
+
+         */
 
     }
 
