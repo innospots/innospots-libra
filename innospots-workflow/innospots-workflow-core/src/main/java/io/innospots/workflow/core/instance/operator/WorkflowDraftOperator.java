@@ -80,10 +80,11 @@ public class WorkflowDraftOperator {
      */
     public boolean saveFlowInstanceToCache(WorkflowBaseBody workflowBaseBody) {
         WorkflowInstanceCacheEntity cacheEntity = workflowInstanceCacheDao.selectById(workflowBaseBody.getWorkflowInstanceId());
-
         if (cacheEntity == null) {
             cacheEntity = new WorkflowInstanceCacheEntity();
         }
+        nodeInstanceOperator.filledNodeInstanceByExecutor(workflowBaseBody.getNodes());
+
         cacheEntity.setFlowInstance(JSONUtils.toJsonString(workflowBaseBody));
 
         if (cacheEntity.getWorkflowInstanceId() == null) {

@@ -124,6 +124,8 @@ public class NodeInstance extends NodeInfo {
     @Schema(title = "node color")
     protected String color;
 
+    private Long workflowInstanceId;
+
     /*
     public void addScriptType(String name, ScriptType type) {
         if (this.scriptTypes == null) {

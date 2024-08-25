@@ -19,11 +19,13 @@
 package io.innospots.workflow.core.node.definition.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.innospots.base.model.field.ParamField;
 import io.innospots.workflow.core.node.NodeInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,6 +58,12 @@ public class NodeDefinition extends NodeInfo {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @Schema(title = "the setting of the execution pop panel, includes size and elements")
     private Map<String, Object> executionPreview;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<ParamField> inputFields;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<ParamField> outputFields;
 
 
     @Override

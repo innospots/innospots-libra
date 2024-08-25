@@ -53,8 +53,7 @@ public class FlowWebhookConfig {
 
     private List<ParamField> responseFields;
 
-    private List<HttpField> requestFields;
-
+    private List<ParamField> requestFields;
 
     private ResponseMode responseMode;
 
@@ -99,6 +98,7 @@ public class FlowWebhookConfig {
          * return immediately, response ack body that define in the responseFields, when the api will be called
          */
         ACK,
+        STREAM,
         /**
          * response flow result that define in the webhook complete node
          */

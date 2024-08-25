@@ -33,9 +33,4 @@ public class HttpField extends ParamField {
 
     private Integer fieldId;
 
-    /**
-     * 字段类型
-     */
-    private FieldScope fieldScope;
-
 }

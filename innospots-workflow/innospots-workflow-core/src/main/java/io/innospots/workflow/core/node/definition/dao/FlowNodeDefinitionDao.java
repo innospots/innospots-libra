@@ -36,8 +36,4 @@ import java.util.List;
 public interface FlowNodeDefinitionDao extends BaseMapper<FlowNodeDefinitionEntity> {
 
 
-    @Select("select nd.* from flow_node_group_node ngn left join flow_node_definition nd " +
-            "on ngn.node_id=nd.node_id where ngn.flow_tpl_id=#{flowTplId} and nd.status=#{status}")
-    List<FlowNodeDefinitionEntity> getNodeDefinitionByFlowTplIdAndStatus(@Param("flowTplId") Integer flowTplId,@Param("status") DataStatus status);
-
 }

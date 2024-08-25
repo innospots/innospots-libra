@@ -20,6 +20,7 @@ package io.innospots.workflow.core.node.definition.converter;
 
 import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.base.json.JSONUtils;
+import io.innospots.base.model.field.ParamField;
 import io.innospots.workflow.core.node.NodeInfo;
 import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
 import io.innospots.workflow.core.node.definition.meta.NodeMetaInfo;
@@ -78,12 +79,12 @@ public interface FlowNodeDefinitionConverter extends BaseBeanConverter<NodeDefin
     NodeDefinition infoToDefinition(NodeInfo nodeInfo);
 
 
-    default List<NodeConnectorConfig> strToConnectorConfigs(String connectorConfig){
-        return JSONUtils.toList(connectorConfig, NodeConnectorConfig.class);
+    default List<ParamField> strToParamFields(String paramFieldsJson){
+        return JSONUtils.toList(paramFieldsJson, ParamField.class);
     }
 
-    default String connectorConfigsToStr(List<NodeConnectorConfig> connectorConfigs){
-        return JSONUtils.toJsonString(connectorConfigs);
+    default String paramFieldsToStr(List<ParamField> paramFields){
+        return JSONUtils.toJsonString(paramFields);
     }
 
     default String resourceToStr(NodeResource nodeResource){

@@ -32,10 +32,14 @@ import io.innospots.workflow.core.instance.entity.NodeInstanceEntity;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.core.node.definition.dao.FlowNodeDefinitionDao;
 import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
+import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
+import io.innospots.workflow.core.node.executor.NodeExecutorFactory;
+import io.innospots.workflow.core.node.executor.TriggerNode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -118,7 +122,32 @@ public class NodeInstanceOperator extends ServiceImpl<NodeInstanceDao, NodeInsta
         return true;
     }
 
+    public List<NodeInstance> listNodeInstances(List<Long> workflowInstanceIds,List<Integer> nodeDefinitionIds){
+        QueryWrapper<NodeInstanceEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().in(NodeInstanceEntity::getWorkflowInstanceId,workflowInstanceIds)
+                .in(NodeInstanceEntity::getNodeDefinitionId,nodeDefinitionIds);
+        return NodeInstanceConverter.INSTANCE.entitiesToModels(this.list(queryWrapper));
+    }
+
+    public void filledNodeInstanceByExecutor(List<NodeInstance> nodeInstances) {
+        if(CollectionUtils.isEmpty(nodeInstances)){
+            return;
+        }
+        for (NodeInstance nodeInstance : nodeInstances) {
+            try {
+                BaseNodeExecutor nodeExecutor = NodeExecutorFactory.newInstance(nodeInstance);
+                if(nodeExecutor instanceof TriggerNode){
+                    // build input fields to instance
+                    nodeExecutor.build();
+                }
+            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException |
+                     InvocationTargetException e) {
+            }
+        }
+    }
+
     private List<NodeInstanceEntity> parseEntities(List<NodeInstance> nodeInstances) {
+        filledNodeInstanceByExecutor(nodeInstances);
         List<NodeInstanceEntity> list = new ArrayList<>();
         if (nodeInstances != null) {
             nodeInstances.forEach(nodeInstance -> list.add(NodeInstanceConverter.INSTANCE.modelToEntity(nodeInstance)));

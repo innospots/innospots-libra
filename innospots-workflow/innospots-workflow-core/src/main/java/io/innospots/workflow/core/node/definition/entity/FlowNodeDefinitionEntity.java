@@ -113,4 +113,10 @@ public class FlowNodeDefinitionEntity extends PBaseEntity {
     @Column(columnDefinition = "TEXT")
     private String executionPreview;
 
+    @Column(columnDefinition = "TEXT")
+    private String inputFields;
+
+    @Column(columnDefinition = "TEXT")
+    private String outputFields;
+
 }

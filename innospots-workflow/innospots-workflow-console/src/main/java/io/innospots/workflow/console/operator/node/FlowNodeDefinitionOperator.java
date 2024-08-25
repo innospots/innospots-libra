@@ -24,13 +24,15 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.enums.ImageType;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.base.data.body.PageBody;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.libra.base.events.AvatarRemoveEvent;
+import io.innospots.workflow.console.model.NodeQueryRequest;
+import io.innospots.workflow.core.enums.NodePrimitive;
 import io.innospots.workflow.core.node.NodeInfo;
 import io.innospots.workflow.core.node.builder.NodeDefinitionCodeBuilder;
 import io.innospots.workflow.core.node.definition.converter.FlowNodeDefinitionConverter;
@@ -39,8 +41,6 @@ import io.innospots.workflow.core.node.definition.dao.FlowNodeGroupDao;
 import io.innospots.workflow.core.node.definition.dao.FlowNodeGroupNodeDao;
 import io.innospots.workflow.core.node.definition.dao.FlowTemplateDao;
 import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
-import io.innospots.workflow.console.model.NodeQueryRequest;
-import io.innospots.workflow.core.enums.NodePrimitive;
 import io.innospots.workflow.core.node.definition.entity.FlowNodeGroupEntity;
 import io.innospots.workflow.core.node.definition.entity.FlowNodeGroupNodeEntity;
 import io.innospots.workflow.core.node.definition.entity.FlowTemplateEntity;
@@ -92,7 +92,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
         if (queryRequest.getFlowTplId() == null) {
             throw ValidatorException.buildMissingException(this.getClass(), "flowTplId is null");
         }
-        if (queryRequest.getNodeGroupId() != null && queryRequest.getNodeGroupId() >=0) {
+        if (queryRequest.getNodeGroupId() != null && queryRequest.getNodeGroupId() >= 0) {
             QueryWrapper<FlowNodeGroupEntity> gQuery = new QueryWrapper<>();
             gQuery.lambda().eq(queryRequest.getFlowTplId() != null, FlowNodeGroupEntity::getFlowTplId, queryRequest.getFlowTplId())
                     .eq(queryRequest.getNodeGroupId() != null, FlowNodeGroupEntity::getNodeGroupId, queryRequest.getNodeGroupId());
@@ -171,7 +171,12 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
         queryWrapper.lambda()
                 .eq(FlowNodeDefinitionEntity::getStatus, DataStatus.ONLINE);
         if (primitive != null) {
-            queryWrapper.lambda().eq(FlowNodeDefinitionEntity::getPrimitive, primitive);
+            if (primitive == NodePrimitive.trigger) {
+                // trigger include api trigger
+                queryWrapper.lambda().in(FlowNodeDefinitionEntity::getPrimitive, primitive, NodePrimitive.apiTrigger);
+            } else {
+                queryWrapper.lambda().eq(FlowNodeDefinitionEntity::getPrimitive, primitive);
+            }
         }
         if (flowCode != null) {
             queryWrapper.lambda().eq(FlowNodeDefinitionEntity::getFlowCode, flowCode);
@@ -341,8 +346,8 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
     @CacheEvict(cacheNames = CACHE_NAME, key = "#nodeId")
     public Boolean deleteNodeDefinition(Integer nodeId) {
         FlowNodeDefinitionEntity entity = this.getById(nodeId);
-        if(entity !=null && entity.getDeletable()!=null && !entity.getDeletable()){
-            throw ResourceException.buildDeleteException(this.getClass(), "node definition can not be deleted,",nodeId);
+        if (entity != null && entity.getDeletable() != null && !entity.getDeletable()) {
+            throw ResourceException.buildDeleteException(this.getClass(), "node definition can not be deleted,", nodeId);
         }
         boolean res = this.removeById(nodeId);
         if (res) {
@@ -402,12 +407,12 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
             }
         }
         if (nodeDefinition.getNodeType() != null) {
-            if(MapUtils.isEmpty(nodeDefinition.getScripts())){
+            if (MapUtils.isEmpty(nodeDefinition.getScripts())) {
                 nodeDefinition.setScripts(new LinkedHashMap<>());
             }
-            Map<String,Object> scripts = nodeDefinition.getScripts();
+            Map<String, Object> scripts = nodeDefinition.getScripts();
             String src = (String) scripts.get(BaseNodeExecutor.FIELD_ACTION);
-            if(StringUtils.isEmpty(src)){
+            if (StringUtils.isEmpty(src)) {
                 scripts.put(NodeDefinition.SCRIPT_ACTION, "class:" + nodeDefinition.getNodeType());
             }
         }

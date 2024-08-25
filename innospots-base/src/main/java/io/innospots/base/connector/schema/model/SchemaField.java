@@ -20,6 +20,7 @@ package io.innospots.base.connector.schema.model;
 
 import io.innospots.base.model.field.BaseField;
 import io.innospots.base.model.field.FieldScope;
+import io.innospots.base.model.field.ParamField;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -58,4 +59,16 @@ public class SchemaField extends BaseField {
      * default value
      */
     private String defaultValue;
+
+
+    public static SchemaField convert(ParamField paramField){
+        SchemaField schemaField = new SchemaField();
+        schemaField.setFieldScope(paramField.getFieldScope());
+        schemaField.setValueType(paramField.getValueType());
+        schemaField.setCode(paramField.getCode());
+        schemaField.setName(paramField.getName());
+        schemaField.setComment(paramField.getComment());
+        schemaField.setDefaultValue(paramField.getValue()!=null?paramField.getValue().toString():null);
+        return schemaField;
+    }
 }

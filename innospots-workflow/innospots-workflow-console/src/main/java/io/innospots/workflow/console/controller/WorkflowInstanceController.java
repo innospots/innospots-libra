@@ -18,6 +18,7 @@
 
 package io.innospots.workflow.console.controller;
 
+import io.innospots.base.connector.schema.model.SchemaRegistry;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.request.FormQuery;
 import io.innospots.base.enums.DataStatus;
@@ -27,6 +28,7 @@ import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
+import io.innospots.workflow.console.model.WorkflowQuery;
 import io.innospots.workflow.console.service.WorkflowService;
 import io.innospots.workflow.core.flow.model.WorkflowBaseInfo;
 import io.innospots.workflow.core.flow.model.WorkflowInfo;
@@ -149,9 +151,15 @@ public class WorkflowInstanceController extends BaseController {
      */
     @GetMapping("page")
     @Operation(summary = "page workflows")
-    public InnospotsResponse<PageBody<WorkflowInstance>> pageWorkflows(FormQuery request) {
+    public InnospotsResponse<PageBody<WorkflowInstance>> pageWorkflows(WorkflowQuery request) {
         PageBody<WorkflowInstance> page = workflowService.getWorkflows(request);
         return success(page);
+    }
+
+    @GetMapping("registry/{registryId}")
+    @Operation(summary = "get workflow api registry")
+    public InnospotsResponse<SchemaRegistry> workflowApiRegistry(@PathVariable String registryId) {
+        return success(workflowService.getApiWorkflowSchemaRegistry(registryId));
     }
 
     @GetMapping("list/trigger-code/{triggerCode}")

@@ -50,6 +50,7 @@ import io.innospots.workflow.node.app.trigger.ApiTriggerNode;
 import io.innospots.workflow.runtime.engine.BaseFlowEngine;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -173,6 +174,7 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
     private List<Map<String, Object>> convertApiInput(List<Map<String, Object>> rawInputs,WorkflowBaseBody workflowBaseBody) {
         List<Map<String, Object>> nList = new ArrayList<>();
         NodeInstance node = workflowBaseBody.getNodes().stream().filter(ni-> "WEBHOOK".equals(ni.getCode())).findFirst().orElse(null);;
+
         if(node!=null){
             if(CollectionUtils.isNotEmpty(rawInputs)){
                 for (Map<String, Object> rawInput : rawInputs) {
@@ -183,7 +185,9 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
             }
             if(nList.isEmpty()){
                 Map<String,Object> rawInput = (Map<String, Object>) node.getData().get("webhook_config");
-                nList.add(convertToMap(rawInput));
+                if(MapUtils.isNotEmpty(rawInput)){
+                    nList.add(convertToMap(rawInput));
+                }
             }
         }
         return nList;
@@ -191,7 +195,9 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
 
     private Map<String,Object> convertToMap(Map<String,Object> rawInput){
         Map<String,Object> input = new LinkedHashMap<>();
-        input.putAll(rawInput);
+        if(rawInput!=null){
+            input.putAll(rawInput);
+        }
         if (rawInput.containsKey("contentType") &&
                 (rawInput.containsKey("params") || rawInput.containsKey("headers") || rawInput.containsKey("body"))){
             Object v = rawInput.get("params");

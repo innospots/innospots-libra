@@ -18,6 +18,8 @@
 
 package io.innospots.workflow.core.instance.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,4 +47,7 @@ public class WorkflowInstance extends WorkflowInstanceBase {
 
     @Schema(title = "icon")
     protected String icon;
+
+    @JsonIgnore
+    private NodeDefinition triggerNode;
 }

@@ -28,6 +28,7 @@ import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntit
 import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -56,25 +57,14 @@ public interface NodeInstanceConverter extends BaseBeanConverter<NodeInstance,No
         ni.setPrimitive(Enum.valueOf(NodePrimitive.class,nodeDefinitionEntity.getPrimitive()));
         ni.setIcon(nodeDefinitionEntity.getIcon());
         ni.setNodeType(nodeDefinitionEntity.getNodeType());
-//        ni.setColor(appNodeDefinition.getColor());
-        /*
-        if(MapUtils.isNotEmpty(nodeDefinitionEntity.getConfig()) && nodeDefinitionEntity.getConfig().containsKey(PROPS)){
-            Map<String,Object> elements = (Map<String, Object>) nodeDefinitionEntity.getConfig().get(PROPS);
-            for (Map.Entry<String, Object> entry : elements.entrySet()) {
-                String elementName = entry.getKey();
-                Map<String,Object> props = (Map<String, Object>) entry.getValue();
-                if(props.containsKey(ELEMENT_WIDGET)){
-                    String widgetName = (String) props.get(ELEMENT_WIDGET);
-                    if(WIDGET_CODE_EDITOR.equals(widgetName)){
-                        String codeType = (String) props.get(ELEMENT_CODE_TYPE);
-//                        ni.addScriptType(elementName, ScriptType.valueOf(codeType));
-                    }
-
-                }//end widget and codeType
-            }//end for
-        }//end PROPS
-
-         */
+        if(StringUtils.isNotEmpty(entity.getInputFields()) &&
+                StringUtils.isNotEmpty(nodeDefinitionEntity.getInputFields())) {
+            ni.setInputFields(jsonStrToParamFieldList(nodeDefinitionEntity.getInputFields()));
+        }
+        if(StringUtils.isNotEmpty(entity.getOutputFields()) &&
+                StringUtils.isNotEmpty(nodeDefinitionEntity.getOutputFields())){
+            ni.setOutputFields(jsonStrToParamFieldList(nodeDefinitionEntity.getOutputFields()));
+        }
         return ni;
     }
 

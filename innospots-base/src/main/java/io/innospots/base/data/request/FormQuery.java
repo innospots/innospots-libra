@@ -36,8 +36,10 @@ import java.util.Map;
 @Schema(title = "simple query")
 public class FormQuery {
 
+    @Schema(title = "category id")
     protected Integer categoryId;
 
+    @Schema(title = "map params")
     protected String params;
 
     @Schema(title = "query input something")

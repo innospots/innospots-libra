@@ -1,6 +1,7 @@
 package io.innospots.workflow.core.node.definition.meta;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.workflow.core.enums.NodePrimitive;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -72,7 +73,17 @@ public class NodeMetaInfo {
     @Schema(title = "execute script code")
     protected Map<String,Object> scripts;
 
+    @Schema(title = "the setting of the execution pop panel, includes size and elements")
     protected Map<String,Object> executionPreview;
+
+    @Schema(title = "input field list")
+    protected List<ParamField> inputFields;
+
+    @Schema(title = "output field list")
+    protected List<ParamField> outputFields;
+
+    @Schema(title = "disable node")
+    protected boolean disable;
 
     @Override
     public String toString() {

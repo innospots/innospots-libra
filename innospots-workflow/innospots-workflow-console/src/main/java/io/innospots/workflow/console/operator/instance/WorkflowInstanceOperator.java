@@ -25,25 +25,26 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.CaseFormat;
+import io.innospots.base.data.body.PageBody;
+import io.innospots.base.data.request.FormQuery;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.base.data.body.PageBody;
 import io.innospots.base.utils.StringConverter;
 import io.innospots.libra.base.events.NewPageEvent;
 import io.innospots.libra.base.events.NotificationAnnotation;
-import io.innospots.base.data.request.FormQuery;
+import io.innospots.workflow.console.listener.WorkflowPageListener;
+import io.innospots.workflow.console.model.WorkflowQuery;
 import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
+import io.innospots.workflow.console.operator.node.FlowTemplateOperator;
+import io.innospots.workflow.core.enums.FlowVersion;
+import io.innospots.workflow.core.enums.NodePrimitive;
+import io.innospots.workflow.core.flow.model.WorkflowBaseInfo;
+import io.innospots.workflow.core.flow.model.WorkflowInfo;
 import io.innospots.workflow.core.instance.converter.WorkflowInstanceConverter;
 import io.innospots.workflow.core.instance.dao.WorkflowInstanceDao;
 import io.innospots.workflow.core.instance.entity.WorkflowInstanceEntity;
-import io.innospots.workflow.core.enums.FlowVersion;
-import io.innospots.workflow.console.listener.WorkflowPageListener;
-import io.innospots.workflow.console.operator.node.FlowTemplateOperator;
-import io.innospots.workflow.core.flow.model.WorkflowBaseInfo;
-import io.innospots.workflow.core.flow.model.WorkflowInfo;
 import io.innospots.workflow.core.instance.model.WorkflowInstance;
-import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
 import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -51,6 +52,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.Node;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -76,7 +78,7 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
 
     private FlowNodeDefinitionOperator flowNodeDefinitionOperator;
 
-    public WorkflowInstanceOperator(FlowTemplateOperator flowTemplateOperator,FlowNodeDefinitionOperator flowNodeDefinitionOperator) {
+    public WorkflowInstanceOperator(FlowTemplateOperator flowTemplateOperator, FlowNodeDefinitionOperator flowNodeDefinitionOperator) {
         this.flowTemplateOperator = flowTemplateOperator;
         this.flowNodeDefinitionOperator = flowNodeDefinitionOperator;
     }
@@ -125,10 +127,10 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
         return this.count(queryWrapper) > 0;
     }
 
-    public List<WorkflowBaseInfo> listWorkflows(String triggerCode){
+    public List<WorkflowBaseInfo> listWorkflows(String triggerCode) {
         QueryWrapper<WorkflowInstanceEntity> query = new QueryWrapper<>();
-        query.lambda().eq(WorkflowInstanceEntity::getStatus,DataStatus.ONLINE)
-                .eq(WorkflowInstanceEntity::getTriggerCode,triggerCode);
+        query.lambda().eq(WorkflowInstanceEntity::getStatus, DataStatus.ONLINE)
+                .eq(WorkflowInstanceEntity::getTriggerCode, triggerCode);
         List<WorkflowInstanceEntity> entities = this.list(query);
         return entities.stream().map(WorkflowInstanceConverter.INSTANCE::entityToBaseInfo).collect(Collectors.toList());
     }
@@ -138,8 +140,17 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
      *
      * @return
      */
-    public PageBody<WorkflowInstance> pageWorkflows(FormQuery request) {
+    public PageBody<WorkflowInstance> pageWorkflows(WorkflowQuery request) {
+        List<String> nodeCodes = null;
+        if (request.getPrimitive() != null) {
+            List<NodeDefinition> nodeDefinitions = flowNodeDefinitionOperator.listOnlineNodes(request.getPrimitive(), null);
+            nodeCodes = nodeDefinitions.stream().map(NodeDefinition::getCode).toList();
+        }
+
         QueryWrapper<WorkflowInstanceEntity> queryWrapper = this.queryWrapper(request);
+        if (CollectionUtils.isNotEmpty(nodeCodes)) {
+            queryWrapper.lambda().in(WorkflowInstanceEntity::getTriggerCode, nodeCodes);
+        }
         PageBody<WorkflowInstance> pageBody = new PageBody<>();
         IPage<WorkflowInstanceEntity> oPage = new Page<>(request.getPage(), request.getSize());
         IPage<WorkflowInstanceEntity> entityPage = this.page(oPage, queryWrapper);
@@ -156,7 +167,9 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
             Map<String, NodeDefinition> nodeDefinitionEntityMap = nodeDefinitionEntities.stream()
                     .collect(Collectors.toMap(NodeDefinition::getCode, Function.identity()));
             for (WorkflowInstance workflowInstance : pageBody.getList()) {
-                workflowInstance.setIcon(nodeDefinitionEntityMap.get(workflowInstance.getTriggerCode()).getIcon());
+                NodeDefinition nodeDefinition = nodeDefinitionEntityMap.get(workflowInstance.getTriggerCode());
+                workflowInstance.setTriggerNode(nodeDefinition);
+                workflowInstance.setIcon(nodeDefinition.getIcon());
             }
         }
 
@@ -207,7 +220,7 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
     public boolean deleteWorkflowInstance(Long workflowInstanceId) {
         WorkflowInstanceEntity entity = this.getWorkflowInstanceEntity(workflowInstanceId);
         if (entity == null) {
-            throw ResourceException.buildNotExistException(this.getClass(),workflowInstanceId);
+            throw ResourceException.buildNotExistException(this.getClass(), workflowInstanceId);
         }
         return this.removeById(workflowInstanceId);
     }
@@ -316,18 +329,21 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
      * @param request
      * @return
      */
-    private QueryWrapper<WorkflowInstanceEntity> queryWrapper(FormQuery request) {
+    private QueryWrapper<WorkflowInstanceEntity> queryWrapper(WorkflowQuery request) {
         QueryWrapper<WorkflowInstanceEntity> query = new QueryWrapper<>();
         LambdaQueryWrapper<WorkflowInstanceEntity> lambda = query.lambda();
 
         if (request.getCategoryId() == null) {
-            request.setCategoryId(0);
-        }
-        if (request.getCategoryId() < 0) {
+            lambda.ne(WorkflowInstanceEntity::getStatus, DataStatus.REMOVED);
+            //request.setCategoryId(0);
+        }else if (request.getCategoryId() < 0) {
             lambda.eq(WorkflowInstanceEntity::getStatus, DataStatus.REMOVED);
         } else {
             lambda.ne(WorkflowInstanceEntity::getStatus, DataStatus.REMOVED);
             lambda.eq(WorkflowInstanceEntity::getCategoryId, request.getCategoryId());
+        }
+        if(request.getDataStatus()!=null){
+            lambda.eq(WorkflowInstanceEntity::getStatus,request.getDataStatus());
         }
 
         if (StringUtils.isNotBlank(request.getQueryInput())) {

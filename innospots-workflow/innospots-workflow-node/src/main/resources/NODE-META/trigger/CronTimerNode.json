@@ -7,7 +7,6 @@
   "description": "定时触发器节点",
   "icon": "dingshi",
   "nodeType": "io.innospots.workflow.node.app.trigger.CronTimerNode",
-  "inPorts": "1",
   "outPorts": "1",
   "components": [
     {

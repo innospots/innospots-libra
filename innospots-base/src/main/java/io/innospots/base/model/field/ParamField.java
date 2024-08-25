@@ -65,6 +65,11 @@ public class ParamField {
      */
     protected String format;
 
+    /**
+     * 字段类型
+     */
+    protected FieldScope fieldScope;
+
 
     public ParamField() {
     }
@@ -74,6 +79,8 @@ public class ParamField {
         this.code = code;
         this.valueType = valueType;
     }
+
+
 
     @Override
     public String toString() {

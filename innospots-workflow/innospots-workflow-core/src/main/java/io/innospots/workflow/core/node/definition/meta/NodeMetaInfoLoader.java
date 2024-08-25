@@ -57,7 +57,7 @@ public class NodeMetaInfoLoader {
                 InputStream inputStream = nodeMetaResource.getInputStream();
                 String content = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
                 NodeMetaInfo nodeMeta = JSONUtils.parseObject(content, NodeMetaInfo.class);
-                if (nodeMeta != null) {
+                if (nodeMeta != null && !nodeMeta.isDisable()) {
                     nodeMeta.setMetaFile(nodeMetaResource.getFilename());
                     tmpMetaInfoMap.put(nodeMeta.getCode(), nodeMeta);
                     log.debug("loaded node meta: {}", nodeMeta);

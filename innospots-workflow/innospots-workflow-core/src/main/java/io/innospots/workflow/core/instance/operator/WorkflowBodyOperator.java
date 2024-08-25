@@ -79,6 +79,10 @@ public class WorkflowBodyOperator {
         return getFlowBody(entity, revision, includeNodes);
     }
 
+    public WorkflowBody getWorkflowBody(Long workflowInstanceId, Boolean includeNodes) {
+        return getWorkflowBody(workflowInstanceId, null, includeNodes);
+    }
+
     public WorkflowBody getWorkflowBody(String workflowKey) {
         WorkflowInstanceEntity entity =workflowInstanceDao.getInstanceByFlowKey(workflowKey);
         return getWorkflowBody(entity.getWorkflowInstanceId(), entity.getRevision(), true);

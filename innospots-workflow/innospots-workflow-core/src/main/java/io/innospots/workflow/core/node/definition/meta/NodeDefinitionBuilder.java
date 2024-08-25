@@ -30,6 +30,8 @@ public class NodeDefinitionBuilder {
         }
         nodeDefinition.setSettings(settings);
         nodeDefinition.setExecutionPreview(nodeMetaInfo.getExecutionPreview());
+        nodeDefinition.setInputFields(nodeMetaInfo.getInputFields());
+        nodeDefinition.setOutputFields(nodeMetaInfo.getOutputFields());
 
         fillInfo(nodeMetaInfo, nodeDefinition);
         rebuildComp(nodeMetaInfo, nodeDefinition);
