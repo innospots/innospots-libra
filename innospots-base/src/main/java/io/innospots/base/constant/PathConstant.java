@@ -36,4 +36,6 @@ public interface PathConstant {
 
     String APP_PATH = "/apps/";
 
+    String APP_ROOT_PATH = "/innospots/apps/";
+
 }

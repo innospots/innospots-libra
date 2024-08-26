@@ -122,19 +122,10 @@ public class WorkflowManagementEndpoint {
         if (StringUtils.isEmpty(host)) {
             host = BeanContextAwareUtils.serverIpAddress();
         }
-        flowInfo.put("webhookApiTest",
-                "http://" +
-                        host +
-                        ":" + BeanContextAwareUtils.serverPort() + PathConstant.ROOT_PATH +
-                        "test/webhook"
-        );
+        flowInfo.put("webhookApiTest",WorkflowRuntimeProperties.webHookApiTest());
+
         WorkflowWebhookServer webhookServer = BeanContextAwareUtils.getBean(WorkflowWebhookServer.class);
-        flowInfo.put("webhookApiServer",
-                "http://" +
-                        host +
-                        ":" + workflowRuntimeProperties.getPort() +
-                        PathConstant.ROOT_PATH + PathConstant.RUNTIME_PATH
-        );
+        flowInfo.put("webhookApiServer", WorkflowRuntimeProperties.webHookApi());
         return InnospotsResponse.success(flowInfo);
     }
 

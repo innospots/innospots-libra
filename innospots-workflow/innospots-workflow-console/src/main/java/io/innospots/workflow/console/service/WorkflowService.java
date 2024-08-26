@@ -20,6 +20,7 @@ package io.innospots.workflow.console.service;
 
 import io.innospots.base.connector.schema.model.SchemaField;
 import io.innospots.base.connector.schema.model.SchemaRegistry;
+import io.innospots.base.connector.schema.model.SchemaRegistryType;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.request.FormQuery;
 import io.innospots.base.enums.DataStatus;
@@ -139,6 +140,7 @@ public class WorkflowService {
                 schemaRegistry.setRegistryId(registryId);
                 schemaRegistry.setName(workflowBody.getName());
                 schemaRegistry.setCode(workflowBody.getFlowKey());
+                schemaRegistry.setRegistryType(SchemaRegistryType.WORKFLOW);
                 schemaRegistry.setCategoryId(workflowBody.getCategoryId());
                 List<SchemaField> schemaFields = new ArrayList<>();
                 for (ParamField inputField : start.getInputFields()) {

@@ -57,6 +57,7 @@ public class ApiTriggerNode extends TriggerNode {
         flowWebhookConfig.setRequestMethod(FlowWebhookConfig.RequestMethod.valueOf(valueString(FIELD_REQUEST_TYPE)));
         flowWebhookConfig.setPath(valueString(FIELD_API_PATH));
         triggerInfo.put(FIELD_API_PATH,flowWebhookConfig.getPath());
+        triggerInfo.put(FIELD_REQUEST_TYPE,flowWebhookConfig.getRequestMethod());
         flowWebhookConfig.setResponseMode(FlowWebhookConfig.ResponseMode.valueOf(valueString(FIELD_RESPONSE_MODE)));
 
         List<Map<String, Object>> responseField = (List<Map<String, Object>>) value(FIELD_REQUEST_FIELDS);

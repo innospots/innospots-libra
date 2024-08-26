@@ -18,6 +18,8 @@
 
 package io.innospots.workflow.runtime.config;
 
+import io.innospots.base.constant.PathConstant;
+import io.innospots.base.utils.BeanContextAwareUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -53,4 +55,32 @@ public class WorkflowRuntimeProperties {
     private Integer port;
 
     private String host;
+
+    public static String serverAddress(){
+        String host = null;
+        Integer port = null;
+        try{
+            WorkflowRuntimeProperties runtimeProperties = BeanContextAwareUtils.getBean(WorkflowRuntimeProperties.class);
+            host = runtimeProperties.getHost();
+            port = runtimeProperties.port;
+        }catch (Exception e){
+
+        }
+        if(host == null){
+            BeanContextAwareUtils.serverIpAddress();
+        }
+        if(port == null){
+            port = BeanContextAwareUtils.serverPort();
+        }
+        return host+ ":" + port;
+    }
+
+    public static String webHookApi(){
+        return "http://" + serverAddress() + PathConstant.ROOT_PATH + PathConstant.RUNTIME_PATH;
+    }
+
+    public static String webHookApiTest(){
+        return "http://" + serverAddress() + PathConstant.ROOT_PATH + "test/webhook";
+    }
+
 }

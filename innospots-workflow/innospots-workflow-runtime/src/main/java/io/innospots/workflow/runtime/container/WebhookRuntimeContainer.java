@@ -99,6 +99,7 @@ public class WebhookRuntimeContainer extends BaseRuntimeContainer {
         super.updateTrigger(flowRuntimeRegistry);
         ApiTriggerNode apiTriggerNode = (ApiTriggerNode) flowRuntimeRegistry.getRegistryNode();
         String path = apiTriggerNode.apiPath();
+
         triggerPaths.put(path, flowRuntimeRegistry);
     }
 

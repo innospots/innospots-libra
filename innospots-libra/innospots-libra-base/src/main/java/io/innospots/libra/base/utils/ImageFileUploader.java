@@ -19,8 +19,14 @@
 package io.innospots.libra.base.utils;
 
 import cn.hutool.core.img.ImgUtil;
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.RandomUtil;
+import cn.hutool.extra.spring.SpringUtil;
+import io.innospots.base.config.InnospotsConfigProperties;
 import io.innospots.base.enums.ImageType;
+import io.innospots.base.execution.ExecutionResource;
 import io.innospots.base.model.Pair;
+import io.innospots.base.utils.CCH;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +36,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
@@ -159,45 +166,33 @@ public class ImageFileUploader {
     }
 
     public static File upload(MultipartFile file, File destFile, ImageType imageType) throws IOException {
-        if (destFile.exists()) {
-            throw new IOException("file already exists," + destFile);
-        } else {
-            if (!destFile.getParentFile().exists()) {
-                boolean mkdir = destFile.getParentFile().mkdirs();
-                if (!mkdir) {
-                    throw new IOException("parentFile create failed," + destFile);
-                }
-            }
-            if (!destFile.createNewFile()) {
-                throw new IOException("file create failed," + destFile);
-            }
-        }
+        destFile = prepareDestFile(destFile, false);
         BufferedImage bufferedImage = ImgUtil.read(file.getInputStream());
-        Pair<Integer, Integer> size = reSize(bufferedImage.getWidth(),bufferedImage.getHeight(),imageType);
-        Image image = ImgUtil.scale(bufferedImage,size.getLeft(), size.getRight());
-        log.info("upload image: width:{}, height:{}, resize:{},{}",bufferedImage.getWidth(),bufferedImage.getHeight(),size, destFile.getAbsolutePath());
-        ImgUtil.write(image,destFile);
+        Pair<Integer, Integer> size = reSize(bufferedImage.getWidth(), bufferedImage.getHeight(), imageType);
+        Image image = ImgUtil.scale(bufferedImage, size.getLeft(), size.getRight());
+        log.info("upload image: width:{}, height:{}, resize:{},{}", bufferedImage.getWidth(), bufferedImage.getHeight(), size, destFile.getAbsolutePath());
+        ImgUtil.write(image, destFile);
 //        ImgUtil.slice(bufferedImage,destFile.getParentFile(),size.getLeft(), size.getRight());
         return destFile;
     }
 
-    private static Pair<Integer,Integer> reSize(int width, int height,ImageType imageType){
-        Pair<Integer,Integer> pair = null;
-        if(imageType.isFix()){
-            if(width > imageType.getWidth() || height > imageType.getHeight()){
+    private static Pair<Integer, Integer> reSize(int width, int height, ImageType imageType) {
+        Pair<Integer, Integer> pair = null;
+        if (imageType.isFix()) {
+            if (width > imageType.getWidth() || height > imageType.getHeight()) {
                 width = imageType.getWidth();
                 height = imageType.getHeight();
-                pair = Pair.of(width,height);
-            }else{
-                pair = Pair.of(width,height);
+                pair = Pair.of(width, height);
+            } else {
+                pair = Pair.of(width, height);
             }
-        }else{
+        } else {
             float scale = imageType.getHeight() * 1.0f / imageType.getWidth();
-            if(width > imageType.getWidth()){
+            if (width > imageType.getWidth()) {
                 width = imageType.getWidth();
                 height = (int) (width * scale);
                 pair = Pair.of(width, height);
-            }else if(height > imageType.getHeight()){
+            } else if (height > imageType.getHeight()) {
                 height = imageType.getHeight();
                 width = (int) (height / scale);
                 pair = Pair.of(width, height);
@@ -212,17 +207,56 @@ public class ImageFileUploader {
      * @param fileName
      * @return
      */
-    public static File upload(MultipartFile file, String parentPath, String fileName,ImageType imageType) throws IOException {
+    public static File upload(MultipartFile file, String parentPath, String fileName, ImageType imageType) throws IOException {
         if (file == null) {
             return null;
         }
         File dir = new File(parentPath);
-        if(!dir.exists()){
+        if (!dir.exists()) {
             dir.mkdirs();
         }
         File destFile = new File(dir, fileName);
-        return upload(file, destFile,imageType);
+        return upload(file, destFile, imageType);
     }
 
+    public static ExecutionResource upload(MultipartFile uploadFile, String contextPath) throws IOException {
+        InnospotsConfigProperties configProperties = SpringUtil.getBean(InnospotsConfigProperties.class);
+        String upLoadPath = configProperties.getUploadFilePath();
+        File uploadFileDir = Paths.get(upLoadPath, contextPath,
+                "u" + CCH.userId(), "p" + CCH.projectId()).toFile();
+        if (uploadFileDir.exists()) {
+            uploadFileDir.mkdirs();
+        }
+        String fileName = uploadFile.getOriginalFilename() != null ?
+                uploadFile.getOriginalFilename(): "File_"+CCH.projectId() + "_" + CCH.userId();
+        File destFile = new File(uploadFileDir.getAbsolutePath(),fileName);
+        destFile = FileUtil.writeFromStream(uploadFile.getInputStream(), destFile);
+
+        return ExecutionResource.buildResource(destFile, false, contextPath);
+    }
+
+    public static ExecutionResource upload(MultipartFile uploadFile, String parentPath, String fileName, String contextPath) throws IOException {
+        File destFile = prepareDestFile(new File(parentPath, fileName), true);
+        destFile = FileUtil.writeFromStream(uploadFile.getInputStream(), destFile);
+        return ExecutionResource.buildResource(destFile, false, contextPath);
+    }
+
+    private static File prepareDestFile(File destFile, boolean overwrite) throws IOException {
+        if (destFile.exists() && !overwrite) {
+            throw new IOException("file already exists," + destFile);
+        } else {
+            if (!destFile.getParentFile().exists()) {
+                boolean mkdir = destFile.getParentFile().mkdirs();
+                if (!mkdir) {
+                    throw new IOException("parentFile create failed," + destFile);
+                }
+            }
+            if (!destFile.exists() && !destFile.createNewFile()) {
+                throw new IOException("file create failed," + destFile);
+            }
+        }
+
+        return destFile;
+    }
 
 }

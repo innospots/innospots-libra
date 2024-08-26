@@ -17,6 +17,10 @@
     <dependencies>
         <dependency>
             <groupId>io.innospots</groupId>
+            <artifactId>innospots-libra-base</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.innospots</groupId>
             <artifactId>innospots-app-core</artifactId>
         </dependency>
 
