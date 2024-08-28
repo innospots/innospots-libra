@@ -1,26 +1,26 @@
-package io.innospots.app.core.model;
+package io.innospots.app.visitor.model;
 
+import io.innospots.app.core.model.AppResource;
+import io.innospots.app.core.model.AppSetting;
+import io.innospots.app.core.model.BaseAppInfo;
+import io.innospots.base.enums.DataStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
-import jakarta.persistence.Column;
-
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2024/1/11
+ * @date 2024/8/28
  */
-@Setter
+@Schema(title = "app show info")
 @Getter
-@Schema(title = "app definition")
-public class AppDefinition extends BaseAppInfo {
+@Setter
+public class AppShowInfo extends BaseAppInfo {
+
 
     @Schema(title = "app definition primary key")
     private String appKey;
-
-    @Schema(title = "app definition template key")
-    private String templateKey;
 
     /**
      * app uri path
@@ -28,5 +28,5 @@ public class AppDefinition extends BaseAppInfo {
     @Schema(title = "app url path, when share to public")
     private String appPath;
 
-    private String accessKey;
+
 }

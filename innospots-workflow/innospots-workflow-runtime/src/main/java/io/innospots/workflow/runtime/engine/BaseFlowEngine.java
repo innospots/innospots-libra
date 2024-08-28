@@ -22,6 +22,7 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.ResourceException;
+import io.innospots.base.model.response.ResponseCode;
 import io.innospots.workflow.core.engine.IFlowEngine;
 import io.innospots.workflow.core.enums.FlowStatus;
 import io.innospots.workflow.core.exception.FlowPrepareException;
@@ -98,6 +99,7 @@ public abstract class BaseFlowEngine implements IFlowEngine {
         } catch (Exception e) {
             logger.error("flow execution fail!", e);
             flowExecution.setStatus(ExecutionStatus.FAILED);
+            flowExecution.setResponseCode(ResponseCode.FAIL);
         }
         if(flow.getFlowStatus() != FlowStatus.LOADED){
             failExecution(flow,flowExecution);
@@ -111,6 +113,7 @@ public abstract class BaseFlowEngine implements IFlowEngine {
         logger.error("flow prepare failed, {}", buildProcessInfo);
         if (buildProcessInfo.getBuildException() != null) {
             flowExecution.setMessage(buildProcessInfo.errorMessage());
+            flowExecution.setResponseCode(ResponseCode.RESOURCE_BUILD_ERROR);
         } else {
             for (Map.Entry<String, Exception> exceptionEntry : buildProcessInfo.getErrorInfo().entrySet()) {
                 NodeExecution nodeExecution = NodeExecution.buildNewNodeExecution(exceptionEntry.getKey(), flowExecution);

@@ -33,4 +33,7 @@ public class AppDefinitionEntity extends BaseAppEntity {
     @Column(length = 32)
     private String appPath;
 
+    @Column(length = 16)
+    private String accessKey;
+
 }

@@ -1,5 +1,7 @@
 package io.innospots.app.visitor.controller;
 
+import io.innospots.app.core.model.AppDefinition;
+import io.innospots.app.visitor.model.AppToken;
 import io.innospots.base.constant.PathConstant;
 import io.innospots.base.model.response.InnospotsResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,20 +19,16 @@ import java.util.Map;
 @Tag(name = "Application Page Show")
 public class AppPageShowController {
 
-    @PostMapping("token/login")
-    public InnospotsResponse<?> login(@RequestBody Map<String,Object> body){
 
-        return null;
-    }
-
-    @GetMapping("access/check")
-    public InnospotsResponse<?> valid(){
+    @PostMapping("{appPath}/access/check")
+    public InnospotsResponse<AppToken> valid(@PathVariable String appPath,
+                                             Map<String,Object> body){
 
         return null;
     }
 
     @PostMapping("show-page/{appPath}")
-    public InnospotsResponse<?> showPage(@PathVariable String appPath){
+    public InnospotsResponse<AppDefinition> showPage(@PathVariable String appPath){
 
         return null;
     }
