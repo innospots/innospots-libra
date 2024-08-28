@@ -37,20 +37,20 @@ public class InnospotsResponse<T> {
 
     @Schema(title = "response message")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String message;
+    protected String message;
 
     @Schema(title = "status code")
-    private String code;
+    protected String code;
 
     @Schema(title = "response detail message")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String detail;
+    protected String detail;
 
     @Schema(title = "body data")
-    private T body;
+    protected T body;
 
     @Schema(title = "response timestamp")
-    private long ts;
+    protected long ts;
 
     public static <T> boolean hasData(InnospotsResponse<T> innospotsResponse) {
         return innospotsResponse != null && innospotsResponse.hasData();

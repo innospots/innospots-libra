@@ -22,6 +22,7 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.collect.Lists;
 import io.innospots.base.events.EventBusCenter;
+import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.workflow.core.execution.enums.RecordMode;
 import io.innospots.workflow.core.flow.Flow;
@@ -267,7 +268,7 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
         workflowResponse.setRevision(0);
         if (buildProcessInfo.getStatus() != FlowStatus.LOADED) {
             log.error("flow prepare failed, {}", buildProcessInfo);
-            workflowResponse.setResponseTime(LocalDateTime.now());
+            workflowResponse.fillResponse(ResponseCode.PUBLISH_BUILD_FAILED);
             return workflowResponse;
         }
 

@@ -50,16 +50,17 @@ public class DefaultResponseBuilder implements WorkflowResponseBuilder {
                         workflowRuntimeContext.getFlowExecution().getStartTime(),
                         workflowRuntimeContext.getFlowExecution().getEndTime()
                 ).toMillis());
-        response.setResponseTime(workflowRuntimeContext.getFlowExecution().getEndTime());
         if(workflowRuntimeContext.getFlowExecution().getStatus() == ExecutionStatus.FAILED){
-            response.setCode(workflowRuntimeContext.getFlowExecution().getResultCode());
-            response.setBody(workflowRuntimeContext.getFlowExecution().getResult());
+            response.fillResponse(workflowRuntimeContext.getFlowExecution().getResponseCode());
             return response;
         }else{
+            /*
             if (webhookConfig == null) {
                 return response;
             }
             response.setCode(webhookConfig.getResponseCode());
+
+             */
         }
 
         if (webhookConfig.getResponseMode() == FlowWebhookConfig.ResponseMode.ACK) {
@@ -67,7 +68,7 @@ public class DefaultResponseBuilder implements WorkflowResponseBuilder {
             for (ParamField responseField : webhookConfig.getResponseFields()) {
                 body.put(responseField.getCode(), responseField.getValue());
             }
-            response.setBody(body);
+            response.fillBody(body);
         } else {
             if (!nodeExecutions.isEmpty()) {
                 List<Map<String, Object>> outList = nodeExecutions.stream().
@@ -76,9 +77,9 @@ public class DefaultResponseBuilder implements WorkflowResponseBuilder {
                         .collect(Collectors.toList());
                 if (CollectionUtils.isNotEmpty(outList)) {
                     if (webhookConfig.getResponseData() == FlowWebhookConfig.ResponseData.ALL) {
-                        response.setBody(outList);
+                        response.fillBody(outList);
                     } else {
-                        response.setBody(outList.get(0));
+                        response.fillBody(outList.get(0));
                     }
                 }//end if outList
             }//end if nodeExecutions

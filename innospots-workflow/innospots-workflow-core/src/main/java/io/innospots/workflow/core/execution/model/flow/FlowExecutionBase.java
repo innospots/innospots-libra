@@ -18,6 +18,7 @@
 
 package io.innospots.workflow.core.execution.model.flow;
 
+import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.utils.InnospotsIdGenerator;
 import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.base.utils.Initializer;
@@ -105,7 +106,7 @@ public class FlowExecutionBase implements Initializer {
      */
     protected String source;
 
-    protected String resultCode;
+    protected ResponseCode responseCode;
 
     protected RecordMode recordMode;
 

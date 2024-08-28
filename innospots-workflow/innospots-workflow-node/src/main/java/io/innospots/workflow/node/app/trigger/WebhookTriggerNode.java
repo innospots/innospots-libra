@@ -94,9 +94,8 @@ public class WebhookTriggerNode extends TriggerNode {
     protected void invoke(NodeExecution nodeExecution, FlowExecution flowExecution) {
         if (!validateAuthentication(nodeExecution)) {
             nodeExecution.setStatus(ExecutionStatus.FAILED);
-            nodeExecution.setMessage("鉴权失败");
-            flowExecution.setResultCode(HttpStatus.HTTP_UNAUTHORIZED+"");
-            flowExecution.setResult(ResponseCode.AUTH_FAILED.info());
+            nodeExecution.setMessage(ResponseCode.AUTH_FAILED.info());
+            flowExecution.setResponseCode(ResponseCode.AUTH_FAILED);
             return;
         }
         super.invoke(nodeExecution, flowExecution);
