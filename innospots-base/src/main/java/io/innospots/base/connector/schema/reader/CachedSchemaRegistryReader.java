@@ -22,7 +22,6 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import io.innospots.base.connector.schema.model.SchemaRegistry;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -68,24 +67,24 @@ public class CachedSchemaRegistryReader implements ISchemaRegistryReader {
 
 
     @Override
-    public SchemaRegistry getSchemaRegistryByCode(String credentialKey, String registryCode) {
+    public SchemaRegistry getSchemaRegistryByCode(String registryCode) {
 
-        String schemaKey = credentialKey + "_" + StringUtils.defaultString(registryCode, "");
+        String schemaKey =  registryCode;
         // 从schemaRegistryCache获取
         return schemaRegistryCache.get(schemaKey,
                 // 始终保持数据源id对应的数据集列表信息是最新的全部数据
-                key -> this.schemaRegistryReader.getSchemaRegistryByCode(credentialKey, registryCode));
+                key -> this.schemaRegistryReader.getSchemaRegistryByCode(registryCode));
 
     }
 
     @Override
-    public SchemaRegistry getSchemaRegistryById(String credentialKey, String registryId) {
+    public SchemaRegistry getSchemaRegistryById(String registryId) {
 
-        String schemaKey = credentialKey + "_" + registryId;
+        String schemaKey =  registryId;
         // 从schemaRegistryCache获取
         return schemaRegistryCache.get(schemaKey,
                 // 始终保持数据源id对应的数据集列表信息是最新的全部数据
-                key -> this.schemaRegistryReader.getSchemaRegistryById(credentialKey, registryId));
+                key -> this.schemaRegistryReader.getSchemaRegistryById(registryId));
     }
 
 

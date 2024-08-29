@@ -52,12 +52,14 @@ public abstract class BaseDataConnectionMinder implements IDataConnectionMinder 
 
     @Override
     public SchemaRegistry schemaRegistryByCode(String registryCode) {
-        return schemaRegistryReader.getSchemaRegistryByCode(connectionCredential.getCredentialKey(), registryCode);
+        return schemaRegistryReader.getSchemaRegistryByCode(registryCode);
+//        return schemaRegistryReader.getSchemaRegistryByCode(connectionCredential.getCredentialKey(), registryCode);
     }
 
     @Override
     public SchemaRegistry schemaRegistryById(String registryId) {
-        return schemaRegistryReader.getSchemaRegistryById(connectionCredential.getCredentialKey(), registryId);
+        return schemaRegistryReader.getSchemaRegistryById(registryId);
+//        return schemaRegistryReader.getSchemaRegistryById(connectionCredential.getCredentialKey(), registryId);
     }
 
     @Override

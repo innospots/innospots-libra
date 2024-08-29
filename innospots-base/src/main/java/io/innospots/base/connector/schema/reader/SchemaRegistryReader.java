@@ -63,14 +63,14 @@ public class SchemaRegistryReader implements ISchemaRegistryReader {
 
 
     @Override
-    public SchemaRegistry getSchemaRegistryById(String credentialKey, String registryId) {
+    public SchemaRegistry getSchemaRegistryById(String registryId) {
 
         SchemaRegistry schemaRegistry = null;
 
         if (registryId != null) {
             schemaRegistry = this.schemaRegistryOperator.getSchemaRegistryById(registryId);
             if (schemaRegistry == null) {
-                throw ResourceException.buildNotExistException(this.getClass(), "registry not exist, credentialKey: " + credentialKey + " , registryId: " + registryId);
+                throw ResourceException.buildNotExistException(this.getClass(), "registry not exist , registryId: " + registryId);
             }
             List<SchemaField> schemaFields = this.schemaFieldOperator.listByRegistryId(registryId);
             schemaRegistry.setSchemaFields(schemaFields);
@@ -83,14 +83,14 @@ public class SchemaRegistryReader implements ISchemaRegistryReader {
 
 
     @Override
-    public SchemaRegistry getSchemaRegistryByCode(String credentialKey, String registryCode) {
+    public SchemaRegistry getSchemaRegistryByCode(String registryCode) {
 
         SchemaRegistry schemaRegistry = null;
 
         if (registryCode != null) {
             schemaRegistry = this.schemaRegistryOperator.getSchemaRegistryByCode(registryCode);
             if (schemaRegistry == null) {
-                throw ResourceException.buildNotExistException(this.getClass(), "registry not exist, credentialKey: " + credentialKey + " , registryCode: " + registryCode);
+                throw ResourceException.buildNotExistException(this.getClass(), "registry not exist , registryCode: " + registryCode);
             }
             List<SchemaField> schemaFields = this.schemaFieldOperator.listByRegistryId(schemaRegistry.getRegistryId());
             schemaRegistry.setSchemaFields(schemaFields);
