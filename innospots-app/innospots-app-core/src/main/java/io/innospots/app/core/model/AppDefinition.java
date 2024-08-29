@@ -1,5 +1,6 @@
 package io.innospots.app.core.model;
 
+import io.innospots.app.core.enums.ViewScope;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,5 +29,9 @@ public class AppDefinition extends BaseAppInfo {
     @Schema(title = "app url path, when share to public")
     private String appPath;
 
+    @Schema(title = "app page view access key")
     private String accessKey;
+
+    @Schema(title = "app view scope")
+    private ViewScope viewScope;
 }

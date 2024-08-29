@@ -6,7 +6,7 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-    database-platform: io.innospots.server.base.CustomH2Dialect
+#    database-platform: io.innospots.server.base.CustomH2Dialect
     generate-ddl: true
     open-in-view: false
   sql:

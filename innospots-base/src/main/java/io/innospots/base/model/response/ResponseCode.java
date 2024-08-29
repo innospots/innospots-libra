@@ -42,6 +42,7 @@ public enum ResponseCode {
     AUTH_DECRYPT_ERROR("60005", "decrypt error"),
     AUTH_FAILED("60006", "authentication failed"),
     CRYPTO_ERROR("60007", "crypto error"),
+    AUTH_ACCESS_FORBIDDEN("60008", "access forbidden"),
     PERMISSION_DENIED("70000", "permission denied"),
     SCRIPT_INVOKE_ERROR("80000", "script invoke error"),
     SCRIPT_COMPILE_ERROR("80001", ""),

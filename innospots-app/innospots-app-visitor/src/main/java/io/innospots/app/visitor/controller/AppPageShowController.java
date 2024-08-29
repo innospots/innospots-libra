@@ -2,12 +2,13 @@ package io.innospots.app.visitor.controller;
 
 import io.innospots.app.core.model.AppDefinition;
 import io.innospots.app.visitor.model.AppToken;
+import io.innospots.app.visitor.model.RequestAccess;
+import io.innospots.app.visitor.operator.AppShowVisitor;
 import io.innospots.base.constant.PathConstant;
 import io.innospots.base.model.response.InnospotsResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 
 /**
  * @author Smars
@@ -19,18 +20,21 @@ import java.util.Map;
 @Tag(name = "Application Page Show")
 public class AppPageShowController {
 
+    private final AppShowVisitor appShowVisitor;
+
+    public AppPageShowController(AppShowVisitor appShowVisitor) {
+        this.appShowVisitor = appShowVisitor;
+    }
 
     @PostMapping("{appPath}/access/check")
     public InnospotsResponse<AppToken> valid(@PathVariable String appPath,
-                                             Map<String,Object> body){
-
-        return null;
+                                             @RequestBody RequestAccess requestAccess){
+        return appShowVisitor.checkAccess(appPath,requestAccess);
     }
 
     @PostMapping("show-page/{appPath}")
     public InnospotsResponse<AppDefinition> showPage(@PathVariable String appPath){
-
-        return null;
+        return InnospotsResponse.success(appShowVisitor.getAppDefinitionByAppPath(appPath));
     }
 
 }

@@ -11,12 +11,6 @@
 
     <artifactId>innospots-libra-auth</artifactId>
 
-    <properties>
-        <jjwt.version>0.9.1</jjwt.version>
-        <nimbus-jose-jwt.version>9.40</nimbus-jose-jwt.version>
-    </properties>
-
-
     <dependencies>
         <dependency>
             <groupId>io.innospots</groupId>

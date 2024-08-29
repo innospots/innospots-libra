@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 /**
  * @author Smars
  * @vesion 2.0
@@ -16,7 +18,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @TableName(value = AppDefinitionEntity.TABLE_NAME)
-@Table(name = AppDefinitionEntity.TABLE_NAME)
+@Table(name = AppDefinitionEntity.TABLE_NAME,indexes = {@Index(name = "idx_app_path", columnList = "appPath")})
 public class AppDefinitionEntity extends BaseAppEntity {
 
     public static final String TABLE_NAME = "app_definition";
@@ -35,5 +37,12 @@ public class AppDefinitionEntity extends BaseAppEntity {
 
     @Column(length = 16)
     private String accessKey;
+
+    @Column
+    private LocalDateTime expiredTime;
+
+    @Column(length = 16)
+    private String viewScope;
+
 
 }

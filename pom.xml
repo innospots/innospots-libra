@@ -76,7 +76,7 @@
         <mybatis-plus.version>3.5.7</mybatis-plus.version>
         <mysql.version>8.4.0</mysql.version>
         <nashorn-core.version>15.4</nashorn-core.version>
-
+        <nimbus-jose-jwt.version>9.40</nimbus-jose-jwt.version>
         <postgresql.version>42.7.3</postgresql.version>
         <openapi-ui.version>2.6.0</openapi-ui.version>
         <reflections.version>0.10.2</reflections.version>

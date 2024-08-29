@@ -37,4 +37,7 @@ public class BaseAppInfo extends PBaseModelInfo {
     @Schema(title = "app setting")
     protected AppSetting settings;
 
+    @Schema(title = "app vendor")
+    protected String vendor;
+
 }
