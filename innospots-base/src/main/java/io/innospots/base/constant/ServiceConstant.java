@@ -24,14 +24,30 @@ package io.innospots.base.constant;
  */
 public interface ServiceConstant {
 
-    String PATH_ROOT_ADMIN_ENDPOINT = "innospot/admin/endpoint";
+    String PATH_ROOT_ADMIN_ENDPOINT = "innospots/admin/endpoint";
     String PATH_ROOT_DATA_API = "innospots/data";
-    String PATH_ROOT_ISP = "innospot/isp";
-    String PATH_ROOT_EXECUTOR = "innospot/executor";
+    String PATH_ROOT_ISP = "innospots/isp";
+    String PATH_ROOT_EXECUTOR = "innospots/executor";
 
     String SRV_NAME_DATA_SERVER = "innospots-Data-Server";
     String SRV_NAME_ADMIN_CONSOLE = "innospots-Administration-Console";
     String SRV_NAME_ISP_SERVER = "innospots-ISP-Server";
-    String SRV_NAME_SCHEDULE_EXECUTOR = "innospots-Schedule-Executor";
-    String SRV_NAME_SCHEDULE_SERVER = "innospots-Schedule-Server";
+
+    String SRV_NAME_SCHEDULE_EXECUTOR = "SCHEDULE_EXECUTOR";
+    String SRV_NAME_SCHEDULE_CONSOLE = "SCHEDULE_CONSOLE";
+
+    String SRV_NAME_APP_VISITOR = "APP_VISITOR";
+
+
+    static String serverAddress() {
+        return System.getProperty("server.address");
+    }
+
+    static String webHookApi(String serverAddress) {
+        return "http://" + serverAddress + PathConstant.ROOT_PATH + PathConstant.WORKFLOW_RUNTIME_PATH;
+    }
+
+    static String webHookApiTest(String serverAddress) {
+        return "http://" + serverAddress + PathConstant.ROOT_PATH + PathConstant.WORKFLOW_TEST_PATH;
+    }
 }

@@ -1,0 +1,71 @@
+{
+  "name": "workflow-api",
+  "icon": "/workflow.svg",
+  "order": 200,
+  "enabled": true,
+  "connectType": "API",
+  "overview": "workflow的 api 接口",
+  "description": "采用 api 接口推送接口",
+  "authOptions": [
+    {
+      "name": "Normal",
+      "code": "normal-api",
+      "minder": "io.innospots.connector.workflow.minder.WorkflowApiConnectorMinder",
+      "defaults": {},
+      "elements": [
+        {
+          "label": "请求地址",
+          "name": "url_address",
+          "maxSize": 256,
+          "placeholder": "http://ip:port",
+          "required": false,
+          "tips": "http://ip:端口",
+          "type": "INPUT",
+          "expression": "",
+          "gridSize": 16,
+          "options": []
+        },
+        {
+          "label": "请求方法",
+          "name": "request_method",
+          "placeholder": "",
+          "required": true,
+          "labelGrid": 4,
+          "tips": "GET POST",
+          "type": "SELECT",
+          "value": "POST",
+          "defaultValue": "POST",
+          "expression": "",
+          "gridSize": 16,
+          "options": [{
+            "name": "GET",
+            "value": "GET"
+          },{
+            "name": "POST",
+            "value": "POST"
+          }]
+        }
+      ]
+    },
+    {
+      "name": "Bearer Token",
+      "code": "bearer_token",
+      "minder": "io.innospots.connector.workflow.minder.WorkflowApiConnectorMinder",
+      "defaults": {},
+      "elements": [
+        {
+          "label": "Token",
+          "name": "bearer_token",
+          "placeholder": "Input token",
+          "required": true,
+          "labelGrid": 4,
+          "tips": "bearer token",
+          "type": "INPUT",
+          "expression": "",
+          "gridSize": 16,
+          "options": []
+        }
+      ]
+    }
+  ]
+}

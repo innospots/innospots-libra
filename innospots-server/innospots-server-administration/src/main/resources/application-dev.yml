@@ -23,3 +23,8 @@ innospots:
     pool-name: innospots-pool
     max-lifetime: 1800000
     idle-timeout: 600000 # millisecond,default ten minute
+
+  application:
+    visitor:
+      workflowAddress: http://${spring.cloud.client.ip-address}:${server.port}/api/workflow/v1
+      workflowTestAddress: http://${spring.cloud.client.ip-address}:${server.port}/api/workflow/v1/test

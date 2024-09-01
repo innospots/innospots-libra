@@ -1,5 +1,5 @@
 {
-  "name": "Http",
+  "name": "API",
   "icon": "/http-api.svg",
   "order": 200,
   "enabled": true,
@@ -7,6 +7,46 @@
   "overview": "基于HTTP协议的请求连接",
   "description": "请选择此连接支持的鉴权方式并填入连接鉴权的默认值，当组件的“只读”选项被勾选中时，此组件在凭据创建时只展示不能修改。",
   "authOptions": [
+    {
+      "name": "Normal",
+      "code": "normal-api",
+      "minder": "io.innospots.connector.api.minder.NormalApiConnectionMinder",
+      "defaults": {},
+      "elements": [
+        {
+          "label": "请求地址",
+          "name": "url_address",
+          "maxSize": 256,
+          "placeholder": "http://ip:port",
+          "required": false,
+          "tips": "http://ip:端口",
+          "type": "INPUT",
+          "expression": "",
+          "gridSize": 16,
+          "options": []
+        },
+        {
+          "label": "请求方法",
+          "name": "request_method",
+          "placeholder": "",
+          "required": true,
+          "labelGrid": 4,
+          "tips": "GET POST",
+          "type": "SELECT",
+          "value": "POST",
+          "defaultValue": "POST",
+          "expression": "",
+          "gridSize": 16,
+          "options": [{
+            "name": "GET",
+            "value": "GET"
+          },{
+            "name": "POST",
+            "value": "POST"
+          }]
+        }
+      ]
+    },
     {
       "name": "Basic",
       "code": "basic-auth-api",

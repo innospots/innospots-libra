@@ -82,7 +82,6 @@
         <Logger name="io.innospots.libra.base.filter" level="debug"/>
         <!-- scan schedule execution -->
         <AsyncLogger name="io.innospots.base.data.operator.jdbc" level="info"/>
-        <AsyncLogger name="io.innospots.base.registry" level="info"/>
         <AsyncLogger name="io.innospots.base.data.operator" level="info"/>
         <AsyncLogger name="io.innospots.connector.schema.dao" level="info"/>
         <AsyncLogger name="io.innospots.server.base.registry" level="info"/>

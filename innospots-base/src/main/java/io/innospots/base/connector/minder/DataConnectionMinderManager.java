@@ -18,10 +18,10 @@
 
 package io.innospots.base.connector.minder;
 
-import com.github.benmanes.caffeine.cache.CacheLoader;
-import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.LoadingCache;
-import com.github.benmanes.caffeine.cache.RemovalListener;
+import com.github.benmanes.caffeine.cache.*;
+import io.innospots.base.connector.credential.buidler.IRegistryCredentialBuilder;
+import io.innospots.base.connector.schema.model.SchemaRegistry;
+import io.innospots.base.connector.schema.reader.SingleSchemaRegistryReader;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.connector.credential.model.ConnectionCredential;
 import io.innospots.base.connector.credential.reader.IConnectionCredentialReader;
@@ -41,6 +41,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 /**
  * manage the datasource connection instance
@@ -54,6 +55,8 @@ public class DataConnectionMinderManager {
     private static final Logger logger = LoggerFactory.getLogger(DataConnectionMinderManager.class);
 
     private final LoadingCache<String, IDataConnectionMinder> connectionPoolCache;
+    private final Cache<String, IDataConnectionMinder> registryMinderCache;
+
 
     private final IConnectionCredentialReader connectionCredentialReader;
 
@@ -66,6 +69,9 @@ public class DataConnectionMinderManager {
         this.connectionCredentialReader = connectionCredentialReader;
         this.dataSchemaReader = dataSchemaReader;
         connectionPoolCache = build(cacheTimeoutSecond);
+        registryMinderCache = Caffeine.newBuilder()
+                .expireAfterWrite(cacheTimeoutSecond, TimeUnit.SECONDS)
+                .build();
     }
 
     public static IDataConnectionMinder getCredentialMinder(String credentialKey) {
@@ -171,6 +177,27 @@ public class DataConnectionMinderManager {
     public  IDataConnectionMinder getMinder(String credentialKey) {
         return connectionPoolCache.get(credentialKey);
 //        return connectionPoolCache.getIfPresent(credentialKey);
+    }
+
+    public IDataConnectionMinder getMinder(SchemaRegistry schemaRegistry) {
+        if(schemaRegistry.getCredentialKey()!=null){
+            return this.getMinder(schemaRegistry.getCredentialKey());
+        }
+
+        IDataConnectionMinder dataConnectionMinder = registryMinderCache.getIfPresent(schemaRegistry.getRegistryId());
+        if(dataConnectionMinder != null){
+            return dataConnectionMinder;
+        }
+
+        dataConnectionMinder = newMinderInstance(schemaRegistry.getConnectorName(),schemaRegistry.getAuthOption());
+        if(dataConnectionMinder == null){
+            return null;
+        }
+        IRegistryCredentialBuilder credentialBuilder = dataConnectionMinder.registryCredentialBuilder();
+        ConnectionCredential connectionCredential = credentialBuilder.buildBySchemaRegistry(schemaRegistry);
+        dataConnectionMinder.initialize(new SingleSchemaRegistryReader(schemaRegistry), connectionCredential);
+        registryMinderCache.put(schemaRegistry.getRegistryId(), dataConnectionMinder);
+        return dataConnectionMinder;
     }
 
 

@@ -7,6 +7,8 @@ innospots:
     tokenExpTimeMinute: 180
     open-super-admin-permission: true
     ignore-auth-paths:
+      - /innospots/apps/api/page/**
+      - /innospots/apps/api/data/**
       - /innospots/api/runtime/webhook/**
       - /actuator/health
       - /actuator/info

@@ -19,6 +19,7 @@
         <module>innospots-connector-redis</module>
         <module>innospots-connector-imap</module>
         <module>innospots-connector-api</module>
+        <module>innospots-connector-workflow</module>
     </modules>
 
 
@@ -27,6 +28,11 @@
             <dependency>
                 <groupId>io.innospots</groupId>
                 <artifactId>innospots-connector-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-connector-workflow</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

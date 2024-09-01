@@ -82,4 +82,10 @@ public class SchemaRegistryEntity extends PBaseEntity {
     @Column(length = 16)
     private String scope;
 
+    @Column(length = 32)
+    private String connectorName;
+
+    @Column(length = 32)
+    private String authOption;
+
 }

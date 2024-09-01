@@ -41,7 +41,7 @@ import java.util.Map;
  * @date 2021/3/12
  */
 
-@RequestMapping(PathConstant.ROOT_PATH + PathConstant.RUNTIME_PATH)
+@RequestMapping(PathConstant.ROOT_PATH + PathConstant.WORKFLOW_RUNTIME_PATH)
 @RestController
 @Tag(name = "webhook runtime api")
 public class WebhookRuntimeEndpoint {

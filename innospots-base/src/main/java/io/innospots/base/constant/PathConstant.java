@@ -29,7 +29,8 @@ public interface PathConstant {
 
     String PROJECT_PATH = "/innospots/api/project/";
 
-    String RUNTIME_PATH = "runtime/webhook/";
+    String WORKFLOW_RUNTIME_PATH = "workflow/runtime/webhook/";
+    String WORKFLOW_TEST_PATH = "workflow/test/webhook/";
 
     String[] STATIC_RESOURCE_SUFFIX = new String[]{".js", ".css", ".svg", ".png", ".jpg", ".jpeg", ".gif", ".less", ".woff2", ".ttf", ".woff"};
 

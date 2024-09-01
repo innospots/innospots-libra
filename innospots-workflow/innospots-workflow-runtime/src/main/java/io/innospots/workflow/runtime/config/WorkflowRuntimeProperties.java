@@ -19,6 +19,7 @@
 package io.innospots.workflow.runtime.config;
 
 import io.innospots.base.constant.PathConstant;
+import io.innospots.base.constant.ServiceConstant;
 import io.innospots.base.utils.BeanContextAwareUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -67,7 +68,7 @@ public class WorkflowRuntimeProperties {
 
         }
         if(host == null){
-            BeanContextAwareUtils.serverIpAddress();
+            host = BeanContextAwareUtils.serverIpAddress();
         }
         if(port == null){
             port = BeanContextAwareUtils.serverPort();
@@ -76,11 +77,11 @@ public class WorkflowRuntimeProperties {
     }
 
     public static String webHookApi(){
-        return "http://" + serverAddress() + PathConstant.ROOT_PATH + PathConstant.RUNTIME_PATH;
+        return ServiceConstant.webHookApi(serverAddress());
     }
 
     public static String webHookApiTest(){
-        return "http://" + serverAddress() + PathConstant.ROOT_PATH + "test/webhook";
+        return ServiceConstant.webHookApiTest(serverAddress());
     }
 
 }

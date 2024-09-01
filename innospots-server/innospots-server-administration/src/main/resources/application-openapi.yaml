@@ -36,6 +36,11 @@ springdoc:
         - io.innospots.app.console
       paths-to-match:
         - /**
+    - group: app-visitor
+      packagesToScan:
+        - io.innospots.app.visitor
+      paths-to-match:
+        - /**
   show-actuator: true
   open-api:
     info:

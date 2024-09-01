@@ -21,6 +21,7 @@ import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.base.model.response.ResponseCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.Objects;
@@ -30,6 +31,7 @@ import java.util.Objects;
  * @vesion 2.0
  * @date 2024/8/28
  */
+@Component
 public class AppShowVisitor {
 
     private static final Logger log = LoggerFactory.getLogger(AppShowVisitor.class);
@@ -111,7 +113,7 @@ public class AppShowVisitor {
         JWTClaimsSet claimsSet = claimsSetBuilder.build();
         try{
             // create singer
-            JWSSigner signer = new MACSigner("Innospots");
+            JWSSigner signer = new MACSigner("ad069f0180fee10b0a5172ba1fa7cda2c8e81b09cda96fafe3cbb134048a8e65");
 
             // create JWT
             SignedJWT signedJWT = new SignedJWT(header, claimsSet);

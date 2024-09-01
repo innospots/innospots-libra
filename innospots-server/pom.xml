@@ -19,6 +19,7 @@
         <module>innospots-server-workflow</module>
         <module>innospots-server-base</module>
         <module>innospots-server-schedule</module>
+        <module>innospots-server-app-visitor</module>
     </modules>
 
     <dependencyManagement>

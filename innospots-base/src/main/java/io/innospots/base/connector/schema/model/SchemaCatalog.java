@@ -21,6 +21,7 @@ package io.innospots.base.connector.schema.model;
 import io.innospots.base.constant.RegexConstants;
 import io.innospots.base.model.BaseModelInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -66,5 +67,11 @@ public class SchemaCatalog extends BaseModelInfo {
 
     @Schema(title = "app schema registry scope, example: application, general etc.")
     protected String scope;
+
+    @Schema(title = "minder connector name")
+    private String connectorName;
+
+    @Schema(title = "minder auth options")
+    private String authOption;
 
 }

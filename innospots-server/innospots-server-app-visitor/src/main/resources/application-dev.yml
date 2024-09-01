@@ -1,0 +1,25 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    generate-ddl: false
+    open-in-view: false
+
+innospots:
+  db:
+    driver-class-name: ${DB_DRIVER:com.mysql.cj.jdbc.Driver}
+    jdbc-url: jdbc:mysql://${DB_IP}:${DB_PORT:3306}/${DB_NAME}?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=${DB_TIMEZONE:GMT%2B8}&zeroDateTimeBehavior=CONVERT_TO_NULL
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    maximum-pool-size: 64
+    minimum-idle: 4
+    pool-name: innospots-db
+    max-lifetime: 1800000
+    idle-timeout: 600000 # millisecond,default ten minute
+
+
+  application:
+    visitor:
+      workflowAddress: http://localhost:8080/api/workflow/v1
+      workflowTestAddress: http://localhost:8080/api/workflow/v1/test

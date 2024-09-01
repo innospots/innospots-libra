@@ -43,8 +43,8 @@
         </dependency>
 
         <dependency>
-            <groupId>de.codecentric</groupId>
-            <artifactId>spring-boot-admin-starter-client</artifactId>
+            <groupId>io.innospots</groupId>
+            <artifactId>innospots-connector-workflow</artifactId>
         </dependency>
 
     </dependencies>

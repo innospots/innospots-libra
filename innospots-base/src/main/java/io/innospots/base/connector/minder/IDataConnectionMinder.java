@@ -19,12 +19,14 @@
 package io.innospots.base.connector.minder;
 
 
-import io.innospots.base.connector.credential.model.CredentialInfo;
-import io.innospots.base.data.body.PageBody;
+import io.innospots.base.connector.credential.buidler.IRegistryCredentialBuilder;
+import io.innospots.base.connector.credential.buidler.SimpleRegistryCredentialBuilder;
 import io.innospots.base.connector.credential.model.ConnectionCredential;
+import io.innospots.base.connector.credential.model.CredentialInfo;
 import io.innospots.base.connector.schema.model.SchemaCatalog;
 import io.innospots.base.connector.schema.model.SchemaRegistry;
 import io.innospots.base.connector.schema.reader.ISchemaRegistryReader;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.operator.IOperator;
 
 import java.util.List;
@@ -94,6 +96,10 @@ public interface IDataConnectionMinder {
 
     default PageBody<Map<String, Object>> fetchSamples(ConnectionCredential connectionCredential, Map<String,Object> config) {
         return null;
+    }
+
+    default IRegistryCredentialBuilder registryCredentialBuilder() {
+        return new SimpleRegistryCredentialBuilder();
     }
 
 }

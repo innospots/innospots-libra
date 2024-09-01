@@ -61,6 +61,10 @@
             <groupId>io.innospots</groupId>
             <artifactId>innospots-app-console</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.innospots</groupId>
+            <artifactId>innospots-app-visitor</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>io.innospots</groupId>

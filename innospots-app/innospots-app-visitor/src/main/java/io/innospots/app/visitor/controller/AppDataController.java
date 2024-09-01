@@ -37,7 +37,7 @@ public class AppDataController {
 
     @Operation(summary = "show and read list data from table or api")
     @GetMapping("{appKey}/registry/{registryId}/list")
-    public InnospotsResponse<List<Map<String,Object>>> list(@PathVariable String appKey,
+    public InnospotsResponse<List<Object>> list(@PathVariable String appKey,
                                                             @PathVariable String registryId,
                                                             @RequestParam Map<String,Object> params){
 

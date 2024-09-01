@@ -37,6 +37,8 @@ import java.util.Map;
 @Schema(title = "schema registry")
 public class SchemaRegistry extends SchemaCatalog {
 
+    private static final String KEY_DATA_OPERATION = "data_operation";
+
     @Schema(title = "schema registry primaryKey")
     protected String registryId;
 
@@ -77,6 +79,14 @@ public class SchemaRegistry extends SchemaCatalog {
             return script.get(configKey);
         }
         return null;
+    }
+
+    public String dataOperation(){
+        Object v =  configValue(KEY_DATA_OPERATION);
+        if(v == null){
+            return null;
+        }
+        return String.valueOf(v);
     }
 
 }

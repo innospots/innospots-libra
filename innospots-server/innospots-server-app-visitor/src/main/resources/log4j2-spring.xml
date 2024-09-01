@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <!--<Configuration status="WARN" monitorInterval="30"> -->
+    <properties>
+        <property name="LOG_HOME">${sys:LOG_PATH:-logs}</property>
+        <property name="applicationName">innospots-server-app-visitor</property>
+    </properties>
+    <Appenders>
+        <!--*********************控制台日志***********************-->
+        <Console name="consoleAppender" target="SYSTEM_OUT">
+            <!--设置日志格式及颜色-->
+            <PatternLayout
+                    pattern="%style{%d{ISO8601}}{bright,green} %highlight{%-5level} [%style{%t}{bright,blue}] %style{%C{} %M(%L)}{bright,yellow}: %msg%n%style{%throwable}{red}"
+                    disableAnsi="false" noConsoleNoAnsi="false"/>
+        </Console>
+
+        <!--*********************文件日志***********************-->
+        <!--all级别日志-->
+        <RollingFile name="allFileAppender"
+                     fileName="${LOG_HOME}/${applicationName}.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/${applicationName}_%d{yyyy-MM-dd}-%i.log.gz">
+            <!--设置日志格式-->
+            <PatternLayout>
+                <pattern>%d %p %C{} [%t] %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <!-- 设置日志文件切分参数 -->
+                <!--<OnStartupTriggeringPolicy/>-->
+                <!--设置日志基础文件大小，超过该大小就触发日志文件滚动更新-->
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+                <!--设置日志文件滚动更新的时间，依赖于文件命名filePattern的设置-->
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <!--设置日志的文件个数上限，不设置默认为7个，超过大小后会被覆盖；依赖于filePattern中的%i-->
+            <DefaultRolloverStrategy max="100"/>
+        </RollingFile>
+
+        <!--error及更高级别日志-->
+        <RollingFile name="errorFileAppender"
+                     fileName="${LOG_HOME}/${applicationName}_error.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/${applicationName}_error_%d{yyyy-MM-dd}-%i.log.gz">
+            <!--设置日志格式-->
+            <PatternLayout>
+                <pattern>%d %p %C{} [%t] %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <!-- 设置日志文件切分参数 -->
+                <!--<OnStartupTriggeringPolicy/>-->
+                <!--设置日志基础文件大小，超过该大小就触发日志文件滚动更新-->
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+                <!--设置日志文件滚动更新的时间，依赖于文件命名filePattern的设置-->
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <!--设置日志的文件个数上限，不设置默认为7个，超过大小后会被覆盖；依赖于filePattern中的%i-->
+            <DefaultRolloverStrategy max="100"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- 根日志设置 -->
+        <Root level="info">
+            <AppenderRef ref="allFileAppender" level="all"/>
+            <AppenderRef ref="consoleAppender" level="all"/>
+            <AppenderRef ref="errorFileAppender" level="error"/>
+        </Root>
+
+        <AsyncLogger name="org.springframework" level="info"/>
+        <AsyncLogger name="org.springframework.web" level="info"/>
+        <AsyncLogger name="org.mybatis" level="warn"/>
+        <AsyncLogger name="org.hibernate" level="warn"/>
+        <AsyncLogger name="com.zaxxer.hikari" level="info"/>
+        <AsyncLogger name="org.quartz" level="info"/>
+        <AsyncLogger name="org.apache.kafka.clients.consumer.internals" level="warn"/>
+        <AsyncLogger name="com.baomidou.mybatisplus" level="info"/>
+        <AsyncLogger name="io.innospots" level="debug"/>
+        <AsyncLogger name="io.innospots.base.data.operator.jdbc" level="info"/>
+        <AsyncLogger name="io.innospots.server.base.registry" level="info"/>
+        <AsyncLogger name="io.innospots.libra.kernel" level="info"/>
+        <AsyncLogger name="io.innospots.libra.base.dao" level="info"/>
+        <AsyncLogger name="io.innospots.app.visitor" level="info"/>
+        <AsyncLogger name="io.innospots.app.core" level="info"/>
+    </Loggers>
+
+</Configuration>
