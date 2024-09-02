@@ -124,8 +124,8 @@ public class WorkflowService {
         return workflowInstanceOperator.pageWorkflows(request);
     }
 
-    public SchemaRegistry getApiWorkflowSchemaRegistry(String registryId){
-        WorkflowBody workflowBody = workflowBodyOperator.getWorkflowBody(Long.parseLong(registryId),true);
+    public SchemaRegistry getApiWorkflowSchemaRegistry(String workflowInstanceId){
+        WorkflowBody workflowBody = workflowBodyOperator.getWorkflowBody(Long.parseLong(workflowInstanceId),true);
         SchemaRegistry schemaRegistry = new SchemaRegistry();
         for (NodeInstance start : workflowBody.getStarts()) {
             if(start.getPrimitive() == NodePrimitive.trigger || start.getPrimitive() == NodePrimitive.apiTrigger){
@@ -137,15 +137,16 @@ public class WorkflowService {
                 }catch (Exception e){
                     log.error(e.getMessage(),e);
                 }
-                schemaRegistry.setRegistryId(registryId);
+                schemaRegistry.setRegistryId(workflowInstanceId);
                 schemaRegistry.setName(workflowBody.getName());
                 schemaRegistry.setCode(workflowBody.getFlowKey());
                 schemaRegistry.setRegistryType(SchemaRegistryType.WORKFLOW);
                 schemaRegistry.setCategoryId(workflowBody.getCategoryId());
+                schemaRegistry.addConfig("flowKey",workflowBody.getFlowKey());
                 List<SchemaField> schemaFields = new ArrayList<>();
                 for (ParamField inputField : start.getInputFields()) {
                     SchemaField schemaField = SchemaField.convert(inputField);
-                    schemaField.setRegistryId(registryId);
+                    schemaField.setRegistryId(workflowInstanceId);
                     schemaFields.add(schemaField);
                 }
                 schemaRegistry.setSchemaFields(schemaFields);

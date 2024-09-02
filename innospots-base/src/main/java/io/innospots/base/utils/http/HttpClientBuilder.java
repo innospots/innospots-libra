@@ -163,7 +163,7 @@ public class HttpClientBuilder {
         return httpData;
     }
 
-    private static void fillResponse(HttpData httpData, String resStr) throws IOException, ParseException {
+    private static void fillResponse(HttpData httpData, String result) throws IOException, ParseException {
 //        int statusCode = response.getCode();
 //        httpData.setStatus(statusCode);
 //        httpData.setMessage(response.getReasonPhrase());
@@ -171,7 +171,7 @@ public class HttpClientBuilder {
 //        for (Header header : response.getHeaders()) {
 //            httpData.addHeader(header.getName(), header.getValue());
 //        }
-        String result = null;
+//        String result = null;
         if (result.startsWith("[")) {
             httpData.setBody(JSONUtils.toList(result, LinkedHashMap.class));
         } else if (result.startsWith("{")) {
@@ -312,7 +312,10 @@ public class HttpClientBuilder {
         } catch (IOException | ParseException e) {
             httpData.setMessage(e.getMessage());
             httpData.setStatus(HttpStatus.HTTP_INTERNAL_ERROR);
-            logger.error(e.getMessage(), e);
+            StringBuilder out = new StringBuilder();
+            out.append("url: ").append(url).append(" ,header: ").append(headers).append(" ,param: ").append(param)
+                    .append(", body: ").append(requestBody);
+            logger.error("{}, error:{}", out, e.getMessage(), e);
         } finally {
         }
 

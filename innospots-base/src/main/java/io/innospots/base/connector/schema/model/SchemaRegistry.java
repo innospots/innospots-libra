@@ -84,6 +84,9 @@ public class SchemaRegistry extends SchemaCatalog {
     public String dataOperation(){
         Object v =  configValue(KEY_DATA_OPERATION);
         if(v == null){
+            v = configValue("requestType");
+        }
+        if(v == null){
             return null;
         }
         return String.valueOf(v);

@@ -38,7 +38,7 @@ import java.util.Map;
 public class WebhookPayloadConverter {
 
 
-    public static WebhookPayload convert(String flowKey,
+    public static WebhookPayload convert(String path,
                                          HttpServletRequest httpRequest, Map<String, Object> headers,
                                          Map<String, Object> params, Map<String, Object> body
     ) {
@@ -46,7 +46,7 @@ public class WebhookPayloadConverter {
         payload.setRequestMethod(FlowWebhookConfig.RequestMethod.valueOf(httpRequest.getMethod()));
         payload.setUri(httpRequest.getRequestURI());
         payload.setLocation(httpRequest.getRemoteAddr());
-        payload.setFlowKey(flowKey);
+        payload.setPath(path);
         if (headers == null) {
             headers = Collections.emptyMap();
         }

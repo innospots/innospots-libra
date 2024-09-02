@@ -39,7 +39,7 @@ import java.util.Map;
 @Setter
 public class WebhookPayload {
 
-    private String flowKey;
+    private String path;
 
     private Map<String, Object> headers;
 
@@ -82,7 +82,7 @@ public class WebhookPayload {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{");
-        sb.append("flowKey='").append(flowKey).append('\'');
+        sb.append("path='").append(path).append('\'');
         sb.append(", uri='").append(uri).append('\'');
         sb.append(", requestMethod=").append(requestMethod);
         sb.append(", location='").append(location).append('\'');

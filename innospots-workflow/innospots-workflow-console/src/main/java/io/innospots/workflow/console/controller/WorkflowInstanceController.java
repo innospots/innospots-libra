@@ -156,10 +156,10 @@ public class WorkflowInstanceController extends BaseController {
         return success(page);
     }
 
-    @GetMapping("registry/{registryId}")
-    @Operation(summary = "get workflow api registry")
-    public InnospotsResponse<SchemaRegistry> workflowApiRegistry(@PathVariable String registryId) {
-        return success(workflowService.getApiWorkflowSchemaRegistry(registryId));
+    @GetMapping("registry/{workflowInstanceId}")
+    @Operation(summary = "get workflow api registry by workflowInstanceId")
+    public InnospotsResponse<SchemaRegistry> workflowApiRegistry(@PathVariable String workflowInstanceId) {
+        return success(workflowService.getApiWorkflowSchemaRegistry(workflowInstanceId));
     }
 
     @GetMapping("list/trigger-code/{triggerCode}")

@@ -34,7 +34,7 @@ public class WorkflowRuntimeEventListener implements IEventListener<FlowEventBod
             return runtimeContext.getResponse();
         }else if(WEBHOOK_NODE.equals(event.getNodeCode())){
             WebhookPayload payload = new WebhookPayload();
-            payload.setFlowKey(event.getFlowKey());
+            payload.setPath(event.getPath());
             payload.setBody((Map<String, Object>) event.getBody());
             return webhookRuntimeContainer.execute(payload);
         }

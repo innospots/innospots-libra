@@ -52,9 +52,9 @@ public class WebhookRuntimeContainer extends BaseRuntimeContainer {
     }
 
     public WorkflowResponse execute(WebhookPayload webhookPayload) {
-        FlowRuntimeRegistry triggerInfo = triggerPaths.get(webhookPayload.getFlowKey());
+        FlowRuntimeRegistry triggerInfo = triggerPaths.get(webhookPayload.getPath());
         if (triggerInfo == null) {
-            throw ResourceException.buildAbandonException(this.getClass(), "api flow trigger not find, maybe not be published, key:" + webhookPayload.getFlowKey());
+            throw ResourceException.buildAbandonException(this.getClass(), "api flow trigger not find, maybe not be published, path:" + webhookPayload.getPath());
         }
         if (logger.isDebugEnabled()) {
             logger.debug("run trigger,{}:{} {}", triggerInfo.key(), triggerInfo, webhookPayload);

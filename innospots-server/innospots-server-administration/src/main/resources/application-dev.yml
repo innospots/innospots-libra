@@ -26,5 +26,5 @@ innospots:
 
   application:
     visitor:
-      workflowAddress: http://${spring.cloud.client.ip-address}:${server.port}/api/workflow/v1
-      workflowTestAddress: http://${spring.cloud.client.ip-address}:${server.port}/api/workflow/v1/test
+      workflowAddress: ${spring.cloud.client.ip-address}:${server.port}
+      workflowTestAddress: ${spring.cloud.client.ip-address}:${server.port}

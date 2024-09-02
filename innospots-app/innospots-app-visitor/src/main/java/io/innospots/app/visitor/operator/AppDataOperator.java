@@ -74,11 +74,11 @@ public class AppDataOperator {
         return dataOperator.executePage(itemRequest).getList();
     }
 
-    public Map<String, Object> submit(String appKey, String registryId, Map<String, Object> body) {
+    public Object submit(String appKey, String registryId, Map<String, Object> body) {
         Pair<IOperator,ItemRequest> pair = buildDataOperator(appKey, registryId, body);
         IOperator dataOperator = pair.getLeft();
         ItemRequest itemRequest = pair.getRight();
-        DataBody<Map<String,Object>> dataBody = dataOperator.execute(itemRequest);
+        DataBody<?> dataBody = dataOperator.execute(itemRequest);
         return dataBody.getBody();
     }
 

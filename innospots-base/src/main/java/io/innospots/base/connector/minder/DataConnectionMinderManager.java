@@ -196,6 +196,8 @@ public class DataConnectionMinderManager {
         IRegistryCredentialBuilder credentialBuilder = dataConnectionMinder.registryCredentialBuilder();
         ConnectionCredential connectionCredential = credentialBuilder.buildBySchemaRegistry(schemaRegistry);
         dataConnectionMinder.initialize(new SingleSchemaRegistryReader(schemaRegistry), connectionCredential);
+        dataConnectionMinder.open();
+
         registryMinderCache.put(schemaRegistry.getRegistryId(), dataConnectionMinder);
         return dataConnectionMinder;
     }

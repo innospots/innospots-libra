@@ -27,22 +27,23 @@ public class WorkflowApiConnectorMinder extends HttpDataConnectionMinder {
         super.initialize(schemaRegistryReader, connectionCredential);
         String isTest = connectionCredential.v("is_test");
         String workflowUrl = System.getProperty(KEY_WORKFLOW_TEST_API);
+        String path = connectionCredential.v("path");
         if (isTest != null & Boolean.parseBoolean(isTest) && workflowUrl != null) {
-            connectionCredential.config(HttpConstant.HTTP_API_URL, workflowUrl);
+            connectionCredential.config(HttpConstant.HTTP_API_URL, workflowUrl + path);
         }
         workflowUrl = System.getProperty(KEY_WORKFLOW_API);
-        if(workflowUrl!=null){
-            connectionCredential.config(HttpConstant.HTTP_API_URL,workflowUrl);
+        if (workflowUrl != null) {
+            connectionCredential.config(HttpConstant.HTTP_API_URL, workflowUrl + path);
         }
     }
 
 
     @Override
     protected Supplier<Map<String, String>> headers() {
-        return ()->{
+        return () -> {
             HashMap<String, String> headers = new HashMap<>();
             String token = this.connectionCredential.v(KEY_TOKEN);
-            if(token!=null){
+            if (token != null) {
                 HttpClientBuilder.fillBearerAuthHeader(token, headers);
             }
             return headers;

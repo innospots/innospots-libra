@@ -16,4 +16,6 @@ public class FlowEventBody extends EventBody {
 
     private String nodeCode;
 
+    private String path;
+
 }

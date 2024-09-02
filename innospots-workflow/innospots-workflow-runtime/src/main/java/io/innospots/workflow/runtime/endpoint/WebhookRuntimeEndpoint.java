@@ -53,23 +53,23 @@ public class WebhookRuntimeEndpoint {
         this.webhookRuntimeContainer = webhookRuntimeContainer;
     }
 
-    @PostMapping(value = "{flowKey}")
+    @PostMapping(value = "{path}")
     @Operation(summary = "post webhook")
     public WorkflowResponse apiPost(
             HttpServletRequest request,
-            @Parameter(required = true) @PathVariable String flowKey,
+            @Parameter(required = true) @PathVariable String path,
             @Parameter(required = false) @RequestHeader Map<String, Object> headers,
             @RequestParam Map<String, Object> requestParams,
             @RequestPart(required = false) MultipartFile[] multipartFiles,
             @RequestBody Map<String, Object> body
     ) {
-        WebhookPayload payload = WebhookPayloadConverter.convert(flowKey,request,headers,requestParams,body);
+        WebhookPayload payload = WebhookPayloadConverter.convert(path,request,headers,requestParams,body);
         return webhookRuntimeContainer.execute(payload);
     }
 
-    @PostMapping("v2/{flowKey}")
+    @PostMapping("v2/{path}")
     @Operation(summary = "post webhook")
-    public WorkflowResponse eventPost(@Parameter(required = true) @PathVariable String flowKey,
+    public WorkflowResponse eventPost(@Parameter(required = true) @PathVariable String path,
                                       @Parameter(required = false) @RequestParam Map<String, Object> params,
                                       @Parameter(required = false) @RequestHeader Map<String, Object> headers,
                                       @Parameter(required = false) @RequestBody Map<String, Object> body) {
@@ -83,15 +83,15 @@ public class WebhookRuntimeEndpoint {
         //return flowNodeDebugger.testWebhook(flowKey,payload);
     }
 
-    @GetMapping("{flowKey}")
+    @GetMapping("{path}")
     @Operation(summary = "get webhook")
     public WorkflowResponse apiGet(
-            @Parameter(required = true) @PathVariable String flowKey,
+            @Parameter(required = true) @PathVariable String path,
                                    HttpServletRequest request,
                                      @Parameter(required = false) @RequestParam(required = false) Map<String, Object> params,
                                      @Parameter(required = false) @RequestHeader(required = false) Map<String, Object> headers) {
 
-        WebhookPayload payload = WebhookPayloadConverter.convert(flowKey,request,headers,params,null);
+        WebhookPayload payload = WebhookPayloadConverter.convert(path,request,headers,params,null);
         return webhookRuntimeContainer.execute(payload);
     }
 

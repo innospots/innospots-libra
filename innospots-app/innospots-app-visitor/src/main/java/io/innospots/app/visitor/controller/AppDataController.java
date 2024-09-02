@@ -44,7 +44,7 @@ public class AppDataController {
         return InnospotsResponse.success(appDataOperator.list(appKey,registryId,params));
     }
 
-    @Operation(summary = "show and read list data from table or api")
+    @Operation(summary = "page list from table or api")
     @GetMapping("{appKey}/registry/{registryId}/page")
     public InnospotsResponse<PageBody<Map<String,Object>>> page(@PathVariable String appKey,
                                             @PathVariable String registryId,
