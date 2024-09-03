@@ -9,7 +9,7 @@ innospots:
     ignore-auth-paths:
       - /innospots/apps/api/page/**
       - /innospots/apps/api/data/**
-      - /innospots/api/runtime/webhook/**
+      - /innospots/api/workflow/runtime/webhook/**
       - /actuator/health
       - /actuator/info
       - /actuator/**

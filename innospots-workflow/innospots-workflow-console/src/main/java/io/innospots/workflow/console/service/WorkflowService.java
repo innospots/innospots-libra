@@ -138,8 +138,11 @@ public class WorkflowService {
                     log.error(e.getMessage(),e);
                 }
                 schemaRegistry.setRegistryId(workflowInstanceId);
+                schemaRegistry.setCategoryId(workflowBody.getCategoryId());
                 schemaRegistry.setName(workflowBody.getName());
                 schemaRegistry.setCode(workflowBody.getFlowKey());
+                schemaRegistry.setAuthOption("normal-api");
+                schemaRegistry.setConnectorName("workflow-api");
                 schemaRegistry.setRegistryType(SchemaRegistryType.WORKFLOW);
                 schemaRegistry.setCategoryId(workflowBody.getCategoryId());
                 schemaRegistry.addConfig("flowKey",workflowBody.getFlowKey());

@@ -36,6 +36,7 @@ import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;
 import io.innospots.workflow.core.instance.model.NodeInstance;
+import io.innospots.workflow.core.logger.FlowLoggerFactory;
 import io.innospots.workflow.core.logger.IFlowLogger;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -76,6 +77,9 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
     public BaseNodeExecutor build() {
         buildStatus = BuildStatus.BUILDING;
         try {
+            if(flowLogger==null){
+                flowLogger = FlowLoggerFactory.getLogger();
+            }
             flowLogger.flowInfo("build node executor: {}-{}", ni.getCode(),ni.getName());
             initialize();
             buildStatus = BuildStatus.DONE;

@@ -66,7 +66,7 @@ public class HttpConnection implements Closeable {
                           Supplier<Map<String, Object>> body
     ) {
         this.connectionCredential = connectionCredential;
-        this.httpClient = HttpClientBuilder.build(15 * 1000, 15);
+        this.httpClient = HttpClientBuilder.build(300 * 1000, 15);
         this.headersSupplier = headers;
         this.paramsSupplier = params;
         this.bodySupplier = body;

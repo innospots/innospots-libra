@@ -102,7 +102,7 @@ public class WorkflowDraftOperator {
      * @param flowInstanceId primary id
      * @return workflow instance body
      */
-    public WorkflowBody getDraftWorkflow(Long flowInstanceId) {
+    public WorkflowBody getCacheWorkflow(Long flowInstanceId) {
         WorkflowInstanceCacheEntity cacheEntity = workflowInstanceCacheDao.selectById(flowInstanceId);
         WorkflowBody flow;
         if (cacheEntity == null || cacheEntity.getFlowInstance() == null) {
@@ -118,13 +118,21 @@ public class WorkflowDraftOperator {
         if (entity == null) {
             throw ResourceException.buildAbandonException(this.getClass(), flowKey);
         }
-        return fillNodeAndEdge(entity);
+        return fillNodeAndEdge(entity,FlowVersion.DRAFT.getVersion());
+    }
+
+    public WorkflowBody getDraftWorkflow(Long flowInstanceId) {
+        WorkflowInstanceEntity entity = workflowInstanceDao.selectById(flowInstanceId);
+        if (entity == null) {
+            throw ResourceException.buildAbandonException(this.getClass(), flowInstanceId);
+        }
+        return fillNodeAndEdge(entity,FlowVersion.DRAFT.getVersion());
     }
 
 
 
     public List<Map<String, Object>> selectNodeInputFields(Long workflowInstanceId, String nodeKey, Set<String> sourceNodeKeys) {
-        WorkflowBaseBody workflowBaseBody = getDraftWorkflow(workflowInstanceId);
+        WorkflowBaseBody workflowBaseBody = getCacheWorkflow(workflowInstanceId);
         if (workflowBaseBody == null) {
             log.warn("select input field is null:{}, nodeKey:{}",workflowInstanceId, nodeKey);
             return Collections.emptyList();
@@ -189,7 +197,7 @@ public class WorkflowDraftOperator {
      */
     public List<Map<String, Object>> getNodeOutputFieldOfInstance(Long workflowInstanceId, String nodeKey) {
         List<Map<String, Object>> result = new ArrayList<>();
-        WorkflowBaseBody workflowBaseBody = getDraftWorkflow(workflowInstanceId);
+        WorkflowBaseBody workflowBaseBody = getCacheWorkflow(workflowInstanceId);
 
         if (workflowBaseBody != null && CollectionUtils.isNotEmpty(workflowBaseBody.getNodes())) {
             workflowBaseBody.getNodes().forEach(nodeInstance -> {
@@ -217,6 +225,7 @@ public class WorkflowDraftOperator {
     }
 
 
+    @Transactional(rollbackFor = {Exception.class})
     public WorkflowBaseBody saveCacheToDraft(Long flowInstanceId) {
         WorkflowInstanceCacheEntity cacheEntity = workflowInstanceCacheDao.selectById(flowInstanceId);
         if (cacheEntity == null) {
@@ -261,7 +270,7 @@ public class WorkflowDraftOperator {
         edgeOperator.saveDraftEdgeInstances(workflowBaseBody.getWorkflowInstanceId(),
                 workflowBaseBody.getEdges());
 
-        workflowBaseBody = fillNodeAndEdge(entity);
+        workflowBaseBody = fillNodeAndEdge(entity,FlowVersion.DRAFT.getVersion());
 
         saveFlowInstanceToCache(workflowBaseBody);
 
@@ -287,7 +296,7 @@ public class WorkflowDraftOperator {
         }
 
         if (entity.getRevision() > 0) {
-            WorkflowBody workflowBody = fillNodeAndEdge(entity);
+            WorkflowBody workflowBody = fillNodeAndEdge(entity,entity.getRevision());
             if (draftWorkflowBody.equalContent(workflowBody)) {
                 throw WorkflowPublishException.buildUnchangedException(this.getClass(), "the workflow is not be changed, revision:" + workflowBody.getRevision());
             }
@@ -355,14 +364,14 @@ public class WorkflowDraftOperator {
             throw ResourceException.buildAbandonException(this.getClass(), workflowInstanceId);
         }
 
-        return fillNodeAndEdge(entity);
+        return fillNodeAndEdge(entity,FlowVersion.DRAFT.getVersion());
     }
 
 
-    private WorkflowBody fillNodeAndEdge(WorkflowInstanceEntity entity) {
+    private WorkflowBody fillNodeAndEdge(WorkflowInstanceEntity entity,Integer revision) {
         WorkflowBody flowInstance = WorkflowInstanceConverter.INSTANCE.entityToFlowBody(entity);
-        flowInstance.setNodes(nodeInstanceOperator.getNodeInstanceByFlowInstanceId(entity.getWorkflowInstanceId(), entity.getRevision()));
-        flowInstance.setEdges(edgeOperator.getEdgeByFlowInstanceId(entity.getWorkflowInstanceId(), entity.getRevision()));
+        flowInstance.setNodes(nodeInstanceOperator.getNodeInstanceByFlowInstanceId(entity.getWorkflowInstanceId(), revision));
+        flowInstance.setEdges(edgeOperator.getEdgeByFlowInstanceId(entity.getWorkflowInstanceId(), revision));
         //初始化
         flowInstance.initialize();
         return flowInstance;
