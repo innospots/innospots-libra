@@ -1,7 +1,9 @@
 package io.innospots.app.visitor.operator;
 
+import cn.hutool.http.HttpStatus;
 import io.innospots.app.core.model.AppDefinition;
 import io.innospots.app.core.operator.AppDefinitionOperator;
+import io.innospots.base.connector.http.HttpData;
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.connector.minder.IDataConnectionMinder;
 import io.innospots.base.connector.schema.model.SchemaField;
@@ -15,6 +17,7 @@ import io.innospots.base.data.request.ItemRequest;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.model.Pair;
 import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.ResponseCode;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
@@ -85,8 +88,15 @@ public class AppDataOperator {
     }
 
     private Object processResponse(Object response){
-        if(response instanceof Map){
-            Map<String,Object> m = (Map<String, Object>) response;
+        if(response instanceof HttpData httpData){
+            if(httpData.getStatus() >= 300){
+                return InnospotsResponse.fail(ResponseCode.FAIL,httpData.getMessage());
+            }else{
+                response = httpData.getBody();
+            }
+        }
+        if(response instanceof Map<?,?> m){
+//            Map<String,Object> m = (Map<String, Object>) response;
             if(m.containsKey("code") && m.containsKey("detail")){
                 return m;
             }

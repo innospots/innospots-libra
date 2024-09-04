@@ -32,6 +32,7 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
 import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.io.SocketConfig;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.apache.hc.core5.http.message.BasicHeader;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
@@ -89,6 +90,10 @@ public class HttpClientBuilder {
 
     private static PoolingHttpClientConnectionManager httpClientConnectionManager(int maxTotal) {
         PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
+        cm.setDefaultSocketConfig(SocketConfig.custom()
+                .setSoKeepAlive(true)
+                .setSoTimeout(Timeout.DISABLED)
+                .build());
         //max connection size
         cm.setMaxTotal(maxTotal * 3);
         /**
@@ -99,10 +104,12 @@ public class HttpClientBuilder {
     }
 
     private static RequestConfig requestConfig(Integer maxTimeOut) {
-        RequestConfig.Builder configBuilder = RequestConfig.custom();
+        RequestConfig.Builder configBuilder = RequestConfig.custom()
+                .setConnectionRequestTimeout(Timeout.DISABLED)
+                .setResponseTimeout(Timeout.DISABLED);
         // http connection timeout , millisecond
-        configBuilder.setConnectionRequestTimeout(Timeout.ofMicroseconds(maxTimeOut));
-        configBuilder.setResponseTimeout(Timeout.ofMicroseconds(maxTimeOut));
+//        configBuilder.setConnectionRequestTimeout(Timeout.ofMicroseconds(maxTimeOut));
+//        configBuilder.setResponseTimeout(Timeout.ofMicroseconds(maxTimeOut));
         return configBuilder.build();
     }
 
@@ -151,11 +158,12 @@ public class HttpClientBuilder {
                     httpGet.setHeader(entry.getKey(), entry.getValue());
                 }
             }
-            BasicHttpClientResponseHandler responseHandler = new BasicHttpClientResponseHandler();
-            String response = httpContext != null ? httpClient.execute(httpGet, httpContext,responseHandler) : httpClient.execute(httpGet,responseHandler);
-            fillResponse(httpData, response);
+            HttpDataResponseHandler responseHandler = new HttpDataResponseHandler();
+            HttpData response = httpContext != null ? httpClient.execute(httpGet, httpContext,responseHandler) : httpClient.execute(httpGet,responseHandler);
+            httpData.fill(response);
+//            fillResponse(httpData, response);
 
-        } catch (IOException | ParseException e) {
+        } catch (IOException e) {
             logger.error(e.getMessage(), e);
             httpData.setStatus(HttpStatus.HTTP_INTERNAL_ERROR);
             httpData.setMessage(e.getMessage());
@@ -246,14 +254,14 @@ public class HttpClientBuilder {
                     httpPost.setHeader(entry.getKey(), entry.getValue());
                 }
             }
-
-            BasicHttpClientResponseHandler responseHandler = new BasicHttpClientResponseHandler();
+            HttpDataResponseHandler responseHandler = new HttpDataResponseHandler();
             httpPost.setEntity(new UrlEncodedFormEntity(pairList, Charset.forName(CONTENT_ENCODING)));
-            String s = httpClient.execute(httpPost,responseHandler);
-            fillResponse(httpData, s);
-        } catch (
-                IOException | ParseException e) {
+            HttpData response = httpClient.execute(httpPost,responseHandler);
+            httpData.fill(response);
+//            fillResponse(httpData, s);
+        } catch (IOException e) {
             httpData.setStatus(HttpStatus.HTTP_INTERNAL_ERROR);
+            httpData.setMessage(e.getMessage());
             logger.error(e.getMessage(), e);
         }
         return httpData;
@@ -300,16 +308,18 @@ public class HttpClientBuilder {
 
                 httpPost.setEntity(stringEntity);
             }
-            BasicHttpClientResponseHandler responseHandler = new BasicHttpClientResponseHandler();
-            String respStr = httpContext != null ?
+            HttpDataResponseHandler responseHandler = new HttpDataResponseHandler();
+            HttpData response = httpContext != null ?
                     httpClient.execute(httpPost, httpContext, responseHandler) : httpClient.execute(httpPost,responseHandler);
+            httpData.fill(response);
             if (logger.isDebugEnabled()) {
                 StringBuilder out = new StringBuilder();
                 out.append("url: ").append(url).append(" ,header: ").append(headers).append(" ,param: ").append(param)
                         .append(", body: ").append(requestBody);
+                logger.debug("request:{}",out);
             }
-            fillResponse(httpData, respStr);
-        } catch (IOException | ParseException e) {
+//            fillResponse(httpData, respStr);
+        } catch (IOException e) {
             httpData.setMessage(e.getMessage());
             httpData.setStatus(HttpStatus.HTTP_INTERNAL_ERROR);
             StringBuilder out = new StringBuilder();

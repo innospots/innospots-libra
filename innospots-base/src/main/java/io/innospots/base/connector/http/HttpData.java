@@ -20,6 +20,7 @@ package io.innospots.base.connector.http;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.collections4.MapUtils;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -38,6 +39,20 @@ public class HttpData {
     private Object body;
     private int status;
     private String message;
+
+    public void fill(HttpData httpData){
+        if(MapUtils.isNotEmpty(httpData.headers)){
+            this.headers.putAll(httpData.headers);
+        }
+        if(MapUtils.isNotEmpty(httpData.params)){
+            this.params.putAll(httpData.params);
+        }
+        if(httpData.body != null){
+            this.body = httpData.body;
+        }
+        this.status = httpData.status;
+        this.message = httpData.message;
+    }
 
     public void addHeader(String name, Object value) {
         this.headers.put(name, value);
