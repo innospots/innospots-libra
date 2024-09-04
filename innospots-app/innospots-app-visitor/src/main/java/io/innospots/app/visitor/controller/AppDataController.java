@@ -55,11 +55,11 @@ public class AppDataController {
 
     @Operation(summary = "write and submit data to table or api")
     @PostMapping("{appKey}/registry/{registryId}")
-    public InnospotsResponse<?> submit(
+    public Object submit(
             @PathVariable String appKey,
             @PathVariable String registryId,
             @RequestBody Map<String,Object> body){
-        return InnospotsResponse.success(appDataOperator.submit(appKey,registryId,body));
+        return appDataOperator.submit(appKey,registryId,body);
     }
 
 }

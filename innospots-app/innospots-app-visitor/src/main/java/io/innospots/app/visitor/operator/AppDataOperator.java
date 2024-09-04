@@ -14,6 +14,8 @@ import io.innospots.base.data.operator.IOperator;
 import io.innospots.base.data.request.ItemRequest;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.model.Pair;
+import io.innospots.base.model.response.InnospotsResponse;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
@@ -79,7 +81,21 @@ public class AppDataOperator {
         IOperator dataOperator = pair.getLeft();
         ItemRequest itemRequest = pair.getRight();
         DataBody<?> dataBody = dataOperator.execute(itemRequest);
-        return dataBody.getBody();
+        return processResponse(dataBody.getBody());
+    }
+
+    private Object processResponse(Object response){
+        if(response instanceof Map){
+            Map<String,Object> m = (Map<String, Object>) response;
+            if(m.containsKey("code") && m.containsKey("detail")){
+                return m;
+            }
+            return InnospotsResponse.success(m);
+        }else if(response instanceof InnospotsResponse<?>){
+            return response;
+        }
+
+        return InnospotsResponse.success(response);
     }
 
 
