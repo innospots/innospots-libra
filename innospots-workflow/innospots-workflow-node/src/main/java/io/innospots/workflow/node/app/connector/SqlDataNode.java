@@ -349,6 +349,7 @@ public class SqlDataNode extends DataNode {
 
     private SimpleRequest buildRequest(String sql) {
         SimpleRequest simpleRequest = new SimpleRequest(sql);
+        simpleRequest.setOperation(this.operation.name());
 
         return simpleRequest;
     }
