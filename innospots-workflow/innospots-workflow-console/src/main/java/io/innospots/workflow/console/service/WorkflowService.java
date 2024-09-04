@@ -46,6 +46,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -107,7 +108,9 @@ public class WorkflowService {
         if (up) {
             WorkflowInstanceEntity instanceEntity = workflowInstanceOperator.getWorkflowInstanceEntity(workflowInstanceId);
             instanceEntity.setStatus(String.valueOf(dataStatus));
-            scheduleFlowJobService.updateScheduleStatus(instanceEntity);
+            if(Objects.equals("CRONTIMER",instanceEntity.getTriggerCode())){
+                scheduleFlowJobService.updateScheduleStatus(instanceEntity);
+            }
         }
         return up;
     }

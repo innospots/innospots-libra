@@ -65,6 +65,12 @@ public class HttpClientBuilder {
 
     private static CloseableHttpClient defaultHttpClient;
 
+    private static CloseableHttpClient getDefaultHttpClient(){
+        if(defaultHttpClient == null){
+            defaultHttpClient = build(30, 100);
+        }
+        return defaultHttpClient;
+    }
 
     public static CloseableHttpClient build(int timeout, int maxTotal) {
         return build(timeout, maxTotal, null);
@@ -90,10 +96,10 @@ public class HttpClientBuilder {
 
     private static PoolingHttpClientConnectionManager httpClientConnectionManager(int maxTotal) {
         PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
-        cm.setDefaultSocketConfig(SocketConfig.custom()
-                .setSoKeepAlive(true)
-                .setSoTimeout(Timeout.DISABLED)
-                .build());
+//        cm.setDefaultSocketConfig(SocketConfig.custom()
+//                .setSoKeepAlive(true)
+//                .setSoTimeout(Timeout.DISABLED)
+//                .build());
         //max connection size
         cm.setMaxTotal(maxTotal * 3);
         /**
@@ -105,8 +111,8 @@ public class HttpClientBuilder {
 
     private static RequestConfig requestConfig(Integer maxTimeOut) {
         RequestConfig.Builder configBuilder = RequestConfig.custom()
-                .setConnectionRequestTimeout(Timeout.DISABLED)
-                .setResponseTimeout(Timeout.DISABLED);
+                .setConnectionRequestTimeout(Timeout.ofSeconds(maxTimeOut))
+                .setResponseTimeout(Timeout.ofSeconds(maxTimeOut));
         // http connection timeout , millisecond
 //        configBuilder.setConnectionRequestTimeout(Timeout.ofMicroseconds(maxTimeOut));
 //        configBuilder.setResponseTimeout(Timeout.ofMicroseconds(maxTimeOut));
@@ -300,7 +306,6 @@ public class HttpClientBuilder {
             }
         }
 
-        HttpEntity httpEntity = null;
         try {
             if (requestBody != null) {
                 StringEntity stringEntity = new StringEntity(requestBody,
@@ -430,33 +435,20 @@ public class HttpClientBuilder {
     }
 
     public static String post(String url, Map<String, Object> params, String requestBody) throws IOException {
-        if (defaultHttpClient == null) {
-            defaultHttpClient = build(15 * 1000, 20);
-        }
-        return doPost(defaultHttpClient, url, null, params, requestBody, null).getBody().toString();
+        return doPost(getDefaultHttpClient(), url, null, params, requestBody, null).getBody().toString();
     }
 
     public static String get(String url, Map<String, Object> param, Map<String, String> header) throws IOException {
-        if (defaultHttpClient == null) {
-            defaultHttpClient = build(15 * 1000, 20);
-        }
-        return doGet(defaultHttpClient, url, param, header).getBody().toString();
+        return doGet(getDefaultHttpClient(), url, param, header).getBody().toString();
     }
 
     public static String put(String path, Map<String, Object> params, String requestBody) throws IOException, ParseException {
         HttpUriRequestBase method = new HttpPut(path);
-        if (defaultHttpClient == null) {
-            defaultHttpClient = build(15 * 1000, 20);
-        }
-        return doRequest(defaultHttpClient, method, path, params, requestBody);
+        return doRequest(getDefaultHttpClient(), method, path, params, requestBody);
     }
 
     public static String delete(String path, Map<String, Object> params, String requestBody) throws IOException, ParseException {
-
-        if (defaultHttpClient == null) {
-            defaultHttpClient = build(15 * 1000, 20);
-        }
-        return deleteHttpRequest(defaultHttpClient, path, params, requestBody);
+        return deleteHttpRequest(getDefaultHttpClient(), path, params, requestBody);
     }
 
 }
