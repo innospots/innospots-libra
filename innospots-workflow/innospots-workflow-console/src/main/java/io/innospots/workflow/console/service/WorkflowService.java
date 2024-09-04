@@ -41,6 +41,7 @@ import io.innospots.workflow.core.node.executor.NodeExecutorFactory;
 import io.innospots.workflow.core.node.executor.TriggerNode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
@@ -103,12 +104,14 @@ public class WorkflowService {
         return delete;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public boolean updateWorkflowStatus(long workflowInstanceId, DataStatus dataStatus){
         boolean up = workflowInstanceOperator.updateWorkflowStatus(workflowInstanceId, dataStatus);
         if (up) {
             WorkflowInstanceEntity instanceEntity = workflowInstanceOperator.getWorkflowInstanceEntity(workflowInstanceId);
             instanceEntity.setStatus(String.valueOf(dataStatus));
             if(Objects.equals("CRONTIMER",instanceEntity.getTriggerCode())){
+                //TODO 有更新调度失败的问题，需要确定跟新异常处置
                 scheduleFlowJobService.updateScheduleStatus(instanceEntity);
             }
         }
