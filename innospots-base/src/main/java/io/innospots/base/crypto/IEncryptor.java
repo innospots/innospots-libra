@@ -44,7 +44,7 @@ public interface IEncryptor {
     }
 
     default String encode(String value) {
-        return Base64.encodeUrlSafe((encode(value.getBytes())));
+        return Base64.encode((encode(value.getBytes())));
     }
 
     static byte[] encrypt(byte[] input, SecretKey secretKey, String transformation) throws NoSuchPaddingException, NoSuchAlgorithmException, BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
