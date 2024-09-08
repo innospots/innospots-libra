@@ -24,6 +24,7 @@ import io.innospots.base.script.jit.MethodBody;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,7 +36,7 @@ import java.util.List;
 public class ScriptJavaNode extends ScriptBaseNode {
 
     @Override
-    public MethodBody buildScriptMethodBody() {
+    public List<MethodBody> buildScriptMethods() {
         String src = this.valueString(FIELD_ACTION_SCRIPT);
         String scriptType = scriptType();
         ParamField pf = new ParamField();
@@ -43,7 +44,7 @@ public class ScriptJavaNode extends ScriptBaseNode {
         pf.setValueType(FieldValueType.MAP);
         pf.setName("item");
         if (StringUtils.isEmpty(src) || StringUtils.isEmpty(scriptType)) {
-            return null;
+            return Collections.emptyList();
         }
         MethodBody methodBody = new MethodBody();
         methodBody.setReturnType(Object.class);
@@ -87,7 +88,7 @@ public class ScriptJavaNode extends ScriptBaseNode {
         }
 
         methodBody.setSrcBody(newSrc);
-        return methodBody;
+        return List.of(methodBody);
     }
 
     @Override

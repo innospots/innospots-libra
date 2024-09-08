@@ -22,7 +22,11 @@ package io.innospots.workflow.core.node.executor;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.ConfigException;
+import io.innospots.base.exception.ScriptException;
+import io.innospots.base.execution.ExecutorManager;
 import io.innospots.base.model.field.ParamField;
+import io.innospots.base.script.ExecutorManagerFactory;
+import io.innospots.base.script.ScriptExecutorManager;
 import io.innospots.base.script.jit.MethodBody;
 import io.innospots.workflow.core.enums.BuildStatus;
 import io.innospots.workflow.core.execution.*;
@@ -475,11 +479,11 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
     }
 
 
-    public MethodBody buildScriptMethodBody() {
+    public List<MethodBody> buildScriptMethods() {
         String src = this.valueString(FIELD_ACTION_SCRIPT);
         String scriptType = scriptType();
         if (StringUtils.isEmpty(src) || StringUtils.isEmpty(scriptType)) {
-            return null;
+            return Collections.emptyList();
         }
         MethodBody methodBody = new MethodBody();
         methodBody.setReturnType(Object.class);
@@ -491,11 +495,20 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
          */
         methodBody.setMethodName(ni.expName());
         methodBody.setSrcBody(src);
-        return methodBody;
+        return List.of(methodBody);
     }
+
 
     protected String scriptType() {
         return this.valueString(FIELD_SCRIPT_TYPE);
+    }
+
+    protected ScriptExecutorManager executorManager() {
+        ScriptExecutorManager executorManager = ExecutorManagerFactory.getCache(this.flowIdentifier);
+        if(executorManager==null){
+            throw ScriptException.buildExecutorException(this.getClass(),this.scriptType(),"script executor manager is null,",this.flowIdentifier);
+        }
+        return executorManager;
     }
 
 }

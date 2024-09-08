@@ -32,10 +32,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Smars
@@ -173,12 +170,12 @@ public class CmdLineScriptNode extends ScriptBaseNode {
     }
 
     @Override
-    public MethodBody buildScriptMethodBody() {
+    public List<MethodBody> buildScriptMethods() {
         String src = this.valueString(FIELD_ACTION_SCRIPT);
         OutputMode oMode = OutputMode.valueOf(this.valueString(FIELD_OUTPUT_MODE));
         String scriptType = scriptType();
         if (StringUtils.isEmpty(src) || StringUtils.isEmpty(scriptType)) {
-            return null;
+            return Collections.emptyList();
         }
 
         MethodBody methodBody = new MethodBody();
@@ -190,7 +187,7 @@ public class CmdLineScriptNode extends ScriptBaseNode {
         methodBody.setMethodName(ni.expName());
 
         methodBody.setSrcBody(src);
-        return methodBody;
+        return List.of(methodBody);
     }
 
 

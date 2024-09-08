@@ -33,11 +33,13 @@ import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.core.node.executor.NodeExecutorFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
+import java.util.List;
 
 
 /**
@@ -110,9 +112,9 @@ public class FlowCompiler {
         BaseNodeExecutor nodeExecutor = null;
         try {
             nodeExecutor = NodeExecutorFactory.newInstance(nodeInstance);
-            MethodBody methodBody = nodeExecutor.buildScriptMethodBody();
-            if (methodBody!= null) {
-                scriptExecutorManager.register(methodBody);
+            List<MethodBody> methodBodies = nodeExecutor.buildScriptMethods();
+            if (CollectionUtils.isNotEmpty(methodBodies)) {
+                methodBodies.forEach(scriptExecutorManager::register);
             }
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException |
                  InvocationTargetException e) {

@@ -39,7 +39,7 @@ import java.util.Map;
 public interface IDataConnectionMinder {
 
 
-    void initialize(ISchemaRegistryReader schemaRegistryReader, ConnectionCredential connectionCredential);
+    void prepare(ISchemaRegistryReader schemaRegistryReader, ConnectionCredential connectionCredential);
 
     ConnectionCredential connectionCredential();
 

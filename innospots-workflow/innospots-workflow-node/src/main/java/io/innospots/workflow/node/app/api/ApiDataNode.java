@@ -23,19 +23,28 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.base.Enums;
 import io.innospots.base.condition.Factor;
+import io.innospots.base.connector.http.HttpDataConnectionMinder;
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.connector.minder.IDataConnectionMinder;
 import io.innospots.base.crypto.EncryptorBuilder;
+import io.innospots.base.data.body.DataBody;
+import io.innospots.base.data.operator.IExecutionOperator;
 import io.innospots.base.data.request.BaseRequest;
 import io.innospots.base.data.request.ItemRequest;
+import io.innospots.base.enums.ScriptType;
+import io.innospots.base.execution.ExecutorManager;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.data.body.DataBody;
+import io.innospots.base.model.field.FieldValueType;
+import io.innospots.base.model.field.ParamField;
+import io.innospots.base.script.IScriptExecutor;
+import io.innospots.base.script.ScriptExecutorManager;
+import io.innospots.base.script.jit.MethodBody;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.base.utils.PlaceholderUtils;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
-import io.innospots.workflow.node.app.connector.DataNode;
+import io.innospots.workflow.node.app.connector.BaseDataNode;
 import io.innospots.workflow.node.app.connector.OutputFieldType;
 import lombok.Getter;
 import lombok.Setter;
@@ -55,7 +64,7 @@ import java.util.stream.Collectors;
  * @date 2021/3/16
  */
 @Slf4j
-public class ApiDataNode extends DataNode {
+public class ApiDataNode extends BaseDataNode {
 
     public static final String FIELD_PAYLOAD = "output_payload";
     public static final String FIELD_JSON_PATH = "extract_path";
@@ -67,6 +76,9 @@ public class ApiDataNode extends DataNode {
 
     public static final String FIELD_URL = "url_address";
 
+    public static final String FIELD_CREDENTIAL_KEY = "credential_key";
+
+    protected String credentialKey;
 
     /**
      * output to flow execution contexts
@@ -84,6 +96,12 @@ public class ApiDataNode extends DataNode {
     private boolean dataCache;
 
     private Cache<String, DataBody> dataBodyCache;
+
+    private IExecutionOperator executionOperator;
+
+    private IScriptExecutor preActionScriptExecutor;
+
+    private IScriptExecutor actionScriptExecutor;
 
     @Override
     protected void initialize() {
@@ -105,7 +123,13 @@ public class ApiDataNode extends DataNode {
         }
 
         if (credentialKey != null) {
-            IDataConnectionMinder connectorMinder = DataConnectionMinderManager.getCredentialMinder(credentialKey);
+            IDataConnectionMinder minder = DataConnectionMinderManager.getCredentialQueueMinder(this.credentialKey);
+            this.executionOperator = minder.buildOperator();
+        } else {
+            HttpDataConnectionMinder httpDataConnectionMinder = new HttpDataConnectionMinder();
+            httpDataConnectionMinder.initialize();
+            httpDataConnectionMinder.open();
+            this.executionOperator = httpDataConnectionMinder.buildOperator();
         }
 
         List<Map<String, Object>> fieldParams = valueMapList(FIELD_REQUEST_PARAMS);
@@ -148,7 +172,18 @@ public class ApiDataNode extends DataNode {
             }
 
         }
+        prepareScriptExecutor();
 
+    }//end initialize
+
+    private void prepareScriptExecutor(){
+        ScriptExecutorManager executorManager = executorManager();
+        if(this.valueString(FIELD_PRE_ACTION)!=null){
+            this.preActionScriptExecutor = executorManager.getExecutor(preActionMethod());
+        }
+        if(this.valueString(FIELD_ACTION_SCRIPT)!=null){
+            this.actionScriptExecutor = executorManager.getExecutor(this.ni.expName());
+        }
     }
 
 
@@ -195,29 +230,19 @@ public class ApiDataNode extends DataNode {
             fillOutput(nodeOutput, item);
             return;
         }
-        if (httpResponse!=null) {
+        if (httpResponse == null) {
             fillOutput(nodeOutput, item);
             return;
         }
         Object body = httpResponse.getBody();
-//        if (this.expression != null) {
-//            body = this.expression.execute(JSONUtils.objectToMap(body));
-//        }
         body = extract(body);
         fillOutput(nodeOutput, item, body);
     }
 
     private Map<String, Object> prevExecute(Map<String, Object> item) {
-        /*
-        if (this.actionScripts == null) {
-            return item;
+        if(this.preActionScriptExecutor!=null){
+            return (Map<String, Object>) this.preActionScriptExecutor.execute(item);
         }
-        IExpression exp = this.actionScripts.get(FIELD_PRE_ACTION);
-        if (exp == null) {
-            return item;
-        }
-        return (Map<String, Object>) exp.execute(item);
-         */
         return item;
     }
 
@@ -230,6 +255,10 @@ public class ApiDataNode extends DataNode {
             v = value;
         } else {
             v = JSONUtils.objectToMap(value);
+        }
+
+        if(this.actionScriptExecutor!=null){
+            v = this.actionScriptExecutor.execute(v);
         }
 
         if (this.extractJsonPath == null || "$".equals(this.extractJsonPath)) {
@@ -259,13 +288,46 @@ public class ApiDataNode extends DataNode {
             dataBody = dataBodyCache.getIfPresent(itemRequest.key());
         }
         if (dataBody == null) {
-            dataBody = dataOperator.execute(itemRequest);
+            dataBody = executionOperator.execute(itemRequest);
             if (dataCache) {
                 dataBodyCache.put(itemRequest.key(), dataBody);
             }
         }
 
         return dataBody;
+    }
+
+    @Override
+    public List<MethodBody> buildScriptMethods() {
+        List<MethodBody> methodBodies = new ArrayList<>();
+        String preSrc = this.valueString(FIELD_PRE_ACTION);
+        if (StringUtils.isNotEmpty(preSrc)) {
+            MethodBody preAction = MethodBody.builder().scriptType(scriptType())
+                    .returnType(Object.class)
+                    .params(List.of(new ParamField("item", "item", FieldValueType.MAP)))
+                    .methodName(preActionMethod()).srcBody(preSrc).build();
+            methodBodies.add(preAction);
+        }
+
+        String actionSrc = this.valueString(FIELD_ACTION_SCRIPT);
+        if (StringUtils.isNotEmpty(actionSrc)) {
+            MethodBody action = MethodBody.builder().scriptType(scriptType())
+                    .returnType(Object.class)
+                    .params(List.of(new ParamField("item", "item", FieldValueType.MAP)))
+                    .methodName(ni.expName()).srcBody(actionSrc).build();
+            methodBodies.add(action);
+        }
+        return methodBodies;
+    }
+
+    private String preActionMethod() {
+        return ni.expName() + "_" + FIELD_PRE_ACTION;
+    }
+
+
+    @Override
+    protected String scriptType() {
+        return ScriptType.JAVA.name().toLowerCase();
     }
 
 
@@ -279,6 +341,7 @@ public class ApiDataNode extends DataNode {
         template;
 
     }
+
 
     @Getter
     @Setter
@@ -305,7 +368,7 @@ public class ApiDataNode extends DataNode {
                     if (v == null) {
                         v = factor.getValue();
                     }
-                    if(v==null){
+                    if (v == null) {
                         continue;
                     }
                     if (StringUtils.isNotEmpty(itemRequest.getUri())) {
@@ -322,9 +385,9 @@ public class ApiDataNode extends DataNode {
             if (CollectionUtils.isNotEmpty(body)) {
                 for (Factor factor : body) {
                     Object value = null;
-                    if("file".equalsIgnoreCase(factor.getCode())){
-                        value = extractFileBase64(factor,item);
-                    }else{
+                    if ("file".equalsIgnoreCase(factor.getCode())) {
+                        value = extractFileBase64(factor, item);
+                    } else {
                         value = factor.value(item);
                     }
                     if (value == null) {
@@ -341,23 +404,23 @@ public class ApiDataNode extends DataNode {
 
         }
 
-        private String extractFileBase64(Factor factor, Map<String, Object> item){
-            Object value = getFileValue(factor,item);
-            if(value == null){
+        private String extractFileBase64(Factor factor, Map<String, Object> item) {
+            Object value = getFileValue(factor, item);
+            if (value == null) {
                 return null;
             }
             String fileValue = String.valueOf(value);
-            if(fileValue.startsWith("file://")){
-                fileValue = fileValue.replace("file://","");
+            if (fileValue.startsWith("file://")) {
+                fileValue = fileValue.replace("file://", "");
                 String filePath = EncryptorBuilder.encryptor.decode(fileValue);
                 File file = new File(filePath);
-                if(!file.exists()){
+                if (!file.exists()) {
                     return null;
                 }
                 byte[] fileBytes = FileUtil.readBytes(file);
                 String base64Content = Base64.encodeBase64String(fileBytes);
-                if(log.isDebugEnabled()){
-                    log.debug("file base64 size:{}, {}",base64Content.length(),factor.getName());
+                if (log.isDebugEnabled()) {
+                    log.debug("file base64 size:{}, {}", base64Content.length(), factor.getName());
                 }
                 return base64Content;
             }//end file if

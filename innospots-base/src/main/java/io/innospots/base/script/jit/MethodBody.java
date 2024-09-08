@@ -21,6 +21,8 @@ package io.innospots.base.script.jit;
 import io.innospots.base.enums.ScriptType;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.base.script.OutputMode;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,6 +36,8 @@ import java.util.List;
  */
 @Getter
 @Setter
+@AllArgsConstructor
+@Builder
 public class MethodBody {
 
     /**
@@ -77,9 +81,6 @@ public class MethodBody {
     public MethodBody() {
     }
 
-    public MethodBody(String scriptType) {
-        this.scriptType = scriptType;
-    }
 
     public String scriptName(){
         return methodName + "." +suffix;

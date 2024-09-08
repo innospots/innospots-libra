@@ -41,7 +41,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 
 /**
  * manage the datasource connection instance
@@ -142,7 +141,7 @@ public class DataConnectionMinderManager {
         try {
             dataConnectionMinder = newMinderInstance(connectionCredential);
             if (dataConnectionMinder != null) {
-                dataConnectionMinder.initialize(dataSchemaReader, connectionCredential);
+                dataConnectionMinder.prepare(dataSchemaReader, connectionCredential);
 //                connectionPoolCache.put(connectionCredential.key(), dataConnectionMinder);
                 dataConnectionMinder.open();
 
@@ -195,7 +194,7 @@ public class DataConnectionMinderManager {
         }
         IRegistryCredentialBuilder credentialBuilder = dataConnectionMinder.registryCredentialBuilder();
         ConnectionCredential connectionCredential = credentialBuilder.buildBySchemaRegistry(schemaRegistry);
-        dataConnectionMinder.initialize(new SingleSchemaRegistryReader(schemaRegistry), connectionCredential);
+        dataConnectionMinder.prepare(new SingleSchemaRegistryReader(schemaRegistry), connectionCredential);
         dataConnectionMinder.open();
 
         registryMinderCache.put(schemaRegistry.getRegistryId(), dataConnectionMinder);

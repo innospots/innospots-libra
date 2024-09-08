@@ -94,6 +94,16 @@ public class JavaCodeScriptExecutor implements IScriptExecutor {
     }
 
     @Override
+    public Object execute(Object... args) {
+        try {
+            return scriptEvaluator.evaluate(args);
+        } catch (InvocationTargetException e) {
+            log.error(e.getMessage(), e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public String[] arguments() {
         return arguments;
     }

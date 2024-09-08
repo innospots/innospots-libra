@@ -40,7 +40,7 @@ public abstract class BaseDataConnectionMinder implements IDataConnectionMinder 
     protected ConnectionCredential connectionCredential;
 
     @Override
-    public void initialize(ISchemaRegistryReader schemaRegistryReader, ConnectionCredential connectionCredential) {
+    public void prepare(ISchemaRegistryReader schemaRegistryReader, ConnectionCredential connectionCredential) {
         this.schemaRegistryReader = schemaRegistryReader;
         this.connectionCredential = connectionCredential;
     }

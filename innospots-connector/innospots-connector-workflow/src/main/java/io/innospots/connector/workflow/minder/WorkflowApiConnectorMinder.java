@@ -23,8 +23,8 @@ public class WorkflowApiConnectorMinder extends HttpDataConnectionMinder {
     public static final String KEY_WORKFLOW_TEST_API = "workflow.test.address";
 
     @Override
-    public void initialize(ISchemaRegistryReader schemaRegistryReader, ConnectionCredential connectionCredential) {
-        super.initialize(schemaRegistryReader, connectionCredential);
+    public void prepare(ISchemaRegistryReader schemaRegistryReader, ConnectionCredential connectionCredential) {
+        super.prepare(schemaRegistryReader, connectionCredential);
         String isTest = connectionCredential.v("is_test");
         String workflowUrl = System.getProperty(KEY_WORKFLOW_TEST_API);
         String path = connectionCredential.v("path");

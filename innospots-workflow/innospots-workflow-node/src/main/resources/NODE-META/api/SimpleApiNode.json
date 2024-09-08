@@ -1,11 +1,11 @@
 {
-  "name": "API",
-  "code": "HTTPAPI",
+  "name": "Simple API",
+  "code": "simple_api",
   "flowCode": "EVENTS",
   "primitive": "api",
   "vendor": "innospots",
   "credentialTypeCode": "Http",
-  "description": "HttpAPI节点",
+  "description": "API接口",
   "icon": "http-api",
   "nodeType": "io.innospots.workflow.node.app.api.ApiDataNode",
   "inPorts": "1",
@@ -21,18 +21,6 @@
         "label": "节点名称",
         "placeholder": "请输入节点名称",
         "initialValue": "API节点"
-      }
-    },
-    {
-      "name": "credential_key",
-      "type": "CredentialSelect",
-      "valueType": "string",
-      "copyable": false,
-      "deletable": false,
-      "settings": {
-        "label": "凭据",
-        "showAddButton": true,
-        "showEditButton": true
       }
     },
     {
@@ -59,75 +47,13 @@
       }
     },
     {
-      "name": "open_script",
-      "type": "Switch",
-      "valueType": "boolean",
-      "copyable": false,
-      "deletable": false,
-      "settings": {
-        "viewType": "switch",
-        "initialValue": false,
-        "label": "开启脚本处理"
-      }
-    },
-    {
-      "name": "pre_action",
-      "type": "ScriptEditor",
-      "valueType": "string",
-      "copyable": false,
-      "deletable": false,
-      "settings": {
-        "label": "前置脚本(JAVA)",
-        "scriptType": "JAVA",
-        "isFixedType": true
-      },
-      "conditions": [
-        {
-          "result": "visible",
-          "relation": "OR",
-          "children": [
-            {
-              "name": "open_script",
-              "opt": "EQUAL",
-              "value": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "action_script",
-      "type": "ScriptEditor",
-      "valueType": "string",
-      "copyable": false,
-      "deletable": false,
-      "settings": {
-        "label": "结果脚本(JAVA)",
-        "scriptType": "JAVA",
-        "isFixedType": true,
-        "initialValue": "return item;"
-      },
-      "conditions": [
-        {
-          "result": "visible",
-          "relation": "OR",
-          "children": [
-            {
-              "name": "open_script",
-              "opt": "EQUAL",
-              "value": true
-            }
-          ]
-        }
-      ]
-    },
-    {
       "name": "output_payload",
       "type": "Switch",
       "valueType": "boolean",
       "copyable": false,
       "deletable": false,
       "settings": {
+        "hidden": true,
         "viewType": "switch",
         "initialValue": true,
         "label": "是否输出返回结果"
@@ -140,22 +66,9 @@
       "copyable": false,
       "deletable": false,
       "settings": {
-        "label": "JSON数据路径",
+        "label": "数据提取",
         "initialValue": "$"
-      },
-      "conditions": [
-        {
-          "result": "visible",
-          "relation": "OR",
-          "children": [
-            {
-              "name": "output_payload",
-              "opt": "EQUAL",
-              "value": true
-            }
-          ]
-        }
-      ]
+      }
     },
     {
       "name": "output_field_type",
@@ -164,6 +77,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "hidden": true,
         "dataSource": "static",
         "initialValue": "MAP",
         "label": "返回数据类型",
@@ -201,6 +115,7 @@
       "deletable": false,
       "settings": {
         "label": "输出结果",
+        "hidden": true,
         "dataSource": "static",
         "initialValue": "OVERWRITE",
 		"viewType": "picker",
@@ -246,6 +161,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "hidden": true,
         "label": "输出结果",
         "default": "OVERWRITE",
         "dataSource": "static",
@@ -266,7 +182,7 @@
       "conditions": [
         {
           "result": "visible",
-          "relation": "AND",
+          "relation": "OR",
           "children": [
             {
               "name": "output_field_type",
@@ -289,6 +205,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "hidden": true,
         "label": "存储变量名称",
         "default": "var_item"
       },
@@ -311,7 +228,7 @@
         },
         {
           "result": "visible",
-          "relation": "AND",
+          "relation": "OR",
           "children": [
             {
               "name": "output_mode_list",
@@ -334,6 +251,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "hidden": true,
         "viewType": "switch",
         "initialValue": false,
         "label": "开启缓存"
@@ -346,6 +264,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
+        "hidden": true,
         "width": 100,
         "initialValue": "60",
         "label": "缓存时间(秒)"

@@ -21,6 +21,7 @@ package io.innospots.base.connector.http;
 
 import io.innospots.base.connector.minder.BaseDataConnectionMinder;
 import io.innospots.base.data.operator.IExecutionOperator;
+import io.innospots.base.data.operator.IOperator;
 import io.innospots.base.data.request.ItemRequest;
 import io.innospots.base.connector.schema.model.ApiSchemaRegistry;
 import io.innospots.base.connector.credential.model.ConnectionCredential;
@@ -47,7 +48,7 @@ public class HttpDataConnectionMinder extends BaseDataConnectionMinder {
 
     protected HttpDataExecutor httpDataExecutor;
 
-    public static final HttpDataConnectionMinder DEFAULT_HTTP_CONNECTION_MINDER = new HttpDataConnectionMinder().init();
+    public static final HttpDataConnectionMinder DEFAULT_HTTP_CONNECTION_MINDER = new HttpDataConnectionMinder().initialize();
 
 
     protected Supplier<Map<String, String>> headers() {
@@ -68,7 +69,7 @@ public class HttpDataConnectionMinder extends BaseDataConnectionMinder {
         };
     }
 
-    public HttpDataConnectionMinder init() {
+    public HttpDataConnectionMinder initialize() {
         if (this.httpConnection != null) {
             open();
         } else {

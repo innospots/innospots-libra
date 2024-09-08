@@ -40,10 +40,7 @@ public abstract class ScriptBaseNode extends BaseNodeExecutor {
 
     @Override
     protected void initialize() {
-       ScriptExecutorManager executorManager = ExecutorManagerFactory.getCache(this.flowIdentifier);
-       if(executorManager==null){
-           throw ScriptException.buildExecutorException(this.getClass(),this.scriptType(),"script executor manager is null,",this.flowIdentifier);
-       }
+       ScriptExecutorManager executorManager = executorManager();
         scriptExecutor = executorManager.getExecutor(this.ni.expName());
        if(scriptExecutor==null){
            throw ScriptException.buildExecutorException(this.getClass(),this.scriptType(),"script executor is null,",this.flowIdentifier);

@@ -27,8 +27,11 @@ import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.core.logger.FlowLoggerFactory;
 import io.innospots.workflow.core.logger.IFlowLogger;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * @author Smars
@@ -86,10 +89,10 @@ public class NodeExecutorFactory {
             nodeExecutor.flowIdentifier = identifier;
             nodeExecutor.flowLogger = flowLogger;
             // Constructs the method body for the script
-            MethodBody methodBody = nodeExecutor.buildScriptMethodBody();
+            List<MethodBody> methods = nodeExecutor.buildScriptMethods();
             // Registers the method body with the executor manager if available
-            if(methodBody != null) {
-                executorManager.register(methodBody);
+            if(CollectionUtils.isNotEmpty(methods)) {
+                methods.forEach(executorManager::register);
             }
             // Executes build and reload operations on the executor manager to ensure readiness
             executorManager.build();

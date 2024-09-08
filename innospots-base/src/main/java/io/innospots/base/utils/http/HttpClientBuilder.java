@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 
@@ -211,6 +212,8 @@ public class HttpClientBuilder {
     public static void toStringParams(StringBuffer buffer, Object v) {
         //字符串需要处理
         if (v instanceof String) {
+            buffer.append(URLEncoder.encode(v.toString(), StandardCharsets.UTF_8));
+            /*
             if (((String) v).contains("\"") || ((String) v).contains(" ")) {
                 try {
                     buffer.append(URLEncoder.encode(v.toString(), "utf-8"));
@@ -222,7 +225,10 @@ public class HttpClientBuilder {
             }
         } else if (v != null) {
             buffer.append(v.toString());
+
+             */
         }
+
     }
 
     /**

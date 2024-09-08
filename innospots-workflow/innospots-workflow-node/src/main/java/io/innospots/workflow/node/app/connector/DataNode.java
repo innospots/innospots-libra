@@ -41,8 +41,10 @@ public class DataNode extends BaseDataNode {
     protected void initialize() {
         super.initialize();
         credentialKey = valueString(FIELD_CREDENTIAL_KEY);
-        IDataConnectionMinder connectionMinder = DataConnectionMinderManager.getCredentialMinder(credentialKey);
-        dataOperator = connectionMinder.buildOperator();
+        if(credentialKey!=null){
+            IDataConnectionMinder connectionMinder = DataConnectionMinderManager.getCredentialMinder(credentialKey);
+            dataOperator = connectionMinder.buildOperator();
+        }
 //        dataOperator = BeanContextAwareUtils.getBean(DataOperatorManager.class).buildDataOperator(credentialKey);
     }
 
