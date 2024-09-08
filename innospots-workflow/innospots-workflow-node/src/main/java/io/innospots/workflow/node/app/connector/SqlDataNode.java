@@ -200,7 +200,10 @@ public class SqlDataNode extends DataNode {
                     if (value == null) {
                         throw ConfigException.buildMissingException(this.getClass(), "sql param:" + conditionField.getCode() + " value is null");
                     }
-                    sql = sql.replaceAll("\\$\\{" + conditionField.getCode() + "\\}", value.toString());
+                    String nm = conditionField.getName();
+                    nm = nm.replace("${","\\$\\{").replace("}","\\}");
+                    sql = sql.replaceAll(nm, value.toString());
+//                    sql = sql.replaceAll("\\$\\{" + conditionField.getCode() + "\\}", value.toString());
                 }
             }
         }
