@@ -88,7 +88,6 @@
       "deletable": false,
       "settings": {
         "label": "数据表",
-        "dataSource": "credential_key",
         "showAddButton": true,
         "showEditButton": true,
         "dependencies": "credential_key"
@@ -124,7 +123,9 @@
       "copyable": false,
       "deletable": false,
       "settings": {
-        "label": "主键字段"
+        "label": "主键字段",
+        "tableName": "table_name",
+        "dependencies": "credential_key"
       },
       "conditions": [
         {
@@ -175,7 +176,6 @@
         "label": "更新键",
         "fieldSource": "SQL_1",
         "tableName": "table_name",
-        "dataSourceId": "credential_key",
         "bind": "",
         "dependencies": "credential_key"
       },
@@ -232,7 +232,6 @@
         "label": "字段映射",
         "fieldSource": "SQL_1",
         "tableName": "table_name",
-        "dataSourceId": "credential_key",
         "dependencies": "credential_key",
         "columns": [
           {
@@ -303,15 +302,15 @@
       "copyable": false,
       "deletable": false,
       "settings": {
-        "label": "存储方式",
+        "label": "输出结果",
 		"viewType": "picker",
         "optionsType": "customOptions",
         "dataSource": "static",
         "initialValue": "OVERWRITE",
         "options": [
           {"value": "FIELD", "label": "存入变量"},
-          {"value": "PAYLOAD", "label": "合并入Payload"},
-          {"value": "OVERWRITE", "label": "覆盖Payload"}
+          {"value": "PAYLOAD", "label": "与输入合并"},
+          {"value": "OVERWRITE", "label": "只输出返回结果"}
         ]
       },
       "conditions": [
@@ -340,15 +339,15 @@
       "copyable": false,
       "deletable": false,
       "settings": {
-        "label": "存储方式",
+        "label": "输出结果",
         "optionsType": "customOptions",
         "dataSource": "static",
         "initialValue": "OVERWRITE",
 		"viewType": "picker",
         "options": [
           {"value": "FIELD", "label": "存入变量"},
-          {"value": "PAYLOAD", "label": "合并入Payload"},
-          {"value": "OVERWRITE", "label": "覆盖Payload"}
+          {"value": "PAYLOAD", "label": "与输入合并"},
+          {"value": "OVERWRITE", "label": "只输出返回结果"}
         ]
       },
       "conditions": [
