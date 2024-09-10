@@ -122,6 +122,10 @@ public class WorkflowDraftOperator {
     }
 
     public WorkflowBody getDraftWorkflow(Long flowInstanceId) {
+        WorkflowBody cacheWorkflow = getCacheWorkflow(flowInstanceId);
+        if(cacheWorkflow!=null){
+            return cacheWorkflow;
+        }
         WorkflowInstanceEntity entity = workflowInstanceDao.selectById(flowInstanceId);
         if (entity == null) {
             throw ResourceException.buildAbandonException(this.getClass(), flowInstanceId);
@@ -132,9 +136,9 @@ public class WorkflowDraftOperator {
 
 
     public List<Map<String, Object>> selectNodeInputFields(Long workflowInstanceId, String nodeKey, Set<String> sourceNodeKeys) {
-        WorkflowBaseBody workflowBaseBody = getCacheWorkflow(workflowInstanceId);
+        WorkflowBaseBody workflowBaseBody = getDraftWorkflow(workflowInstanceId);
         if (workflowBaseBody == null) {
-            log.warn("select input field is null:{}, nodeKey:{}",workflowInstanceId, nodeKey);
+            log.warn("select workflowBaseBody is null:{}, nodeKey:{}",workflowInstanceId, nodeKey);
             return Collections.emptyList();
         }
 

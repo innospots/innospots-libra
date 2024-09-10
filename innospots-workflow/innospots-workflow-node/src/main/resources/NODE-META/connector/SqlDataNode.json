@@ -173,7 +173,7 @@
       "copyable": false,
       "deletable": false,
       "settings": {
-        "label": "更新键",
+        "label": "更新条件",
         "fieldSource": "SQL_1",
         "tableName": "table_name",
         "bind": "",
