@@ -90,7 +90,7 @@ public class NodeInstanceOperator extends ServiceImpl<NodeInstanceDao, NodeInsta
                 deleteIds = new ArrayList<>(entityMap.keySet());
             }
         } else {
-            List<NodeInstanceEntity> requestEntities = parseEntities(nodeInstances);
+              List<NodeInstanceEntity> requestEntities = parseEntities(nodeInstances);
             for (NodeInstanceEntity newEntity : requestEntities) {
                 newEntity.setRevision(FlowVersion.DRAFT.getVersion());
                 newEntity.setProjectId(CCH.projectId());
@@ -150,7 +150,10 @@ public class NodeInstanceOperator extends ServiceImpl<NodeInstanceDao, NodeInsta
         filledNodeInstanceByExecutor(nodeInstances);
         List<NodeInstanceEntity> list = new ArrayList<>();
         if (nodeInstances != null) {
-            nodeInstances.forEach(nodeInstance -> list.add(NodeInstanceConverter.INSTANCE.modelToEntity(nodeInstance)));
+            for (NodeInstance nodeInstance : nodeInstances) {
+                NodeInstanceEntity instanceEntity = NodeInstanceConverter.INSTANCE.modelToEntity(nodeInstance);
+                list.add(instanceEntity);
+            }
         }
         return list;
     }

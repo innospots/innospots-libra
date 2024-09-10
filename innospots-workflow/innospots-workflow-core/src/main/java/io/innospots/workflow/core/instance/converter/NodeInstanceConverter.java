@@ -18,22 +18,19 @@
 
 package io.innospots.workflow.core.instance.converter;
 
-import io.innospots.base.enums.ScriptType;
-import io.innospots.base.json.JSONUtils;
 import io.innospots.base.converter.BaseBeanConverter;
+import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.workflow.core.enums.NodePrimitive;
 import io.innospots.workflow.core.instance.entity.NodeInstanceEntity;
-import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
-import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import io.innospots.workflow.core.instance.model.NodeInstance;
-import org.apache.commons.collections4.MapUtils;
+import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -41,7 +38,7 @@ import java.util.Map;
  * @date 2021-12-25 17:49:00
  */
 @Mapper
-public interface NodeInstanceConverter extends BaseBeanConverter<NodeInstance,NodeInstanceEntity> {
+public interface NodeInstanceConverter extends BaseBeanConverter<NodeInstance, NodeInstanceEntity> {
 
     NodeInstanceConverter INSTANCE = Mappers.getMapper(NodeInstanceConverter.class);
 
@@ -51,18 +48,30 @@ public interface NodeInstanceConverter extends BaseBeanConverter<NodeInstance,No
     String WIDGET_CODE_EDITOR = "CodeEditor";
 
 
-    default NodeInstance entityToModel(NodeInstanceEntity entity, FlowNodeDefinitionEntity nodeDefinitionEntity){
+    default NodeInstance entityToModel(NodeInstanceEntity entity, FlowNodeDefinitionEntity nodeDefinitionEntity) {
         NodeInstance ni = entityToModel(entity);
         ni.setCode(nodeDefinitionEntity.getCode());
-        ni.setPrimitive(Enum.valueOf(NodePrimitive.class,nodeDefinitionEntity.getPrimitive()));
+        ni.setPrimitive(Enum.valueOf(NodePrimitive.class, nodeDefinitionEntity.getPrimitive()));
         ni.setIcon(nodeDefinitionEntity.getIcon());
         ni.setNodeType(nodeDefinitionEntity.getNodeType());
-        if(StringUtils.isNotEmpty(entity.getInputFields()) &&
-                StringUtils.isNotEmpty(nodeDefinitionEntity.getInputFields())) {
+        List<ParamField> paramFields = null;
+        if (StringUtils.isNotEmpty(entity.getInputFields())) {
+            paramFields = jsonStrToParamFieldList(entity.getInputFields());
+        }
+        if(CollectionUtils.isNotEmpty(paramFields)){
+            ni.setInputFields(paramFields);
+        }else if (StringUtils.isNotEmpty(nodeDefinitionEntity.getInputFields())) {
             ni.setInputFields(jsonStrToParamFieldList(nodeDefinitionEntity.getInputFields()));
         }
-        if(StringUtils.isNotEmpty(entity.getOutputFields()) &&
-                StringUtils.isNotEmpty(nodeDefinitionEntity.getOutputFields())){
+
+        paramFields = null;
+        if (StringUtils.isNotEmpty(entity.getOutputFields())) {
+            paramFields = jsonStrToParamFieldList(entity.getOutputFields());
+        }
+
+        if(CollectionUtils.isNotEmpty(paramFields)){
+            ni.setOutputFields(paramFields);
+        }else if (StringUtils.isNotEmpty(nodeDefinitionEntity.getOutputFields())) {
             ni.setOutputFields(jsonStrToParamFieldList(nodeDefinitionEntity.getOutputFields()));
         }
         return ni;

@@ -66,7 +66,7 @@ public class NodeExecutionDisplay {
     private Map<String, Object> logs = new LinkedHashMap<>();
 
     public static NodeExecutionDisplay build(NodeExecution nodeExecution, NodeInstance nodeInstance, int page, int size) {
-        NodeExecutionDisplay executionDisplay = buildNotContextPage(nodeExecution,nodeInstance);
+        NodeExecutionDisplay executionDisplay = buildNotContextPage(nodeExecution, nodeInstance);
         if (CollectionUtils.isNotEmpty(nodeExecution.getOutputs())) {
             List<NodeOutputPage> nodeOutputPages = new ArrayList<>();
             for (NodeOutput output : nodeExecution.getOutputs()) {
@@ -88,7 +88,7 @@ public class NodeExecutionDisplay {
     public static NodeExecutionDisplay build(NodeExecution nodeExecution, NodeInstance nodeInstance) {
         int size = 50;
         int page = 1;
-        NodeExecutionDisplay executionDisplay = buildNotContextPage(nodeExecution,nodeInstance);
+        NodeExecutionDisplay executionDisplay = buildNotContextPage(nodeExecution, nodeInstance);
         if (CollectionUtils.isNotEmpty(nodeExecution.getOutputs())) {
             List<NodeOutputPage> nodeOutputPages = new ArrayList<>();
             for (NodeOutput output : nodeExecution.getOutputs()) {
@@ -115,7 +115,7 @@ public class NodeExecutionDisplay {
         return build(nodeExecution, null, page, size);
     }
 
-    private static NodeExecutionDisplay buildNotContextPage(NodeExecution nodeExecution, NodeInstance nodeInstance){
+    private static NodeExecutionDisplay buildNotContextPage(NodeExecution nodeExecution, NodeInstance nodeInstance) {
         if (nodeExecution == null) {
             return null;
         }
@@ -169,6 +169,12 @@ public class NodeExecutionDisplay {
                     outputFields.add(pf);
                 }
             }
+        }
+
+        if (outputFields.isEmpty() && schemaFields != null) {
+            outputFields = schemaFields;
+        }else if(CollectionUtils.isEmpty(schemaFields) && CollectionUtils.isNotEmpty(outputFields)){
+            schemaFields = outputFields;
         }
     }
 
