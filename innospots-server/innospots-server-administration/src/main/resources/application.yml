@@ -73,7 +73,7 @@ mybatis-plus:
 innospots:
   config:
     enable-swagger: true
-    upload-file-path: ./file/
+    upload-file-path: .download_files/
     ext-lib-path: ./ext_lib/
     schema-cache-timeout-second: 180
     extension-load: true

@@ -114,7 +114,7 @@ public class FlowExecutionController extends BaseController {
         String uri = EncryptorBuilder.encryptor.decode(resourceId);
         File resFile = new File(uri);
         log.debug("resource file:{}",uri);
-        ExecutionResource executionResource = ExecutionResource.buildResource(resFile,true, InnospotsWorkflowProperties.WORKFLOW_RESOURCES);
+        ExecutionResource executionResource = ExecutionResource.buildResource(resFile,true, "api/"+InnospotsWorkflowProperties.WORKFLOW_RESOURCES);
         InputStreamSource resource = executionResource.buildInputStreamSource();
         String[] ss = executionResource.getMimeType().split("/");
         return ResponseEntity.ok().contentType(new MediaType(ss[0], ss[1])).body(resource);

@@ -10,9 +10,14 @@ import io.innospots.libra.base.utils.ImageFileUploader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +28,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping( PathConstant.APP_ROOT_PATH +"api/data")
-@Tag(name = "Application Data View")
+@Tag(name = "Application Data Operator")
 public class AppDataController {
 
     private final AppDataOperator appDataOperator;
@@ -73,8 +78,30 @@ public class AppDataController {
     public InnospotsResponse<ExecutionResource> upload(
             @Parameter(name = "appKey",required = true) @PathVariable("appKey") String appKey,
             @Parameter(name = "upFile", required = true) @RequestParam("upFile") MultipartFile upFile){
-        ExecutionResource executionResource = ImageFileUploader.upload(upFile,"f"+appKey);
+        ExecutionResource executionResource = ImageFileUploader.upload(upFile,"apps/api/data/resource/"+appKey);
         return InnospotsResponse.success(executionResource);
+    }
+
+    @Operation(summary = "download resource")
+    @GetMapping("resource/{appKey}")
+    public ResponseEntity resource(
+            @Parameter(name = "appKey",required = true) @PathVariable("appKey") String appKey,
+            @Parameter(name = "resourceId", required = true) @RequestParam("resourceId") String resourceId){
+        ExecutionResource executionResource = ExecutionResource.buildResource(resourceId);
+        MediaType mediaType = null;
+        if(executionResource.getMimeType()!=null){
+            String[] ss = executionResource.getMimeType().split("/");
+            mediaType = new MediaType(ss[0], ss[1]);
+        }else{
+            mediaType = MediaType.valueOf(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename*=UTF-8''" + URLEncoder.encode(executionResource.getResourceName(), StandardCharsets.UTF_8));
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(mediaType)
+                .body(executionResource.buildInputStreamSource());
     }
 
 }

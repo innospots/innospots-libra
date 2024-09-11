@@ -21,6 +21,7 @@ package io.innospots.base.execution;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.innospots.base.constant.PathConstant;
 import io.innospots.base.crypto.EncryptorBuilder;
+import io.innospots.base.exception.ResourceException;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -94,32 +95,35 @@ public class ExecutionResource {
         return meta;
     }
 
+    public static ExecutionResource buildResource(String resourceId) {
+        ExecutionResource resource = new ExecutionResource();
+        resource.resourceId = resourceId;
+        resource.localUri = EncryptorBuilder.encryptor.decode(resourceId);
+        File localFile = new File(resource.localUri);
+        if(!localFile.exists()){
+            throw ResourceException.buildNotExistException(ExecutionResource.class,"resourceId",resourceId);
+        }
+        resource.mimeType = mineType(localFile);
+        resource.executionCache = true;
+        resource.resourceName = localFile.getName();
+        resource.fileSize = fileSize(localFile);
+        resource.inputStreamSource = new FileSystemResource(localFile);
+        return resource;
+    }
+
     public static ExecutionResource buildResource(File localFile, boolean executionCache,String contextPath) {
         ExecutionResource resource = new ExecutionResource();
 
         resource.resourceName = localFile.getName();
-        double s = localFile.length();
-        if(s > 1024 * 1024 *1024){
-            resource.fileSize = String.format("%.2f GB",s / (1024*1024*1024d));
-        }else if(s > 1024 * 1024){
-            resource.fileSize = String.format("%.2f MB",s / (1024*1024d));
-        }else if(s > 1024){
-            resource.fileSize = String.format("%.2f KB",s / 1024d);
-        }
-
+        resource.fileSize = fileSize(localFile);
         resource.executionCache = executionCache;
-        try {
-            resource.mimeType = Files.probeContentType(localFile.toPath());
-        } catch (IOException e) {
-        }
-        if(resource.mimeType == null){
-            resource.mimeType = URLConnection.getFileNameMap().getContentTypeFor(localFile.getName());
-        }
+        resource.mimeType = mineType(localFile);
+
         if(EncryptorBuilder.encryptor!=null){
-            resource.resourceId = EncryptorBuilder.encryptor.encode(localFile.getAbsolutePath());
+            resource.resourceId = EncryptorBuilder.encryptor.encodeUrlSafe(localFile.getAbsolutePath());
         }
 
-        resource.resourceUri = PathConstant.ROOT_PATH +contextPath+"?resourceId="+resource.resourceId;
+        resource.resourceUri = PathConstant.INNOSPOTS_PATH +contextPath+"?resourceId="+resource.resourceId;
 
 //        resource.resourceUri = PathConstant.ROOT_PATH +"workflow/flow-execution/resources?resourceId="+resource.resourceId;
         resource.localUri = localFile.getAbsolutePath();
@@ -141,5 +145,30 @@ public class ExecutionResource {
         sb.append(", executionCache=").append(executionCache);
         sb.append('}');
         return sb.toString();
+    }
+
+    private static String mineType(File localFile){
+        String mimeType=null;
+        try {
+            mimeType = Files.probeContentType(localFile.toPath());
+        } catch (IOException e) {
+        }
+        if(mimeType == null){
+            mimeType = URLConnection.getFileNameMap().getContentTypeFor(localFile.getName());
+        }
+        return mimeType;
+    }
+
+    private static String fileSize(File localFile){
+        String fileSize = null;
+        double s = localFile.length();
+        if(s > 1024 * 1024 *1024){
+            fileSize = String.format("%.2f GB",s / (1024*1024*1024d));
+        }else if(s > 1024 * 1024){
+            fileSize = String.format("%.2f MB",s / (1024*1024d));
+        }else if(s > 1024){
+            fileSize = String.format("%.2f KB",s / 1024d);
+        }
+        return fileSize;
     }
 }
