@@ -24,6 +24,8 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import io.innospots.base.config.InnospotsConfigProperties;
 import io.innospots.base.enums.ImageType;
+import io.innospots.base.exception.InnospotException;
+import io.innospots.base.exception.ResourceException;
 import io.innospots.base.execution.ExecutionResource;
 import io.innospots.base.model.Pair;
 import io.innospots.base.utils.CCH;
@@ -219,7 +221,7 @@ public class ImageFileUploader {
         return upload(file, destFile, imageType);
     }
 
-    public static ExecutionResource upload(MultipartFile uploadFile, String contextPath) throws IOException {
+    public static ExecutionResource upload(MultipartFile uploadFile, String contextPath){
         InnospotsConfigProperties configProperties = SpringUtil.getBean(InnospotsConfigProperties.class);
         String upLoadPath = configProperties.getUploadFilePath();
         File uploadFileDir = Paths.get(upLoadPath, contextPath,
@@ -230,7 +232,12 @@ public class ImageFileUploader {
         String fileName = uploadFile.getOriginalFilename() != null ?
                 uploadFile.getOriginalFilename(): "File_"+CCH.projectId() + "_" + CCH.userId();
         File destFile = new File(uploadFileDir.getAbsolutePath(),fileName);
-        destFile = FileUtil.writeFromStream(uploadFile.getInputStream(), destFile);
+        try{
+            destFile = FileUtil.writeFromStream(uploadFile.getInputStream(), destFile);
+        }catch (Exception e){
+            log.error(e.getMessage(),e);
+            throw ResourceException.buildUploadException(ImageFileUploader.class,e,e.getMessage());
+        }
 
         return ExecutionResource.buildResource(destFile, false, contextPath);
     }

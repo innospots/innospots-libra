@@ -86,4 +86,8 @@ public class ResourceException extends BaseException {
         return new ResourceException(invokeClass, ResponseCode.RESOURCE_IO_ERROR, cause, params);
     }
 
+    public static ResourceException buildUploadException(Class<?> invokeClass, Throwable cause, Object... params) {
+        return new ResourceException(invokeClass, ResponseCode.RESOURCE_UPLOAD_ERROR, cause, params);
+    }
+
 }
