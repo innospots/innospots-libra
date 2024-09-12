@@ -31,7 +31,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "innospots.workflow")
 public class InnospotsWorkflowProperties {
 
-    public static final String WORKFLOW_RESOURCES = "workflow/flow-execution/resources";
+    public static final String WORKFLOW_RESOURCES = "api/workflow/flow-execution/resources";
     public static final String FLOW_JSON_PATH = "flow_json_path";
 
     public static final int MAX_SHARDING_KEY = 16;

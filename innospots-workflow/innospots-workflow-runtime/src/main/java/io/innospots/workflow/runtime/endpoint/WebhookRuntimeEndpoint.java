@@ -60,7 +60,6 @@ public class WebhookRuntimeEndpoint {
             @Parameter(required = true) @PathVariable String path,
             @Parameter(required = false) @RequestHeader Map<String, Object> headers,
             @RequestParam Map<String, Object> requestParams,
-            @RequestPart(required = false) MultipartFile[] multipartFiles,
             @RequestBody Map<String, Object> body
     ) {
         WebhookPayload payload = WebhookPayloadConverter.convert(path,request,headers,requestParams,body);

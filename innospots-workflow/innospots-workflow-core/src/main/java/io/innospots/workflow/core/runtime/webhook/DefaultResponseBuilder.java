@@ -87,4 +87,9 @@ public class DefaultResponseBuilder implements WorkflowResponseBuilder {
 
         return response;
     }
+
+    @Override
+    public String responseType() {
+        return "DEFAULT";
+    }
 }

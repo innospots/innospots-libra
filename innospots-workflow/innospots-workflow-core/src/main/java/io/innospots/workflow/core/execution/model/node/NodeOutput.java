@@ -86,7 +86,7 @@ public class NodeOutput {
         if (resources != null && position < resources.size()) {
             return this.resources.get(position);
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public void addResource(Integer position, ExecutionResource executionResource) {

@@ -60,6 +60,11 @@ public class JdbcNodeExecutionOperator implements INodeExecutionOperator {
     @Override
     public NodeExecution getNodeExecutionById(String nodeExecutionId, boolean includeContext, int page, int size) {
         SelectClause selectClause = buildClause(null, nodeExecutionId, null);
+        if(page>0){
+            selectClause.setPage(page-1);
+        }
+
+        selectClause.setSize(size);
         DataBody<Map<String, Object>> response = dataOperator.selectForObject(selectClause);
         NodeExecution nodeExecution = null;
         if (response != null && response.getBody() instanceof Map) {

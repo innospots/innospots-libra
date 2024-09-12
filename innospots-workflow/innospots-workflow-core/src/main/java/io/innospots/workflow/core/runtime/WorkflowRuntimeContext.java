@@ -46,6 +46,11 @@ public class WorkflowRuntimeContext {
      */
     private String path;
 
+    /**
+     * using different response builder
+     */
+    private String responseType;
+
 
     private List<Map<String, Object>> response = new ArrayList<>();
 

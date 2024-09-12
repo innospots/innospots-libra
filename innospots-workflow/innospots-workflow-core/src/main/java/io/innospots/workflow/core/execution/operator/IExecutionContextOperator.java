@@ -145,8 +145,16 @@ public interface IExecutionContextOperator {
                         for (String s : ss) {
                             String[] kv = s.split("@@@");
                             List<ExecutionResource> executionResources = JSONUtils.toList(kv[1], ExecutionResource.class);
+                            if (executionResources == null || executionResources.isEmpty()) {
+                                continue;
+                            }
+                            int position = Integer.parseInt(kv[0]);
+                            List<ExecutionResource> eList = output.itemResources(position);
+                            if(CollectionUtils.isNotEmpty(eList)){
+                                eList.clear();
+                            }
                             for (ExecutionResource resource : executionResources) {
-                                output.addResource(Integer.parseInt(kv[0]), resource);
+                                output.addResource(position, resource);
                             }
                         }//end for
                         continue;

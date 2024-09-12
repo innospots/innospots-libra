@@ -33,4 +33,6 @@ public interface WorkflowResponseBuilder {
     default WorkflowResponse build(WorkflowRuntimeContext workflowRuntimeContext) {
         return build(workflowRuntimeContext, null);
     }
+
+    String responseType();
 }
