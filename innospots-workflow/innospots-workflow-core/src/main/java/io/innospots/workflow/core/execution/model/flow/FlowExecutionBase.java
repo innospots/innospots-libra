@@ -131,7 +131,9 @@ public class FlowExecutionBase implements Initializer {
 
     public void fillExecutionId(String flowKey) {
         this.flowKey = flowKey;
-        this.setFlowExecutionId(String.join("_", flowKey, String.valueOf(InnospotsIdGenerator.generateId())));
+        if(this.flowExecutionId == null){
+            this.setFlowExecutionId(String.join("_", flowKey, String.valueOf(InnospotsIdGenerator.generateId())));
+        }
     }
 
 

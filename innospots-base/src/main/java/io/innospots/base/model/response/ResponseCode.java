@@ -94,7 +94,8 @@ public enum ResponseCode {
     PUBLISH_BUILD_FAILED("15003", "building failed, publish failed"),
     TASK_STATUS_EDIT_ERROR("16001", "Only the creator and principals can edit the task status"),
     SUCCESS("10000", "response success"),
-    FAIL("10001", "system error");
+    FAIL("10001", "system error"),
+    ASYNC_RUNNING("10002", "async request execute");
 
     private String code;
 

@@ -1,6 +1,5 @@
 package io.innospots.app.visitor.operator;
 
-import cn.hutool.http.HttpStatus;
 import io.innospots.app.core.model.AppDefinition;
 import io.innospots.app.core.operator.AppDefinitionOperator;
 import io.innospots.base.connector.http.HttpData;
@@ -8,17 +7,16 @@ import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.connector.minder.IDataConnectionMinder;
 import io.innospots.base.connector.schema.model.SchemaField;
 import io.innospots.base.connector.schema.model.SchemaRegistry;
+import io.innospots.base.connector.schema.model.SchemaRegistryType;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.enums.ApiMethod;
-import io.innospots.base.data.operator.IDataOperator;
 import io.innospots.base.data.operator.IOperator;
 import io.innospots.base.data.request.ItemRequest;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.model.Pair;
 import io.innospots.base.model.response.InnospotsResponse;
 import io.innospots.base.model.response.ResponseCode;
-import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
@@ -141,7 +139,9 @@ public class AppDataOperator {
         } else if (apiMethod == ApiMethod.GET) {
             itemRequest.setQuery(input);
         }
-
+        if(schemaRegistry.getRegistryType() == SchemaRegistryType.WORKFLOW){
+            itemRequest.addQuery("respType","app");
+        }
         return itemRequest;
     }
 

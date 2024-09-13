@@ -53,6 +53,25 @@ public class WebhookRuntimeEndpoint {
         this.webhookRuntimeContainer = webhookRuntimeContainer;
     }
 
+    @Operation(summary = "get webhook response")
+    @GetMapping("response/{contextId}")
+    public WorkflowResponse getResponse(@PathVariable String contextId){
+        return webhookRuntimeContainer.getResponseByContextId(contextId);
+    }
+
+    @PostMapping(value = "async/{path}")
+    @Operation(summary = "async post webhook")
+    public WorkflowResponse asyncPost(
+            HttpServletRequest request,
+            @Parameter(required = true) @PathVariable String path,
+            @Parameter(required = false) @RequestHeader Map<String, Object> headers,
+            @RequestParam Map<String, Object> requestParams,
+            @RequestBody Map<String, Object> body
+    ) {
+        WebhookPayload payload = WebhookPayloadConverter.convert(path,request,headers,requestParams,body);
+        return webhookRuntimeContainer.asyncExecute(payload);
+    }
+
     @PostMapping(value = "{path}")
     @Operation(summary = "post webhook")
     public WorkflowResponse apiPost(

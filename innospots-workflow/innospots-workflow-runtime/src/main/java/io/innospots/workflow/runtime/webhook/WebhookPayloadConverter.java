@@ -18,6 +18,9 @@
 
 package io.innospots.workflow.runtime.webhook;
 
+import cn.hutool.core.util.HexUtil;
+import cn.hutool.core.util.RandomUtil;
+import io.innospots.base.utils.InnospotsIdGenerator;
 import io.innospots.workflow.core.runtime.webhook.FlowWebhookConfig;
 import io.innospots.workflow.runtime.webhook.WebhookPayload;
 import org.apache.commons.collections4.MapUtils;
@@ -37,6 +40,7 @@ import java.util.Map;
  */
 public class WebhookPayloadConverter {
 
+    public static final String PARAM_GID = "gid";
 
     public static WebhookPayload convert(String path,
                                          HttpServletRequest httpRequest, Map<String, Object> headers,
@@ -47,6 +51,11 @@ public class WebhookPayloadConverter {
         payload.setUri(httpRequest.getRequestURI());
         payload.setLocation(httpRequest.getRemoteAddr());
         payload.setPath(path);
+        payload.setGid((String) params.get(PARAM_GID));
+        if(payload.getGid() == null){
+            payload.setGid(HexUtil.encodeHexStr(InnospotsIdGenerator.generateIdStr()));
+
+        }
         if (headers == null) {
             headers = Collections.emptyMap();
         }

@@ -61,4 +61,28 @@ public class FlowEmitter {
     public static SseEmitter createResponseEmitter(String flowExecutionId, String streamId) {
         return FlowExecutionEmitter.createEmitter("response-" + flowExecutionId, "flow-response", streamId);
     }
+
+    public static SseEmitter createExecutionLogEmitter(String flowExecutionId) {
+        return createExecutionLogEmitter(flowExecutionId, flowExecutionId);
+    }
+
+    public static SseEmitter createResponseEmitter(String flowExecutionId) {
+        return createResponseEmitter(flowExecutionId, flowExecutionId);
+    }
+
+    public static SseEmitter getExecutionLogEmitter(String flowExecutionId, String streamId) {
+        return FlowExecutionEmitter.getEmitter("log-" + flowExecutionId, streamId);
+    }
+
+    public static SseEmitter getResponseEmitter(String flowExecutionId, String streamId) {
+        return FlowExecutionEmitter.getEmitter("response-" + flowExecutionId, streamId);
+    }
+
+    public static SseEmitter getExecutionLogEmitter(String flowExecutionId) {
+        return getExecutionLogEmitter(flowExecutionId, flowExecutionId);
+    }
+
+    public static SseEmitter getResponseEmitter(String flowExecutionId) {
+        return getResponseEmitter(flowExecutionId, flowExecutionId);
+    }
 }

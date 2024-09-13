@@ -18,21 +18,28 @@
 
 package io.innospots.workflow.runtime.container;
 
-import cn.hutool.core.map.MapUtil;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
+import io.innospots.base.model.response.ResponseCode;
+import io.innospots.base.utils.thread.ThreadPoolBuilder;
+import io.innospots.base.utils.thread.ThreadTaskExecutor;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.runtime.FlowRuntimeRegistry;
+import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
 import io.innospots.workflow.core.runtime.webhook.FlowWebhookConfig;
-import io.innospots.workflow.runtime.webhook.WebhookPayload;
 import io.innospots.workflow.core.runtime.webhook.WorkflowResponse;
 import io.innospots.workflow.core.runtime.webhook.WorkflowResponseBuilder;
+import io.innospots.workflow.core.sse.FlowEmitter;
 import io.innospots.workflow.node.app.trigger.ApiTriggerNode;
+import io.innospots.workflow.runtime.webhook.WebhookPayload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Smars
@@ -42,18 +49,59 @@ public class WebhookRuntimeContainer extends BaseRuntimeContainer {
 
     private static final Logger logger = LoggerFactory.getLogger(WebhookRuntimeContainer.class);
 
-    protected WorkflowResponseBuilder workflowResponseBuilder;
+    private final ThreadTaskExecutor taskExecutor;
 
+    private Cache<String, CompletableFuture<WorkflowResponse>> webhookFutures = Caffeine.newBuilder()
+            .expireAfterWrite(15, TimeUnit.MINUTES).build();
+
+    protected WorkflowResponseBuilder workflowResponseBuilder;
 
     private Map<String, FlowRuntimeRegistry> triggerPaths = new HashMap<>();
 
     public WebhookRuntimeContainer(WorkflowResponseBuilder workflowResponseBuilder) {
         this.workflowResponseBuilder = workflowResponseBuilder;
+        taskExecutor = ThreadPoolBuilder.build(16, 16, 10000, "webhook-runtime-container");
+    }
 
+    public WorkflowResponse getResponseByContextId(String contextId) {
+        CompletableFuture<WorkflowResponse> cf = webhookFutures.getIfPresent(contextId);
+        if (cf != null) {
+            return cf.join();
+        }
+        WorkflowResponse response = new WorkflowResponse();
+        response.setContextId(contextId);
+        response.fillResponse(ResponseCode.FAIL);
+        response.setMessage("response not exist.");
+        return response;
+    }
+
+    public WorkflowResponse asyncExecute(WebhookPayload webhookPayload) {
+        FlowRuntimeRegistry triggerInfo = triggerPaths.get(webhookPayload.getPath());
+        WorkflowRuntimeContext workflowRuntimeContext = buildContext(webhookPayload, triggerInfo);
+        CompletableFuture<WorkflowResponse> cf = CompletableFuture.supplyAsync(() -> {
+            execute(workflowRuntimeContext);
+            return workflowResponseBuilder.build(workflowRuntimeContext, ((ApiTriggerNode) triggerInfo.getRegistryNode()).getFlowWebhookConfig());
+        }, taskExecutor);
+        WorkflowResponse asyncResp = new WorkflowResponse();
+        asyncResp.setFlowKey(triggerInfo.getFlowKey());
+        asyncResp.setContextId(workflowRuntimeContext.getFlowExecution().getFlowExecutionId());
+        asyncResp.setRevision(triggerInfo.getRevision());
+        asyncResp.fillResponse(ResponseCode.ASYNC_RUNNING);
+        FlowEmitter.createResponseEmitter(asyncResp.getContextId());
+        FlowEmitter.createExecutionLogEmitter(asyncResp.getContextId());
+        webhookFutures.put(asyncResp.getContextId(),cf);
+        return asyncResp;
     }
 
     public WorkflowResponse execute(WebhookPayload webhookPayload) {
         FlowRuntimeRegistry triggerInfo = triggerPaths.get(webhookPayload.getPath());
+        WorkflowRuntimeContext workflowRuntimeContext = buildContext(webhookPayload, triggerInfo);
+        execute(workflowRuntimeContext);
+
+        return workflowResponseBuilder.build(workflowRuntimeContext, ((ApiTriggerNode) triggerInfo.getRegistryNode()).getFlowWebhookConfig());
+    }
+
+    private WorkflowRuntimeContext buildContext(WebhookPayload webhookPayload, FlowRuntimeRegistry triggerInfo) {
         if (triggerInfo == null) {
             throw ResourceException.buildAbandonException(this.getClass(), "api flow trigger not find, maybe not be published, path:" + webhookPayload.getPath());
         }
@@ -64,17 +112,17 @@ public class WebhookRuntimeContainer extends BaseRuntimeContainer {
         FlowExecution flowExecution = FlowExecution.buildNewFlowExecution(
                 triggerInfo.getWorkflowInstanceId(),
                 triggerInfo.getRevision());
+        flowExecution.fillExecutionId(triggerInfo.getFlowKey());
         flowExecution.setSource(triggerInfo.getRegistryNode().nodeCode());
         flowExecution.setInput(webhookPayload.toExecutionInput());
         Object respType = webhookPayload.getParam("respType");
         WorkflowRuntimeContext workflowRuntimeContext = WorkflowRuntimeContext.build(flowExecution);
-        if(respType!=null){
+        if (respType != null) {
             workflowRuntimeContext.setResponseType(respType.toString());
         }
-        execute(workflowRuntimeContext);
-
-        return workflowResponseBuilder.build(workflowRuntimeContext, ((ApiTriggerNode) triggerInfo.getRegistryNode()).getFlowWebhookConfig());
+        return workflowRuntimeContext;
     }
+
 
     public WorkflowResponse run(String path, FlowWebhookConfig.RequestMethod method, Map<String, Object> payload, Map<String, Object> context) {
         FlowRuntimeRegistry triggerInfo = triggerPaths.get(path);

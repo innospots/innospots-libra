@@ -103,11 +103,11 @@ public class BaseEventEmitter {
         }
     }
 
-    public static SseEmitter getEmitter(String nodeExecutionId, String streamId) {
-        if(nodeExecutionId == null){
+    public static SseEmitter getEmitter(String eventEmitterId, String streamId) {
+        if(eventEmitterId == null){
             return null;
         }
-        List<SseEmitterHolder> holders = eventEmitter.getIfPresent(nodeExecutionId);
+        List<SseEmitterHolder> holders = eventEmitter.getIfPresent(eventEmitterId);
         if (holders == null) {
             return null;
         }

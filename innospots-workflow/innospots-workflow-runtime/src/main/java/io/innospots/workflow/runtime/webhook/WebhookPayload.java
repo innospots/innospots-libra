@@ -51,6 +51,8 @@ public class WebhookPayload {
 
     private String uri;
 
+    private String gid;
+
     private FlowWebhookConfig.RequestMethod requestMethod;
 
     private String location;

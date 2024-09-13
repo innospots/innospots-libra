@@ -11,19 +11,17 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
  * @date 2024/6/24
  */
 @RestController
-@RequestMapping(PathConstant.ROOT_PATH + "workflow/execution")
+@RequestMapping(PathConstant.ROOT_PATH + "workflow/stream")
 @Tag(name ="workflow execution stream")
 public class WorkflowStreamEndpoint {
 
-    @GetMapping("log/{flowExecutionId}")
-    public SseEmitter workflowLog(@PathVariable String flowExecutionId,
-                                  @RequestParam String streamId){
-        return FlowEmitter.createExecutionLogEmitter(flowExecutionId,streamId);
+    @GetMapping("log/{contextId}")
+    public SseEmitter workflowLog(@PathVariable String contextId){
+        return FlowEmitter.getExecutionLogEmitter(contextId);
     }
 
-    @GetMapping("response/{flowExecutionId}")
-    public SseEmitter workflowResponse(@PathVariable String flowExecutionId,
-                                       @RequestParam String streamId){
-        return FlowEmitter.createResponseEmitter(flowExecutionId,streamId);
+    @GetMapping("response/{contextId}")
+    public SseEmitter workflowAckMessage(@PathVariable String contextId){
+        return FlowEmitter.getResponseEmitter(contextId);
     }
 }
