@@ -19,6 +19,7 @@
 package io.innospots.workflow.core.execution.model.node;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.innospots.base.model.field.ParamField;
 import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.base.execution.ExecMode;
 import io.innospots.base.quartz.ExecutionStatus;
@@ -31,6 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
 
 /**
  * @author Raydian
@@ -68,6 +70,9 @@ public class NodeExecutionBase {
     protected String nodeCode;
 
     protected RecordMode recordMode=RecordMode.SYNC;
+
+    @JsonIgnore
+    protected List<ParamField> schemaFields;
 
 
     public String flowKey() {

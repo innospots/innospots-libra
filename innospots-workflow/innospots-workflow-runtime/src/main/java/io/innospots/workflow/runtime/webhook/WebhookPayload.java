@@ -55,6 +55,13 @@ public class WebhookPayload {
 
     private String location;
 
+    public Object getParam(String  key){
+        if(params == null){
+            return null;
+        }
+        return params.get(key);
+    }
+
     public ExecutionInput toExecutionInput() {
         ExecutionInput executionInput = new ExecutionInput();
         Map<String, Object> input = new HashMap<>();

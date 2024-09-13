@@ -32,7 +32,7 @@ import java.util.*;
  */
 @Getter
 @Setter
-public class NodeOutputPage {
+public class OutputDisplay {
 
     private PageBody<Map<String, Object>> results = new PageBody<>();
 
@@ -48,12 +48,12 @@ public class NodeOutputPage {
     public boolean isEmpty() {
         return CollectionUtils.isEmpty(results.getList());
     }
-    public NodeOutputPage(long page,long size) {
+    public OutputDisplay(long page, long size) {
         results.setPageSize(size);
         results.setCurrent(page);
     }
 
-    public NodeOutputPage(NodeOutput nodeOutput,long page,long size) {
+    public OutputDisplay(NodeOutput nodeOutput, long page, long size) {
         results.setPageSize(size);
         results.setCurrent(page);
         results.setTotal(nodeOutput.getTotal());

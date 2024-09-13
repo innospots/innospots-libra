@@ -18,6 +18,7 @@
 
 package io.innospots.workflow.runtime.container;
 
+import cn.hutool.core.map.MapUtil;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
@@ -65,8 +66,11 @@ public class WebhookRuntimeContainer extends BaseRuntimeContainer {
                 triggerInfo.getRevision());
         flowExecution.setSource(triggerInfo.getRegistryNode().nodeCode());
         flowExecution.setInput(webhookPayload.toExecutionInput());
-
+        Object respType = webhookPayload.getParam("respType");
         WorkflowRuntimeContext workflowRuntimeContext = WorkflowRuntimeContext.build(flowExecution);
+        if(respType!=null){
+            workflowRuntimeContext.setResponseType(respType.toString());
+        }
         execute(workflowRuntimeContext);
 
         return workflowResponseBuilder.build(workflowRuntimeContext, ((ApiTriggerNode) triggerInfo.getRegistryNode()).getFlowWebhookConfig());

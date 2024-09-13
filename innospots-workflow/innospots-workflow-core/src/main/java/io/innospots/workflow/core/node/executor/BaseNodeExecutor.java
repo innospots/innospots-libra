@@ -320,6 +320,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
 
     protected void after(NodeExecution nodeExecution) {
         nodeExecution.fillTotal();
+        nodeExecution.setSchemaFields(ni.getOutputFields());
         if (nodeExecutionListeners != null) {
             for (INodeExecutionListener nodeExecutionListener : nodeExecutionListeners) {
                 if (nodeExecution.getStatus() == ExecutionStatus.COMPLETE) {

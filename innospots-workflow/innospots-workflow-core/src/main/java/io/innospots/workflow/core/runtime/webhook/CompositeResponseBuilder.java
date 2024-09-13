@@ -12,8 +12,8 @@ import java.util.Map;
 public class CompositeResponseBuilder implements WorkflowResponseBuilder{
 
 
-    private Map<String,WorkflowResponseBuilder> responseBuilderMap = new HashMap<>();
-    private WorkflowResponseBuilder defaultResponseBuilder = new DefaultResponseBuilder();
+    private final Map<String,WorkflowResponseBuilder> responseBuilderMap = new HashMap<>();
+    private final WorkflowResponseBuilder defaultResponseBuilder = new DefaultResponseBuilder();
 
     public CompositeResponseBuilder(WorkflowResponseBuilder... responseBuilders){
         for (WorkflowResponseBuilder responseBuilder : responseBuilders) {
@@ -22,8 +22,12 @@ public class CompositeResponseBuilder implements WorkflowResponseBuilder{
     }
 
     @Override
-    public WorkflowResponse build(WorkflowRuntimeContext workflowRuntimeContext, FlowWebhookConfig webhookConfig) {
-        return null;
+    public <T> WorkflowResponse<T> build(WorkflowRuntimeContext workflowRuntimeContext, FlowWebhookConfig webhookConfig) {
+        String responseType = workflowRuntimeContext.getResponseType();
+        if(responseType == null || !responseBuilderMap.containsKey(responseType)){
+            return defaultResponseBuilder.build(workflowRuntimeContext, webhookConfig);
+        }
+        return responseBuilderMap.get(responseType).build(workflowRuntimeContext, webhookConfig);
     }
 
     @Override

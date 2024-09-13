@@ -39,28 +39,10 @@ public class DefaultResponseBuilder implements WorkflowResponseBuilder {
 
 
     @Override
-    public WorkflowResponse build(WorkflowRuntimeContext workflowRuntimeContext, FlowWebhookConfig webhookConfig) {
-        WorkflowResponse response = new WorkflowResponse();
-        response.setContextId(String.valueOf(workflowRuntimeContext.getFlowExecution().getFlowExecutionId()));
-        response.setRevision(workflowRuntimeContext.getFlowExecution().getRevision());
-        response.setFlowKey(workflowRuntimeContext.getFlowExecution().getFlowKey());
-        List<NodeExecution> nodeExecutions = workflowRuntimeContext.getFlowExecution().getLastNodeExecution();
-        response.setConsume(
-                Duration.between(
-                        workflowRuntimeContext.getFlowExecution().getStartTime(),
-                        workflowRuntimeContext.getFlowExecution().getEndTime()
-                ).toMillis());
+    public <T> WorkflowResponse<T> build(WorkflowRuntimeContext workflowRuntimeContext, FlowWebhookConfig webhookConfig) {
+        WorkflowResponse response = newInstance(workflowRuntimeContext);
         if(workflowRuntimeContext.getFlowExecution().getStatus() == ExecutionStatus.FAILED){
-            response.fillResponse(workflowRuntimeContext.getFlowExecution().getResponseCode());
             return response;
-        }else{
-            /*
-            if (webhookConfig == null) {
-                return response;
-            }
-            response.setCode(webhookConfig.getResponseCode());
-
-             */
         }
 
         if (webhookConfig.getResponseMode() == FlowWebhookConfig.ResponseMode.ACK) {
@@ -70,6 +52,7 @@ public class DefaultResponseBuilder implements WorkflowResponseBuilder {
             }
             response.fillBody(body);
         } else {
+            List<NodeExecution> nodeExecutions = workflowRuntimeContext.getFlowExecution().getLastNodeExecution();
             if (!nodeExecutions.isEmpty()) {
                 List<Map<String, Object>> outList = nodeExecutions.stream().
                         flatMap(execution -> execution.getOutputs().stream())

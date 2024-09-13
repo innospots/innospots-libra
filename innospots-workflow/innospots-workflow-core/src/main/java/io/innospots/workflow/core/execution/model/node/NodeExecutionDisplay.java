@@ -54,7 +54,7 @@ public class NodeExecutionDisplay {
      * result table data
      */
     @Schema(title = "execution output results array")
-    private List<NodeOutputPage> outputs;
+    private List<OutputDisplay> outputs;
 
     @Schema(title = "output columns fields")
     protected List<ParamField> outputFields;
@@ -68,18 +68,18 @@ public class NodeExecutionDisplay {
     public static NodeExecutionDisplay build(NodeExecution nodeExecution, NodeInstance nodeInstance, int page, int size) {
         NodeExecutionDisplay executionDisplay = buildNotContextPage(nodeExecution, nodeInstance);
         if (CollectionUtils.isNotEmpty(nodeExecution.getOutputs())) {
-            List<NodeOutputPage> nodeOutputPages = new ArrayList<>();
+            List<OutputDisplay> outputDisplays = new ArrayList<>();
             for (NodeOutput output : nodeExecution.getOutputs()) {
                 if (CollectionUtils.isNotEmpty(output.getResults())) {
                     if (page <= 0) {
                         page = 1;
                     }
-                    NodeOutputPage outputPage = new NodeOutputPage(output, page, size);
+                    OutputDisplay outputPage = new OutputDisplay(output, page, size);
                     outputPage.getResults().setList(output.getResults());
-                    nodeOutputPages.add(outputPage);
+                    outputDisplays.add(outputPage);
                 }
             }//end for
-            executionDisplay.outputs = nodeOutputPages;
+            executionDisplay.outputs = outputDisplays;
             executionDisplay.buildOutputField();
         }
         return executionDisplay;
@@ -90,22 +90,22 @@ public class NodeExecutionDisplay {
         int page = 1;
         NodeExecutionDisplay executionDisplay = buildNotContextPage(nodeExecution, nodeInstance);
         if (CollectionUtils.isNotEmpty(nodeExecution.getOutputs())) {
-            List<NodeOutputPage> nodeOutputPages = new ArrayList<>();
+            List<OutputDisplay> outputDisplays = new ArrayList<>();
             for (NodeOutput output : nodeExecution.getOutputs()) {
                 if (CollectionUtils.isNotEmpty(output.getResults())) {
                     if (page <= 0) {
                         page = 1;
                     }
-                    NodeOutputPage outputPage = new NodeOutputPage(output, page, size);
+                    OutputDisplay outputPage = new OutputDisplay(output, page, size);
                     for (int i = (page - 1) * size; i < size; i++) {
                         if (i < output.getResults().size()) {
                             outputPage.addItem(output.getResults().get(i));
                         }
                     }
-                    nodeOutputPages.add(outputPage);
+                    outputDisplays.add(outputPage);
                 }
             }//end for
-            executionDisplay.outputs = nodeOutputPages;
+            executionDisplay.outputs = outputDisplays;
             executionDisplay.buildOutputField();
         }
         return executionDisplay;
@@ -137,6 +137,8 @@ public class NodeExecutionDisplay {
 
         if (nodeInstance != null) {
             executionDisplay.schemaFields = nodeInstance.getOutputFields();
+        }else{
+            executionDisplay.schemaFields = nodeExecution.getSchemaFields();
         }
         return executionDisplay;
     }
@@ -146,29 +148,12 @@ public class NodeExecutionDisplay {
         this.logs.put(key, value);
     }
 
-
     private void buildOutputField() {
         outputFields = new ArrayList<>();
         //all output data have the save fields
         if (outputs != null && !outputs.isEmpty()) {
             List<Map<String, Object>> listResult = outputs.get(0).getResults().getList();
-            if (!listResult.isEmpty()) {
-                Map<String, Object> data = listResult.get(0);
-                for (String key : data.keySet()) {
-                    Object v = data.get(key);
-                    ParamField pf = new ParamField(key, key, FieldValueTypeConverter.convertJavaTypeByValue(v));
-                    if (v instanceof Map) {
-                        //the value is map object
-                        pf.setSubFields(parseFieldFromValue(pf.getCode(), (Map<?, ?>) v));
-                    } else if (v instanceof Collection) {
-                        Object obj = ((Collection<?>) v).stream().findFirst().orElse(null);
-                        if (obj instanceof Map) {
-                            pf.setSubFields(parseFieldFromValue(pf.getCode(), (Map<?, ?>) obj));
-                        }
-                    }
-                    outputFields.add(pf);
-                }
-            }
+            outputFields = NodeOutput.buildOutputField(listResult);
         }
 
         if (outputFields.isEmpty() && schemaFields != null) {
@@ -178,16 +163,6 @@ public class NodeExecutionDisplay {
         }
     }
 
-    private List<ParamField> parseFieldFromValue(String parentCode, Map<?, ?> value) {
-        List<ParamField> subFields = new ArrayList<>();
-        for (Map.Entry<?, ?> entry : ((Map<?, ?>) value).entrySet()) {
-            String k = entry.getKey().toString();
-            ParamField subField = new ParamField(k, k, FieldValueTypeConverter.convertJavaTypeByValue(entry.getValue()));
-            subField.setParentCode(parentCode);
-            subFields.add(subField);
-        }
-        return subFields;
-    }
 
     @Override
     public String toString() {

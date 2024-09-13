@@ -19,6 +19,8 @@
 package io.innospots.workflow.core.execution.model.node;
 
 import io.innospots.base.execution.ExecutionResource;
+import io.innospots.base.model.field.FieldValueTypeConverter;
+import io.innospots.base.model.field.ParamField;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;
@@ -174,5 +176,41 @@ public class NodeOutput {
 
     public int size() {
         return this.results.size();
+    }
+
+
+    public static List<ParamField> buildOutputField(List<Map<String, Object>> listResult) {
+        List<ParamField> outputFields = new ArrayList<>();
+        //all output data have the save fields
+        if (listResult != null && !listResult.isEmpty()) {
+            Map<String, Object> data = listResult.get(0);
+            for (String key : data.keySet()) {
+                Object v = data.get(key);
+                ParamField pf = new ParamField(key, key, FieldValueTypeConverter.convertJavaTypeByValue(v));
+                if (v instanceof Map) {
+                    //the value is map object
+                    pf.setSubFields(parseFieldFromValue(pf.getCode(), (Map<?, ?>) v));
+                } else if (v instanceof Collection) {
+                    Object obj = ((Collection<?>) v).stream().findFirst().orElse(null);
+                    if (obj instanceof Map) {
+                        pf.setSubFields(parseFieldFromValue(pf.getCode(), (Map<?, ?>) obj));
+                    }
+                }
+                outputFields.add(pf);
+            }
+
+        }
+        return outputFields;
+    }
+
+    private static List<ParamField> parseFieldFromValue(String parentCode, Map<?, ?> value) {
+        List<ParamField> subFields = new ArrayList<>();
+        for (Map.Entry<?, ?> entry : ((Map<?, ?>) value).entrySet()) {
+            String k = entry.getKey().toString();
+            ParamField subField = new ParamField(k, k, FieldValueTypeConverter.convertJavaTypeByValue(entry.getValue()));
+            subField.setParentCode(parentCode);
+            subFields.add(subField);
+        }
+        return subFields;
     }
 }

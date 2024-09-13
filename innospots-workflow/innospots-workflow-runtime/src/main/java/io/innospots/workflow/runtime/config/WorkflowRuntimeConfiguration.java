@@ -32,23 +32,21 @@ import io.innospots.workflow.core.execution.reader.NodeExecutionReader;
 import io.innospots.workflow.core.execution.store.FlowExecutionStoreListener;
 import io.innospots.workflow.core.execution.store.NodeExecutionStoreListener;
 import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
+import io.innospots.workflow.core.flow.manage.FlowManager;
 import io.innospots.workflow.core.instance.operator.WorkflowDraftOperator;
-import io.innospots.workflow.core.runtime.webhook.DefaultResponseBuilder;
+import io.innospots.workflow.core.runtime.webhook.AppFormResponseBuilder;
+import io.innospots.workflow.core.runtime.webhook.CompositeResponseBuilder;
 import io.innospots.workflow.runtime.container.*;
 import io.innospots.workflow.runtime.container.listener.WorkflowRuntimeEventListener;
-import io.innospots.workflow.runtime.endpoint.SseEventEndpoint;
-import io.innospots.workflow.runtime.endpoint.WebhookRuntimeEndpoint;
-import io.innospots.workflow.runtime.endpoint.WebhookTestEndpoint;
-import io.innospots.workflow.runtime.endpoint.WorkflowManagementEndpoint;
-import io.innospots.workflow.runtime.endpoint.WorkflowStreamEndpoint;
+import io.innospots.workflow.runtime.debugger.FlowNodeSimpleDebugger;
+import io.innospots.workflow.runtime.endpoint.*;
 import io.innospots.workflow.runtime.engine.CarrierFlowEngine;
 import io.innospots.workflow.runtime.engine.ParallelStreamFlowEngine;
 import io.innospots.workflow.runtime.engine.StreamFlowEngine;
-import io.innospots.workflow.core.flow.manage.FlowManager;
-import io.innospots.workflow.runtime.debugger.FlowNodeSimpleDebugger;
 import io.innospots.workflow.runtime.scheduled.NodeExecutionEventListener;
 import io.innospots.workflow.runtime.server.WorkflowWebhookServer;
 import io.innospots.workflow.runtime.starter.RuntimePrepareStarter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.availability.ApplicationAvailability;
@@ -154,14 +152,13 @@ public class WorkflowRuntimeConfiguration {
         return new ScheduleRuntimeContainer(quartzScheduleManager);
     }
 
-    @Bean
-    public DefaultResponseBuilder responseBuilder() {
-        return new DefaultResponseBuilder();
+    public CompositeResponseBuilder responseBuilder() {
+        return new CompositeResponseBuilder(new AppFormResponseBuilder());
     }
 
     @Bean
     public WebhookRuntimeContainer webhookRuntimeContainer() {
-        return new WebhookRuntimeContainer(new DefaultResponseBuilder());
+        return new WebhookRuntimeContainer(responseBuilder());
     }
 
     @Bean

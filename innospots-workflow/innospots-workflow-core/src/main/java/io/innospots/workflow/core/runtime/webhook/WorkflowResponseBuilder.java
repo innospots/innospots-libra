@@ -18,7 +18,12 @@
 
 package io.innospots.workflow.core.runtime.webhook;
 
+import io.innospots.base.quartz.ExecutionStatus;
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
+
+import java.time.Duration;
+import java.util.List;
 
 
 /**
@@ -28,10 +33,28 @@ import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
 public interface WorkflowResponseBuilder {
 
 
-    WorkflowResponse build(WorkflowRuntimeContext workflowRuntimeContext, FlowWebhookConfig webhookConfig);
+    <T> WorkflowResponse<T> build(WorkflowRuntimeContext workflowRuntimeContext, FlowWebhookConfig webhookConfig);
 
-    default WorkflowResponse build(WorkflowRuntimeContext workflowRuntimeContext) {
+    default  <T> WorkflowResponse<T>  build(WorkflowRuntimeContext workflowRuntimeContext) {
         return build(workflowRuntimeContext, null);
+    }
+
+    default <T> WorkflowResponse<T> newInstance(WorkflowRuntimeContext workflowRuntimeContext){
+        WorkflowResponse<T> response = new WorkflowResponse<>();
+        response.setContextId(String.valueOf(workflowRuntimeContext.getFlowExecution().getFlowExecutionId()));
+        response.setRevision(workflowRuntimeContext.getFlowExecution().getRevision());
+        response.setFlowKey(workflowRuntimeContext.getFlowExecution().getFlowKey());
+        response.setConsume(
+                Duration.between(
+                        workflowRuntimeContext.getFlowExecution().getStartTime(),
+                        workflowRuntimeContext.getFlowExecution().getEndTime()
+                ).toMillis());
+        if(workflowRuntimeContext.getFlowExecution().getStatus() == ExecutionStatus.FAILED){
+            response.fillResponse(workflowRuntimeContext.getFlowExecution().getResponseCode());
+            response.setMessage(workflowRuntimeContext.getFlowExecution().getMessage());
+            return response;
+        }
+        return response;
     }
 
     String responseType();
