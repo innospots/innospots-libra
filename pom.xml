@@ -82,7 +82,7 @@
         <reflections.version>0.10.2</reflections.version>
 
         <snack3.version>3.2.107</snack3.version>
-        <spring.ai.version>1.0.0-M2</spring.ai.version>
+        <spring.ai.version>1.0.0-SNAPSHOT</spring.ai.version>
         <spring-boot.version>3.3.2</spring-boot.version>
         <spring-boot-admin.version>3.3.2</spring-boot-admin.version>
         <spring-cloud-alibaba.version>2023.0.1.2</spring-cloud-alibaba.version>

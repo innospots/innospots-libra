@@ -7,7 +7,7 @@
   "appNodeType": "io.innospots.workflow.node.app.data.KafkaDataNode",
   "overview": "",
   "description": "",
-  "authOptions": [
+  "options": [
     {
       "name": "基础配置",
       "code": "kafka-basic",

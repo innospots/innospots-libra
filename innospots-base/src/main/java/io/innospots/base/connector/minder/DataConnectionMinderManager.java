@@ -27,7 +27,7 @@ import io.innospots.base.connector.credential.model.ConnectionCredential;
 import io.innospots.base.connector.credential.reader.IConnectionCredentialReader;
 import io.innospots.base.connector.meta.ConnectionMinderSchema;
 import io.innospots.base.connector.meta.ConnectionMinderSchemaLoader;
-import io.innospots.base.connector.meta.CredentialAuthOption;
+import io.innospots.base.connector.meta.CredentialOption;
 import io.innospots.base.connector.schema.reader.ISchemaRegistryReader;
 import io.innospots.base.exception.LoadConfigurationException;
 import io.innospots.base.exception.data.DataConnectionException;
@@ -84,7 +84,7 @@ public class DataConnectionMinderManager {
     public static IDataConnectionMinder newMinderInstance(String connectorName,String authOption){
         try {
             ConnectionMinderSchema minderSchema = ConnectionMinderSchemaLoader.getConnectionMinderSchema(connectorName);
-            CredentialAuthOption config = minderSchema.getAuthOptions().stream().filter(f -> Objects.equals(authOption, f.getCode())).findFirst()
+            CredentialOption config = minderSchema.getOptions().stream().filter(f -> Objects.equals(authOption, f.getCode())).findFirst()
                     .orElseThrow(() -> LoadConfigurationException.buildException(ConnectionMinderSchemaLoader.class, "dataConnectionMinder newInstance failed, configCode invalid."));
             return (IDataConnectionMinder) Class.forName(config.getMinder()).getConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException |
@@ -107,7 +107,7 @@ public class DataConnectionMinderManager {
     }
 
     public static Object fetchSample(ConnectionCredential connectionCredential) {
-        CredentialAuthOption formConfig = ConnectionMinderSchemaLoader.getCredentialFormConfig(connectionCredential.getConnectorName(), connectionCredential.getAuthOption());
+        CredentialOption formConfig = ConnectionMinderSchemaLoader.getCredentialFormConfig(connectionCredential.getConnectorName(), connectionCredential.getAuthOption());
         if (formConfig == null) {
             return false;
         }

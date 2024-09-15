@@ -96,19 +96,19 @@ public class ConnectionMinderSchemaLoader {
                 .filter(f -> f.getName().equals(connectorName)).findFirst().orElse(null);
     }
 
-    public static CredentialAuthOption getCredentialFormConfig(String connectorName, String configCode) {
+    public static CredentialOption getCredentialFormConfig(String connectorName, String configCode) {
         ConnectionMinderSchema connectionMinderSchema = getConnectionMinderSchema(connectorName);
         if (connectionMinderSchema == null) {
             throw LoadConfigurationException.buildException(ConnectionMinderSchemaLoader.class, "connection minder schema is empty");
         }
         if(configCode == null){
-            return connectionMinderSchema.getAuthOptions().stream().findFirst().orElse(null);
+            return connectionMinderSchema.getOptions().stream().findFirst().orElse(null);
         }
-        return connectionMinderSchema.getAuthOptions().stream().filter(f -> f.getCode().equals(configCode)).findFirst()
+        return connectionMinderSchema.getOptions().stream().filter(f -> f.getCode().equals(configCode)).findFirst()
                 .orElseThrow(() -> LoadConfigurationException.buildException(ConnectionMinderSchemaLoader.class, "credential configuration can not found"));
     }
 
-    public static CredentialAuthOption getCredentialFormConfig(String connectorName) {
+    public static CredentialOption getCredentialFormConfig(String connectorName) {
         return getCredentialFormConfig(connectorName,null);
     }
 }

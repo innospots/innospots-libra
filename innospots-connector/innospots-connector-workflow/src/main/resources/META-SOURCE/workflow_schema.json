@@ -6,7 +6,7 @@
   "connectType": "API",
   "overview": "workflow的 api 接口",
   "description": "采用 api 接口推送接口",
-  "authOptions": [
+  "options": [
     {
       "name": "Normal",
       "code": "normal-api",

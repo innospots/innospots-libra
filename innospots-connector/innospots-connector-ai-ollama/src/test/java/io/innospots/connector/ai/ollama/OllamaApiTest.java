@@ -19,11 +19,12 @@ public class OllamaApiTest {
     void test() {
         var ollamaApi = new OllamaApi();
 
-        var chatModel = new OllamaChatModel(ollamaApi,
+        OllamaChatModel chatModel = new OllamaChatModel(ollamaApi,
                 OllamaOptions.create()
                         .withModel("qwen2:7b")
                         .withFormat("json")
                         .withTemperature(0.9f));
+
 
         ChatResponse response = chatModel.call(
                 new Prompt("人工智能的简介作文，200字"));

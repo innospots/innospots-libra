@@ -6,7 +6,7 @@
   "connectType": "JDBC",
   "overview": "${meta.schema.mysql.overview:Mysql数据库连接}",
   "description": "请填入连接鉴权的默认值，当控件“只读”被勾选中时，改字段在凭据创建时只展示不能修改。",
-  "authOptions": [
+  "options": [
     {
       "name": "TCP/IP",
       "code": "mysql-jdbc",

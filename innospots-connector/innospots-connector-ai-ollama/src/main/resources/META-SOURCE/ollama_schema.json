@@ -1,0 +1,33 @@
+{
+  "name": "Ollama",
+  "icon": "/ollama.svg",
+  "order": 200,
+  "enabled": true,
+  "connectType": "API",
+  "overview": "${meta.schema.ollama.overview:ollama配置}",
+  "description": "ollama 的链接配置本地配置",
+  "options": [
+    {
+      "name": "General",
+      "code": "ollama-config",
+      "minder": "io.innospots.connector.ai.ollama.minder.OllamaConnectorMinder",
+      "defaults": {
+      },
+      "elements": [
+        {
+          "label": "服务地址",
+          "name": "service_address",
+          "maxSize": 64,
+          "placeholder": "ip:port",
+          "required": true,
+          "labelGrid": 4,
+          "tips": "主机 ip+端口号",
+          "type": "INPUT",
+          "expression": "",
+          "gridSize": 16,
+          "options": []
+        }
+      ]
+    }
+  ]
+}

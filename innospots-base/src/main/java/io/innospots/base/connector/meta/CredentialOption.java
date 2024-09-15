@@ -31,7 +31,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class CredentialAuthOption implements Cloneable {
+public class CredentialOption implements Cloneable {
 
     private String name;
 
@@ -45,7 +45,7 @@ public class CredentialAuthOption implements Cloneable {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        CredentialAuthOption cloneObj = (CredentialAuthOption) super.clone();
+        CredentialOption cloneObj = (CredentialOption) super.clone();
 
         if (this.defaults != null) {
             LinkedHashMap<String, String> dfs = new LinkedHashMap<>();

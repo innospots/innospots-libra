@@ -6,7 +6,7 @@
   "connectType": "GENERAL",
   "overview": "IMAP代表Internet消息访问协议，接收来自邮件服务器的电子邮件",
   "description": "请填入触发器连接鉴权的默认值，当控件“只读”被勾选中时，改字段在凭据创建时只展示不能修改。",
-  "authOptions": [
+  "options": [
     {
       "code": "email-imap",
       "minder": "io.innospots.connector.imap.minder.ImapConnectionMinder",

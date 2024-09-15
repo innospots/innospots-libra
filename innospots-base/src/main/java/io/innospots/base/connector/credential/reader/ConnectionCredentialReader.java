@@ -25,7 +25,7 @@ import io.innospots.base.connector.credential.model.CredentialType;
 import io.innospots.base.connector.credential.operator.CredentialInfoOperator;
 import io.innospots.base.connector.credential.operator.CredentialTypeOperator;
 import io.innospots.base.connector.meta.ConnectionMinderSchemaLoader;
-import io.innospots.base.connector.meta.CredentialAuthOption;
+import io.innospots.base.connector.meta.CredentialOption;
 import io.innospots.base.exception.AuthenticationException;
 import io.innospots.base.exception.ResourceException;
 import lombok.extern.slf4j.Slf4j;
@@ -84,9 +84,9 @@ public class ConnectionCredentialReader implements IConnectionCredentialReader {
         if(credentialType.getProps()!=null){
             credentialInfo.getProps().putAll(credentialType.getProps());
         }
-        CredentialAuthOption credentialAuthOption = ConnectionMinderSchemaLoader.getCredentialFormConfig(credentialInfo.getConnectorName(), credentialInfo.getCredentialType().getAuthOption());
-        if(credentialAuthOption!=null && credentialAuthOption.getDefaults()!=null){
-            credentialInfo.getProps().putAll(credentialAuthOption.getDefaults());
+        CredentialOption credentialOption = ConnectionMinderSchemaLoader.getCredentialFormConfig(credentialInfo.getConnectorName(), credentialInfo.getCredentialType().getAuthOption());
+        if(credentialOption !=null && credentialOption.getDefaults()!=null){
+            credentialInfo.getProps().putAll(credentialOption.getDefaults());
         }
         ConnectionCredential connection = decryptFormValues(credentialInfo);
         connection.setAuthOption(credentialInfo.getCredentialType().getAuthOption());
