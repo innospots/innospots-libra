@@ -19,16 +19,17 @@
 package io.innospots.workflow.core.execution.model.flow;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.innospots.base.json.JSONUtils;
 import io.innospots.base.execution.ExecMode;
-import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
-import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.base.execution.ExecutionResource;
+import io.innospots.base.json.JSONUtils;
 import io.innospots.base.quartz.ExecutionStatus;
+import io.innospots.base.utils.BeanUtils;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;
 import io.innospots.workflow.core.execution.reader.NodeOutputStaticReader;
+import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -66,6 +67,8 @@ public class FlowExecution extends FlowExecutionBase {
 
     protected List<Map<String, Object>> output = new ArrayList<>();
 
+    private Map<Integer, List<ExecutionResource>> resources;
+
     /**
      *
      */
@@ -89,8 +92,9 @@ public class FlowExecution extends FlowExecutionBase {
     }
 
 
-    public static FlowExecution buildNewFlowExecution(String flowKey, List<Map<String, Object>> payloads){
-        FlowExecution flowExecution = new FlowExecution();;
+    public static FlowExecution buildNewFlowExecution(String flowKey, List<Map<String, Object>> payloads) {
+        FlowExecution flowExecution = new FlowExecution();
+        ;
         flowExecution.setStatus(ExecutionStatus.READY);
         flowExecution.contextDataPath = WorkflowRuntimeContext.contextResourcePath;
         flowExecution.setFlowKey(flowKey);
@@ -135,6 +139,12 @@ public class FlowExecution extends FlowExecutionBase {
         return buildNewFlowExecution(flwInstanceId, revision, false, false, payloads);
     }
 
+    public void addResource(int position, List<ExecutionResource> executionResources) {
+        if (resources == null) {
+            resources = new LinkedHashMap<>();
+        }
+        resources.put(position, executionResources);
+    }
 
     public FlowExecution addInput(Map<String, Object> data) {
         this.input.addInput(data);
@@ -238,18 +248,18 @@ public class FlowExecution extends FlowExecutionBase {
         List<Map<String, Object>> outputList = new ArrayList<>();
         for (NodeOutput nodeOutput : nodeOutputs) {
             if (nodeOutput.containNextNodeKey(targetNodeKey)) {
-                if(nodeOutput.getResults()!=null){
+                if (nodeOutput.getResults() != null) {
                     for (int i = 0; i < nodeOutput.getResults().size(); i++) {
                         outputList.add(nodeOutput.getResults().get(i));
                         List<ExecutionResource> res = nodeOutput.itemResources(i);
-                        if(res!=null){
+                        if (res != null) {
                             executionInput.addResource(res);
-                            if(res.size() > 1){
-                                log.warn("item have multi file resources:{}",res);
+                            if (res.size() > 1) {
+                                log.warn("item have multi file resources:{}", res);
                             }
                         }
                     }//end for output item
-                }else if(nodeOutput.getResources()!=null){
+                } else if (nodeOutput.getResources() != null) {
                     for (List<ExecutionResource> resources : nodeOutput.getResources().values()) {
                         executionInput.addResource(resources);
                     }
@@ -273,6 +283,20 @@ public class FlowExecution extends FlowExecutionBase {
         o = executionContext.get("outputs");
         if (o != null) {
             this.output = JSONUtils.parseObject(String.valueOf(o), List.class);
+        }
+        o = executionContext.get("resources");
+        if (o != null) {
+            try {
+                Map<Integer, List<Map<String, Object>>> mRes = JSONUtils.parseObject(String.valueOf(o), LinkedHashMap.class);
+                if (mRes != null) {
+                    mRes.forEach((k, v) -> {
+                        List<ExecutionResource> er = BeanUtils.toBean(v, ExecutionResource.class);
+                        this.addResource(k, er);
+                    });
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
         }
     }
 
@@ -303,7 +327,7 @@ public class FlowExecution extends FlowExecutionBase {
         return sb.toString();
     }
 
-    public String info(){
+    public String info() {
         final StringBuffer sb = new StringBuffer("{");
         sb.append("executionId='").append(flowExecutionId).append('\'');
         sb.append(", status=").append(status);

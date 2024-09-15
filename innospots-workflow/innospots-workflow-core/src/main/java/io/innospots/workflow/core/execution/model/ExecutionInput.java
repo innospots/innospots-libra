@@ -101,8 +101,8 @@ public class ExecutionInput {
     public Map<String,Object> log(){
         Map<String,Object> l = new LinkedHashMap<>();
         l.put("sourceKey",this.sourceKey);
-        l.put("item_size", this.data.size());
-        l.put("resource_size", this.resources == null ? 0 : this.resources.size());
+        l.put("inputs", this.data.size());
+        l.put("resources", this.resources == null ? 0 : this.resources.size());
         return l;
     }
 

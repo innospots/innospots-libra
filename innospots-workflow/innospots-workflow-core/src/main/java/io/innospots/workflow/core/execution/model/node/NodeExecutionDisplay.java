@@ -19,7 +19,6 @@
 package io.innospots.workflow.core.execution.model.node;
 
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.model.field.FieldValueTypeConverter;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.instance.model.NodeInstance;
@@ -27,8 +26,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -38,13 +41,17 @@ import java.util.*;
 @Getter
 @Setter
 @Schema(title = "Display of Node Execution ")
-public class NodeExecutionDisplay {
+public class NodeExecutionDisplay implements Comparable<NodeExecutionDisplay> {
 
     private String nodeKey;
+
+    private String nodeName;
 
     private String nodeExecutionId;
 
     private String flowExecutionId;
+
+    private int sequenceNumber;
 
     @Schema(title = "input data")
     private List<ExecutionInput> inputs;
@@ -120,26 +127,32 @@ public class NodeExecutionDisplay {
             return null;
         }
         NodeExecutionDisplay executionDisplay = new NodeExecutionDisplay();
+        if (nodeInstance != null) {
+            executionDisplay.schemaFields = nodeInstance.getOutputFields();
+            executionDisplay.nodeName = nodeInstance.getName();
+        } else {
+            executionDisplay.schemaFields = nodeExecution.getSchemaFields();
+            executionDisplay.nodeName = nodeExecution.getNodeName();
+        }
+
         executionDisplay.flowExecutionId = nodeExecution.getFlowExecutionId();
 //        executionDisplay.inputs = nodeExecution.flatInput();
         executionDisplay.inputs = nodeExecution.getInputs();
         executionDisplay.nodeExecutionId = nodeExecution.getNodeExecutionId();
         executionDisplay.nodeKey = nodeExecution.getNodeKey();
+        executionDisplay.sequenceNumber = nodeExecution.getSequenceNumber();
         executionDisplay.logs.put("nodeExecutionId", nodeExecution.getNodeExecutionId());
+        executionDisplay.logs.put("name", executionDisplay.nodeName);
         executionDisplay.logs.put("nodeKey", executionDisplay.nodeKey);
         executionDisplay.logs.put("status", nodeExecution.getStatus());
         executionDisplay.logs.put("consume", nodeExecution.consume());
         executionDisplay.logs.put("startTime", nodeExecution.getStartTime());
         executionDisplay.logs.put("endTime", nodeExecution.getEndTime());
         executionDisplay.logs.put("sequence", nodeExecution.getSequenceNumber());
-        executionDisplay.logs.put("output_table", JSONUtils.toJsonString(nodeExecution.outputLog()));
+        executionDisplay.logs.put("outputs", JSONUtils.toJsonString(nodeExecution.outputLog()));
         executionDisplay.logs.put("message", nodeExecution.getMessage());
 
-        if (nodeInstance != null) {
-            executionDisplay.schemaFields = nodeInstance.getOutputFields();
-        }else{
-            executionDisplay.schemaFields = nodeExecution.getSchemaFields();
-        }
+
         return executionDisplay;
     }
 
@@ -158,7 +171,7 @@ public class NodeExecutionDisplay {
 
         if (outputFields.isEmpty() && schemaFields != null) {
             outputFields = schemaFields;
-        }else if(CollectionUtils.isEmpty(schemaFields) && CollectionUtils.isNotEmpty(outputFields)){
+        } else if (CollectionUtils.isEmpty(schemaFields) && CollectionUtils.isNotEmpty(outputFields)) {
             schemaFields = outputFields;
         }
     }
@@ -173,5 +186,10 @@ public class NodeExecutionDisplay {
         sb.append(", logs='").append(logs).append('\'');
         sb.append('}');
         return sb.toString();
+    }
+
+    @Override
+    public int compareTo(@NotNull NodeExecutionDisplay o) {
+        return Integer.compare(this.sequenceNumber, o.sequenceNumber);
     }
 }

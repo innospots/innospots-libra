@@ -19,6 +19,7 @@
 package io.innospots.workflow.core.flow.loader;
 
 import io.innospots.workflow.core.flow.model.WorkflowBody;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 
 import java.util.Collections;
 import java.util.List;
@@ -31,6 +32,8 @@ public interface IWorkflowLoader {
 
 
     WorkflowBody loadWorkflow(Long workflowInstanceId, Integer revision);
+
+    NodeInstance loadNodeInstance(Long flowInstanceId, Integer revision, String nodeKey);
 
     WorkflowBody loadWorkflow(String flowKey);
 

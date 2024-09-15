@@ -40,7 +40,10 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -90,7 +93,7 @@ public class NodeInstanceOperator extends ServiceImpl<NodeInstanceDao, NodeInsta
                 deleteIds = new ArrayList<>(entityMap.keySet());
             }
         } else {
-              List<NodeInstanceEntity> requestEntities = parseEntities(nodeInstances);
+            List<NodeInstanceEntity> requestEntities = parseEntities(nodeInstances);
             for (NodeInstanceEntity newEntity : requestEntities) {
                 newEntity.setRevision(FlowVersion.DRAFT.getVersion());
                 newEntity.setProjectId(CCH.projectId());
@@ -122,21 +125,21 @@ public class NodeInstanceOperator extends ServiceImpl<NodeInstanceDao, NodeInsta
         return true;
     }
 
-    public List<NodeInstance> listNodeInstances(List<Long> workflowInstanceIds,List<Integer> nodeDefinitionIds){
+    public List<NodeInstance> listNodeInstances(List<Long> workflowInstanceIds, List<Integer> nodeDefinitionIds) {
         QueryWrapper<NodeInstanceEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().in(NodeInstanceEntity::getWorkflowInstanceId,workflowInstanceIds)
-                .in(NodeInstanceEntity::getNodeDefinitionId,nodeDefinitionIds);
+        queryWrapper.lambda().in(NodeInstanceEntity::getWorkflowInstanceId, workflowInstanceIds)
+                .in(NodeInstanceEntity::getNodeDefinitionId, nodeDefinitionIds);
         return NodeInstanceConverter.INSTANCE.entitiesToModels(this.list(queryWrapper));
     }
 
     public void filledNodeInstanceByExecutor(List<NodeInstance> nodeInstances) {
-        if(CollectionUtils.isEmpty(nodeInstances)){
+        if (CollectionUtils.isEmpty(nodeInstances)) {
             return;
         }
         for (NodeInstance nodeInstance : nodeInstances) {
             try {
                 BaseNodeExecutor nodeExecutor = NodeExecutorFactory.newInstance(nodeInstance);
-                if(nodeExecutor instanceof TriggerNode){
+                if (nodeExecutor instanceof TriggerNode) {
                     // build input fields to instance
                     nodeExecutor.build();
                 }
@@ -187,6 +190,20 @@ public class NodeInstanceOperator extends ServiceImpl<NodeInstanceDao, NodeInsta
         return list;
     }
 
+    public NodeInstance getNodeInstance(Long flowInstanceId, Integer revision, String nodeKey) {
+        QueryWrapper<NodeInstanceEntity> query = new QueryWrapper<>();
+        query.lambda().eq(NodeInstanceEntity::getWorkflowInstanceId, flowInstanceId)
+                .eq(NodeInstanceEntity::getRevision, revision)
+                .eq(NodeInstanceEntity::getNodeKey, nodeKey);
+        NodeInstanceEntity entity = this.getOne(query);
+        if (entity == null) {
+            return null;
+        }
+        FlowNodeDefinitionEntity nodeDefinitionEntity = flowNodeDefinitionDao.selectById(entity.getNodeDefinitionId());
+        return NodeInstanceConverter.INSTANCE.entityToModel(entity, nodeDefinitionEntity);
+    }
+
+
     public List<NodeInstanceEntity> getInstanceNodeByFlowInstanceId(Long flowInstanceId) {
         QueryWrapper<NodeInstanceEntity> query = new QueryWrapper<>();
         query.lambda().eq(NodeInstanceEntity::getWorkflowInstanceId, flowInstanceId);
@@ -212,54 +229,6 @@ public class NodeInstanceOperator extends ServiceImpl<NodeInstanceDao, NodeInsta
         return super.count(queryWrapper);
     }
 
-    /*
-    public Map<Boolean, List<Integer>> countByNodeIds(List<Integer> nodeIds) {
-        if (CollectionUtils.isEmpty(nodeIds)) {
-            return null;
-        }
-        List<Map<String, Object>> nodeList = super.listMaps(
-                new QueryWrapper<NodeInstanceEntity>()
-                        .select("NODE_DEFINITION_ID, COUNT(1) CNT ")
-                        .in("NODE_DEFINITION_ID", nodeIds)
-                        .groupBy("NODE_DEFINITION_ID"));
-        Map<Integer, Integer> nodeMap = nodeList.stream().collect(
-                Collectors.toMap(
-                        k -> Integer.valueOf(k.get("NODE_DEFINITION_ID").toString()),
-                        v -> Integer.valueOf(v.get("CNT").toString()))
-        );
-        Map<Boolean, List<Integer>> map = new HashMap<>();
-        List<Integer> nodeUsed = new ArrayList<>();
-        List<Integer> nodeUnUsed = new ArrayList<>();
-        for (Integer nodeId : nodeIds) {
-            if (MapUtils.isNotEmpty(nodeMap) && nodeMap.get(nodeId) > 0) {
-                nodeUsed.add(nodeId);
-
-            } else {
-                nodeUnUsed.add(nodeId);
-            }
-        }
-        if(!nodeUsed.isEmpty()){
-            map.put(Boolean.TRUE, nodeUsed);
-        }
-        if(!nodeUnUsed.isEmpty()){
-            map.put(Boolean.FALSE, nodeUnUsed);
-        }
-
-        return map;
-    }
-     */
-
-    public List<NodeInstance> listNodeInstancesByNodeKeys(Long flowInstanceId, Integer revision, Set<String> nodeKeys) {
-        QueryWrapper<NodeInstanceEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(NodeInstanceEntity::getWorkflowInstanceId, flowInstanceId)
-                .eq(NodeInstanceEntity::getRevision, revision)
-                .in(NodeInstanceEntity::getNodeKey, nodeKeys);
-        List<NodeInstanceEntity> entityList = this.list(queryWrapper);
-        if (entityList == null) {
-            return Collections.emptyList();
-        }
-        return entityList.stream().map(NodeInstanceConverter.INSTANCE::entityToModel).collect(Collectors.toList());
-    }
 
     /**
      * 发布最新版本

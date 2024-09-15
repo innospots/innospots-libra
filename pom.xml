@@ -82,6 +82,7 @@
         <reflections.version>0.10.2</reflections.version>
 
         <snack3.version>3.2.107</snack3.version>
+        <spring.ai.version>1.0.0-M2</spring.ai.version>
         <spring-boot.version>3.3.2</spring-boot.version>
         <spring-boot-admin.version>3.3.2</spring-boot-admin.version>
         <spring-cloud-alibaba.version>2023.0.1.2</spring-cloud-alibaba.version>
@@ -157,6 +158,13 @@
                 </exclusions>
             </dependency>
 
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>${spring.ai.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
             <dependency>
                 <groupId>de.codecentric</groupId>
@@ -855,4 +863,25 @@
             </plugin>
         </plugins>
     </build>
+
+
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/snapshot</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+    </repositories>
+
 </project>

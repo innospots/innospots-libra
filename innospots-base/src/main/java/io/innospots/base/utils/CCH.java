@@ -167,4 +167,8 @@ public class CCH {
         localHolder.get().put(SESSION_ID, sessionId);
     }
 
+    public static void removeSessionId() {
+        localHolder.get().remove(SESSION_ID);
+    }
+
 }

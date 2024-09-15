@@ -28,6 +28,7 @@ import io.innospots.workflow.core.execution.listener.IFlowExecutionListener;
 import io.innospots.workflow.core.execution.operator.IFlowExecutionOperator;
 import io.innospots.workflow.core.execution.operator.INodeExecutionOperator;
 import io.innospots.workflow.core.execution.operator.IScheduledNodeExecutionOperator;
+import io.innospots.workflow.core.execution.reader.FlowExecutionReader;
 import io.innospots.workflow.core.execution.reader.NodeExecutionReader;
 import io.innospots.workflow.core.execution.store.FlowExecutionStoreListener;
 import io.innospots.workflow.core.execution.store.NodeExecutionStoreListener;
@@ -43,6 +44,7 @@ import io.innospots.workflow.runtime.endpoint.*;
 import io.innospots.workflow.runtime.engine.CarrierFlowEngine;
 import io.innospots.workflow.runtime.engine.ParallelStreamFlowEngine;
 import io.innospots.workflow.runtime.engine.StreamFlowEngine;
+import io.innospots.workflow.runtime.response.StreamResponseEmitter;
 import io.innospots.workflow.runtime.scheduled.NodeExecutionEventListener;
 import io.innospots.workflow.runtime.server.WorkflowWebhookServer;
 import io.innospots.workflow.runtime.starter.RuntimePrepareStarter;
@@ -102,10 +104,9 @@ public class WorkflowRuntimeConfiguration {
     }
 
     @Bean
-    public WorkflowStreamEndpoint workflowStreamEndpoint(){
-        return new WorkflowStreamEndpoint();
+    public WorkflowStreamEndpoint workflowStreamEndpoint(StreamResponseEmitter streamResponseEmitter){
+        return new WorkflowStreamEndpoint(streamResponseEmitter);
     }
-
 
     @Bean
     public FlowManager flowManager(IWorkflowLoader workflowLoader) {
@@ -227,5 +228,11 @@ public class WorkflowRuntimeConfiguration {
         return new RuntimePrepareStarter(
                 workflowWebhookServer, runTimeContainerManager, workflowProperties, applicationAvailability);
     }
+
+    @Bean
+    public StreamResponseEmitter streamResponseEmitter(NodeExecutionReader nodeExecutionReader, FlowExecutionReader flowExecutionReader){
+        return new StreamResponseEmitter(nodeExecutionReader,flowExecutionReader);
+    }
+
 
 }

@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import io.innospots.workflow.core.flow.model.WorkflowBody;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,6 +82,15 @@ public class FsWorkflowLoader extends BaseWorkflowLoader {
     @Override
     public WorkflowBody loadWorkflow(Long workflowInstanceId, Integer revision) {
         return flowInstanceCache.get(IWorkflowLoader.key(workflowInstanceId, revision));
+    }
+
+    @Override
+    public NodeInstance loadNodeInstance(Long flowInstanceId, Integer revision, String nodeKey) {
+        WorkflowBody workflowBody = loadWorkflow(flowInstanceId, revision);
+        if (workflowBody != null) {
+            return workflowBody.findNode(nodeKey);
+        }
+        return null;
     }
 
     @Override

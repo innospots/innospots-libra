@@ -24,6 +24,7 @@ import io.innospots.base.data.request.BaseRequest;
 import io.innospots.base.data.request.BatchRequest;
 import io.innospots.base.data.request.ItemRequest;
 import io.innospots.base.data.request.SimpleRequest;
+import reactor.core.publisher.Flux;
 
 /**
  * @author Smars
@@ -56,5 +57,9 @@ public interface IOperator {
     }
 
     default void close(){
+    }
+
+    default <D> Flux<D> executeStream(BaseRequest<?> itemRequest){
+        return null;
     }
 }

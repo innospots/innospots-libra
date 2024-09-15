@@ -11,26 +11,30 @@ import java.util.Map;
  * @date 2024/6/25
  */
 @Slf4j
-public class FlowExecutionEmitter extends BaseEventEmitter{
+public class FlowExecutionEmitter extends BaseEventEmitter {
 
 
-    public static void sendLog(String flowExecutionId, Object message){
-        sendInfoLog(flowExecutionId,"flow-execution-log",message);
+    public static void sendLog(String flowExecutionId, Object message) {
+        sendInfoLog(flowExecutionId, "flow-execution-log", message);
     }
 
-    public static void sendLog(String flowExecutionId, String message){
-        sendInfoLog(flowExecutionId,"flow-execution-log",message);
+    public static void sendLog(String flowExecutionId, String message) {
+        sendInfoLog(flowExecutionId, "flow-execution-log", message);
     }
 
-    public static void sendErrorLog(String flowExecutionId, Object message){
-        sendErrorLog(flowExecutionId,"flow-execution-log",message);
+    public static void sendErrorLog(String flowExecutionId, Object message) {
+        sendErrorLog(flowExecutionId, "flow-execution-log", message);
     }
 
-    public static void sendLog(String flowExecutionId, NodeExecution nodeExecution){
-        sendInfoLog(flowExecutionId,"flow-node-execution-log",nodeExecution.logInfo());
+    public static void sendLog(String flowExecutionId, NodeExecution nodeExecution) {
+        sendInfoLog(flowExecutionId, "flow-node-execution-log", nodeExecution.logInfo());
     }
 
-    public static void sendItem(String flowExecutionId,Map<String,Object> item){
-        send(flowExecutionId,"flow-execution-item",item);
+    public static void sendItem(String flowExecutionId, Map<String, Object> item) {
+        send(flowExecutionId, "flow-execution-item", item);
+    }
+
+    public static void sendResource(String flowExecutionId, Map<String, Object> resource) {
+        send(flowExecutionId, "flow-execution-resource", resource);
     }
 }

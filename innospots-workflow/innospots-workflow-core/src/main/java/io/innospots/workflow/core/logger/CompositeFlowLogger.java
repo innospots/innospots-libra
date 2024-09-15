@@ -21,13 +21,13 @@ public class CompositeFlowLogger implements IFlowLogger {
     }
 
     @Override
-    public void item(String flowExecution, String nodeExecutionId, Map<String, Object> item) {
-        loggers.forEach(logger -> logger.item(flowExecution, nodeExecutionId, item));
+    public void item(String flowExecution, Map<String, Object> item) {
+        loggers.forEach(logger -> logger.item(flowExecution, item));
     }
 
     @Override
-    public void resource(String flowExecution, String nodeExecutionId, ExecutionResource resource) {
-        loggers.forEach(logger -> logger.resource(flowExecution, nodeExecutionId, resource));
+    public void resource(String flowExecution, ExecutionResource resource) {
+        loggers.forEach(logger -> logger.resource(flowExecution, resource));
     }
 
     @Override
@@ -40,13 +40,4 @@ public class CompositeFlowLogger implements IFlowLogger {
         loggers.forEach(logger -> logger.flowError(sessionId, message));
     }
 
-    @Override
-    public void nodeInfo(String sessionId, Object message) {
-        loggers.forEach(logger -> logger.nodeInfo(sessionId, message));
-    }
-
-    @Override
-    public void nodeError(String sessionId, Object message) {
-        loggers.forEach(logger -> logger.nodeError(sessionId, message));
-    }
 }

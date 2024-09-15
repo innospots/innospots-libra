@@ -19,6 +19,7 @@
 package io.innospots.workflow.core.flow.loader;
 
 import io.innospots.workflow.core.flow.model.WorkflowBody;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.core.instance.operator.WorkflowBodyOperator;
 
 import java.util.List;
@@ -39,6 +40,11 @@ public class WorkflowDBLoader implements IWorkflowLoader {
     @Override
     public WorkflowBody loadWorkflow(Long workflowInstanceId, Integer revision) {
         return workflowBodyOperator.getWorkflowBody(workflowInstanceId, revision, true);
+    }
+
+    @Override
+    public NodeInstance loadNodeInstance(Long flowInstanceId, Integer revision, String nodeKey) {
+        return workflowBodyOperator.getNodeInstance(flowInstanceId, revision, nodeKey);
     }
 
 

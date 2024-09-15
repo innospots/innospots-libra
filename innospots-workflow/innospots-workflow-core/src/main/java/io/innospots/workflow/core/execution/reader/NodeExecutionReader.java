@@ -25,9 +25,9 @@ import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecutionDisplay;
 import io.innospots.workflow.core.execution.operator.IFlowExecutionOperator;
 import io.innospots.workflow.core.execution.operator.INodeExecutionOperator;
+import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
 import io.innospots.workflow.core.flow.model.WorkflowBaseBody;
 import io.innospots.workflow.core.flow.model.WorkflowBody;
-import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -42,20 +42,25 @@ import java.util.*;
  */
 public class NodeExecutionReader {
 
-    private INodeExecutionOperator nodeExecutionOperator;
+    private final INodeExecutionOperator nodeExecutionOperator;
 
-    private IFlowExecutionOperator flowExecutionOperator;
+    private final IFlowExecutionOperator flowExecutionOperator;
 
-    private IWorkflowLoader workflowLoader;
+    private final IWorkflowLoader workflowLoader;
 
     public NodeExecutionReader(
             IWorkflowLoader workflowLoader,
             INodeExecutionOperator nodeExecutionOperator,
-                               IFlowExecutionOperator flowExecutionOperator) {
+            IFlowExecutionOperator flowExecutionOperator) {
         this.nodeExecutionOperator = nodeExecutionOperator;
         this.workflowLoader = workflowLoader;
         this.flowExecutionOperator = flowExecutionOperator;
     }
+
+    public Map<String, NodeExecutionDisplay> readExecutionByFlowExecutionId(String flowExecutionId) {
+        return readExecutionByFlowExecutionId(flowExecutionId, Collections.emptyList(), false);
+    }
+
 
     public Map<String, NodeExecutionDisplay> readExecutionByFlowExecutionId(String flowExecutionId, List<String> nodeKeys) {
         return readExecutionByFlowExecutionId(flowExecutionId, nodeKeys, false);
@@ -74,17 +79,20 @@ public class NodeExecutionReader {
 
         Map<String, NodeExecutionDisplay> nodeDisplays = new HashMap<>(nodeExecutions.size());
         WorkflowBody workflowBody = null;
-        if(nodeExecutions.size() > 0){
+        if (!nodeExecutions.isEmpty()) {
             NodeExecution ne = nodeExecutions.get(0);
-            workflowBody = workflowLoader.loadWorkflow(ne.getFlowInstanceId(),ne.getRevision());
+            workflowBody = workflowLoader.loadWorkflow(ne.getFlowInstanceId(), ne.getRevision());
         }
 
         for (NodeExecution nodeExecution : nodeExecutions) {
             NodeInstance nodeInstance = null;
-            if(workflowBody!=null){
+            if (workflowBody != null) {
                 nodeInstance = workflowBody.findNode(nodeExecution.getNodeKey());
             }
-            nodeDisplays.put(nodeExecution.getNodeKey(), NodeExecutionDisplay.build(nodeExecution,nodeInstance));
+            if(nodeInstance!=null){
+                nodeExecution.setNodeName(nodeInstance.getName());
+            }
+            nodeDisplays.put(nodeExecution.getNodeKey(), NodeExecutionDisplay.build(nodeExecution, nodeInstance));
         }
 
         return nodeDisplays;
@@ -97,25 +105,33 @@ public class NodeExecutionReader {
         if (CollectionUtils.isEmpty(flowExecutions.getList())) {
             return Collections.emptyMap();
         }
-
         return readExecutionByFlowExecutionId(flowExecutions.getList().get(0).getFlowExecutionId(), nodeKeys);
     }
 
     public NodeExecutionDisplay findNodeExecution(String nodeExecutionId, int page, int size) {
         NodeExecution nodeExecution = nodeExecutionOperator.getNodeExecutionById(nodeExecutionId, true, page, size);
         NodeExecutionDisplay nodeExecutionDisplay = null;
-        if(nodeExecution!=null){
-            if(nodeExecution.getRevision()==null || nodeExecution.getRevision() == 0){
+        if (nodeExecution != null) {
+            if (nodeExecution.getRevision() == null || nodeExecution.getRevision() == 0) {
+                NodeInstance nodeInstance = workflowLoader.loadNodeInstance(nodeExecution.getFlowInstanceId(), FlowVersion.DRAFT.getVersion(), nodeExecution.getNodeKey());
+                nodeExecutionDisplay = NodeExecutionDisplay.build(nodeExecution, nodeInstance, page, size);
+                /*
                 WorkflowBaseBody workflowBaseBody = workflowLoader.loadWorkflow(nodeExecution.getFlowInstanceId(), FlowVersion.DRAFT.getVersion());
-                if(workflowBaseBody!=null){
-                    NodeInstance nodeInstance = workflowBaseBody.getNodes().stream().filter(ni-> Objects.equals(ni.getNodeKey(),nodeExecution.getNodeKey())).findFirst().orElse(null);
-                    nodeExecutionDisplay = NodeExecutionDisplay.build(nodeExecution,nodeInstance,page,size);
+                if (workflowBaseBody != null) {
+                    NodeInstance nodeInstance = workflowBaseBody.getNodes().stream().filter(ni -> Objects.equals(ni.getNodeKey(), nodeExecution.getNodeKey())).findFirst().orElse(null);
+                    nodeExecutionDisplay = NodeExecutionDisplay.build(nodeExecution, nodeInstance, page, size);
                 }
-            }else{
+                 */
+            } else {
+                NodeInstance nodeInstance = workflowLoader.loadNodeInstance(nodeExecution.getFlowInstanceId(), FlowVersion.DRAFT.getVersion(), nodeExecution.getNodeKey());
+                nodeExecutionDisplay = NodeExecutionDisplay.build(nodeExecution, nodeInstance, page, size);
+                /*
                 WorkflowBody workflowBody =
-                        workflowLoader.loadWorkflow(nodeExecution.getFlowInstanceId(),nodeExecution.getRevision());
+                        workflowLoader.loadWorkflow(nodeExecution.getFlowInstanceId(), nodeExecution.getRevision());
                 NodeInstance nodeInstance = workflowBody.findNode(nodeExecution.getNodeKey());
-                nodeExecutionDisplay = NodeExecutionDisplay.build(nodeExecution,nodeInstance,page,size);
+                nodeExecutionDisplay = NodeExecutionDisplay.build(nodeExecution, nodeInstance, page, size);
+
+                 */
             }
         }
         return nodeExecutionDisplay;

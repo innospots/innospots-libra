@@ -120,9 +120,9 @@ public class WorkflowCoreConfiguration {
 
     @Bean
     public FlowExecutionReader flowExecutionReader(
-            IFlowExecutionOperator IFlowExecutionOperator,
-            INodeExecutionOperator INodeExecutionOperator) {
-        return new FlowExecutionReader(IFlowExecutionOperator, INodeExecutionOperator);
+            IFlowExecutionOperator flowExecutionOperator,
+            INodeExecutionOperator nodeExecutionOperator) {
+        return new FlowExecutionReader(flowExecutionOperator, nodeExecutionOperator);
     }
 
 }

@@ -14,44 +14,29 @@ public class FlowEmitter {
 
 
     public static void log(String flowExecutionId, Object message) {
-        FlowExecutionEmitter.sendLog(flowExecutionId, message);
+        FlowExecutionEmitter.sendLog("log-" + flowExecutionId, message);
     }
 
     public static void log(String flowExecutionId, Map<String, Object> item) {
-        FlowExecutionEmitter.sendLog(flowExecutionId, item);
+        FlowExecutionEmitter.sendLog("log-" + flowExecutionId, item);
     }
 
     public static void log(String flowExecutionId, NodeExecution nodeExecution) {
-        FlowExecutionEmitter.sendLog(flowExecutionId, nodeExecution);
+        FlowExecutionEmitter.sendLog("log-" + flowExecutionId, nodeExecution);
     }
 
     public static void logError(String flowExecutionId, Object message) {
-        FlowExecutionEmitter.sendErrorLog(flowExecutionId, message);
+        FlowExecutionEmitter.sendErrorLog("log-" + flowExecutionId, message);
     }
 
-    public static void logNodeError(String nodeExecutionId, Object message) {
-        NodeExecutionEmitter.sendErrorLog(nodeExecutionId, message);
-    }
-
-    public static void logNode(String nodeExecutionId, Object message) {
-        NodeExecutionEmitter.sendLog(nodeExecutionId, message);
-    }
-
-    public static void logNode(String nodeExecutionId, Map<String, Object> item) {
-        NodeExecutionEmitter.sendLog(nodeExecutionId, item);
-    }
-
-    public static void nodeItem(String flowExecutionId, String nodeExecutionId, Map<String, Object> item) {
+    public static void item(String flowExecutionId, Map<String, Object> item) {
         if (flowExecutionId != null) {
-            FlowExecutionEmitter.sendItem(flowExecutionId, item);
-        }
-        if (nodeExecutionId != null) {
-            NodeExecutionEmitter.sendItem(nodeExecutionId, item);
+            FlowExecutionEmitter.sendItem("response-" + flowExecutionId, item);
         }
     }
 
-    public static void nodeResource(String flowExecutionId, String nodeExecutionId, ExecutionResource executionResource) {
-        NodeExecutionEmitter.sendResources(nodeExecutionId, executionResource);
+    public static void resource(String flowExecutionId, ExecutionResource executionResource) {
+        FlowExecutionEmitter.sendResource("response-" + flowExecutionId, executionResource.toMetaInfo());
     }
 
     public static SseEmitter createExecutionLogEmitter(String flowExecutionId, String streamId) {
@@ -63,11 +48,11 @@ public class FlowEmitter {
     }
 
     public static SseEmitter createExecutionLogEmitter(String flowExecutionId) {
-        return createExecutionLogEmitter(flowExecutionId, flowExecutionId);
+        return createExecutionLogEmitter("log-" + flowExecutionId, flowExecutionId);
     }
 
     public static SseEmitter createResponseEmitter(String flowExecutionId) {
-        return createResponseEmitter(flowExecutionId, flowExecutionId);
+        return createResponseEmitter("response-" + flowExecutionId, flowExecutionId);
     }
 
     public static SseEmitter getExecutionLogEmitter(String flowExecutionId, String streamId) {
@@ -79,10 +64,18 @@ public class FlowEmitter {
     }
 
     public static SseEmitter getExecutionLogEmitter(String flowExecutionId) {
-        return getExecutionLogEmitter(flowExecutionId, flowExecutionId);
+        return getExecutionLogEmitter("log-" + flowExecutionId, flowExecutionId);
     }
 
     public static SseEmitter getResponseEmitter(String flowExecutionId) {
-        return getResponseEmitter(flowExecutionId, flowExecutionId);
+        return getResponseEmitter("response-" + flowExecutionId, flowExecutionId);
+    }
+
+    public static void closeLog(String flowExecutionId) {
+        FlowExecutionEmitter.close("log-" + flowExecutionId);
+    }
+
+    public static void closeResponse(String flowExecutionId) {
+        FlowExecutionEmitter.close("response-" + flowExecutionId);
     }
 }

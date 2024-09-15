@@ -51,6 +51,7 @@ public interface ExecutionContextConverter {
         context.setInputSize(flowExecution.getInput().getData().size());
         context.setOutputs(JSONUtils.toJsonString(flowExecution.getOutput()));
         context.setOutputSize(flowExecution.getOutput().size());
+        context.setResources(JSONUtils.toJsonString(flowExecution.getResources()));
         context.setNodePaths(JSONUtils.toJsonString(flowExecution.getNodeExecutions().keySet()));
         context.setContextType(ExecutionContextEntity.ContextType.FLOW.name());
         context.setCreatedTime(LocalDateTime.now());

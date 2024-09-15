@@ -12,17 +12,13 @@ import java.util.Map;
  */
 public interface IFlowLogger {
 
-    void item(String flowExecution, String nodeExecutionId, Map<String, Object> item);
+    void item(String flowExecutionId, Map<String, Object> item);
 
-    void resource(String flowExecution, String nodeExecutionId, ExecutionResource resource);
+    void resource(String flowExecutionId, ExecutionResource resource);
 
-    void flowInfo(String sessionId, Object message);
+    void flowInfo(String flowExecutionId, Object message);
 
-    void flowError(String sessionId, Object message);
-
-    void nodeInfo(String sessionId, Object message);
-
-    void nodeError(String sessionId, Object message);
+    void flowError(String flowExecutionId, Object message);
 
     default void flowInfo(Object message) {
         flowInfo(CCH.sessionId(), message);
@@ -30,14 +26,6 @@ public interface IFlowLogger {
 
     default void flowError(Object message) {
         flowError(CCH.sessionId(), message);
-    }
-
-    default void nodeInfo(Object message) {
-        nodeInfo(CCH.sessionId(), message);
-    }
-
-    default void nodeError(Object message) {
-        nodeError(CCH.sessionId(), message);
     }
 
     default void flowInfo(String format, Object... message) {
@@ -48,28 +36,25 @@ public interface IFlowLogger {
         flowError(CCH.sessionId(), StrUtil.format(format, message));
     }
 
-    default void nodeInfo(String format, Object... message) {
-        nodeInfo(CCH.sessionId(), StrUtil.format(format, message));
+    default void nodeStatus(String status, String nodeKey, String nodeName) {
+        flowInfo(CCH.sessionId(), "status: " + status + ", nodeKey: " + nodeKey + ", name: " + nodeName);
     }
 
-    default void nodeError(String format, Object... message) {
-        nodeError(CCH.sessionId(), StrUtil.format(format, message));
+    default void nodeInfo(String nodeKey, String nodeName, String format, Object... message) {
+        flowInfo(CCH.sessionId(), "nodeKey: " + nodeKey + ", name: " + nodeName + ", " + StrUtil.format(format, message));
     }
 
-    default void flowInfoById(String eventEmitterId, String format, Object... message) {
-        flowInfo(eventEmitterId, StrUtil.format(format, message));
+    default void nodeError(String nodeKey, String nodeName, String format, Object... message) {
+        flowError(CCH.sessionId(), "nodeKey: " + nodeKey + ", name: " + nodeName + ", " + StrUtil.format(format, message));
     }
 
-    default void flowErrorById(String eventEmitterId, String format, Object... message) {
-        flowError(eventEmitterId, StrUtil.format(format, message));
+    default void flowInfoById(String flowExecutionId, String format, Object... message) {
+        flowInfo(flowExecutionId, StrUtil.format(format, message));
     }
 
-    default void nodeInfoById(String eventEmitterId, String format, Object... message) {
-        nodeInfo(eventEmitterId, StrUtil.format(format, message));
+    default void flowErrorById(String flowExecutionId, String format, Object... message) {
+        flowError(flowExecutionId, StrUtil.format(format, message));
     }
 
-    default void nodeError(String eventEmitterId, String format, Object... message) {
-        nodeError(eventEmitterId, StrUtil.format(format, message));
-    }
 
 }

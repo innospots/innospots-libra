@@ -160,7 +160,7 @@ public class NodeExecution extends NodeExecutionBase {
         log.put("consume", this.consume());
         log.put("startTime", this.getStartTime());
         log.put("endTime", this.getEndTime());
-        log.put("output_table", this.outputLog());
+        log.put("outputs", this.outputLog());
         return log;
     }
 

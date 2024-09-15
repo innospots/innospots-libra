@@ -54,11 +54,14 @@ public class ExecutionContextEntity {
     @Column(columnDefinition = "TEXT")
     private String nodePaths;
 
-    @Column(columnDefinition = "LONGTEXT")
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String inputs;
 
-    @Column(columnDefinition = "LONGTEXT")
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String outputs;
+
+    @Column(columnDefinition = "MEDIUMTEXT")
+    private String resources;
 
     @Column
     private Integer inputSize;

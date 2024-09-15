@@ -29,6 +29,7 @@ import io.innospots.workflow.core.instance.dao.WorkflowRevisionDao;
 import io.innospots.workflow.core.instance.entity.WorkflowInstanceEntity;
 import io.innospots.workflow.core.instance.entity.WorkflowRevisionEntity;
 import io.innospots.workflow.core.instance.events.InstanceUpdateEvent;
+import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
@@ -149,5 +150,10 @@ public class WorkflowBodyOperator {
 
         return WorkflowInstanceConverter.INSTANCE.entitiesToFlowBodies(entities);
     }
+
+    public NodeInstance getNodeInstance(Long flowInstanceId, Integer revision, String nodeKey) {
+        return nodeInstanceOperator.getNodeInstance(flowInstanceId, revision, nodeKey);
+    }
+
 
 }

@@ -20,22 +20,20 @@ package io.innospots.workflow.core.node.executor;
 
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.exception.ScriptException;
-import io.innospots.base.execution.ExecutorManager;
+import io.innospots.base.execution.ExecutionResource;
 import io.innospots.base.model.field.ParamField;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.base.script.ExecutorManagerFactory;
 import io.innospots.base.script.ScriptExecutorManager;
 import io.innospots.base.script.jit.MethodBody;
+import io.innospots.base.utils.CCH;
 import io.innospots.workflow.core.enums.BuildStatus;
-import io.innospots.workflow.core.execution.*;
-import io.innospots.base.quartz.ExecutionStatus;
-import io.innospots.workflow.core.execution.events.NodeExecutionTaskEvent;
-import io.innospots.workflow.core.execution.model.ExecutionInput;
-import io.innospots.base.execution.ExecutionResource;
-import io.innospots.workflow.core.execution.model.flow.FlowExecution;
+import io.innospots.workflow.core.execution.AsyncExecutors;
 import io.innospots.workflow.core.execution.listener.INodeExecutionListener;
+import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;
@@ -48,6 +46,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Raydian
@@ -81,10 +80,10 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
     public BaseNodeExecutor build() {
         buildStatus = BuildStatus.BUILDING;
         try {
-            if(flowLogger==null){
+            if (flowLogger == null) {
                 flowLogger = FlowLoggerFactory.getLogger();
             }
-            flowLogger.flowInfo("build node executor: {}-{}", ni.getCode(),ni.getName());
+            flowLogger.flowInfo("build node executor: {}-{}", ni.getCode(), ni.getName());
             initialize();
             buildStatus = BuildStatus.DONE;
         } catch (Exception e) {
@@ -99,13 +98,16 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
 
 
     protected NodeExecution prepare(FlowExecution flowExecution) {
+        if (flowLogger == null) {
+            flowLogger = FlowLoggerFactory.getLogger();
+        }
         NodeExecution nodeExecution = NodeExecution.buildNewNodeExecution(
                 nodeKey(),
                 flowExecution);
         nodeExecution.setNodeCode(ni.getCode());
         flowExecution.addNodeExecution(nodeExecution);
         if (this.buildStatus != BuildStatus.DONE) {
-            nodeExecution.end(buildException!=null?buildException.getMessage():"build fail", ExecutionStatus.FAILED, false);
+            nodeExecution.end(buildException != null ? buildException.getMessage() : "build fail", ExecutionStatus.FAILED, false);
         } else {
             nodeExecution.setInputs(this.buildExecutionInput(flowExecution));
         }
@@ -114,13 +116,13 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
 
     @Override
     public NodeExecution execute(FlowExecution flowExecution) {
+        CCH.sessionId(flowExecution.getFlowExecutionId());
         flowExecution.resetCurrentNodeKey(this.nodeKey());
         NodeExecution nodeExecution = prepare(flowExecution);
         if (nodeExecution.getStatus() == ExecutionStatus.FAILED) {
             after(nodeExecution);
         } else {
             before(nodeExecution);
-            nodeExecution.setStatus(ExecutionStatus.STARTING);
             if (ni.isAsync()) {
                 AsyncExecutors.execute(() -> innerExecute(nodeExecution, flowExecution));
             } else {
@@ -128,11 +130,11 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
             }
 
         }
+        CCH.sessionId(flowExecution.getFlowExecutionId());
         end(nodeExecution, flowExecution);
-
+        CCH.removeSessionId();
         return nodeExecution;
     }
-
 
     protected void invoke(NodeExecution nodeExecution, FlowExecution flowExecution) {
         invoke(nodeExecution);
@@ -151,7 +153,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
 
         if (CollectionUtils.isNotEmpty(nodeExecution.getInputs())) {
             for (ExecutionInput executionInput : nodeExecution.getInputs()) {
-                flowLogger.flowInfo(nodeExecution.getFlowExecutionId(), "nodeKey:{}, node input:{}", nodeExecution.getNodeKey(), executionInput.log());
+                flowLogger.flowInfo("key: {}, name: {}, node input: {}", nodeExecution.getNodeKey(), executionInput.log().toString());
                 if (CollectionUtils.isNotEmpty(executionInput.getData())) {
                     for (Map<String, Object> item : executionInput.getData()) {
                         Object result = processItem(item);
@@ -180,30 +182,32 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
         if (logger.isDebugEnabled()) {
             logger.debug("node execution, nodeOutput:{} {}", nodeOutput, nodeExecution);
         }
-        flowLogger.flowInfo(nodeExecution.getFlowExecutionId(), "node execution, nodeExecutionId:{}, nodeOutput: {}", nodeExecution.getNodeExecutionId(), nodeOutput.log());
-    }
-
-
-    public void innerExecute(NodeExecution nodeExecution) {
-        this.innerExecute(nodeExecution, null);
     }
 
     public void innerExecute(NodeExecution nodeExecution, FlowExecution flowExecution) {
+        CCH.sessionId(flowExecution.getFlowExecutionId());
         boolean isFail;
         nodeExecution.setStatus(ExecutionStatus.RUNNING);
-        flowLogger.flowInfo(flowExecution.getFlowExecutionId(), "node execution is running, nodeKey:{}", nodeExecution.getNodeKey());
+        flowLogger.flowInfo("execution: {}, key: {}, name: {}", nodeExecution.getStatus(), this.ni.getNodeKey(), this.ni.getName());
         int tryTimes = 0;
         String msg = "";
         do {
             isFail = false;
             try {
                 invoke(nodeExecution, flowExecution);
+                List<NodeOutput> nodeOutputs = nodeExecution.getOutputs();
+                if (CollectionUtils.isNotEmpty(nodeOutputs)) {
+                    String outMsg = nodeOutputs.stream().map(out -> out.log().toString()).collect(Collectors.joining(" <=> "));
+                    flowLogger.nodeInfo(this.nodeKey(), this.nodeName(), "outputs:{}", outMsg);
+                } else {
+                    flowLogger.nodeInfo(this.nodeKey(), this.nodeName(), "outputs:{}", "empty.");
+                }
                 if (nodeExecution.getStatus() == ExecutionStatus.FAILED) {
                     isFail = true;
                 }
             } catch (Exception e) {
                 isFail = true;
-                flowLogger.flowError(flowExecution.getFlowExecutionId(), "node execution error, nodeKey:{}, err:{}", nodeExecution.getNodeKey(), e.getMessage());
+                flowLogger.nodeError(this.nodeKey(), this.ni.getName(), "err:{}", e.getMessage());
                 logger.error("node inner execute error:{}", nodeExecution, e);
                 nodeExecution.clearOutput();
                 msg = ExceptionUtil.stacktraceToString(e, 2048);
@@ -225,7 +229,6 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
 
         if (isFail && nodeExecution.getStatus() != ExecutionStatus.FAILED) {
             nodeExecution.setStatus(ExecutionStatus.FAILED);
-            flowLogger.flowError(flowExecution.getFlowExecutionId(), "node execution failed, nodeKey:{}, tryTimes:{}", nodeExecution.getNodeKey(), tryTimes);
         }
 
         if (!isFail || ni.isContinueOnFail()) {
@@ -235,8 +238,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
         boolean isDone = nodeExecution.getStatus() != null && nodeExecution.getStatus().isDone();
         if (nodeExecution.getStatus() == null || !isDone) {
             nodeExecution.end(msg, ExecutionStatus.COMPLETE, true);
-            flowLogger.flowInfo(flowExecution.getFlowExecutionId(), "node execution complete, nodeKey:{}", nodeExecution.getNodeKey());
-        } else if (isDone) {
+        } else {
             nodeExecution.end(msg);
         }
         //after process node execution
@@ -311,11 +313,13 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
     }
 
     protected void before(NodeExecution nodeExecution) {
+        nodeExecution.setStatus(ExecutionStatus.STARTING);
         if (nodeExecutionListeners != null) {
             for (INodeExecutionListener executionListener : nodeExecutionListeners) {
                 executionListener.start(nodeExecution);
             }
         }
+        flowLogger.nodeStatus(nodeExecution.getStatus().name(), this.ni.getNodeKey(), this.ni.getName());
     }
 
     protected void after(NodeExecution nodeExecution) {
@@ -325,10 +329,8 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
             for (INodeExecutionListener nodeExecutionListener : nodeExecutionListeners) {
                 if (nodeExecution.getStatus() == ExecutionStatus.COMPLETE) {
                     nodeExecutionListener.complete(nodeExecution);
-                    flowLogger.flowInfo(nodeExecution.getFlowExecutionId(), "node execution complete, nodeKey:{}", nodeExecution.getNodeKey());
                 } else if (nodeExecution.getStatus() == ExecutionStatus.FAILED) {
                     nodeExecutionListener.fail(nodeExecution);
-                    flowLogger.flowInfo(nodeExecution.getFlowExecutionId(), "node execution failed, nodeKey:{}", nodeExecution.getNodeKey());
                 } else {
                     logger.error("nodeExecutionListeners other status:{} nodeExecution:{}", nodeExecution.getStatus(), nodeExecution);
                 }
@@ -344,7 +346,9 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
             flowExecution.setStatus(ExecutionStatus.FAILED);
             flowExecution.setMessage(nodeExecution.getMessage());
         }
-        EventBusCenter.getInstance().asyncPost(NodeExecutionTaskEvent.build(flowExecution, nodeExecution));
+        flowLogger.nodeStatus(nodeExecution.getStatus().name(), this.ni.getNodeKey(), this.ni.getName());
+
+        //EventBusCenter.getInstance().asyncPost(NodeExecutionTaskEvent.build(flowExecution, nodeExecution));
     }
 
 
@@ -471,6 +475,10 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
         return ni.getNodeKey();
     }
 
+    protected String nodeName() {
+        return ni.getName();
+    }
+
     public BuildStatus getBuildStatus() {
         return buildStatus;
     }
@@ -506,8 +514,8 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
 
     protected ScriptExecutorManager executorManager() {
         ScriptExecutorManager executorManager = ExecutorManagerFactory.getCache(this.flowIdentifier);
-        if(executorManager==null){
-            throw ScriptException.buildExecutorException(this.getClass(),this.scriptType(),"script executor manager is null,",this.flowIdentifier);
+        if (executorManager == null) {
+            throw ScriptException.buildExecutorException(this.getClass(), this.scriptType(), "script executor manager is null,", this.flowIdentifier);
         }
         return executorManager;
     }

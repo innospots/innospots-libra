@@ -144,18 +144,18 @@ public class NodeOutput {
 
     public Map<String, Object> log(boolean detail) {
         Map<String, Object> logs = new LinkedHashMap<>();
-        logs.put("size", results.size());
+        logs.put("items", results.size());
         logs.put("total", total);
         logs.put("nextNodeKeys", this.nextNodeKeys);
-        if (results.size() > 0 && detail) {
+        if (!results.isEmpty() && detail) {
             logs.put("columns", results.get(0).keySet().size());
         }
         if (MapUtils.isNotEmpty(resources)) {
-            logs.put("resource_size", resources.size());
+            logs.put("size", resources.size());
             if (detail) {
                 List<Map<String, Object>> metas = new ArrayList<>();
                 for (List<ExecutionResource> executionResources : resources.values()) {
-                    metas.addAll(executionResources.stream().map(ExecutionResource::toMetaInfo).collect(Collectors.toList()));
+                    metas.addAll(executionResources.stream().map(ExecutionResource::toMetaInfo).toList());
                 }
                 logs.put("resources", metas);
             }

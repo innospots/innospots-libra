@@ -34,9 +34,12 @@ public class BaseEventEmitter {
                 }
             }).build();
 
+    public static void close(String eventEmitterId) {
+        close(eventEmitterId, eventEmitterId);
+    }
 
     public static void close(String eventEmitterId, String streamId) {
-        if(eventEmitterId == null){
+        if (eventEmitterId == null) {
             return;
         }
         List<SseEmitterHolder> holders = eventEmitter.getIfPresent(eventEmitterId);
@@ -60,7 +63,7 @@ public class BaseEventEmitter {
     }
 
     public static boolean hasExist(String eventEmitterId, String streamId) {
-        if(eventEmitterId == null){
+        if (eventEmitterId == null) {
             return false;
         }
         List<SseEmitterHolder> holders = eventEmitter.getIfPresent(eventEmitterId);
@@ -71,8 +74,8 @@ public class BaseEventEmitter {
     }
 
 
-    public static SseEmitter createEmitter(String eventEmitterId,String eventType, String streamId) {
-        if(eventEmitterId == null){
+    public static SseEmitter createEmitter(String eventEmitterId, String eventType, String streamId) {
+        if (eventEmitterId == null) {
             return null;
         }
         synchronized (eventEmitterId) {
@@ -87,7 +90,7 @@ public class BaseEventEmitter {
             SseEmitterHolder holder;
             if (optional.isEmpty()) {
                 holder = SseEmitterHolder.create(streamId, MAX_TIMEOUT_MINUTES * 60 * 1000);
-                EventBusCenter.postSync(new SseEmitterEvent(eventEmitterId, streamId,eventType));
+                EventBusCenter.postSync(new SseEmitterEvent(eventEmitterId, streamId, eventType));
                 holders.add(holder);
                 holder.onCompletion(() -> {
                     log.info("complete sse emitter, eventEmitterId: {}, streamId: {}", eventEmitterId, streamId);
@@ -104,7 +107,7 @@ public class BaseEventEmitter {
     }
 
     public static SseEmitter getEmitter(String eventEmitterId, String streamId) {
-        if(eventEmitterId == null){
+        if (eventEmitterId == null) {
             return null;
         }
         List<SseEmitterHolder> holders = eventEmitter.getIfPresent(eventEmitterId);
@@ -119,7 +122,7 @@ public class BaseEventEmitter {
     }
 
     public static void send(String eventEmitterId, String eventName, Object item) {
-        if(eventEmitterId == null){
+        if (eventEmitterId == null) {
             return;
         }
         List<SseEmitterHolder> holders = eventEmitter.getIfPresent(eventEmitterId);

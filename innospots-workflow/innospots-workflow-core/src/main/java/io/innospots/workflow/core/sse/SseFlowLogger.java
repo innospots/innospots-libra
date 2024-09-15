@@ -12,13 +12,13 @@ import java.util.Map;
 public class SseFlowLogger implements IFlowLogger {
 
     @Override
-    public void item(String flowExecution, String nodeExecutionId, Map<String, Object> item) {
-        FlowEmitter.nodeItem(flowExecution, nodeExecutionId, item);
+    public void item(String flowExecution, Map<String, Object> item) {
+        FlowEmitter.item(flowExecution, item);
     }
 
     @Override
-    public void resource(String flowExecution, String nodeExecutionId, ExecutionResource resource) {
-        FlowEmitter.nodeResource(flowExecution, nodeExecutionId,resource);
+    public void resource(String flowExecution, ExecutionResource resource) {
+        FlowEmitter.resource(flowExecution,resource);
     }
 
     @Override
@@ -31,14 +31,5 @@ public class SseFlowLogger implements IFlowLogger {
         FlowEmitter.logError(sessionId,message);
     }
 
-    @Override
-    public void nodeInfo(String sessionId, Object message) {
-        FlowEmitter.logNode(sessionId,message);
-    }
-
-    @Override
-    public void nodeError(String sessionId, Object message) {
-        FlowEmitter.logNodeError(sessionId,message);
-    }
 
 }

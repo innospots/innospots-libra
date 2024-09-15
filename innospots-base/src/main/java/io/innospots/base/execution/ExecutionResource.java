@@ -91,7 +91,7 @@ public class ExecutionResource {
         meta.put("mineType",this.mimeType);
         meta.put("fileSize",this.fileSize);
         meta.put("resourceId",this.resourceId);
-        meta.put("uri","file://"+resourceId);
+        meta.put("uri",resourceUri);
         return meta;
     }
 

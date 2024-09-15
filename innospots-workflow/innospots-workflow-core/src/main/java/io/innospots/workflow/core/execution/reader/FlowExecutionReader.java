@@ -36,23 +36,23 @@ import java.util.List;
  */
 public class FlowExecutionReader {
 
-    private IFlowExecutionOperator IFlowExecutionOperator;
-    private INodeExecutionOperator INodeExecutionOperator;
+    private IFlowExecutionOperator flowExecutionOperator;
+    private INodeExecutionOperator nodeExecutionOperator;
 
-    public FlowExecutionReader(IFlowExecutionOperator IFlowExecutionOperator,
-                               INodeExecutionOperator INodeExecutionOperator) {
-        this.IFlowExecutionOperator = IFlowExecutionOperator;
-        this.INodeExecutionOperator = INodeExecutionOperator;
+    public FlowExecutionReader(IFlowExecutionOperator flowExecutionOperator,
+                               INodeExecutionOperator nodeExecutionOperator) {
+        this.flowExecutionOperator = flowExecutionOperator;
+        this.nodeExecutionOperator = nodeExecutionOperator;
     }
 
     public PageBody<FlowExecutionBase> pageFlowExecutions(Long workflowInstanceId, Integer revision, List<String> status,
                                                           String startTime, String endTime, Integer page, Integer size) {
-        PageBody<FlowExecutionBase> body = IFlowExecutionOperator.pageFlowExecutions(workflowInstanceId, revision, status, startTime, endTime, page, size);
+        PageBody<FlowExecutionBase> body = flowExecutionOperator.pageFlowExecutions(workflowInstanceId, revision, status, startTime, endTime, page, size);
         List<FlowExecutionBase> bases = body.getList();
         if (CollectionUtils.isNotEmpty(bases)) {
             for (FlowExecutionBase base : bases) {
                 FlowExecution execution = (FlowExecution) base;
-                FlowExecution flowExecution = IFlowExecutionOperator.getFlowExecutionById(execution.getFlowExecutionId(), true);
+                FlowExecution flowExecution = flowExecutionOperator.getFlowExecutionById(execution.getFlowExecutionId(), true);
                 if (flowExecution != null) {
                     execution.setInput(flowExecution.getInput());
                     execution.setOutput(flowExecution.getOutput());
@@ -63,14 +63,14 @@ public class FlowExecutionReader {
     }
 
     public FlowExecutionBase findLatestFlowExecution(Long workflowInstanceId, Integer revision) {
-        PageBody<FlowExecutionBase> flowExecutionPageBody = IFlowExecutionOperator.pageLatestFlowExecutions(workflowInstanceId, revision, 0, 1);
+        PageBody<FlowExecutionBase> flowExecutionPageBody = flowExecutionOperator.pageLatestFlowExecutions(workflowInstanceId, revision, 0, 1);
         if (CollectionUtils.isEmpty(flowExecutionPageBody.getList())) {
             return null;
         }
         FlowExecutionBase flowExecutionBase = new FlowExecutionBase();
         BeanUtils.copyProperties(flowExecutionPageBody.getList().get(0), flowExecutionBase);
 
-        List<NodeExecution> nodeExecutionList = INodeExecutionOperator.getNodeExecutionsByFlowExecutionId(flowExecutionBase.getFlowExecutionId(), false);
+        List<NodeExecution> nodeExecutionList = nodeExecutionOperator.getNodeExecutionsByFlowExecutionId(flowExecutionBase.getFlowExecutionId(), false);
         if (nodeExecutionList != null) {
             flowExecutionBase.addNodeExecutions(nodeExecutionList);
         }
@@ -78,10 +78,14 @@ public class FlowExecutionReader {
         return flowExecutionBase;
     }
 
-    public FlowExecutionBase getFlowExecutionById(String flowExecutionId) {
-        FlowExecutionBase flowExecutionBase = IFlowExecutionOperator.getFlowExecutionById(flowExecutionId, false);
+    public FlowExecution getOnlyFlowExecution(String flowExecutionId) {
+        return flowExecutionOperator.getFlowExecutionById(flowExecutionId, true);
+    }
 
-        List<NodeExecution> nodeExecutionList = INodeExecutionOperator.getNodeExecutionsByFlowExecutionId(flowExecutionBase.getFlowExecutionId(), false);
+    public FlowExecutionBase getFlowExecutionById(String flowExecutionId) {
+        FlowExecutionBase flowExecutionBase = flowExecutionOperator.getFlowExecutionById(flowExecutionId, false);
+
+        List<NodeExecution> nodeExecutionList = nodeExecutionOperator.getNodeExecutionsByFlowExecutionId(flowExecutionBase.getFlowExecutionId(), false);
         if (nodeExecutionList != null) {
             flowExecutionBase.addNodeExecutions(nodeExecutionList);
         }

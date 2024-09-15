@@ -165,6 +165,11 @@
             <groupId>net.datafaker</groupId>
             <artifactId>datafaker</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
