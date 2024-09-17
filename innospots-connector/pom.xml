@@ -24,6 +24,7 @@
         <module>innospots-connector-ai-openai</module>
         <module>innospots-connector-ai-zhipu</module>
         <module>innospots-connector-ai-moonshot</module>
+        <module>innospots-connector-ai-aliyun</module>
     </modules>
 
 
@@ -31,36 +32,48 @@
         <dependencies>
             <dependency>
                 <groupId>io.innospots</groupId>
-                <artifactId>innospots-connector-api</artifactId>
+                <artifactId>innospots-ai</artifactId>
                 <version>${project.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-connector-ai-ollama</artifactId>
+                <version>${innosopts.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-connector-api</artifactId>
+                <version>${innosopts.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.innospots</groupId>
                 <artifactId>innospots-connector-workflow</artifactId>
-                <version>${project.version}</version>
+                <version>${innosopts.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.innospots</groupId>
                 <artifactId>innospots-connector-kafka</artifactId>
-                <version>${project.version}</version>
+                <version>${innosopts.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.innospots</groupId>
                 <artifactId>innospots-connector-mysql</artifactId>
-                <version>${project.version}</version>
+                <version>${innosopts.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.innospots</groupId>
                 <artifactId>innospots-connector-redis</artifactId>
-                <version>${project.version}</version>
+                <version>${innosopts.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.innospots</groupId>
                 <artifactId>innospots-data-provider</artifactId>
-                <version>${project.version}</version>
+                <version>${innosopts.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

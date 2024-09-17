@@ -9,12 +9,21 @@
 
     <artifactId>innospots-connector-ai-zhipu</artifactId>
     <name>innospots-connector-ai-zhipu</name>
+    <properties>
+        <zhipu.bigmodel.version>release-V4-2.3.0</zhipu.bigmodel.version>
+    </properties>
 
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.ai</groupId>
-            <artifactId>spring-ai-zhipuai</artifactId>
+            <artifactId>spring-ai-core</artifactId>
+            <version>${spring.ai.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.bigmodel.openapi</groupId>
+            <artifactId>oapi-java-sdk</artifactId>
+            <version>${zhipu.bigmodel.version}</version>
         </dependency>
     </dependencies>
 

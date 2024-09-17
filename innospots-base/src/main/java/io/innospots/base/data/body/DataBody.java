@@ -18,9 +18,12 @@
 
 package io.innospots.base.data.body;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Map;
 
 /**
  * @author Raydian
@@ -41,6 +44,10 @@ public class DataBody<T> {
     protected int consume;
 
     protected String message;
+
+    @Schema(title = "body meta")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Map<String,Object> meta;
 
     public DataBody() {
         startTime = System.currentTimeMillis();

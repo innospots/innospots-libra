@@ -1,7 +1,10 @@
 package io.innospots.connector.ai.ollama.minder;
 
 import io.innospots.base.connector.credential.model.ConnectionCredential;
+import io.innospots.base.connector.schema.model.SchemaRegistry;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,5 +31,17 @@ class OllamaConnectorMinderTest {
         OllamaConnectorMinder minder = new OllamaConnectorMinder();
         Object object = minder.fetchSample(cc,"qwen2:7b");
         System.out.println(object);
+    }
+
+    @Test
+    void testRegistry(){
+        ConnectionCredential cc = new ConnectionCredential();
+        cc.config("service_address", "http://localhost:11434");
+        OllamaConnectorMinder minder = new OllamaConnectorMinder();
+        minder.prepare(null, cc);
+        List<SchemaRegistry> registryList = minder.schemaRegistries(true);
+        for (SchemaRegistry schemaRegistry : registryList) {
+            System.out.println(schemaRegistry.getName());
+        }
     }
 }

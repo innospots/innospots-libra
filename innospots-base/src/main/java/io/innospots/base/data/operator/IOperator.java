@@ -59,7 +59,7 @@ public interface IOperator {
     default void close(){
     }
 
-    default <D> Flux<D> executeStream(BaseRequest<?> itemRequest){
+    default Flux<?> executeStream(BaseRequest<?> itemRequest){
         return null;
     }
 }

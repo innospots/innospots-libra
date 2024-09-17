@@ -15,6 +15,7 @@
         <module>innospots-scripts</module>
         <module>innospots-schedule</module>
         <module>innospots-app</module>
+        <module>innospots-ai</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -863,7 +864,6 @@
             </plugin>
         </plugins>
     </build>
-
 
     <repositories>
         <repository>

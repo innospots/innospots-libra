@@ -1,0 +1,37 @@
+{
+  "name": "AliLlm",
+  "icon": "/aliyun.svg",
+  "order": 200,
+  "enabled": true,
+  "connectType": "API",
+  "overview": "${meta.schema.aliyunllm.overview:阿里云大模型}",
+  "description": "aliyun 大模型接入",
+  "options": [
+    {
+      "name": "authKey",
+      "code": "api-key",
+      "minder": "io.innospots.connector.ai.aliyun.minder.AliyunLlmConnectorMinder",
+      "defaults": {
+        "temperature": 0.8,
+        "maxTokens": 800,
+        "topP": 0.8,
+        "resultFormat": "message"
+      },
+      "elements": [
+        {
+          "label": "apiKey",
+          "name": "api_key",
+          "maxSize": 64,
+          "placeholder": "鉴权 key",
+          "required": true,
+          "labelGrid": 4,
+          "tips": "鉴权凭证 key",
+          "type": "INPUT",
+          "expression": "",
+          "gridSize": 16,
+          "options": []
+        }
+      ]
+    }
+  ]
+}

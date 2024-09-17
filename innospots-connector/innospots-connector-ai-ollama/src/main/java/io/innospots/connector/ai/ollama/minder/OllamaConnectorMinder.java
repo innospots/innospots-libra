@@ -2,16 +2,17 @@ package io.innospots.connector.ai.ollama.minder;
 
 import io.innospots.base.connector.credential.model.ConnectionCredential;
 import io.innospots.base.connector.minder.BaseDataConnectionMinder;
+import io.innospots.base.connector.schema.model.SchemaCatalog;
+import io.innospots.base.connector.schema.model.SchemaRegistry;
 import io.innospots.base.data.operator.IExecutionOperator;
-import io.innospots.base.data.operator.IOperator;
 import io.innospots.connector.ai.ollama.operator.OllamaOperator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClient;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,11 @@ public class OllamaConnectorMinder extends BaseDataConnectionMinder {
         if(ollamaOperator!=null){
             return;
         }
-        ollamaOperator = new OllamaOperator(baseUrl(connectionCredential));
+        Map<String,Object> options = new HashMap<>();
+        options.putAll(this.connectionCredential.getConfig());
+        options.putAll(this.connectionCredential.getProps());
+        ollamaOperator = new OllamaOperator(baseUrl(connectionCredential),
+                options);
     }
 
     @Override
@@ -49,6 +54,68 @@ public class OllamaConnectorMinder extends BaseDataConnectionMinder {
             address = "http://"+address;
         }
         return address;
+    }
+
+    @Override
+    public SchemaRegistry schemaRegistryByCode(String registryCode) {
+        Map<String,String> body = new HashMap<>();
+        body.put("name",registryCode);
+        ResponseEntity<Map> entity = restClient(connectionCredential)
+                .post().uri("/api/show").body(body).retrieve().toEntity(Map.class);
+        SchemaRegistry registry = new SchemaRegistry();
+        if(entity.getStatusCode().is2xxSuccessful()){
+            registry.setConfigs((Map<String, Object>) entity.getBody().get("model_info"));
+        }
+        registry.setName(registryCode);
+        registry.setCode(registryCode);
+        registry.setConnectorName("API");
+        return registry;
+    }
+
+    @Override
+    public SchemaRegistry schemaRegistryById(String registryId) {
+        return this.schemaRegistryByCode(registryId);
+    }
+
+    @Override
+    public List<SchemaRegistry> schemaRegistries(boolean includeField) {
+        RestClient client = this.restClient(this.connectionCredential);
+        ResponseEntity<Map> entity = client.get().uri("/api/tags").retrieve().toEntity(Map.class);
+        List<SchemaRegistry> registries = new ArrayList<>();
+        if(entity.getStatusCode().is2xxSuccessful()){
+            Map<String,Object> body = entity.getBody();
+            List<Map<String,Object>> models = (List<Map<String, Object>>) body.get("models");
+            registries = models.stream().map(model -> {
+                SchemaRegistry registry = new SchemaRegistry();
+                String name = String.valueOf(model.get("name"));
+                registry.setName(name);
+                registry.setCode(name);
+                registry.setConfigs((Map<String, Object>) model.get("details"));
+                return registry;
+            }).toList();
+        }
+
+        return registries;
+    }
+
+    @Override
+    public List<SchemaCatalog> schemaCatalogs() {
+        RestClient client = this.restClient(this.connectionCredential);
+        ResponseEntity<Map> entity = client.get().uri("/api/tags").retrieve().toEntity(Map.class);
+        List<SchemaCatalog> catalogs = new ArrayList<>();
+        if(entity.getStatusCode().is2xxSuccessful()){
+            Map<String,Object> body = entity.getBody();
+            List<Map<String,Object>> models = (List<Map<String, Object>>) body.get("models");
+            catalogs = models.stream().map(model -> {
+                SchemaCatalog catalog = new SchemaCatalog();
+                String name = String.valueOf(model.get("name"));
+                catalog.setName(name);
+                catalog.setDescription(String.valueOf(model.get("details")));
+                catalog.setCode(name);
+                return catalog;
+            }).toList();
+        }
+        return catalogs;
     }
 
     @Override
