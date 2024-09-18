@@ -2,6 +2,7 @@ package io.innospots.ai.core.prompt;
 
 import io.innospots.base.data.request.BaseRequest;
 import io.innospots.base.execution.ExecutionResource;
+import io.innospots.base.json.JSONUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.messages.*;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -58,7 +59,11 @@ public class RequestPromptBuilder {
             role = MessageType.USER.getValue();
         }
         if (MessageType.USER.getValue().equals(role)) {
-            String content = (String) item.get("content");
+            Object content = item.get("content");
+            if(content instanceof String){
+            }else{
+                content = JSONUtils.toJsonString(content);
+            }
             List<ExecutionResource> resources = (List<ExecutionResource>) item.get("resources");
             List<Media> mediaList = new ArrayList<>();
             if (resources != null) {
@@ -74,7 +79,7 @@ public class RequestPromptBuilder {
                     mediaList.add(media);
                 }
             }
-            message = new UserMessage(content, mediaList);
+            message = new UserMessage(String.valueOf(content), mediaList);
         } else if (MessageType.SYSTEM.getValue().equals(role)) {
             String content = (String) item.get("content");
             return new SystemMessage(content);

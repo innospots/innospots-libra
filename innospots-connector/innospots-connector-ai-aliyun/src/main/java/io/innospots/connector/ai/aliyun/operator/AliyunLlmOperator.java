@@ -147,7 +147,11 @@ public class AliyunLlmOperator implements IExecutionOperator {
         if (role == null) {
             role = Role.USER.getValue();
         }
-        String content = (String) item.get("content");
+        Object content = item.get("content");
+        if(content instanceof String){
+        }else{
+            content = JSONUtils.toJsonString(content);
+        }
         if (Role.USER.getValue().equals(role)) {
             List<ExecutionResource> resources = (List<ExecutionResource>) item.get("resources");
             if (CollectionUtils.isNotEmpty(resources)) {
@@ -155,7 +159,7 @@ public class AliyunLlmOperator implements IExecutionOperator {
             }
         }
         message = Message.builder()
-                .content(content)
+                .content(String.valueOf(content))
                 .role(role)
                 .build();
         return message;

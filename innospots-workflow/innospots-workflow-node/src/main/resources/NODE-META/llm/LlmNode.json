@@ -1,0 +1,111 @@
+{
+  "name": "Llm",
+  "code": "LLM",
+  "flowCode": "EVENTS",
+  "primitive": "api",
+  "vendor": "innospots",
+  "credentialTypeCode": "llm",
+  "description": "llm大模型",
+  "icon": "Llm",
+  "nodeType": "io.innospots.workflow.node.app.llm.LlmNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "SQL数据节点"
+      }
+    },
+    {
+      "name": "credential_key",
+      "type": "CredentialSelect",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "凭据",
+        "showAddButton": true,
+        "showEditButton": true
+      }
+    },
+    {
+      "name": "model_name",
+      "type": "DataTableSelect",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "模型名称",
+        "showAddButton": true,
+        "showEditButton": true,
+        "dependencies": "credential_key"
+      }
+    },
+    {
+      "name": "content_fields",
+      "type": "InputFieldSelect2",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "fieldSource": "LLM_1",
+        "multiple": true,
+        "label": "内容字段",
+        "tooltip": "返回的内容字段"
+      }
+    },
+    {
+      "name": "execute_mode",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "调用执行方式",
+        "viewType": "picker",
+        "dataSource": "static",
+        "initialValue": "SYNC",
+        "options": [
+          {
+            "value": "STREAM",
+            "label": "流式"
+          },
+          {
+            "value": "SYNC",
+            "label": "同步"
+          }
+        ]
+      }
+    },
+    {
+      "name": "temperature",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "temperature",
+        "initialValue": "1.0"
+      }
+    },
+    {
+      "name": "max_tokens",
+      "type": "NumberInput",
+      "valueType": "number",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "width": 100,
+        "label": "最大 Token量",
+        "initialValue": 500
+      }
+    }
+  ]
+}

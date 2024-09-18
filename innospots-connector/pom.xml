@@ -39,6 +39,26 @@
             </dependency>
             <dependency>
                 <groupId>io.innospots</groupId>
+                <artifactId>innospots-connector-ai-aliyun</artifactId>
+                <version>${innosopts.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-connector-ai-moonshot</artifactId>
+                <version>${innosopts.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-connector-ai-zhipu</artifactId>
+                <version>${innosopts.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-connector-ai-openai</artifactId>
+                <version>${innosopts.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
                 <artifactId>innospots-connector-ai-ollama</artifactId>
                 <version>${innosopts.version}</version>
             </dependency>
