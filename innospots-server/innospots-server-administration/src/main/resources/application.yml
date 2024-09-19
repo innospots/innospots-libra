@@ -34,7 +34,7 @@ spring:
         cachecontrol:
           max-age: 216000
           must-revalidate: true
-      static-locations: classpath:/static,classpath:/public,classpath:/resources,classpath:/META-INF/resources,file:${innospots.config.upload-file-path},classpath:/META-INF/resources/apps/visualization/
+      static-locations: classpath:/static,classpath:/node_icon,classpath:/public,classpath:/resources,classpath:/META-INF/resources,file:${innospots.config.upload-file-path},classpath:/META-INF/resources/apps/visualization/
   servlet:
     multipart:
       max-file-size: 10MB
