@@ -8,9 +8,8 @@ import io.innospots.base.model.field.ParamField;
 import io.innospots.base.utils.Initializer;
 import io.innospots.workflow.core.exception.NodeFieldException;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
-import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.Getter;
 import lombok.Setter;
@@ -59,8 +58,8 @@ public class ShiftFunctionField implements Initializer {
     }
 
 
-    public static void computeShift(NodeOutput nodeOutput, NodeExecution nodeExecution,
-                              List<ShiftFunctionField> shiftFields, boolean outputRestricted, Logger logger) {
+    public static void computeShift(ExecutionOutput nodeOutput, NodeExecution nodeExecution,
+                                    List<ShiftFunctionField> shiftFields, boolean outputRestricted, Logger logger) {
 
         List<Map<String, Object>> outData = new ArrayList<>();
         StringBuilder error = new StringBuilder();

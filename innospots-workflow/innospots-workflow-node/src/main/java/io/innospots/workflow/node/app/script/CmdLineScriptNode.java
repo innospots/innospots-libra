@@ -25,8 +25,8 @@ import io.innospots.base.script.OutputMode;
 import io.innospots.base.script.cmdline.CmdLineScriptExecutor;
 import io.innospots.base.script.jit.MethodBody;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -63,7 +63,7 @@ public class CmdLineScriptNode extends ScriptBaseNode {
 
     @Override
     public void invoke(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = new NodeOutput();
+        ExecutionOutput nodeOutput = new ExecutionOutput();
         nodeOutput.addNextKey(this.nextNodeKeys());
 
         if (scriptExecutor != null) {
@@ -97,7 +97,7 @@ public class CmdLineScriptNode extends ScriptBaseNode {
     }
 
     private void executeItem(Map<String, Object> item, StringBuilder msg,
-                             NodeExecution nodeExecution, NodeOutput nodeOutput) {
+                             NodeExecution nodeExecution, ExecutionOutput nodeOutput) {
         CmdLineScriptExecutor cmdLineScriptExecutor = (CmdLineScriptExecutor) scriptExecutor;
         Object result = cmdLineScriptExecutor.execute(item, (line) -> {
             if (this.outputMode == OutputMode.STREAM) {
@@ -117,7 +117,7 @@ public class CmdLineScriptNode extends ScriptBaseNode {
         }
     }
 
-    protected void processOutput(NodeExecution nodeExecution, Object result, Map<String, Object> input, NodeOutput nodeOutput) {
+    protected void processOutput(NodeExecution nodeExecution, Object result, Map<String, Object> input, ExecutionOutput nodeOutput) {
         if (log.isDebugEnabled()) {
             log.debug("nodeKey:{}, script output:{}", this.nodeKey(), result);
         }

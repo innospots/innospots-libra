@@ -5,7 +5,7 @@
   "primitive": "script",
   "vendor": "innospots",
   "description": "groovy 脚本节点",
-  "icon": "groovy",
+  "icon": "/node/groovy.svg",
   "nodeType": "io.innospots.workflow.node.app.script.GroovyNode",
   "outPorts": "1",
   "inPorts": "1",

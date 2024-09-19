@@ -39,6 +39,8 @@ import java.util.Map;
 @Setter
 public class WebhookPayload {
 
+    public static final String PARAM_RESP_TYPE = "respType";
+
     private String path;
 
     private Map<String, Object> headers;
@@ -62,6 +64,10 @@ public class WebhookPayload {
             return null;
         }
         return params.get(key);
+    }
+
+    public String responseType(){
+        return (String) getParam(PARAM_RESP_TYPE);
     }
 
     public ExecutionInput toExecutionInput() {

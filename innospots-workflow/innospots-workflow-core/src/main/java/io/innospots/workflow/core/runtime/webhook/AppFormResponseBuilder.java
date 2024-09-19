@@ -1,19 +1,14 @@
 package io.innospots.workflow.core.runtime.webhook;
 
-import io.innospots.base.model.field.ParamField;
 import io.innospots.base.quartz.ExecutionStatus;
-import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeExecutionDisplay;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.model.node.OutputDisplay;
 import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 
-import java.time.Duration;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author Smars
@@ -27,6 +22,21 @@ public class AppFormResponseBuilder implements WorkflowResponseBuilder {
         if (workflowRuntimeContext.getFlowExecution().getStatus() == ExecutionStatus.FAILED) {
             return response;
         }
+        Integer page = (Integer) workflowRuntimeContext.getContexts().get("page");
+        Integer size = (Integer) workflowRuntimeContext.getContexts().get("size");
+        if (page == null) {
+            page = 1;
+        }
+        if (size == null) {
+            size = 50;
+        }
+        OutputDisplay outputDisplay = new OutputDisplay(page, size);
+        outputDisplay.fill(workflowRuntimeContext.getFlowExecution().getOutput());
+
+        AppResponseBody responseBody = new AppResponseBody();
+        responseBody.setOutputs(outputDisplay);
+        responseBody.setSchemaFields(ExecutionOutput.buildOutputField(outputDisplay.getResults().getList()));
+        /*
         List<NodeExecution> nodeExecutions = workflowRuntimeContext.getFlowExecution().getLastNodeExecution();
         if (!nodeExecutions.isEmpty()) {
             NodeExecution nodeExecution = nodeExecutions.get(nodeExecutions.size() -1);
@@ -47,7 +57,29 @@ public class AppFormResponseBuilder implements WorkflowResponseBuilder {
             response.setBody(responseBody);
         }//end if nodeExecutions
 
+         */
+        response.setBody(responseBody);
         return response;
+    }
+
+    @Override
+    public WorkflowResponse<AppResponseBody> newInstance(FlowExecution flowExecution) {
+        WorkflowResponse workflowResponse = WorkflowResponseBuilder.super.newInstance(flowExecution);
+        Integer page = (Integer) flowExecution.getContext("page");
+        Integer size = (Integer) flowExecution.getContext("size");
+        if (page == null) {
+            page = 1;
+        }
+        if (size == null) {
+            size = 50;
+        }
+        OutputDisplay outputDisplay = new OutputDisplay(page, size);
+        outputDisplay.fill(flowExecution.getOutput());
+        AppResponseBody responseBody = new AppResponseBody();
+        responseBody.setOutputs(outputDisplay);
+        responseBody.setSchemaFields(ExecutionOutput.buildOutputField(outputDisplay.getResults().getList()));
+        workflowResponse.setBody(responseBody);
+        return workflowResponse;
     }
 
     @Override

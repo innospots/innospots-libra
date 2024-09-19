@@ -20,8 +20,8 @@ package io.innospots.workflow.node.app.data;
 
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.i18n.LocaleMessageUtils;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;
@@ -59,7 +59,7 @@ public class FakeJsonNode extends BaseNodeExecutor {
 
     @Override
     public void invoke(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = new NodeOutput();
+        ExecutionOutput nodeOutput = new ExecutionOutput();
         nodeOutput.addNextKey(this.nextNodeKeys());
         nodeExecution.addOutput(nodeOutput);
         for (int i = 0; i < itemSize; i++) {

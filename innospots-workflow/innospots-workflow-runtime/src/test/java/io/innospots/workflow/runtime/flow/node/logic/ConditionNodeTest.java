@@ -2,8 +2,8 @@ package io.innospots.workflow.runtime.flow.node.logic;
 
 import io.innospots.base.exception.ScriptException;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.node.app.logic.ConditionNode;
 import io.innospots.workflow.runtime.flow.node.BaseNodeTest;
@@ -31,7 +31,7 @@ public class ConditionNodeTest {
         executor.invoke(nodeExecution);
         log.info("nodeExecution:{}", nodeExecution);
 
-        for (NodeOutput output : nodeExecution.getOutputs()) {
+        for (ExecutionOutput output : nodeExecution.getOutputs()) {
             System.out.println(output);
         }
 

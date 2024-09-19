@@ -19,6 +19,7 @@
 package io.innospots.workflow.core.runtime.webhook;
 
 import io.innospots.base.quartz.ExecutionStatus;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
 
@@ -37,6 +38,24 @@ public interface WorkflowResponseBuilder {
 
     default  <T> WorkflowResponse<T>  build(WorkflowRuntimeContext workflowRuntimeContext) {
         return build(workflowRuntimeContext, null);
+    }
+
+    default <T> WorkflowResponse<T> newInstance(FlowExecution flowExecution){
+        WorkflowResponse<T> response = new WorkflowResponse<>();
+        response.setContextId(String.valueOf(flowExecution.getFlowExecutionId()));
+        response.setRevision(flowExecution.getRevision());
+        response.setFlowKey(flowExecution.getFlowKey());
+        response.setConsume(
+                Duration.between(
+                        flowExecution.getStartTime(),
+                        flowExecution.getEndTime()
+                ).toMillis());
+        if(flowExecution.getStatus() == ExecutionStatus.FAILED){
+            response.fillResponse(flowExecution.getResponseCode());
+            response.setMessage(flowExecution.getMessage());
+            return response;
+        }
+        return response;
     }
 
     default <T> WorkflowResponse<T> newInstance(WorkflowRuntimeContext workflowRuntimeContext){

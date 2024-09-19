@@ -25,8 +25,10 @@ import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.utils.thread.ThreadPoolBuilder;
 import io.innospots.base.utils.thread.ThreadTaskExecutor;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
+import io.innospots.workflow.core.execution.reader.FlowExecutionReader;
 import io.innospots.workflow.core.runtime.FlowRuntimeRegistry;
 import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
+import io.innospots.workflow.core.runtime.webhook.AppFormResponseBuilder;
 import io.innospots.workflow.core.runtime.webhook.FlowWebhookConfig;
 import io.innospots.workflow.core.runtime.webhook.WorkflowResponse;
 import io.innospots.workflow.core.runtime.webhook.WorkflowResponseBuilder;
@@ -39,6 +41,7 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Flow;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -56,6 +59,8 @@ public class WebhookRuntimeContainer extends BaseRuntimeContainer {
 
     protected WorkflowResponseBuilder workflowResponseBuilder;
 
+    private FlowExecutionReader flowExecutionReader;
+
     private Map<String, FlowRuntimeRegistry> triggerPaths = new HashMap<>();
 
     public WebhookRuntimeContainer(WorkflowResponseBuilder workflowResponseBuilder) {
@@ -68,10 +73,17 @@ public class WebhookRuntimeContainer extends BaseRuntimeContainer {
         if (cf != null) {
             return cf.join();
         }
-        WorkflowResponse response = new WorkflowResponse();
-        response.setContextId(contextId);
-        response.fillResponse(ResponseCode.FAIL);
-        response.setMessage("response not exist.");
+        FlowExecution flowExecution = flowExecutionReader.getFlowExecutionById(contextId);
+        WorkflowResponse response;
+        if(flowExecution == null){
+            response = new WorkflowResponse();
+            response.setContextId(contextId);
+            response.fillResponse(ResponseCode.FAIL);
+            response.setMessage("response not exist.");
+        }else{
+            AppFormResponseBuilder responseBuilder = new AppFormResponseBuilder();
+            response = responseBuilder.newInstance(flowExecution);
+        }
         return response;
     }
 
@@ -115,7 +127,7 @@ public class WebhookRuntimeContainer extends BaseRuntimeContainer {
         flowExecution.fillExecutionId(triggerInfo.getFlowKey());
         flowExecution.setSource(triggerInfo.getRegistryNode().nodeCode());
         flowExecution.setInput(webhookPayload.toExecutionInput());
-        Object respType = webhookPayload.getParam("respType");
+        Object respType = webhookPayload.responseType();
         WorkflowRuntimeContext workflowRuntimeContext = WorkflowRuntimeContext.build(flowExecution);
         if (respType != null) {
             workflowRuntimeContext.setResponseType(respType.toString());

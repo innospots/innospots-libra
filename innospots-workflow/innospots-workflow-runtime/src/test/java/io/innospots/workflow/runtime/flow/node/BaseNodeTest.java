@@ -4,8 +4,8 @@ import io.innospots.base.exception.ScriptException;
 import io.innospots.base.execution.ExecutionResource;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.script.ScriptExecutorManager;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.core.node.executor.NodeExecutorFactory;
@@ -52,7 +52,7 @@ public class BaseNodeTest {
     }
 
     public static void output(NodeExecution nodeExecution){
-        for (NodeOutput output : nodeExecution.getOutputs()) {
+        for (ExecutionOutput output : nodeExecution.getOutputs()) {
             System.out.println(output.log());
             for (Map<String, Object> result : output.getResults()) {
                 System.out.println(result);

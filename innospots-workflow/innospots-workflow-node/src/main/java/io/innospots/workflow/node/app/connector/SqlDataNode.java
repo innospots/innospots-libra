@@ -31,8 +31,8 @@ import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -221,7 +221,7 @@ public class SqlDataNode extends DataNode {
 
     protected void insert(NodeExecution nodeExecution) {
         List<Map<String, Object>> insertList = new ArrayList<>();
-        NodeOutput nodeOutput = new NodeOutput();
+        ExecutionOutput nodeOutput = new ExecutionOutput();
         nodeOutput.addNextKey(this.nextNodeKeys());
         nodeExecution.addOutput(nodeOutput);
         for (ExecutionInput executionInput : nodeExecution.getInputs()) {
@@ -246,7 +246,7 @@ public class SqlDataNode extends DataNode {
 
     protected void update(NodeExecution nodeExecution) {
         List<UpdateItem> updateItems = new ArrayList<>();
-        NodeOutput nodeOutput = new NodeOutput();
+        ExecutionOutput nodeOutput = new ExecutionOutput();
         nodeOutput.addNextKey(this.nextNodeKeys());
         nodeExecution.addOutput(nodeOutput);
         for (ExecutionInput executionInput : nodeExecution.getInputs()) {
@@ -272,7 +272,7 @@ public class SqlDataNode extends DataNode {
 
 
     protected void fetchOne(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = new NodeOutput();
+        ExecutionOutput nodeOutput = new ExecutionOutput();
         nodeOutput.addNextKey(this.nextNodeKeys());
         nodeExecution.addOutput(nodeOutput);
         if (CollectionUtils.isNotEmpty(nodeExecution.getInputs())) {
@@ -302,7 +302,7 @@ public class SqlDataNode extends DataNode {
 
 
     protected void query(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = new NodeOutput();
+        ExecutionOutput nodeOutput = new ExecutionOutput();
         nodeOutput.addNextKey(this.nextNodeKeys());
         nodeExecution.addOutput(nodeOutput);
         if (CollectionUtils.isNotEmpty(nodeExecution.getInputs()) &&
@@ -329,7 +329,7 @@ public class SqlDataNode extends DataNode {
 
     protected void upsert(NodeExecution nodeExecution) {
         List<Map<String, Object>> insertList = new ArrayList<>();
-        NodeOutput nodeOutput = new NodeOutput();
+        ExecutionOutput nodeOutput = new ExecutionOutput();
         nodeOutput.addNextKey(this.nextNodeKeys());
         nodeExecution.addOutput(nodeOutput);
         for (ExecutionInput executionInput : nodeExecution.getInputs()) {

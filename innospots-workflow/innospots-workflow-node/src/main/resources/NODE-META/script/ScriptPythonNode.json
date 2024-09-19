@@ -5,7 +5,7 @@
   "primitive": "script",
   "vendor": "innospots",
   "description": "python2 脚本",
-  "icon": "python",
+  "icon": "/node/python.svg",
   "nodeType": "io.innospots.workflow.node.app.script.ScriptPythonNode",
   "outPorts": "1",
   "inPorts": "1",

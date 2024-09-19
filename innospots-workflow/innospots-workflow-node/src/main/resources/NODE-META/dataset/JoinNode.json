@@ -5,7 +5,7 @@
   "primitive": "dataset",
   "vendor": "innospots",
   "description": "数据连接节点",
-  "icon": "join",
+  "icon": "/node/join.svg",
   "nodeType": "io.innospots.workflow.node.app.dataset.JoinNode",
   "outPorts": "1",
   "inPorts": [

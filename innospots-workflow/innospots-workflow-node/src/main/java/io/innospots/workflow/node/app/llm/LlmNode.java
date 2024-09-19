@@ -3,12 +3,12 @@ package io.innospots.workflow.node.app.llm;
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.connector.minder.IDataConnectionMinder;
 import io.innospots.base.data.body.DataBody;
-import io.innospots.base.data.operator.IDataOperator;
+import io.innospots.base.data.operator.IOperator;
 import io.innospots.base.data.request.BaseRequest;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.node.field.NodeParamField;
 import io.innospots.workflow.core.utils.NodeInstanceUtils;
@@ -47,7 +47,7 @@ public class LlmNode extends BaseNodeExecutor {
 
     private List<NodeParamField> contentFields;
 
-    private IDataOperator llmDataOperator;
+    private IOperator llmDataOperator;
     private Map<String, Object> options = new HashMap<>();
 
     @Override
@@ -75,7 +75,7 @@ public class LlmNode extends BaseNodeExecutor {
 
     @Override
     public void invoke(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = this.buildOutput(nodeExecution);
+        ExecutionOutput nodeOutput = this.buildOutput(nodeExecution);
         BaseRequest llmRequest = buildRequest(nodeExecution);
         switch (executeMode) {
             case STREAM:
@@ -99,7 +99,7 @@ public class LlmNode extends BaseNodeExecutor {
 
 
     @Override
-    protected void processOutput(NodeExecution nodeExecution, Object result, NodeOutput nodeOutput) {
+    protected void processOutput(NodeExecution nodeExecution, Object result, ExecutionOutput nodeOutput) {
         if (result instanceof Map) {
             nodeOutput.addResult((Map<String, Object>) result);
         } else if (result instanceof Collection<?>) {
@@ -107,16 +107,26 @@ public class LlmNode extends BaseNodeExecutor {
         } else if (result instanceof String) {
             try {
                 String r = (String) result;
-                if (r.startsWith("{")) {
-                    nodeOutput.addResult(JSONUtils.toMap(r));
-                } else if (r.startsWith("[")) {
+                if (r.startsWith("{") && r.endsWith("}")) {
+                    Map m = JSONUtils.toMap(r);
+                    if(m!=null){
+                        nodeOutput.addResult(m);
+                    }else{
+                        nodeOutput.addResult("response", r);
+                    }
+                } else if (r.startsWith("[") && r.endsWith("]")) {
                     Collection collection = JSONUtils.toList(r, Map.class);
-                    nodeOutput.addResult(collection);
+                    if(CollectionUtils.isNotEmpty(collection)){
+                        nodeOutput.addResult(collection);
+                    }else{
+                        nodeOutput.addResult("response", r);
+                    }
                 } else {
                     nodeOutput.addResult("response", result);
                 }
             } catch (Exception e) {
-                log.error(e.getMessage(), e);
+                log.error(e.getMessage());
+                nodeOutput.addResult("response", result);
             }
         }
 

@@ -5,7 +5,7 @@
   "primitive": "dataset",
   "vendor": "innospots",
   "description": "数据提取节点",
-  "icon": "extract",
+  "icon": "/node/extract.svg",
   "nodeType": "io.innospots.workflow.node.app.dataset.ExtractNode",
   "outPorts": "1",
   "inPorts": "1",

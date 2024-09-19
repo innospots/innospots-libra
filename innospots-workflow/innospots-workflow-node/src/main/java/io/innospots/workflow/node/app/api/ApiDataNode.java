@@ -32,7 +32,6 @@ import io.innospots.base.data.operator.IExecutionOperator;
 import io.innospots.base.data.request.BaseRequest;
 import io.innospots.base.data.request.ItemRequest;
 import io.innospots.base.enums.ScriptType;
-import io.innospots.base.execution.ExecutorManager;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.model.field.ParamField;
@@ -42,8 +41,8 @@ import io.innospots.base.script.jit.MethodBody;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.base.utils.PlaceholderUtils;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.node.app.connector.BaseDataNode;
 import io.innospots.workflow.node.app.connector.OutputFieldType;
 import lombok.Getter;
@@ -189,7 +188,7 @@ public class ApiDataNode extends BaseDataNode {
 
     @Override
     public void invoke(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = new NodeOutput();
+        ExecutionOutput nodeOutput = new ExecutionOutput();
         nodeOutput.addNextKey(this.nextNodeKeys());
         nodeExecution.addOutput(nodeOutput);
         //Map<String, String> resp = new HashMap<>();
@@ -223,7 +222,7 @@ public class ApiDataNode extends BaseDataNode {
         }
     }
 
-    private void request(NodeOutput nodeOutput, Map<String, Object> item) {
+    private void request(ExecutionOutput nodeOutput, Map<String, Object> item) {
         item = prevExecute(item);
         DataBody httpResponse = doRequest(item);
         if (!outputPayload) {

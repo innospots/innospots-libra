@@ -22,8 +22,8 @@ import com.google.common.base.Enums;
 import io.innospots.base.execution.ExecutionResource;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.node.field.NodeParamField;
 import io.innospots.workflow.core.utils.NodeInstanceUtils;
@@ -68,7 +68,7 @@ public class EndNode extends BaseNodeExecutor {
                 super.invoke(nodeExecution);
                 break;
             case FIRST_ITEM:
-                NodeOutput nodeOutput = this.buildOutput(nodeExecution);
+                ExecutionOutput nodeOutput = this.buildOutput(nodeExecution);
                 for (ExecutionInput executionInput : nodeExecution.getInputs()) {
                     for (Map<String, Object> item : executionInput.getData()) {
                         nodeOutput.addResult(item);
@@ -99,7 +99,7 @@ public class EndNode extends BaseNodeExecutor {
     @Override
     protected void end(NodeExecution nodeExecution, FlowExecution flowExecution) {
         int position = 0;
-        for (NodeOutput nodeOutput : nodeExecution.getOutputs()) {
+        for (ExecutionOutput nodeOutput : nodeExecution.getOutputs()) {
             flowExecution.addOutput(nodeOutput.getResults());
             if (MapUtils.isNotEmpty(nodeOutput.getResources())) {
                 for (Map.Entry<Integer, List<ExecutionResource>> entry : nodeOutput.getResources().entrySet()) {

@@ -25,9 +25,10 @@ import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.base.execution.ExecutionResource;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
@@ -61,7 +62,7 @@ public interface IExecutionContextOperator {
     String FILE_MIME_TYPE = ".f.gz";
     String DIR_ATTACHMENT = "files";
 
-    List<NodeOutput> readNodeOutputs(String flowExecutionId, String nodeExecutionId);
+    List<ExecutionOutput> readNodeOutputs(String flowExecutionId, String nodeExecutionId);
 
     /**
      * 读取执行节点输出结果，向后输出到目标
@@ -71,12 +72,12 @@ public interface IExecutionContextOperator {
      * @param targetNodeKey
      * @return
      */
-    List<NodeOutput> readNodeOutputs(String flowExecutionId, String nodeExecutionId, String targetNodeKey);
+    List<ExecutionOutput> readNodeOutputs(String flowExecutionId, String nodeExecutionId, String targetNodeKey);
 
 
     Map<String, Object> readFlowExecutionContext(String flowExecutionId);
 
-    PageBody<NodeOutput> pageNodeOutputs(String executionId, int page, int size);
+    PageBody<ExecutionOutput> pageNodeOutputs(String executionId, int page, int size);
 
 
     void saveExecutionContext(NodeExecution nodeExecution);
@@ -112,14 +113,14 @@ public interface IExecutionContextOperator {
             return;
         }
         Arrays.sort(outFiles, Comparator.comparing(File::getName));
-        List<NodeOutput> outputs = nodeExecution.getOutputs();
+        List<ExecutionOutput> outputs = nodeExecution.getOutputs();
         if (outputs == null) {
             logger.warn("output is empty, but exist context file, {},{}", nodeExecution, Arrays.toString(outFiles));
             return;
         }
         int i = 0;
         for (File outFile : outFiles) {
-            NodeOutput output = outputs.get(i);
+            ExecutionOutput output = outputs.get(i);
             i++;
             if (targetNodeKey != null && !output.containNextNodeKey(targetNodeKey)) {
                 continue;
@@ -240,14 +241,14 @@ public interface IExecutionContextOperator {
         if (CollectionUtils.isNotEmpty(nodeExecution.getOutputs())) {
             File flwDir = nodeExecution.getContextDataPath();
             int count = 0;
-            for (NodeOutput nodeOutput : nodeExecution.getOutputs()) {
+            for (ExecutionOutput nodeOutput : nodeExecution.getOutputs()) {
                 File outFile = new File(flwDir, String.join("~",
                         nodeExecution.getNodeExecutionId(), OUTPUT_FILE_SUFFIX + count + FILE_MIME_TYPE));
                 int outputCount = 0;
                 try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(outFile)), StandardCharsets.UTF_8))) {
                     bw.write("#total=" + nodeOutput.getTotal());
                     bw.newLine();
-                    if (nodeOutput.getResources() != null) {
+                    if (MapUtils.isNotEmpty(nodeOutput.getResources())) {
                         String rLine = "";
                         for (Map.Entry<Integer, List<ExecutionResource>> entry : nodeOutput.getResources().entrySet()) {
                             List<ExecutionResource> resources = entry.getValue();

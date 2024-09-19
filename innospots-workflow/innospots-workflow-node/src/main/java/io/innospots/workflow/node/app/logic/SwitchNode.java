@@ -23,15 +23,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.innospots.base.condition.BaseCondition;
 import io.innospots.base.condition.Relation;
 import io.innospots.base.exception.ConfigException;
-import io.innospots.base.json.JSONUtils;
 import io.innospots.base.script.IScriptExecutor;
 import io.innospots.base.script.aviator.AviatorExpressionExecutor;
-import io.innospots.base.script.aviator.AviatorScriptExecutor;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.base.utils.Initializer;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.Getter;
@@ -81,13 +79,13 @@ public class SwitchNode extends BaseNodeExecutor {
 
     @Override
     public void invoke(NodeExecution nodeExecution) {
-        Map<String, NodeOutput> outCache = new LinkedHashMap<>();
-        NodeOutput defaultOutput = new NodeOutput("#default");
+        Map<String, ExecutionOutput> outCache = new LinkedHashMap<>();
+        ExecutionOutput defaultOutput = new ExecutionOutput("#default");
         if (switchConditions != null) {
             for (int i = 0; i < switchConditions.size(); i++) {
                 SwitchCondition sc = switchConditions.get(i);
                 String nName = sc.name(i + 1);
-                NodeOutput nodeOutput = new NodeOutput(nName);
+                ExecutionOutput nodeOutput = new ExecutionOutput(nName);
                 nodeOutput.addNextKey(sc.getNodeKeys());
                 outCache.put(sc.sourceAnchor, nodeOutput);
             }
@@ -97,7 +95,7 @@ public class SwitchNode extends BaseNodeExecutor {
                     for (SwitchCondition switchCondition : switchConditions) {
                         if (switchCondition.match(data)) {
                             isMatch = true;
-                            NodeOutput nodeOutput = outCache.get(switchCondition.sourceAnchor);
+                            ExecutionOutput nodeOutput = outCache.get(switchCondition.sourceAnchor);
                             nodeOutput.addResult(data);
                             break;
                         }//end if switch condition

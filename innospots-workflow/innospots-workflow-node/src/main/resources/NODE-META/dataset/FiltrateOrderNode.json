@@ -5,7 +5,7 @@
   "primitive": "dataset",
   "vendor": "innospots",
   "description": "按条件筛选并过滤",
-  "icon": "/image/NODE/sort_filter",
+  "icon": "/node/sort-filter.svg",
   "nodeType": "io.innospots.workflow.node.app.dataset.FiltrateOrderNode",
   "outPorts": "1",
   "inPorts": "1",

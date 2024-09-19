@@ -5,7 +5,7 @@
   "primitive": "logic",
   "vendor": "innospots",
   "description": "多个分支合并",
-  "icon": "combine",
+  "icon": "/node/combine.svg",
   "nodeType": "io.innospots.workflow.node.app.logic.CombineNode",
   "outPorts": "1",
   "inPorts": "4",

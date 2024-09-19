@@ -5,7 +5,7 @@
   "primitive": "data",
   "vendor": "innospots",
   "description": "模拟JSON",
-  "icon": "faker",
+  "icon": "/node/faker.svg",
   "nodeType": "io.innospots.workflow.node.app.data.FakeJsonNode",
   "outPorts": "1",
   "inPorts": "1",

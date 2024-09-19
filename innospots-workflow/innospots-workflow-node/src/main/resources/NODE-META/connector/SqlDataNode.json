@@ -6,7 +6,7 @@
   "vendor": "innospots",
   "credentialTypeCode": "SQL",
   "description": "SQL数据节点",
-  "icon": "mysql",
+  "icon": "/node/sql.svg",
   "nodeType": "io.innospots.workflow.node.app.connector.SqlDataNode",
   "outPorts": "1",
   "inPorts": "1",

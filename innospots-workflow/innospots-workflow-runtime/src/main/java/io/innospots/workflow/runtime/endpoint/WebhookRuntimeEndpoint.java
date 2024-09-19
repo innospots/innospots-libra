@@ -86,7 +86,7 @@ public class WebhookRuntimeEndpoint {
     }
 
     @PostMapping("v2/{path}")
-    @Operation(summary = "post webhook")
+    @Operation(summary = "post webhook v2")
     public WorkflowResponse eventPost(@Parameter(required = true) @PathVariable String path,
                                       @Parameter(required = false) @RequestParam Map<String, Object> params,
                                       @Parameter(required = false) @RequestHeader Map<String, Object> headers,

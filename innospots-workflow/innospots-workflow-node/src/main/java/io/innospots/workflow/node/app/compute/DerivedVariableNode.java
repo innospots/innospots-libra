@@ -23,8 +23,8 @@ import io.innospots.base.model.field.compute.ComputeItem;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.base.quartz.ExecutionStatus;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import org.apache.commons.collections4.CollectionUtils;
@@ -74,7 +74,7 @@ public class DerivedVariableNode extends BaseNodeExecutor {
 
     @Override
     public void invoke(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = new NodeOutput();
+        ExecutionOutput nodeOutput = new ExecutionOutput();
         nodeOutput.addNextKey(this.nextNodeKeys());
         nodeExecution.addOutput(nodeOutput);
         List<Map<String, Object>> outData = new ArrayList<>();

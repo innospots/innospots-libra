@@ -82,13 +82,17 @@ public class FlowExecutionReader {
         return flowExecutionOperator.getFlowExecutionById(flowExecutionId, true);
     }
 
-    public FlowExecutionBase getFlowExecutionById(String flowExecutionId) {
-        FlowExecutionBase flowExecutionBase = flowExecutionOperator.getFlowExecutionById(flowExecutionId, false);
+    public FlowExecution getFlowExecutionById(String flowExecutionId) {
+        return getFlowExecutionById(flowExecutionId,false);
+    }
 
-        List<NodeExecution> nodeExecutionList = nodeExecutionOperator.getNodeExecutionsByFlowExecutionId(flowExecutionBase.getFlowExecutionId(), false);
+    public FlowExecution getFlowExecutionById(String flowExecutionId, boolean includeContext) {
+        FlowExecution flowExecution = flowExecutionOperator.getFlowExecutionById(flowExecutionId, includeContext);
+
+        List<NodeExecution> nodeExecutionList = nodeExecutionOperator.getNodeExecutionsByFlowExecutionId(flowExecution.getFlowExecutionId(), false);
         if (nodeExecutionList != null) {
-            flowExecutionBase.addNodeExecutions(nodeExecutionList);
+            flowExecution.addNodeExecutions(nodeExecutionList);
         }
-        return flowExecutionBase;
+        return flowExecution;
     }
 }

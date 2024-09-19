@@ -19,7 +19,7 @@
 package io.innospots.workflow.core.execution.reader;
 
 import io.innospots.base.utils.BeanContextAwareUtils;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;
 
 import java.util.List;
@@ -33,9 +33,9 @@ public class NodeOutputStaticReader {
 
     private static IExecutionContextOperator executionContextOperator;
 
-    public static List<NodeOutput> readNodeOutputs(String flowExecutionId,
-                                                   String nodeExecutionId,
-                                                   String targetNodeKey) {
+    public static List<ExecutionOutput> readNodeOutputs(String flowExecutionId,
+                                                        String nodeExecutionId,
+                                                        String targetNodeKey) {
 
         if (executionContextOperator == null) {
             executionContextOperator = BeanContextAwareUtils.getBean(IExecutionContextOperator.class);

@@ -9,7 +9,7 @@ import io.innospots.schedule.job.BaseJob;
 import io.innospots.schedule.model.JobExecution;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.flow.Flow;
 import io.innospots.workflow.core.flow.manage.FlowManager;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
@@ -60,7 +60,7 @@ public class FlowNodeJob extends BaseJob {
         }
         Map<String,Object> body = new HashMap<>();
         if(CollectionUtils.isNotEmpty(nodeExecution.getOutputs())){
-            for (NodeOutput output : nodeExecution.getOutputs()) {
+            for (ExecutionOutput output : nodeExecution.getOutputs()) {
                 for (Map<String, Object> result : output.getResults()) {
                     body.putAll(result);
                 }

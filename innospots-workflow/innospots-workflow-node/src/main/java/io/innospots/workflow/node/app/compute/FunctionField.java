@@ -10,7 +10,7 @@ import io.innospots.workflow.core.exception.NodeFieldException;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import lombok.Getter;
 import lombok.Setter;
@@ -72,7 +72,7 @@ public class FunctionField {
     }
 
 
-    public static void computeAccumAndRolling(NodeOutput nodeOutput, NodeExecution nodeExecution,
+    public static void computeAccumAndRolling(ExecutionOutput nodeOutput, NodeExecution nodeExecution,
                                               FuncType funcType, List<FunctionField> functionFields, boolean outputRestricted, Logger logger) {
         for (ExecutionInput executionInput : nodeExecution.getInputs()) {
             try {

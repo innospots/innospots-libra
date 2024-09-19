@@ -25,8 +25,8 @@ import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.entity.ExecutionContextEntity;
 import io.innospots.workflow.core.execution.converter.ExecutionContextConverter;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;
 
 import java.util.Collections;
@@ -50,12 +50,12 @@ public class JdbcExecutionContextOperator implements IExecutionContextOperator {
     }
 
     @Override
-    public List<NodeOutput> readNodeOutputs(String flowExecutionId, String nodeExecutionId) {
+    public List<ExecutionOutput> readNodeOutputs(String flowExecutionId, String nodeExecutionId) {
         return readNodeOutputs(flowExecutionId, nodeExecutionId, null);
     }
 
     @Override
-    public List<NodeOutput> readNodeOutputs(String flowExecutionId, String nodeExecutionId, String targetNodeKey) {
+    public List<ExecutionOutput> readNodeOutputs(String flowExecutionId, String nodeExecutionId, String targetNodeKey) {
         String contextId = BeanUtils.getFieldName(ExecutionContextEntity::getExecutionId, true);
         NodeExecution nodeExecution = new NodeExecution();
         nodeExecution.setNodeExecutionId(nodeExecutionId);
@@ -79,7 +79,7 @@ public class JdbcExecutionContextOperator implements IExecutionContextOperator {
     }
 
     @Override
-    public PageBody<NodeOutput> pageNodeOutputs(String executionId, int page, int size) {
+    public PageBody<ExecutionOutput> pageNodeOutputs(String executionId, int page, int size) {
         String contextId = BeanUtils.getFieldName(ExecutionContextEntity::getExecutionId, true);
         NodeExecution nodeExecution = new NodeExecution();
         nodeExecution.setNodeExecutionId(executionId);
@@ -89,9 +89,9 @@ public class JdbcExecutionContextOperator implements IExecutionContextOperator {
         }
         IExecutionContextOperator.fillExecutionDataPath(nodeExecution, storePath);
         this.fillNodeExecutionOutput(nodeExecution, page, size, null);
-        List<NodeOutput> nodeOutputs = nodeExecution.getOutputs();
+        List<ExecutionOutput> nodeOutputs = nodeExecution.getOutputs();
 
-        PageBody<NodeOutput> pageBody = new PageBody<>();
+        PageBody<ExecutionOutput> pageBody = new PageBody<>();
         pageBody.setCurrent((long) page);
         pageBody.setPageSize((long) size);
         pageBody.setList(nodeOutputs);

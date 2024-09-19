@@ -51,16 +51,16 @@ public class AliyunLlmOperator implements IExecutionOperator {
     @Override
     public Flux<?> executeStream(BaseRequest<?> itemRequest) {
         Generation gen = new Generation();
-        GenerationParam generationParam = generationParam(itemRequest);
+        GenerationParam generationParam = generationParam(itemRequest,true);
         Flux flux = null;
         try {
             Flowable<GenerationResult> flowable = gen.streamCall(generationParam);
             flux = Flux.from(flowable)
-                    .map(result-> result.getOutput().getChoices())
+                    .map(result -> result.getOutput().getChoices())
                     .flatMap(Flux::fromIterable)
                     .map(choice -> BeanUtil.beanToMap(choice.getMessage()));
         } catch (NoApiKeyException | InputRequiredException e) {
-            log.error(e.getMessage(),e);
+            log.error(e.getMessage(), e);
         }
         return flux;
     }
@@ -69,24 +69,29 @@ public class AliyunLlmOperator implements IExecutionOperator {
     public <D> DataBody<D> execute(BaseRequest<?> itemRequest) {
         DataBody dataBody = new DataBody<>();
         Generation gen = new Generation();
-        GenerationParam generationParam = generationParam(itemRequest);
+        GenerationParam generationParam = generationParam(itemRequest,false);
+
         try {
-            GenerationResult gr =gen.call(generationParam);
+            GenerationResult gr = gen.call(generationParam);
+            if(log.isDebugEnabled()){
+                log.debug("generation result:{}", JSONUtils.toJsonString(gr));
+            }
             dataBody.setMeta(BeanUtil.beanToMap(gr.getUsage()));
             String content = gr.getOutput()
                     .getChoices().stream().map(GenerationOutput.Choice::getMessage)
                     .map(Message::getContent)
                     .collect(Collectors.joining("||"));
+
             dataBody.setBody(content);
         } catch (NoApiKeyException | InputRequiredException e) {
-            log.error(e.getMessage(),e);
+            log.error(e.getMessage(), e);
         }
         dataBody.end();
         return dataBody;
     }
 
 
-    private GenerationParam generationParam(BaseRequest<?> itemRequest) {
+    private GenerationParam generationParam(BaseRequest<?> itemRequest,boolean stream) {
         List<Message> messages = buildMessages(itemRequest);
         String modelName = itemRequest.getTargetName();
         if (modelName == null) {
@@ -96,9 +101,19 @@ public class AliyunLlmOperator implements IExecutionOperator {
                 .model(modelName)
                 .messages(messages)
                 .apiKey(apiKey)
-                .incrementalOutput(true)
+                .incrementalOutput(stream)
                 .build();
         fillOptions(generationParam, itemRequest);
+        if (log.isDebugEnabled()) {
+            StringBuilder info = new StringBuilder();
+            info.append("maxTokens").append(generationParam.getMaxTokens()).append(", ")
+                    .append("temperature").append(generationParam.getTemperature()).append(", ")
+                    .append("topP").append(generationParam.getTopP()).append(", ");
+            for (Message message : generationParam.getMessages()) {
+                info.append(message.getRole()).append(":").append(message.getContent());
+            }
+            log.debug(info.toString());
+        }
         return generationParam;
     }
 
@@ -148,8 +163,8 @@ public class AliyunLlmOperator implements IExecutionOperator {
             role = Role.USER.getValue();
         }
         Object content = item.get("content");
-        if(content instanceof String){
-        }else{
+        if (content instanceof String) {
+        } else {
             content = JSONUtils.toJsonString(content);
         }
         if (Role.USER.getValue().equals(role)) {

@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package io.innospots.workflow.core.execution.model.node;
+package io.innospots.workflow.core.execution.model;
 
 import io.innospots.base.execution.ExecutionResource;
 import io.innospots.base.model.field.FieldValueTypeConverter;
@@ -27,10 +27,9 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
- * node execute output for each branch
+ * execute output for each branch
  *
  * @author Smars
  * @version 1.0.0
@@ -38,7 +37,7 @@ import java.util.stream.Collectors;
  */
 @Getter
 @Setter
-public class NodeOutput {
+public class ExecutionOutput {
 
     private List<Map<String, Object>> results = new ArrayList<>();
 
@@ -47,7 +46,7 @@ public class NodeOutput {
      */
     private Map<Integer, List<ExecutionResource>> resources;
 
-    private Set<String> nextNodeKeys = new HashSet<>();
+    private Set<String> nextKeys = new HashSet<>();
 
     private String name;
 
@@ -55,15 +54,15 @@ public class NodeOutput {
 
     private Map<String, Object> logs = new LinkedHashMap<>();
 
-    public NodeOutput() {
+    public ExecutionOutput() {
     }
 
-    public NodeOutput(String name) {
+    public ExecutionOutput(String name) {
         this.name = name;
     }
 
     public boolean containNextNodeKey(String nodeKey) {
-        return nextNodeKeys.contains(nodeKey);
+        return nextKeys.contains(nodeKey);
     }
 
     public void addResult(Map<String, Object> item) {
@@ -91,6 +90,13 @@ public class NodeOutput {
         return Collections.emptyList();
     }
 
+    public void addResource(Integer position, List<ExecutionResource> executionResources){
+        if(this.resources == null){
+            this.resources = new LinkedHashMap<>();
+        }
+        this.resources.put(position, executionResources);
+    }
+
     public void addResource(Integer position, ExecutionResource executionResource) {
         if (resources == null) {
             this.resources = new LinkedHashMap<>();
@@ -107,13 +113,13 @@ public class NodeOutput {
 
     public void addNextKey(String nodeKey) {
         if (nodeKey != null) {
-            this.nextNodeKeys.add(nodeKey);
+            this.nextKeys.add(nodeKey);
         }
     }
 
     public void addNextKey(Collection<String> nodeKeys) {
         if (CollectionUtils.isNotEmpty(nodeKeys)) {
-            this.nextNodeKeys.addAll(nodeKeys);
+            this.nextKeys.addAll(nodeKeys);
         }
     }
 
@@ -121,7 +127,7 @@ public class NodeOutput {
     public String toString() {
         final StringBuilder sb = new StringBuilder("{");
         sb.append("name='").append(name).append('\'');
-        sb.append(", nextNodeKeys=").append(nextNodeKeys);
+        sb.append(", nextKeys=").append(nextKeys);
         sb.append(", resources=").append(resources);
         sb.append(", results=").append(results);
 
@@ -129,11 +135,11 @@ public class NodeOutput {
         return sb.toString();
     }
 
-    public NodeOutput copy() {
-        NodeOutput nodeOutput = new NodeOutput();
+    public ExecutionOutput copy() {
+        ExecutionOutput nodeOutput = new ExecutionOutput();
         nodeOutput.resources = resources;
         nodeOutput.name = name;
-        nodeOutput.nextNodeKeys = nextNodeKeys;
+        nodeOutput.nextKeys = nextKeys;
         nodeOutput.total = total;
         return nodeOutput;
     }
@@ -146,9 +152,9 @@ public class NodeOutput {
         Map<String, Object> logs = new LinkedHashMap<>();
         logs.put("items", results.size());
         logs.put("total", total);
-        logs.put("nextNodeKeys", this.nextNodeKeys);
-        if (!results.isEmpty() && detail) {
-            logs.put("columns", results.get(0).keySet().size());
+        logs.put("nextKeys", this.nextKeys);
+        if (!results.isEmpty() && detail && results.get(0)!=null) {
+            logs.put("columns", results.get(0).keySet());
         }
         if (MapUtils.isNotEmpty(resources)) {
             logs.put("size", resources.size());

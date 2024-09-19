@@ -6,7 +6,7 @@
   "connectType": "API",
   "overview": "基于HTTP协议的请求连接",
   "description": "请选择此连接支持的鉴权方式并填入连接鉴权的默认值，当组件的“只读”选项被勾选中时，此组件在凭据创建时只展示不能修改。",
-  "options": [
+  "authOptions": [
     {
       "name": "Normal",
       "code": "normal-api",

@@ -5,7 +5,7 @@
   "primitive": "trigger",
   "vendor": "innospots",
   "description": "开始节点",
-  "icon": "start",
+  "icon": "/node/start.svg",
   "nodeType": "io.innospots.workflow.core.node.executor.StateNode",
   "outPorts": [
     {

@@ -5,7 +5,7 @@
   "primitive": "script",
   "vendor": "innospots",
   "description": "shell 脚本节点",
-  "icon": "shell",
+  "icon": "/node/shell.svg",
   "nodeType": "io.innospots.workflow.node.app.script.ShellNode",
   "outPorts": "1",
   "inPorts": "1",

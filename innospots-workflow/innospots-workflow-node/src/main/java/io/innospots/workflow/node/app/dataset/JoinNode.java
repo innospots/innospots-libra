@@ -21,8 +21,8 @@ package io.innospots.workflow.node.app.dataset;
 import io.innospots.base.model.Pair;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.field.NodeParamField;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.instance.model.NodeInstance;
@@ -67,7 +67,7 @@ public class JoinNode extends BaseNodeExecutor {
 
     @Override
     public void invoke(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = buildOutput(nodeExecution);
+        ExecutionOutput nodeOutput = buildOutput(nodeExecution);
 
         Pair<ExecutionInput, ExecutionInput> pair = splitSet(nodeExecution, mainSourceNodeKey);
         ExecutionInput mainInput = pair.getLeft();

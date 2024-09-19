@@ -5,7 +5,7 @@
   "primitive": "dataset",
   "vendor": "innospots",
   "description": "pandas transform计算，按 dim 字段分组列表，",
-  "icon": "/image/NODE/group_compute",
+  "icon": "/node/group-by.svg",
   "nodeType": "io.innospots.workflow.node.app.dataset.GroupTransformNode",
   "outPorts": "1",
   "inPorts": "1",

@@ -7,7 +7,7 @@
   "appNodeType": "io.innospots.workflow.node.app.data.RedisDataNode",
   "overview": "",
   "description": "",
-  "options": [
+  "authOptions": [
     {
       "name": "基础配置",
       "code": "redis-basic",

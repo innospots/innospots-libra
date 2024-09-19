@@ -5,7 +5,7 @@
   "primitive": "execute",
   "vendor": "innospots",
   "description": "待办工作项",
-  "icon": "todo-task",
+  "icon": "/node/todo_list.svg",
   "nodeType": "io.innospots.workflow.node.app.execute.TodoTaskNode",
   "outPorts": "1",
   "inPorts": "1",

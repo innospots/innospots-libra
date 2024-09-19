@@ -1,8 +1,8 @@
 package io.innospots.workflow.node.app.dataset;
 
 import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.node.field.ExtendField;
 import io.innospots.workflow.core.node.field.ValueParamField;
@@ -45,7 +45,7 @@ public class ValueBuildNode extends BaseNodeExecutor {
 
     @Override
     public void invoke(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = buildOutput(nodeExecution);
+        ExecutionOutput nodeOutput = buildOutput(nodeExecution);
         for (ExecutionInput executionInput : nodeExecution.getInputs()) {
             for (Map<String, Object> item : executionInput.getData()) {
                 if(fieldAction == FieldAction.REPLACE){

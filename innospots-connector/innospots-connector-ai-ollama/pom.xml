@@ -24,6 +24,12 @@
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-ollama</artifactId>
             <version>${spring.ai.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

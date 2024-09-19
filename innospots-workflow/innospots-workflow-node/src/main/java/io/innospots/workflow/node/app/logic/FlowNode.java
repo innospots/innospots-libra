@@ -22,7 +22,7 @@ import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.node.executor.StateNode;
 import io.innospots.workflow.core.node.field.InputField;
@@ -68,7 +68,7 @@ public class FlowNode extends BaseNodeExecutor {
     @Override
     public void invoke(NodeExecution nodeExecution) {
         List<Map<String, Object>> payloads = new ArrayList<>();
-        NodeOutput nodeOutput = this.buildOutput(nodeExecution);
+        ExecutionOutput nodeOutput = this.buildOutput(nodeExecution);
         for (ExecutionInput input : nodeExecution.getInputs()) {
             for (Map<String, Object> item : input.getData()) {
                 Object res = null;

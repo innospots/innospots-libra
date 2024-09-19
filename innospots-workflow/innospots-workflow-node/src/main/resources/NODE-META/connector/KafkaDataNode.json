@@ -6,7 +6,7 @@
   "vendor": "innospots",
   "credentialTypeCode": "KAFKA",
   "description": "Kafka数据节点",
-  "icon": "kafka",
+  "icon": "/node/kafka-data.svg",
   "nodeType": "io.innospots.workflow.node.app.connector.KafkaDataNode",
   "inPorts": "1",
   "outPorts": "1",

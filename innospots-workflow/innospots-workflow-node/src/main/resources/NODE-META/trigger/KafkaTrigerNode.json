@@ -6,7 +6,7 @@
   "vendor": "innospots",
   "credentialTypeCode": "KAFKA",
   "description": "Kafka队列触发器节点",
-  "icon": "kafka-trigger",
+  "icon": "/node/kafka-trigger.svg",
   "nodeType": "io.innospots.workflow.node.app.trigger.KafkaTriggerNode",
   "outPorts": "1",
   "components": [

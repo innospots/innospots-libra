@@ -5,7 +5,7 @@
   "primitive": "logic",
   "vendor": "innospots",
   "description": "IF条件",
-  "icon": "condition",
+  "icon": "/node/condition.svg",
   "nodeType": "io.innospots.workflow.node.app.logic.ConditionNode",
   "outPorts": [
     {

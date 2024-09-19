@@ -19,7 +19,7 @@ class AliyunLlmOperatorTest {
     public Map<String,Object> options(){
         Map<String,Object> om = new HashMap<>();
         om.put("temperature",1.0);
-        om.put("maxTokens",1500);
+        om.put("maxTokens",200);
         om.put("topP",0.8);
         om.put("resultFormat","message");
         return om;
@@ -43,8 +43,8 @@ class AliyunLlmOperatorTest {
     void execute() {
         AliyunLlmOperator llmOperator = new AliyunLlmOperator(System.getenv("API_KEY"),options());
         DataBody dataBody = llmOperator.execute(build("qwen2-1.5b-instruct"));
-        System.out.println(dataBody.getBody());
-        System.out.println(dataBody.getMeta());
+        System.out.println("out body: "+dataBody.getBody());
+        System.out.println("meta:"+dataBody.getMeta());
     }
 
     BaseRequest build(String model){
@@ -55,5 +55,19 @@ class AliyunLlmOperatorTest {
         m.put("role","user");
         request.setBody(m);
         return request;
+    }
+
+    @Test
+    void test2(){
+        AliyunLlmOperator llmOperator = new AliyunLlmOperator(System.getenv("API_KEY"),options());
+        BaseRequest request = new BaseRequest();
+        request.setTargetName("qwen2-1.5b-instruct");
+        Map<String,Object> m = new HashMap<>();
+        m.put("content","content:大模型\n");
+        m.put("role","user");
+        request.setBody(m);
+        DataBody dataBody = llmOperator.execute(request);
+        System.out.println(dataBody.getBody());
+        System.out.println(dataBody.getMeta());
     }
 }

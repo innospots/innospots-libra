@@ -5,7 +5,7 @@
   "primitive": "logic",
   "vendor": "innospots",
   "description": "结束节点",
-  "icon": "end",
+  "icon": "/node/end.svg",
   "nodeType": "io.innospots.workflow.node.app.logic.EndNode",
   "inPorts": "1",
   "components": [

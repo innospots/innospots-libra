@@ -5,7 +5,7 @@
   "primitive": "script",
   "vendor": "innospots",
   "description": "Java节点",
-  "icon": "java",
+  "icon": "/node/java.svg",
   "nodeType": "io.innospots.workflow.node.app.script.ScriptJavaNode",
   "outPorts": "1",
   "inPorts": "1",

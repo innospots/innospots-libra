@@ -28,7 +28,7 @@ import io.innospots.base.exception.ConfigException;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -122,7 +122,7 @@ public class KafkaDataNode extends DataNode {
 
     @Override
     public void invoke(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = new NodeOutput();
+        ExecutionOutput nodeOutput = new ExecutionOutput();
         nodeOutput.addNextKey(this.nextNodeKeys());
         nodeExecution.addOutput(nodeOutput);
         List<Map<String, Object>> sendData = new ArrayList<>();

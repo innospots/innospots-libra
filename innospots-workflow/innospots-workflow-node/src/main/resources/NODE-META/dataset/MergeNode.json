@@ -5,7 +5,7 @@
   "primitive": "dataset",
   "vendor": "innospots",
   "description": "数据合并节点",
-  "icon": "merge",
+  "icon": "/node/merge.svg",
   "nodeType": "io.innospots.workflow.node.app.dataset.MergeNode",
   "outPorts": "1",
   "inPorts": [

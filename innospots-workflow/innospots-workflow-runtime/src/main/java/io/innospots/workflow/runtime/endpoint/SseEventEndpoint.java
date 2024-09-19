@@ -4,8 +4,8 @@ import io.innospots.base.constant.PathConstant;
 import io.innospots.base.execution.ExecutionResource;
 import io.innospots.base.utils.DataFakerUtils;
 import io.innospots.base.utils.FakerExpression;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.sse.BaseEventEmitter;
 import io.innospots.workflow.core.sse.NodeExecutionEmitter;
 import io.innospots.workflow.core.sse.SseEmitterNodeExecutionListener;
@@ -118,7 +118,7 @@ public class SseEventEndpoint {
             try {
                 log.info("send log");
                 //listener.log(ne,null);
-                for (NodeOutput output : ne.getOutputs()) {
+                for (ExecutionOutput output : ne.getOutputs()) {
                     log.info("send item");
                     for (Map<String, Object> result : output.getResults()) {
                         listener.item(ne, result);
@@ -146,7 +146,7 @@ public class SseEventEndpoint {
         ne.addLog("create", "创建上下文");
         ne.setNodeExecutionId(nodeExecutionId);
         DataFakerUtils df = DataFakerUtils.build();
-        NodeOutput output = new NodeOutput();
+        ExecutionOutput output = new ExecutionOutput();
         for (int i = 0; i < size; i++) {
             output.addResult(df.sample());
         }

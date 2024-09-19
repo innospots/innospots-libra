@@ -5,7 +5,7 @@
   "primitive": "script",
   "vendor": "innospots",
   "description": "命令行形式执行 python",
-  "icon": "shell",
+  "icon": "/node/shell.svg",
   "nodeType": "io.innospots.workflow.node.app.script.CmdLinePythonNode",
   "outPorts": "1",
   "inPorts": "1",

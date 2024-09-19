@@ -5,7 +5,7 @@
   "primitive": "interaction",
   "vendor": "innospots",
   "description": "通知节点",
-  "icon": "notification",
+  "icon": "/node/notification.svg",
   "nodeType": "io.innospots.workflow.node.app.interaction.NotificationNode",
   "outPorts": "1",
   "inPorts": "1",

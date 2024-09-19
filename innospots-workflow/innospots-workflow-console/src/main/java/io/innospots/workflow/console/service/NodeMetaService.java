@@ -43,7 +43,7 @@ public class NodeMetaService {
                     NodeDefinition nodeDefinition = NodeDefinitionBuilder.build(nodeMetaInfo);
                     nodeDefinition.setStatus(oldNodeDefinition.getStatus());
                     nodeDefinition.setUsed(oldNodeDefinition.getUsed());
-                    nodeDefinition.setCredentialTypeCode(oldNodeDefinition.getCredentialTypeCode());
+//                    nodeDefinition.setCredentialTypeCode(oldNodeDefinition.getCredentialTypeCode());
                     nodeDefinition.setNodeGroupId(oldNodeDefinition.getNodeGroupId());
                     nodeDefinition.setNodeId(oldNodeDefinition.getNodeId());
                     log.info("update node definition from node meta: {}", nodeDefinition);

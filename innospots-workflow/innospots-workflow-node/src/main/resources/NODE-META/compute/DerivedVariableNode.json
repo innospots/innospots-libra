@@ -5,7 +5,7 @@
   "primitive": "compute",
   "vendor": "innospots",
   "description": "计算字段",
-  "icon": "calculation",
+  "icon": "/node/calculation.svg",
   "nodeType": "io.innospots.workflow.node.app.compute.DerivedVariableNode",
   "outPorts": "1",
   "inPorts": "1",

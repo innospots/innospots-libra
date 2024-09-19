@@ -19,9 +19,8 @@
 package io.innospots.workflow.node.app.script;
 
 import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
-import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -40,7 +39,7 @@ public class PayloadScriptNode extends ScriptBaseNode {
 
     @Override
     public void invoke(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = new NodeOutput();
+        ExecutionOutput nodeOutput = new ExecutionOutput();
         if (scriptExecutor != null) {
             nodeOutput.addNextKey(this.nextNodeKeys());
             List<Map<String, Object>> items = new ArrayList<>();

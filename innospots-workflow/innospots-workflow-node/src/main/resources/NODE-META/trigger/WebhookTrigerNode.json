@@ -5,7 +5,7 @@
   "primitive": "trigger",
   "vendor": "innospots",
   "description": "api触发器节点",
-  "icon": "webhook",
+  "icon": "/node/webhook.svg",
   "nodeType": "io.innospots.workflow.node.app.trigger.WebhookTriggerNode",
   "outPorts": "1",
   "disable": true,

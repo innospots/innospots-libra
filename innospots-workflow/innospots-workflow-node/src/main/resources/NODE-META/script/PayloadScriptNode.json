@@ -5,7 +5,7 @@
   "primitive": "script",
   "vendor": "innospots",
   "description": "js payload",
-  "icon": "script",
+  "icon": "/node/js-payload.svg",
   "nodeType": "io.innospots.workflow.node.app.script.PayloadScriptNode",
   "outPorts": "1",
   "inPorts": "1",

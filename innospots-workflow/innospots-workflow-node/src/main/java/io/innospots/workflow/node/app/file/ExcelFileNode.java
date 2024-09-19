@@ -13,8 +13,8 @@ import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.base.execution.ExecutionResource;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -124,7 +124,7 @@ public class ExcelFileNode extends BaseNodeExecutor {
 
 
     private void read(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = buildOutput(nodeExecution);
+        ExecutionOutput nodeOutput = buildOutput(nodeExecution);
         Map<Integer, String> header = new LinkedHashMap<>();
         AtomicInteger counter = new AtomicInteger();
         log.info("read file: {}",filePath);
@@ -181,7 +181,7 @@ public class ExcelFileNode extends BaseNodeExecutor {
     }
 
     private void write(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = buildOutput(nodeExecution);
+        ExecutionOutput nodeOutput = buildOutput(nodeExecution);
         List<List<String>> headers = new ArrayList<>();
         List<List<Object>> items = new ArrayList<>();
         for (ExecutionInput input : nodeExecution.getInputs()) {

@@ -24,6 +24,7 @@ import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.InnospotsIdGenerator;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.base.quartz.ExecutionStatus;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import lombok.Getter;
 import lombok.Setter;
@@ -53,7 +54,7 @@ public class NodeExecution extends NodeExecutionBase {
      * multi branch or condition output
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<NodeOutput> outputs;
+    private List<ExecutionOutput> outputs;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<String> nextNodeKeys;
@@ -127,7 +128,7 @@ public class NodeExecution extends NodeExecutionBase {
         }
         o = executionContext.get("outputs");
         if (o != null) {
-            this.outputs = JSONUtils.toList(String.valueOf(o).replaceAll("\\n", " "), NodeOutput.class);
+            this.outputs = JSONUtils.toList(String.valueOf(o).replaceAll("\\n", " "), ExecutionOutput.class);
         }
     }
 
@@ -146,7 +147,7 @@ public class NodeExecution extends NodeExecutionBase {
         this.inputs.add(executionInput);
     }
 
-    public void addOutput(NodeOutput nodeOutput) {
+    public void addOutput(ExecutionOutput nodeOutput) {
         outputs.add(nodeOutput);
     }
 
@@ -174,7 +175,7 @@ public class NodeExecution extends NodeExecutionBase {
             return logs;
         }
         for (int i = 0; i < this.outputs.size(); i++) {
-            NodeOutput nodeOutput = outputs.get(i);
+            ExecutionOutput nodeOutput = outputs.get(i);
             if (nodeOutput.getName() != null) {
                 logs.put(nodeOutput.getName(), nodeOutput.log());
             } else {
@@ -218,7 +219,7 @@ public class NodeExecution extends NodeExecutionBase {
 
     public List<Map<String, Object>> flatOutput(String nodeKey) {
         List<Map<String, Object>> outputList = new ArrayList<>();
-        for (NodeOutput nodeOutput : this.outputs) {
+        for (ExecutionOutput nodeOutput : this.outputs) {
             if (nodeOutput.containNextNodeKey(nodeKey)) {
                 outputList.addAll(nodeOutput.getResults());
             }
@@ -241,7 +242,7 @@ public class NodeExecution extends NodeExecutionBase {
     }
 
     public void fillTotal() {
-        this.outputs.forEach(NodeOutput::fillTotal);
+        this.outputs.forEach(ExecutionOutput::fillTotal);
     }
 
     public List<String> sourceKeys() {

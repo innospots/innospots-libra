@@ -5,7 +5,7 @@
   "primitive": "logic",
   "vendor": "innospots",
   "description": "基于字段的分支条件",
-  "icon": "branch",
+  "icon": "/node/branch.svg",
   "nodeType": "io.innospots.workflow.node.app.logic.SwitchNode",
   "outPorts": [
     {"id": "#1", "label": "#1", "count": 1},

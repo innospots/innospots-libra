@@ -23,7 +23,7 @@ public class OllamaApiTest {
                 OllamaOptions.create()
                         .withModel("qwen2:7b")
                         .withFormat("json")
-                        .withTemperature(0.9f));
+                        .withTemperature(0.9d));
 
 
         ChatResponse response = chatModel.call(
@@ -44,7 +44,7 @@ public class OllamaApiTest {
         var chatModel = new OllamaChatModel(ollamaApi,
                 OllamaOptions.create()
                         .withModel("qwen2:7b")
-                        .withTemperature(0.9f));
+                        .withTemperature(0.9d));
 
         Flux<ChatResponse> response = chatModel.stream(
                 new Prompt("人工智能"));
@@ -66,7 +66,7 @@ public class OllamaApiTest {
         var chatModel = new OllamaChatModel(ollamaApi,
                 OllamaOptions.create()
                         .withModel("qwen2:7b")
-                        .withTemperature(0.9f));
+                        .withTemperature(0.9d));
 
         String s = chatModel.call("介绍自己的能力");
         System.out.println(s);

@@ -5,7 +5,7 @@
   "primitive": "file",
   "vendor": "innospots",
   "description": "扫描文件目录，加载文件，不读取文件内容",
-  "icon": "file",
+  "icon": "/node/load-file.svg",
   "nodeType": "io.innospots.workflow.node.app.file.LoadFilesNode",
   "outPorts": "1",
   "inPorts": "1",

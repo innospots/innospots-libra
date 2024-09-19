@@ -25,8 +25,8 @@ import io.innospots.base.model.field.ParamField;
 import io.innospots.base.script.IScriptExecutor;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.field.NodeParamField;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.utils.NodeInstanceUtils;
@@ -116,7 +116,7 @@ public class ExtractNode extends BaseNodeExecutor {
 
     @Override
     public void invoke(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = buildOutput(nodeExecution);
+        ExecutionOutput nodeOutput = buildOutput(nodeExecution);
         Set<Map<String, Object>> uniSet = new LinkedHashSet<>();
         List<Map<String,Object>> items = new ArrayList<>();
         int count = 0;

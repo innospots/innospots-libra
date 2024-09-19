@@ -6,7 +6,7 @@
   "vendor": "innospots",
   "credentialTypeCode": "Http",
   "description": "HttpAPI节点",
-  "icon": "http-api",
+  "icon": "/node/http-api.svg",
   "nodeType": "io.innospots.workflow.node.app.api.ApiDataNode",
   "inPorts": "1",
   "outPorts": "1",

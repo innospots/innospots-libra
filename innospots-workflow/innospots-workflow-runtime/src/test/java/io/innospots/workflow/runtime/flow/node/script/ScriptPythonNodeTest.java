@@ -2,8 +2,8 @@ package io.innospots.workflow.runtime.flow.node.script;
 
 import io.innospots.base.exception.ScriptException;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.runtime.flow.node.BaseNodeTest;
@@ -34,7 +34,7 @@ public class ScriptPythonNodeTest {
         NodeExecution nodeExecution = nodeExecution(executor);
         executor.invoke(nodeExecution);
         log.info("nodeExecution:{}", nodeExecution);
-        for (NodeOutput output : nodeExecution.getOutputs()) {
+        for (ExecutionOutput output : nodeExecution.getOutputs()) {
             System.out.println(output.getResults());
         }
     }

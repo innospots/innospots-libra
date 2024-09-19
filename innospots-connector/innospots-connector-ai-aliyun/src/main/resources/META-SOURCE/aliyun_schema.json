@@ -6,14 +6,14 @@
   "connectType": "API",
   "overview": "${meta.schema.aliyunllm.overview:阿里云大模型}",
   "description": "aliyun 大模型接入",
-  "options": [
+  "authOptions": [
     {
       "name": "authKey",
       "code": "api-key",
       "minder": "io.innospots.connector.ai.aliyun.minder.AliyunLlmConnectorMinder",
       "defaults": {
-        "temperature": 0.8,
-        "maxTokens": 800,
+        "temperature": 1.8,
+        "maxTokens": 80,
         "topP": 0.8,
         "resultFormat": "message"
       },

@@ -19,6 +19,7 @@
 package io.innospots.workflow.core.runtime;
 
 
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import lombok.Getter;
 import lombok.Setter;
@@ -52,7 +53,7 @@ public class WorkflowRuntimeContext {
     private String responseType;
 
 
-    private List<Map<String, Object>> response = new ArrayList<>();
+    private ExecutionOutput response = new ExecutionOutput();
 
     public static String contextResourcePath = ".execution_contexts";
 
@@ -72,14 +73,16 @@ public class WorkflowRuntimeContext {
     }
 
     public void fillResponse(){
+        if(flowExecution!=null){
+            this.response = flowExecution.getOutput();
+        }
+        /*
         if(flowExecution!=null && CollectionUtils.isNotEmpty(flowExecution.getOutput())){
             this.response.addAll(flowExecution.getOutput());
         }
+         */
     }
 
-    public void addResponse(Map<String,Object> item) {
-        this.response.add(item);
-    }
 
     @Override
     public String toString() {

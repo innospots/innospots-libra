@@ -5,7 +5,7 @@
   "primitive": "logic",
   "vendor": "innospots",
   "description": "等待节点",
-  "icon": "interval",
+  "icon": "/node/interval.svg",
   "nodeType": "io.innospots.workflow.node.app.logic.WaitNode",
   "inPorts": "1",
   "outPorts": "1",

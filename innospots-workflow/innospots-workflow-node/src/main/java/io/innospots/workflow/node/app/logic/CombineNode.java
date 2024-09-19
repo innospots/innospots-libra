@@ -19,10 +19,9 @@
 package io.innospots.workflow.node.app.logic;
 
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
-import io.innospots.workflow.core.instance.model.NodeInstance;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -46,7 +45,7 @@ public class CombineNode extends BaseNodeExecutor {
 
     @Override
     protected void invoke(NodeExecution nodeExecution, FlowExecution flowExecution) {
-        NodeOutput nodeOutput = new NodeOutput();
+        ExecutionOutput nodeOutput = new ExecutionOutput();
         nodeOutput.addNextKey(this.nextNodeKeys());
         nodeExecution.addOutput(nodeOutput);
         if (outputSetting == OutputSetting.NONE) {
@@ -63,7 +62,7 @@ public class CombineNode extends BaseNodeExecutor {
         } else {
             execution = nodeExecutions.get(nodeExecutions.size() - 1);
         }
-        for (NodeOutput output : execution.getOutputs()) {
+        for (ExecutionOutput output : execution.getOutputs()) {
             nodeOutput.addResult(output.getResults());
         }
     }

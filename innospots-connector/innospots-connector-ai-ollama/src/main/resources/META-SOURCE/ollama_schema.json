@@ -6,7 +6,7 @@
   "connectType": "API",
   "overview": "${meta.schema.ollama.overview:ollama配置}",
   "description": "ollama 的链接配置本地配置",
-  "options": [
+  "authOptions": [
     {
       "name": "General",
       "code": "ollama-config",

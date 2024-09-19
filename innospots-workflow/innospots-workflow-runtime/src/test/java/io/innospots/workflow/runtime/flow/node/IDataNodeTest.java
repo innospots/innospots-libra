@@ -4,7 +4,7 @@ import io.innospots.base.utils.DataFakerUtils;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 
@@ -56,7 +56,7 @@ public interface IDataNodeTest {
             }
             execution.addInput(input);
         }else{
-            NodeOutput output = new NodeOutput();
+            ExecutionOutput output = new ExecutionOutput();
             for (int i = 0; i < size; i++) {
                 Map<String,Object> m = sampleInput();
                 output.addResult(m);

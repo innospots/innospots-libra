@@ -5,7 +5,7 @@
   "primitive": "file",
   "vendor": "innospots",
   "description": "文件输出到指定目录",
-  "icon": "file-out",
+  "icon": "/node/file-output.svg",
   "nodeType": "io.innospots.workflow.node.app.file.OutputFilesNode",
   "outPorts": "1",
   "inPorts": "1",

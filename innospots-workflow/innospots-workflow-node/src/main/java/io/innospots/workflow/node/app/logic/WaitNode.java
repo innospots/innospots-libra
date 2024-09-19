@@ -26,8 +26,8 @@ import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.listener.INodeExecutionListener;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.execution.operator.IScheduledNodeExecutionOperator;
 import io.innospots.workflow.core.execution.model.scheduled.ScheduledNodeExecution;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
@@ -66,7 +66,7 @@ public class WaitNode extends BaseNodeExecutor {
 
     @Override
     public void invoke(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = new NodeOutput();
+        ExecutionOutput nodeOutput = new ExecutionOutput();
         nodeOutput.addNextKey(this.nextNodeKeys());
         for (ExecutionInput executionInput : nodeExecution.getInputs()) {
             nodeOutput.setResults(executionInput.getData());

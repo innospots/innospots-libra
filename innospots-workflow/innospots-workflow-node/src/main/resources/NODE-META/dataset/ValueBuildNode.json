@@ -5,7 +5,7 @@
   "primitive": "dataset",
   "vendor": "innospots",
   "description": "替换空值，指定值",
-  "icon": "/image/NODE/data_value",
+  "icon": "/node/data-value.svg",
   "nodeType": "io.innospots.workflow.node.app.dataset.ValueBuildNode",
   "outPorts": "1",
   "inPorts": "1",

@@ -84,7 +84,7 @@ public class DataConnectionMinderManager {
     public static IDataConnectionMinder newMinderInstance(String connectorName,String authOption){
         try {
             ConnectionMinderSchema minderSchema = ConnectionMinderSchemaLoader.getConnectionMinderSchema(connectorName);
-            CredentialOption config = minderSchema.getOptions().stream().filter(f -> Objects.equals(authOption, f.getCode())).findFirst()
+            CredentialOption config = minderSchema.getAuthOptions().stream().filter(f -> Objects.equals(authOption, f.getCode())).findFirst()
                     .orElseThrow(() -> LoadConfigurationException.buildException(ConnectionMinderSchemaLoader.class, "dataConnectionMinder newInstance failed, configCode invalid."));
             return (IDataConnectionMinder) Class.forName(config.getMinder()).getConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException |

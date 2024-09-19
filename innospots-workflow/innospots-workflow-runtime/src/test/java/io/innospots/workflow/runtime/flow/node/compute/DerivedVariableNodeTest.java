@@ -1,25 +1,17 @@
 package io.innospots.workflow.runtime.flow.node.compute;
 
 
-import io.innospots.base.function.definition.loader.IFunctionLoader;
-import io.innospots.base.function.definition.model.FunctionDefinition;
-import io.innospots.base.utils.BeanContextAware;
-import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.runtime.flow.node.BaseNodeTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,7 +28,7 @@ public class DerivedVariableNodeTest {
         NodeExecution nodeExecution = nodeExecution();
         BaseNodeExecutor nodeExecutor = BaseNodeTest.buildExecutor("compute",nodeFileName);
         nodeExecutor.invoke(nodeExecution);
-        for (NodeOutput output : nodeExecution.getOutputs()) {
+        for (ExecutionOutput output : nodeExecution.getOutputs()) {
             System.out.println(output);
         }
         //System.out.println(v);

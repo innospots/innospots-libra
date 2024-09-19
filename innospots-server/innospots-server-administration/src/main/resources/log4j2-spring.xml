@@ -100,6 +100,7 @@
         <AsyncLogger name="io.innospots.workflow.core.execution.store.NodeExecutionStoreListener" level="info"/>
         <AsyncLogger name="io.innospots.workflow.core.execution.operator.jdbc" level="info"/>
         <AsyncLogger name="io.innospots.workflow.core.node.definition" level="info"/>
+        <AsyncLogger name="io.innospots.connector.ai" level="debug"/>
     </Loggers>
 
 </Configuration>

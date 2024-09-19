@@ -24,7 +24,7 @@ import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.operator.IQueueReceiver;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.node.executor.TriggerNode;
 import lombok.extern.slf4j.Slf4j;
 
@@ -96,7 +96,7 @@ public class QueueTriggerNode extends TriggerNode {
         if (response.getBody() == null) {
             return;
         }
-        NodeOutput nodeOutput = new NodeOutput();
+        ExecutionOutput nodeOutput = new ExecutionOutput();
         nodeOutput.addNextKey(this.nextNodeKeys());
         nodeOutput.addResult(response.getBody());
         nodeExecution.addOutput(nodeOutput);

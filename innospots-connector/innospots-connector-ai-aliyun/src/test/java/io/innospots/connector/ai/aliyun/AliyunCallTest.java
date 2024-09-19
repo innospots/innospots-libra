@@ -1,6 +1,7 @@
 package io.innospots.connector.ai.aliyun;
 
 import com.alibaba.dashscope.aigc.generation.Generation;
+import com.alibaba.dashscope.aigc.generation.GenerationParam;
 import com.alibaba.dashscope.aigc.generation.GenerationResult;
 import com.alibaba.dashscope.aigc.generation.models.QwenParam;
 import com.alibaba.dashscope.common.Message;
@@ -23,9 +24,9 @@ public class AliyunCallTest {
             throws NoApiKeyException, ApiException, InputRequiredException {
         Generation gen = new Generation();
         Message userMsg = Message.builder().role(Role.USER.getValue()).content("开源软件商用限制?").build();
-        QwenParam param =
-                QwenParam.builder().model("qwen2-7b-instruct").messages(Arrays.asList(userMsg))
-                        .resultFormat(QwenParam.ResultFormat.MESSAGE)
+        GenerationParam param =
+                GenerationParam.builder().model("qwen2-7b-instruct").messages(Arrays.asList(userMsg))
+                        .resultFormat(GenerationParam.ResultFormat.MESSAGE)
                         .maxTokens(100)
                         .topP(0.8)
                         .apiKey(System.getenv("API_KEY"))

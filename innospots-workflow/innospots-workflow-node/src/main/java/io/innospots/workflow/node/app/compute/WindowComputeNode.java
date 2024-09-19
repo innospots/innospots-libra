@@ -1,7 +1,7 @@
 package io.innospots.workflow.node.app.compute;
 
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,14 +93,14 @@ public class WindowComputeNode extends BaseNodeExecutor {
 
     private void computeShift(NodeExecution nodeExecution) {
 
-        NodeOutput nodeOutput = this.buildOutput(nodeExecution);
+        ExecutionOutput nodeOutput = this.buildOutput(nodeExecution);
 
         ShiftFunctionField.computeShift(nodeOutput,nodeExecution,this.shiftFields,outputRestricted,logger);
     }
 
     private void computeAccumAndRolling(NodeExecution nodeExecution) {
 
-        NodeOutput nodeOutput = this.buildOutput(nodeExecution);
+        ExecutionOutput nodeOutput = this.buildOutput(nodeExecution);
 
         List<FunctionField> functionFields = this.funcType == FuncType.ACCUM ? this.accumFields : this.rollingFields;
 

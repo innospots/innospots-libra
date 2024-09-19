@@ -198,6 +198,8 @@ public abstract class BaseFlowEngine implements IFlowEngine {
             flowExecution.setStatus(ExecutionStatus.COMPLETE);
         } else if (flowExecution.getStatus() != null && flowExecution.getStatus().isStopping()) {
             flowExecution.setStatus(ExecutionStatus.STOPPED);
+        }else if(flowExecution.getResponseCode() == null && flowExecution.getStatus() == ExecutionStatus.FAILED){
+            flowExecution.setResponseCode(ResponseCode.FAIL);
         }
         flowExecution.setEndTime(LocalDateTime.now());
         if (flowExecutionListeners != null) {

@@ -25,8 +25,8 @@ import io.innospots.base.json.JSONUtils;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;
 import io.innospots.workflow.core.execution.reader.NodeOutputStaticReader;
 import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
@@ -65,9 +65,8 @@ public class FlowExecution extends FlowExecutionBase {
 
     protected LongAdder counter = new LongAdder();
 
-    protected List<Map<String, Object>> output = new ArrayList<>();
+    private ExecutionOutput output = new ExecutionOutput();
 
-    private Map<Integer, List<ExecutionResource>> resources;
 
     /**
      *
@@ -140,10 +139,7 @@ public class FlowExecution extends FlowExecutionBase {
     }
 
     public void addResource(int position, List<ExecutionResource> executionResources) {
-        if (resources == null) {
-            resources = new LinkedHashMap<>();
-        }
-        resources.put(position, executionResources);
+        output.addResource(position,executionResources);
     }
 
     public FlowExecution addInput(Map<String, Object> data) {
@@ -161,11 +157,11 @@ public class FlowExecution extends FlowExecutionBase {
     }
 
     public void addOutput(Map<String, Object> item) {
-        this.output.add(item);
+        this.output.getResults().add(item);
     }
 
     public void addOutput(List<Map<String, Object>> items) {
-        this.output.addAll(items);
+        this.output.getResults().addAll(items);
     }
 
 
@@ -194,6 +190,10 @@ public class FlowExecution extends FlowExecutionBase {
 
     public void addContext(String key, Object value) {
         this.contexts.put(key, value);
+    }
+
+    public Object getContext(String key){
+        return this.contexts.get(key);
     }
 
 
@@ -238,7 +238,7 @@ public class FlowExecution extends FlowExecutionBase {
             return null;
         }
         ExecutionInput executionInput = new ExecutionInput(nodeKey);
-        List<NodeOutput> nodeOutputs = null;
+        List<ExecutionOutput> nodeOutputs = null;
         if (this.execMode == ExecMode.MEMORY) {
             nodeOutputs = nodeExecution.getOutputs();
         } else {
@@ -246,7 +246,7 @@ public class FlowExecution extends FlowExecutionBase {
         }
 
         List<Map<String, Object>> outputList = new ArrayList<>();
-        for (NodeOutput nodeOutput : nodeOutputs) {
+        for (ExecutionOutput nodeOutput : nodeOutputs) {
             if (nodeOutput.containNextNodeKey(targetNodeKey)) {
                 if (nodeOutput.getResults() != null) {
                     for (int i = 0; i < nodeOutput.getResults().size(); i++) {
@@ -282,7 +282,7 @@ public class FlowExecution extends FlowExecutionBase {
         }
         o = executionContext.get("outputs");
         if (o != null) {
-            this.output = JSONUtils.parseObject(String.valueOf(o), List.class);
+            this.output.setResults(JSONUtils.parseObject(String.valueOf(o), List.class));
         }
         o = executionContext.get("resources");
         if (o != null) {

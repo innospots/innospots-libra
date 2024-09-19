@@ -22,8 +22,8 @@ import io.innospots.base.condition.Factor;
 import io.innospots.base.exception.ConfigException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.utils.BeanUtils;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -96,11 +96,11 @@ public class BaseDataNode extends BaseNodeExecutor {
     }
 
 
-    protected void fillOutput(NodeOutput nodeOutput, Map<String, Object> input) {
+    protected void fillOutput(ExecutionOutput nodeOutput, Map<String, Object> input) {
         fillOutput(nodeOutput, input, null);
     }
 
-    protected void fillOutput(NodeOutput nodeOutput, Map<String, Object> input, Object body) {
+    protected void fillOutput(ExecutionOutput nodeOutput, Map<String, Object> input, Object body) {
         if(outputFieldType == OutputFieldType.NONE){
             return;
         }

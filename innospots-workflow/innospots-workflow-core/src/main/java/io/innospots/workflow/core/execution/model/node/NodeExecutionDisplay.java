@@ -21,6 +21,7 @@ package io.innospots.workflow.core.execution.model.node;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -76,7 +77,7 @@ public class NodeExecutionDisplay implements Comparable<NodeExecutionDisplay> {
         NodeExecutionDisplay executionDisplay = buildNotContextPage(nodeExecution, nodeInstance);
         if (CollectionUtils.isNotEmpty(nodeExecution.getOutputs())) {
             List<OutputDisplay> outputDisplays = new ArrayList<>();
-            for (NodeOutput output : nodeExecution.getOutputs()) {
+            for (ExecutionOutput output : nodeExecution.getOutputs()) {
                 if (CollectionUtils.isNotEmpty(output.getResults())) {
                     if (page <= 0) {
                         page = 1;
@@ -98,7 +99,7 @@ public class NodeExecutionDisplay implements Comparable<NodeExecutionDisplay> {
         NodeExecutionDisplay executionDisplay = buildNotContextPage(nodeExecution, nodeInstance);
         if (CollectionUtils.isNotEmpty(nodeExecution.getOutputs())) {
             List<OutputDisplay> outputDisplays = new ArrayList<>();
-            for (NodeOutput output : nodeExecution.getOutputs()) {
+            for (ExecutionOutput output : nodeExecution.getOutputs()) {
                 if (CollectionUtils.isNotEmpty(output.getResults())) {
                     if (page <= 0) {
                         page = 1;
@@ -166,7 +167,7 @@ public class NodeExecutionDisplay implements Comparable<NodeExecutionDisplay> {
         //all output data have the save fields
         if (outputs != null && !outputs.isEmpty()) {
             List<Map<String, Object>> listResult = outputs.get(0).getResults().getList();
-            outputFields = NodeOutput.buildOutputField(listResult);
+            outputFields = ExecutionOutput.buildOutputField(listResult);
         }
 
         if (outputFields.isEmpty() && schemaFields != null) {

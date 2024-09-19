@@ -20,6 +20,7 @@ package io.innospots.workflow.core.execution.model.node;
 
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.execution.ExecutionResource;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;
@@ -41,7 +42,7 @@ public class OutputDisplay {
      */
     private Map<Integer,List<ExecutionResource>> resources;
 
-    private Set<String> nextNodeKeys = new HashSet<>();
+    private Set<String> nextKeys = new HashSet<>();
 
     private String name;
 
@@ -53,15 +54,24 @@ public class OutputDisplay {
         results.setCurrent(page);
     }
 
-    public OutputDisplay(NodeOutput nodeOutput, long page, long size) {
+    public OutputDisplay(ExecutionOutput nodeOutput, long page, long size) {
         results.setPageSize(size);
         results.setCurrent(page);
         results.setTotal(nodeOutput.getTotal());
         //results.setList(nodeOutput.getResults());
         this.resources = nodeOutput.getResources();
-        this.nextNodeKeys = nodeOutput.getNextNodeKeys();
+        this.nextKeys = nodeOutput.getNextKeys();
         this.name = nodeOutput.getName();
     }
+
+    public void fill(ExecutionOutput executionOutput){
+        this.results.setList(executionOutput.getResults());
+        this.resources = executionOutput.getResources();
+        this.nextKeys = executionOutput.getNextKeys();
+        this.name = executionOutput.getName();
+    }
+
+
     public void addItem(Map<String,Object> item){
         this.results.add(item);
     }

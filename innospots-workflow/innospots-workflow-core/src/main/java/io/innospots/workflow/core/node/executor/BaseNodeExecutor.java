@@ -34,8 +34,8 @@ import io.innospots.workflow.core.execution.AsyncExecutors;
 import io.innospots.workflow.core.execution.listener.INodeExecutionListener;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.core.logger.FlowLoggerFactory;
@@ -149,7 +149,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
     }
 
     public void invoke(NodeExecution nodeExecution) {
-        NodeOutput nodeOutput = buildOutput(nodeExecution);
+        ExecutionOutput nodeOutput = buildOutput(nodeExecution);
 
         if (CollectionUtils.isNotEmpty(nodeExecution.getInputs())) {
             for (ExecutionInput executionInput : nodeExecution.getInputs()) {
@@ -195,7 +195,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
             isFail = false;
             try {
                 invoke(nodeExecution, flowExecution);
-                List<NodeOutput> nodeOutputs = nodeExecution.getOutputs();
+                List<ExecutionOutput> nodeOutputs = nodeExecution.getOutputs();
                 if (CollectionUtils.isNotEmpty(nodeOutputs)) {
                     String outMsg = nodeOutputs.stream().map(out -> out.log().toString()).collect(Collectors.joining(" <=> "));
                     flowLogger.nodeInfo(this.nodeKey(), this.nodeName(), "outputs:{}", outMsg);
@@ -251,7 +251,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
     }
 
     //    @Override
-    protected void processOutput(NodeExecution nodeExecution, Object result, NodeOutput nodeOutput) {
+    protected void processOutput(NodeExecution nodeExecution, Object result, ExecutionOutput nodeOutput) {
         if (result == null) {
             return;
         }
@@ -434,8 +434,8 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
         }
     }
 
-    protected NodeOutput buildOutput(NodeExecution execution) {
-        NodeOutput nodeOutput = new NodeOutput();
+    protected ExecutionOutput buildOutput(NodeExecution execution) {
+        ExecutionOutput nodeOutput = new ExecutionOutput();
         nodeOutput.addNextKey(this.nextNodeKeys());
         execution.addOutput(nodeOutput);
         return nodeOutput;

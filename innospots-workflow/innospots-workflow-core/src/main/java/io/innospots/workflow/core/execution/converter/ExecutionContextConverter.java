@@ -24,7 +24,7 @@ import io.innospots.workflow.core.execution.entity.ExecutionContextEntity;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -49,9 +49,9 @@ public interface ExecutionContextConverter {
         context.setExecutionId(flowExecution.getFlowExecutionId());
         context.setInputs(JSONUtils.toJsonString(flowExecution.getInput().copy()));
         context.setInputSize(flowExecution.getInput().getData().size());
-        context.setOutputs(JSONUtils.toJsonString(flowExecution.getOutput()));
+        context.setOutputs(JSONUtils.toJsonString(flowExecution.getOutput().getResults()));
         context.setOutputSize(flowExecution.getOutput().size());
-        context.setResources(JSONUtils.toJsonString(flowExecution.getResources()));
+        context.setResources(JSONUtils.toJsonString(flowExecution.getOutput().getResources()));
         context.setNodePaths(JSONUtils.toJsonString(flowExecution.getNodeExecutions().keySet()));
         context.setContextType(ExecutionContextEntity.ContextType.FLOW.name());
         context.setCreatedTime(LocalDateTime.now());
@@ -78,9 +78,9 @@ public interface ExecutionContextConverter {
         contextEntity.setInputSize(count);
 
 
-        List<NodeOutput> nodeOutputs = new ArrayList<>();
+        List<ExecutionOutput> nodeOutputs = new ArrayList<>();
         count = 0;
-        for (NodeOutput output : nodeExecution.getOutputs()) {
+        for (ExecutionOutput output : nodeExecution.getOutputs()) {
             count += output.getResults().size();
             nodeOutputs.add(output.copy());
         }

@@ -5,7 +5,7 @@
   "primitive": "trigger",
   "vendor": "innospots",
   "description": "定时触发器节点",
-  "icon": "dingshi",
+  "icon": "/node/cron-trigger.svg",
   "nodeType": "io.innospots.workflow.node.app.trigger.CronTimerNode",
   "outPorts": "1",
   "components": [

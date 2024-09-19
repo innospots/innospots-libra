@@ -24,8 +24,8 @@ import io.innospots.base.exception.ConfigException;
 import io.innospots.base.script.IScriptExecutor;
 import io.innospots.base.script.aviator.AviatorExpressionExecutor;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.utils.NodeInstanceUtils;
 import org.slf4j.Logger;
@@ -72,11 +72,11 @@ public class ConditionNode extends BaseNodeExecutor {
     public void invoke(NodeExecution nodeExecution) {
 
         if (expression != null) {
-            NodeOutput trueOut = new NodeOutput("true");
+            ExecutionOutput trueOut = new ExecutionOutput("true");
             if (this.trueNextNodeKeys != null) {
                 trueOut.addNextKey(this.trueNextNodeKeys);
             }
-            NodeOutput falseOut = new NodeOutput("false");
+            ExecutionOutput falseOut = new ExecutionOutput("false");
             if (this.falseNextNodeKeys != null) {
                 falseOut.addNextKey(this.falseNextNodeKeys);
             }

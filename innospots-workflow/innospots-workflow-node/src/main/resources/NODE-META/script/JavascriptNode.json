@@ -5,7 +5,7 @@
   "primitive": "script",
   "vendor": "innospots",
   "description": "javascript脚本",
-  "icon": "script",
+  "icon": "/node/js.svg",
   "nodeType": "io.innospots.workflow.node.app.script.JavaScriptNode",
   "outPorts": "1",
   "inPorts": "1",

@@ -5,7 +5,7 @@
   "primitive": "data",
   "vendor": "innospots",
   "description": "模拟字段节点",
-  "icon": "/image/NODE/mock_field",
+  "icon": "/node/mock-data.svg",
   "nodeType": "io.innospots.workflow.node.app.data.FakeFieldNode",
   "outPorts": "1",
   "inPorts": "1",

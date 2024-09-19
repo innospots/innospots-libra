@@ -24,7 +24,7 @@ import io.innospots.base.model.Pair;
 import io.innospots.workflow.core.exception.FlowRuntimeException;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.node.field.NodeParamField;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 
@@ -92,7 +92,7 @@ public class FilterNode extends BaseNodeExecutor {
         Pair<ExecutionInput, ExecutionInput> pair = splitSet(nodeExecution, mainSourceNodeKey);
         ExecutionInput mainInput = pair.getLeft();
         ExecutionInput filterInput = pair.getRight();
-        NodeOutput nodeOutput = buildOutput(nodeExecution);
+        ExecutionOutput nodeOutput = buildOutput(nodeExecution);
 
         if (mainInput == null) {
             throw ResourceException.buildAbandonException(this.getClass(),

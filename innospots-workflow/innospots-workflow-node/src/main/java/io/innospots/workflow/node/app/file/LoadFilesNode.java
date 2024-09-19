@@ -22,7 +22,7 @@ import io.innospots.base.execution.ExecutionResource;
 import io.innospots.base.utils.PlaceholderUtils;
 import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.model.node.NodeOutput;
+import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import org.apache.commons.lang3.StringUtils;
 
@@ -58,7 +58,7 @@ public class LoadFilesNode extends BaseNodeExecutor {
     public void invoke(NodeExecution nodeExecution) {
         // eg: /tmp/*.img
         File[] readFiles = selectFiles(sourceFiles);
-        NodeOutput nodeOutput = new NodeOutput();
+        ExecutionOutput nodeOutput = new ExecutionOutput();
         nodeOutput.addNextKey(this.nextNodeKeys());
         nodeExecution.addOutput(nodeOutput);
         if (readFiles != null) {
