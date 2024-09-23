@@ -1,0 +1,50 @@
+{
+  "name": "提示词",
+  "code": "prompt",
+  "flowCode": "EVENTS",
+  "primitive": "script",
+  "vendor": "innospots",
+  "description": "Prompt节点",
+  "icon": "/node/prompt.svg",
+  "nodeType": "io.innospots.workflow.node.app.llm.PromptNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "提示词"
+      }
+    },
+    {
+      "name": "prompt_template",
+      "type": "ScriptEditor",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": " 提示词模板",
+        "scriptType": "MARKDOWN",
+        "isFixedType": true,
+        "placeholder": "输入提示词,${variable}，变量替换",
+        "initialValue": ""
+      },
+      "layout": {
+        "h": 12, "minH": 5,
+        "w": 1, "x": 0, "y": 0, "moved": true, "static": false,
+        "resizeHandles": ["s", "n"]
+      }
+    }
+  ],
+  "outputFields": [
+    {
+      "name": "提示词",
+      "code": "content",
+      "valueType": "STRING"
+    }
+  ]
+}

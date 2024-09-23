@@ -24,6 +24,8 @@ import lombok.Setter;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,6 +53,13 @@ public class SchemaRegistry extends SchemaCatalog {
 
     @Schema(title = "json body include scripts")
     protected Map<String, Object> script;
+
+    public void addField(SchemaField schemaField){
+        if(this.schemaFields == null){
+            this.schemaFields = new ArrayList<>();
+        }
+        this.schemaFields.add(schemaField);
+    }
 
 
     public void addScript(String scriptKey, Object body) {

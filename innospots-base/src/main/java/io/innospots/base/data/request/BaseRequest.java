@@ -72,6 +72,13 @@ public class BaseRequest<Body> {
         }
     }
 
+    public Object query(String key){
+        if(this.query == null){
+            return null;
+        }
+        return this.query.get(key);
+    }
+
     public void addQuery(String key, Object value){
         if(query==null){
             this.query = new HashMap<>();

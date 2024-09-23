@@ -1,0 +1,255 @@
+{
+  "name": "阿里生图模型",
+  "code": "ali_image_gen",
+  "flowCode": "EVENTS",
+  "primitive": "api",
+  "vendor": "innospots",
+  "credentialTypeCode": "ali_image_gen",
+  "description": "阿里生图大模型",
+  "icon": "/node/ali-image-gen.svg",
+  "nodeType": "io.innospots.workflow.node.app.llm.AliImageGenNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "图像生成节点"
+      }
+    },
+    {
+      "name": "credential_key",
+      "type": "CredentialSelect",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "凭据",
+        "showAddButton": true,
+        "showEditButton": true
+      }
+    },
+    {
+      "name": "model_name",
+      "type": "DataTableSelect",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "模型名称",
+        "showAddButton": true,
+        "showEditButton": true,
+        "dependencies": "credential_key"
+      }
+    },
+    {
+      "name": "generate_mode",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "生成方式",
+        "viewType": "picker",
+        "dataSource": "static",
+        "initialValue": "txt2image",
+        "options": [
+          {
+            "value": "txt2image",
+            "label": "文生图"
+          },
+          {
+            "value": "similarImage",
+            "label": "相似图"
+          },
+          {
+            "value": "graffiti",
+            "label": "涂鸦"
+          },
+          {
+            "value": "poster",
+            "label": "海报"
+          }
+        ]
+      }
+    },
+    {
+      "name": "prompt",
+      "type": "InputFieldSelect2",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "fieldSource": "ali_image_gen_1",
+        "multiple": false,
+        "label": "提示词字段",
+        "tooltip": "提示词字段"
+      }
+    },
+    {
+      "name": "size",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "size",
+        "initialValue": "1024*1024",
+        "viewType": "picker",
+        "dataSource": "static",
+        "options": [
+          {
+            "value": "1024*1024",
+            "label": "1024*1024"
+          },
+          {
+            "value": "720×1280",
+            "label": "720×1280"
+          },
+          {
+            "value": "1280×720",
+            "label": "1280×720"
+          }
+        ]
+      }
+    },
+    {
+      "name": "n",
+      "type": "NumberInput",
+      "valueType": "number",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "width": 100,
+        "label": "n",
+        "initialValue": 1
+      }
+    },
+    {
+      "name": "refImage",
+      "type": "InputFieldSelect2",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "fieldSource": "ali_image_gen_1",
+        "multiple": false,
+        "label": "相关图片字段",
+        "tooltip": "相关图片字段"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "generate_mode",
+              "opt": "EQUAL",
+              "value": "similarImage"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "sketchImageUrl",
+      "type": "InputFieldSelect2",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "fieldSource": "ali_image_gen_1",
+        "multiple": false,
+        "label": "手绘图",
+        "tooltip": "手绘图"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "generate_mode",
+              "opt": "EQUAL",
+              "value": "graffiti"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "style",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "图像风格",
+        "viewType": "picker",
+        "dataSource": "static",
+        "initialValue": "auto",
+        "options": [
+          {
+            "value": "auto",
+            "label": "默认"
+          },
+          {
+            "value": "photography",
+            "label": "摄影"
+          },
+          {
+            "value": "portrait",
+            "label": "人像写真"
+          },
+          {
+            "value": "3d cartoon",
+            "label": "3D卡通"
+          },
+          {
+            "value": "anime",
+            "label": "动画"
+          },
+          {
+            "value": "oil painting",
+            "label": "油画"
+          },
+          {
+            "value": "watercolor",
+            "label": "水彩"
+          },
+          {
+            "value": "sketch",
+            "label": "素描"
+          },
+          {
+            "value": "chinese painting",
+            "label": "中国画"
+          },
+          {
+            "value": "flat illustration",
+            "label": "扁平插画"
+          }
+        ]
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "generate_mode",
+              "opt": "EQUAL",
+              "value": "graffiti"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

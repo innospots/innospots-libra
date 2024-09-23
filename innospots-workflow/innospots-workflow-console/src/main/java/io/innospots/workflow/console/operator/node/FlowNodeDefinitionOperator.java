@@ -136,7 +136,8 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
 
         nodeQueryWrapper.lambda().eq(queryRequest.getDataStatus() != null, FlowNodeDefinitionEntity::getStatus, queryRequest.getDataStatus())
                 .like(StringUtils.isNotBlank(queryRequest.getQueryInput()), FlowNodeDefinitionEntity::getName, queryRequest.getQueryInput())
-                .orderByDesc(FlowNodeDefinitionEntity::getUpdatedTime);
+                .orderByDesc(FlowNodeDefinitionEntity::getUpdatedTime)
+                .orderByDesc(FlowNodeDefinitionEntity::getNodeId);
 
         IPage<FlowNodeDefinitionEntity> queryPage = new Page<>(queryRequest.getPage(), queryRequest.getSize());
         queryPage = this.page(queryPage, nodeQueryWrapper);

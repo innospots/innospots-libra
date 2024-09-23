@@ -1,13 +1,13 @@
 {
-  "name": "阿里大模型",
-  "code": "LLM",
+  "name": "阿里图像识别模型",
+  "code": "ali_image_rec",
   "flowCode": "EVENTS",
   "primitive": "api",
   "vendor": "innospots",
-  "credentialTypeCode": "ali_llm",
-  "description": "llm大模型",
-  "icon": "/node/llm.svg",
-  "nodeType": "io.innospots.workflow.node.app.llm.LlmNode",
+  "credentialTypeCode": "ali_image_rec",
+  "description": "阿里图像识别大模型",
+  "icon": "/node/ali-image-rec.svg",
+  "nodeType": "io.innospots.workflow.node.app.llm.AliImageRecNode",
   "outPorts": "1",
   "inPorts": "1",
   "components": [
@@ -20,7 +20,7 @@
       "settings": {
         "label": "节点名称",
         "placeholder": "请输入节点名称",
-        "initialValue": "LLM节点"
+        "initialValue": "图像识别节点"
       }
     },
     {
@@ -49,16 +49,29 @@
       }
     },
     {
-      "name": "content_fields",
+      "name": "image",
       "type": "InputFieldSelect2",
       "valueType": "array",
       "copyable": false,
       "deletable": false,
       "settings": {
-        "fieldSource": "LLM_1",
+        "fieldSource": "ali_image_rec_1",
         "multiple": false,
-        "label": "内容字段",
-        "tooltip": "返回的内容字段"
+        "label": "图像字段",
+        "tooltip": "识别图像字段"
+      }
+    },
+    {
+      "name": "text",
+      "type": "InputFieldSelect2",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "fieldSource": "ali_image_rec_1",
+        "multiple": false,
+        "label": "提示词字段",
+        "tooltip": "提示词字段"
       }
     },
     {
@@ -92,19 +105,30 @@
       "deletable": false,
       "settings": {
         "label": "temperature",
-        "initialValue": "1.0"
+        "initialValue": "1.5"
       }
     },
     {
-      "name": "max_tokens",
+      "name": "maxLength",
       "type": "NumberInput",
       "valueType": "number",
       "copyable": false,
       "deletable": false,
       "settings": {
         "width": 100,
-        "label": "最大 Token量",
-        "initialValue": 500
+        "label": "最大Token量",
+        "initialValue": 1024
+      }
+    },
+    {
+      "name": "topP",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "topP",
+        "initialValue": "0.6"
       }
     }
   ]

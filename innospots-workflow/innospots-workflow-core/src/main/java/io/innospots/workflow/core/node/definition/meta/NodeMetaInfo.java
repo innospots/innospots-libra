@@ -67,9 +67,6 @@ public class NodeMetaInfo {
     @Schema(title = "node components")
     protected List<NodeComponent> components;
 
-    @Schema(title = "node outputs")
-    protected List<ParamField> outputs;
-
     @Schema(title = "execute script code")
     protected Map<String,Object> scripts;
 

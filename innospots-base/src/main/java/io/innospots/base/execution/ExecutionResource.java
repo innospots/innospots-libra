@@ -76,6 +76,9 @@ public class ExecutionResource {
     private boolean executionCache;
 
     @JsonIgnore
+    private String subDir;
+
+    @JsonIgnore
     private InputStreamSource inputStreamSource;
 
     public InputStreamSource buildInputStreamSource() {

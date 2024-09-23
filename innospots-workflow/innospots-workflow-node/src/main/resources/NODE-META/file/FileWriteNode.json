@@ -1,12 +1,12 @@
 {
-  "name": "文件转存",
-  "code": "OUTPUT_FILES",
+  "name": "内容写入",
+  "code": "write_file",
   "flowCode": "EVENTS",
   "primitive": "file",
   "vendor": "innospots",
-  "description": "文件输出到指定目录",
+  "description": "将节点输出内容写入文件",
   "icon": "/node/file-output.svg",
-  "nodeType": "io.innospots.workflow.node.app.file.OutputFilesNode",
+  "nodeType": "io.innospots.workflow.node.app.file.FileWriteNode",
   "outPorts": "1",
   "inPorts": "1",
   "components": [
@@ -23,27 +23,28 @@
       }
     },
     {
-      "name": "output_path",
+      "name": "file_name",
       "type": "Input",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
-        "label": "转存目录",
-        "placeholder": "/home/user/store",
-        "initialValue": ""
+        "label": "写入文件名称",
+        "placeholder": " xxx.txt",
+        "initialValue": "write_file.txt"
       }
     },
     {
-      "name": "file_pattern",
-      "type": "Input",
-      "valueType": "string",
+      "name": "content_fields",
+      "type": "InputFieldSelect2",
+      "valueType": "array",
       "copyable": false,
       "deletable": false,
       "settings": {
-        "label": "文件名格式",
-        "placeholder": "*.后缀名，例如: *.png",
-        "initialValue": ".*"
+        "fieldSource": "write_file_1",
+        "multiple": true,
+        "label": "内容字段",
+        "tooltip": "选择内容字段"
       }
     }
   ]

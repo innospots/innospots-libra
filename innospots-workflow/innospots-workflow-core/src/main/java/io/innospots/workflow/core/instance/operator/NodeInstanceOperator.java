@@ -143,8 +143,8 @@ public class NodeInstanceOperator extends ServiceImpl<NodeInstanceDao, NodeInsta
                     // build input fields to instance
                     nodeExecutor.build();
                 }
-            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException |
-                     InvocationTargetException e) {
+            } catch (Exception e) {
+                log.error(e.getMessage());
             }
         }
     }

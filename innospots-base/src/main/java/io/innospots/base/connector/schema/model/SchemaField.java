@@ -18,8 +18,10 @@
 
 package io.innospots.base.connector.schema.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.innospots.base.model.field.BaseField;
 import io.innospots.base.model.field.FieldScope;
+import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.model.field.ParamField;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -27,6 +29,8 @@ import lombok.Setter;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
+import java.util.List;
 
 /**
  * @author Raydian
@@ -60,6 +64,22 @@ public class SchemaField extends BaseField {
      */
     private String defaultValue;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    protected List<SchemaField> subFields;
+
+    public SchemaField fill(String code, String name,
+                            FieldValueType valueType){
+        return this.fill(code, name, valueType,null);
+    }
+
+    public SchemaField fill(String code, String name, FieldValueType valueType,FieldScope fieldScope){
+        this.code = code;
+        this.name = name;
+        this.valueType = valueType;
+        this.fieldScope =fieldScope;
+        return this;
+    }
+
 
     public static SchemaField convert(ParamField paramField){
         SchemaField schemaField = new SchemaField();
@@ -68,6 +88,11 @@ public class SchemaField extends BaseField {
         schemaField.setCode(paramField.getCode());
         schemaField.setName(paramField.getName());
         schemaField.setComment(paramField.getComment());
+        if(paramField.getSubFields()!=null){
+            schemaField.setSubFields(paramField.getSubFields()
+                    .stream().map(SchemaField::convert).toList());
+        }
+
         schemaField.setDefaultValue(paramField.getValue()!=null?paramField.getValue().toString():null);
         return schemaField;
     }

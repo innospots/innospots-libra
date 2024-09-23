@@ -26,6 +26,7 @@ package io.innospots.base.constant;
 public interface PathConstant {
 
     String ROOT_PATH = "/innospots/api/";
+    String RESOURCE_PATH = "api/system/resources";
     String INNOSPOTS_PATH = "/innospots/";
 
     String PROJECT_PATH = "/innospots/api/project/";

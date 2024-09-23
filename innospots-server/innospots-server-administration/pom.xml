@@ -70,7 +70,6 @@
             <groupId>io.innospots</groupId>
             <artifactId>innospots-schedule</artifactId>
         </dependency>
-
     </dependencies>
 
     <build>

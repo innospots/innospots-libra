@@ -1,7 +1,6 @@
 package io.innospots.connector.ai.aliyun.operator;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
 import com.alibaba.dashscope.aigc.generation.Generation;
 import com.alibaba.dashscope.aigc.generation.GenerationOutput;
 import com.alibaba.dashscope.aigc.generation.GenerationParam;
@@ -11,8 +10,8 @@ import com.alibaba.dashscope.common.Role;
 import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
 import io.innospots.base.data.body.DataBody;
-import io.innospots.base.data.operator.IExecutionOperator;
 import io.innospots.base.data.request.BaseRequest;
+import io.innospots.base.exception.ResourceException;
 import io.innospots.base.execution.ExecutionResource;
 import io.innospots.base.json.JSONUtils;
 import io.reactivex.Flowable;
@@ -32,26 +31,17 @@ import java.util.stream.Collectors;
  * @date 2024/9/17
  */
 @Slf4j
-public class AliyunLlmOperator implements IExecutionOperator {
+public class AliyunLlmOperator extends AliyunAiOperator<GenerationParam, List<Message>, GenerationResult> {
 
-    private String apiKey;
-
-    private Map<String, Object> options;
-
-
-    public AliyunLlmOperator(String apiKey) {
-        this.apiKey = apiKey;
-    }
 
     public AliyunLlmOperator(String apiKey, Map<String, Object> options) {
-        this.apiKey = apiKey;
-        this.options = options;
+        super(apiKey,options);
     }
 
     @Override
     public Flux<?> executeStream(BaseRequest<?> itemRequest) {
         Generation gen = new Generation();
-        GenerationParam generationParam = generationParam(itemRequest,true);
+        GenerationParam generationParam = generationParam(itemRequest, true);
         Flux flux = null;
         try {
             Flowable<GenerationResult> flowable = gen.streamCall(generationParam);
@@ -68,31 +58,41 @@ public class AliyunLlmOperator implements IExecutionOperator {
     @Override
     public <D> DataBody<D> execute(BaseRequest<?> itemRequest) {
         DataBody dataBody = new DataBody<>();
-        Generation gen = new Generation();
-        GenerationParam generationParam = generationParam(itemRequest,false);
-
-        try {
-            GenerationResult gr = gen.call(generationParam);
-            if(log.isDebugEnabled()){
-                log.debug("generation result:{}", JSONUtils.toJsonString(gr));
-            }
-            dataBody.setMeta(BeanUtil.beanToMap(gr.getUsage()));
-            String content = gr.getOutput()
-                    .getChoices().stream().map(GenerationOutput.Choice::getMessage)
-                    .map(Message::getContent)
-                    .collect(Collectors.joining("||"));
-
-            dataBody.setBody(content);
-        } catch (NoApiKeyException | InputRequiredException e) {
-            log.error(e.getMessage(), e);
+        GenerationResult gr = invoke(itemRequest);
+        if (log.isDebugEnabled()) {
+            log.debug("generation result:{}", JSONUtils.toJsonString(gr));
         }
+        dataBody.setMeta(BeanUtil.beanToMap(gr.getUsage()));
+        String content = gr.getOutput()
+                .getChoices().stream().map(GenerationOutput.Choice::getMessage)
+                .map(Message::getContent)
+                .collect(Collectors.joining("||"));
+        dataBody.setBody(content);
         dataBody.end();
         return dataBody;
     }
 
+    @Override
+    protected GenerationResult invoke(BaseRequest itemRequest) {
+        Generation gen = new Generation();
+        GenerationResult gr = null;
+        GenerationParam generationParam = generationParam(itemRequest, false);
+        try {
+            gr = gen.call(generationParam);
+        } catch (NoApiKeyException | InputRequiredException e) {
+            log.error(e.getMessage(), e);
+            throw ResourceException.buildCreateException(AliyunLlmOperator.class, e);
+        }
+        return gr;
+    }
 
-    private GenerationParam generationParam(BaseRequest<?> itemRequest,boolean stream) {
-        List<Message> messages = buildMessages(itemRequest);
+    @Override
+    protected GenerationParam buildParam(BaseRequest<?> request) {
+        return generationParam(request, false);
+    }
+
+    private GenerationParam generationParam(BaseRequest<?> itemRequest, boolean stream) {
+        List<Message> messages = buildMessage(itemRequest);
         String modelName = itemRequest.getTargetName();
         if (modelName == null) {
             modelName = (String) options.get("model_name");
@@ -104,30 +104,13 @@ public class AliyunLlmOperator implements IExecutionOperator {
                 .incrementalOutput(stream)
                 .build();
         fillOptions(generationParam, itemRequest);
-        if (log.isDebugEnabled()) {
-            StringBuilder info = new StringBuilder();
-            info.append("maxTokens").append(generationParam.getMaxTokens()).append(", ")
-                    .append("temperature").append(generationParam.getTemperature()).append(", ")
-                    .append("topP").append(generationParam.getTopP()).append(", ");
-            for (Message message : generationParam.getMessages()) {
-                info.append(message.getRole()).append(":").append(message.getContent());
-            }
-            log.debug(info.toString());
-        }
+        log.info("llm param:{}",generationParam);
         return generationParam;
     }
 
-    private void fillOptions(GenerationParam generationParam, BaseRequest<?> request) {
-        if (options != null) {
-            BeanUtil.fillBeanWithMap(options, generationParam, CopyOptions.create().ignoreError().ignoreNullValue());
-        }
 
-        if (request.getQuery() != null) {
-            BeanUtil.fillBeanWithMap(request.getQuery(), generationParam, CopyOptions.create().ignoreError().ignoreNullValue());
-        }
-    }
-
-    public static List<Message> buildMessages(BaseRequest<?> itemRequest) {
+    @Override
+    protected List<Message> buildMessage(BaseRequest<?> itemRequest) {
         List<Message> messages = new ArrayList<>();
         if (itemRequest.getBody() instanceof List) {
             Message message = null;
