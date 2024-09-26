@@ -54,7 +54,8 @@ public class AliTtsNode extends AliAiBaseNode<String, SpeechSynthesisParam> {
                     if (byteBuffer == null) {
                         throw ResourceException.buildCreateException(this.getClass(), "tts result is null,", this.nodeCode(), this.nodeName(), synthesisParam.toString());
                     }
-                    ExecutionResource er = IExecutionContextOperator.buildExecutionResource(byteBuffer.array(), "tts_"+position+"_"+nodeKey()+".mp3", nodeExecution.getContextDataPath());
+                    ExecutionResource er = this.saveResourceToLocal(byteBuffer.array(), "tts_"+position+"_"+nodeKey()+".mp3",nodeExecution);
+//                    ExecutionResource er = IExecutionContextOperator.buildExecutionResource(byteBuffer.array(), "tts_"+position+"_"+nodeKey()+".mp3", nodeExecution.getContextDataPath());
                     log.info("tts complete, temp file: {}", er.getLocalUri());
                     executionOutput.addResult(er.toMetaInfo());
                     log.info("tts resource meta:{}", er.toMetaInfo());

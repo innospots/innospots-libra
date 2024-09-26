@@ -33,8 +33,8 @@ import io.innospots.workflow.core.enums.BuildStatus;
 import io.innospots.workflow.core.execution.AsyncExecutors;
 import io.innospots.workflow.core.execution.listener.INodeExecutionListener;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
-import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.model.ExecutionOutput;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;
 import io.innospots.workflow.core.instance.model.NodeInstance;
@@ -147,10 +147,10 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
     }
 
     protected Object processItem(Map<String, Object> item) {
-        return processItem(item,null);
+        return processItem(item, null);
     }
 
-    protected Object processItem(Map<String, Object> item,NodeExecution nodeExecution) {
+    protected Object processItem(Map<String, Object> item, NodeExecution nodeExecution) {
         return item;
     }
 
@@ -158,7 +158,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
         return resource;
     }
 
-    protected ExecutionResource processResource(ExecutionResource resource,NodeExecution nodeExecution) {
+    protected ExecutionResource processResource(ExecutionResource resource, NodeExecution nodeExecution) {
         return resource;
     }
 
@@ -170,17 +170,17 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
                 flowLogger.flowInfo("key: {}, name: {}, node input: {}", nodeExecution.getNodeKey(), executionInput.log().toString());
                 if (CollectionUtils.isNotEmpty(executionInput.getData())) {
                     for (Map<String, Object> item : executionInput.getData()) {
-                        Object result = processItem(item,nodeExecution);
+                        Object result = processItem(item, nodeExecution);
                         processOutput(nodeExecution, result, nodeOutput);
                     }//end for
                 } else {
-                    Object result = processItem(null,nodeExecution);
+                    Object result = processItem(null, nodeExecution);
                     processOutput(nodeExecution, result, nodeOutput);
                 }
                 if (CollectionUtils.isNotEmpty(executionInput.getResources())) {
                     List<ExecutionResource> outputResources = new ArrayList<>();
                     for (int i = 0; i < executionInput.getResources().size(); i++) {
-                        ExecutionResource resource = processResource(executionInput.getResources().get(i),nodeExecution);
+                        ExecutionResource resource = processResource(executionInput.getResources().get(i), nodeExecution);
                         outputResources.add(resource);
                     }
                     outputResources = IExecutionContextOperator.saveExecutionResources(outputResources, nodeExecution.getContextDataPath());
@@ -378,7 +378,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
         return ni.valueString(field);
     }
 
-    protected Double valueDouble(String key){
+    protected Double valueDouble(String key) {
         return ni.valueDouble(key);
     }
 
@@ -497,7 +497,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
         return ni.getName();
     }
 
-    public int timeoutMills(){
+    public int timeoutMills() {
         return ni.getTimeoutMills();
     }
 
@@ -533,5 +533,10 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
         }
         return executorManager;
     }
+
+    protected ExecutionResource saveResourceToLocal(byte[] fileBytes, String fileName, NodeExecution nodeExecution) {
+        return IExecutionContextOperator.buildExecutionResource(fileBytes, fileName, nodeExecution.getContextDataPath());
+    }
+
 
 }
