@@ -24,6 +24,7 @@
     <description>intelligence workflow platform, parent pom and jar dependencies</description>
 
     <properties>
+        <alibaba.dashscope.version>2.16.4</alibaba.dashscope.version>
         <aviator.version>5.4.3</aviator.version>
         <beanutils.version>1.9.4</beanutils.version>
         <caffeine.version>3.1.8</caffeine.version>
@@ -703,6 +704,18 @@
                 <groupId>com.lmax</groupId>
                 <artifactId>disruptor</artifactId>
                 <version>${disruptor.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>dashscope-sdk-java</artifactId>
+                <version>${alibaba.dashscope.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>slf4j-simple</artifactId>
+                        <groupId>org.slf4j</groupId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
         </dependencies>

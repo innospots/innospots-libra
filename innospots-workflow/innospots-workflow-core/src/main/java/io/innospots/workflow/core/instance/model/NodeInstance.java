@@ -126,6 +126,9 @@ public class NodeInstance extends NodeInfo {
 
     private Long workflowInstanceId;
 
+    @Schema(title = "timeout millisecond")
+    protected int timeoutMills=60000;
+
     /*
     public void addScriptType(String name, ScriptType type) {
         if (this.scriptTypes == null) {
@@ -203,6 +206,18 @@ public class NodeInstance extends NodeInfo {
             return null;
         } else {
             return String.valueOf(o);
+        }
+    }
+
+    public Double valueDouble(String key){
+        Object o = value(key);
+        if (o instanceof Double) {
+            return (Double) o;
+        }
+        if (o == null) {
+            return null;
+        } else {
+            return Double.valueOf(o.toString());
         }
     }
 

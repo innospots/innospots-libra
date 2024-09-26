@@ -3,22 +3,24 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.innospots</groupId>
-        <artifactId>innospots-connector</artifactId>
+        <artifactId>innospots-workflow</artifactId>
         <version>${innosopts.version}</version>
     </parent>
 
-    <artifactId>innospots-connector-ai-aliyun</artifactId>
+    <artifactId>innospots-workflow-node-ai</artifactId>
     <packaging>jar</packaging>
-    <name>innospots-connector-ai-aliyun</name>
 
-    <properties>
-        <alibaba.dashscope.version>2.16.4</alibaba.dashscope.version>
-    </properties>
+    <name>innospots-workflow-node-ai</name>
 
     <dependencies>
+        <dependency>
+            <groupId>io.innospots</groupId>
+            <artifactId>innospots-workflow-core</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>dashscope-sdk-java</artifactId>
         </dependency>
     </dependencies>
+
 </project>

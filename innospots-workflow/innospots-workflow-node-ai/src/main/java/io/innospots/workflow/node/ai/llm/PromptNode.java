@@ -1,4 +1,4 @@
-package io.innospots.workflow.node.app.llm;
+package io.innospots.workflow.node.ai.llm;
 
 import io.innospots.base.model.field.ParamField;
 import io.innospots.base.utils.PlaceholderUtils;

@@ -37,6 +37,7 @@ import org.springframework.core.io.InputStreamSource;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.zip.GZIPInputStream;
@@ -180,6 +181,22 @@ public interface IExecutionContextOperator {
                 logger.error(e.getMessage(), e);
             }
         }//end for
+    }
+
+    static ExecutionResource buildExecutionResource(byte[] bufferBytes,String resourceName, File flowExecutionPath) {
+        File fileDir = new File(flowExecutionPath, DIR_ATTACHMENT);
+        if (!fileDir.exists()) {
+            fileDir.mkdirs();
+        }
+        File resourceFile = new File(fileDir,resourceName);
+        if(!resourceFile.exists()){
+            try {
+                Files.write(resourceFile.toPath(),bufferBytes);
+            } catch (IOException e) {
+                logger.error(e.getMessage(),e);
+            }
+        }
+        return ExecutionResource.buildResource(resourceFile,false,InnospotsWorkflowProperties.WORKFLOW_RESOURCES);
     }
 
     static List<ExecutionResource> saveExecutionResources(List<ExecutionResource> executionResources, File flowExecutionPath) {

@@ -81,6 +81,9 @@ public class ExecutionResource {
     @JsonIgnore
     private InputStreamSource inputStreamSource;
 
+    @JsonIgnore
+    private int position;
+
     public InputStreamSource buildInputStreamSource() {
         if (inputStreamSource == null && localUri != null) {
             inputStreamSource = new FileSystemResource(localUri);

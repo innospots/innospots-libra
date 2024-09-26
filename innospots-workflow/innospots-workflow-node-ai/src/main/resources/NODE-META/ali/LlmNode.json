@@ -1,0 +1,154 @@
+{
+  "name": "阿里大模型",
+  "code": "LLM",
+  "flowCode": "EVENTS",
+  "primitive": "api",
+  "vendor": "innospots",
+  "credentialTypeCode": "ali_api_key",
+  "description": "llm大模型",
+  "icon": "/node/ali_llm.svg",
+  "nodeType": "io.innospots.workflow.node.ai.aliyun.AliLlmAiNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "LLM节点"
+      }
+    },
+    {
+      "name": "credential_key",
+      "type": "CredentialSelect",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "凭据",
+        "showAddButton": true,
+        "showEditButton": true
+      }
+    },
+    {
+      "name": "model_name",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "模型名称",
+        "viewType": "picker",
+        "dataSource": "static",
+        "initialValue": "qwen2-0.5b-instruct",
+        "options": [
+          {"label": "qwen-coder-turbo", "value": "qwen-coder-turbo"},
+          {"label": "qwen2.5-coder-7b-instruct", "value": "qwen2.5-coder-7b-instruct"},
+          {"label": "qwen2.5-coder-1.5b-instruct", "value": "qwen2.5-coder-1.5b-instruct"},
+          {"label": "qwen2-72b-instruct", "value": "qwen2-72b-instruct"},
+          {"label": "qwen2-57b-a14b-instruct", "value": "qwen2-57b-a14b-instruct"},
+          {"label": "qwen2-7b-instruct", "value": "qwen2-7b-instruct"},
+          {"label": "qwen2-1.5b-instruct", "value": "qwen2-1.5b-instruct"},
+          {"label": "qwen2-0.5b-instruct", "value": "qwen2-0.5b-instruct"},
+          {"label": "qwen-max", "value": "qwen-max"},
+          {"label": "qwen-max-longcontext", "value": "qwen-max-longcontext"},
+          {"label": "qwen-plus", "value": "qwen-plus"},
+          {"label": "qwen-turbo", "value": "qwen-turbo"},
+          {"label": "qwen-long", "value": "qwen-long"},
+          {"label": "qwen-math-plus", "value": "qwen-math-plus"},
+          {"label": "qwen2-math-72b-instruct", "value": "qwen2-math-72b-instruct"},
+          {"label": "qwen2-math-7b-instruct", "value": "qwen2-math-7b-instruct"},
+          {"label": "qwen2-math-1.5b-instruct", "value": "qwen2-math-1.5b-instruct"},
+          {"label": "llama3.1-405b-instruct", "value": "llama3.1-405b-instruct"},
+          {"label": "llama3.1-70b-instruct", "value": "llama3.1-70b-instruct"},
+          {"label": "llama3.1-8b-instruct", "value": "llama3.1-8b-instruct"},
+          {"label": "moonshot-v1-8k", "value": "moonshot-v1-8k"},
+          {"label": "moonshot-v1-32k", "value": "moonshot-v1-32k"},
+          {"label": "moonshot-v1-128k", "value": "moonshot-v1-128k"},
+          {"label": "yi-large", "value": "yi-large"},
+          {"label": "yi-medium", "value": "yi-medium"},
+          {"label": "yi-large-rag", "value": "yi-large-rag"},
+          {"label": "yi-large-turbo", "value": "yi-large-turbo"},
+          {"label": "abab6.5s-chat", "value": "abab6.5s-chat"},
+          {"label": "abab6.5t-chat", "value": "abab6.5t-chat"},
+          {"label": "abab6.5g-chat", "value": "abab6.5g-chat"}
+        ]
+      }
+    },
+    {
+      "name": "text",
+      "type": "InputFieldSelect2",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "fieldSource": "ali_image_rec_1",
+        "multiple": false,
+        "label": "提示词字段",
+        "tooltip": "提示词字段"
+      }
+    },
+    {
+      "name": "execute_mode",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "调用执行方式",
+        "viewType": "picker",
+        "dataSource": "static",
+        "initialValue": "SYNC",
+        "options": [
+          {
+            "value": "STREAM",
+            "label": "流式"
+          },
+          {
+            "value": "SYNC",
+            "label": "同步"
+          }
+        ]
+      }
+    },
+    {
+      "name": "temperature",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "temperature",
+        "initialValue": "1.0"
+      }
+    },
+    {
+      "name": "maxTokens",
+      "type": "NumberInput",
+      "valueType": "number",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "width": 100,
+        "label": "最大Token量",
+        "initialValue": 1024
+      }
+    },
+    {
+      "name": "topP",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "topP",
+        "initialValue": "0.6"
+      }
+    }
+  ]
+}

@@ -15,8 +15,9 @@
         <module>innospots-workflow-runtime</module>
         <module>innospots-workflow-core</module>
         <module>innospots-workflow-console</module>
-        <module>innospots-workflow-node</module>
         <module>innospots-workflow-job</module>
+        <module>innospots-workflow-node</module>
+        <module>innospots-workflow-node-ai</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -62,6 +63,11 @@
             <dependency>
                 <groupId>io.innospots</groupId>
                 <artifactId>innospots-workflow-node</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-workflow-node-ai</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

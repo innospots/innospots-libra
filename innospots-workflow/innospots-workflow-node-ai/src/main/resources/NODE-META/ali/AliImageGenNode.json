@@ -1,0 +1,838 @@
+{
+  "name": "阿里生图模型",
+  "code": "ali_image_gen",
+  "flowCode": "EVENTS",
+  "primitive": "api",
+  "vendor": "innospots",
+  "credentialTypeCode": "ali_api_key",
+  "description": "阿里生图大模型",
+  "icon": "/node/ali-image-gen.svg",
+  "nodeType": "io.innospots.workflow.node.ai.aliyun.AliImageGenNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "图像生成节点"
+      }
+    },
+    {
+      "name": "credential_key",
+      "type": "CredentialSelect",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "凭据",
+        "showAddButton": true,
+        "showEditButton": true
+      }
+    },
+    {
+      "name": "generate_image_mode",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "生成方式",
+        "viewType": "picker",
+        "dataSource": "static",
+        "initialValue": "txt2image",
+        "options": [
+          {
+            "value": "txt2image",
+            "label": "文生图"
+          },
+          {
+            "value": "similarImage",
+            "label": "相似图"
+          },
+          {
+            "value": "graffiti",
+            "label": "涂鸦"
+          },
+          {
+            "value": "poster",
+            "label": "海报"
+          },
+          {
+            "value": "cosplay",
+            "label": "Cosplay动漫人物"
+          },
+          {
+            "value": "repaint",
+            "label": "人像风格重绘"
+          }
+        ]
+      }
+    },
+    {
+      "name": "prompt",
+      "type": "InputFieldSelect2",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "fieldSource": "ali_image_gen_1",
+        "multiple": false,
+        "label": "提示词字段",
+        "tooltip": "提示词字段"
+      }
+    },
+    {
+      "name": "size",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "size",
+        "initialValue": "1024*1024",
+        "viewType": "picker",
+        "dataSource": "static",
+        "options": [
+          {
+            "value": "1024*1024",
+            "label": "1024*1024"
+          },
+          {
+            "value": "720×1280",
+            "label": "720×1280"
+          },
+          {
+            "value": "1280×720",
+            "label": "1280×720"
+          }
+        ]
+      }
+    },
+    {
+      "name": "n",
+      "type": "NumberInput",
+      "valueType": "number",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "width": 100,
+        "label": "n",
+        "initialValue": 1
+      }
+    },
+    {
+      "name": "refImage",
+      "type": "InputFieldSelect2",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "fieldSource": "ali_image_gen_1",
+        "multiple": false,
+        "label": "相关图片字段",
+        "tooltip": "相关图片字段"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "generate_mode",
+              "opt": "EQUAL",
+              "value": "similarImage"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "sketchImageUrl",
+      "type": "InputFieldSelect2",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "fieldSource": "ali_image_gen_1",
+        "multiple": false,
+        "label": "手绘图",
+        "tooltip": "手绘图"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "generate_mode",
+              "opt": "EQUAL",
+              "value": "graffiti"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "style",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "图像风格",
+        "viewType": "picker",
+        "dataSource": "static",
+        "initialValue": "auto",
+        "options": [
+          {
+            "value": "auto",
+            "label": "默认"
+          },
+          {
+            "value": "photography",
+            "label": "摄影"
+          },
+          {
+            "value": "portrait",
+            "label": "人像写真"
+          },
+          {
+            "value": "3d cartoon",
+            "label": "3D卡通"
+          },
+          {
+            "value": "anime",
+            "label": "动画"
+          },
+          {
+            "value": "oil painting",
+            "label": "油画"
+          },
+          {
+            "value": "watercolor",
+            "label": "水彩"
+          },
+          {
+            "value": "sketch",
+            "label": "素描"
+          },
+          {
+            "value": "chinese painting",
+            "label": "中国画"
+          },
+          {
+            "value": "flat illustration",
+            "label": "扁平插画"
+          }
+        ]
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "generate_mode",
+              "opt": "EQUAL",
+              "value": "graffiti"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "title",
+      "type": "InputFieldSelect2",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "fieldSource": "ali_image_gen_1",
+        "multiple": false,
+        "label": "标题",
+        "tooltip": "标题"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "generate_mode",
+              "opt": "EQUAL",
+              "value": "poster"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "sub_title",
+      "type": "InputFieldSelect2",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "fieldSource": "ali_image_gen_1",
+        "multiple": false,
+        "label": "副标题",
+        "tooltip": "副标题"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "generate_mode",
+              "opt": "EQUAL",
+              "value": "poster"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "body_text",
+      "type": "InputFieldSelect2",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "fieldSource": "ali_image_gen_1",
+        "multiple": false,
+        "label": "内容",
+        "tooltip": "内容"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "generate_mode",
+              "opt": "EQUAL",
+              "value": "poster"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "prompt_text_zh",
+      "type": "InputFieldSelect2",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "fieldSource": "ali_image_gen_1",
+        "multiple": false,
+        "label": "中文内容",
+        "tooltip": "内容"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "generate_mode",
+              "opt": "EQUAL",
+              "value": "poster"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "generate_mode",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "生成模式",
+        "viewType": "picker",
+        "dataSource": "static",
+        "initialValue": "generate",
+        "options": [
+          {
+            "value": "generate",
+            "label": "默认模式"
+          },
+          {
+            "value": "sr",
+            "label": "高分辨率模式"
+          },
+          {
+            "value": "hrf",
+            "label": "高清修复模式"
+          }
+        ]
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "generate_mode",
+              "opt": "EQUAL",
+              "value": "poster"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "generate_num",
+      "type": "NumberInput",
+      "valueType": "number",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "width": 100,
+        "label": "生成数量",
+        "initialValue": 1
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "generate_mode",
+              "opt": "EQUAL",
+              "value": "poster"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "lora_name",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "海报风格",
+        "viewType": "picker",
+        "dataSource": "static",
+        "initialValue": "浓郁色彩",
+        "options": [
+          {
+            "value": "浓郁色彩",
+            "label": "浓郁色彩"
+          },
+          {
+            "value": "2D插画1",
+            "label": "2D插画1"
+          },
+          {
+            "value": "2D插画2",
+            "label": "2D插画2"
+          },
+          {
+            "value": "浩瀚星云",
+            "label": "浩瀚星云"
+          },
+          {
+            "value": "光线粒子",
+            "label": "光线粒子"
+          },
+          {
+            "value": "透明玻璃",
+            "label": "透明玻璃"
+          },
+          {
+            "value": "剪纸工艺",
+            "label": "剪纸工艺"
+          },
+          {
+            "value": "中国水墨",
+            "label": "中国水墨"
+          },
+          {
+            "value": "中国刺绣",
+            "label": "中国刺绣"
+          },
+          {
+            "value": "真实场景",
+            "label": "真实场景"
+          },
+          {
+            "value": "2D卡通",
+            "label": "2D卡通"
+          },
+          {
+            "value": "儿童水彩",
+            "label": "儿童水彩"
+          },
+          {
+            "value": "赛博背景",
+            "label": "赛博背景"
+          },
+          {
+            "value": "浅蓝抽象",
+            "label": "浅蓝抽象"
+          },
+          {
+            "value": "深蓝抽象",
+            "label": "深蓝抽象"
+          },
+          {
+            "value": "抽象点线",
+            "label": "抽象点线"
+          },
+          {
+            "value": "童话油画",
+            "label": "童话油画"
+          }
+        ]
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "generate_mode",
+              "opt": "EQUAL",
+              "value": "poster"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "lora_weight",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "海报风格权重",
+        "initialValue": "0.8"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "generate_mode",
+              "opt": "EQUAL",
+              "value": "poster"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ctrl_ratio",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "留白效果权重",
+        "initialValue": "0.7"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "generate_mode",
+              "opt": "EQUAL",
+              "value": "poster"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ctrl_step",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "留白效果权重",
+        "initialValue": "0.7"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "generate_mode",
+              "opt": "EQUAL",
+              "value": "poster"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "style_index",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "风格化类型",
+        "viewType": "picker",
+        "dataSource": "static",
+        "initialValue": "0",
+        "options": [
+          {
+            "value": "-1",
+            "label": "参考上传图像风格"
+          },
+          {
+            "value": "0",
+            "label": "复古漫画"
+          },
+          {
+            "value": "1",
+            "label": "3D童话"
+          },
+          {
+            "value": "2",
+            "label": "二次元"
+          },
+          {
+            "value": "3",
+            "label": "小清新"
+          },
+          {
+            "value": "4",
+            "label": "未来科技"
+          },
+          {
+            "value": "5",
+            "label": "国画古风"
+          },
+          {
+            "value": "6",
+            "label": "将军百战"
+          },
+          {
+            "value": "7",
+            "label": "炫彩卡通"
+          },
+          {
+            "value": "8",
+            "label": "清雅国风"
+          },
+          {
+            "value": "9",
+            "label": "喜迎新年"
+          },
+          {
+            "value": "10",
+            "label": "手办卡通"
+          },
+          {
+            "value": "11",
+            "label": "炫彩多巴胺"
+          },
+          {
+            "value": "12",
+            "label": "3D国风"
+          },
+          {
+            "value": "13",
+            "label": "国风水墨"
+          },
+          {
+            "value": "14",
+            "label": "国风工笔"
+          },
+          {
+            "value": "15",
+            "label": "恭贺新禧"
+          },
+          {
+            "value": "16",
+            "label": "国风插图"
+          },
+          {
+            "value": "17",
+            "label": "清新水彩"
+          },
+          {
+            "value": "18",
+            "label": "文艺笔触"
+          },
+          {
+            "value": "101",
+            "label": "浪漫烟花"
+          },
+          {
+            "value": "102",
+            "label": "春日花园"
+          },
+          {
+            "value": "103",
+            "label": "湖畔夏夜"
+          },
+          {
+            "value": "104",
+            "label": "丛林探险"
+          },
+          {
+            "value": "105",
+            "label": "质感人像"
+          },
+          {
+            "value": "106",
+            "label": "星际迷航"
+          },
+          {
+            "value": "107",
+            "label": "海洋传说"
+          },
+          {
+            "value": "108",
+            "label": "冰雪精灵"
+          },
+          {
+            "value": "109",
+            "label": "大漠敦煌"
+          }
+        ]
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "generate_mode",
+              "opt": "EQUAL",
+              "value": "repaint"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "image_url",
+      "type": "InputFieldSelect2",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "fieldSource": "ali_image_gen_1",
+        "multiple": false,
+        "label": "风格图像字段",
+        "initialValue": "0.7"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "generate_mode",
+              "opt": "EQUAL",
+              "value": "repaint"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "style_ref_url",
+      "type": "InputFieldSelect2",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "fieldSource": "ali_image_gen_1",
+        "multiple": false,
+        "label": "风格参考图像URL地址",
+        "initialValue": "0.7"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "AND",
+          "children": [
+            {
+              "name": "style_index",
+              "opt": "EQUAL",
+              "value": "-1"
+            },
+            {
+              "name": "generate_mode",
+              "opt": "EQUAL",
+              "value": "repaint"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "face_image_url",
+      "type": "InputFieldSelect2",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "fieldSource": "ali_image_gen_1",
+        "multiple": false,
+        "label": "人脸图像URL地址"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "generate_mode",
+              "opt": "EQUAL",
+              "value": "cosplay"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "template_image_url",
+      "type": "InputFieldSelect2",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "fieldSource": "ali_image_gen_1",
+        "multiple": false,
+        "label": "模板图像URL地址"
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "generate_mode",
+              "opt": "EQUAL",
+              "value": "cosplay"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

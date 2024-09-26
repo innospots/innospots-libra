@@ -1,13 +1,13 @@
 {
-  "name": "阿里图像识别模型",
+  "name": "阿里图像识别",
   "code": "ali_image_rec",
   "flowCode": "EVENTS",
   "primitive": "api",
   "vendor": "innospots",
-  "credentialTypeCode": "ali_image_rec",
-  "description": "阿里图像识别大模型",
+  "credentialTypeCode": "ali_api_key",
+  "description": "图像识别大模型",
   "icon": "/node/ali-image-rec.svg",
-  "nodeType": "io.innospots.workflow.node.app.llm.AliImageRecNode",
+  "nodeType": "io.innospots.workflow.node.ai.aliyun.AliImageRecNode",
   "outPorts": "1",
   "inPorts": "1",
   "components": [
@@ -37,15 +37,33 @@
     },
     {
       "name": "model_name",
-      "type": "DataTableSelect",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
         "label": "模型名称",
-        "showAddButton": true,
-        "showEditButton": true,
-        "dependencies": "credential_key"
+        "viewType": "picker",
+        "dataSource": "static",
+        "initialValue": "qwen-vl-plus",
+        "options": [
+          {
+            "value": "qwen-vl-plus",
+            "label": "qwen-vl-plus"
+          },
+          {
+            "value": "qwen-vl-max",
+            "label": "qwen-vl-max"
+          },
+          {
+            "value": "qwen-vl-v1",
+            "label": "qwen-vl-v1"
+          },
+          {
+            "value": "qwen-vl-chat-v1",
+            "label": "qwen-vl-chat-v1"
+          }
+        ]
       }
     },
     {

@@ -40,6 +40,8 @@ import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.core.logger.FlowLoggerFactory;
 import io.innospots.workflow.core.logger.IFlowLogger;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -63,14 +65,18 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
 
     protected List<INodeExecutionListener> nodeExecutionListeners;
 
+    @Getter
     protected BuildStatus buildStatus = BuildStatus.NONE;
 
+    @Getter
     protected Exception buildException;
 
+    @Setter
     protected NodeInstance ni;
 
     protected String flowIdentifier;
 
+    @Setter
     protected IFlowLogger flowLogger;
 
 
@@ -141,10 +147,18 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
     }
 
     protected Object processItem(Map<String, Object> item) {
+        return processItem(item,null);
+    }
+
+    protected Object processItem(Map<String, Object> item,NodeExecution nodeExecution) {
         return item;
     }
 
     protected ExecutionResource processResource(ExecutionResource resource) {
+        return resource;
+    }
+
+    protected ExecutionResource processResource(ExecutionResource resource,NodeExecution nodeExecution) {
         return resource;
     }
 
@@ -156,17 +170,17 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
                 flowLogger.flowInfo("key: {}, name: {}, node input: {}", nodeExecution.getNodeKey(), executionInput.log().toString());
                 if (CollectionUtils.isNotEmpty(executionInput.getData())) {
                     for (Map<String, Object> item : executionInput.getData()) {
-                        Object result = processItem(item);
+                        Object result = processItem(item,nodeExecution);
                         processOutput(nodeExecution, result, nodeOutput);
                     }//end for
                 } else {
-                    Object result = processItem(null);
+                    Object result = processItem(null,nodeExecution);
                     processOutput(nodeExecution, result, nodeOutput);
                 }
                 if (CollectionUtils.isNotEmpty(executionInput.getResources())) {
                     List<ExecutionResource> outputResources = new ArrayList<>();
                     for (int i = 0; i < executionInput.getResources().size(); i++) {
-                        ExecutionResource resource = processResource(executionInput.getResources().get(i));
+                        ExecutionResource resource = processResource(executionInput.getResources().get(i),nodeExecution);
                         outputResources.add(resource);
                     }
                     outputResources = IExecutionContextOperator.saveExecutionResources(outputResources, nodeExecution.getContextDataPath());
@@ -205,7 +219,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
                 if (nodeExecution.getStatus() == ExecutionStatus.FAILED) {
                     isFail = true;
                 }
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 isFail = true;
                 flowLogger.nodeError(this.nodeKey(), this.ni.getName(), "err:{}", e.getMessage());
                 logger.error("node inner execute error:{}", nodeExecution, e);
@@ -364,6 +378,10 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
         return ni.valueString(field);
     }
 
+    protected Double valueDouble(String key){
+        return ni.valueDouble(key);
+    }
+
     protected Long valueLong(String field) {
         return ni.valueLong(field);
     }
@@ -479,12 +497,8 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
         return ni.getName();
     }
 
-    public BuildStatus getBuildStatus() {
-        return buildStatus;
-    }
-
-    public Exception getBuildException() {
-        return buildException;
+    public int timeoutMills(){
+        return ni.getTimeoutMills();
     }
 
 

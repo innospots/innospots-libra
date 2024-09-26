@@ -40,6 +40,10 @@
             <artifactId>innospots-workflow-node</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.innospots</groupId>
+            <artifactId>innospots-workflow-node-ai</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.projectreactor.netty</groupId>
             <artifactId>reactor-netty-http</artifactId>
         </dependency>
@@ -47,10 +51,6 @@
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>tech.tablesaw</groupId>
-            <artifactId>tablesaw-core</artifactId>
         </dependency>
     </dependencies>
 

@@ -172,12 +172,12 @@ public class ExecutionCarrier {
         CompletableFuture<NodeExecution> future = ecUnit.future;
         if (future == null) {
             if (async) {
-                future = CompletableFuture.supplyAsync(ecUnit::execute, taskExecutor);
+                future = CompletableFuture.supplyAsync(ecUnit::execute, taskExecutor).orTimeout(ecUnit.nodeExecutor.timeoutMills(), TimeUnit.MILLISECONDS);
                 //log.debug("execute async ecUnit:{}",ecUnit);
                 ecUnit.future = future;
             } else {
                 future = new CompletableFuture<>();
-                ecUnit.future = future;
+                ecUnit.future = future.orTimeout(ecUnit.nodeExecutor.timeoutMills(), TimeUnit.MILLISECONDS);
                 NodeExecution nodeExecution = ecUnit.execute();
                 ecUnit.future.complete(nodeExecution);
                 //CompletableFuture.completedFuture(ecUnit.execute());

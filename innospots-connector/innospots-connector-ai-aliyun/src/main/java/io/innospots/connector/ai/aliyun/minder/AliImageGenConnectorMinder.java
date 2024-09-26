@@ -28,11 +28,11 @@ public class AliImageGenConnectorMinder extends AliAiConnectorMinder {
                 "wanx-v1,通义万相",
                 "wanx-style-cosplay-v1,Cosplay动漫人物生成",
                 "wanx-poster-generation-v1,创意海报",
-//                "wanx-virtualmodel,虚拟模特",
-//                "virtualmodel-v2,虚拟模特v2",
-//                "image-erase-completion",
+                "wanx-virtualmodel,虚拟模特",
+                "virtualmodel-v2,虚拟模特v2",
+                "image-erase-completion",
                 "wanx-sketch-to-image-lite,通义涂鸦",
-//                "image-out-painting,图像扩展",
+                "image-out-painting,图像扩展",
                 "wanx-x-painting,局部重绘"
         };
         if (this.aliyunAiOperator == null) {

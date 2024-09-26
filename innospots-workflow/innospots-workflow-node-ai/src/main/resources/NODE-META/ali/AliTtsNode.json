@@ -1,13 +1,13 @@
 {
-  "name": "阿里大模型",
-  "code": "LLM",
+  "name": "阿里TTS",
+  "code": "ali_tts",
   "flowCode": "EVENTS",
   "primitive": "api",
   "vendor": "innospots",
-  "credentialTypeCode": "ali_llm",
-  "description": "llm大模型",
-  "icon": "/node/llm.svg",
-  "nodeType": "io.innospots.workflow.node.app.llm.LlmNode",
+  "credentialTypeCode": "ali_api_key",
+  "description": "阿里TTS",
+  "icon": "/node/ali-tts.svg",
+  "nodeType": "io.innospots.workflow.node.ai.aliyun.AliTtsNode",
   "outPorts": "1",
   "inPorts": "1",
   "components": [
@@ -20,7 +20,7 @@
       "settings": {
         "label": "节点名称",
         "placeholder": "请输入节点名称",
-        "initialValue": "LLM节点"
+        "initialValue": "TTS节点"
       }
     },
     {
@@ -37,74 +37,73 @@
     },
     {
       "name": "model_name",
-      "type": "DataTableSelect",
-      "valueType": "string",
-      "copyable": false,
-      "deletable": false,
-      "settings": {
-        "label": "模型名称",
-        "showAddButton": true,
-        "showEditButton": true,
-        "dependencies": "credential_key"
-      }
-    },
-    {
-      "name": "content_fields",
-      "type": "InputFieldSelect2",
-      "valueType": "array",
-      "copyable": false,
-      "deletable": false,
-      "settings": {
-        "fieldSource": "LLM_1",
-        "multiple": false,
-        "label": "内容字段",
-        "tooltip": "返回的内容字段"
-      }
-    },
-    {
-      "name": "execute_mode",
       "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
-        "label": "调用执行方式",
+        "label": "模型名称",
         "viewType": "picker",
         "dataSource": "static",
-        "initialValue": "SYNC",
+        "initialValue": "cosyvoice-v1",
         "options": [
           {
-            "value": "STREAM",
-            "label": "流式"
-          },
-          {
-            "value": "SYNC",
-            "label": "同步"
+            "value": "cosyvoice-v1",
+            "label": "cosyvoice-v1"
           }
         ]
       }
     },
     {
-      "name": "temperature",
-      "type": "Input",
+      "name": "text",
+      "type": "InputFieldSelect2",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "fieldSource": "ali_tts_1",
+        "multiple": false,
+        "label": "提示词字段",
+        "tooltip": "提示词字段"
+      }
+    },
+    {
+      "name": "voice",
+      "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
-        "label": "temperature",
-        "initialValue": "1.0"
-      }
-    },
-    {
-      "name": "max_tokens",
-      "type": "NumberInput",
-      "valueType": "number",
-      "copyable": false,
-      "deletable": false,
-      "settings": {
-        "width": 100,
-        "label": "最大 Token量",
-        "initialValue": 500
+        "label": "音色",
+        "viewType": "picker",
+        "dataSource": "static",
+        "initialValue": "longxiaochun",
+        "options": [
+          {
+            "value": "longxiaochun",
+            "label": "龙小淳"
+          },
+          {
+            "value": "longxiaoxia",
+            "label": "龙小夏"
+          },
+          {
+            "value": "loongstella",
+            "label": "Stella"
+          },
+          {
+            "value": "longjielidou",
+            "label": "龙杰力豆"
+          },
+          {
+            "value": "longlaotie",
+            "label": "龙老铁"
+          },
+          {
+            "value": "longxiaocheng",
+            "label": "龙小诚"
+          }
+        ]
       }
     }
   ]

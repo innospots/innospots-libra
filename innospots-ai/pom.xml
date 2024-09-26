@@ -7,6 +7,7 @@
         <version>${innosopts.version}</version>
     </parent>
 
+
     <artifactId>innospots-ai</artifactId>
     <name>innospots-ai</name>
     <packaging>pom</packaging>

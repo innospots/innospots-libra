@@ -5,8 +5,34 @@
   "enabled": true,
   "connectType": "API",
   "overview": "${meta.schema.aliyunllm.overview:阿里云大模型}",
-  "description": "aliyun 大模型接入",
+  "description": "aliyun大模型接入",
   "authOptions": [
+    {
+      "name": "阿里APIKEY",
+      "code": "ali_api_key",
+      "minder": "io.innospots.connector.ai.aliyun.minder.AliAiApiConnectorMinder",
+      "defaults": {
+        "temperature": 1.8,
+        "maxTokens": 80,
+        "topP": 0.8,
+        "resultFormat": "message"
+      },
+      "elements": [
+        {
+          "label": "apiKey",
+          "name": "api_key",
+          "maxSize": 64,
+          "placeholder": "鉴权 key",
+          "required": true,
+          "labelGrid": 4,
+          "tips": "鉴权凭证 key",
+          "type": "INPUT",
+          "expression": "",
+          "gridSize": 16,
+          "options": []
+        }
+      ]
+    },
     {
       "name": "文本生成",
       "code": "ali-llm",
