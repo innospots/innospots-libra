@@ -47,6 +47,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.MalformedURLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -536,6 +537,10 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
 
     protected ExecutionResource saveResourceToLocal(byte[] fileBytes, String fileName, NodeExecution nodeExecution) {
         return IExecutionContextOperator.buildExecutionResource(fileBytes, fileName, nodeExecution.getContextDataPath());
+    }
+
+    protected ExecutionResource saveResourceToLocal(String url, String subFix, NodeExecution nodeExecution) throws MalformedURLException {
+        return IExecutionContextOperator.buildExecutionResource(url, subFix, nodeExecution.getContextDataPath());
     }
 
 

@@ -75,7 +75,7 @@
       }
     },
     {
-      "name": "prompt",
+      "name": "prompt_txt",
       "type": "InputFieldSelect2",
       "valueType": "array",
       "copyable": false,
@@ -144,7 +144,7 @@
           "relation": "OR",
           "children": [
             {
-              "name": "generate_mode",
+              "name": "generate_image_mode",
               "opt": "EQUAL",
               "value": "similarImage"
             }
@@ -170,7 +170,7 @@
           "relation": "OR",
           "children": [
             {
-              "name": "generate_mode",
+              "name": "generate_image_mode",
               "opt": "EQUAL",
               "value": "graffiti"
             }
@@ -188,46 +188,46 @@
         "label": "图像风格",
         "viewType": "picker",
         "dataSource": "static",
-        "initialValue": "auto",
+        "initialValue": "<auto>",
         "options": [
           {
-            "value": "auto",
+            "value": "<auto>",
             "label": "默认"
           },
           {
-            "value": "photography",
+            "value": "<photography>",
             "label": "摄影"
           },
           {
-            "value": "portrait",
+            "value": "<portrait>",
             "label": "人像写真"
           },
           {
-            "value": "3d cartoon",
+            "value": "<3d cartoon>",
             "label": "3D卡通"
           },
           {
-            "value": "anime",
+            "value": "<anime>",
             "label": "动画"
           },
           {
-            "value": "oil painting",
+            "value": "<oil painting>",
             "label": "油画"
           },
           {
-            "value": "watercolor",
+            "value": "<watercolor>",
             "label": "水彩"
           },
           {
-            "value": "sketch",
+            "value": "<sketch>",
             "label": "素描"
           },
           {
-            "value": "chinese painting",
+            "value": "<chinese painting>",
             "label": "中国画"
           },
           {
-            "value": "flat illustration",
+            "value": "<flat illustration>",
             "label": "扁平插画"
           }
         ]
@@ -238,9 +238,19 @@
           "relation": "OR",
           "children": [
             {
-              "name": "generate_mode",
+              "name": "generate_image_mode",
               "opt": "EQUAL",
               "value": "graffiti"
+            },
+            {
+              "name": "generate_image_mode",
+              "opt": "EQUAL",
+              "value": "txt2image"
+            },
+            {
+              "name": "generate_image_mode",
+              "opt": "EQUAL",
+              "value": "similarImage"
             }
           ]
         }
@@ -264,7 +274,7 @@
           "relation": "OR",
           "children": [
             {
-              "name": "generate_mode",
+              "name": "generate_image_mode",
               "opt": "EQUAL",
               "value": "poster"
             }
@@ -290,7 +300,7 @@
           "relation": "OR",
           "children": [
             {
-              "name": "generate_mode",
+              "name": "generate_image_mode",
               "opt": "EQUAL",
               "value": "poster"
             }
@@ -316,7 +326,7 @@
           "relation": "OR",
           "children": [
             {
-              "name": "generate_mode",
+              "name": "generate_image_mode",
               "opt": "EQUAL",
               "value": "poster"
             }
@@ -342,7 +352,7 @@
           "relation": "OR",
           "children": [
             {
-              "name": "generate_mode",
+              "name": "generate_image_mode",
               "opt": "EQUAL",
               "value": "poster"
             }
@@ -382,7 +392,7 @@
           "relation": "OR",
           "children": [
             {
-              "name": "generate_mode",
+              "name": "generate_image_mode",
               "opt": "EQUAL",
               "value": "poster"
             }
@@ -407,7 +417,7 @@
           "relation": "OR",
           "children": [
             {
-              "name": "generate_mode",
+              "name": "generate_image_mode",
               "opt": "EQUAL",
               "value": "poster"
             }
@@ -503,7 +513,7 @@
           "relation": "OR",
           "children": [
             {
-              "name": "generate_mode",
+              "name": "generate_image_mode",
               "opt": "EQUAL",
               "value": "poster"
             }
@@ -527,7 +537,7 @@
           "relation": "OR",
           "children": [
             {
-              "name": "generate_mode",
+              "name": "generate_image_mode",
               "opt": "EQUAL",
               "value": "poster"
             }
@@ -551,7 +561,7 @@
           "relation": "OR",
           "children": [
             {
-              "name": "generate_mode",
+              "name": "generate_image_mode",
               "opt": "EQUAL",
               "value": "poster"
             }
@@ -575,7 +585,7 @@
           "relation": "OR",
           "children": [
             {
-              "name": "generate_mode",
+              "name": "generate_image_mode",
               "opt": "EQUAL",
               "value": "poster"
             }
@@ -719,7 +729,7 @@
           "relation": "OR",
           "children": [
             {
-              "name": "generate_mode",
+              "name": "generate_image_mode",
               "opt": "EQUAL",
               "value": "repaint"
             }
@@ -736,8 +746,7 @@
       "settings": {
         "fieldSource": "ali_image_gen_1",
         "multiple": false,
-        "label": "风格图像字段",
-        "initialValue": "0.7"
+        "label": "风格图像字段"
       },
       "conditions": [
         {
@@ -745,7 +754,7 @@
           "relation": "OR",
           "children": [
             {
-              "name": "generate_mode",
+              "name": "generate_image_mode",
               "opt": "EQUAL",
               "value": "repaint"
             }
@@ -762,8 +771,7 @@
       "settings": {
         "fieldSource": "ali_image_gen_1",
         "multiple": false,
-        "label": "风格参考图像URL地址",
-        "initialValue": "0.7"
+        "label": "风格参考图像URL地址"
       },
       "conditions": [
         {
@@ -776,7 +784,7 @@
               "value": "-1"
             },
             {
-              "name": "generate_mode",
+              "name": "generate_image_mode",
               "opt": "EQUAL",
               "value": "repaint"
             }
@@ -801,7 +809,7 @@
           "relation": "OR",
           "children": [
             {
-              "name": "generate_mode",
+              "name": "generate_image_mode",
               "opt": "EQUAL",
               "value": "cosplay"
             }
@@ -826,7 +834,7 @@
           "relation": "OR",
           "children": [
             {
-              "name": "generate_mode",
+              "name": "generate_image_mode",
               "opt": "EQUAL",
               "value": "cosplay"
             }

@@ -21,7 +21,7 @@ public abstract class AliAiBaseNode<Msg, Param> extends BaseNodeExecutor {
     public static final String FIELD_CREDENTIAL_KEY = "credential_key";
     public static final String FIELD_MODEL_NAME = "model_name";
     public static final String FIELD_LLM_EXECUTE_MODE = "execute_mode";
-    public static final String FILED_TEXT = "text";
+    public static final String FILED_PROMPT = "prompt_txt";
 
     protected ParamField promptField;
 
@@ -42,7 +42,7 @@ public abstract class AliAiBaseNode<Msg, Param> extends BaseNodeExecutor {
             this.executeMode = LlmExecuteMode.valueOf(eMode);
         }
 
-        this.promptField = NodeInstanceUtils.buildParamField(this.ni, FILED_TEXT);
+        this.promptField = NodeInstanceUtils.buildParamField(this.ni, FILED_PROMPT);
 
         this.modelName = this.valueString(FIELD_MODEL_NAME);
     }

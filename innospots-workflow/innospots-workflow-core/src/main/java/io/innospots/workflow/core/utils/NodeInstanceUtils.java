@@ -27,9 +27,9 @@ public class NodeInstanceUtils {
 
     public static NodeParamField buildParamField(NodeInstance nodeInstance, String fieldName) {
         NodeParamField nodeParamField = null;
-        Map<String, Object> listFieldValue = (Map<String, Object>) nodeInstance.value(fieldName);
-        if (listFieldValue != null) {
-            nodeParamField = BeanUtils.toBean(listFieldValue, NodeParamField.class);
+        Object listFieldValue = nodeInstance.value(fieldName);
+        if (listFieldValue instanceof Map) {
+            nodeParamField = BeanUtils.toBean((Map<String, Object>) listFieldValue, NodeParamField.class);
         }
         return nodeParamField;
     }

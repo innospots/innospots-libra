@@ -18,6 +18,7 @@
 
 package io.innospots.workflow.core.execution.operator;
 
+import cn.hutool.core.util.RandomUtil;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.utils.time.DateTimeUtils;
@@ -34,8 +35,10 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.InputStreamSource;
+import org.springframework.core.io.UrlResource;
 
 import java.io.*;
+import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
@@ -181,6 +184,27 @@ public interface IExecutionContextOperator {
                 logger.error(e.getMessage(), e);
             }
         }//end for
+    }
+
+    static ExecutionResource buildExecutionResource(String url,String subFix,File flowExecutionPath) throws MalformedURLException {
+        File fileDir = new File(flowExecutionPath, DIR_ATTACHMENT);
+        if (!fileDir.exists()) {
+            fileDir.mkdirs();
+        }
+        UrlResource resource = new UrlResource(url);
+        String fileName = resource.getFilename();
+        if(fileName == null){
+            fileName = RandomUtil.randomString(6)+"."+subFix;
+        }
+        File resourceFile = new File(fileDir, fileName);
+        if(!resourceFile.exists()){
+            try {
+                Files.write(resourceFile.toPath(),resource.getContentAsByteArray());
+            } catch (IOException e) {
+                logger.error(e.getMessage(),e);
+            }
+        }
+        return ExecutionResource.buildResource(resourceFile,false,InnospotsWorkflowProperties.WORKFLOW_RESOURCES);
     }
 
     static ExecutionResource buildExecutionResource(byte[] bufferBytes,String resourceName, File flowExecutionPath) {

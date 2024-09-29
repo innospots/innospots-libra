@@ -55,7 +55,7 @@
       }
     },
     {
-      "name": "text",
+      "name": "prompt_txt",
       "type": "InputFieldSelect2",
       "valueType": "array",
       "copyable": false,
