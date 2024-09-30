@@ -6,9 +6,9 @@
   "vendor": "innospots",
   "description": "",
   "settings": {
-    "formWidth": 420,
-    "formMinWidth": 360,
-    "formMaxWidth": 700,
+    "formWidth": 500,
+    "formMinWidth": 400,
+    "formMaxWidth": 860,
     "isFixedWidth": false,
     "runMethod": "DEFAULT",
     "color": "#fffff"

@@ -7,11 +7,7 @@
   "description": "开始节点",
   "icon": "/node/start.svg",
   "nodeType": "io.innospots.workflow.core.node.executor.StateNode",
-  "outPorts": [
-    {
-      "count": 1
-    }
-  ],
+  "outPorts": "1",
   "components": [
     {
       "name": "displayName",

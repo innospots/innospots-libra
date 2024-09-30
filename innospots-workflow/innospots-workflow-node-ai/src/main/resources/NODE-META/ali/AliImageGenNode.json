@@ -104,12 +104,24 @@
             "label": "1024*1024"
           },
           {
-            "value": "720×1280",
-            "label": "720×1280"
+            "value": "720*1280",
+            "label": "720*1280"
           },
           {
-            "value": "1280×720",
-            "label": "1280×720"
+            "value": "1280*720",
+            "label": "1280*720"
+          },
+          {
+            "value": "1280*1280",
+            "label": "1280*1280"
+          },
+          {
+            "value": "2048*2048",
+            "label": "2048*2048"
+          },
+          {
+            "value": "768*768",
+            "label": "768*768"
           }
         ]
       }
@@ -122,12 +134,12 @@
       "deletable": false,
       "settings": {
         "width": 100,
-        "label": "n",
+        "label": "图片数量",
         "initialValue": 1
       }
     },
     {
-      "name": "refImage",
+      "name": "ref_image",
       "type": "InputFieldSelect2",
       "valueType": "string",
       "copyable": false,
@@ -153,7 +165,7 @@
       ]
     },
     {
-      "name": "sketchImageUrl",
+      "name": "sketch_image_url",
       "type": "InputFieldSelect2",
       "valueType": "string",
       "copyable": false,

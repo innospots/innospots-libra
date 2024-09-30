@@ -51,10 +51,10 @@ public abstract class AliAiBaseNode<Msg, Param> extends BaseNodeExecutor {
 
     protected void fillOptions(Map<String, Object> item, Param param) {
         if (item != null) {
-            BeanUtil.fillBeanWithMap(item, param, CopyOptions.create().ignoreError().ignoreNullValue());
+            BeanUtil.fillBeanWithMap(item, param, CopyOptions.create().ignoreError().setAutoTransCamelCase(false).ignoreNullValue());
         }
         if (this.ni.getData() != null) {
-            BeanUtil.fillBeanWithMap(this.ni.getData(), param, CopyOptions.create().ignoreError().ignoreNullValue());
+            BeanUtil.fillBeanWithMap(this.ni.getData(), param, CopyOptions.create().setAutoTransCamelCase(false).ignoreError().ignoreNullValue());
         }
     }
 
