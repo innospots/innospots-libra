@@ -25,9 +25,11 @@ import java.util.stream.Collectors;
 public class NodeMetaService {
 
     private final FlowNodeDefinitionOperator flowNodeDefinitionOperator;
+    private final NodeDefinitionService nodeDefinitionService;
 
-    public NodeMetaService(FlowNodeDefinitionOperator flowNodeDefinitionOperator) {
+    public NodeMetaService(FlowNodeDefinitionOperator flowNodeDefinitionOperator, NodeDefinitionService nodeDefinitionService) {
         this.flowNodeDefinitionOperator = flowNodeDefinitionOperator;
+        this.nodeDefinitionService = nodeDefinitionService;
     }
 
     public List<NodeDefinition> synchronizeNodeMeta(boolean force) {
@@ -57,7 +59,7 @@ public class NodeMetaService {
         for (NodeMetaInfo value : metaInfoMap.values()) {
             NodeDefinition nodeDefinition = NodeDefinitionBuilder.build(value);
             log.info("create node definition from node meta: {}", nodeDefinition);
-            nodeDefinition = flowNodeDefinitionOperator.createNodeDefinition(nodeDefinition);
+            nodeDefinition = nodeDefinitionService.createNodeDefinition(nodeDefinition);
             nd.add(nodeDefinition);
         }
         log.info("synchronize node definition: {}", nd.size());

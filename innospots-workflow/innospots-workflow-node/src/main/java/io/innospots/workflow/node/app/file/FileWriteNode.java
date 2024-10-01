@@ -1,7 +1,6 @@
 package io.innospots.workflow.node.app.file;
 
 import io.innospots.base.execution.ExecutionResource;
-import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
@@ -11,9 +10,6 @@ import io.innospots.workflow.core.utils.NodeInstanceUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
@@ -57,13 +53,8 @@ public class FileWriteNode extends BaseNodeExecutor {
         if(content.isEmpty()){
             return;
         }
-        try {
-            String fileN = fileName == null? this.nodeKey() : fileName;
-            Path outFile = Files.createTempFile("innospots_"+fileN, ".txt");
-            Files.write(outFile, content.toString().getBytes());
-            nodeOutput.addResource(0, ExecutionResource.buildResource(outFile.toFile(), true, InnospotsWorkflowProperties.WORKFLOW_RESOURCES));
-        } catch (IOException e) {
-            log.error(e.getMessage(),e);
-        }
+        String fileN = fileName == null? this.nodeKey() : fileName;
+        ExecutionResource er = this.saveResourceToLocal(content.toString().getBytes(),fileN, nodeExecution);
+        nodeOutput.addResource(0, er);
     }
 }

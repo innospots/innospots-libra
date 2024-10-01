@@ -7,22 +7,11 @@ import com.alibaba.dashscope.common.Message;
 import com.alibaba.dashscope.common.Role;
 import io.innospots.base.connector.credential.model.ConnectionCredential;
 import io.innospots.base.connector.minder.BaseDataConnectionMinder;
-import io.innospots.base.connector.schema.model.SchemaCatalog;
-import io.innospots.base.connector.schema.model.SchemaRegistry;
-import io.innospots.base.data.body.DataBody;
-import io.innospots.base.data.operator.IExecutionOperator;
 import io.innospots.base.data.operator.IOperator;
-import io.innospots.base.data.request.BaseRequest;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.connector.ai.aliyun.operator.AliyunAiOperator;
-import io.innospots.connector.ai.aliyun.operator.AliyunLlmOperator;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author Smars

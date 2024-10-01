@@ -116,12 +116,15 @@ public class AliImageGenNode extends AliAiBaseNode<String, ImageSynthesisParam> 
             throw ResourceException.buildNotExistException(AliImageRecNode.class, "image_url is null");
         }
         input.put("image_url", imageUrl);
-        log.info("repaint post body:{}", data);
-
         boolean enableOss = imageUrl != null && imageUrl.startsWith("oss");
+        return restInvoke(data, nodeExecution, enableOss);
+    }
+
+    private List<ExecutionResource> restInvoke(Map<String,Object> data,NodeExecution nodeExecution,boolean enableOss){
+        log.info("rest post body:{}", data);
         RestClient restClient = buildClient("https://dashscope.aliyuncs.com/api/v1/services/aigc/image-generation/generation", enableOss);
         Map<String, Object> res = restClient.post().body(data).retrieve().toEntity(Map.class).getBody();
-        log.info("repaint result:{}", res);
+        log.info("image generation result:{}", res);
         Map<String, String> output = (Map<String, String>) res.get("output");
         String taskId = output.get("task_id");
         if (taskId == null) {
@@ -143,29 +146,27 @@ public class AliImageGenNode extends AliAiBaseNode<String, ImageSynthesisParam> 
         }
     }
 
-    protected Map<String, String> cosplay(Map<String, Object> item, NodeExecution nodeExecution) {
+    protected List<ExecutionResource> cosplay(Map<String, Object> item, NodeExecution nodeExecution) {
         Map<String, Object> data = new HashMap<>();
         data.put("model", GenerateImageMode.cosplay.getModel());
         Map<String, Object> input = new HashMap<>();
         data.put("input", input);
         input.put("model_index", 1);
         String faceImageUrl = faceImageUrlField != null ? (String) item.get(faceImageUrlField.getCode()) : null;
-        input.put("face_image_url", faceImageUrl);
         String templateImageUrl = templateImagUrlField != null ? (String) item.get(templateImagUrlField.getCode()) : null;
-        input.put("template_image_url", templateImageUrl);
+
         if (faceImageUrl != null) {
-            faceImageUrl = this.convertAndUploadImage(GenerateImageMode.cosplay.model, faceImageUrl);
+            //faceImageUrl = this.convertAndUploadImage(GenerateImageMode.cosplay.model, faceImageUrl);
         }
         if (templateImageUrl != null) {
-            templateImageUrl = this.convertAndUploadImage(GenerateImageMode.cosplay.model, templateImageUrl);
+            //templateImageUrl = this.convertAndUploadImage(GenerateImageMode.cosplay.model, templateImageUrl);
         }
+        input.put("face_image_url", faceImageUrl);
+        input.put("template_image_url", templateImageUrl);
         boolean enableOss = (faceImageUrl != null && faceImageUrl.startsWith("oss"))
                 || (templateImageUrl != null && templateImageUrl.startsWith("oss"));
 
-        RestClient restClient = buildClient("https://dashscope.aliyuncs.com/api/v1/services/aigc/image-generation/generation", enableOss);
-
-
-        return restClient.post().body(data).retrieve().toEntity(Map.class).getBody();
+        return restInvoke(data, nodeExecution, enableOss);
     }
 
     private RestClient buildClient(String url, boolean enableOss) {
@@ -306,7 +307,7 @@ public class AliImageGenNode extends AliAiBaseNode<String, ImageSynthesisParam> 
             Files.write(outFile.toPath(), resource.getContentAsByteArray());
             log.info("write image temp file:{}", outFile.getAbsolutePath());
             urlImage = OSSUtils.upload(model, outFile.getAbsolutePath(), this.apiKey);
-            log.info("upload to oos:{}", urlImage);
+            log.info("upload to oss:{}", urlImage);
         } catch (Exception e) {
             log.error(e.getMessage());
         }

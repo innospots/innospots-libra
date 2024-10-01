@@ -56,10 +56,10 @@ import java.util.stream.Collectors;
 public class FlowNodeGroupOperator {
 
 
-    private FlowNodeGroupDao flowNodeGroupDao;
-    private FlowNodeGroupNodeDao flowNodeGroupNodeDao;
-    private FlowNodeDefinitionDao flowNodeDefinitionDao;
-    private FlowTemplateDao flowTemplateDao;
+    private final FlowNodeGroupDao flowNodeGroupDao;
+    private final FlowNodeGroupNodeDao flowNodeGroupNodeDao;
+    private final FlowNodeDefinitionDao flowNodeDefinitionDao;
+    private final FlowTemplateDao flowTemplateDao;
 
     public FlowNodeGroupOperator(FlowTemplateDao flowTemplateDao, FlowNodeGroupDao flowNodeGroupDao, FlowNodeGroupNodeDao flowNodeGroupNodeDao,
                                  FlowNodeDefinitionDao flowNodeDefinitionDao) {
@@ -114,6 +114,13 @@ public class FlowNodeGroupOperator {
         if (row != 1) {
             throw ResourceException.buildCreateException(this.getClass(), "create node group error");
         }
+        return FlowNodeGroupConverter.INSTANCE.entityToModel(entity);
+    }
+
+    public NodeGroup getNodeGroupByCode(String groupCode){
+        QueryWrapper<FlowNodeGroupEntity> qw = new QueryWrapper<>();
+        qw.lambda().eq(FlowNodeGroupEntity::getCode, groupCode);
+        FlowNodeGroupEntity entity = flowNodeGroupDao.selectOne(qw);
         return FlowNodeGroupConverter.INSTANCE.entityToModel(entity);
     }
 

@@ -131,4 +131,22 @@ class AliImageGenNodeTest {
         }
     }
 
+    @Test
+    void testCosplay(){
+        AliImageGenNode genNode = build();
+        genNode.generateMode = AliImageGenNode.GenerateImageMode.cosplay;
+        genNode.faceImageUrlField = new ParamField("face", "face", FieldValueType.STRING);
+        genNode.templateImagUrlField = new ParamField("template", "template", FieldValueType.STRING);
+        Map<String,Object> item = new HashMap<>();
+//        item.put("face","https://i.pinimg.com/originals/b4/f6/83/b4f683cbafa9d9f4a07585a0b43247d6.jpg");
+//        item.put("template","https://img95.699pic.com/element/40159/5645.png_860.png");
+        item.put("face","https://huarong123.oss-cn-hangzhou.aliyuncs.com/image/cosplay-%E5%8E%9F%E5%9B%BE-%E5%A5%B3.jpg");
+        item.put("template","https://huarong123.oss-cn-hangzhou.aliyuncs.com/image/%E9%A3%8E%E6%A0%BC%E5%8F%82%E8%80%83%E5%9B%BE-%E8%A3%81%E5%89%AA.jpg");
+        NodeExecution nodeExecution = buildNodeExecution(item);
+        List<ExecutionResource> ll = genNode.cosplay(item, nodeExecution);
+        for (ExecutionResource executionResource : ll) {
+            System.out.println(executionResource);
+        }
+    }
+
 }

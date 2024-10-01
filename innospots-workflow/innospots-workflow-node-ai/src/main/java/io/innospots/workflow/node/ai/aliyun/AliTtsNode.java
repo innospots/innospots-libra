@@ -5,17 +5,12 @@ import com.alibaba.dashscope.audio.ttsv2.SpeechSynthesizer;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.execution.ExecutionResource;
-import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
 import java.nio.ByteBuffer;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Map;
 
 /**

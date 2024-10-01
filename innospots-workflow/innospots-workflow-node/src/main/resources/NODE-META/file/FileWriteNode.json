@@ -19,7 +19,7 @@
       "settings": {
         "label": "节点名称",
         "placeholder": "请输入节点名称",
-        "initialValue": "文件输出"
+        "initialValue": "内容写入"
       }
     },
     {
@@ -30,11 +30,10 @@
       "deletable": false,
       "settings": {
         "label": "写入文件名称",
-        "placeholder": " xxx.txt",
+        "placeholder": "xxx.txt",
         "initialValue": "write_file.txt"
       }
-    },
-    {
+    },{
       "name": "content_fields",
       "type": "InputFieldSelect2",
       "valueType": "array",
@@ -44,7 +43,7 @@
         "fieldSource": "write_file_1",
         "multiple": true,
         "label": "内容字段",
-        "tooltip": "选择内容字段"
+        "tooltip": "写入内容字段"
       }
     }
   ]

@@ -35,6 +35,7 @@ import io.innospots.workflow.core.enums.NodePrimitive;
 import io.innospots.workflow.core.enums.NodeVendor;
 import io.innospots.workflow.core.node.NodeInfo;
 import io.innospots.workflow.core.node.definition.model.NodeDefinition;
+import io.innospots.workflow.core.node.definition.model.NodeGroup;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -141,6 +142,16 @@ public class NodeDefinitionService {
         nodeIds.add(nodeId);
         flowNodeGroupOperator.saveOrUpdateNodeGroupNode(nodeGroupId, nodeIds);
         return nodeInfo;
+    }
+
+    @Transactional
+    public NodeDefinition createNodeDefinition(NodeDefinition nodeDefinition) {
+        nodeDefinition = flowNodeDefinitionOperator.createNodeDefinition(nodeDefinition);
+        NodeGroup nodeGroup = this.flowNodeGroupOperator.getNodeGroupByCode(nodeDefinition.getPrimitive().name());
+        if(nodeGroup!=null){
+            this.updateNodeGroup(nodeDefinition.getNodeId(), nodeGroup.getNodeGroupId());
+        }
+        return nodeDefinition;
     }
 
     public Boolean updateNodeDefinitionStatus(Integer nodeId, DataStatus status) {
