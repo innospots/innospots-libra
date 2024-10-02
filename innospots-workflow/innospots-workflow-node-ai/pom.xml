@@ -11,6 +11,9 @@
     <packaging>jar</packaging>
 
     <name>innospots-workflow-node-ai</name>
+    <properties>
+        <zhipu.ai.version>release-V4-2.3.0</zhipu.ai.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -20,6 +23,12 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>dashscope-sdk-java</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.bigmodel.openapi</groupId>
+            <artifactId>oapi-java-sdk</artifactId>
+            <version>${zhipu.ai.version}</version>
         </dependency>
     </dependencies>
 

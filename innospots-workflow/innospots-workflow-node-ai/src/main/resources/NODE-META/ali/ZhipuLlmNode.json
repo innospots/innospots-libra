@@ -1,0 +1,132 @@
+{
+  "name": "智谱大模型",
+  "code": "zhipu_llm",
+  "flowCode": "EVENTS",
+  "primitive": "ai",
+  "vendor": "innospots",
+  "credentialTypeCode": "api_key",
+  "description": "智谱大模型",
+  "icon": "/node/zhipu_llm.svg",
+  "nodeType": "io.innospots.workflow.node.ai.zhipu.ZhipuLlmNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "智谱大模型"
+      }
+    },
+    {
+      "name": "credential_key",
+      "type": "CredentialSelect",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "凭据",
+        "showAddButton": true,
+        "showEditButton": true
+      }
+    },
+    {
+      "name": "model_name",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "模型名称",
+        "viewType": "picker",
+        "dataSource": "static",
+        "initialValue": "GLM-4-Flash",
+        "options": [
+          {"label": "高智能旗舰:GLM-4-Plus", "value": "GLM-4-Plus"},
+          {"label": "高智能模型:GLM-4-0520", "value": "GLM-4-0520"},
+          {"label": "超长输入:GLM-4-Long", "value": "GLM-4-Long"},
+          {"label": "极速推理:GLM-4-AirX", "value": "GLM-4-AirX"},
+          {"label": "高性价比:GLM-4-Air", "value": "GLM-4-Air"},
+          {"label": "高速低价:GLM-4-FlashX", "value": "GLM-4-FlashX"},
+          {"label": "免费调用:GLM-4-Flash", "value": "GLM-4-Flash"},
+          {"label": "代码模型:CodeGeeX-4", "value": "CodeGeeX-4"}
+        ]
+      }
+    },
+    {
+      "name": "prompt_txt",
+      "type": "InputFieldSelect2",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "fieldSource": "ali_image_rec_1",
+        "multiple": false,
+        "label": "提示词字段",
+        "tooltip": "提示词字段"
+      }
+    },
+    {
+      "name": "execute_mode",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "调用执行方式",
+        "viewType": "picker",
+        "dataSource": "static",
+        "initialValue": "SYNC",
+        "options": [
+          {
+            "value": "STREAM",
+            "label": "流式"
+          },
+          {
+            "value": "SYNC",
+            "label": "同步"
+          }
+        ]
+      }
+    },
+    {
+      "name": "temperature",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "temperature",
+        "initialValue": "1.0"
+      }
+    },
+    {
+      "name": "maxTokens",
+      "type": "NumberInput",
+      "valueType": "number",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "width": 100,
+        "label": "最大Token量",
+        "initialValue": 1024
+      }
+    },
+    {
+      "name": "topP",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "topP",
+        "initialValue": "0.6"
+      }
+    }
+  ]
+}

@@ -20,33 +20,31 @@ import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.core.logger.FlowLoggerFactory;
+import io.innospots.workflow.node.ai.LlmExecuteMode;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.UrlResource;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Smars
  * @vesion 2.0
  * @date 2024/9/26
  */
-class AliImageRecNodeTest {
+class AliAliImageRecNodeTest {
 
 
     AliImageRecNode build(){
         AliImageRecNode recNode = new AliImageRecNode();
         recNode.imageField = new ParamField("image","image", FieldValueType.STRING);
-        recNode.promptField = new ParamField("text","text",FieldValueType.STRING);
-        recNode.executeMode =LlmExecuteMode.SYNC;
-        recNode.modelName = "qwen-vl-plus";
-        recNode.apiKey = System.getenv("API_KEY");
+        recNode.setPromptField(new ParamField("text","text",FieldValueType.STRING));
+        recNode.setExecuteMode(LlmExecuteMode.SYNC);
+        recNode.setModelName("qwen-vl-plus");
+        recNode.setApiKey(System.getenv("API_KEY"));
         InnospotsIdGenerator.build("127.0.0.1", 8080);
 
         NodeInstance ni = new NodeInstance();

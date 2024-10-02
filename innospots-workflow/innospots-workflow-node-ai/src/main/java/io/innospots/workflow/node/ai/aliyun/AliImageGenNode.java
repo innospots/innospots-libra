@@ -13,6 +13,7 @@ import io.innospots.base.model.field.ParamField;
 import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.utils.NodeInstanceUtils;
+import io.innospots.workflow.node.ai.AiBaseNode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -35,7 +36,7 @@ import java.util.function.Consumer;
  * @date 2024/9/23
  */
 @Slf4j
-public class AliImageGenNode extends AliAiBaseNode<String, ImageSynthesisParam> {
+public class AliImageGenNode extends AiBaseNode<String, ImageSynthesisParam> {
 
     protected GenerateImageMode generateMode;
 
@@ -238,7 +239,7 @@ public class AliImageGenNode extends AliAiBaseNode<String, ImageSynthesisParam> 
 
 
     @Override
-    protected ImageSynthesisParam buildParam(Map<String, Object> item) {
+    protected ImageSynthesisParam buildParam(Map<String, Object> item,boolean stream) {
         String refImage = refImageField != null ? (String) item.get(refImageField.getCode()) : null;
         String sketchImage = sketchImageField != null ? (String) item.get(sketchImageField.getCode()) : null;
         Map<String, Object> extraInputs = new HashMap<>();

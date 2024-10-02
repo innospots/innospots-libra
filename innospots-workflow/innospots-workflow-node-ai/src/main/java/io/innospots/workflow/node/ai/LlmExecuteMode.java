@@ -1,4 +1,4 @@
-package io.innospots.workflow.node.ai.aliyun;
+package io.innospots.workflow.node.ai;
 
 /**
  * @author Smars
@@ -8,4 +8,8 @@ package io.innospots.workflow.node.ai.aliyun;
 public enum LlmExecuteMode {
     STREAM,
     SYNC;
+
+    public boolean isStream(){
+        return this == STREAM;
+    }
 }

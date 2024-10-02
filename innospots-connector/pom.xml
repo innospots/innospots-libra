@@ -21,9 +21,6 @@
         <module>innospots-connector-api</module>
         <module>innospots-connector-workflow</module>
         <module>innospots-connector-ai-ollama</module>
-        <module>innospots-connector-ai-openai</module>
-        <module>innospots-connector-ai-zhipu</module>
-        <module>innospots-connector-ai-moonshot</module>
         <module>innospots-connector-ai-aliyun</module>
     </modules>
 

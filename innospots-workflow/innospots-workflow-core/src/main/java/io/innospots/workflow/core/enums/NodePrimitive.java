@@ -44,6 +44,8 @@ public enum NodePrimitive {
      */
     api("workflow.node.primitive.api:API"),
 
+    ai("workflow.node.primitive.api:人工智能"),
+
     connector("workflow.node.primitive.connector:连接器"),
 
     file("workflow.node.primitive.file:文件"),

@@ -8,6 +8,7 @@ import io.innospots.base.execution.ExecutionResource;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.node.ai.AiBaseNode;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.ByteBuffer;
@@ -19,7 +20,7 @@ import java.util.Map;
  * @date 2024/9/24
  */
 @Slf4j
-public class AliTtsNode extends AliAiBaseNode<String, SpeechSynthesisParam> {
+public class AliTtsNode extends AiBaseNode<String, SpeechSynthesisParam> {
 
 
     @Override
@@ -65,7 +66,7 @@ public class AliTtsNode extends AliAiBaseNode<String, SpeechSynthesisParam> {
     }
 
     @Override
-    protected SpeechSynthesisParam buildParam(Map<String, Object> items) {
+    protected SpeechSynthesisParam buildParam(Map<String, Object> items,boolean stream) {
         SpeechSynthesisParam param =
                 SpeechSynthesisParam.builder()
                         .model(this.modelName)

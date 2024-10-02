@@ -8,6 +8,27 @@
   "description": "请选择此连接支持的鉴权方式并填入连接鉴权的默认值，当组件的“只读”选项被勾选中时，此组件在凭据创建时只展示不能修改。",
   "authOptions": [
     {
+      "name": "APIKEY",
+      "code": "api-key",
+      "minder": "io.innospots.connector.api.minder.ApiKeyConnectionMinder",
+      "defaults": {},
+      "elements": [
+        {
+          "label": "apiKey",
+          "name": "api_key",
+          "maxSize": 64,
+          "placeholder": "鉴权 key",
+          "required": true,
+          "labelGrid": 4,
+          "tips": "鉴权凭证 key",
+          "type": "INPUT",
+          "expression": "",
+          "gridSize": 16,
+          "options": []
+        }
+      ]
+    },
+    {
       "name": "Normal",
       "code": "normal-api",
       "minder": "io.innospots.connector.api.minder.NormalApiConnectionMinder",

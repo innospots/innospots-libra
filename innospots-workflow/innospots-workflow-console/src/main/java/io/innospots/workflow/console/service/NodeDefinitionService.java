@@ -19,21 +19,21 @@
 package io.innospots.workflow.console.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import io.innospots.base.data.body.PageBody;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.enums.ImageType;
 import io.innospots.base.events.EventBusCenter;
-import io.innospots.base.exception.ResourceException;
-import io.innospots.base.data.body.PageBody;
 import io.innospots.base.events.NewAvatarEvent;
-import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
-import io.innospots.workflow.core.node.definition.entity.FlowNodeGroupNodeEntity;
+import io.innospots.base.exception.ResourceException;
 import io.innospots.workflow.console.model.NodeQueryRequest;
 import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
 import io.innospots.workflow.console.operator.node.FlowNodeGroupOperator;
-import io.innospots.workflow.core.instance.operator.NodeInstanceOperator;
 import io.innospots.workflow.core.enums.NodePrimitive;
 import io.innospots.workflow.core.enums.NodeVendor;
+import io.innospots.workflow.core.instance.operator.NodeInstanceOperator;
 import io.innospots.workflow.core.node.NodeInfo;
+import io.innospots.workflow.core.node.definition.entity.FlowNodeDefinitionEntity;
+import io.innospots.workflow.core.node.definition.entity.FlowNodeGroupNodeEntity;
 import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import io.innospots.workflow.core.node.definition.model.NodeGroup;
 import lombok.extern.slf4j.Slf4j;
@@ -86,7 +86,7 @@ public class NodeDefinitionService {
     }
 
     public List<NodeDefinition> listOnlineNodes(NodePrimitive primitive, String tplFlowCode) {
-        return flowNodeDefinitionOperator.listOnlineNodes(primitive,tplFlowCode);
+        return flowNodeDefinitionOperator.listOnlineNodes(primitive, tplFlowCode);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -131,6 +131,7 @@ public class NodeDefinitionService {
 
     /**
      * update node group id
+     *
      * @param nodeId
      * @param nodeGroupId new group id
      * @return
@@ -148,7 +149,7 @@ public class NodeDefinitionService {
     public NodeDefinition createNodeDefinition(NodeDefinition nodeDefinition) {
         nodeDefinition = flowNodeDefinitionOperator.createNodeDefinition(nodeDefinition);
         NodeGroup nodeGroup = this.flowNodeGroupOperator.getNodeGroupByCode(nodeDefinition.getPrimitive().name());
-        if(nodeGroup!=null){
+        if (nodeGroup != null) {
             this.updateNodeGroup(nodeDefinition.getNodeId(), nodeGroup.getNodeGroupId());
         }
         return nodeDefinition;

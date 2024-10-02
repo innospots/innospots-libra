@@ -15,6 +15,7 @@ import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.core.logger.FlowLoggerFactory;
+import io.innospots.workflow.node.ai.LlmExecuteMode;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -27,16 +28,16 @@ import java.util.Map;
  * @vesion 2.0
  * @date 2024/9/30
  */
-class AliImageGenNodeTest {
+class AliAliImageGenNodeTest {
 
 
     AliImageGenNode build() {
         AliImageGenNode genNode = new AliImageGenNode();
         genNode.generateMode = AliImageGenNode.GenerateImageMode.similarImage;
         genNode.refImageField = new ParamField("ref", "ref", FieldValueType.STRING);
-        genNode.promptField = new ParamField("text", "text", FieldValueType.STRING);
-        genNode.executeMode = LlmExecuteMode.SYNC;
-        genNode.apiKey = System.getenv("DASHSCOPE_API_KEY");
+        genNode.setPromptField(new ParamField("text", "text", FieldValueType.STRING));
+        genNode.setExecuteMode(LlmExecuteMode.SYNC);
+        genNode.setApiKey(System.getenv("DASHSCOPE_API_KEY"));
         InnospotsIdGenerator.build("127.0.0.1", 8080);
         NodeInstance ni = new NodeInstance();
         genNode.setNi(ni);

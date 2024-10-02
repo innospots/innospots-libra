@@ -12,12 +12,10 @@ import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.workflow.core.execution.model.ExecutionInput;
-import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
+import io.innospots.workflow.node.ai.AiBaseNode;
 import io.reactivex.Flowable;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.*;
 
@@ -27,7 +25,7 @@ import java.util.*;
  * @date 2024/9/18
  */
 @Slf4j
-public class AliLlmAiNode extends AliAiBaseNode<Message, GenerationParam> {
+public class AliLlmAiNode extends AiBaseNode<Message, GenerationParam> {
 
 
     @Override
@@ -35,16 +33,7 @@ public class AliLlmAiNode extends AliAiBaseNode<Message, GenerationParam> {
         super.initialize();
     }
 
-    @Override
-    public void invoke(NodeExecution nodeExecution) {
-        ExecutionOutput executionOutput = this.buildOutput(nodeExecution);
-        for (ExecutionInput executionInput : nodeExecution.getInputs()) {
-            for (Map<String, Object> item : executionInput.getData()) {
-                Object result = processItem(item, nodeExecution);
-                processOutput(nodeExecution, result, executionOutput);
-            }
-        }
-    }
+
 
     @Override
     protected Object processItem(Map<String, Object> inputItem, NodeExecution nodeExecution) {
@@ -101,42 +90,11 @@ public class AliLlmAiNode extends AliAiBaseNode<Message, GenerationParam> {
         return content.toString();
     }
 
-    @Override
-    protected void processOutput(NodeExecution nodeExecution, Object result, ExecutionOutput nodeOutput) {
-        if (result instanceof Map) {
-            nodeOutput.addResult((Map<String, Object>) result);
-        } else if (result instanceof Collection<?>) {
-            nodeOutput.addResult((Collection<Map<String, Object>>) result);
-        } else if (result instanceof String) {
-            try {
-                String r = (String) result;
-                if (r.startsWith("{") && r.endsWith("}")) {
-                    Map m = JSONUtils.toMap(r);
-                    if (m != null) {
-                        nodeOutput.addResult(m);
-                    } else {
-                        nodeOutput.addResult("response", r);
-                    }
-                } else if (r.startsWith("[") && r.endsWith("]")) {
-                    Collection collection = JSONUtils.toList(r, Map.class);
-                    if (CollectionUtils.isNotEmpty(collection)) {
-                        nodeOutput.addResult(collection);
-                    } else {
-                        nodeOutput.addResult("response", r);
-                    }
-                } else {
-                    nodeOutput.addResult("response", result);
-                }
-            } catch (Exception e) {
-                log.error(e.getMessage());
-                nodeOutput.addResult("response", result);
-            }
-        }
-    }
+
 
     @Override
-    protected GenerationParam buildParam(Map<String, Object> inputItem) {
-        return generationParam(inputItem, false);
+    protected GenerationParam buildParam(Map<String, Object> inputItem,boolean stream) {
+        return generationParam(inputItem, stream);
     }
 
     private GenerationParam generationParam(Map<String, Object> inputItem, boolean stream) {

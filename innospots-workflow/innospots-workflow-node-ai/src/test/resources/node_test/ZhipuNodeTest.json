@@ -1,0 +1,15 @@
+{
+  "nodeKey": "zhipu",
+  "nodeDefinitionId": 11,
+  "name": "智谱模型",
+  "code": "zhipu_llm",
+  "nodeType": "io.innospots.workflow.node.ai.zhipu.ZhipuLlmNode",
+  "nodeInstanceId": 125,
+  "data": {
+    "credential_key":"credential_key",
+    "encoding":"UTF-8",
+    "operation":"WRITE",
+    "file_format":"XLSX",
+    "file_path": "/tmp/pdf_out/out.xlsx"
+  }
+}

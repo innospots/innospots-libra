@@ -12,6 +12,8 @@ import io.innospots.base.exception.ResourceException;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.utils.NodeInstanceUtils;
+import io.innospots.workflow.node.ai.AiBaseNode;
+import io.innospots.workflow.node.ai.LlmExecuteMode;
 import io.reactivex.Flowable;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +25,7 @@ import java.util.*;
  * @date 2024/9/23
  */
 @Slf4j
-public class AliImageRecNode extends AliAiBaseNode<MultiModalMessage,MultiModalConversationParam> {
+public class AliImageRecNode extends AiBaseNode<MultiModalMessage,MultiModalConversationParam> {
 
     public static final String FILED_IMAGE = "image";
 
@@ -44,7 +46,7 @@ public class AliImageRecNode extends AliAiBaseNode<MultiModalMessage,MultiModalC
     @Override
     protected Object processItem(Map<String, Object> item,NodeExecution nodeExecution) {
         MultiModalConversation conv = new MultiModalConversation();
-        MultiModalConversationParam param = buildParam(item);
+        MultiModalConversationParam param = buildParam(item, LlmExecuteMode.STREAM == executeMode);
         List<Map<String, Object>> ll = new ArrayList<>();
         try {
             log.info("start recognize image,{}",param);
@@ -91,12 +93,12 @@ public class AliImageRecNode extends AliAiBaseNode<MultiModalMessage,MultiModalC
     }
 
     @Override
-    protected MultiModalConversationParam buildParam(Map<String, Object> items) {
+    protected MultiModalConversationParam buildParam(Map<String, Object> items,boolean stream) {
         MultiModalConversationParam param = MultiModalConversationParam.builder()
                 .model(modelName)
                 .message(buildMessage(items))
                 .apiKey(apiKey)
-                .incrementalOutput(LlmExecuteMode.STREAM == executeMode)
+                .incrementalOutput(stream)
                 .build();
         //fillOptions(items, param);
 
