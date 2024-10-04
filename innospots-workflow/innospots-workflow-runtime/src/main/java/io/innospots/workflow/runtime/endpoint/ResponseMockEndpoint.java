@@ -26,6 +26,10 @@ import java.util.*;
 @RequestMapping(PathConstant.ROOT_PATH + "workflow/mock/response")
 public class ResponseMockEndpoint {
 
+    private RestClient restClient = RestClient.builder().build();
+
+    private List<Map<String,Object>> history;
+
     @PostMapping("payload")
     WorkflowResponse<List<RespPayload>> cardResponse() {
         Faker faker = new Faker(Locale.CHINESE);
@@ -48,8 +52,8 @@ public class ResponseMockEndpoint {
         c1.addRow(image("图片6",
                 data.get("mov_pic").toString(), "图片描述"));
         c1.addRow(video("视频6", "https://sfile.chatglm.cn/testpath/video/cb850ab9-fe6b-5745-9eeb-2895d08eb9a3_0.mp4", "视频描述"));
-        c1.addRow(markdown("markdown1", faker.text().text(500), faker.text().text(150)));
-        c1.addRow(embed("嵌入链接展示", "//player.bilibili.com/player.html?isOutside=true&aid=236534017&bvid=BV1xe411Z7oj&cid=1349699744&p=1", "嵌入卡片描述"));
+        c1.addRow(markdown("markdown1", "# 标题\n ```核心标记```, **是加粗**", "简介内容"));
+        c1.addRow(embed((String) data.get("mov_title"), "//player.bilibili.com/player.html?isOutside=true&aid=236534017&bvid=BV1xe411Z7oj&cid=1349699744&p=1", "嵌入卡片描述"));
         c1.addRow(file("文件1", "https://sfile.chatglm.cn/testpath/file/cb850ab9-fe6b-5745-9eeb-2895d08eb9a3_0.mp4", "文件描述"));
         cl.add(c1);
 
@@ -126,6 +130,8 @@ public class ResponseMockEndpoint {
 
         WorkflowResponse<List<RespPayload>> wf = new WorkflowResponse<>();
         wf.fillBody(cl);
+        history.clear();
+        history = null;
         return wf;
     }
 
@@ -203,7 +209,7 @@ public class ResponseMockEndpoint {
         cards.add(video("视频4", "https://sfile.chatglm.cn/testpath/video/1aa1515f-1193-58bf-83d7-3bd62b765f62_0.mp4", "视频描述"));
         cards.add(video("视频5", "https://sfile.chatglm.cn/testpath/video/61cf829a-0741-56d7-89b6-0c5ae4e51287_0.mp4", "视频描述"));
         cards.add(video("视频6", "https://sfile.chatglm.cn/testpath/video/cb850ab9-fe6b-5745-9eeb-2895d08eb9a3_0.mp4", "视频描述"));
-        return null;
+        return cards;
     }
 
     private List<ViewCard> bingImages(){
@@ -240,31 +246,38 @@ public class ResponseMockEndpoint {
     }
 
     private List<ViewCard> chatCards(){
+        List<Map<String,Object>> avatars = (List<Map<String, Object>>) avatars().get(0).get("list");
         Faker faker = new Faker(Locale.CHINA);
+        history = history();
+        Map<String,Object> h = history.get(0);
         List<ViewCard> cards = new ArrayList<>();
-        ViewCard vc = text(faker.text().text(60), faker.text().text(150), "聊天描述",faker.name().fullName(),faker.number().digit());
-        vc.setIcon("/node/todo_list.svg");
+        int p =0;
+        ViewCard vc = text("标题："+h.get("title"), (String) h.get("desc"), "聊天描述",faker.name().fullName(),faker.number().digit());
+        vc.setIcon((String) avatars.get(p).get("icon"));
+        vc.setUserName((String) avatars.get(p++).get("name"));
         cards.add(vc);
-        vc = text(faker.text().text(60), faker.text().text(150), "聊天描述",faker.name().fullName(),faker.number().digit());
-        vc.setIcon("/node/todo_list.svg");
+        vc = text("标题:"+faker.appliance().brand(), faker.country().capital(), "聊天描述",faker.name().fullName(),faker.number().digit());
+        vc.setIcon((String) avatars.get(p).get("icon"));
+        vc.setUserName((String) avatars.get(p++).get("name"));
         cards.add(vc);
-        vc = text(faker.text().text(60), faker.text().text(150), "聊天描述",faker.name().fullName(),faker.number().digit());
-        vc.setIcon("/node/todo_list.svg");
+        vc = text("标题:"+faker.appliance().brand(), faker.address().fullAddress(), "聊天描述",faker.name().fullName(),faker.number().digit());
+        vc.setIcon((String) avatars.get(p).get("icon"));
+        vc.setUserName((String) avatars.get(p++).get("name"));
         cards.add(vc);
         vc = image("图片结果", "https://ts1.cn.mm.bing.net/th/id/R-C.bd761f3d24ed5d5b94bf9406bd0595c4?rik=CgCy16TQXKpWRQ&riu=http%3a%2f%2fpic.ntimg.cn%2f20130606%2f2531170_104007297000_2.jpg&ehk=dOJc%2fEY4AUn1YOZ4YxxE4m5eCr0Ix8CNRAvfbNNMLPU%3d&risl=&pid=ImgRaw&r=0", "图片描述");
-        vc.setUserName(faker.name().fullName());
         vc.setUserId(faker.number().digit());
-        vc.setIcon("/node/todo_list.svg");
+        vc.setIcon((String) avatars.get(p).get("icon"));
+        vc.setUserName((String) avatars.get(p++).get("name"));
         cards.add(vc);
 
         vc = file("文件结果", "https://mdpi-res.com/d_attachment/energies/energies-15-07288/article_deploy/energies-15-07288-v2.pdf?version=1665288575", "文件描述");
-        vc.setIcon("/node/todo_list.svg");
-        vc.setUserName(faker.name().fullName());
+        vc.setIcon((String) avatars.get(p).get("icon"));
+        vc.setUserName((String) avatars.get(p++).get("name"));
         vc.setUserId(faker.number().digit());
         cards.add(vc);
         vc = video("视频结果", "https://sfile.chatglm.cn/testpath/video/1aa1515f-1193-58bf-83d7-3bd62b765f62_0.mp4", "视频描述");
-        vc.setIcon("/node/todo_list.svg");
-        vc.setUserName(faker.name().fullName());
+        vc.setIcon((String) avatars.get(p).get("icon"));
+        vc.setUserName((String) avatars.get(p++).get("name"));
         vc.setUserId(faker.number().digit());
         cards.add(vc);
 
@@ -349,6 +362,8 @@ public class ResponseMockEndpoint {
                 .description(description)
                 .icon(icon)
                 .src(src)
+                .previewUrl(src)
+                .downloadUrl(src)
                 .viewId(RandomUtil.randomNumbers(16))
                 .build();
     }
@@ -385,16 +400,30 @@ public class ResponseMockEndpoint {
                 .build();
     }
 
+    private List<Map<String,Object>> history(){
+        if(history!=null){
+            return history;
+        }
+        history = (List<Map<String, Object>>) restClient.get().uri("https://api.oioweb.cn/api/common/history")
+                .retrieve()
+                .body(Map.class).get("result");
+        return history;
+    }
+
     private List<Map<String,Object>> images(){
-        RestClient restClient = RestClient.builder().build();
         return (List<Map<String, Object>>) restClient.get().uri("https://api.oioweb.cn/api/bing")
                 .retrieve()
                 .body(Map.class).get("result");
     }
 
     private Map<String,Object> movie(){
-        RestClient restClient = RestClient.builder().build();
         return (Map<String, Object>) restClient.get().uri("https://api.oioweb.cn/api/common/OneFilm")
+                .retrieve()
+                .body(Map.class).get("result");
+    }
+
+    private List<Map<String,Object>> avatars(){
+        return (List<Map<String,Object>>) restClient.get().uri("https://api.oioweb.cn/api/picture/miyoushe_avatar")
                 .retrieve()
                 .body(Map.class).get("result");
     }
