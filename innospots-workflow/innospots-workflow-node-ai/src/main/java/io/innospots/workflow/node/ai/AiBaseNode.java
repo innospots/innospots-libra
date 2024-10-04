@@ -54,7 +54,7 @@ public abstract class AiBaseNode<Msg, Param> extends BaseNodeExecutor {
             this.executeMode = LlmExecuteMode.valueOf(eMode);
         }
         this.temperature = this.valueDouble(FILED_TEMPERATURE);
-        this.maxTokens = this.validInteger(FILED_MAX_TOKENS);
+        this.maxTokens = this.valueInteger(FILED_MAX_TOKENS);
         this.promptField = NodeInstanceUtils.buildParamField(this.ni, FILED_PROMPT);
         this.topP = this.valueDouble(FILED_TOP_P);
 

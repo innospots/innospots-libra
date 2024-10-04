@@ -35,6 +35,7 @@ import java.util.concurrent.Executors;
 @Slf4j
 @RequestMapping(PathConstant.ROOT_PATH + "workflow/sse")
 @RestController
+@Deprecated
 @Tag(name = "server send event")
 public class SseEventEndpoint {
 

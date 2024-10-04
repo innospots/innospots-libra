@@ -127,7 +127,7 @@ public class NodeInstance extends NodeInfo {
     private Long workflowInstanceId;
 
     @Schema(title = "timeout millisecond")
-    protected int timeoutMills=60000;
+    protected int timeoutMills=120000;
 
     /*
     public void addScriptType(String name, ScriptType type) {

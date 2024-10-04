@@ -44,7 +44,9 @@ public enum NodePrimitive {
      */
     api("workflow.node.primitive.api:API"),
 
-    ai("workflow.node.primitive.api:人工智能"),
+    response("workflow.node.primitive.response:结果应答"),
+
+    ai("workflow.node.primitive.ai:人工智能"),
 
     connector("workflow.node.primitive.connector:连接器"),
 
@@ -73,6 +75,7 @@ public enum NodePrimitive {
      * Trigger node.
      */
     trigger("workflow.node.primitive.trigger:触发器"),
+
     scheduleTrigger("workflow.node.primitive.trigger.schedule:调度触发器"),
 
     apiTrigger("workflow.node.primitive.api:API触发器"),

@@ -18,7 +18,11 @@
 
 package io.innospots.base.data.body;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import io.innospots.base.model.field.ParamField;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +33,7 @@ import java.util.List;
  */
 public class PageBody<T> {
 
+    @Getter
     private List<T> list;
 
     private final long startTime;
@@ -36,6 +41,11 @@ public class PageBody<T> {
     private int consume;
 
     private String message;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Getter
+    @Setter
+    private List<ParamField> schemaFields;
 
     private final Pagination pagination;
 
@@ -50,10 +60,6 @@ public class PageBody<T> {
 
     public long current() {
         return pagination.current;
-    }
-
-    public List<T> getList() {
-        return list;
     }
 
     public void add(T item) {
@@ -110,6 +116,7 @@ public class PageBody<T> {
     public Pagination getPagination() {
         return pagination;
     }
+
 
     @Schema
     public static class Pagination {

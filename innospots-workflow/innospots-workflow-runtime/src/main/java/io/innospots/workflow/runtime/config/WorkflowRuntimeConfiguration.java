@@ -79,6 +79,11 @@ public class WorkflowRuntimeConfiguration {
     }
 
     @Bean
+    public ResponseMockEndpoint mockEndpoint(){
+        return new ResponseMockEndpoint();
+    }
+
+    @Bean
     public SseEventEndpoint sseEventEndpoint() {
         return new SseEventEndpoint();
     }
