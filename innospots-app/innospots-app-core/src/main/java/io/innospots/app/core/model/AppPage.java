@@ -33,4 +33,7 @@ public class AppPage {
 
     @Schema(title = "set home page")
     private Boolean setHomePage;
+
+    @Schema(title = "page config")
+    private Map<String,Object> configs;
 }
