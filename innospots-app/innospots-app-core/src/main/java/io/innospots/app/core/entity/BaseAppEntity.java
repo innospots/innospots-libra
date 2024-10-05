@@ -43,4 +43,7 @@ public class BaseAppEntity extends PBaseEntity {
     @Column(columnDefinition = "TEXT")
     protected String settings;
 
+    @Column(length = 32)
+    protected String appType;
+
 }

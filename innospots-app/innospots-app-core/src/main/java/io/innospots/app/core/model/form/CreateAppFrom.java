@@ -1,5 +1,6 @@
 package io.innospots.app.core.model.form;
 
+import io.innospots.app.core.enums.AppType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,4 +23,7 @@ public class CreateAppFrom {
 
     @Schema(title = "icon")
     private String icon;
+
+    @Schema(title = "appType")
+    private AppType appType;
 }

@@ -1,5 +1,6 @@
 package io.innospots.app.core.model;
 
+import io.innospots.app.core.enums.AppType;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.model.PBaseModelInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -39,5 +40,8 @@ public class BaseAppInfo extends PBaseModelInfo {
 
     @Schema(title = "app vendor")
     protected String vendor;
+
+    @Schema(title = "app type")
+    protected AppType appType;
 
 }

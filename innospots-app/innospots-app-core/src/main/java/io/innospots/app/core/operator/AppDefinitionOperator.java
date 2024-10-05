@@ -44,6 +44,7 @@ public class AppDefinitionOperator extends ServiceImpl<AppDefinitionDao, AppDefi
         appDefinition.setName(createAppFrom.getName());
         appDefinition.setCategoryId(createAppFrom.getCategoryId());
         appDefinition.setIcon(createAppFrom.getIcon());
+        appDefinition.setAppType(createAppFrom.getAppType());
 
         do {
             String key = StringConverter.randomKey(8);
