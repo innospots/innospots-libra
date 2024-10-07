@@ -1,0 +1,165 @@
+{
+  "name": "应用回复",
+  "code": "response",
+  "flowCode": "EVENTS",
+  "primitive": "response",
+  "vendor": "innospots",
+  "description": "回复",
+  "icon": "/node/response.svg",
+  "nodeType": "io.innospots.workflow.node.app.response.AppResponseNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "应用回复"
+      }
+    },
+    {
+      "name": "card_layout",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "输出布局",
+		"viewType": "picker",
+        "optionsType": "customOptions",
+        "dataSource": "static",
+        "initialValue": "GRID",
+        "options": [
+          {
+            "value": "GRID",
+            "label": "卡片布局"
+          },
+          {
+            "value": "TABLE",
+            "label": "数据表"
+          },
+          {
+            "value": "PAGE",
+            "label": "页面"
+          }
+        ]
+      }
+    },
+    {
+      "name": "card_align",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "布局对齐方式",
+        "viewType": "picker",
+        "optionsType": "customOptions",
+        "dataSource": "static",
+        "initialValue": "CENTER",
+        "options": [
+          {
+            "value": "LEFT",
+            "label": "左对齐"
+          },
+          {
+            "value": "RIGHT",
+            "label": "右对齐"
+          },
+          {
+            "value": "CENTER",
+            "label": "居中"
+          }
+        ]
+      }
+    },
+    {
+      "name": "layout_column",
+      "type": "NumberInput",
+      "valueType": "number",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "Grid列数",
+        "width": 100,
+        "description": "布局列数",
+        "initialValue": 1
+      }
+    },
+    {
+      "name": "response_fields",
+      "type": "FieldList",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "fieldSource": "response_1",
+        "label": "响应字段",
+        "description": "响应字段",
+        "customColumns": [
+          {
+            "code": "sourceField",
+            "type": "FIELD",
+            "width": "140px",
+            "title": "字段",
+            "default": ""
+          },
+          {
+            "code": "fieldCode",
+            "type": "SELECT",
+            "width": "120px",
+            "title": "映射字段",
+            "default": "",
+            "options": [
+              {
+                "label": "title",
+                "value": "title"
+              },
+              {
+                "label": "description",
+                "value": "description"
+              },
+              {
+                "label": "data",
+                "value": "data"
+              },
+              {
+                "label": "src",
+                "value": "src"
+              },
+              {
+                "label": "downloadUrl",
+                "value": "downloadUrl"
+              },
+              {
+                "label": "previewUrl",
+                "value": "previewUrl"
+              },
+              {
+                "label": "viewType",
+                "value": "viewType"
+              },
+              {
+                "label": "icon",
+                "value": "icon"
+              },
+              {
+                "label": "viewId",
+                "value": "viewId"
+              },
+              {
+                "label": "createTime",
+                "value": "createTime"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

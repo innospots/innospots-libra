@@ -91,23 +91,36 @@ public class ExecutionResource {
         return inputStreamSource;
     }
 
-    public Map<String,Object> toMetaInfo(){
-        Map<String,Object> meta = new HashMap<>();
-        meta.put("name",this.resourceName);
-        meta.put("mineType",this.mimeType);
-        meta.put("fileSize",this.fileSize);
-        meta.put("resourceId",this.resourceId);
-        meta.put("uri",resourceUri);
+    public Map<String, Object> toMetaInfo() {
+        Map<String, Object> meta = new HashMap<>();
+        meta.put("name", this.resourceName);
+        meta.put("mineType", this.mimeType);
+        meta.put("fileSize", this.fileSize);
+        meta.put("resourceId", this.resourceId);
+        meta.put("uri", resourceUri);
         return meta;
     }
+
+    public boolean isVideo() {
+        return mimeType != null && mimeType.startsWith("video");
+    }
+
+    public boolean isAudio() {
+        return mimeType != null && mimeType.startsWith("audio");
+    }
+
+    public boolean isImage() {
+        return mimeType != null && mimeType.startsWith("image");
+    }
+
 
     public static ExecutionResource buildResource(String resourceId) {
         ExecutionResource resource = new ExecutionResource();
         resource.resourceId = resourceId;
         resource.localUri = EncryptorBuilder.encryptor.decode(resourceId);
         File localFile = new File(resource.localUri);
-        if(!localFile.exists()){
-            throw ResourceException.buildNotExistException(ExecutionResource.class,"resourceId",resourceId);
+        if (!localFile.exists()) {
+            throw ResourceException.buildNotExistException(ExecutionResource.class, "resourceId", resourceId);
         }
         resource.mimeType = mineType(localFile);
         resource.executionCache = true;
@@ -117,7 +130,7 @@ public class ExecutionResource {
         return resource;
     }
 
-    public static ExecutionResource buildResource(File localFile, boolean executionCache,String contextPath) {
+    public static ExecutionResource buildResource(File localFile, boolean executionCache, String contextPath) {
         ExecutionResource resource = new ExecutionResource();
 
         resource.resourceName = localFile.getName();
@@ -125,16 +138,16 @@ public class ExecutionResource {
         resource.executionCache = executionCache;
         resource.mimeType = mineType(localFile);
 
-        if(EncryptorBuilder.encryptor!=null){
+        if (EncryptorBuilder.encryptor != null) {
             resource.resourceId = EncryptorBuilder.encryptor.encodeUrlSafe(localFile.getAbsolutePath());
         }
 
-        resource.resourceUri = PathConstant.INNOSPOTS_PATH +contextPath+"?resourceId="+resource.resourceId;
+        resource.resourceUri = PathConstant.INNOSPOTS_PATH + contextPath + "?resourceId=" + resource.resourceId;
 
 //        resource.resourceUri = PathConstant.ROOT_PATH +"workflow/flow-execution/resources?resourceId="+resource.resourceId;
         resource.localUri = localFile.getAbsolutePath();
-        if(log.isDebugEnabled()){
-            log.debug("resource info:{}",resource);
+        if (log.isDebugEnabled()) {
+            log.debug("resource info:{}", resource);
         }
         return resource;
     }
@@ -153,27 +166,28 @@ public class ExecutionResource {
         return sb.toString();
     }
 
-    private static String mineType(File localFile){
-        String mimeType=null;
+    private static String mineType(File localFile) {
+        String mimeType = null;
         try {
             mimeType = Files.probeContentType(localFile.toPath());
         } catch (IOException e) {
         }
-        if(mimeType == null){
+        if (mimeType == null) {
             mimeType = URLConnection.getFileNameMap().getContentTypeFor(localFile.getName());
         }
         return mimeType;
     }
 
-    private static String fileSize(File localFile){
+
+    private static String fileSize(File localFile) {
         String fileSize = null;
         double s = localFile.length();
-        if(s > 1024 * 1024 *1024){
-            fileSize = String.format("%.2f GB",s / (1024*1024*1024d));
-        }else if(s > 1024 * 1024){
-            fileSize = String.format("%.2f MB",s / (1024*1024d));
-        }else if(s > 1024){
-            fileSize = String.format("%.2f KB",s / 1024d);
+        if (s > 1024 * 1024 * 1024) {
+            fileSize = String.format("%.2f GB", s / (1024 * 1024 * 1024d));
+        } else if (s > 1024 * 1024) {
+            fileSize = String.format("%.2f MB", s / (1024 * 1024d));
+        } else if (s > 1024) {
+            fileSize = String.format("%.2f KB", s / 1024d);
         }
         return fileSize;
     }

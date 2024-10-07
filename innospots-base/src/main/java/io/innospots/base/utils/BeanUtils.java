@@ -91,7 +91,8 @@ public class BeanUtils{
     }
 
     public static Map<String, Object> toMap(Object object) {
-        return BeanUtil.beanToMap(object,false,false);
+        Map<String,Object> map = new HashMap<>();
+        return BeanUtil.beanToMap(object,map,CopyOptions.create().ignoreNullValue().ignoreNullValue().setAutoTransCamelCase(false).ignoreError());
     }
 
 

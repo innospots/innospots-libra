@@ -140,8 +140,9 @@ public class FlowExecutionEntity extends PBaseEntity {
     private String resultCode;
 
     @Column(length = 16)
-//    @Enumerated(value = EnumType.STRING)
     private String execMode;
-//    private ExecMode execMode;
+
+    @Column(length = 64)
+    private String sessionId;
 
 }

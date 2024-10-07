@@ -110,6 +110,8 @@ public class FlowExecutionBase implements Initializer {
 
     protected RecordMode recordMode;
 
+    protected String sessionId;
+
 
     @Setter(AccessLevel.NONE)
     private LinkedHashMap<String, NodeExecution> nodeExecutions = new LinkedHashMap<>();

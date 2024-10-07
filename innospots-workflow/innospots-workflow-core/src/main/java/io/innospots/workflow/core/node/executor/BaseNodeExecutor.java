@@ -123,7 +123,8 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
 
     @Override
     public NodeExecution execute(FlowExecution flowExecution) {
-        CCH.sessionId(flowExecution.getFlowExecutionId());
+        CCH.executionId(flowExecution.getFlowExecutionId());
+
         flowExecution.resetCurrentNodeKey(this.nodeKey());
         NodeExecution nodeExecution = prepare(flowExecution);
         if (nodeExecution.getStatus() == ExecutionStatus.FAILED) {
@@ -137,9 +138,10 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
             }
 
         }
-        CCH.sessionId(flowExecution.getFlowExecutionId());
+        CCH.executionId(flowExecution.getFlowExecutionId());
+//        CCH.sessionId(flowExecution.getFlowExecutionId());
         end(nodeExecution, flowExecution);
-        CCH.removeSessionId();
+        CCH.removeExecutionId();
         return nodeExecution;
     }
 
@@ -200,7 +202,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
     }
 
     public void innerExecute(NodeExecution nodeExecution, FlowExecution flowExecution) {
-        CCH.sessionId(flowExecution.getFlowExecutionId());
+        CCH.executionId(flowExecution.getFlowExecutionId());
         boolean isFail;
         nodeExecution.setStatus(ExecutionStatus.RUNNING);
         flowLogger.flowInfo("execution: {}, key: {}, name: {}", nodeExecution.getStatus(), this.ni.getNodeKey(), this.ni.getName());

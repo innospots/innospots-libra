@@ -71,9 +71,11 @@ public class CCH {
 
     private static String SESSION_ID = "sessionId";
 
+    private static String EXECUTION_ID = "executionId";
+
 
     /**
-     * register current thread organization and user name
+     * register current thread organization and user's name
      *
      * @param organizationId
      * @param authUser
@@ -158,7 +160,7 @@ public class CCH {
     public static String sessionId() {
         Object sid = localHolder.get().get(SESSION_ID);
         if (sid == null) {
-            sid = null;
+            return null;
         }
         return (String) sid;
     }
@@ -169,6 +171,22 @@ public class CCH {
 
     public static void removeSessionId() {
         localHolder.get().remove(SESSION_ID);
+    }
+
+    public static void executionId(String executionId){
+        localHolder.get().put(EXECUTION_ID, executionId);
+    }
+
+    public static String executionId(){
+        Object executionId = localHolder.get().get(EXECUTION_ID);
+        if (executionId == null) {
+            return null;
+        }
+        return (String) executionId;
+    }
+
+    public static void removeExecutionId(){
+        localHolder.get().remove(EXECUTION_ID);
     }
 
 }

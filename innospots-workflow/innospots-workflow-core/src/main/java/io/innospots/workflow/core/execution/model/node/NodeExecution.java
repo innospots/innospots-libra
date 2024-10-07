@@ -21,9 +21,9 @@ package io.innospots.workflow.core.execution.model.node;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.innospots.base.json.JSONUtils;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.base.utils.InnospotsIdGenerator;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
-import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import lombok.Getter;
@@ -225,6 +225,14 @@ public class NodeExecution extends NodeExecutionBase {
             }
         }
         return outputList;
+    }
+
+    public List<Map<String, Object>> flatInput() {
+        List<Map<String, Object>> inputList = new ArrayList<>();
+        for (ExecutionInput input : this.inputs) {
+            inputList.addAll(input.getData());
+        }
+        return inputList;
     }
 
     public boolean inputIsEmpty() {
