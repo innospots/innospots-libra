@@ -19,11 +19,11 @@ public class OllamaApiTest {
     void test() {
         var ollamaApi = new OllamaApi();
 
-        OllamaChatModel chatModel = new OllamaChatModel(ollamaApi,
-                OllamaOptions.create()
-                        .withModel("qwen2:7b")
-                        .withFormat("json")
-                        .withTemperature(0.9d));
+        OllamaChatModel chatModel = OllamaChatModel.builder().withOllamaApi(ollamaApi)
+                        .withDefaultOptions(                OllamaOptions.create()
+                                .withModel("qwen2:7b")
+                                .withFormat("json")
+                                .withTemperature(0.9d)).build();
 
 
         ChatResponse response = chatModel.call(
@@ -41,10 +41,11 @@ public class OllamaApiTest {
     void test2() {
         var ollamaApi = new OllamaApi();
 
-        var chatModel = new OllamaChatModel(ollamaApi,
-                OllamaOptions.create()
+        var chatModel = OllamaChatModel.builder().withOllamaApi(ollamaApi)
+                .withDefaultOptions(                OllamaOptions.create()
                         .withModel("qwen2:7b")
-                        .withTemperature(0.9d));
+                        .withFormat("json")
+                        .withTemperature(0.9d)).build();
 
         Flux<ChatResponse> response = chatModel.stream(
                 new Prompt("人工智能"));
@@ -63,10 +64,11 @@ public class OllamaApiTest {
     void test3() {
         var ollamaApi = new OllamaApi();
 
-        var chatModel = new OllamaChatModel(ollamaApi,
-                OllamaOptions.create()
+        var chatModel = OllamaChatModel.builder().withOllamaApi(ollamaApi)
+                .withDefaultOptions(                OllamaOptions.create()
                         .withModel("qwen2:7b")
-                        .withTemperature(0.9d));
+                        .withFormat("json")
+                        .withTemperature(0.9d)).build();
 
         String s = chatModel.call("介绍自己的能力");
         System.out.println(s);

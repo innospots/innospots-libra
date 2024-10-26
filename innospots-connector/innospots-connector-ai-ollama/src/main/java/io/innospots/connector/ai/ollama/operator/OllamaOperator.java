@@ -2,11 +2,11 @@ package io.innospots.connector.ai.ollama.operator;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import io.innospots.ai.core.prompt.RequestPromptBuilder;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.operator.IExecutionOperator;
 import io.innospots.base.data.request.BaseRequest;
 import io.innospots.base.json.JSONUtils;
+import io.innospots.connector.ai.ollama.prompt.RequestPromptBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.model.ChatModel;
@@ -73,7 +73,7 @@ public class OllamaOperator implements IExecutionOperator {
 
     private OllamaChatModel chatModel(BaseRequest<?> request) {
         OllamaOptions ollamaOptions = buildOptions(request);
-        return new OllamaChatModel(ollamaApi, ollamaOptions);
+        return OllamaChatModel.builder().withOllamaApi(ollamaApi).withDefaultOptions(ollamaOptions).build();
     }
 
 

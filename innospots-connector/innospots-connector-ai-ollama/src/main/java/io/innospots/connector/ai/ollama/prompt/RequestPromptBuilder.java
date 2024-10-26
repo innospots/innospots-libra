@@ -1,4 +1,4 @@
-package io.innospots.ai.core.prompt;
+package io.innospots.connector.ai.ollama.prompt;
 
 import io.innospots.base.data.request.BaseRequest;
 import io.innospots.base.execution.ExecutionResource;

@@ -29,13 +29,6 @@
         <dependencies>
             <dependency>
                 <groupId>io.innospots</groupId>
-                <artifactId>innospots-ai</artifactId>
-                <version>${project.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>io.innospots</groupId>
                 <artifactId>innospots-connector-ai-aliyun</artifactId>
                 <version>${innosopts.version}</version>
             </dependency>

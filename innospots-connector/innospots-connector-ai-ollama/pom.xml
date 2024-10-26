@@ -12,10 +12,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.innospots</groupId>
-            <artifactId>innospots-ai-core</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-core</artifactId>
             <version>${spring.ai.version}</version>
@@ -32,5 +28,25 @@
             </exclusions>
         </dependency>
     </dependencies>
+
+
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/snapshot</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+    </repositories>
 
 </project>
