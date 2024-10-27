@@ -33,6 +33,15 @@ public class ThreadPoolBuilder {
     public static final int DEFAULT_MAX_QUEUE_CAPACITY = 20000;
     private static int keepAliveSeconds = 60;
 
+    public static ThreadTaskExecutor build(int coreSize, int maxSize, int queueCapacity, String poolName,RejectedExecutionHandler rejectedExecutionHandler) {
+        ThreadTaskExecutor threadTaskExecutor = new ThreadTaskExecutor(coreSize,maxSize,keepAliveSeconds, TimeUnit.SECONDS,
+                createQueue(queueCapacity),
+                new ThreadFactoryBuilder().setNameFormat(poolName + "-%d").build(),
+                rejectedExecutionHandler);
+        threadTaskExecutor.setPoolName(poolName);
+        return threadTaskExecutor;
+    }
+
     public static ThreadTaskExecutor build(int coreSize, int maxSize, int queueCapacity, String poolName) {
         ThreadTaskExecutor threadTaskExecutor = new ThreadTaskExecutor(coreSize,maxSize,keepAliveSeconds, TimeUnit.SECONDS,
                 createQueue(queueCapacity),

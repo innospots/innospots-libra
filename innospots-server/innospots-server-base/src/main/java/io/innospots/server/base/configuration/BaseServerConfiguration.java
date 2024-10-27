@@ -34,6 +34,7 @@ import io.innospots.server.base.registry.ServiceRegistryDao;
 import io.innospots.server.base.registry.ServiceRegistryManager;
 import io.innospots.server.base.registry.ServiceRegistryStarter;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -114,6 +115,12 @@ public class BaseServerConfiguration {
     @Bean
     public BeanContextAware applicationContextUtils(SpringUtil springUtil) {
         return new SpringBeanAware(springUtil);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public SpringUtil springUtil() {
+        return new SpringUtil();
     }
 
     @Bean
