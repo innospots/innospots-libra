@@ -21,7 +21,7 @@ package io.innospots.base.data.point;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.request.BatchRequest;
 import io.innospots.base.data.request.ItemRequest;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 
 /**
  * data crud operator
@@ -32,20 +32,20 @@ import io.innospots.base.model.response.InnospotsResponse;
 public interface IDataOperatorPoint extends IDataAccessPoint {
 
 
-    InnospotsResponse<Integer> insert(ItemRequest itemRequest);
+    R<Integer> insert(ItemRequest itemRequest);
 
-    InnospotsResponse<Integer> insert(BatchRequest batchRequest);
+    R<Integer> insert(BatchRequest batchRequest);
 
-    InnospotsResponse<Integer> upsert(ItemRequest itemRequest);
+    R<Integer> upsert(ItemRequest itemRequest);
 
-    InnospotsResponse<Integer> upsert(BatchRequest batchRequest);
+    R<Integer> upsert(BatchRequest batchRequest);
 
-    InnospotsResponse<Integer> update(ItemRequest itemRequest);
+    R<Integer> update(ItemRequest itemRequest);
 
-    InnospotsResponse<Integer> update(BatchRequest batchRequest);
+    R<Integer> update(BatchRequest batchRequest);
 
-    InnospotsResponse<DataBody<?>> execute(ItemRequest itemRequest);
+    R<DataBody<?>> execute(ItemRequest itemRequest);
 
-    InnospotsResponse<DataBody<?>> execute(BatchRequest itemRequest);
+    R<DataBody<?>> execute(BatchRequest itemRequest);
 
 }

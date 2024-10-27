@@ -21,7 +21,7 @@ package io.innospots.schedule.controller;
 import io.innospots.base.constant.PathConstant;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.enums.DataStatus;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.base.quartz.ScheduleMode;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
@@ -59,8 +59,8 @@ public class ScheduleJobInfoController {
     @PostMapping
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
     @Operation(summary = "create schedule")
-    public InnospotsResponse<ScheduleJobInfo> createScheduleJobInfo(@Validated @RequestBody ScheduleJobInfo scheduleJobInfo) {
-        return InnospotsResponse.success(scheduleJobInfoOperator.createScheduleJobInfo(scheduleJobInfo));
+    public R<ScheduleJobInfo> createScheduleJobInfo(@Validated @RequestBody ScheduleJobInfo scheduleJobInfo) {
+        return R.success(scheduleJobInfoOperator.createScheduleJobInfo(scheduleJobInfo));
     }
 
 
@@ -68,40 +68,40 @@ public class ScheduleJobInfoController {
     @PutMapping
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
     @Operation(summary = "update schedule")
-    public InnospotsResponse<ScheduleJobInfo> updateScheduleJobInfo(@Validated @RequestBody ScheduleJobInfo scheduleJobInfo) {
-        return InnospotsResponse.success(scheduleJobInfoOperator.updateScheduleJobInfo(scheduleJobInfo));
+    public R<ScheduleJobInfo> updateScheduleJobInfo(@Validated @RequestBody ScheduleJobInfo scheduleJobInfo) {
+        return R.success(scheduleJobInfoOperator.updateScheduleJobInfo(scheduleJobInfo));
     }
 
     @OperationLog(operateType = OperateType.UPDATE_STATUS, primaryField = "jobKey")
     @PutMapping("{jobKey}/status/{jobStatus}")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.status}")
-    public InnospotsResponse updateScheduleJobStatus(@PathVariable String jobKey, @PathVariable DataStatus jobStatus) {
-        return InnospotsResponse.success(scheduleJobInfoOperator.updateScheduleJobStatus(jobKey, jobStatus));
+    public R updateScheduleJobStatus(@PathVariable String jobKey, @PathVariable DataStatus jobStatus) {
+        return R.success(scheduleJobInfoOperator.updateScheduleJobStatus(jobKey, jobStatus));
     }
 
     @GetMapping("{jobKey}")
-    public InnospotsResponse<ScheduleJobInfo> getScheduleJobInfo(@PathVariable String jobKey) {
-        return InnospotsResponse.success(scheduleJobInfoOperator.getScheduleJobInfo(jobKey));
+    public R<ScheduleJobInfo> getScheduleJobInfo(@PathVariable String jobKey) {
+        return R.success(scheduleJobInfoOperator.getScheduleJobInfo(jobKey));
     }
 
     @OperationLog(operateType = OperateType.DELETE, primaryField = "jobKey")
     @DeleteMapping("{jobKey}")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @Operation(summary = "delete schedule")
-    public InnospotsResponse<Boolean> deleteScheduleJobInfo(@PathVariable String jobKey) {
-        return InnospotsResponse.success(scheduleJobInfoOperator.deleteScheduleJobInfo(jobKey));
+    public R<Boolean> deleteScheduleJobInfo(@PathVariable String jobKey) {
+        return R.success(scheduleJobInfoOperator.deleteScheduleJobInfo(jobKey));
     }
 
     @GetMapping("page")
     @Operation(summary = "page schedule list")
-    public InnospotsResponse<PageBody<ScheduleJobInfo>> pageScheduleJobInfo(
+    public R<PageBody<ScheduleJobInfo>> pageScheduleJobInfo(
             @Parameter(name = "page") @RequestParam("page") int page,
             @Parameter(name = "size") @RequestParam("size") int size,
             @Parameter(name = "jobType") @RequestParam(value = "jobType", required = false) JobType jobType,
             @Parameter(name = "jobStatus") @RequestParam(value = "jobStatus", required = false) DataStatus jobStatus,
             @Parameter(name = "scheduleMode") @RequestParam(value = "scheduleMode", required = false) ScheduleMode scheduleMode
             ){
-                return InnospotsResponse.success(scheduleJobInfoOperator.pageScheduleJobInfo(page, size, jobType, jobStatus, scheduleMode));
+                return R.success(scheduleJobInfoOperator.pageScheduleJobInfo(page, size, jobType, jobStatus, scheduleMode));
     }
 
 }

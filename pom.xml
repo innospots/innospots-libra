@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.innospots</groupId>
     <artifactId>innospots-root</artifactId>
-    <version>${innosopts.version}</version>
+    <version>${innospots.version}</version>
     <modules>
         <module>innospots-base</module>
         <module>innospots-connector</module>
@@ -16,6 +16,8 @@
         <module>innospots-schedule</module>
         <module>innospots-app</module>
         <module>innospots-ai</module>
+        <module>innospots-scripts/innospots-scripts-bom</module>
+        <module>innospots-workflow/innospots-workflow-bom</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -56,7 +58,7 @@
         <mapdb.version>3.1.0</mapdb.version>
         <innospots-ui.version>2.0.0-SNAPSHOT</innospots-ui.version>
         <innospots-page-ui.version>1.2.0-SNAPSHOT</innospots-page-ui.version>
-        <innosopts.version>2.0.0-SNAPSHOT</innosopts.version>
+        <innospots.version>2.0.0-SNAPSHOT</innospots.version>
 
         <jackson.version>2.17.2</jackson.version>
         <jackson.version.core>2.17.2</jackson.version.core>
@@ -110,6 +112,71 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-base</artifactId>
+                <version>${innospots.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-data-provider</artifactId>
+                <version>${innospots.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-schedule</artifactId>
+                <version>${innospots.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-scripts-bom</artifactId>
+                <version>${innospots.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-connector-bom</artifactId>
+                <version>${innospots.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-libra-bom</artifactId>
+                <version>${innospots.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-app-bom</artifactId>
+                <version>${innospots.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-workflow-bom</artifactId>
+                <version>${innospots.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-server-bom</artifactId>
+                <version>${innospots.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <dependency>
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
@@ -859,6 +926,7 @@
                     </execution>
                 </executions>
             </plugin>
+            <!--
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
@@ -875,6 +943,7 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
         </plugins>
     </build>
 

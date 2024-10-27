@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.innospots</groupId>
+    <artifactId>innospots-connector-bom</artifactId>
+    <version>${innospots.version}</version>
+
+    <properties>
+        <innospots.version>2.0.0-SNAPSHOT</innospots.version>
+    </properties>
+    <packaging>pom</packaging>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-connector-ai-aliyun</artifactId>
+                <version>${innospots.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-connector-ai-moonshot</artifactId>
+                <version>${innospots.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-connector-ai-zhipu</artifactId>
+                <version>${innospots.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-connector-ai-openai</artifactId>
+                <version>${innospots.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-connector-ai-ollama</artifactId>
+                <version>${innospots.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-connector-api</artifactId>
+                <version>${innospots.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-connector-workflow</artifactId>
+                <version>${innospots.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-connector-kafka</artifactId>
+                <version>${innospots.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-connector-mysql</artifactId>
+                <version>${innospots.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-connector-redis</artifactId>
+                <version>${innospots.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+</project>

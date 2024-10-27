@@ -18,7 +18,7 @@
 
 package io.innospots.libra.security.controller;
 
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.security.auth.AuthToken;
 import io.innospots.libra.security.jwt.JwtAuthManager;
@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static io.innospots.base.exception.AuthenticationException.buildTokenExpiredException;
 import static io.innospots.base.exception.AuthenticationException.buildTokenInvalidException;
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.security.context.SecurityContextHolder.getContext;
 
@@ -53,7 +53,7 @@ public class AuthTokenController extends BaseController {
 
     @GetMapping("check")
     @Operation(summary = "check whether the user is login")
-    public InnospotsResponse<AuthToken> checkToken() {
+    public R<AuthToken> checkToken() {
         JwtToken authToken = (JwtToken) getContext();
         if (authToken == null) {
             throw buildTokenInvalidException(this.getClass());
@@ -66,7 +66,7 @@ public class AuthTokenController extends BaseController {
 
     @GetMapping("refresh")
     @Operation(summary = "refresh token and return newToken", description = "get token")
-    public InnospotsResponse<String> getToken() {
+    public R<String> getToken() {
         AuthToken authToken = getContext();
         authToken = authManager.refreshToken(authToken.getRawToken());
         return success("Bearer " + authToken.getRawToken());

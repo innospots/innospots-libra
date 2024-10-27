@@ -20,7 +20,7 @@ package io.innospots.libra.kernel.module.page.controller;
 
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
@@ -38,7 +38,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
 import static io.innospots.libra.kernel.module.page.enums.PageOperationType.PUBLISH;
@@ -61,7 +61,7 @@ public class PageController extends BaseController {
     @PostMapping
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
     @Operation(summary = "save page")
-    public InnospotsResponse<PageDetail> createOrUpdate(
+    public R<PageDetail> createOrUpdate(
             @Parameter(name = "pageDetail", required = true) @Validated @RequestBody PageDetail pageDetail,
             BindingResult bindingResult) {
         PageDetail result = pageOperator.createOrUpdate(pageDetail, SAVE);
@@ -73,7 +73,7 @@ public class PageController extends BaseController {
     @PostMapping("publish")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.publish}")
     @Operation(summary = "publish page")
-    public InnospotsResponse<PageDetail> publishPage(
+    public R<PageDetail> publishPage(
             @Parameter(name = "pageDetail", required = true) @Validated @RequestBody PageDetail pageDetail,
             BindingResult bindingResult) {
         PageDetail result = pageOperator.createOrUpdate(pageDetail, PUBLISH);
@@ -84,7 +84,7 @@ public class PageController extends BaseController {
     @DeleteMapping("{id}")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @Operation(summary = "delete page")
-    public InnospotsResponse<Boolean> deletePage(@Parameter(name = "id", required = true) @PathVariable Integer id) {
+    public R<Boolean> deletePage(@Parameter(name = "id", required = true) @PathVariable Integer id) {
         boolean delete = pageOperator.deletePage(id);
         return success(delete);
     }
@@ -92,7 +92,7 @@ public class PageController extends BaseController {
 
     @GetMapping("{id}")
     @Operation(summary = "page detail")
-    public InnospotsResponse<PageDetail> getPageDetail(@Parameter(name = "id", required = true) @PathVariable Integer id) {
+    public R<PageDetail> getPageDetail(@Parameter(name = "id", required = true) @PathVariable Integer id) {
         PageDetail pageDetail = pageOperator.getPageDetail(id);
         return success(pageDetail);
     }
@@ -100,10 +100,10 @@ public class PageController extends BaseController {
     // TODO 待拆分page和list接口
     @GetMapping("page")
     @Operation(summary = "page list")
-    public InnospotsResponse<PageBody<Page>> pagePages(@Parameter(name = "categoryId") @RequestParam(value = "categoryId", required = false) Integer categoryId,
-                                                       @Parameter(name = "queryCode") @RequestParam(value = "queryCode", required = false) String queryCode,
-                                                       @Parameter(name = "page") @RequestParam("page") int page,
-                                                       @Parameter(name = "size") @RequestParam("size") int size) {
+    public R<PageBody<Page>> pagePages(@Parameter(name = "categoryId") @RequestParam(value = "categoryId", required = false) Integer categoryId,
+                                       @Parameter(name = "queryCode") @RequestParam(value = "queryCode", required = false) String queryCode,
+                                       @Parameter(name = "page") @RequestParam("page") int page,
+                                       @Parameter(name = "size") @RequestParam("size") int size) {
         PageBody<Page> list = pageOperator.pagePages(categoryId, queryCode, page, size);
         return success(list);
     }
@@ -112,8 +112,8 @@ public class PageController extends BaseController {
     @PutMapping("{id}/status/{status}")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.status}")
     @Operation(summary = "update status", description = "page enable disable, ONLINE | OFFLINE")
-    public InnospotsResponse<Boolean> updateStatus(@Parameter(name = "id", required = true) @PathVariable Integer id,
-                                                   @Parameter(name = "status", required = true) @PathVariable DataStatus status) {
+    public R<Boolean> updateStatus(@Parameter(name = "id", required = true) @PathVariable Integer id,
+                                   @Parameter(name = "status", required = true) @PathVariable DataStatus status) {
         boolean updateStatus = pageOperator.updateStatus(id, status);
         return success(updateStatus);
     }
@@ -122,7 +122,7 @@ public class PageController extends BaseController {
     @PutMapping("{id}/recycle")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${page.category.recycle_bin}")
     @Operation(summary = "recycle page")
-    public InnospotsResponse<Boolean> recyclePage(
+    public R<Boolean> recyclePage(
             @Parameter(name = "id", required = true) @PathVariable Integer id) {
         return success(pageOperator.recyclePage(id));
     }

@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.module.todo.controller;
 
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
@@ -37,7 +37,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
 
 /**
@@ -64,7 +64,7 @@ public class TodoTaskCommentController extends BaseController {
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
     @OperationLog(operateType = OperateType.CREATE, primaryField = "commentId")
     @Operation(summary = "create task comment")
-    public InnospotsResponse<TodoTaskComment> createTodoTaskComment(@Parameter(name = "todoTaskComment", required = true) @Validated @RequestBody TodoTaskComment todoTaskComment) {
+    public R<TodoTaskComment> createTodoTaskComment(@Parameter(name = "todoTaskComment", required = true) @Validated @RequestBody TodoTaskComment todoTaskComment) {
 
         TodoTaskComment create = todoTaskCommentOperator.createTodoTaskComment(todoTaskComment);
         return success(create);
@@ -72,7 +72,7 @@ public class TodoTaskCommentController extends BaseController {
 
     @GetMapping("{taskId}")
     @Operation(summary = "view task with comment")
-    public InnospotsResponse<TodoTask> getTodoTaskWithComment(@Parameter(name = "taskId", required = true) @PathVariable Integer taskId) {
+    public R<TodoTask> getTodoTaskWithComment(@Parameter(name = "taskId", required = true) @PathVariable Integer taskId) {
 
         TodoTask view = todoTaskService.getTodoTaskWithComment(taskId);
         return success(view);
@@ -82,7 +82,7 @@ public class TodoTaskCommentController extends BaseController {
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @OperationLog(idParamPosition = 0, operateType = OperateType.DELETE)
     @Operation(summary = "delete task comment")
-    public InnospotsResponse<Boolean> deleteTodoTaskComment(@Parameter(name = "commentId", required = true) @PathVariable Integer commentId) {
+    public R<Boolean> deleteTodoTaskComment(@Parameter(name = "commentId", required = true) @PathVariable Integer commentId) {
 
         Boolean delete = todoTaskCommentOperator.deleteTodoTaskComment(commentId);
         return success(delete);
@@ -92,7 +92,7 @@ public class TodoTaskCommentController extends BaseController {
     @PostMapping(value = "image")
 //    @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
     @Operation(summary = "upload image")
-    public InnospotsResponse<List<String>> uploadImage(@Parameter(name = "images", required = true) @RequestParam("images") List<MultipartFile> uploadFiles) {
+    public R<List<String>> uploadImage(@Parameter(name = "images", required = true) @RequestParam("images") List<MultipartFile> uploadFiles) {
 
         return success(todoTaskCommentOperator.uploadImage(uploadFiles));
     }

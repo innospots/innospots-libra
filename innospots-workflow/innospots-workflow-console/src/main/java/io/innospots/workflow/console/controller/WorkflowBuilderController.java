@@ -18,16 +18,13 @@
 
 package io.innospots.workflow.console.controller;
 
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
 import io.innospots.workflow.console.service.WorkflowBuilderService;
-import io.innospots.workflow.core.instance.operator.WorkflowDraftOperator;
-import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
-import io.innospots.workflow.core.instance.operator.WorkflowBodyOperator;
 import io.innospots.workflow.core.flow.model.WorkflowBaseBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -38,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
 
@@ -71,9 +68,9 @@ public class WorkflowBuilderController extends BaseController {
     @GetMapping("{workflowInstanceId}/revision/{revision}")
     @ResourceItemOperation(type = BUTTON, icon = "edit", name = "${common.button.edit}")
     @Operation(summary = "get flow instance by revision")
-    public InnospotsResponse<WorkflowBaseBody> getFlowInstanceByRevision(@PathVariable Long workflowInstanceId,
-                                                                         @PathVariable Integer revision,
-                                                                         @RequestParam(defaultValue = "true") Boolean includeNodes) {
+    public R<WorkflowBaseBody> getFlowInstanceByRevision(@PathVariable Long workflowInstanceId,
+                                                         @PathVariable Integer revision,
+                                                         @RequestParam(defaultValue = "true") Boolean includeNodes) {
         return success(workflowBuilderService.getFlowInstanceByRevision(workflowInstanceId,revision,includeNodes));
     }
 
@@ -85,7 +82,7 @@ public class WorkflowBuilderController extends BaseController {
      */
     @GetMapping("draft/{workflowInstanceId}")
     @Operation(summary = "get flow instance by draft")
-    public InnospotsResponse<WorkflowBaseBody> getFlowInstanceByDraft(@PathVariable Long workflowInstanceId) {
+    public R<WorkflowBaseBody> getFlowInstanceByDraft(@PathVariable Long workflowInstanceId) {
         return success(workflowBuilderService.getFlowInstanceByDraft(workflowInstanceId));
     }
 
@@ -99,8 +96,8 @@ public class WorkflowBuilderController extends BaseController {
      */
     @GetMapping("lasted/{workflowInstanceId}")
     @Operation(summary = "get flow instance by lasted")
-    public InnospotsResponse<WorkflowBaseBody> getFlowInstanceByLasted(@PathVariable Long workflowInstanceId,
-                                                                       @RequestParam(defaultValue = "true") Boolean includeNodes) {
+    public R<WorkflowBaseBody> getFlowInstanceByLasted(@PathVariable Long workflowInstanceId,
+                                                       @RequestParam(defaultValue = "true") Boolean includeNodes) {
         return success(workflowBuilderService.getFlowInstanceByLasted(workflowInstanceId, includeNodes));
     }
 
@@ -114,14 +111,14 @@ public class WorkflowBuilderController extends BaseController {
     @PostMapping("cache")
     @Operation(summary = "save flow instance to cache")
     @ResourceItemOperation(key = "workflow-builder-opt")
-    public InnospotsResponse<Boolean> saveCache(@Validated @RequestBody WorkflowBaseBody workflowBaseBody) {
+    public R<Boolean> saveCache(@Validated @RequestBody WorkflowBaseBody workflowBaseBody) {
         return success(workflowBuilderService.saveCache(workflowBaseBody));
     }
 
 
     @GetMapping("/{workflowInstanceId}/node-key/{nodeKey}/input-fields")
     @Operation(summary = "the input data fields, which current select node")
-    public InnospotsResponse<List<Map<String, Object>>> listNodeInputFields(
+    public R<List<Map<String, Object>>> listNodeInputFields(
             @PathVariable Long workflowInstanceId,
             @PathVariable String nodeKey,
             @RequestParam(required = false) Set<String> sourceNodeKeys
@@ -139,7 +136,7 @@ public class WorkflowBuilderController extends BaseController {
     @PutMapping("draft")
     @Operation(summary = "save flow instance draft revision")
     @ResourceItemOperation(key = "workflow-builder-opt", type = BUTTON, icon = "save", name = "${common.button.save}")
-    public InnospotsResponse<WorkflowBaseBody> saveDraft(@Validated @RequestBody WorkflowBaseBody workflowBaseBody) {
+    public R<WorkflowBaseBody> saveDraft(@Validated @RequestBody WorkflowBaseBody workflowBaseBody) {
         return success(workflowBuilderService.saveDraft(workflowBaseBody));
     }
 
@@ -154,8 +151,8 @@ public class WorkflowBuilderController extends BaseController {
     @PostMapping("publish/{workflowInstanceId}")
     @Operation(summary = "publish flow instance")
     @ResourceItemOperation(type = BUTTON, icon = "save", name = "${common.button.publish}")
-    public InnospotsResponse<Boolean> publish(@PathVariable Long workflowInstanceId,
-                                              @RequestParam(defaultValue = "") String description) {
+    public R<Boolean> publish(@PathVariable Long workflowInstanceId,
+                              @RequestParam(defaultValue = "") String description) {
 
         return success(workflowBuilderService.publish(workflowInstanceId, description));
     }

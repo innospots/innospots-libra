@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.innospots</groupId>
         <artifactId>innospots-app</artifactId>
-        <version>${innosopts.version}</version>
+        <version>${innospots.version}</version>
     </parent>
 
     <artifactId>innospots-app-core</artifactId>

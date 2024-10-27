@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.module.i18n.controller;
 
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.kernel.module.i18n.operator.I18nDictionaryOperator;
 import io.innospots.libra.kernel.module.i18n.service.I18nLocaleResourceService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,7 +30,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.TreeMap;
 
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.kernel.module.i18n.loader.LocaleCountryLoader.localeList;
 
@@ -56,7 +56,7 @@ public class I18nLocaleResourceController {
 
     @GetMapping("list")
     @Operation(summary = "list available locale code,when create new language and select the language code")
-    public InnospotsResponse<TreeMap<String, String>> listAvailableLocale() {
+    public R<TreeMap<String, String>> listAvailableLocale() {
         return success(localeList());
     }
 
@@ -69,9 +69,9 @@ public class I18nLocaleResourceController {
      */
     @GetMapping("{localeCode}/{module}.json")
     @Operation(summary = "")
-    public InnospotsResponse<TreeMap<String, String>> getLocaleResource(HttpServletRequest request,
-                                                                        @Parameter @PathVariable String localeCode,
-                                                                        @Parameter @PathVariable String module) {
+    public R<TreeMap<String, String>> getLocaleResource(HttpServletRequest request,
+                                                        @Parameter @PathVariable String localeCode,
+                                                        @Parameter @PathVariable String module) {
         /*
         LocaleContext localeContext = getLocaleContext();
         if (!localeCode.equalsIgnoreCase(localeContext.getLocale().toString())) {
@@ -83,7 +83,7 @@ public class I18nLocaleResourceController {
     }
 
     @GetMapping("switch")
-    public InnospotsResponse<List<String>> switchLocale(@Parameter @RequestParam String locale) {
+    public R<List<String>> switchLocale(@Parameter @RequestParam String locale) {
         return success(i18nDictionaryOperator.listModules());
     }
 }

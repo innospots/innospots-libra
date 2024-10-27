@@ -20,7 +20,7 @@ package io.innospots.libra.kernel.module.schema.controller;
 
 import io.innospots.base.connector.meta.ConnectionMinderSchema;
 import io.innospots.base.connector.meta.ConnectionMinderSchemaLoader;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 
 /**
@@ -50,7 +50,7 @@ public class ConnectorSchemaController {
 
     @GetMapping("config/list")
     @Operation(summary = "config list", description = "Query Config list")
-    public InnospotsResponse<List<ConnectionMinderSchema>> configList() {
+    public R<List<ConnectionMinderSchema>> configList() {
         List<ConnectionMinderSchema> schemaList = ConnectionMinderSchemaLoader.connectionMinderSchemas();
         return success(schemaList);
     }

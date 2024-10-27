@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.module.notification.controller;
 
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
 
@@ -59,12 +59,12 @@ public class NotificationSettingController extends BaseController {
 
     @GetMapping("events")
     @Operation(summary = "get the list of the module in the events.")
-    public InnospotsResponse<Map<String, NotificationGroup>> events() {
+    public R<Map<String, NotificationGroup>> events() {
         return success(NotificationDefinitionLoader.load());
     }
 
     @GetMapping("list")
-    public InnospotsResponse<List<NotificationSetting>> listMessageSettings() {
+    public R<List<NotificationSetting>> listMessageSettings() {
 
         List<NotificationSetting> notificationSettings = notificationSettingOperator.listMessageSettings();
         return success(notificationSettings);
@@ -73,7 +73,7 @@ public class NotificationSettingController extends BaseController {
     @OperationLog(operateType = OperateType.UPDATE)
     @PostMapping()
     @ResourceItemOperation(type = BUTTON, icon = "save", name = "${common.button.update}")
-    public InnospotsResponse<Boolean> saveMessageSetting(
+    public R<Boolean> saveMessageSetting(
             @Parameter(name = "messageSettings") @RequestBody List<NotificationSetting> notificationSettings
     ) {
         Boolean result = notificationSettingOperator.saveMessageSetting(notificationSettings);

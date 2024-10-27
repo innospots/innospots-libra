@@ -2,7 +2,7 @@ package io.innospots.schedule.job.db;
 
 import io.innospots.base.connector.jdbc.JdbcDataConnectionMinder;
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.base.quartz.JobType;
 import io.innospots.schedule.job.BaseJob;
 import io.innospots.schedule.model.JobExecution;
@@ -37,7 +37,7 @@ public abstract class DbJdbcJob extends BaseJob {
     }
 
     @Override
-    public InnospotsResponse<Map<String, Object>> execute() {
+    public R<Map<String, Object>> execute() {
         return null;
     }
 

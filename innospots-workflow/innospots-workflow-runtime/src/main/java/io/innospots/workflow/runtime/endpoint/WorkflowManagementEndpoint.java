@@ -19,7 +19,7 @@
 package io.innospots.workflow.runtime.endpoint;
 
 import io.innospots.base.constant.PathConstant;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.base.quartz.QuartzScheduleManager;
 import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.workflow.runtime.config.WorkflowRuntimeProperties;
@@ -36,7 +36,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 
 /**
  * @author Smars
@@ -65,58 +65,58 @@ public class WorkflowManagementEndpoint {
 
     @PostMapping("load/{workInstanceId}/{revision}")
     @Operation(summary = "load workflow instance")
-    public InnospotsResponse<Flow> load(@PathVariable Long workInstanceId, @PathVariable Integer revision) {
+    public R<Flow> load(@PathVariable Long workInstanceId, @PathVariable Integer revision) {
         Flow flow = flowManager.loadFlow(workInstanceId, revision);
         return success(flow);
     }
 
     @PostMapping("load/{workInstanceId}")
     @Operation(summary = "load latest workflow instance")
-    public InnospotsResponse<Flow> load(@PathVariable Long workInstanceId) {
+    public R<Flow> load(@PathVariable Long workInstanceId) {
         Flow flow = flowManager.loadFlow(workInstanceId);
         return success(flow);
     }
 
     @PutMapping("clear/{workInstanceId}/{revision}")
     @Operation(summary = "clear workflow instance cache")
-    public InnospotsResponse<Boolean> clear(@PathVariable Long workInstanceId, @PathVariable Integer revision) {
+    public R<Boolean> clear(@PathVariable Long workInstanceId, @PathVariable Integer revision) {
         return success(flowManager.clear(workInstanceId, revision));
     }
 
     @PutMapping("clear/{workInstanceId}")
     @Operation(summary = "clear latest workflow instance")
-    public InnospotsResponse<Boolean> clear(@PathVariable Long workInstanceId) {
+    public R<Boolean> clear(@PathVariable Long workInstanceId) {
         return success(flowManager.clear(workInstanceId));
     }
 
     @GetMapping("info/{workInstanceId}/{revision}")
     @Operation(summary = "show workflow instance")
-    public InnospotsResponse<Flow> info(@PathVariable Long workInstanceId, @PathVariable Integer revision) {
+    public R<Flow> info(@PathVariable Long workInstanceId, @PathVariable Integer revision) {
         return success(flowManager.findFlow(workInstanceId, revision));
     }
 
 
     @GetMapping("info/{workInstanceId}")
     @Operation(summary = "show latest workflow instance")
-    public InnospotsResponse<Flow> info(@PathVariable Long workInstanceId) {
+    public R<Flow> info(@PathVariable Long workInstanceId) {
         return success(flowManager.findFlow(workInstanceId));
     }
 
     @GetMapping("runtime")
     @Operation(summary = "published workflow in runtime")
-    public InnospotsResponse<Map<String, Object>> runtime() {
+    public R<Map<String, Object>> runtime() {
         return success(containerManager.runtimeTriggers());
     }
 
     @GetMapping("schedule-infos")
     @Operation(summary = "published schedule workflow")
-    public InnospotsResponse<List<Map<String, Object>>> scheduleInfo() {
+    public R<List<Map<String, Object>>> scheduleInfo() {
         return success(quartzScheduleManager.schedulerInfo());
     }
 
     @GetMapping("webhook-address")
     @Operation(summary = "webhook address")
-    public InnospotsResponse<Map<String, String>> apiAddress() {
+    public R<Map<String, String>> apiAddress() {
         Map<String, String> flowInfo = new LinkedHashMap<>();
         String host = workflowRuntimeProperties.getHost();
         if (StringUtils.isEmpty(host)) {
@@ -126,7 +126,7 @@ public class WorkflowManagementEndpoint {
 
         WorkflowWebhookServer webhookServer = BeanContextAwareUtils.getBean(WorkflowWebhookServer.class);
         flowInfo.put("webhookApiServer", WorkflowRuntimeProperties.webHookApi());
-        return InnospotsResponse.success(flowInfo);
+        return R.success(flowInfo);
     }
 
 

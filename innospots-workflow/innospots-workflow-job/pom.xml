@@ -24,7 +24,7 @@
     <parent>
         <groupId>io.innospots</groupId>
         <artifactId>innospots-workflow</artifactId>
-        <version>${innosopts.version}</version>
+        <version>${innospots.version}</version>
     </parent>
 
     <artifactId>innospots-workflow-job</artifactId>
@@ -36,7 +36,6 @@
         <dependency>
             <groupId>io.innospots</groupId>
             <artifactId>innospots-schedule</artifactId>
-            <version>${innosopts.version}</version>
         </dependency>
 
         <dependency>

@@ -19,7 +19,7 @@
 package io.innospots.libra.security.controller;
 
 import io.innospots.base.exception.AuthenticationException;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.security.auth.AuthToken;
 import io.innospots.libra.security.jwt.JwtAuthManager;
@@ -35,7 +35,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import static io.innospots.base.exception.AuthenticationException.buildTokenExpiredException;
 import static io.innospots.base.exception.AuthenticationException.buildTokenInvalidException;
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.security.context.SecurityContextHolder.getContext;
 
@@ -58,7 +58,7 @@ public class AccessCheckController extends BaseController {
 
     @GetMapping("check")
     @Operation(summary = "check whether the user is login")
-    public InnospotsResponse<AuthToken> checkToken(@RequestParam(required = false) String pageUrl, HttpServletRequest httpRequest) {
+    public R<AuthToken> checkToken(@RequestParam(required = false) String pageUrl, HttpServletRequest httpRequest) {
         JwtToken authToken = (JwtToken) getContext();
         if (authToken == null) {
             throw buildTokenInvalidException(this.getClass());

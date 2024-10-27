@@ -20,9 +20,8 @@ package io.innospots.workflow.console.controller;
 
 import io.innospots.base.connector.schema.model.SchemaRegistry;
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.data.request.FormQuery;
 import io.innospots.base.enums.DataStatus;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
@@ -41,7 +40,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
 
@@ -72,7 +71,7 @@ public class WorkflowInstanceController extends BaseController {
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${workflow.main.button.add}")
     @OperationLog(operateType = OperateType.CREATE, primaryField = "workflowInstanceId")
     @Operation(summary = "create workflow")
-    public InnospotsResponse<WorkflowInstance> createWorkflow(@Parameter(name = "workflow") @Valid @RequestBody WorkflowInfo workflow) {
+    public R<WorkflowInstance> createWorkflow(@Parameter(name = "workflow") @Valid @RequestBody WorkflowInfo workflow) {
         WorkflowInstance workflowInstance = workflowService.createWorkflow(workflow);
         return success(workflowInstance);
     }
@@ -87,7 +86,7 @@ public class WorkflowInstanceController extends BaseController {
     @OperationLog(idParamPosition = 0, primaryField = "workflowInstanceId", operateType = OperateType.UPDATE)
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.save}")
     @Operation(summary = "update workflow")
-    public InnospotsResponse<Boolean> updateWorkflow(@Parameter(name = "workflow") @Valid @RequestBody WorkflowInstance workflow) {
+    public R<Boolean> updateWorkflow(@Parameter(name = "workflow") @Valid @RequestBody WorkflowInstance workflow) {
         Boolean updateInfo = workflowService.updateWorkflow(workflow);
         return success(updateInfo);
     }
@@ -102,7 +101,7 @@ public class WorkflowInstanceController extends BaseController {
     @OperationLog(idParamPosition = 0, operateType = OperateType.RECYCLE)
     @Operation(summary = "remove workflow to recycle bin", description = "remove workflow to recycle bin")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.tooltip.recycle_bin}")
-    public InnospotsResponse<Boolean> removeWorkflowToRecycle(@Parameter(required = true, name = "workflowInstanceId") @PathVariable Long workflowInstanceId) {
+    public R<Boolean> removeWorkflowToRecycle(@Parameter(required = true, name = "workflowInstanceId") @PathVariable Long workflowInstanceId) {
         Boolean delete = workflowService.removeWorkflowToRecycle(workflowInstanceId);
         return success(delete);
     }
@@ -111,7 +110,7 @@ public class WorkflowInstanceController extends BaseController {
     @Operation(summary = "delete workflow from system")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @OperationLog(idParamPosition = 0, operateType = OperateType.DELETE)
-    public InnospotsResponse<Boolean> deleteWorkflowInstance(@Parameter(required = true, name = "workflowInstanceId") @PathVariable Long workflowInstanceId) {
+    public R<Boolean> deleteWorkflowInstance(@Parameter(required = true, name = "workflowInstanceId") @PathVariable Long workflowInstanceId) {
         Boolean delete = workflowService.deleteByWorkflowBody(workflowInstanceId);
         return success(delete);
     }
@@ -125,8 +124,8 @@ public class WorkflowInstanceController extends BaseController {
     @OperationLog(idParamPosition = 0, operateType = OperateType.UPDATE_STATUS)
     @Operation(summary = "update workflow status", description = "update workflow status")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.text.status}")
-    public InnospotsResponse<Boolean> updateDataStatus(@Parameter(required = true, name = "workflowInstanceId") @PathVariable Long workflowInstanceId,
-                                                       @Parameter(required = true, name = "dataStatus") @PathVariable DataStatus dataStatus) {
+    public R<Boolean> updateDataStatus(@Parameter(required = true, name = "workflowInstanceId") @PathVariable Long workflowInstanceId,
+                                       @Parameter(required = true, name = "dataStatus") @PathVariable DataStatus dataStatus) {
         Boolean update = workflowService.updateWorkflowStatus(workflowInstanceId, dataStatus);
         return success(update);
     }
@@ -139,7 +138,7 @@ public class WorkflowInstanceController extends BaseController {
      */
     @GetMapping("{workflowInstanceId}")
     @Operation(summary = "get workflowInfo")
-    public InnospotsResponse<WorkflowInstance> getWorkflowInstance(@Parameter(required = true, name = "workflowInstanceId") @PathVariable Long workflowInstanceId) {
+    public R<WorkflowInstance> getWorkflowInstance(@Parameter(required = true, name = "workflowInstanceId") @PathVariable Long workflowInstanceId) {
         WorkflowInstance info = workflowService.getWorkflowInstance(workflowInstanceId);
         return success(info);
     }
@@ -151,14 +150,14 @@ public class WorkflowInstanceController extends BaseController {
      */
     @GetMapping("page")
     @Operation(summary = "page workflows")
-    public InnospotsResponse<PageBody<WorkflowInstance>> pageWorkflows(WorkflowQuery request) {
+    public R<PageBody<WorkflowInstance>> pageWorkflows(WorkflowQuery request) {
         PageBody<WorkflowInstance> page = workflowService.getWorkflows(request);
         return success(page);
     }
 
     @GetMapping("registry/{workflowInstanceId}")
     @Operation(summary = "get workflow api registry by workflowInstanceId")
-    public InnospotsResponse<SchemaRegistry> workflowApiRegistry(@PathVariable String workflowInstanceId) {
+    public R<SchemaRegistry> workflowApiRegistry(@PathVariable String workflowInstanceId) {
         return success(workflowService.getApiWorkflowSchemaRegistry(workflowInstanceId));
     }
 

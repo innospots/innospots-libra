@@ -1,6 +1,6 @@
 package io.innospots.workflow.schedule.job;
 
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.base.quartz.JobType;
 import io.innospots.schedule.job.BaseJob;
 import io.innospots.schedule.model.JobExecution;
@@ -25,7 +25,7 @@ public class FlowStreamEventJob extends BaseJob {
     }
 
     @Override
-    public InnospotsResponse<Map<String, Object>> execute() {
+    public R<Map<String, Object>> execute() {
         return null;
     }
 }

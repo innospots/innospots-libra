@@ -1,7 +1,7 @@
 package io.innospots.app.console.controller;
 
 import io.innospots.app.console.operator.AppDefinitionCategoryOperator;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.category.BaseCategory;
 import io.innospots.libra.base.category.CategoryType;
 import io.innospots.libra.base.controller.BaseController;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
 
@@ -42,7 +42,7 @@ public class AppDefinitionCategoryController extends BaseController {
     @PostMapping
     @Operation(summary = "create application category")
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${app.category.add.title}")
-    public InnospotsResponse<BaseCategory> createCategory(@Parameter(required = true, name = "categoryName") @RequestParam("categoryName") String categoryName) {
+    public R<BaseCategory> createCategory(@Parameter(required = true, name = "categoryName") @RequestParam("categoryName") String categoryName) {
         BaseCategory category = appDefinitionCategoryOperator.createCategory(categoryName, CategoryType.APPS);
         return success(category);
     }
@@ -51,8 +51,8 @@ public class AppDefinitionCategoryController extends BaseController {
     @PutMapping("{categoryId}")
     @Operation(summary = "update application category")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${page.category.edit.title}")
-    public InnospotsResponse<Boolean> updateCategory(@Parameter(required = true, name = "categoryId") @PathVariable Integer categoryId,
-                                                     @Parameter(required = true, name = "categoryName") @RequestParam("categoryName") String categoryName) {
+    public R<Boolean> updateCategory(@Parameter(required = true, name = "categoryId") @PathVariable Integer categoryId,
+                                     @Parameter(required = true, name = "categoryName") @RequestParam("categoryName") String categoryName) {
         Boolean update = appDefinitionCategoryOperator.updateCategory(categoryId, categoryName, CategoryType.APPS);
         return success(update);
     }
@@ -61,14 +61,14 @@ public class AppDefinitionCategoryController extends BaseController {
     @DeleteMapping("{categoryId}")
     @Operation(summary = "delete application category")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.category.delete.title}")
-    public InnospotsResponse<Boolean> deleteCategory(@Parameter(required = true, name = "categoryId") @PathVariable Integer categoryId) {
+    public R<Boolean> deleteCategory(@Parameter(required = true, name = "categoryId") @PathVariable Integer categoryId) {
         return success(appDefinitionCategoryOperator.deleteCategory(categoryId));
     }
 
 
     @GetMapping
     @Operation(summary = "application category list")
-    public InnospotsResponse<List<BaseCategory>> listCategories() {
+    public R<List<BaseCategory>> listCategories() {
         List<BaseCategory> list = appDefinitionCategoryOperator.listCategories();
         return success(list);
 

@@ -18,11 +18,9 @@
 
 package io.innospots.workflow.core.runtime.webhook;
 
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 /**
  * @author Smars
@@ -30,7 +28,7 @@ import java.time.LocalDateTime;
  */
 @Setter
 @Getter
-public class WorkflowResponse<T> extends InnospotsResponse<T> {
+public class WorkflowResponse<T> extends R<T> {
 
     private String contextId;
 

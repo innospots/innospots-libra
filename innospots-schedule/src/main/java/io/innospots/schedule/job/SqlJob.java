@@ -23,7 +23,7 @@ import io.innospots.base.connector.minder.IDataConnectionMinder;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.operator.IOperator;
 import io.innospots.base.data.request.SimpleRequest;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.base.quartz.JobType;
 import io.innospots.schedule.model.JobExecution;
 import lombok.extern.slf4j.Slf4j;
@@ -63,8 +63,8 @@ public class SqlJob extends BaseJob {
     }
 
     @Override
-    public InnospotsResponse<Map<String,Object>> execute() {
-        InnospotsResponse<Map<String,Object>> response = new InnospotsResponse<>();
+    public R<Map<String,Object>> execute() {
+        R<Map<String,Object>> response = new R<>();
         SimpleRequest simpleRequest = new SimpleRequest(credentialKey, sqlScript);
         log.info("execute sql job, credentialKey:{}, sqlScript:{}", credentialKey, sqlScript);
         DataBody dataBody = operator.execute(simpleRequest);

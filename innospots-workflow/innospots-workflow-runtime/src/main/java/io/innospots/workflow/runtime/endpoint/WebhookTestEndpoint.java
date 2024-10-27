@@ -20,7 +20,7 @@ package io.innospots.workflow.runtime.endpoint;
 
 
 import io.innospots.base.constant.PathConstant;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.workflow.core.debug.FlowNodeDebugger;
 import io.innospots.workflow.core.runtime.webhook.WorkflowResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,7 +32,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 
 /**
  * @author Smars
@@ -81,7 +81,7 @@ public class WebhookTestEndpoint {
 
     @PostMapping(value = "{flowKey}")
     @Operation(summary = "post webhook upload files")
-    public InnospotsResponse<String> eventPost(
+    public R<String> eventPost(
             @Parameter(required = true) @PathVariable String flowKey,
             @Parameter(required = false) @RequestHeader Map<String, Object> headers,
             @RequestParam Map<String, Object> requestParams

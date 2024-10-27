@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.system.controller;
 
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.kernel.module.system.model.role.RoleInfo;
 import io.innospots.base.model.user.SimpleUser;
 import io.innospots.libra.base.controller.BaseController;
@@ -41,7 +41,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
 import static java.util.Collections.singletonList;
@@ -75,7 +75,7 @@ public class RoleController extends BaseController {
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
     @OperationLog(operateType = OperateType.CREATE, primaryField = "roleId")
     @Operation(summary = "create role")
-    public InnospotsResponse<RoleInfo> createRole(@Parameter(name = "role", required = true) @Valid @RequestBody RoleInfo role) {
+    public R<RoleInfo> createRole(@Parameter(name = "role", required = true) @Valid @RequestBody RoleInfo role) {
 
         RoleInfo save = roleOperator.createRole(role);
         return success(save);
@@ -85,7 +85,7 @@ public class RoleController extends BaseController {
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "roleId")
     @Operation(summary = "update role")
-    public InnospotsResponse<Boolean> updateRole(@Parameter(name = "role", required = true) @Valid @RequestBody RoleInfo role) {
+    public R<Boolean> updateRole(@Parameter(name = "role", required = true) @Valid @RequestBody RoleInfo role) {
 
         Boolean update = roleOperator.updateRole(role);
         return success(update);
@@ -96,7 +96,7 @@ public class RoleController extends BaseController {
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @OperationLog(operateType = OperateType.DELETE, idParamPosition = 0)
     @Operation(summary = "delete role", description = "delete role")
-    public InnospotsResponse<Boolean> deleteRole(@Parameter(name = "roleId", required = true) @PathVariable Integer roleId) {
+    public R<Boolean> deleteRole(@Parameter(name = "roleId", required = true) @PathVariable Integer roleId) {
 
         Boolean delete = userRoleService.deleteRole(roleId);
         return success(delete);
@@ -104,7 +104,7 @@ public class RoleController extends BaseController {
 
     @GetMapping("{roleId}")
     @Operation(summary = "get role info")
-    public InnospotsResponse<RoleInfo> getRole(@Parameter(name = "roleId", required = true) @PathVariable Integer roleId) {
+    public R<RoleInfo> getRole(@Parameter(name = "roleId", required = true) @PathVariable Integer roleId) {
 
         RoleInfo view = roleOperator.getRole(roleId);
         return success(view);
@@ -112,14 +112,14 @@ public class RoleController extends BaseController {
 
     @GetMapping("page")
     @Operation(summary = "role list")
-    public InnospotsResponse<PageBody<RoleInfo>> pageRoles(FormQuery request) {
+    public R<PageBody<RoleInfo>> pageRoles(FormQuery request) {
         PageBody<RoleInfo> pageModel = userRoleService.pageRoles(request);
         return success(pageModel);
     }
 
     @GetMapping("{roleId}/users")
     @Operation(summary = "role user list")
-    public InnospotsResponse<List<SimpleUser>> listRoleUsers(@PathVariable Integer roleId) {
+    public R<List<SimpleUser>> listRoleUsers(@PathVariable Integer roleId) {
         List<SimpleUser> users = userRoleService.listRoleUsers(roleId);
         return success(users);
     }
@@ -128,8 +128,8 @@ public class RoleController extends BaseController {
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}", label = "${role.list.button.add_member}")
     @OperationLog(operateType = OperateType.ADD, idParamPosition = 0)
     @Operation(summary = "batch add user role")
-    public InnospotsResponse<List<SimpleUser>> addUserRole(@Parameter(name = "roleId", required = true) @PathVariable Integer roleId,
-                                                           @RequestBody UserRole userRole) {
+    public R<List<SimpleUser>> addUserRole(@Parameter(name = "roleId", required = true) @PathVariable Integer roleId,
+                                           @RequestBody UserRole userRole) {
         userRoleOperator.saveUserRoles(userRole.getUserIds(), singletonList(roleId));
         return success(userOperator.listByIds(userRole.getUserIds()));
     }
@@ -138,14 +138,14 @@ public class RoleController extends BaseController {
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.update}", label = "${role.list.button.delete_member}")
     @OperationLog(operateType = OperateType.CREATE, primaryField = "roleId")
     @Operation(summary = "delete user role")
-    public InnospotsResponse<Boolean> deleteUserRole(@Parameter(name = "roleId", required = true) @PathVariable Integer roleId,
-                                                     @Parameter(name = "userId", required = true) @PathVariable Integer userId) {
+    public R<Boolean> deleteUserRole(@Parameter(name = "roleId", required = true) @PathVariable Integer roleId,
+                                     @Parameter(name = "userId", required = true) @PathVariable Integer userId) {
         Boolean delete = userRoleOperator.delete(userId, roleId);
         return success(delete);
     }
 
     @GetMapping("list-name")
-    public InnospotsResponse<List<String>> listUserRole() {
+    public R<List<String>> listUserRole() {
         List<String> roleNames = userRoleService.getUserRoles();
         return success(roleNames);
     }

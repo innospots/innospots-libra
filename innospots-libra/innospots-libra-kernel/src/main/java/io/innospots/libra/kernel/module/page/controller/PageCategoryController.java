@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.page.controller;
 
 
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.category.CategoryType;
 import io.innospots.libra.base.log.OperateType;
@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
 
@@ -60,7 +60,7 @@ public class PageCategoryController extends BaseController {
     @PostMapping
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${page.category.add.title}")
     @Operation(summary = "create page category")
-    public InnospotsResponse<BaseCategory> createCategory(@Parameter(required = true, name = "categoryName") @RequestParam("categoryName") String categoryName) {
+    public R<BaseCategory> createCategory(@Parameter(required = true, name = "categoryName") @RequestParam("categoryName") String categoryName) {
 
         BaseCategory save = pageCategoryOperator.createCategory(categoryName, CategoryType.PAGE);
         return success(save);
@@ -71,8 +71,8 @@ public class PageCategoryController extends BaseController {
     @PutMapping("{categoryId}")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${page.category.edit.title}")
     @Operation(summary = "update page category")
-    public InnospotsResponse<Boolean> updateCategory(@Parameter(required = true, name = "categoryId") @PathVariable Integer categoryId,
-                                                     @Parameter(required = true, name = "categoryName") @RequestParam("categoryName") String categoryName) {
+    public R<Boolean> updateCategory(@Parameter(required = true, name = "categoryId") @PathVariable Integer categoryId,
+                                     @Parameter(required = true, name = "categoryName") @RequestParam("categoryName") String categoryName) {
         Boolean update = pageCategoryOperator.updateCategory(categoryId, categoryName, CategoryType.PAGE);
         return success(update);
     }
@@ -81,14 +81,14 @@ public class PageCategoryController extends BaseController {
     @DeleteMapping("{categoryId}")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.category.delete.title}")
     @Operation(summary = "delete page category")
-    public InnospotsResponse<Boolean> deleteCategory(@Parameter(required = true, name = "categoryId") @PathVariable Integer categoryId) {
+    public R<Boolean> deleteCategory(@Parameter(required = true, name = "categoryId") @PathVariable Integer categoryId) {
         return success(pageCategoryOperator.deleteCategory(categoryId));
     }
 
 
     @GetMapping("page")
     @Operation(summary = "page category list")
-    public InnospotsResponse<List<BaseCategory>> listCategories() {
+    public R<List<BaseCategory>> listCategories() {
         List<BaseCategory> list = pageCategoryOperator.listCategories();
         return success(list);
 

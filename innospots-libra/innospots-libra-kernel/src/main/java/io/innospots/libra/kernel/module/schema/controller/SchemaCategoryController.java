@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.schema.controller;
 
 import io.innospots.base.exception.ValidatorException;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.libra.base.category.CategoryType;
 import io.innospots.libra.base.log.OperateType;
@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
 
@@ -63,7 +63,7 @@ public class SchemaCategoryController {
     @Operation(summary = "create dataset category")
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${meta.view.category.button.create}")
     @OperationLog(operateType = OperateType.CREATE, primaryField = "categoryId")
-    public InnospotsResponse<BaseCategory> createDatasetCategory(
+    public R<BaseCategory> createDatasetCategory(
             @Parameter(required = true, name = "categoryName") @RequestParam("categoryName") String categoryName) {
         check(categoryName);
         BaseCategory category = schemaCategoryOperator.createCategory(categoryName, CategoryType.DATA_SET);
@@ -74,7 +74,7 @@ public class SchemaCategoryController {
     @Operation(summary = "update dataset category")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${meta.view.category.button.update}")
     @OperationLog(operateType = OperateType.UPDATE, idParamPosition = 0)
-    public InnospotsResponse<Boolean> updateDatasetCategory(
+    public R<Boolean> updateDatasetCategory(
             @Parameter(required = true, name = "categoryId") @PathVariable Integer categoryId,
             @Parameter(required = true, name = "categoryName") @RequestParam("categoryName") String categoryName) {
         check(categoryName);
@@ -86,14 +86,14 @@ public class SchemaCategoryController {
     @DeleteMapping("{categoryId}")
     @Operation(summary = "delete dataset category")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${meta.view.category.button.delete}")
-    public InnospotsResponse<Boolean> deleteDatasetCategory(
+    public R<Boolean> deleteDatasetCategory(
             @Parameter(required = true, name = "categoryId") @PathVariable Integer categoryId) {
         return success(schemaCategoryOperator.deleteCategory(categoryId));
     }
 
     @GetMapping("list")
     @Operation(summary = "list dataset categories")
-    public InnospotsResponse<List<BaseCategory>> listDatasetCategories() {
+    public R<List<BaseCategory>> listDatasetCategories() {
         List<BaseCategory> list = schemaCategoryOperator.listCategories();
         return success(list);
     }

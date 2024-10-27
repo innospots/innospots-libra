@@ -18,12 +18,11 @@
 
 package io.innospots.workflow.console.controller;
 
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.workflow.console.model.flow.WorkflowStatistics;
 import io.innospots.workflow.console.service.WorkflowExecutionService;
-import io.innospots.workflow.console.service.WorkflowService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,7 +31,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 
 /**
@@ -53,7 +52,7 @@ public class WorkflowStatController extends BaseController {
 
     @GetMapping("{workflowInstanceId}")
     @Operation(summary = "get statistics")
-    public InnospotsResponse<WorkflowStatistics> getWorkflowStat(@Parameter(name = "workflowInstanceId", required = true) @PathVariable Long workflowInstanceId) {
+    public R<WorkflowStatistics> getWorkflowStat(@Parameter(name = "workflowInstanceId", required = true) @PathVariable Long workflowInstanceId) {
         WorkflowStatistics statistics = workflowExecutionService.getWorkflowStat(workflowInstanceId);
         return success(statistics);
     }

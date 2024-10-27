@@ -20,7 +20,7 @@ package io.innospots.libra.kernel.module.schema.controller;
 
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.dataset.Dataset;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
 
@@ -60,7 +60,7 @@ public class DatasetController {
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
     @Operation(summary = "create dataset")
     @OperationLog(operateType = OperateType.CREATE, primaryField = "id")
-    public InnospotsResponse<Dataset> createDataset(
+    public R<Dataset> createDataset(
             @Parameter(name = "dataset") @Validated @RequestBody Dataset dataset, BindingResult bindingResult) {
         Dataset create = datasetOperator.createDataset(dataset);
         return success(create);
@@ -70,7 +70,7 @@ public class DatasetController {
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
     @Operation(summary = "update dataset")
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "id")
-    public InnospotsResponse<Dataset> updateDataset(
+    public R<Dataset> updateDataset(
             @Parameter(name = "dataset") @Validated @RequestBody Dataset dataset, BindingResult bindingResult) {
         Dataset update = datasetOperator.updateDataset(dataset);
         return success(update);
@@ -80,21 +80,21 @@ public class DatasetController {
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @OperationLog(idParamPosition = 0, operateType = OperateType.DELETE)
     @Operation(summary = "delete dataset")
-    public InnospotsResponse<Boolean> deleteDataset(@Parameter(name = "id") @PathVariable String id) {
+    public R<Boolean> deleteDataset(@Parameter(name = "id") @PathVariable String id) {
         Boolean delete = datasetOperator.deleteDataset(id);
         return success(delete);
     }
 
     @GetMapping("{id}")
     @Operation(summary = "get dataset")
-    public InnospotsResponse<Dataset> getDatasetById(@Parameter(name = "id") @PathVariable String id) {
+    public R<Dataset> getDatasetById(@Parameter(name = "id") @PathVariable String id) {
         Dataset dataset = datasetOperator.getDatasetById(id);
         return success(dataset);
     }
 
     @GetMapping("page")
     @Operation(summary = "page datasets")
-    public InnospotsResponse<PageBody<Dataset>> pageDatasets(
+    public R<PageBody<Dataset>> pageDatasets(
             @Parameter(name = "page") @RequestParam(value = "page") Integer page,
             @Parameter(name = "size") @RequestParam(value = "size") Integer size,
             @Parameter(name = "categoryId") @RequestParam(value = "categoryId", required = false, defaultValue = "0") Integer categoryId,
@@ -107,7 +107,7 @@ public class DatasetController {
 
     @GetMapping("list")
     @Operation(summary = "list datasets")
-    public InnospotsResponse<List<Dataset>> listDatasets(
+    public R<List<Dataset>> listDatasets(
             @Parameter(name = "categoryId") @RequestParam(value = "categoryId", required = false) Integer categoryId,
             @Parameter(name = "queryCode") @RequestParam(value = "queryCode", required = false) String queryCode,
             @Parameter(name = "sort", description = "sort field") @RequestParam(value = "sort", required = false, defaultValue = "createdTime") String sort

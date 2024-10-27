@@ -8,7 +8,7 @@ import io.innospots.base.connector.schema.model.SchemaRegistryType;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.field.FieldScope;
 import io.innospots.base.model.field.FieldValueType;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -32,7 +32,7 @@ public class WorkflowTriggerController {
 
     @Operation(summary = "page webhook registries")
     @GetMapping("webhook/registries")
-    public InnospotsResponse<PageBody<SchemaRegistry>> pageWebhookTriggerRegistry(
+    public R<PageBody<SchemaRegistry>> pageWebhookTriggerRegistry(
             @Parameter(name = "flowName") @RequestParam(required = false) String flowName,
             @Parameter(name = "categoryId") @RequestParam(required = false) Integer categoryId,
             @Parameter(name = "page") @RequestParam(required = false,defaultValue = "1") Integer page,
@@ -65,6 +65,6 @@ public class WorkflowTriggerController {
         pageBody.setCurrent(1L);
         pageBody.setTotal((long) registries.size());
         pageBody.setPageSize(20L);
-        return InnospotsResponse.success(pageBody);
+        return R.success(pageBody);
     }
 }

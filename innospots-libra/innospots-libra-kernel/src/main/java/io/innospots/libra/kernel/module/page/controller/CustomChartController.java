@@ -19,7 +19,7 @@
 package io.innospots.libra.kernel.module.page.controller;
 
 import io.innospots.base.exception.ResourceException;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -49,7 +49,7 @@ public class CustomChartController {
 
     @GetMapping("custom/charts")
     @Operation(summary = "custom charts")
-    public InnospotsResponse<Set<String>> listCustomChart() {
+    public R<Set<String>> listCustomChart() {
         Set<String> set = new HashSet<>();
         try {
             Resource[] resources = new PathMatchingResourcePatternResolver()
@@ -60,6 +60,6 @@ public class CustomChartController {
         } catch (IOException e) {
             throw ResourceException.buildNotExistException(this.getClass());
         }
-        return InnospotsResponse.success(set);
+        return R.success(set);
     }
 }

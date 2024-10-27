@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.module.extension.controller;
 
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.extension.LibraExtensionProperties;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
 
@@ -66,7 +66,7 @@ public class ExtInstallmentController {
      */
     @GetMapping("list")
     @Operation(summary = "extension installed list")
-    public InnospotsResponse<List<ExtensionInstallInfo>> listInstalledExtensions() {
+    public R<List<ExtensionInstallInfo>> listInstalledExtensions() {
 
         return success(extInstallmentOperator.installedExtensions());
     }
@@ -78,7 +78,7 @@ public class ExtInstallmentController {
      */
     @GetMapping("list/base-info")
     @Operation(summary = "extension base info installed list")
-    public InnospotsResponse<List<LibraExtensionProperties>> listInstalledExtBaseInfos() {
+    public R<List<LibraExtensionProperties>> listInstalledExtBaseInfos() {
 
         return success(extInstallmentOperator.installedExtBaseInfos());
     }
@@ -88,7 +88,7 @@ public class ExtInstallmentController {
     @ResourceItemOperation(type = BUTTON, icon = "install", name = "${app.market.button.install}")
     @Operation(summary = "extension install by extKey")
     @OperationLog(operateType = OperateType.INSTALL, idParamPosition = 0)
-    public InnospotsResponse<ExtensionInstallInfo> installByKey(@PathVariable String extKey) {
+    public R<ExtensionInstallInfo> installByKey(@PathVariable String extKey) {
         return success(extensionService.install(extKey));
     }
 
@@ -97,7 +97,7 @@ public class ExtInstallmentController {
     @ResourceItemOperation(type = BUTTON, icon = "available", name = "${app.market.button.enable}")
     @Operation(summary = "extension available")
     @OperationLog(operateType = OperateType.INSTALL, idParamPosition = 0)
-    public InnospotsResponse<Boolean> enabled(@PathVariable String extKey) {
+    public R<Boolean> enabled(@PathVariable String extKey) {
         return success(extInstallmentOperator.enabled(extKey));
     }
 
@@ -105,7 +105,7 @@ public class ExtInstallmentController {
     @ResourceItemOperation(type = BUTTON, icon = "disabled", name = "${app.market.button.disable}")
     @Operation(summary = "extension disabled")
     @OperationLog(operateType = OperateType.INACTIVE, idParamPosition = 0)
-    public InnospotsResponse<Boolean> disabled(@PathVariable String extKey) {
+    public R<Boolean> disabled(@PathVariable String extKey) {
         return success(extInstallmentOperator.disabled(extKey));
     }
 

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>innospots-root</artifactId>
         <groupId>io.innospots</groupId>
-        <version>${innosopts.version}</version>
+        <version>${innospots.version}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -20,8 +20,10 @@
         <module>innospots-server-base</module>
         <module>innospots-server-schedule</module>
         <module>innospots-server-app-visitor</module>
+        <module>innospots-server-bom</module>
     </modules>
 
+    <!--
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -78,6 +80,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+    -->
 
     <dependencies>
         <dependency>

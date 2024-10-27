@@ -20,7 +20,7 @@ package io.innospots.workflow.console.controller.execution;
 
 import io.innospots.base.crypto.EncryptorBuilder;
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.base.execution.ExecutionResource;
@@ -43,7 +43,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 
 /**
@@ -66,7 +66,7 @@ public class FlowExecutionController extends BaseController {
 
     @GetMapping("page/workflow-instance/{workflowInstanceId}")
     @Operation(summary = "page flow executions using workflowInstanceId")
-    public InnospotsResponse<PageBody<FlowExecutionBase>> pageFlowExecutions(
+    public R<PageBody<FlowExecutionBase>> pageFlowExecutions(
             @Parameter(name = "workflowInstanceId") @PathVariable Long workflowInstanceId,
             @Parameter(name = "page") @RequestParam(required = false, defaultValue = "0") Integer page,
             @Parameter(name = "size") @RequestParam(required = false, defaultValue = "20") Integer size,
@@ -78,13 +78,13 @@ public class FlowExecutionController extends BaseController {
         if (page > 0) {
             page --;
         }
-        return InnospotsResponse.success(flowExecutionReader.pageFlowExecutions(workflowInstanceId, revision,
+        return R.success(flowExecutionReader.pageFlowExecutions(workflowInstanceId, revision,
                 statuses, startTime, endTime, page, size));
     }
 
     @GetMapping("result-code")
     @Operation(summary = "get resultCode")
-    public InnospotsResponse<List<String>> getResultCode() {
+    public R<List<String>> getResultCode() {
         List<String> resultCodes = new ArrayList<>();
         resultCodes.add("COMPLETE");
         resultCodes.add("FAILED");
@@ -93,19 +93,19 @@ public class FlowExecutionController extends BaseController {
 
     @GetMapping("latest/workflow-instance/{workflowInstanceId}")
     @Operation(summary = "find latest flow execution using workflowInstanceId")
-    public InnospotsResponse<FlowExecutionBase> findLatestFlowExecution(
+    public R<FlowExecutionBase> findLatestFlowExecution(
             @Parameter(name = "workflowInstanceId") @PathVariable Long workflowInstanceId,
             @Parameter(name = "revision") @RequestParam(required = false, defaultValue = "0") Integer revision
     ) {
-        return InnospotsResponse.success(flowExecutionReader.findLatestFlowExecution(workflowInstanceId, revision));
+        return R.success(flowExecutionReader.findLatestFlowExecution(workflowInstanceId, revision));
     }
 
     @GetMapping("id/{flowExecutionId}")
     @Operation(summary = "get flow execution by flowExecutionId")
-    public InnospotsResponse<FlowExecutionBase> getFlowExecution(
+    public R<FlowExecutionBase> getFlowExecution(
             @Parameter(name = "flowExecutionId") @PathVariable String flowExecutionId
     ) {
-        return InnospotsResponse.success(flowExecutionReader.getFlowExecutionById(flowExecutionId));
+        return R.success(flowExecutionReader.getFlowExecutionById(flowExecutionId));
     }
 
     @GetMapping(value = "resources")

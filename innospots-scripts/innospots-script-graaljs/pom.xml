@@ -24,7 +24,7 @@
     <parent>
         <groupId>io.innospots</groupId>
         <artifactId>innospots-scripts</artifactId>
-        <version>${innosopts.version}</version>
+        <version>${innospots.version}</version>
     </parent>
 
     <artifactId>innospots-script-graaljs</artifactId>

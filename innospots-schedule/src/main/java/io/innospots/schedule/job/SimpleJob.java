@@ -18,7 +18,7 @@
 
 package io.innospots.schedule.job;
 
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.base.quartz.JobType;
 import io.innospots.schedule.model.JobExecution;
 import lombok.extern.slf4j.Slf4j;
@@ -46,8 +46,8 @@ public class SimpleJob extends BaseJob {
     }
 
     @Override
-    public InnospotsResponse<Map<String,Object>> execute() {
-        InnospotsResponse<Map<String,Object>> response = new InnospotsResponse<>();
+    public R<Map<String,Object>> execute() {
+        R<Map<String,Object>> response = new R<>();
         Integer sleepTime = this.jobExecution.getInteger(PARAM_SLEEP_TIME);
         if(sleepTime == null){
             sleepTime = 100;

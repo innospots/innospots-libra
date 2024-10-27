@@ -20,7 +20,7 @@ package io.innospots.schedule.controller;
 
 import io.innospots.base.constant.PathConstant;
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.schedule.model.ExecutionFormQuery;
@@ -49,25 +49,25 @@ public class JobExecutionController {
 
     @GetMapping("page")
     @Operation(summary = "page job executions")
-    public InnospotsResponse<PageBody<JobExecution>> pageJobExecutions(
+    public R<PageBody<JobExecution>> pageJobExecutions(
             ExecutionFormQuery executionFormQuery) {
-        return InnospotsResponse.success(jobExecutionOperator.
+        return R.success(jobExecutionOperator.
                 pageJobExecutions(executionFormQuery));
     }
 
     @Operation(summary = "get job execution")
     @GetMapping("{jobExecutionId}")
-    public InnospotsResponse<JobExecution> getJobExecution(@PathVariable String jobExecutionId,
-                                                           @RequestParam(required = false,defaultValue = "true") boolean includeSub) {
-        return InnospotsResponse.success(jobExecutionOperator.getJobExecution(jobExecutionId, includeSub));
+    public R<JobExecution> getJobExecution(@PathVariable String jobExecutionId,
+                                           @RequestParam(required = false,defaultValue = "true") boolean includeSub) {
+        return R.success(jobExecutionOperator.getJobExecution(jobExecutionId, includeSub));
     }
 
     @Operation(summary = "update job execution status")
     @PutMapping("{jobExecutionId}/status/{status}")
-    public InnospotsResponse<Boolean> updateStatus(@PathVariable String jobExecutionId,
-                                                   @PathVariable ExecutionStatus status,
-                                                   @RequestParam(required = false) String message) {
-        return InnospotsResponse.success(jobExecutionOperator.updateStatus(jobExecutionId,
+    public R<Boolean> updateStatus(@PathVariable String jobExecutionId,
+                                   @PathVariable ExecutionStatus status,
+                                   @RequestParam(required = false) String message) {
+        return R.success(jobExecutionOperator.updateStatus(jobExecutionId,
                 status, message));
     }
 

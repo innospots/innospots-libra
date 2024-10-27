@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.module.system.controller;
 
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.base.log.OperateType.UPDATE;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
@@ -59,19 +59,19 @@ public class RoleResourceController extends BaseController {
 
 
     @GetMapping("menu-permissions")
-    public InnospotsResponse<Map<String, List<RoleResourceInfo>>> getMenuPermissions() {
+    public R<Map<String, List<RoleResourceInfo>>> getMenuPermissions() {
         List<RoleResourceInfo> roleResourceInfos = roleResourceOperator.listMenuAuthorities(null);
         return success(roleResourceInfos.stream().collect(groupingBy(RoleResourceInfo::getItemKey)));
     }
 
     @GetMapping("menu-permissions/{itemKey}")
-    public InnospotsResponse<List<RoleResourceInfo>> getMenuPermissionsByItemKey(@PathVariable String itemKey) {
+    public R<List<RoleResourceInfo>> getMenuPermissionsByItemKey(@PathVariable String itemKey) {
         List<RoleResourceInfo> roleResourceInfos = roleResourceOperator.listMenuAuthorities(itemKey);
         return success(roleResourceInfos);
     }
 
     @GetMapping("operate-permissions/{roleId}")
-    public InnospotsResponse<Map<String, List<RoleResourceInfo>>> getOperateRolePermissions(
+    public R<Map<String, List<RoleResourceInfo>>> getOperateRolePermissions(
             @Parameter(name = "roleId") @PathVariable Integer roleId
     ) {
         List<RoleResourceInfo> roleResourceInfos = roleResourceOperator.listOperateAuthorities(roleId);
@@ -81,7 +81,7 @@ public class RoleResourceController extends BaseController {
     @PostMapping("menu-permissions")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${authority.list.menu.button.update}")
     @OperationLog(operateType = UPDATE)
-    public InnospotsResponse<Boolean> addMenuRolePermissions(
+    public R<Boolean> addMenuRolePermissions(
             @RequestBody RoleResourceRequest roleResourceRequest
     ) {
 
@@ -92,7 +92,7 @@ public class RoleResourceController extends BaseController {
     @PostMapping("operate-permissions")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${authority.list.app.button.update}")
     @OperationLog(operateType = UPDATE)
-    public InnospotsResponse<Boolean> addOperateRolePermissions(
+    public R<Boolean> addOperateRolePermissions(
             @RequestBody RoleResourceRequest roleResourceRequest
     ) {
         Boolean result = roleResourceOperator.saveRoleResourceAuthority(roleResourceRequest);

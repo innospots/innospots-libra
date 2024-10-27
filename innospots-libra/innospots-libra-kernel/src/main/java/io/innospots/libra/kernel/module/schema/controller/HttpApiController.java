@@ -24,7 +24,7 @@ import io.innospots.base.connector.http.HttpConnection;
 import io.innospots.base.connector.http.HttpDataExecutor;
 import io.innospots.base.connector.schema.model.ApiSchemaRegistry;
 import io.innospots.base.data.request.ItemRequest;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
 
 
@@ -66,7 +66,7 @@ public class HttpApiController extends BaseController {
     @PostMapping
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
     @Operation(summary = "create http api registry")
-    public InnospotsResponse<ApiSchemaRegistry> createHttpApi(@Validated @RequestBody ApiSchemaRegistry apiSchemaRegistry) {
+    public R<ApiSchemaRegistry> createHttpApi(@Validated @RequestBody ApiSchemaRegistry apiSchemaRegistry) {
 
         ApiSchemaRegistry save = httpApiOperator.createApiRegistry(apiSchemaRegistry);
         return success(save);
@@ -76,7 +76,7 @@ public class HttpApiController extends BaseController {
     @PutMapping
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
     @Operation(summary = "update http api")
-    public InnospotsResponse<ApiSchemaRegistry> updateHttpApi(@Validated @RequestBody ApiSchemaRegistry apiSchemaRegistry) {
+    public R<ApiSchemaRegistry> updateHttpApi(@Validated @RequestBody ApiSchemaRegistry apiSchemaRegistry) {
         ApiSchemaRegistry update = httpApiOperator.updateApiRegistry(apiSchemaRegistry);
         return success(update);
     }
@@ -85,21 +85,21 @@ public class HttpApiController extends BaseController {
     @DeleteMapping("{registryId}")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @Operation(summary = "delete http api")
-    public InnospotsResponse<Boolean> deleteHttpApi(@Parameter(name = "registryId") @PathVariable String registryId) {
+    public R<Boolean> deleteHttpApi(@Parameter(name = "registryId") @PathVariable String registryId) {
         Boolean delete = httpApiOperator.deleteApiRegistry(registryId);
         return success(delete);
     }
 
     @GetMapping("{registryId}")
     @Operation(summary = "get api registry by id")
-    public InnospotsResponse<ApiSchemaRegistry> getHttpApiById(@Parameter(name = "registryId") @PathVariable String registryId) {
+    public R<ApiSchemaRegistry> getHttpApiById(@Parameter(name = "registryId") @PathVariable String registryId) {
         ApiSchemaRegistry apiSchemaRegistry = httpApiOperator.getApiRegistry(registryId);
         return success(apiSchemaRegistry);
     }
 
     @GetMapping
     @Operation(summary = "list api registry")
-    public InnospotsResponse<List<ApiSchemaRegistry>> listHttpApi(
+    public R<List<ApiSchemaRegistry>> listHttpApi(
             @Parameter(name = "queryCode") @RequestParam(value = "queryCode", required = false) String queryCode,
             @Parameter(name = "sort", description = "sort field") @RequestParam(value = "sort", required = false, defaultValue = "createdTime") String sort) {
         List<ApiSchemaRegistry> list = httpApiOperator.listApiRegistries(queryCode, sort);
@@ -110,7 +110,7 @@ public class HttpApiController extends BaseController {
     @OperationLog(operateType = OperateType.FETCH, primaryField = "registryId", idParamPosition = 0)
     @PostMapping("fetch-sample")
     @Operation(summary = "http api fetch-sample")
-    public InnospotsResponse<Object> fetchSample(@Validated @RequestBody ApiSchemaRegistry apiSchemaRegistry) {
+    public R<Object> fetchSample(@Validated @RequestBody ApiSchemaRegistry apiSchemaRegistry) {
         ConnectionCredential connectionCredential = connectionCredentialReader.readCredential(apiSchemaRegistry.getCredentialKey());
         HttpConnection httpConnection = new HttpConnection(connectionCredential);
         HttpDataExecutor httpDataExecutor = new HttpDataExecutor(httpConnection);

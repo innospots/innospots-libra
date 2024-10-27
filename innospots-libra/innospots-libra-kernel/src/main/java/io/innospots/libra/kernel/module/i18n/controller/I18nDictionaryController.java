@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.module.i18n.controller;
 
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.kernel.module.i18n.operator.I18nDictionaryOperator;
@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 
 /**
@@ -55,19 +55,19 @@ public class I18nDictionaryController extends BaseController {
 
     @GetMapping("list-app")
     @Operation(summary = "list app of i18n dictionary")
-    public InnospotsResponse<List<String>> listApp() {
+    public R<List<String>> listApp() {
         return success(i18nDictionaryOperator.listApps());
     }
 
     @GetMapping("list-module")
     @Operation(summary = "list module of i18n dictionary")
-    public InnospotsResponse<List<String>> listModule() {
+    public R<List<String>> listModule() {
         return success(i18nDictionaryOperator.listModules());
     }
 
     @GetMapping("list-module/app/{app}")
     @Operation(summary = "list module of i18n dictionary by app")
-    public InnospotsResponse<List<String>> listModule(@PathVariable String app) {
+    public R<List<String>> listModule(@PathVariable String app) {
         return success(i18nDictionaryOperator.listModulesByAppName(app));
     }
 

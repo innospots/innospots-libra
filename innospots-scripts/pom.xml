@@ -5,7 +5,7 @@
     <parent>
         <artifactId>innospots-root</artifactId>
         <groupId>io.innospots</groupId>
-        <version>${innosopts.version}</version>
+        <version>${innospots.version}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -24,7 +24,7 @@
         <spring-integration-scripting.version>5.5.18</spring-integration-scripting.version>
     </properties>
 
-
+    <!--
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -65,6 +65,7 @@
 
         </dependencies>
     </dependencyManagement>
+    -->
 
     <dependencies>
         <dependency>

@@ -21,7 +21,7 @@ package io.innospots.schedule.job.db.sharding;
 import io.innospots.base.connector.minder.DataConnectionMinderManager;
 import io.innospots.base.connector.minder.IDataConnectionMinder;
 import io.innospots.base.data.operator.IDataOperator;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.schedule.dispatch.ReadJobDispatcher;
 import io.innospots.base.quartz.JobType;
@@ -112,7 +112,7 @@ public abstract class AbstractShardingJob<T> extends BaseJob {
     }
 
     @Override
-    public InnospotsResponse<Map<String, Object>> execute() {
+    public R<Map<String, Object>> execute() {
         if (shardingList.isEmpty()) {
             log.warn("job sharding is empty,jobKey:{}, executionId:{}, credentialKey:{}, table:{}", jobExecution.getJobKey(), jobExecution.getExecutionId(), credentialKey, table);
             return null;

@@ -24,7 +24,7 @@
     <parent>
         <groupId>io.innospots</groupId>
         <artifactId>innospots-root</artifactId>
-        <version>${innosopts.version}</version>
+        <version>${innospots.version}</version>
     </parent>
 
     <artifactId>innospots-schedule</artifactId>
@@ -37,7 +37,6 @@
             <groupId>io.innospots</groupId>
             <artifactId>innospots-libra-base</artifactId>
             <scope>provided</scope>
-            <version>${innosopts.version}</version>
         </dependency>
 
         <dependency>

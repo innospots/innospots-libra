@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.innospots</groupId>
+    <artifactId>innospots-app-bom</artifactId>
+    <version>${innospots.version}</version>
+
+    <properties>
+        <innospots.version>2.0.0-SNAPSHOT</innospots.version>
+    </properties>
+    <packaging>pom</packaging>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-app-core</artifactId>
+                <version>${innospots.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-app-console</artifactId>
+                <version>${innospots.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-app-visitor</artifactId>
+                <version>${innospots.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

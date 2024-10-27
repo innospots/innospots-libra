@@ -20,7 +20,7 @@ package io.innospots.libra.kernel.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.configuration.InnospotsConsoleProperties;
 import io.innospots.libra.kernel.service.TestService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -62,30 +62,30 @@ public class TestController {
 
     @GetMapping("jar/loader")
     @Operation(summary = "jar loader")
-    public InnospotsResponse<Boolean> LibLoader(@Parameter(name = "jarName") @RequestParam(value = "jarName", required = false, defaultValue = "innospots-extension-apps-1.0.0-SNAPSHOT.jar") String jarName) {
+    public R<Boolean> LibLoader(@Parameter(name = "jarName") @RequestParam(value = "jarName", required = false, defaultValue = "innospots-extension-apps-1.0.0-SNAPSHOT.jar") String jarName) {
 
 //        String jarUrl = "file://" + innospotsConfigProperties.getExtLibPath() + jarName;
 //        ClassJarFileLoader.loadJar(jarUrl);
-        return InnospotsResponse.success(true);
+        return R.success(true);
     }
 
     @GetMapping("json")
-    public InnospotsResponse<Map<String, Object>> json() throws JsonProcessingException {
+    public R<Map<String, Object>> json() throws JsonProcessingException {
         Map<String, Object> m = new HashMap<>();
         m.put("time", LocalDateTime.now());
         m.put("date", LocalDate.now());
         m.put("json", jsonMapper.writeValueAsString(m));
         testService.log1(m);
-        return InnospotsResponse.success(m);
+        return R.success(m);
     }
 
     @PostMapping("test/echo")
-    public InnospotsResponse<Map<String, Object>> echo(
+    public R<Map<String, Object>> echo(
             @RequestBody Map<String,Object> body,
             @RequestParam Map<String,Object> params){
         Map<String, Object> m = new HashMap<>();
         m.put("body",body);
         m.put("params", params);
-        return InnospotsResponse.success(m);
+        return R.success(m);
     }
 }

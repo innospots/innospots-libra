@@ -18,7 +18,7 @@
 
 package io.innospots.workflow.console.controller.node;
 
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
@@ -50,10 +50,10 @@ public class FlowNodeDebugController {
     @PostMapping("upload-file/{force}")
     @Operation(summary = "upload debug file")
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.upload}")
-    public InnospotsResponse<ExecutionResource> uploadFile
+    public R<ExecutionResource> uploadFile
             (@Parameter(name = "files", required = true) @RequestParam("files") MultipartFile uploadFile,   @PathVariable boolean force){
 
-        return InnospotsResponse.success(
+        return R.success(
                 FlowNodeDebuggerBuilder.build("nodeDebugger").updateTestFile(uploadFile,force));
     }
 
@@ -61,10 +61,10 @@ public class FlowNodeDebugController {
     @PostMapping("execute")
     @Operation(summary = "debug app node")
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.execute}")
-    public InnospotsResponse<NodeExecutionDisplay> execute(
+    public R<NodeExecutionDisplay> execute(
             @RequestBody DebugPayload debugPayload){
 
-        return InnospotsResponse.success(
+        return R.success(
                 FlowNodeDebuggerBuilder.build("nodeDebugger").execute(debugPayload));
     }
 

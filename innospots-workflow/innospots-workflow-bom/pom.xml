@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.innospots</groupId>
+    <artifactId>innospots-workflow-bom</artifactId>
+    <version>${innospots.version}</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <innospots.version>2.0.0-SNAPSHOT</innospots.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-workflow-runtime</artifactId>
+                <version>${innospots.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-workflow-console</artifactId>
+                <version>${innospots.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-workflow-core</artifactId>
+                <version>${innospots.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-workflow-node</artifactId>
+                <version>${innospots.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-workflow-node-ai</artifactId>
+                <version>${innospots.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-workflow-job</artifactId>
+                <version>${innospots.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

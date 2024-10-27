@@ -1,6 +1,6 @@
 package io.innospots.workflow.console.controller.node;
 
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.workflow.console.service.NodeMetaService;
 import io.innospots.workflow.core.node.NodeInfo;
@@ -38,45 +38,45 @@ public class FlowNodeMetaController {
 
     @GetMapping("list-meta")
     @Operation(summary = "list node meta")
-    public InnospotsResponse<Collection<NodeMetaInfo>> listMetaInfo(){
-        return InnospotsResponse.success(NodeMetaInfoLoader.nodeMetaInfos());
+    public R<Collection<NodeMetaInfo>> listMetaInfo(){
+        return R.success(NodeMetaInfoLoader.nodeMetaInfos());
     }
 
     @GetMapping("list-info")
     @Operation(summary = "list node info")
-    public InnospotsResponse<List<NodeInfo>> listNodeInfo(){
+    public R<List<NodeInfo>> listNodeInfo(){
         List<NodeMetaInfo> metas = new ArrayList<>(NodeMetaInfoLoader.nodeMetaInfos());
-        return InnospotsResponse.success(FlowNodeDefinitionConverter.INSTANCE.metaToInfoList(metas));
+        return R.success(FlowNodeDefinitionConverter.INSTANCE.metaToInfoList(metas));
     }
 
     @GetMapping("list-definition")
     @Operation(summary = "list node definition according node metas")
-    public InnospotsResponse<List<NodeDefinition>> listNodeDefinition(){
+    public R<List<NodeDefinition>> listNodeDefinition(){
         List<NodeDefinition> definitions = new ArrayList<>();
         for (NodeMetaInfo nodeMetaInfo : NodeMetaInfoLoader.nodeMetaInfos()) {
             definitions.add(NodeDefinitionBuilder.build(nodeMetaInfo.getCode()));
         }
-        return InnospotsResponse.success(definitions);
+        return R.success(definitions);
     }
 
     @GetMapping("definition/{code}")
     @Operation(summary = "node definition by code")
-    public InnospotsResponse<NodeDefinition> getNodeDefinitionByCode(
+    public R<NodeDefinition> getNodeDefinitionByCode(
             @PathVariable String code){
-        return InnospotsResponse.success(NodeDefinitionBuilder.build(code));
+        return R.success(NodeDefinitionBuilder.build(code));
     }
 
     @GetMapping("reload")
     @Operation(summary = "reload node meta info")
-    public InnospotsResponse<List<NodeInfo>> reload(){
+    public R<List<NodeInfo>> reload(){
         NodeMetaInfoLoader.load();
         List<NodeMetaInfo> metas = new ArrayList<>(NodeMetaInfoLoader.nodeMetaInfos());
-        return InnospotsResponse.success(FlowNodeDefinitionConverter.INSTANCE.metaToInfoList(metas));
+        return R.success(FlowNodeDefinitionConverter.INSTANCE.metaToInfoList(metas));
     }
 
     @PutMapping("synchronize/{force}")
     @Operation(summary = "synchronize node meta info")
-    public InnospotsResponse<List<NodeDefinition>> synchronize(@PathVariable boolean force){
-        return InnospotsResponse.success(nodeMetaService.synchronizeNodeMeta(force));
+    public R<List<NodeDefinition>> synchronize(@PathVariable boolean force){
+        return R.success(nodeMetaService.synchronizeNodeMeta(force));
     }
 }

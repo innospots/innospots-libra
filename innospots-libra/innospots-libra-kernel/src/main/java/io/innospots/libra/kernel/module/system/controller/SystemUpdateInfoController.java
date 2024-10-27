@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.module.system.controller;
 
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.base.utils.time.DateTimeUtils;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.extension.LibraClassPathExtPropertiesLoader;
@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 
 /**
@@ -50,7 +50,7 @@ public class SystemUpdateInfoController extends BaseController {
 
     @GetMapping
     @Operation(summary = "get system update info")
-    public InnospotsResponse<SystemUpdateInfo> getSystemUpdateInfo() {
+    public R<SystemUpdateInfo> getSystemUpdateInfo() {
         SystemUpdateInfo updateInfo = new SystemUpdateInfo();
         LibraExtensionProperties libraProperties = LibraClassPathExtPropertiesLoader.getLibraKernelProperties();
         updateInfo.setDetail("此版本发布时间："+libraProperties.getPublishTime());

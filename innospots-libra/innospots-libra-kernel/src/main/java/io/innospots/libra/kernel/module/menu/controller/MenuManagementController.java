@@ -18,7 +18,7 @@
 
 package io.innospots.libra.kernel.module.menu.controller;
 
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import java.util.List;
 
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 import static io.innospots.libra.base.menu.ItemType.BUTTON;
 
@@ -61,13 +61,13 @@ public class MenuManagementController extends BaseController {
 
     @GetMapping("list")
     @Operation(summary = "menu tree list")
-    public InnospotsResponse<List<MenuResourceItem>> listMenuItems(@RequestParam(value = "queryInput", required = false) String queryInput) {
+    public R<List<MenuResourceItem>> listMenuItems(@RequestParam(value = "queryInput", required = false) String queryInput) {
         return success(menuManagementOperator.listMenuItems(queryInput));
     }
 
     @GetMapping("list/{itemType}")
     @Operation(summary = "list menu items which the itemType is category")
-    public InnospotsResponse<List<MenuResourceItem>> listDirectoryMenuTree(@Parameter(name = "itemType") @PathVariable ItemType itemType) {
+    public R<List<MenuResourceItem>> listDirectoryMenuTree(@Parameter(name = "itemType") @PathVariable ItemType itemType) {
         return success(menuManagementOperator.listMenuItemsByItemType(itemType));
     }
 
@@ -75,8 +75,8 @@ public class MenuManagementController extends BaseController {
     @PutMapping("menu-item/{resourceId}/status/{status}")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.status}")
     @Operation(summary = "update menu item status")
-    public InnospotsResponse<Boolean> updateStatus(@Parameter(name = "resourceId") @PathVariable Integer resourceId,
-                                                   @Parameter(name = "status") @PathVariable Boolean status) {
+    public R<Boolean> updateStatus(@Parameter(name = "resourceId") @PathVariable Integer resourceId,
+                                   @Parameter(name = "status") @PathVariable Boolean status) {
         return success(menuManagementOperator.updateStatus(resourceId, status));
     }
 
@@ -84,7 +84,7 @@ public class MenuManagementController extends BaseController {
     @DeleteMapping("menu-item/{resourceId}")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @Operation(summary = "delete menu item")
-    public InnospotsResponse<Boolean> deleteMenuById(@Parameter(name = "resourceId") @PathVariable Integer resourceId) {
+    public R<Boolean> deleteMenuById(@Parameter(name = "resourceId") @PathVariable Integer resourceId) {
         return success(menuManagementOperator.deleteMenuById(resourceId));
     }
 
@@ -92,7 +92,7 @@ public class MenuManagementController extends BaseController {
     @PostMapping("menu-item")
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
     @Operation(summary = "create new menu item")
-    public InnospotsResponse<MenuResourceItem> createMenu(@Valid @RequestBody NewMenuItem newMenuItem) {
+    public R<MenuResourceItem> createMenu(@Valid @RequestBody NewMenuItem newMenuItem) {
         return success(menuManagementOperator.createMenu(newMenuItem));
     }
 
@@ -100,7 +100,7 @@ public class MenuManagementController extends BaseController {
     @PutMapping("menu-item")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
     @Operation(summary = "update menu item")
-    public InnospotsResponse<Boolean> updateMenu(@RequestBody NewMenuItem newMenuItem) {
+    public R<Boolean> updateMenu(@RequestBody NewMenuItem newMenuItem) {
         Boolean update = menuManagementOperator.updateMenu(newMenuItem);
         return success(update);
     }
@@ -109,7 +109,7 @@ public class MenuManagementController extends BaseController {
     @OperationLog(operateType = OperateType.UPDATE, idParamPosition = 0, primaryField = "resourceId")
     @PutMapping("menu-item/order")
     @Operation(summary = "order menu items")
-    public InnospotsResponse<List<MenuResourceItem>> orderMenuItems(@RequestBody MenuOrders menuOrders) {
+    public R<List<MenuResourceItem>> orderMenuItems(@RequestBody MenuOrders menuOrders) {
         return success(menuManagementOperator.orderItems(menuOrders));
     }
 

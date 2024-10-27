@@ -18,7 +18,7 @@
 
 package io.innospots.schedule.job;
 
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.schedule.dispatch.ReadJobDispatcher;
 import io.innospots.base.quartz.JobType;
@@ -67,9 +67,9 @@ public class GroupJob extends BaseJob {
     }
 
     @Override
-    public InnospotsResponse<Map<String,Object>> execute() {
+    public R<Map<String,Object>> execute() {
         Map prm = getParamMap(PARAM_EXECUTE_JOB_PARAMS);
-        InnospotsResponse<Map<String,Object>> response = new InnospotsResponse<>();
+        R<Map<String,Object>> response = new R<>();
         for (int i = 0; i < groupJobKeys.size(); i++) {
             log.info("dispatch sub job:{} , parentExecutionId:{}", groupJobKeys.get(i), jobExecution.getExecutionId());
             readJobDispatcher.dispatch(jobExecution.getExecutionId(), i + 1, groupJobKeys.get(i), prm);

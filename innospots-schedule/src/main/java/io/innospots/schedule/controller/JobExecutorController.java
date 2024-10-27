@@ -19,7 +19,7 @@
 package io.innospots.schedule.controller;
 
 import io.innospots.base.constant.PathConstant;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
@@ -50,40 +50,40 @@ public class JobExecutorController {
     @Operation(summary = "execute schedule job")
     @OperationLog(operateType = OperateType.EXECUTE)
     @PostMapping("execute/{jobKey}")
-    public InnospotsResponse<Void> launch(@PathVariable String jobKey, @RequestBody Map<String, Object> params) {
+    public R<Void> launch(@PathVariable String jobKey, @RequestBody Map<String, Object> params) {
         readJobDispatcher.dispatch(jobKey, params);
-        return InnospotsResponse.success();
+        return R.success();
     }
 
     @OperationLog(operateType = OperateType.UPDATE_STATUS)
     @Operation(summary = "cancel schedule job in the queue")
     @PostMapping("cancel/{jobKey}")
-    public InnospotsResponse<Integer> cancel(@PathVariable String jobKey) {
-        return InnospotsResponse.success(readJobDispatcher.cancel(jobKey));
+    public R<Integer> cancel(@PathVariable String jobKey) {
+        return R.success(readJobDispatcher.cancel(jobKey));
     }
 
     @OperationLog(operateType = OperateType.EXECUTE)
     @Operation(summary = "retry execute schedule job")
     @PostMapping("retry/{jobExecutionId}")
-    public InnospotsResponse<Integer> retry(@PathVariable String jobExecutionId) {
+    public R<Integer> retry(@PathVariable String jobExecutionId) {
         int c = readJobDispatcher.retryDispatch(jobExecutionId);
-        return InnospotsResponse.success(c);
+        return R.success(c);
     }
 
     @OperationLog(operateType = OperateType.EXECUTE)
     @Operation(summary = "continue execute stopped job")
     @PostMapping("continue/{jobExecutionId}")
-    public InnospotsResponse<Integer> continueExecute(@PathVariable String jobExecutionId) {
+    public R<Integer> continueExecute(@PathVariable String jobExecutionId) {
         int c = readJobDispatcher.continueDispatch(jobExecutionId);
-        return InnospotsResponse.success(c);
+        return R.success(c);
     }
 
     @OperationLog(operateType = OperateType.OFFLINE)
     @Operation(summary = "stop executing job")
     @PostMapping("stop/{jobExecutionId}")
-    public InnospotsResponse<Integer> stop(@PathVariable String jobExecutionId,
-                                           @RequestParam(required = false) String message) {
-        return InnospotsResponse.success(readJobDispatcher.stop(jobExecutionId, message));
+    public R<Integer> stop(@PathVariable String jobExecutionId,
+                           @RequestParam(required = false) String message) {
+        return R.success(readJobDispatcher.stop(jobExecutionId, message));
     }
 
 }

@@ -19,7 +19,7 @@
 package io.innospots.libra.security.controller;
 
 import io.innospots.base.config.InnospotsConfigProperties;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.security.auth.AuthToken;
 import io.innospots.libra.security.auth.Authentication;
@@ -29,7 +29,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
-import static io.innospots.base.model.response.InnospotsResponse.success;
+import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 
 /**
@@ -52,7 +52,7 @@ public class LoginAuthController extends BaseController {
 
     @PostMapping
     @Operation(summary = "login", description = "authenticate userName and password")
-    public InnospotsResponse<AuthToken> authenticate(@RequestBody LoginRequest request) {
+    public R<AuthToken> authenticate(@RequestBody LoginRequest request) {
 
         Authentication authentication = authenticationProvider.authenticate(request);
         return success(authentication.getToken().newInstance());
@@ -60,7 +60,7 @@ public class LoginAuthController extends BaseController {
 
     @GetMapping(path = "public-key")
     @Operation(summary = "get public key", description = "get public key")
-    public InnospotsResponse<String> getPublicKey() {
+    public R<String> getPublicKey() {
         return success(innospotsConfigProperties.getPublicKey());
     }
 

@@ -19,7 +19,7 @@
 package io.innospots.schedule.job;
 
 import cn.hutool.core.util.RuntimeUtil;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.base.quartz.JobType;
 import io.innospots.schedule.model.JobExecution;
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +53,7 @@ public class CommandJob extends BaseJob{
     }
 
     @Override
-    public InnospotsResponse<Map<String,Object>> execute() {
+    public R<Map<String,Object>> execute() {
         String cmd = validParamString(PARAM_COMMAND);
         String cmdFile = jobExecution.getString(PARAM_FILE);
         String[] args = jobExecution.getStringArray(PARAM_ARGS);
@@ -70,7 +70,7 @@ public class CommandJob extends BaseJob{
         if(resp.length() > 32768){
             resp = resp.substring(0, 32768);
         }
-        InnospotsResponse<Map<String,Object>> response = InnospotsResponse.success();
+        R<Map<String,Object>> response = R.success();
         response.setMessage(resp);
 
         return response;

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>innospots-root</artifactId>
         <groupId>io.innospots</groupId>
-        <version>${innosopts.version}</version>
+        <version>${innospots.version}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -16,8 +16,10 @@
         <module>innospots-libra-kernel</module>
         <module>innospots-libra-base</module>
         <module>innospots-libra-auth</module>
+        <module>innospots-libra-bom</module>
     </modules>
 
+    <!--
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -35,13 +37,9 @@
                 <artifactId>innospots-libra-kernel</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>io.innospots</groupId>
-                <artifactId>innospots-base</artifactId>
-                <version>${project.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
+    -->
 
     <dependencies>
         <dependency>

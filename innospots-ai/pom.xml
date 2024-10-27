@@ -4,7 +4,7 @@
     <parent>
         <groupId>io.innospots</groupId>
         <artifactId>innospots-root</artifactId>
-        <version>${innosopts.version}</version>
+        <version>${innospots.version}</version>
     </parent>
 
 
@@ -21,7 +21,7 @@
             <dependency>
                 <groupId>io.innospots</groupId>
                 <artifactId>innospots-ai-core</artifactId>
-                <version>${innosopts.version}</version>
+                <version>${innospots.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -31,7 +31,7 @@
         <dependency>
             <groupId>io.innospots</groupId>
             <artifactId>innospots-base</artifactId>
-            <version>${innosopts.version}</version>
+            <version>${innospots.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.ai</groupId>

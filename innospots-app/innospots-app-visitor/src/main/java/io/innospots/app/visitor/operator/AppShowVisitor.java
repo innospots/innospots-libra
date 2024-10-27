@@ -17,7 +17,7 @@ import io.innospots.app.core.operator.AppDefinitionOperator;
 import io.innospots.app.visitor.model.AppToken;
 import io.innospots.app.visitor.model.RequestAccess;
 import io.innospots.base.crypto.IEncryptor;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.base.model.response.ResponseCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,10 +50,10 @@ public class AppShowVisitor {
         return AppDefinitionConverter.INSTANCE.entityToModel(appDefinitionEntity);
     }
 
-    public InnospotsResponse<AppToken> checkAccess(String appPath, RequestAccess requestAccess) {
+    public R<AppToken> checkAccess(String appPath, RequestAccess requestAccess) {
         AppToken appToken = new AppToken();
         appToken.setTs(System.currentTimeMillis());
-        InnospotsResponse<AppToken> response = new InnospotsResponse<>();
+        R<AppToken> response = new R<>();
         response.setBody(appToken);
         QueryWrapper<AppDefinitionEntity> qw = new QueryWrapper<>();
         qw.lambda().eq(AppDefinitionEntity::getAppPath, appPath);

@@ -15,7 +15,7 @@ import io.innospots.base.data.operator.IOperator;
 import io.innospots.base.data.request.ItemRequest;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.model.Pair;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.base.model.response.ResponseCode;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
@@ -88,7 +88,7 @@ public class AppDataOperator {
     private Object processResponse(Object response){
         if(response instanceof HttpData httpData){
             if(httpData.getStatus() >= 300){
-                return InnospotsResponse.fail(ResponseCode.FAIL,httpData.getMessage());
+                return R.fail(ResponseCode.FAIL,httpData.getMessage());
             }else{
                 response = httpData.getBody();
             }
@@ -98,12 +98,12 @@ public class AppDataOperator {
             if(m.containsKey("code") && m.containsKey("detail")){
                 return m;
             }
-            return InnospotsResponse.success(m);
-        }else if(response instanceof InnospotsResponse<?>){
+            return R.success(m);
+        }else if(response instanceof R<?>){
             return response;
         }
 
-        return InnospotsResponse.success(response);
+        return R.success(response);
     }
 
 

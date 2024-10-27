@@ -22,6 +22,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.body.PageBody;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.HashMap;
@@ -33,26 +35,34 @@ import java.util.Map;
  * @date 2020/10/31
  */
 @Schema(title = "api response wrapper")
-public class InnospotsResponse<T> {
+public class R<T> {
 
+    @Setter
+    @Getter
     @Schema(title = "response message")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     protected String message;
 
+    @Setter
+    @Getter
     @Schema(title = "status code")
     protected String code;
 
+    @Setter
+    @Getter
     @Schema(title = "response detail message")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     protected String detail;
 
+    @Setter
+    @Getter
     @Schema(title = "body data")
     protected T body;
 
     @Schema(title = "response timestamp")
     protected long ts;
 
-    public static <T> boolean hasData(InnospotsResponse<T> innospotsResponse) {
+    public static <T> boolean hasData(R<T> innospotsResponse) {
         return innospotsResponse != null && innospotsResponse.hasData();
     }
 
@@ -77,32 +87,32 @@ public class InnospotsResponse<T> {
         this.ts = System.currentTimeMillis();
     }
 
-    public static <T> InnospotsResponse<T> success() {
+    public static <T> R<T> success() {
         return success(null);
     }
 
-    public static <T> InnospotsResponse<T> success(T body) {
-        InnospotsResponse<T> response = new InnospotsResponse<>();
+    public static <T> R<T> success(T body) {
+        R<T> response = new R<>();
         response.setBody(body);
         response.fillResponse(ResponseCode.SUCCESS);
         return response;
     }
 
-    public static <T> InnospotsResponse<T> fail(ResponseCode responseCode, String detail) {
-        InnospotsResponse<T> innospotsResponse = new InnospotsResponse<>();
+    public static <T> R<T> fail(ResponseCode responseCode, String detail) {
+        R<T> innospotsResponse = new R<>();
         innospotsResponse.fillResponse(responseCode);
         innospotsResponse.setDetail(detail);
         return innospotsResponse;
     }
 
-    public static <T> InnospotsResponse<T> fail(ResponseCode responseCode) {
-        InnospotsResponse<T> innospotsResponse = new InnospotsResponse<>();
+    public static <T> R<T> fail(ResponseCode responseCode) {
+        R<T> innospotsResponse = new R<>();
         innospotsResponse.fillResponse(responseCode);
         return innospotsResponse;
     }
 
-    public static <T> InnospotsResponse<T> fail(String message, String code, String detail) {
-        InnospotsResponse<T> innospotsResponse = new InnospotsResponse<>();
+    public static <T> R<T> fail(String message, String code, String detail) {
+        R<T> innospotsResponse = new R<>();
         innospotsResponse.setDetail(detail);
         innospotsResponse.setCode(code);
         innospotsResponse.setMessage(message);
@@ -127,38 +137,6 @@ public class InnospotsResponse<T> {
         resp.put("message", message);
         resp.put("detail", detail);
         return resp;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getDetail() {
-        return detail;
-    }
-
-    public void setDetail(String detail) {
-        this.detail = detail;
-    }
-
-    public T getBody() {
-        return body;
-    }
-
-    public void setBody(T body) {
-        this.body = body;
     }
 
     public void fillBody(T body){

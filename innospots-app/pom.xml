@@ -6,51 +6,61 @@
     <parent>
         <groupId>io.innospots</groupId>
         <artifactId>innospots-root</artifactId>
-        <version>${innosopts.version}</version>
+        <version>${innospots.version}</version>
     </parent>
 
     <artifactId>innospots-app</artifactId>
 
     <packaging>pom</packaging>
+
     <modules>
         <module>innospots-app-core</module>
         <module>innospots-app-console</module>
         <module>innospots-app-visitor</module>
+        <module>innospots-app-bom</module>
     </modules>
 
+    <!--
+    <properties>
+        <innospots.version>2.0.0-SNAPSHOT</innospots.version>
+    </properties>
+    -->
+
+    <!--
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>io.innospots</groupId>
                 <artifactId>innospots-libra</artifactId>
-                <version>${innosopts.version}</version>
+                <version>${innospots.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>io.innospots</groupId>
                 <artifactId>innospots-connector</artifactId>
-                <version>${innosopts.version}</version>
+                <version>${innospots.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>io.innospots</groupId>
                 <artifactId>innospots-app-core</artifactId>
-                <version>${innosopts.version}</version>
+                <version>${innospots.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.innospots</groupId>
                 <artifactId>innospots-app-console</artifactId>
-                <version>${innosopts.version}</version>
+                <version>${innospots.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.innospots</groupId>
                 <artifactId>innospots-app-visitor</artifactId>
-                <version>${innosopts.version}</version>
+                <version>${innospots.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
+    -->
 
 
 </project>

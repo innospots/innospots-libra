@@ -20,7 +20,7 @@ package io.innospots.schedule.launcher;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import io.innospots.base.enums.DataStatus;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.base.utils.thread.ThreadTaskExecutor;
@@ -161,7 +161,7 @@ public class ReadyJobLauncher {
         baseJob.prepare();
         jobExecutionExplorer.updateJobExecution(jobExecution);
         //execute job
-        InnospotsResponse<Map<String, Object>> resp = baseJob.execute();
+        R<Map<String, Object>> resp = baseJob.execute();
         if (resp != null) {
             jobExecution.setMessage(resp.getMessage());
             jobExecution.setOutput(resp.getBody());

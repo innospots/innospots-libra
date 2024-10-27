@@ -1,6 +1,6 @@
 package io.innospots.schedule.job;
 
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.base.quartz.JobType;
 import io.innospots.schedule.model.JobExecution;
 
@@ -33,8 +33,8 @@ public class ShellJob extends BaseJob {
     }
 
     @Override
-    public InnospotsResponse<Map<String,Object>> execute() {
-        InnospotsResponse<Map<String,Object>> response = new InnospotsResponse<>();
+    public R<Map<String,Object>> execute() {
+        R<Map<String,Object>> response = new R<>();
 
         return response;
     }

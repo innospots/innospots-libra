@@ -1,6 +1,6 @@
 package io.innospots.workflow.schedule.job;
 
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.base.quartz.JobType;
 import io.innospots.schedule.job.BaseJob;
@@ -40,8 +40,8 @@ public class FlowJob extends BaseJob {
 
 
     @Override
-    public InnospotsResponse<Map<String, Object>> execute() {
-        InnospotsResponse resp = new InnospotsResponse<>();
+    public R<Map<String, Object>> execute() {
+        R resp = new R<>();
         flowJobExecutor.executeStartJob(this.jobExecution,workflowBody);
         return resp;
     }

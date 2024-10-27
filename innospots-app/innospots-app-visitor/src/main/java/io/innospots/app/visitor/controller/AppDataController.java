@@ -3,9 +3,8 @@ package io.innospots.app.visitor.controller;
 import io.innospots.app.visitor.operator.AppDataOperator;
 import io.innospots.base.constant.PathConstant;
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.enums.ImageType;
 import io.innospots.base.execution.ExecutionResource;
-import io.innospots.base.model.response.InnospotsResponse;
+import io.innospots.base.model.response.R;
 import io.innospots.libra.base.utils.ImageFileUploader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -39,28 +38,28 @@ public class AppDataController {
 
     @Operation(summary = "show and read data from table or api")
     @GetMapping("{appKey}/registry/{registryId}")
-    public InnospotsResponse<Map<String,Object>> show(@PathVariable String appKey,
-                                     @PathVariable String registryId,
-                                     @RequestParam Map<String,Object> params){
-        return InnospotsResponse.success(appDataOperator.show(appKey,registryId,params));
+    public R<Map<String,Object>> show(@PathVariable String appKey,
+                                      @PathVariable String registryId,
+                                      @RequestParam Map<String,Object> params){
+        return R.success(appDataOperator.show(appKey,registryId,params));
     }
 
     @Operation(summary = "show and read list data from table or api")
     @GetMapping("{appKey}/registry/{registryId}/list")
-    public InnospotsResponse<List<Object>> list(@PathVariable String appKey,
-                                                            @PathVariable String registryId,
-                                                            @RequestParam Map<String,Object> params){
+    public R<List<Object>> list(@PathVariable String appKey,
+                                @PathVariable String registryId,
+                                @RequestParam Map<String,Object> params){
 
-        return InnospotsResponse.success(appDataOperator.list(appKey,registryId,params));
+        return R.success(appDataOperator.list(appKey,registryId,params));
     }
 
     @Operation(summary = "page list from table or api")
     @GetMapping("{appKey}/registry/{registryId}/page")
-    public InnospotsResponse<PageBody<Map<String,Object>>> page(@PathVariable String appKey,
-                                            @PathVariable String registryId,
-                                            @RequestParam Map<String,Object> params){
+    public R<PageBody<Map<String,Object>>> page(@PathVariable String appKey,
+                                                @PathVariable String registryId,
+                                                @RequestParam Map<String,Object> params){
 
-        return InnospotsResponse.success(appDataOperator.page(appKey,registryId,params));
+        return R.success(appDataOperator.page(appKey,registryId,params));
     }
 
     @Operation(summary = "write and submit data to table or api")
@@ -75,11 +74,11 @@ public class AppDataController {
 
     @Operation(summary = "upload file")
     @PostMapping("{appKey}/upload")
-    public InnospotsResponse<ExecutionResource> upload(
+    public R<ExecutionResource> upload(
             @Parameter(name = "appKey",required = true) @PathVariable("appKey") String appKey,
             @Parameter(name = "upFile", required = true) @RequestParam("upFile") MultipartFile upFile){
         ExecutionResource executionResource = ImageFileUploader.upload(upFile,"apps/api/data/resource/"+appKey);
-        return InnospotsResponse.success(executionResource);
+        return R.success(executionResource);
     }
 
     @Operation(summary = "download resource")
