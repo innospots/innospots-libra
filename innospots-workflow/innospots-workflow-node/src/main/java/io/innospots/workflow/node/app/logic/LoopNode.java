@@ -18,7 +18,7 @@
 
 package io.innospots.workflow.node.app.logic;
 
-import io.innospots.base.model.field.ComputeField;
+import io.innospots.workflow.node.app.compute.ComputeField;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.workflow.node.app.connector.OutputFieldMode;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;

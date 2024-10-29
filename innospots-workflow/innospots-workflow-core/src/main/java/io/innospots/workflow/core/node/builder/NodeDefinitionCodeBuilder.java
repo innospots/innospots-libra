@@ -1,8 +1,8 @@
 package io.innospots.workflow.core.node.builder;
 
 import io.innospots.base.exception.ScriptException;
-import io.innospots.base.script.ScriptExecutorManager;
-import io.innospots.base.script.jit.JavaSourceFileCompiler;
+import io.innospots.script.base.ScriptExecutorManager;
+import io.innospots.script.base.jit.JavaSourceFileCompiler;
 import io.innospots.workflow.core.node.definition.model.NodeDefinition;
 import lombok.extern.slf4j.Slf4j;
 

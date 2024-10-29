@@ -20,9 +20,8 @@ package io.innospots.workflow.node.app.script;
 
 
 import io.innospots.base.exception.ScriptException;
-import io.innospots.base.script.ExecutorManagerFactory;
-import io.innospots.base.script.IScriptExecutor;
-import io.innospots.base.script.ScriptExecutorManager;
+import io.innospots.script.base.IScriptExecutor;
+import io.innospots.script.base.ScriptExecutorManager;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import lombok.extern.slf4j.Slf4j;
 

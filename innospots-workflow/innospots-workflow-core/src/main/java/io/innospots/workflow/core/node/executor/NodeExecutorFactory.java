@@ -18,10 +18,9 @@
 
 package io.innospots.workflow.core.node.executor;
 
-import cn.hutool.core.util.StrUtil;
-import io.innospots.base.script.ExecutorManagerFactory;
-import io.innospots.base.script.ScriptExecutorManager;
-import io.innospots.base.script.jit.MethodBody;
+import io.innospots.script.base.ExecutorManagerFactory;
+import io.innospots.script.base.ScriptExecutorManager;
+import io.innospots.script.base.jit.MethodBody;
 import io.innospots.workflow.core.exception.NodeBuildException;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.core.logger.FlowLoggerFactory;
@@ -30,7 +29,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 
 /**

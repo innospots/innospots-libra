@@ -18,7 +18,6 @@
 
 package io.innospots.workflow.node.app.compute;
 
-import io.innospots.base.model.field.ComputeField;
 import io.innospots.base.model.field.compute.ComputeItem;
 import io.innospots.base.utils.BeanUtils;
 import io.innospots.workflow.core.execution.model.ExecutionInput;

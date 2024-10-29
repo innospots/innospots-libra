@@ -24,6 +24,11 @@
 
         <dependency>
             <groupId>io.innospots</groupId>
+            <artifactId>innospots-script-function</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.innospots</groupId>
             <artifactId>innospots-data-provider</artifactId>
             <version>${project.version}</version>
         </dependency>

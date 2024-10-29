@@ -19,6 +19,7 @@
 package io.innospots.libra.kernel;
 
 import io.innospots.connector.core.ConnectorCoreImporter;
+import io.innospots.script.function.definition.FunctionDefinitionImporter;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -35,6 +36,7 @@ import java.lang.annotation.*;
 @Documented
 @Inherited
 @ConnectorCoreImporter
+@FunctionDefinitionImporter
 @Import({LibraKernelImporter.LibraKernelInnerConfiguration.class})
 public @interface LibraKernelImporter {
 

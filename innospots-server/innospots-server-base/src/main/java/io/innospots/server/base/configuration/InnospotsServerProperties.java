@@ -33,11 +33,6 @@ public class InnospotsServerProperties {
 
 
     /**
-     * script build path
-     */
-    private String scriptBuildPath=".script_build_path";
-
-    /**
      * log root path
      */
     private String logRootPath="logs";

@@ -58,7 +58,7 @@ public class ServiceRegistryStarter implements ApplicationRunner {
     public void run(ApplicationArguments args) {
 
         try {
-            BaseServerConfiguration.buildPath(configProperties);
+//            BaseServerConfiguration.buildPath(configProperties);
             ServiceRegistryHolder.setDebugMode(configProperties.isDebugMode());
             ServiceInfo serviceInfo = ServiceRegistryHolder.buildCurrentNewService();
             if (configProperties.isEnableRegistry()) {

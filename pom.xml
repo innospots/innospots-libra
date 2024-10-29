@@ -12,7 +12,7 @@
         <module>innospots-libra</module>
         <module>innospots-server</module>
         <module>innospots-workflow</module>
-        <module>innospots-scripts</module>
+        <module>innospots-script</module>
         <module>innospots-schedule</module>
         <module>innospots-app</module>
     </modules>
@@ -128,7 +128,7 @@
 
             <dependency>
                 <groupId>io.innospots</groupId>
-                <artifactId>innospots-scripts-bom</artifactId>
+                <artifactId>innospots-script-bom</artifactId>
                 <version>${innospots.version}</version>
                 <type>pom</type>
                 <scope>import</scope>

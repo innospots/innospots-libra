@@ -18,10 +18,7 @@
 
 package io.innospots.workflow.node.app.script;
 
-import io.innospots.base.script.OutputMode;
-import io.innospots.base.script.jit.MethodBody;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Smars

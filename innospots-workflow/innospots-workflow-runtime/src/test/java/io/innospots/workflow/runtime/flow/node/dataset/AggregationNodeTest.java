@@ -1,11 +1,10 @@
 package io.innospots.workflow.runtime.flow.node.dataset;
 
 import io.innospots.base.condition.*;
-import io.innospots.base.function.StatisticFunctionType;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.field.FieldValueType;
-import io.innospots.base.utils.BeanUtils;
 import io.innospots.base.utils.DataFakerUtils;
+import io.innospots.script.function.StatisticFunctionType;
 import io.innospots.workflow.core.instance.model.NodeInstance;
 import io.innospots.workflow.core.node.field.NodeParamField;
 import io.innospots.workflow.node.app.compute.AggregationComputeField;

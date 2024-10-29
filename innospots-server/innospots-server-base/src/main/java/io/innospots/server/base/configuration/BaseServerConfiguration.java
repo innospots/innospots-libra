@@ -20,9 +20,9 @@ package io.innospots.server.base.configuration;
 
 import cn.hutool.extra.spring.SpringUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.innospots.base.config.InnospotsConfigProperties;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.script.ScriptExecutorManager;
 import io.innospots.base.utils.BeanContextAware;
 import io.innospots.base.utils.CCH;
 import io.innospots.base.utils.InnospotsIdGenerator;
@@ -54,7 +54,7 @@ import java.io.File;
 @MapperScan(basePackages = {"io.innospots.server.base.registry"})
 @EntityScan(basePackages = {"io.innospots.server.base.registry"})
 @Configuration
-@EnableConfigurationProperties({InnospotsServerProperties.class})
+@EnableConfigurationProperties({InnospotsConfigProperties.class,InnospotsServerProperties.class})
 @Import({CCH.class})
 public class BaseServerConfiguration {
 
@@ -71,10 +71,6 @@ public class BaseServerConfiguration {
 
      */
 
-    public static void buildPath(InnospotsServerProperties configProperties) {
-        ScriptExecutorManager.setRetainSource(configProperties.isDebugMode());
-        ScriptExecutorManager.setPath(configProperties.getScriptBuildPath() + File.separator + "src", configProperties.getScriptBuildPath());
-    }
 
     @Bean
     public GlobalExceptionHandler globalExceptionHandler() {

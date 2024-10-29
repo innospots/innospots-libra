@@ -20,6 +20,7 @@ package io.innospots.workflow.runtime.starter;
 
 import io.innospots.base.crypto.EncryptorBuilder;
 import io.innospots.base.utils.BeanContextAwareUtils;
+import io.innospots.script.base.ScriptExecutorManager;
 import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.runtime.WorkflowRuntimeContext;
 import io.innospots.workflow.core.runtime.lisenter.WorkflowRuntimeListener;
@@ -62,8 +63,14 @@ public class RuntimePrepareStarter implements ApplicationRunner {
         this.applicationAvailability = applicationAvailability;
     }
 
+    public static void buildPath(InnospotsWorkflowProperties configProperties) {
+        ScriptExecutorManager.setRetainSource(configProperties.isRetainScriptSource());
+        ScriptExecutorManager.setPath(configProperties.getScriptBuildPath() + File.separator + "src", configProperties.getScriptBuildPath());
+    }
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        buildPath(workflowProperties);
         WorkflowRuntimeContext.contextResourcePath = new File(workflowProperties.getExecutionStorePath()).getAbsolutePath();
         Map<String, WorkflowRuntimeListener> listeners =
                 BeanContextAwareUtils.getBeansOfType(WorkflowRuntimeListener.class);

@@ -20,7 +20,7 @@ package io.innospots.workflow.node.app.dataset;
 
 import cn.hutool.core.comparator.ComparatorChain;
 import cn.hutool.core.comparator.CompareUtil;
-import io.innospots.base.script.IScriptExecutor;
+import io.innospots.script.base.IScriptExecutor;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;

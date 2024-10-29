@@ -20,7 +20,7 @@ package io.innospots.workflow.node.app.script;
 
 import io.innospots.base.model.field.FieldValueType;
 import io.innospots.base.model.field.ParamField;
-import io.innospots.base.script.jit.MethodBody;
+import io.innospots.script.base.jit.MethodBody;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 

@@ -37,6 +37,13 @@ public class InnospotsWorkflowProperties {
     public static final int MAX_SHARDING_KEY = 16;
 
     /**
+     * script build path
+     */
+    private String scriptBuildPath=".script_build_path";
+
+    private boolean retainScriptSource = true;
+
+    /**
      * the maximum amount number of versions
      */
     private int workFlowInstanceKeepVersionAmount = 5;

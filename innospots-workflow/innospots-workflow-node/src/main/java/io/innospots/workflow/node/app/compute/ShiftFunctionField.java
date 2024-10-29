@@ -1,8 +1,8 @@
 package io.innospots.workflow.node.app.compute;
 
-import io.innospots.base.function.shift.IShiftFunction;
-import io.innospots.base.function.shift.ShiftFunctionBuilder;
-import io.innospots.base.function.shift.ShiftFunctionType;
+import io.innospots.script.function.shift.IShiftFunction;
+import io.innospots.script.function.shift.ShiftFunctionBuilder;
+import io.innospots.script.function.shift.ShiftFunctionType;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.base.utils.Initializer;

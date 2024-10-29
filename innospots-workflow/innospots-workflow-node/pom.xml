@@ -73,6 +73,10 @@
             <groupId>io.innospots</groupId>
             <artifactId>innospots-script-python</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.innospots</groupId>
+            <artifactId>innospots-script-function</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

@@ -20,7 +20,6 @@ package io.innospots.app.visitor.server;
 
 
 import io.innospots.app.visitor.ApplicationVisitorImporter;
-import io.innospots.base.config.InnospotsBaseImporter;
 import io.innospots.base.constant.ServiceConstant;
 import io.innospots.server.base.ServerConfigImporter;
 import io.innospots.server.base.registry.ServiceRegistryHolder;
@@ -36,7 +35,6 @@ import org.springframework.boot.autoconfigure.quartz.QuartzAutoConfiguration;
 @SpringBootApplication(exclude = {QuartzAutoConfiguration.class,
         FreeMarkerAutoConfiguration.class})
 @ServerConfigImporter
-@InnospotsBaseImporter
 @ApplicationVisitorImporter
 public class InnospotsAppVisitorServer {
 

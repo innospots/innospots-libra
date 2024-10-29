@@ -18,8 +18,8 @@
 
 package io.innospots.libra.kernel.module.function.controller;
 
-import io.innospots.base.function.definition.model.FunctionDefinition;
-import io.innospots.base.function.definition.operator.FunctionDefinitionOperator;
+import io.innospots.script.function.definition.model.FunctionDefinition;
+import io.innospots.script.function.definition.operator.FunctionDefinitionOperator;
 import io.innospots.base.model.response.R;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;

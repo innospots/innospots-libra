@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>innospots-root</artifactId>
+        <groupId>io.innospots</groupId>
+        <version>${innospots.version}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>innospots-script</artifactId>
+
+    <packaging>pom</packaging>
+    <modules>
+        <module>innospots-script-javascript</module>
+        <module>innospots-script-python</module>
+        <module>innospots-script-groovy</module>
+        <module>innospots-script-java</module>
+        <module>innospots-script-graaljs</module>
+        <module>innospots-script-bom</module>
+        <module>innospots-script-base</module>
+        <module>innospots-script-function</module>
+    </modules>
+
+    <properties>
+        <spring-integration-scripting.version>5.5.18</spring-integration-scripting.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.innospots</groupId>
+            <artifactId>innospots-base</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

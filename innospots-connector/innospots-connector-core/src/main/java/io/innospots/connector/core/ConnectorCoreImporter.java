@@ -18,7 +18,6 @@
 
 package io.innospots.connector.core;
 
-import io.innospots.base.config.FunctionConfiguration;
 import io.innospots.base.config.InnospotsConfigProperties;
 import io.innospots.connector.core.config.CredentialConfiguration;
 import io.innospots.connector.core.config.SchemaConfiguration;

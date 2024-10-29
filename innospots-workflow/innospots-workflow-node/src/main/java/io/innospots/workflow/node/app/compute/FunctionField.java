@@ -1,8 +1,9 @@
 package io.innospots.workflow.node.app.compute;
 
-import io.innospots.base.function.StatisticFunctionType;
-import io.innospots.base.function.moving.IMovingFunction;
-import io.innospots.base.function.moving.MovingFunctionBuilder;
+
+import io.innospots.script.function.StatisticFunctionType;
+import io.innospots.script.function.moving.IMovingFunction;
+import io.innospots.script.function.moving.MovingFunctionBuilder;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.Pair;
 import io.innospots.base.model.field.ParamField;

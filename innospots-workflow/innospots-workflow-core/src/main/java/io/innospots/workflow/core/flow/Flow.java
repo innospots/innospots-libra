@@ -20,9 +20,8 @@ package io.innospots.workflow.core.flow;
 
 
 import io.innospots.base.enums.DataStatus;
-import io.innospots.base.exception.ScriptException;
 import io.innospots.base.exception.ValidatorException;
-import io.innospots.base.script.ExecutorManagerFactory;
+import io.innospots.script.base.ExecutorManagerFactory;
 import io.innospots.workflow.core.enums.FlowStatus;
 import io.innospots.workflow.core.execution.listener.INodeExecutionListener;
 import io.innospots.workflow.core.flow.model.BuildProcessInfo;

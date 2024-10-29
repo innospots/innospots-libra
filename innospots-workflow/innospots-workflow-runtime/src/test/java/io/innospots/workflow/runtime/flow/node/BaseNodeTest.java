@@ -3,7 +3,7 @@ package io.innospots.workflow.runtime.flow.node;
 import io.innospots.base.exception.ScriptException;
 import io.innospots.base.execution.ExecutionResource;
 import io.innospots.base.json.JSONUtils;
-import io.innospots.base.script.ScriptExecutorManager;
+import io.innospots.script.base.ScriptExecutorManager;
 import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;

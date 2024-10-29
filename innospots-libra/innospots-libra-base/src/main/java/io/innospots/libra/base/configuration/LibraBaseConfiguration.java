@@ -24,10 +24,9 @@ import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
 import com.google.common.collect.ImmutableList;
-import io.innospots.base.config.InnospotsBaseImporter;
+import io.innospots.base.entity.handler.EntityMetaObjectHandler;
 import io.innospots.base.store.CacheStoreManager;
 import io.innospots.base.utils.CCH;
-import io.innospots.base.entity.handler.EntityMetaObjectHandler;
 import io.innospots.libra.base.temp.SystemTempCacheOperator;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
@@ -46,7 +45,6 @@ import java.util.List;
 @Configuration
 @EntityScan(basePackages = {"io.innospots.libra.base.temp"})
 @MapperScan(basePackages = {"io.innospots.libra.base.temp"})
-@InnospotsBaseImporter
 @EnableConfigurationProperties({AuthProperties.class, InnospotsConsoleProperties.class})
 public class LibraBaseConfiguration {
 

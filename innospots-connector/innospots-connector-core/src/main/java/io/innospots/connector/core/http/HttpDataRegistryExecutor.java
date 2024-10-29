@@ -29,7 +29,6 @@ import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.exception.data.HttpConnectionException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.field.FieldScope;
-import io.innospots.base.script.IScriptExecutor;
 import io.innospots.base.utils.PlaceholderUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -54,9 +53,9 @@ public class HttpDataRegistryExecutor implements IExecutionOperator {
 
     private HttpContext httpContext;
 
-    private IScriptExecutor preScriptExpression;
+//    private IScriptExecutor preScriptExpression;
 
-    private IScriptExecutor postScriptExpression;
+//    private IScriptExecutor postScriptExpression;
 
     public HttpDataRegistryExecutor(HttpConnection httpConnection, ApiSchemaRegistry schemaRegistry) {
         this.httpConnection = httpConnection;
@@ -102,12 +101,15 @@ public class HttpDataRegistryExecutor implements IExecutionOperator {
 
         List<SchemaField> paramFields = dataFieldMap.get(FieldScope.HTTP_PARAM);
 
+        /*
         if (this.preScriptExpression != null) {
             Map<String, Object> preScriptResultMap = (Map<String, Object>) this.preScriptExpression.execute(body);
             if (preScriptResultMap != null) {
                 body.putAll(preScriptResultMap);
             }
         }
+
+         */
 
         Map<String, String> headers = extractStrFields(headerFields, body);
         Map<String, String> pathValues = extractStrFields(pathFields, body);
@@ -129,12 +131,15 @@ public class HttpDataRegistryExecutor implements IExecutionOperator {
             throw HttpConnectionException.buildException(this.getClass(), itemRequest);
         }
 
+        /*
         if (this.postScriptExpression != null && data.getBody() != null) {
             Map<String, Object> dataParams = new HashMap<>();
             dataParams.put("body", data.getBody());
             Map<String, Object> result = (Map<String, Object>) postScriptExpression.execute(dataParams);
             data.setBody(result);
         }
+
+         */
 
         DataBody<HttpData> dataBody = new DataBody<>();
         dataBody.setBody(data);

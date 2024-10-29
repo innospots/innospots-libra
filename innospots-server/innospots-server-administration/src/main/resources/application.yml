@@ -84,13 +84,13 @@ innospots:
     enable-registry: true
     # set system environment variable: logRootPath
     log-root-path: ${LOG_PATH:innospots-server/logs}
-    script-build-path: .script_build_path
     watcher-size: 10
     # open debug mode
     debug-mode: true
   workflow:
     execution-store-path: .execution_contexts
-
+    script-build-path: .script_build_path
+    retain-script-source: true
 
 # /actuator/info config
 info:

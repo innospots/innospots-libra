@@ -21,8 +21,8 @@ package io.innospots.workflow.node.app.logic;
 
 import io.innospots.base.condition.EmbedCondition;
 import io.innospots.base.exception.ConfigException;
-import io.innospots.base.script.IScriptExecutor;
-import io.innospots.base.script.aviator.AviatorExpressionExecutor;
+import io.innospots.script.base.IScriptExecutor;
+import io.innospots.script.base.aviator.AviatorExpressionExecutor;
 import io.innospots.workflow.core.execution.model.ExecutionInput;
 import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
