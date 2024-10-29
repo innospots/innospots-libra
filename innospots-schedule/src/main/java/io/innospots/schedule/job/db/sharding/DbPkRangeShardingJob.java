@@ -19,10 +19,10 @@
 package io.innospots.schedule.job.db.sharding;
 
 import cn.hutool.core.text.StrFormatter;
-import io.innospots.base.connector.minder.DataConnectionMinderManager;
-import io.innospots.base.connector.minder.IDataConnectionMinder;
-import io.innospots.base.connector.schema.model.SchemaField;
-import io.innospots.base.connector.schema.model.SchemaRegistry;
+import io.innospots.connector.core.minder.DataConnectionMinderManager;
+import io.innospots.connector.core.minder.IDataConnectionMinder;
+import io.innospots.connector.core.schema.model.SchemaField;
+import io.innospots.connector.core.schema.model.SchemaRegistry;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.schedule.exception.JobExecutionException;
 import io.innospots.schedule.model.JobExecution;

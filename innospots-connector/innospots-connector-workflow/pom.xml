@@ -9,4 +9,11 @@
     <artifactId>innospots-connector-workflow</artifactId>
     <name>innospots-connector-workflow</name>
 
+
+    <dependencies>
+        <dependency>
+            <groupId>io.innospots</groupId>
+            <artifactId>innospots-connector-core</artifactId>
+        </dependency>
+    </dependencies>
 </project>

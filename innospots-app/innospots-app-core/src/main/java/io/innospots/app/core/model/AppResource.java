@@ -1,6 +1,6 @@
 package io.innospots.app.core.model;
 
-import io.innospots.base.connector.schema.model.SchemaRegistry;
+import io.innospots.connector.core.schema.model.SchemaRegistry;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;

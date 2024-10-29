@@ -19,26 +19,28 @@
 package io.innospots.base.utils;
 
 import cn.hutool.core.lang.generator.SnowflakeGenerator;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Smars
  * @date 2021/6/29
  */
+@Slf4j
 public class InnospotsIdGenerator {
 
-    private static final long MAX_DATACENTER_NUM = 1024L;
+    private static final long MAX_NUM = 32;
 
     private static InnospotsIdGenerator innospotsIdGenerator;
     private SnowflakeGenerator idGenerator;
 
     public InnospotsIdGenerator(long dataCenterId, long machineId) {
-//        idGenerator = new SnowflakeGenerator(machineId,dataCenterId);
-        idGenerator = new SnowflakeGenerator(0,0);
+        idGenerator = new SnowflakeGenerator(machineId % MAX_NUM,dataCenterId % MAX_NUM);
+//        idGenerator = new SnowflakeGenerator(0,0);
     }
 
     public static InnospotsIdGenerator build(String ip, int port) {
         if (innospotsIdGenerator == null) {
-            innospotsIdGenerator = new InnospotsIdGenerator(port % MAX_DATACENTER_NUM,ipToLong(ip));
+            innospotsIdGenerator = new InnospotsIdGenerator(port,ipToLong(ip));
         }
         return innospotsIdGenerator;
     }
@@ -54,10 +56,14 @@ public class InnospotsIdGenerator {
             result = ipAddress.hashCode();
         }
 
-        return result % MAX_DATACENTER_NUM;
+        return result % MAX_NUM;
     }
 
     public static long generateId() {
+        if(innospotsIdGenerator == null){
+            innospotsIdGenerator = new InnospotsIdGenerator(0,0);
+            log.warn("generator not be initialized, user default dataCenter and machineId");
+        }
         return innospotsIdGenerator.nextId();
     }
 

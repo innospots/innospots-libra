@@ -35,6 +35,10 @@
     <dependencies>
         <dependency>
             <groupId>io.innospots</groupId>
+            <artifactId>innospots-connector-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.innospots</groupId>
             <artifactId>innospots-libra-base</artifactId>
             <scope>provided</scope>
         </dependency>

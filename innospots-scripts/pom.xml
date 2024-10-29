@@ -18,6 +18,7 @@
         <module>innospots-script-groovy</module>
         <module>innospots-script-java</module>
         <module>innospots-script-graaljs</module>
+        <module>innospots-scripts-bom</module>
     </modules>
 
     <properties>

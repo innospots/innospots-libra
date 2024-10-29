@@ -18,7 +18,7 @@
 
 package io.innospots.workflow.console.controller;
 
-import io.innospots.base.connector.schema.model.SchemaRegistry;
+import io.innospots.connector.core.schema.model.SchemaRegistry;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.model.response.R;

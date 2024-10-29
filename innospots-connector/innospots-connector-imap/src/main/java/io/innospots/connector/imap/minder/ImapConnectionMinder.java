@@ -18,9 +18,9 @@
 
 package io.innospots.connector.imap.minder;
 
-import io.innospots.base.connector.minder.BaseDataConnectionMinder;
+import io.innospots.connector.core.minder.BaseDataConnectionMinder;
 import io.innospots.base.data.operator.IOperator;
-import io.innospots.base.connector.credential.model.ConnectionCredential;
+import io.innospots.connector.core.credential.model.ConnectionCredential;
 import io.innospots.connector.imap.operator.ImapExecutionOperator;
 import jakarta.mail.*;
 import jakarta.mail.event.ConnectionEvent;

@@ -26,19 +26,19 @@ import datart.base.consts.VariableTypeEnum;
 import datart.provider.Dataframe;
 import datart.provider.ScriptVariable;
 import datart.provider.StdSqlOperator;
-import io.innospots.base.connector.credential.model.ConnectionCredential;
-import io.innospots.base.connector.credential.reader.IConnectionCredentialReader;
-import io.innospots.base.connector.minder.IDataConnectionMinder;
-import io.innospots.base.connector.schema.model.SchemaColumn;
-import io.innospots.base.connector.schema.model.SchemaField;
-import io.innospots.base.connector.schema.model.SchemaRegistry;
+import io.innospots.base.data.schema.SchemaColumn;
+import io.innospots.connector.core.credential.model.ConnectionCredential;
+import io.innospots.connector.core.credential.reader.IConnectionCredentialReader;
+import io.innospots.connector.core.data.DataOperatorManager;
+import io.innospots.connector.core.minder.IDataConnectionMinder;
+import io.innospots.connector.core.schema.model.SchemaField;
+import io.innospots.connector.core.schema.model.SchemaRegistry;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.body.SqlDataPageBody;
 import io.innospots.base.data.dataset.Dataset;
 import io.innospots.base.data.dataset.DatasetExecuteParam;
 import io.innospots.base.data.dataset.Variable;
 import io.innospots.base.data.enums.DataOperation;
-import io.innospots.base.data.operator.DataOperatorManager;
 import io.innospots.base.data.operator.IDataOperator;
 import io.innospots.base.data.request.SimpleRequest;
 import io.innospots.base.json.JSONUtils;
@@ -51,11 +51,8 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.time.temporal.Temporal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Alfred

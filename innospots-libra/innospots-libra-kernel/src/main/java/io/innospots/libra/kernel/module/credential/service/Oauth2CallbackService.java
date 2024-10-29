@@ -1,15 +1,14 @@
 package io.innospots.libra.kernel.module.credential.service;
 
-import io.innospots.base.connector.credential.model.ConnectionCredential;
-import io.innospots.base.connector.credential.model.CredentialInfo;
-import io.innospots.base.connector.credential.model.CredentialType;
-import io.innospots.base.connector.credential.operator.CredentialTypeOperator;
-import io.innospots.base.connector.minder.DataConnectionMinderManager;
-import io.innospots.base.exception.ResourceException;
+import io.innospots.connector.core.credential.model.ConnectionCredential;
+import io.innospots.connector.core.credential.model.CredentialInfo;
+import io.innospots.connector.core.credential.model.CredentialType;
+import io.innospots.connector.core.credential.operator.CredentialTypeOperator;
+import io.innospots.connector.core.minder.DataConnectionMinderManager;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.store.CacheStoreManager;
-import io.innospots.base.connector.credential.reader.ConnectionCredentialReader;
+import io.innospots.connector.core.credential.reader.ConnectionCredentialReader;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;

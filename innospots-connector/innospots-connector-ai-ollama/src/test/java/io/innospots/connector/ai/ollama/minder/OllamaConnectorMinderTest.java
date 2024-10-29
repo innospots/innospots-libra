@@ -1,12 +1,10 @@
 package io.innospots.connector.ai.ollama.minder;
 
-import io.innospots.base.connector.credential.model.ConnectionCredential;
-import io.innospots.base.connector.schema.model.SchemaRegistry;
+import io.innospots.connector.core.credential.model.ConnectionCredential;
+import io.innospots.connector.core.schema.model.SchemaRegistry;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Smars

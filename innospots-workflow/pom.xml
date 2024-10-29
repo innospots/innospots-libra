@@ -18,6 +18,7 @@
         <module>innospots-workflow-job</module>
         <module>innospots-workflow-node</module>
         <module>innospots-workflow-node-ai</module>
+        <module>innospots-workflow-bom</module>
     </modules>
 
     <packaging>pom</packaging>

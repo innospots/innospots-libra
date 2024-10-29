@@ -41,7 +41,7 @@ public class InnospotsConfigProperties {
     /**
      * the directory store upload file
      */
-    private String uploadFilePath;
+    private String uploadFilePath=".download_files/";
 
     /**
      * load extension from classpath
@@ -54,12 +54,12 @@ public class InnospotsConfigProperties {
     /**
      * the path of external jar lib
      */
-    private String extLibPath;
+    private String extLibPath="./ext_lib/";
 
     /**
      * Symmetric encryption key
      */
-    private String secretKey;
+    private String secretKey="Q1b9aAsldxfv3wM5";
 
     private String publicKey;
 

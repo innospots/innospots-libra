@@ -18,6 +18,11 @@
         <dependencies>
             <dependency>
                 <groupId>io.innospots</groupId>
+                <artifactId>innospots-connector-core</artifactId>
+                <version>${innospots.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
                 <artifactId>innospots-connector-ai-aliyun</artifactId>
                 <version>${innospots.version}</version>
             </dependency>

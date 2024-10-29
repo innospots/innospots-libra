@@ -17,6 +17,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>io.innospots</groupId>
+            <artifactId>innospots-connector-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
             <version>${kafka-client.version}</version>

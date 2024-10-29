@@ -19,10 +19,10 @@
 package io.innospots.connector.api.minder;
 
 import cn.hutool.core.net.url.UrlBuilder;
-import io.innospots.base.connector.credential.model.CredentialInfo;
+import io.innospots.connector.core.credential.model.CredentialInfo;
 import io.innospots.base.constant.PathConstant;
 import io.innospots.base.data.enums.ApiMethod;
-import io.innospots.base.connector.credential.model.ConnectionCredential;
+import io.innospots.connector.core.credential.model.ConnectionCredential;
 import io.innospots.base.exception.data.HttpConnectionException;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.response.ResponseCode;
@@ -31,12 +31,10 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.checkerframework.checker.units.qual.C;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 

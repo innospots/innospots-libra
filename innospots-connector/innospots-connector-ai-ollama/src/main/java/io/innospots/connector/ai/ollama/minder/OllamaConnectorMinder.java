@@ -1,9 +1,9 @@
 package io.innospots.connector.ai.ollama.minder;
 
-import io.innospots.base.connector.credential.model.ConnectionCredential;
-import io.innospots.base.connector.minder.BaseDataConnectionMinder;
-import io.innospots.base.connector.schema.model.SchemaCatalog;
-import io.innospots.base.connector.schema.model.SchemaRegistry;
+import io.innospots.connector.core.credential.model.ConnectionCredential;
+import io.innospots.connector.core.minder.BaseDataConnectionMinder;
+import io.innospots.connector.core.schema.model.SchemaCatalog;
+import io.innospots.connector.core.schema.model.SchemaRegistry;
 import io.innospots.base.data.operator.IExecutionOperator;
 import io.innospots.connector.ai.ollama.operator.OllamaOperator;
 import lombok.extern.slf4j.Slf4j;

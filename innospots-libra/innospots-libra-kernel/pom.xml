@@ -19,6 +19,11 @@
 
         <dependency>
             <groupId>io.innospots</groupId>
+            <artifactId>innospots-connector-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.innospots</groupId>
             <artifactId>innospots-data-provider</artifactId>
             <version>${project.version}</version>
         </dependency>

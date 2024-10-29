@@ -18,12 +18,12 @@
 
 package io.innospots.libra.kernel.module.credential.controller;
 
-import io.innospots.base.connector.credential.model.ConnectionCredential;
-import io.innospots.base.connector.credential.model.CredentialInfo;
-import io.innospots.base.connector.credential.model.SimpleCredentialInfo;
-import io.innospots.base.connector.credential.operator.CredentialInfoOperator;
-import io.innospots.base.connector.credential.reader.IConnectionCredentialReader;
-import io.innospots.base.connector.minder.DataConnectionMinderManager;
+import io.innospots.connector.core.credential.model.ConnectionCredential;
+import io.innospots.connector.core.credential.model.CredentialInfo;
+import io.innospots.connector.core.credential.model.SimpleCredentialInfo;
+import io.innospots.connector.core.credential.operator.CredentialInfoOperator;
+import io.innospots.connector.core.credential.reader.IConnectionCredentialReader;
+import io.innospots.connector.core.minder.DataConnectionMinderManager;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.request.FormQuery;
 import io.innospots.base.enums.ConnectType;

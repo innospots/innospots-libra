@@ -2,9 +2,9 @@ package io.innospots.workflow.node.ai;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import io.innospots.base.connector.credential.model.ConnectionCredential;
-import io.innospots.base.connector.minder.DataConnectionMinderManager;
-import io.innospots.base.connector.minder.IDataConnectionMinder;
+import io.innospots.connector.core.credential.model.ConnectionCredential;
+import io.innospots.connector.core.minder.DataConnectionMinderManager;
+import io.innospots.connector.core.minder.IDataConnectionMinder;
 import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.workflow.core.exception.NodeExecuteException;

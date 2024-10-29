@@ -2,9 +2,9 @@ package io.innospots.connector.api.minder;
 
 import cn.hutool.http.HttpStatus;
 import io.innospots.base.data.enums.ApiMethod;
-import io.innospots.base.connector.http.HttpConnection;
-import io.innospots.base.connector.http.HttpData;
-import io.innospots.base.connector.credential.model.ConnectionCredential;
+import io.innospots.connector.core.http.HttpConnection;
+import io.innospots.base.utils.http.HttpData;
+import io.innospots.connector.core.credential.model.ConnectionCredential;
 import io.innospots.base.exception.AuthenticationException;
 import io.innospots.base.json.JSONUtils;
 import lombok.Getter;

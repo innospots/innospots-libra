@@ -18,8 +18,8 @@
 
 package io.innospots.workflow.node.app.connector;
 
-import io.innospots.base.connector.minder.DataConnectionMinderManager;
-import io.innospots.base.connector.minder.IDataConnectionMinder;
+import io.innospots.connector.core.minder.DataConnectionMinderManager;
+import io.innospots.connector.core.minder.IDataConnectionMinder;
 import io.innospots.base.data.operator.IDataOperator;
 import lombok.extern.slf4j.Slf4j;
 

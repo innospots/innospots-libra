@@ -18,7 +18,7 @@
 
 package io.innospots.workflow.core.config;
 
-import io.innospots.base.connector.minder.DataConnectionMinderManager;
+import io.innospots.connector.core.minder.DataConnectionMinderManager;
 import io.innospots.base.data.operator.IDataOperator;
 import io.innospots.workflow.core.execution.operator.IExecutionContextOperator;
 import io.innospots.workflow.core.execution.operator.IFlowExecutionOperator;

@@ -18,18 +18,18 @@
 
 package io.innospots.libra.kernel.module.schema.dataset;
 
-import io.innospots.base.connector.credential.model.CredentialInfo;
-import io.innospots.base.connector.credential.reader.IConnectionCredentialReader;
-import io.innospots.base.connector.schema.model.SchemaRegistry;
-import io.innospots.base.connector.schema.model.SchemaRegistryType;
-import io.innospots.base.connector.meta.ConnectionMinderSchema;
-import io.innospots.base.connector.meta.ConnectionMinderSchemaLoader;
+import io.innospots.connector.core.credential.model.CredentialInfo;
+import io.innospots.connector.core.credential.reader.IConnectionCredentialReader;
+import io.innospots.connector.core.schema.model.SchemaRegistry;
+import io.innospots.connector.core.schema.model.SchemaRegistryType;
+import io.innospots.connector.core.meta.ConnectionMinderSchema;
+import io.innospots.connector.core.meta.ConnectionMinderSchemaLoader;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.dataset.Dataset;
 import io.innospots.base.data.dataset.IDatasetReader;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.base.connector.schema.converter.SchemaRegistryConverter;
-import io.innospots.base.connector.schema.operator.SchemaRegistryOperator;
+import io.innospots.connector.core.schema.converter.SchemaRegistryConverter;
+import io.innospots.connector.core.schema.operator.SchemaRegistryOperator;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

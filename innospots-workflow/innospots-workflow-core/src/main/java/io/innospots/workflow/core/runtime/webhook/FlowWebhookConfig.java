@@ -19,7 +19,7 @@
 package io.innospots.workflow.core.runtime.webhook;
 
 
-import io.innospots.base.connector.http.HttpField;
+import io.innospots.connector.core.http.HttpField;
 import io.innospots.base.model.field.ParamField;
 import lombok.Getter;
 import lombok.Setter;

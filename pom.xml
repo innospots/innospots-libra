@@ -15,9 +15,6 @@
         <module>innospots-scripts</module>
         <module>innospots-schedule</module>
         <module>innospots-app</module>
-        <module>innospots-ai</module>
-        <module>innospots-scripts/innospots-scripts-bom</module>
-        <module>innospots-workflow/innospots-workflow-bom</module>
     </modules>
 
     <packaging>pom</packaging>

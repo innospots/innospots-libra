@@ -23,72 +23,8 @@
         <module>innospots-connector-ai-ollama</module>
         <module>innospots-connector-ai-aliyun</module>
         <module>innospots-connector-bom</module>
+        <module>innospots-connector-core</module>
     </modules>
-
-    <!--
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>io.innospots</groupId>
-                <artifactId>innospots-connector-ai-aliyun</artifactId>
-                <version>${innospots.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.innospots</groupId>
-                <artifactId>innospots-connector-ai-moonshot</artifactId>
-                <version>${innospots.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.innospots</groupId>
-                <artifactId>innospots-connector-ai-zhipu</artifactId>
-                <version>${innospots.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.innospots</groupId>
-                <artifactId>innospots-connector-ai-openai</artifactId>
-                <version>${innospots.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.innospots</groupId>
-                <artifactId>innospots-connector-ai-ollama</artifactId>
-                <version>${innospots.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.innospots</groupId>
-                <artifactId>innospots-connector-api</artifactId>
-                <version>${innospots.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.innospots</groupId>
-                <artifactId>innospots-connector-workflow</artifactId>
-                <version>${innospots.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.innospots</groupId>
-                <artifactId>innospots-connector-kafka</artifactId>
-                <version>${innospots.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.innospots</groupId>
-                <artifactId>innospots-connector-mysql</artifactId>
-                <version>${innospots.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.innospots</groupId>
-                <artifactId>innospots-connector-redis</artifactId>
-                <version>${innospots.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.innospots</groupId>
-                <artifactId>innospots-data-provider</artifactId>
-                <version>${innospots.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-    -->
 
     <dependencies>
         <dependency>

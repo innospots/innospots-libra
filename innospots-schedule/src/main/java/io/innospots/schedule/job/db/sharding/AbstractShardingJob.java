@@ -18,8 +18,8 @@
 
 package io.innospots.schedule.job.db.sharding;
 
-import io.innospots.base.connector.minder.DataConnectionMinderManager;
-import io.innospots.base.connector.minder.IDataConnectionMinder;
+import io.innospots.connector.core.minder.DataConnectionMinderManager;
+import io.innospots.connector.core.minder.IDataConnectionMinder;
 import io.innospots.base.data.operator.IDataOperator;
 import io.innospots.base.model.response.R;
 import io.innospots.base.utils.BeanContextAwareUtils;

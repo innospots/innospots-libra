@@ -38,7 +38,7 @@ public @interface InnospotsBaseImporter {
 
 
     @Configuration
-    @Import({SchemaConfiguration.class, CredentialConfiguration.class, FunctionConfiguration.class})
+    @Import({FunctionConfiguration.class})
     @EnableConfigurationProperties(InnospotsConfigProperties.class)
     class BaseInnerConfiguration {
     }

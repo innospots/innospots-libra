@@ -19,6 +19,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>io.innospots</groupId>
+            <artifactId>innospots-connector-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>jakarta.mail</groupId>
             <artifactId>jakarta.mail-api</artifactId>
             <version>${mail-api.version}</version>

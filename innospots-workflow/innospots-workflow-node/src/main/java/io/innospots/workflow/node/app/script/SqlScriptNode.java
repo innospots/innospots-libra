@@ -19,8 +19,8 @@
 package io.innospots.workflow.node.app.script;
 
 import io.innospots.base.condition.Factor;
-import io.innospots.base.connector.minder.DataConnectionMinderManager;
-import io.innospots.base.connector.minder.IDataConnectionMinder;
+import io.innospots.connector.core.minder.DataConnectionMinderManager;
+import io.innospots.connector.core.minder.IDataConnectionMinder;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.operator.IDataOperator;
 import io.innospots.base.data.request.SimpleRequest;

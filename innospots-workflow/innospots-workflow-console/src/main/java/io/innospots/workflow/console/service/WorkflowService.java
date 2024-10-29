@@ -18,11 +18,10 @@
 
 package io.innospots.workflow.console.service;
 
-import io.innospots.base.connector.schema.model.SchemaField;
-import io.innospots.base.connector.schema.model.SchemaRegistry;
-import io.innospots.base.connector.schema.model.SchemaRegistryType;
+import io.innospots.connector.core.schema.model.SchemaField;
+import io.innospots.connector.core.schema.model.SchemaRegistry;
+import io.innospots.connector.core.schema.model.SchemaRegistryType;
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.data.request.FormQuery;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.workflow.console.model.WorkflowQuery;

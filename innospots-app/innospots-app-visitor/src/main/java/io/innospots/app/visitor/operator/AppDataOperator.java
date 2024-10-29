@@ -2,12 +2,12 @@ package io.innospots.app.visitor.operator;
 
 import io.innospots.app.core.model.AppDefinition;
 import io.innospots.app.core.operator.AppDefinitionOperator;
-import io.innospots.base.connector.http.HttpData;
-import io.innospots.base.connector.minder.DataConnectionMinderManager;
-import io.innospots.base.connector.minder.IDataConnectionMinder;
-import io.innospots.base.connector.schema.model.SchemaField;
-import io.innospots.base.connector.schema.model.SchemaRegistry;
-import io.innospots.base.connector.schema.model.SchemaRegistryType;
+import io.innospots.base.utils.http.HttpData;
+import io.innospots.connector.core.minder.DataConnectionMinderManager;
+import io.innospots.connector.core.minder.IDataConnectionMinder;
+import io.innospots.connector.core.schema.model.SchemaField;
+import io.innospots.connector.core.schema.model.SchemaRegistry;
+import io.innospots.connector.core.schema.model.SchemaRegistryType;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.data.enums.ApiMethod;

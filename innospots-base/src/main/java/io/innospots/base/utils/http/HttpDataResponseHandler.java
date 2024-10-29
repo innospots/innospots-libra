@@ -1,8 +1,6 @@
 package io.innospots.base.utils.http;
 
-import io.innospots.base.connector.http.HttpData;
 import io.innospots.base.json.JSONUtils;
-import org.apache.hc.client5.http.HttpResponseException;
 import org.apache.hc.core5.http.*;
 import org.apache.hc.core5.http.io.HttpClientResponseHandler;
 import org.apache.hc.core5.http.io.entity.EntityUtils;

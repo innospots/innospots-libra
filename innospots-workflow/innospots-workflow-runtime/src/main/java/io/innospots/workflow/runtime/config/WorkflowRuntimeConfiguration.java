@@ -19,7 +19,7 @@
 package io.innospots.workflow.runtime.config;
 
 
-import io.innospots.base.connector.minder.DataConnectionMinderManager;
+import io.innospots.connector.core.minder.DataConnectionMinderManager;
 import io.innospots.base.quartz.QuartzScheduleManager;
 import io.innospots.workflow.core.config.InnospotsWorkflowProperties;
 import io.innospots.workflow.core.config.WorkflowCoreConfiguration;
@@ -48,7 +48,6 @@ import io.innospots.workflow.runtime.response.StreamResponseEmitter;
 import io.innospots.workflow.runtime.scheduled.NodeExecutionEventListener;
 import io.innospots.workflow.runtime.server.WorkflowWebhookServer;
 import io.innospots.workflow.runtime.starter.RuntimePrepareStarter;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.availability.ApplicationAvailability;

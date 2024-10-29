@@ -18,8 +18,8 @@
 
 package io.innospots.libra.kernel.module.schema.controller;
 
-import io.innospots.base.connector.meta.ConnectionMinderSchema;
-import io.innospots.base.connector.meta.ConnectionMinderSchemaLoader;
+import io.innospots.connector.core.meta.ConnectionMinderSchema;
+import io.innospots.connector.core.meta.ConnectionMinderSchemaLoader;
 import io.innospots.base.model.response.R;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.swagger.v3.oas.annotations.Operation;

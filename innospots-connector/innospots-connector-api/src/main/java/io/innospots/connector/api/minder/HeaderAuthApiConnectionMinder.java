@@ -18,15 +18,16 @@
 
 package io.innospots.connector.api.minder;
 
-import io.innospots.base.connector.http.HttpDataConnectionMinder;
-import io.innospots.base.connector.http.HttpDataExecutor;
+import io.innospots.connector.core.http.HttpDataConnectionMinder;
+import io.innospots.connector.core.http.HttpDataExecutor;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import static io.innospots.base.connector.http.HttpConstant.KEY_AUTHORITY_NAME;
-import static io.innospots.base.connector.http.HttpConstant.KEY_AUTHORITY_VALUE;
+import static io.innospots.base.utils.http.HttpConstant.KEY_AUTHORITY_NAME;
+import static io.innospots.base.utils.http.HttpConstant.KEY_AUTHORITY_VALUE;
+
 
 /**
  * @author Smars

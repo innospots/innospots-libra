@@ -35,12 +35,12 @@ public class InnospotsServerProperties {
     /**
      * script build path
      */
-    private String scriptBuildPath;
+    private String scriptBuildPath=".script_build_path";
 
     /**
      * log root path
      */
-    private String logRootPath;
+    private String logRootPath="logs";
 
     /**
      * watcher thread pool size

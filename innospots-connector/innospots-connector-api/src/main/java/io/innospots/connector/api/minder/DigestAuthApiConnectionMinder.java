@@ -19,8 +19,8 @@
 package io.innospots.connector.api.minder;
 
 import cn.hutool.core.util.RandomUtil;
-import io.innospots.base.connector.http.HttpDataConnectionMinder;
-import io.innospots.base.connector.http.HttpDataExecutor;
+import io.innospots.connector.core.http.HttpDataConnectionMinder;
+import io.innospots.connector.core.http.HttpDataExecutor;
 import io.innospots.base.data.operator.IExecutionOperator;
 import org.apache.hc.client5.http.auth.AuthCache;
 import org.apache.hc.client5.http.auth.AuthScope;
@@ -32,7 +32,7 @@ import org.apache.hc.client5.http.protocol.HttpClientContext;
 import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.http.protocol.HttpContext;
 
-import static io.innospots.base.connector.http.HttpConstant.*;
+import static io.innospots.base.utils.http.HttpConstant.*;
 
 /**
  * @author Smars

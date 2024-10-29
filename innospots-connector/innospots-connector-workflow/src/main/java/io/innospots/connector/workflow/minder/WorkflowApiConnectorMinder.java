@@ -1,16 +1,17 @@
 package io.innospots.connector.workflow.minder;
 
-import io.innospots.base.connector.credential.model.ConnectionCredential;
-import io.innospots.base.connector.http.HttpConstant;
-import io.innospots.base.connector.http.HttpDataConnectionMinder;
-import io.innospots.base.connector.schema.reader.ISchemaRegistryReader;
+import io.innospots.connector.core.credential.model.ConnectionCredential;
+import io.innospots.base.utils.http.HttpConstant;
+import io.innospots.connector.core.http.HttpDataConnectionMinder;
+import io.innospots.connector.core.schema.reader.ISchemaRegistryReader;
 import io.innospots.base.utils.http.HttpClientBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import static io.innospots.base.connector.http.HttpConstant.KEY_TOKEN;
+import static io.innospots.base.utils.http.HttpConstant.KEY_TOKEN;
+
 
 /**
  * @author Smars

@@ -18,14 +18,13 @@
 
 package io.innospots.workflow.node.app.trigger;
 
-import io.innospots.base.connector.minder.DataConnectionMinderManager;
-import io.innospots.base.connector.minder.IDataConnectionMinder;
+import io.innospots.connector.core.minder.DataConnectionMinderManager;
+import io.innospots.connector.core.minder.IDataConnectionMinder;
 import io.innospots.base.data.operator.IExecutionOperator;
 import io.innospots.base.data.request.ItemRequest;
-import io.innospots.base.connector.credential.model.ConnectionCredential;
+import io.innospots.connector.core.credential.model.ConnectionCredential;
 import io.innospots.base.data.body.DataBody;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.instance.model.NodeInstance;
 
 import java.util.Map;
 

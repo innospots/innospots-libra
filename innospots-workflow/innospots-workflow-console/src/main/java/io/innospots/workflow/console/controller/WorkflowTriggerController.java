@@ -2,9 +2,9 @@ package io.innospots.workflow.console.controller;
 
 
 import cn.hutool.core.util.RandomUtil;
-import io.innospots.base.connector.schema.model.SchemaField;
-import io.innospots.base.connector.schema.model.SchemaRegistry;
-import io.innospots.base.connector.schema.model.SchemaRegistryType;
+import io.innospots.connector.core.schema.model.SchemaField;
+import io.innospots.connector.core.schema.model.SchemaRegistry;
+import io.innospots.connector.core.schema.model.SchemaRegistryType;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.field.FieldScope;
 import io.innospots.base.model.field.FieldValueType;
