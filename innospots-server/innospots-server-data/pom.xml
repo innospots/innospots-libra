@@ -47,21 +47,6 @@
             <artifactId>innospots-connector-workflow</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>io.innospots</groupId>
-            <artifactId>innospots-connector-ai-aliyun</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.innospots</groupId>
-            <artifactId>innospots-connector-ai-ollama</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.innospots</groupId>
-            <artifactId>innospots-connector-ai-zhipu</artifactId>
-        </dependency>
-
     </dependencies>
 
     <!--
