@@ -102,6 +102,14 @@
                         <descriptor>src/assembly/package.xml</descriptor>
                     </descriptors>
                     <finalName>${project.artifactId}</finalName>
+                    <updateOnly>false</updateOnly>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
                 </configuration>
             </plugin>
         </plugins>

@@ -963,4 +963,13 @@
         </repository>
     </repositories>
 
+    <distributionManagement>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <name>ossrh</name>
+            <layout>default</layout>
+        </repository>
+    </distributionManagement>
+
 </project>
