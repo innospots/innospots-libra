@@ -225,7 +225,7 @@ public class LibraClassPathExtPropertiesLoader implements LibraExtPropertiesLoad
         }
         //TODO 调整匹配方式，一个菜单对应一个ResourceItem，一个菜单中包含多个Controller的ModuleMenuOperation
         Map<String, ResourceItem> menuItemMap = new HashMap<>();
-        fillMenuMap(menuItemMap, libraExtProperties.getModules());
+        fillMenuMap(menuItemMap, libraExtProperties.getModules(),libraExtProperties.getExtKey());
         List<ModuleMenuOperation> menuTags = MenuTagScanner.scan(packages);
 
         for (ModuleMenuOperation menuTag : menuTags) {
@@ -244,7 +244,7 @@ public class LibraClassPathExtPropertiesLoader implements LibraExtPropertiesLoad
 
             resourceItem.addMenuOperation(menuTag);
 //            resourceItem.setPath(menuTag.getPath());
-            resourceItem.setAppKey(libraExtProperties.getExtKey());
+            //resourceItem.setAppKey(libraExtProperties.getExtKey());
             fillMenuItem(menuTag.getModuleMenu(), resourceItem);
 
             if (loadOptElement) {
@@ -255,11 +255,13 @@ public class LibraClassPathExtPropertiesLoader implements LibraExtPropertiesLoad
         }//end for menuTag
     }
 
-    private static void fillMenuMap(Map<String, ResourceItem> menuItemMap, List<ResourceItem> resourceItems) {
+    private static void fillMenuMap(Map<String, ResourceItem> menuItemMap, List<ResourceItem> resourceItems,String appKey) {
+
         for (ResourceItem resourceItem : resourceItems) {
+            resourceItem.setAppKey(appKey);
             menuItemMap.put(resourceItem.getItemKey(), resourceItem);
             if (CollectionUtils.isNotEmpty(resourceItem.getItems())) {
-                fillMenuMap(menuItemMap, resourceItem.getItems());
+                fillMenuMap(menuItemMap, resourceItem.getItems(),appKey);
             }
         }
     }

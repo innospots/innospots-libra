@@ -1,0 +1,38 @@
+{
+  "name": "${workflow-name}",
+  "i18nNames": {
+    "en_US": "Apps Extend",
+    "zh_CN": "应用扩展"
+  },
+  "version": "v1.0.0",
+  "publishTime": "2024-10-12",
+  "vendor": "Innospots",
+  "extKey": "innospots-apps",
+  "kernelVersion": "v1.0.0",
+  "description": "apps module",
+  "basePackages": [
+    "io.innospots.app.console"
+  ],
+  "modules": [
+    {
+      "name": "${app-management}",
+      "itemKey": "applications",
+      "uri": "/app",
+      "icon": "app",
+      "i18nNames": {
+        "en_US": "Apps",
+        "zh_CN": "应用管理"
+      }
+    },
+    {
+      "name": "${app-template}",
+      "itemKey": "app-template",
+      "uri": "/app-template",
+      "icon": "app-template",
+      "i18nNames": {
+        "en_US": "App Template",
+        "zh_CN": "应用模板"
+      }
+    }
+  ]
+}

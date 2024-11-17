@@ -21,7 +21,7 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
  */
 @RestController
 @RequestMapping(PATH_ROOT_ADMIN + "app/template")
-@ModuleMenu(menuKey = "applications")
+@ModuleMenu(menuKey = "app-template")
 @Tag(name = "application template")
 public class AppTemplateController extends BaseController {
 
