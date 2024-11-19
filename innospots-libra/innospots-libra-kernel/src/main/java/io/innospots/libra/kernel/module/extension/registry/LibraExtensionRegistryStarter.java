@@ -26,6 +26,7 @@ import io.innospots.libra.base.extension.LibraClassPathExtPropertiesLoader;
 import io.innospots.libra.base.extension.LibraExtensionInformation;
 import io.innospots.libra.base.extension.LibraExtensionProperties;
 import io.innospots.libra.kernel.module.extension.entity.ExtInstallmentEntity;
+import io.innospots.libra.kernel.module.extension.operator.ExtDefinitionOperator;
 import io.innospots.libra.kernel.module.extension.operator.ExtInstallmentOperator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
@@ -47,13 +48,17 @@ import java.util.stream.Collectors;
 public class LibraExtensionRegistryStarter implements ApplicationRunner {
 
 
-    private ExtInstallmentOperator extInstallmentOperator;
+    private final ExtInstallmentOperator extInstallmentOperator;
 
-    private InnospotsConfigProperties innospotsConfigProperties;
+    private final InnospotsConfigProperties innospotsConfigProperties;
+
+    private final ExtDefinitionOperator extDefinitionOperator;
 
     public LibraExtensionRegistryStarter(ExtInstallmentOperator extInstallmentOperator,
+                                         ExtDefinitionOperator extDefinitionOperator,
                                          InnospotsConfigProperties innospotsConfigProperties) {
         this.extInstallmentOperator = extInstallmentOperator;
+        this.extDefinitionOperator = extDefinitionOperator;
         this.innospotsConfigProperties = innospotsConfigProperties;
     }
 
@@ -61,32 +66,42 @@ public class LibraExtensionRegistryStarter implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
 
         if (!innospotsConfigProperties.isExtensionLoad()) {
-            log.info("skip application check");
+            log.info("skip extension check");
             return;
         }
-        List<LibraExtensionProperties> appProperties = LibraClassPathExtPropertiesLoader.loadFromClassPath();
-        Map<String, LibraExtensionProperties> libraAppPropertiesMap = Optional.ofNullable(appProperties).orElse(new ArrayList<>())
+        List<LibraExtensionProperties> extProperties = LibraClassPathExtPropertiesLoader.loadFromClassPath();
+        Map<String, LibraExtensionProperties> libraExtensionPropertiesMap = Optional.ofNullable(extProperties).orElse(new ArrayList<>())
                 .stream().collect(Collectors.toMap(LibraExtensionInformation::getExtKey, item -> item));
 
-        log.info("the size of libra applications has bean loaded in the system: {}, apps:[{}]", appProperties.size(), libraAppPropertiesMap.keySet());
+        log.info("the size of libra extension has bean loaded in the system: {}, extensions:[{}]", extProperties.size(), libraExtensionPropertiesMap.keySet());
 
         List<ExtInstallmentEntity> installmentEntityList = extInstallmentOperator.getBaseMapper().selectList(null);
-        Map<String, ExtInstallmentEntity> appInstallmentEntityMap = Optional.ofNullable(installmentEntityList).orElse(new ArrayList<>())
+        Map<String, ExtInstallmentEntity> extInstallmentEntityMap = Optional.ofNullable(installmentEntityList).orElse(new ArrayList<>())
                 .stream().collect(Collectors.toMap(ExtInstallmentEntity::getExtKey, item -> item));
 
-        for (String appKey : libraAppPropertiesMap.keySet()) {
-            if (!appInstallmentEntityMap.containsKey(appKey)) {
-                log.warn("app {} has bean loaded in the system，but not installed", appKey);
+
+        for (LibraExtensionProperties ext : libraExtensionPropertiesMap.values()) {
+            extDefinitionOperator.registryExtensionDefinition(ext);
+        }
+
+        for (String extKey : libraExtensionPropertiesMap.keySet()) {
+            if (!extInstallmentEntityMap.containsKey(extKey)) {
+                log.warn("extension {} has bean loaded in the system，but not installed", extKey);
             }
         }
 
-        for (ExtInstallmentEntity app : appInstallmentEntityMap.values()) {
-            if (!libraAppPropertiesMap.containsKey(app.getExtKey())) {
-                log.warn("app {} has installed, but not bean loaded in the system", app.getExtKey());
+        for (ExtInstallmentEntity ext : extInstallmentEntityMap.values()) {
+            if(ExtensionStatus.DISABLED.name().equals(ext.getExtensionStatus())){
+                continue;
             }
-            if (ExtensionStatus.INSTALLED.equals(app.getExtensionStatus())) {
+
+            if (!libraExtensionPropertiesMap.containsKey(ext.getExtKey()) ) {
+                log.warn("extension {} has installed, but not bean loaded in the system", ext.getExtKey());
+            }
+
+            if (ExtensionStatus.INSTALLED.name().equals(ext.getExtensionStatus())) {
                 UpdateWrapper<ExtInstallmentEntity> wrapper = new UpdateWrapper<>();
-                wrapper.lambda().eq(ExtInstallmentEntity::getExtInstallmentId, app.getExtInstallmentId())
+                wrapper.lambda().eq(ExtInstallmentEntity::getExtInstallmentId, ext.getExtInstallmentId())
                         .set(ExtInstallmentEntity::getExtensionStatus, ExtensionStatus.ENABLED);
                 this.extInstallmentOperator.update(null, wrapper);
             }

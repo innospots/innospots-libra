@@ -55,49 +55,54 @@ public class ExtDefinitionOperator extends ServiceImpl<ExtDefinitionDao, ExtDefi
         return registryExtensionDefinition(libraAppProperties);
     }
 
+    private ExtDefinitionEntity getLastVersion(String extKey) {
+        QueryWrapper<ExtDefinitionEntity> qw = new QueryWrapper<>();
+        qw.lambda().eq(ExtDefinitionEntity::getExtKey, extKey)
+                .orderByDesc(ExtDefinitionEntity::getExtVersion);
+        return this.getOne(qw, false);
+    }
 
-    public LibraExtensionProperties registryExtensionDefinition(LibraExtensionProperties libraAppProperties) {
-        ExtensionDefinition appDefinition = ExtDefinitionConverter.INSTANCE.propertiesToModel(libraAppProperties);
-        boolean result = false;
-        ExtDefinitionEntity entity = this.getBaseMapper().getLastVersion(appDefinition.getExtKey());
+
+    public LibraExtensionProperties registryExtensionDefinition(LibraExtensionProperties libraExtensionProperties) {
+        ExtensionDefinition extDefinition = ExtDefinitionConverter.INSTANCE.propertiesToModel(libraExtensionProperties);
+        boolean result = true;
+        ExtDefinitionEntity entity = getLastVersion(extDefinition.getExtKey());
         if (entity == null) {
             //Judge whether the current application exists. If it does not exist, insert it directly into the database
-            entity = ExtDefinitionConverter.INSTANCE.modelToEntity(appDefinition);
+            entity = ExtDefinitionConverter.INSTANCE.modelToEntity(extDefinition);
             entity.generateSignature();
             entity.setExtensionStatus(ExtensionStatus.AVAILABLE.name());
+            log.info("save new extension: {}",libraExtensionProperties);
             result = save(entity);
         } else {
-            int compare = appDefinition.getVersion().compareToIgnoreCase(entity.getExtVersion());
+            int compare = extDefinition.getVersion().compareToIgnoreCase(entity.getExtVersion());
             if (compare > 0) {
                 //If it exists, and the version is inconsistent and large, insert the update,
-                entity = ExtDefinitionConverter.INSTANCE.updateEntity4Model(entity, appDefinition);
+                entity = ExtDefinitionConverter.INSTANCE.updateEntity4Model(entity, extDefinition);
                 entity.generateSignature();
                 if (ExtensionStatus.valueOf(entity.getExtensionStatus()) == ExtensionStatus.EXPIRED) {
                     entity.setExtensionStatus(ExtensionStatus.AVAILABLE.name());
                 }
-                //result = save(entity);
+                log.info("update new version extension:{}",entity);
                 result = updateById(entity);
-            /*} else if (compare == 0) {
+            } else if (compare == 0) {
                 //If the version is consistent but the signature is inconsistent, the update will be overwritten
                 String oldSignature = entity.getSignature();
-                AppDefinitionConvertMapper.INSTANCE.updateEntity4Model(entity, appDefinition);
+                ExtDefinitionConverter.INSTANCE.updateEntity4Model(entity, extDefinition);
                 if (!oldSignature.equals(entity.generateSignature())) {
-                    log.error("update application definition:{}", appDefinition);
+                    log.warn("the meta has been changed, update extension definition:{}", extDefinition);
                     result = updateById(entity);
-                } */
+                }
             } else {
                 //The version is small and not updated
-                throw ResourceException.buildUpdateException(this.getClass(), "appKey:" + appDefinition.getExtKey() + " version is error");
+                log.warn("the version of extension is smaller than database, new version:{} ,old version:{}", extDefinition.getVersion(), entity.getExtVersion());
             }
         }
+
         if (!result) {
-            //Find the fields in the menu that need to be internationalized,
-            //and send write dictionary and internationalized translation events
-            //sendI18nDictEvents(appProperties);
-            //return appDefinition;
-            throw ResourceException.buildUpdateException(this.getClass(), "appKey:" + appDefinition.getExtKey() + " registry error");
+            throw ResourceException.buildUpdateException(this.getClass(), "extKey:" + extDefinition.getExtKey() + " registry error");
         }
-        return libraAppProperties;
+        return libraExtensionProperties;
     }
 
 
