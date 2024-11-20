@@ -15,6 +15,7 @@
         <module>innospots-script</module>
         <module>innospots-schedule</module>
         <module>innospots-app</module>
+        <module>innospots-approve</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -161,6 +162,14 @@
             <dependency>
                 <groupId>io.innospots</groupId>
                 <artifactId>innospots-workflow-bom</artifactId>
+                <version>${innospots.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-approve-bom</artifactId>
                 <version>${innospots.version}</version>
                 <type>pom</type>
                 <scope>import</scope>

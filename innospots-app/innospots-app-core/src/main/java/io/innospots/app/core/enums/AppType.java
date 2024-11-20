@@ -9,6 +9,8 @@ public enum AppType {
 
     CHAT,
     FORM,
+    APPROVAL,
+    INTERACTIVE,
     APP_PAGE;
 
 }

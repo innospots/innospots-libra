@@ -20,8 +20,9 @@ package io.innospots.base.exception;
 
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.i18n.LocaleMessageUtils;
+import io.innospots.base.model.response.ResponseCode;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
@@ -56,6 +57,34 @@ public class BaseException extends RuntimeException {
     protected Class<? extends Throwable> exceptionClass;
 
     protected String module;
+
+    public BaseException(Class<?> invokeClass, String code, String detail, Throwable cause, Object... params) {
+        this.module = invokeClass.getSimpleName();
+        this.code = code;
+        this.message = LocaleMessageUtils.message(KEY_PREFIX + this.code, convert(params));
+        this.detail = detail;
+        if (StringUtils.isBlank(this.message) && ArrayUtils.isNotEmpty(params)) {
+            this.message = Arrays.toString(params);
+        }
+        if (cause != null) {
+            this.exceptionClass = cause.getClass();
+            if (this.detail == null) {
+                this.detail = "throwable: " + cause.getMessage() + ", "
+                        + ExceptionUtil.stacktraceToString(cause, 2048);
+            }
+
+        }
+    }
+
+    public BaseException(String module, String code, String detail, Object... params) {
+        this.module = module;
+        this.code = code;
+        this.message = LocaleMessageUtils.message(KEY_PREFIX + this.code, convert(params));
+        this.detail = detail;
+        if (StringUtils.isBlank(this.message) && ArrayUtils.isNotEmpty(params)) {
+            this.message = Arrays.toString(params);
+        }
+    }
 
     public BaseException(Class<?> invokeClass, ResponseCode responseCode, Throwable cause, Object... params) {
         this(invokeClass.getSimpleName(), responseCode, cause, params);
@@ -138,7 +167,7 @@ public class BaseException extends RuntimeException {
     }
 
     private Object[] convert(Object... params) {
-        if(params == null){
+        if (params == null) {
             return null;
         }
         for (int i = 0; i < params.length; i++) {

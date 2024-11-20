@@ -25,7 +25,6 @@ public class AppDefinitionEntity extends BaseAppEntity {
 
     @Id
     @TableId(type = IdType.INPUT)
-//    @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(length = 16)
     private String appKey;
 
