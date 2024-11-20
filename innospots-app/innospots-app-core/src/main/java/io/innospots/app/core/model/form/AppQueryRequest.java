@@ -29,4 +29,7 @@ public class AppQueryRequest {
 
     @Schema(title = "number of entries per page")
     protected Integer size = 20;
+
+    @Schema(title = "app type")
+    protected String appType;
 }

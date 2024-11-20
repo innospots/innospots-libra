@@ -100,6 +100,10 @@ public class AppDefinitionOperator extends ServiceImpl<AppDefinitionDao, AppDefi
             query.lambda().eq(AppDefinitionEntity::getName,queryRequest.getQueryInput());
         }
 
+        if(StringUtils.isNotEmpty(queryRequest.getAppType())){
+            query.lambda().eq(AppDefinitionEntity::getAppType,queryRequest.getAppType());
+        }
+
         IPage<AppDefinitionEntity> entityPage = super.page(PageDTO.of(queryRequest.getPage(), queryRequest.getSize()), query);
 
         PageBody<AppDefinition> pageBody = new PageBody<>();
