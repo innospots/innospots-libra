@@ -67,15 +67,6 @@ import java.util.List;
 @EnableConfigurationProperties(WorkflowRuntimeProperties.class)
 public class WorkflowRuntimeConfiguration {
 
-    @Bean
-    public FlowExecutionStoreListener flowExecutionStoreListener(IFlowExecutionOperator flowExecutionOperator) {
-        return new FlowExecutionStoreListener(flowExecutionOperator);
-    }
-
-    @Bean
-    public NodeExecutionStoreListener nodeExecutionStoreListener(INodeExecutionOperator nodeExecutionOperator) {
-        return new NodeExecutionStoreListener(nodeExecutionOperator);
-    }
 
     @Bean
     public ResponseMockEndpoint mockEndpoint(){
@@ -110,11 +101,6 @@ public class WorkflowRuntimeConfiguration {
     @Bean
     public WorkflowStreamEndpoint workflowStreamEndpoint(StreamResponseEmitter streamResponseEmitter){
         return new WorkflowStreamEndpoint(streamResponseEmitter);
-    }
-
-    @Bean
-    public FlowManager flowManager(IWorkflowLoader workflowLoader) {
-        return new FlowManager(workflowLoader);
     }
 
     @Bean

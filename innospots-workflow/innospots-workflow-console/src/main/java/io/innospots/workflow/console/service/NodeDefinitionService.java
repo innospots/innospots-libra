@@ -148,7 +148,8 @@ public class NodeDefinitionService {
     @Transactional
     public NodeDefinition createNodeDefinition(NodeDefinition nodeDefinition) {
         nodeDefinition = flowNodeDefinitionOperator.createNodeDefinition(nodeDefinition);
-        NodeGroup nodeGroup = this.flowNodeGroupOperator.getNodeGroupByCode(nodeDefinition.getPrimitive().name());
+
+        NodeGroup nodeGroup = this.flowNodeGroupOperator.getNodeGroupByCode(nodeDefinition.getFlowCode(),nodeDefinition.getPrimitive().name());
         if (nodeGroup != null) {
             this.updateNodeGroup(nodeDefinition.getNodeId(), nodeGroup.getNodeGroupId());
         }

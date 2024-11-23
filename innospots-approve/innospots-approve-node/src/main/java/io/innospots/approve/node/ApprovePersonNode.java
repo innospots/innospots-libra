@@ -7,7 +7,7 @@ import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
  * @vesion 2.0
  * @date 2024/11/20
  */
-public class ApproveAuditNode extends BaseNodeExecutor {
+public class ApprovePersonNode extends BaseNodeExecutor {
 
 
     @Override

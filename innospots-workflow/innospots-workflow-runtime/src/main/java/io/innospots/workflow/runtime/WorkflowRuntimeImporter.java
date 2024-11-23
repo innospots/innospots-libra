@@ -20,9 +20,6 @@ package io.innospots.workflow.runtime;
 
 
 import io.innospots.workflow.runtime.config.WorkflowRuntimeConfiguration;
-import io.innospots.workflow.core.flow.manage.FlowManager;
-import io.innospots.workflow.runtime.starter.WorkflowStarter;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -42,31 +39,6 @@ public @interface WorkflowRuntimeImporter {
 
     @Configuration
     class StreamFlowEngineConfiguration {
-
-        @Bean
-        public WorkflowStarter workflowStarter(FlowManager flowManager) {
-            return new WorkflowStarter(flowManager);
-        }
-
-        /*
-        @Bean
-        public IWorkflowLoader workflowLoader(WorkflowBuilderOperator workFlowBuilderOperator) {
-            return new DbWorkflowLoader(workFlowBuilderOperator);
-        }
-         */
-
-
-        /*
-        @Bean
-        @ConditionalOnProperty(prefix = "innospots.config", name = "enable-swagger", havingValue = "true")
-        public GroupedOpenApi workflowRuntimeOpenApi() {
-            return GroupedOpenApi.builder().group("workflow-runtime")
-                    .packagesToScan("io.innospots.workflow.runtime")
-                    .pathsToMatch("/**")
-                    .build();
-        }
-
-         */
 
     }
 }

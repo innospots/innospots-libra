@@ -26,16 +26,12 @@ import java.util.List;
  */
 public interface RuntimeContainer {
 
-
-    /**
-     * 注册使用的触发器
-     *
-     * @param triggerInfos
-     */
-    void register(List<FlowRuntimeRegistry> triggerInfos);
+    //void register(List<FlowRuntimeRegistry> triggerInfos);
 
 
     void close();
+
+    void execute(WorkflowRuntimeContext<?> runtimeContext);
 
 
 }

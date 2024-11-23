@@ -90,7 +90,6 @@ public class FlowExecutionBase implements Initializer {
 
     protected String parentFlowExecutionId;
 
-
     protected String uuid;
 
     protected String uuidType;
@@ -112,6 +111,8 @@ public class FlowExecutionBase implements Initializer {
 
     protected String sessionId;
 
+    protected Integer executeTimes;
+
 
     @Setter(AccessLevel.NONE)
     private LinkedHashMap<String, NodeExecution> nodeExecutions = new LinkedHashMap<>();
@@ -121,6 +122,9 @@ public class FlowExecutionBase implements Initializer {
         this.startTime = LocalDateTime.now();
     }
 
+    public Integer getHitNodeNumber(){
+        return nodeExecutions.size();
+    }
 
     @Override
     public void initialize() {

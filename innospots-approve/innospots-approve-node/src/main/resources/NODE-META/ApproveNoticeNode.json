@@ -1,0 +1,49 @@
+{
+  "name": "审批通知",
+  "code": "approve_notice",
+  "flowCode": "APPROVE",
+  "primitive": "approve",
+  "vendor": "innospots",
+  "description": "审批通知节点",
+  "icon": "/node/approve_notice.svg",
+  "nodeType": "io.innospots.approve.node.ApproveNoticeNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "审批通知节点"
+      }
+    },
+    {
+      "name": "title",
+      "type": "Input",
+      "valueType": "string",
+     "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "通知标题",
+        "placeholder": "请输入通知标题",
+        "initialValue": ""
+      }
+    },{
+      "name": "content",
+      "type": "TextArea",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "通知内容",
+        "placeholder": "请输入通知内容",
+        "initialValue": ""
+      }
+    }
+  ]
+}

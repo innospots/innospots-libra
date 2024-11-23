@@ -1,0 +1,37 @@
+{
+  "name": "审批开始",
+  "code": "approve_start",
+  "flowCode": "APPROVE",
+  "primitive": "approve",
+  "vendor": "innospots",
+  "description": "审批开始节点",
+  "icon": "/node/approve_start.svg",
+  "nodeType": "io.innospots.approve.node.ApproveStartNode",
+  "outPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "审批开始节点"
+      }
+    },
+    {
+      "name": "has_role",
+      "type": "Switch",
+      "valueType": "boolean",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "viewType": "switch",
+        "label": "是否角色限制",
+        "placeholder": "请输入节点名称",
+        "initialValue": false
+      }
+    }
+  ]
+}

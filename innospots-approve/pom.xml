@@ -16,6 +16,7 @@
         <module>innospots-approve-console</module>
         <module>innospots-approve-node</module>
         <module>innospots-approve-bom</module>
+        <module>innospots-approve-core</module>
     </modules>
 
 

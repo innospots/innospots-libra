@@ -29,8 +29,11 @@ import io.innospots.workflow.core.execution.operator.jdbc.JdbcFlowExecutionOpera
 import io.innospots.workflow.core.execution.operator.jdbc.JdbcNodeExecutionOperator;
 import io.innospots.workflow.core.execution.operator.jdbc.ScheduledNodeExecutionOperator;
 import io.innospots.workflow.core.execution.reader.FlowExecutionReader;
+import io.innospots.workflow.core.execution.store.FlowExecutionStoreListener;
+import io.innospots.workflow.core.execution.store.NodeExecutionStoreListener;
 import io.innospots.workflow.core.flow.loader.IWorkflowLoader;
 import io.innospots.workflow.core.flow.loader.WorkflowDBLoader;
+import io.innospots.workflow.core.flow.manage.FlowManager;
 import io.innospots.workflow.core.instance.dao.WorkflowInstanceCacheDao;
 import io.innospots.workflow.core.instance.dao.WorkflowInstanceDao;
 import io.innospots.workflow.core.instance.dao.WorkflowRevisionDao;
@@ -39,6 +42,7 @@ import io.innospots.workflow.core.instance.operator.NodeInstanceOperator;
 import io.innospots.workflow.core.instance.operator.WorkflowBodyOperator;
 import io.innospots.workflow.core.instance.operator.WorkflowDraftOperator;
 import io.innospots.workflow.core.node.definition.dao.FlowNodeDefinitionDao;
+import io.innospots.workflow.core.starter.WorkflowStarter;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -62,6 +66,16 @@ import org.springframework.context.annotation.Configuration;
         "io.innospots.workflow.core.node.definition.entity",
         "io.innospots.workflow.core.instance.entity"})
 public class WorkflowCoreConfiguration {
+
+    @Bean
+    public WorkflowStarter workflowStarter(FlowManager flowManager) {
+        return new WorkflowStarter(flowManager);
+    }
+
+    @Bean
+    public FlowManager flowManager(IWorkflowLoader workflowLoader) {
+        return new FlowManager(workflowLoader);
+    }
 
 
     @Bean
@@ -123,6 +137,16 @@ public class WorkflowCoreConfiguration {
             IFlowExecutionOperator flowExecutionOperator,
             INodeExecutionOperator nodeExecutionOperator) {
         return new FlowExecutionReader(flowExecutionOperator, nodeExecutionOperator);
+    }
+
+    @Bean
+    public FlowExecutionStoreListener flowExecutionStoreListener(IFlowExecutionOperator flowExecutionOperator) {
+        return new FlowExecutionStoreListener(flowExecutionOperator);
+    }
+
+    @Bean
+    public NodeExecutionStoreListener nodeExecutionStoreListener(INodeExecutionOperator nodeExecutionOperator) {
+        return new NodeExecutionStoreListener(nodeExecutionOperator);
     }
 
 }

@@ -82,6 +82,7 @@ public class NodeMetaInfo {
     @Schema(title = "disable node")
     protected boolean disable;
 
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{");

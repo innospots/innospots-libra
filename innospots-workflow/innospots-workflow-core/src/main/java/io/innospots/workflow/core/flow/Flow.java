@@ -192,27 +192,27 @@ public class Flow {
         return Collections.emptyList();
     }
 
-    public Set<String> nextNodes(String nodeKey) {
+    public Set<String> nextNodeKeys(String nodeKey) {
         if (!nextNodeCache.isEmpty()) {
             return nextNodeCache.get(nodeKey);
         }
         return Collections.emptySet();
     }
 
-    /*
-    private List<INodeExecutor> convert(List<NodeInstance> nodeInstances) {
-        List<INodeExecutor> nodeExecutors = new ArrayList<>();
-        for (NodeInstance nodeInstance : nodeInstances) {
-            BaseAppNode appNode = BaseAppNode.buildAppNode(identifier(),nodeInstance);
-            appNode.setBuildCounter(nodeBuildCounter);
-            appNode.addNodeExecutionListener(nodeExecutionListeners);
-            nodeExecutors.add(appNode);
+    public List<BaseNodeExecutor> nextNodes(List<String> nodeKeys){
+        List<BaseNodeExecutor> nodeExecutors = new ArrayList<>();
+        Set<String> keys = new HashSet<>();
+        for (String nodeKey : nodeKeys) {
+            Set<String> nks = nextNodeCache.get(nodeKey);
+            if(nks!=null){
+                keys.addAll(nks);
+            }
         }
-
+        for (String key : keys) {
+            nodeExecutors.add(nodeCache.get(key));
+        }
         return nodeExecutors;
     }
-
-     */
 
     public BaseNodeExecutor findNode(String nodeKey) {
         return nodeCache.get(nodeKey);

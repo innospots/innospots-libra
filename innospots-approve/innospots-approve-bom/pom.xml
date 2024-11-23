@@ -26,6 +26,11 @@
                 <artifactId>innospots-approve-console</artifactId>
                 <version>${innospots.version}</version>
             </dependency>
+            <dependency>
+                <groupId>io.innospots</groupId>
+                <artifactId>innospots-approve-core</artifactId>
+                <version>${innospots.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

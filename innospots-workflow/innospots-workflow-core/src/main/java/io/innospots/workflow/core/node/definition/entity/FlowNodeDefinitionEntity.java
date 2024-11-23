@@ -19,19 +19,12 @@
 package io.innospots.workflow.core.node.definition.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.innospots.base.entity.PBaseEntity;
-import io.innospots.base.enums.DataStatus;
-import io.innospots.base.entity.BaseEntity;
-import io.innospots.workflow.core.enums.NodePrimitive;
-import io.innospots.workflow.core.node.definition.model.NodeDefinition;
-import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import jakarta.persistence.*;
 
 /**
  * @author Raydian

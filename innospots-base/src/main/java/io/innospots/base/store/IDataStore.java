@@ -31,6 +31,11 @@ public interface IDataStore<E> {
 
     boolean insert(List<E> executions);
 
+    default boolean upsert(E execution){
+        return true;
+    }
+
+
     boolean update(E execution);
 
     boolean update(List<E> executions);

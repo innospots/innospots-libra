@@ -1,4 +1,4 @@
-package io.innospots.approve.console.enums;
+package io.innospots.approve.core.enums;
 
 /**
  * @author Smars
@@ -13,7 +13,7 @@ public enum ApproveStatus {
 
     REJECTED,
 
-    CANCELED,
+    REVOKED,
 
     EXPIRED,
 
@@ -22,5 +22,7 @@ public enum ApproveStatus {
     REMOVED,
 
     PROCESSING,
+
+    STOPPED;
 
 }

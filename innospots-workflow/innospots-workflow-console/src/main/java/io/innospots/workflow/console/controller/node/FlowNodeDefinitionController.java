@@ -76,7 +76,7 @@ public class FlowNodeDefinitionController extends BaseController {
             @RequestParam(required = false, name = "queryInput") String queryInput,
             @RequestParam(required = false, name = "page", defaultValue = "1") int page,
             @RequestParam(required = false, name = "size", defaultValue = "20") int size,
-            @RequestParam(required = false, name = "primitive") NodePrimitive primitive
+            @RequestParam(required = false, name = "primitive") String primitive
     ) {
         NodeQueryRequest queryRequest = new NodeQueryRequest();
         queryRequest.setPage(page);

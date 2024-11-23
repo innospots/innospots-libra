@@ -1,0 +1,44 @@
+{
+  "name": "审批人员",
+  "code": "approve_person",
+  "flowCode": "APPROVE",
+  "primitive": "approve",
+  "vendor": "innospots",
+  "description": "审批人员节点",
+  "icon": "/node/approve_person.svg",
+  "nodeType": "io.innospots.approve.node.ApprovePersonNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "审批人员节点"
+      }
+    },
+    {
+      "name": "approve_person_type",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "审批人员类型",
+        "viewType": "picker",
+        "dataSource": "static",
+        "initialValue": "depart_manager",
+        "options": [
+          {"label": "部门主管", "value": "depart_manager"},
+          {"label": "角色", "value": "role"},
+          {"label": "指定成员", "value": "person"}
+        ]
+      }
+    }
+  ]
+}

@@ -19,11 +19,6 @@
 
         <dependency>
             <groupId>io.innospots</groupId>
-            <artifactId>innospots-app-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.innospots</groupId>
             <artifactId>innospots-approve-node</artifactId>
         </dependency>
 

@@ -145,4 +145,7 @@ public class FlowExecutionEntity extends PBaseEntity {
     @Column(length = 64)
     private String sessionId;
 
+    @Column
+    private Integer executeTimes;
+
 }

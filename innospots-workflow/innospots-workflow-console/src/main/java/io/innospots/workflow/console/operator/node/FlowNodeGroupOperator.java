@@ -21,13 +21,12 @@ package io.innospots.workflow.console.operator.node;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import io.innospots.base.enums.DataScope;
-import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.base.utils.StringConverter;
 import io.innospots.workflow.core.enums.NodePrimitive;
-import io.innospots.workflow.core.node.definition.converter.FlowNodeGroupConverter;
 import io.innospots.workflow.core.node.definition.converter.FlowNodeDefinitionConverter;
+import io.innospots.workflow.core.node.definition.converter.FlowNodeGroupConverter;
 import io.innospots.workflow.core.node.definition.dao.FlowNodeDefinitionDao;
 import io.innospots.workflow.core.node.definition.dao.FlowNodeGroupDao;
 import io.innospots.workflow.core.node.definition.dao.FlowNodeGroupNodeDao;
@@ -117,9 +116,19 @@ public class FlowNodeGroupOperator {
         return FlowNodeGroupConverter.INSTANCE.entityToModel(entity);
     }
 
-    public NodeGroup getNodeGroupByCode(String groupCode){
+    public NodeGroup getNodeGroupByCode(String tplFlowCode, String groupCode) {
+        FlowTemplateEntity templateEntity = null;
+        if (tplFlowCode != null) {
+            QueryWrapper<FlowTemplateEntity> ftqw = new QueryWrapper<>();
+            ftqw.lambda().eq(FlowTemplateEntity::getTplCode, tplFlowCode);
+            templateEntity = flowTemplateDao.selectOne(ftqw);
+        }
+
         QueryWrapper<FlowNodeGroupEntity> qw = new QueryWrapper<>();
         qw.lambda().eq(FlowNodeGroupEntity::getCode, groupCode);
+        if (templateEntity != null) {
+            qw.lambda().eq(FlowNodeGroupEntity::getFlowTplId, templateEntity.getFlowTplId());
+        }
         FlowNodeGroupEntity entity = flowNodeGroupDao.selectOne(qw);
         return FlowNodeGroupConverter.INSTANCE.entityToModel(entity);
     }

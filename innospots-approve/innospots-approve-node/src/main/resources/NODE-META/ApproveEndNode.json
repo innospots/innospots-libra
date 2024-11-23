@@ -1,0 +1,57 @@
+{
+  "name": "审批结束",
+  "code": "approve_end",
+  "flowCode": "APPROVE",
+  "primitive": "approve",
+  "vendor": "innospots",
+  "description": "审批结束节点",
+  "icon": "/node/end.svg",
+  "nodeType": "io.innospots.approve.node.ApproveEndNode",
+  "inPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "审批结束节点"
+      }
+    },
+    {
+      "name": "return_value_type",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "返回数据",
+		"viewType": "picker",
+        "optionsType": "customOptions",
+        "dataSource": "static",
+        "initialValue": "INPUT",
+        "options": [
+          {
+            "value": "INPUT",
+            "label": "原始输入"
+          },
+          {
+            "value": "FIRST_ITEM",
+            "label": "输入第一项"
+          },
+          {
+            "value": "FIELD",
+            "label": "指定字段"
+          },
+          {
+            "value": "EMPTY",
+            "label": "空"
+          }
+        ]
+      }
+    }
+  ]
+}

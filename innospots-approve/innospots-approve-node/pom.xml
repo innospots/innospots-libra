@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>io.innospots</groupId>
-            <artifactId>innospots-workflow-core</artifactId>
+            <artifactId>innospots-approve-core</artifactId>
         </dependency>
 
         <dependency>

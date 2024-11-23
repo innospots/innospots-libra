@@ -1,8 +1,9 @@
-package io.innospots.approve.console.entity;
+package io.innospots.approve.core.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.innospots.approve.core.enums.ApproveStatus;
 import io.innospots.base.entity.PBaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,8 +11,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 /**
  * @author Smars
@@ -21,32 +20,19 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = ApproveFlowExecutionEntity.TABLE_NAME)
-@TableName(value = ApproveFlowExecutionEntity.TABLE_NAME)
-public class ApproveFlowExecutionEntity extends PBaseEntity {
+@Table(name = ApproveExecutionEntity.TABLE_NAME)
+@TableName(value = ApproveExecutionEntity.TABLE_NAME)
+public class ApproveExecutionEntity extends PBaseEntity {
 
     public static final String TABLE_NAME = "approve_flow_execution";
 
     @Id
-    @TableId(type = IdType.INPUT)
+    @TableId(type = IdType.ASSIGN_ID)
     @Column(length = 16)
-    private String flowExecutionId;
+    private String approveExecutionId;
 
-    @Column(length = 32)
-    private String approveType;
-
-
-    private String appInstanceKey;
-
-    @Column(length = 32)
-    private String approveStatus;
-
-
-    @Column(length = 128)
-    private String originator;
-
-    @Column
-    private Integer originatorId;
+    @Column(length = 16)
+    private String approveInstanceKey;
 
 
     @Column(length = 128)
@@ -57,18 +43,17 @@ public class ApproveFlowExecutionEntity extends PBaseEntity {
 
 
     @Column(length = 64)
-    private String nextNodeKey;
+    private String currentNodeKey;
 
-    @Column
-    private LocalDateTime lastApproveDateTime;
+    @Column(length = 32)
+    private String approveStatus;
 
-    @Column
-    private LocalDateTime startTime;
-
-    @Column
-    private LocalDateTime endTime;
 
     @Column(length = 2048)
     private String message;
+
+
+    @Column(columnDefinition = "TEXT")
+    private String context;
 
 }

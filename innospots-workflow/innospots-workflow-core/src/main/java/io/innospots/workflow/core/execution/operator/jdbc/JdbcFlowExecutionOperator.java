@@ -204,6 +204,12 @@ public class JdbcFlowExecutionOperator implements IDataStore<FlowExecution>, IFl
     }
 
     @Override
+    public boolean upsert(FlowExecution execution) {
+        int cnt = dataOperator.upsert(FlowExecutionEntity.TABLE_NAME, "flow_execution_id",FlowExecutionConverter.INSTANCE.modelToMap(execution, true));
+        return cnt > 0;
+    }
+
+    @Override
     public boolean insert(List<FlowExecution> executions) {
         //TODO store executions group by workflow instance and datasource id
         for (FlowExecution execution : executions) {

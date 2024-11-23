@@ -37,6 +37,7 @@ public enum ExecutionStatus {
     CONTINUING(1),
     STARTING(2),
     RUNNING(2),
+    PROCESSING(2),
     CONTINUE_RUNNING(2),
     RETRY_RUNNING(2),
     COMPLETE(3),

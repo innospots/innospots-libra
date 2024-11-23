@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.runtime.starter;
+package io.innospots.workflow.core.starter;
 
 import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.workflow.core.execution.AsyncExecutors;

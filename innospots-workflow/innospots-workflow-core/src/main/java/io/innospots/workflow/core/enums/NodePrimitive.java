@@ -79,6 +79,8 @@ public enum NodePrimitive {
     scheduleTrigger("workflow.node.primitive.trigger.schedule:调度触发器"),
 
     apiTrigger("workflow.node.primitive.api:API触发器"),
+
+    approve("workflow.node.primitive.approve:审批"),
     /**
      * Normal node.
      */

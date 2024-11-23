@@ -54,14 +54,15 @@ public abstract class BaseRuntimeContainer implements RuntimeContainer {
         return execute(triggerInfo, items, context);
     }
 
-    protected WorkflowRuntimeContext execute(FlowRuntimeRegistry triggerInfo, List<Map<String, Object>> payloads, Map<String, Object> context) {
-        WorkflowRuntimeContext workflowRuntimeContext = buildContext(triggerInfo, payloads, context);
+    protected WorkflowRuntimeContext<List<Map<String, Object>>> execute(FlowRuntimeRegistry triggerInfo, List<Map<String, Object>> payloads, Map<String, Object> context) {
+        WorkflowRuntimeContext<List<Map<String, Object>>> workflowRuntimeContext = buildContext(triggerInfo, payloads, context);
         execute(workflowRuntimeContext);
         return workflowRuntimeContext;
     }
 
 
-    protected void execute(WorkflowRuntimeContext runtimeContext) {
+    @Override
+    public void execute(WorkflowRuntimeContext<?> runtimeContext) {
         start(runtimeContext);
 
         IFlowEngine flowEngine = FlowEngineManager.eventFlowEngine();
@@ -72,20 +73,20 @@ public abstract class BaseRuntimeContainer implements RuntimeContainer {
 
     }
 
-    protected WorkflowRuntimeContext buildContext(FlowRuntimeRegistry triggerInfo, Map<String, Object> payload, Map<String, Object> context) {
+    protected WorkflowRuntimeContext<List<Map<String, Object>>> buildContext(FlowRuntimeRegistry triggerInfo, Map<String, Object> payload, Map<String, Object> context) {
         List<Map<String, Object>> items = new ArrayList<>();
         items.add(payload);
         return buildContext(triggerInfo, items, context);
     }
 
-    protected WorkflowRuntimeContext buildContext(FlowRuntimeRegistry triggerInfo, List<Map<String, Object>> payloads, Map<String, Object> context) {
+    protected WorkflowRuntimeContext<List<Map<String, Object>>> buildContext(FlowRuntimeRegistry triggerInfo, List<Map<String, Object>> payloads, Map<String, Object> context) {
         log.debug("run trigger,{}:{} {}", triggerInfo.key(), triggerInfo, payloads);
         FlowExecution flowExecution = FlowExecution.buildNewFlowExecution(
                 triggerInfo.getWorkflowInstanceId(),
                 triggerInfo.getRevision(), payloads);
         flowExecution.addContext(context);
         flowExecution.setSource(triggerInfo.getRegistryNode().nodeCode());
-        WorkflowRuntimeContext workflowRuntimeContext = WorkflowRuntimeContext.build(flowExecution);
+        WorkflowRuntimeContext<List<Map<String, Object>>> workflowRuntimeContext = WorkflowRuntimeContext.build(flowExecution);
         workflowRuntimeContext.addContext(context);
         return workflowRuntimeContext;
     }
@@ -126,7 +127,6 @@ public abstract class BaseRuntimeContainer implements RuntimeContainer {
      *
      * @param triggerNodes
      */
-    @Override
     public void register(List<FlowRuntimeRegistry> triggerNodes) {
         Set<String> shouldRemovedTriggers = new HashSet<>(triggerNodeCache.keySet());
         List<FlowRuntimeRegistry> newTriggers = new ArrayList<>();

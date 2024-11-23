@@ -36,16 +36,15 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Getter
 @Setter
-public class WorkflowRuntimeContext {
+public class WorkflowRuntimeContext<T> {
 
     private FlowExecution flowExecution;
 
     private Map<String, Object> contexts = new ConcurrentHashMap<>();
 
-    /**
-     *
-     */
     private String path;
+
+    private T payload;
 
     /**
      * using different response builder
@@ -60,8 +59,8 @@ public class WorkflowRuntimeContext {
     private WorkflowRuntimeContext() {
     }
 
-    public static WorkflowRuntimeContext build(FlowExecution flowExecution) {
-        WorkflowRuntimeContext workflowRuntimeContext = new WorkflowRuntimeContext();
+    public static <T> WorkflowRuntimeContext<T> build(FlowExecution flowExecution) {
+        WorkflowRuntimeContext<T> workflowRuntimeContext = new WorkflowRuntimeContext<>();
         workflowRuntimeContext.flowExecution = flowExecution;
         return workflowRuntimeContext;
     }
