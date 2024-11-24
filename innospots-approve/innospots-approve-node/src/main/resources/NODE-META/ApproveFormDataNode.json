@@ -1,0 +1,52 @@
+{
+  "name": "审批表单数据",
+  "code": "approve_form",
+  "flowCode": "APPROVE",
+  "primitive": "approve",
+  "vendor": "innospots",
+  "credentialTypeCode": "SQL",
+  "description": "审批表单数据节点",
+  "icon": "/node/form.svg",
+  "nodeType": "io.innospots.approve.node.ApproveFormDataNode",
+  "outPorts": "1",
+  "inPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "审批表单数据节点"
+      }
+    },
+    {
+      "name": "credential_key",
+      "type": "CredentialSelect",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "凭据",
+        "showAddButton": true,
+        "showEditButton": true
+      }
+    },
+    {
+      "name": "table_name",
+      "type": "DataTableSelect",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "数据表",
+        "showAddButton": true,
+        "showEditButton": true,
+        "dependencies": "credential_key"
+      }
+    }
+  ]
+}

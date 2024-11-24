@@ -23,7 +23,7 @@
       }
     },
     {
-      "name": "approve_person_type",
+      "name": "actorType",
       "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
@@ -32,13 +32,64 @@
         "label": "审批人员类型",
         "viewType": "picker",
         "dataSource": "static",
-        "initialValue": "depart_manager",
+        "initialValue": "role",
         "options": [
-          {"label": "部门主管", "value": "depart_manager"},
           {"label": "角色", "value": "role"},
           {"label": "指定成员", "value": "person"}
         ]
       }
+    },
+    {
+      "name": "roleId",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "审批角色",
+        "viewType": "picker",
+        "dataSource": "static",
+        "options": []
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "actorType",
+              "opt": "EQUAL",
+              "value": "role"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "userId",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "审批人员",
+        "viewType": "picker",
+        "dataSource": "static",
+        "options": []
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "actorType",
+              "opt": "EQUAL",
+              "value": "person"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

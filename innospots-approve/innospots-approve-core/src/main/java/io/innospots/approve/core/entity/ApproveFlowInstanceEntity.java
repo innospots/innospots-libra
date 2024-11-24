@@ -26,7 +26,7 @@ public class ApproveFlowInstanceEntity extends PBaseEntity {
 
     @Id
     @TableId(type = IdType.ASSIGN_ID)
-    @Column(length = 16)
+    @Column(length = 32)
     private String approveInstanceKey;
 
     @Column(length = 32)
@@ -35,6 +35,7 @@ public class ApproveFlowInstanceEntity extends PBaseEntity {
     @Column(length = 16)
     private String appKey;
 
+    @Column(length = 64)
     private String flowExecutionId;
 
     @Column(length = 32)
@@ -52,15 +53,20 @@ public class ApproveFlowInstanceEntity extends PBaseEntity {
     @Column(length = 128)
     private String originator;
 
-    @Column(length = 2048)
+    @Column(length = 256)
     private String message;
 
     @Column(length = 128)
-    private String approverRole;
+    private String approver;
 
     @Column
-    private Integer approverRoleId;
+    private Integer approverId;
 
+    @Column(length = 32)
+    private String approveNodeKey;
+
+    @Column(length = 32)
+    private String approveNodeName;
 
     @Column(length = 1024)
     private String nextNodeKeys;

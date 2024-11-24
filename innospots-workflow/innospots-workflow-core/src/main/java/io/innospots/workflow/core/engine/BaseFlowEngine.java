@@ -16,14 +16,13 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.runtime.engine;
+package io.innospots.workflow.core.engine;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.model.response.ResponseCode;
-import io.innospots.workflow.core.engine.IFlowEngine;
 import io.innospots.workflow.core.enums.FlowStatus;
 import io.innospots.workflow.core.exception.FlowPrepareException;
 import io.innospots.base.quartz.ExecutionStatus;
@@ -167,7 +166,7 @@ public abstract class BaseFlowEngine implements IFlowEngine {
     protected abstract void execute(Flow flow, FlowExecution flowExecution);
 
 
-    private void startFlow(Flow flow, FlowExecution flowExecution) {
+    protected void startFlow(Flow flow, FlowExecution flowExecution) {
 
         flowExecution.fillExecutionId(flow.getFlowKey());
         if (flow.getFlowStatus() == FlowStatus.LOADED) {
@@ -193,7 +192,7 @@ public abstract class BaseFlowEngine implements IFlowEngine {
         EventBusCenter.async(FlowExecutionTaskEvent.build(flowExecution));
     }
 
-    private void completeFlow(FlowExecution flowExecution, boolean isUpdate) {
+    protected void completeFlow(FlowExecution flowExecution, boolean isUpdate) {
         if (flowExecution.getStatus() != null && flowExecution.getStatus().isExecuting()) {
             flowExecution.setStatus(ExecutionStatus.COMPLETE);
         } else if (flowExecution.getStatus() != null && flowExecution.getStatus().isStopping()) {
@@ -232,13 +231,6 @@ public abstract class BaseFlowEngine implements IFlowEngine {
         }
         flowExecution.setTotalCount(flow.nodeSize());
         return flow;
-    }
-
-    public void addFlowExecutionListener(IFlowExecutionListener flowExecutionListener) {
-        if (this.flowExecutionListeners == null) {
-            this.flowExecutionListeners = new ArrayList<>();
-        }
-        this.flowExecutionListeners.add(flowExecutionListener);
     }
 
 }

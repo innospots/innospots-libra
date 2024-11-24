@@ -21,6 +21,7 @@ package io.innospots.administration.server;
 import io.innospots.administration.schedule.LoggerClearScheduler;
 import io.innospots.app.console.ApplicationConsoleImporter;
 import io.innospots.app.visitor.ApplicationVisitorImporter;
+import io.innospots.approve.console.ApproveConsoleImporter;
 import io.innospots.libra.kernel.LibraKernelImporter;
 import io.innospots.libra.security.LibraAuthImporter;
 import io.innospots.schedule.ScheduleConsoleImporter;
@@ -53,6 +54,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ApplicationVisitorImporter
 @ScheduleConsoleImporter
 @WorkflowServerImporter
+@ApproveConsoleImporter
 @EnableScheduling
 public class InnospotsAdministrationServer {
 

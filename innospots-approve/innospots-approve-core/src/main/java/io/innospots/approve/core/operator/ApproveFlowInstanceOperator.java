@@ -1,6 +1,5 @@
 package io.innospots.approve.core.operator;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -15,7 +14,6 @@ import io.innospots.approve.core.model.ApproveRequest;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.utils.CCH;
-import io.innospots.base.utils.InnospotsIdGenerator;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
@@ -90,7 +88,7 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
         if(isOriginator){
             qw.lambda().eq(ApproveFlowInstanceEntity::getOriginatorId, CCH.userId());
         }else if(isApprover){
-            qw.lambda().eq(ApproveFlowInstanceEntity::getApproverRoleId, CCH.userId());
+            qw.lambda().eq(ApproveFlowInstanceEntity::getApproverId, CCH.userId());
             qw.lambda().eq(approveRequest.getOriginatorId()!=null, ApproveFlowInstanceEntity::getOriginatorId, approveRequest.getOriginatorId());
         }
 

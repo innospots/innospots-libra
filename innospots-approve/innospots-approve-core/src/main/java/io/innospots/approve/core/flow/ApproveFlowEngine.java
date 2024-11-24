@@ -8,6 +8,7 @@ import io.innospots.base.exception.ResourceException;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.engine.IFlowEngine;
+import io.innospots.workflow.core.engine.StreamFlowEngine;
 import io.innospots.workflow.core.enums.FlowStatus;
 import io.innospots.workflow.core.exception.FlowPrepareException;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
@@ -31,53 +32,23 @@ import java.util.Map;
  */
 @Component
 @Slf4j
-public class ApproveFlowEngine implements IFlowEngine {
+public class ApproveFlowEngine extends StreamFlowEngine {
 
     protected ApproveFlowExecutionStoreListener approveFlowExecutionStoreListener;
 
-    protected FlowManager flowManager;
-
     protected ApproveFlowInstanceOperator approveFlowInstanceOperator;
+
+
 
     public ApproveFlowEngine(ApproveFlowExecutionStoreListener approveFlowExecutionStoreListener,
                              FlowManager flowManager,
                              ApproveFlowInstanceOperator approveFlowInstanceOperator) {
+        super(null, flowManager);
         this.approveFlowExecutionStoreListener = approveFlowExecutionStoreListener;
         this.flowManager = flowManager;
         this.approveFlowInstanceOperator = approveFlowInstanceOperator;
     }
 
-    @Override
-    public BuildProcessInfo prepare(Long flowInstanceId, Integer version, boolean force) throws FlowPrepareException {
-        Flow flow = flowManager.loadFlow(flowInstanceId, version, force, false);
-        return flow.getBuildProcessInfo();
-    }
-
-    @Override
-    public void execute(FlowExecution flowExecution) {
-        Flow flow = getFlow(flowExecution);
-
-        startFlow(flow, flowExecution);
-        try {
-            execute(flow, flowExecution);
-            /*
-            if (flow.getFlowStatus() == FlowStatus.LOADED) {
-                execute(flow, flowExecution);
-            } else {
-                failExecution(flow, flowExecution);
-            }
-             */
-        } catch (Exception e) {
-            log.error("flow execution fail!", e);
-            flowExecution.setStatus(ExecutionStatus.FAILED);
-            flowExecution.setResponseCode(ResponseCode.FAIL);
-        }
-        if (flow.getFlowStatus() != FlowStatus.LOADED) {
-            failExecution(flow, flowExecution);
-        } else {
-            completeFlow(flowExecution);
-        }
-    }
 
     protected void execute(Flow flow, FlowExecution flowExecution) {
         if (!flow.isLoaded()) {
@@ -87,67 +58,9 @@ public class ApproveFlowEngine implements IFlowEngine {
             log.warn("execution status is not process, can't execute this flow execution:{}", flowExecution);
             return;
         }
-        ApproveFlowInstance approveFlowInstance = ApproveHolder.get();
-        try {
-            List<BaseNodeExecutor> nodeExecutors = null;
-            /*
-            if (flowExecution.getExecuteTimes() == 1 && flowExecution.getCurrentNodeKeys() == null) {
-                nodeExecutors = flow.startNodes();
-            } else {
-                nodeExecutors = flow.nextNodes(flowExecution.getCurrentNodeKeys());
-            }
-             */
-
-            if (approveFlowInstance.getNextNodeKeys() == null) {
-                nodeExecutors = flow.startNodes();
-            } else {
-                nodeExecutors = flow.findNodes(approveFlowInstance.getNextNodeKeys());
-            }
-
-            for (BaseNodeExecutor nodeExecutor : nodeExecutors) {
-                nodeExecutor.execute(flowExecution);
-                flowExecution.addCurrentNodeKey(nodeExecutor.nodeKey());
-            }
-
-        } catch (Exception e) {
-            log.error("flow execution fail!", e);
-            flowExecution.setStatus(ExecutionStatus.FAILED);
-        }
+        super.execute(flow,flowExecution);
     }
 
-
-    protected void failExecution(Flow flow, FlowExecution flowExecution) {
-        BuildProcessInfo buildProcessInfo = flow.getBuildProcessInfo();
-        log.error("flow prepare failed, {}", buildProcessInfo);
-        if (buildProcessInfo.getBuildException() != null) {
-            flowExecution.setMessage(buildProcessInfo.errorMessage());
-            flowExecution.setResponseCode(ResponseCode.RESOURCE_BUILD_ERROR);
-        } else {
-            for (Map.Entry<String, Exception> exceptionEntry : buildProcessInfo.getErrorInfo().entrySet()) {
-                NodeExecution nodeExecution = NodeExecution.buildNewNodeExecution(exceptionEntry.getKey(), flowExecution);
-                nodeExecution.setStartTime(LocalDateTime.now());
-                nodeExecution.setEndTime(LocalDateTime.now());
-                nodeExecution.setStatus(ExecutionStatus.FAILED);
-                nodeExecution.setMessage(buildProcessInfo.getBuildMessage(exceptionEntry.getKey()));
-                flowExecution.addNodeExecution(nodeExecution);
-                if (CollectionUtils.isNotEmpty(flowManager.nodeExecutionListeners())) {
-                    flowManager.nodeExecutionListeners().forEach(
-                            listener -> listener.fail(nodeExecution)
-                    );
-                }
-            }
-        }
-    }
-
-    @Override
-    public FlowExecution stop(String flowExecutionId) {
-        return null;
-    }
-
-    @Override
-    public FlowExecution stopByFlowKey(String flowKey) {
-        return null;
-    }
 
     @Override
     public boolean continueExecute(FlowExecution flowExecution) {
@@ -155,7 +68,8 @@ public class ApproveFlowEngine implements IFlowEngine {
         return true;
     }
 
-    private void startFlow(Flow flow, FlowExecution flowExecution) {
+    @Override
+    protected void startFlow(Flow flow, FlowExecution flowExecution) {
 
         flowExecution.fillExecutionId(flow.getFlowKey());
         if (flow.getFlowStatus() == FlowStatus.LOADED &&
@@ -177,7 +91,8 @@ public class ApproveFlowEngine implements IFlowEngine {
         }
     }
 
-    private void completeFlow(FlowExecution flowExecution) {
+    @Override
+    protected void completeFlow(FlowExecution flowExecution,boolean isUpdate) {
         ApproveFlowInstance flowInstance = ApproveHolder.get();
         ApproveStatus approveStatus = flowInstance.getApproveStatus();
 //        ApproveStatus approveStatus = approveFlowInstanceOperator.getApproveStatusByFlowExecutionId(flowExecution.getFlowExecutionId());
@@ -202,25 +117,6 @@ public class ApproveFlowEngine implements IFlowEngine {
 
     public Flow getFlow(String flowKey){
         return flowManager.loadFlow(flowKey);
-    }
-
-    protected Flow getFlow(FlowExecution flowExecution) {
-        Flow flow = null;
-        if (flowExecution.getFlowKey() != null) {
-            flow = flowManager.loadFlow(flowExecution.getFlowKey());
-        } else {
-            flow = flowManager.loadFlow(flowExecution.getFlowInstanceId(), flowExecution.getRevision());
-        }
-
-        if (flow == null) {
-            throw ResourceException.buildAbandonException(this.getClass(), "flow not exist: " + flowExecution.getFlowInstanceId() + " ,revision: " + flowExecution.getRevision());
-        }
-        if (!flow.isLoaded()) {
-            log.warn("the flow is not loaded completed, {},{}", flow.getWorkflowInstanceId(), flow.getRevision());
-            flowExecution.setStatus(ExecutionStatus.NOT_PREPARED);
-        }
-        flowExecution.setTotalCount(flow.nodeSize());
-        return flow;
     }
 
 

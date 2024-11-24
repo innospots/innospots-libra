@@ -24,7 +24,7 @@
       }
     },
     {
-      "name": "credential",
+      "name": "credential_key",
       "type": "CredentialSelect",
       "valueType": "number",
       "copyable": false,

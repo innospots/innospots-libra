@@ -25,6 +25,7 @@ import io.innospots.base.exception.ScriptException;
 import io.innospots.base.execution.ExecutionResource;
 import io.innospots.base.model.field.ParamField;
 import io.innospots.base.quartz.ExecutionStatus;
+import io.innospots.base.utils.BeanContextAwareUtils;
 import io.innospots.script.base.ExecutorManagerFactory;
 import io.innospots.script.base.ScriptExecutorManager;
 import io.innospots.script.base.jit.MethodBody;
@@ -545,5 +546,8 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
         return IExecutionContextOperator.buildExecutionResource(url, subFix, nodeExecution.getContextDataPath());
     }
 
+    protected <T> T getBean(Class<T> clazz) {
+        return BeanContextAwareUtils.getBean(clazz);
+    }
 
 }

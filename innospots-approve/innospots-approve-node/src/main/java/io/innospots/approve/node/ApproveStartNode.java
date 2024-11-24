@@ -1,5 +1,6 @@
 package io.innospots.approve.node;
 
+import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 
 /**
@@ -10,6 +11,10 @@ import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 public class ApproveStartNode extends BaseNodeExecutor {
     @Override
     protected void initialize() {
+    }
 
+    @Override
+    public void invoke(NodeExecution nodeExecution) {
+        super.invoke(nodeExecution);
     }
 }

@@ -26,13 +26,9 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 public class ApproveFlowController {
 
 
-    private final ApproveFlowInstanceOperator instanceOperator;
-
     private final ApproveFlowRuntimeContainer approveFlowRuntimeContainer;
 
-    public ApproveFlowController(ApproveFlowInstanceOperator instanceOperator,
-                                 ApproveFlowRuntimeContainer approveFlowRuntimeContainer) {
-        this.instanceOperator = instanceOperator;
+    public ApproveFlowController(ApproveFlowRuntimeContainer approveFlowRuntimeContainer) {
         this.approveFlowRuntimeContainer = approveFlowRuntimeContainer;
     }
 
@@ -40,25 +36,25 @@ public class ApproveFlowController {
     @PostMapping("start/{approveInstanceKey}")
     public R<ApproveFlowInstance> start(@PathVariable String approveInstanceKey){
 
-        return R.success(instanceOperator.start(approveInstanceKey));
+        return R.success(approveFlowRuntimeContainer.start(approveInstanceKey));
     }
 
     @Operation(summary = "revoke approve flow")
     @PostMapping("revoke/{approveInstanceKey}")
     public R<Boolean> revoke(@PathVariable String approveInstanceKey, String message){
-        return R.success(instanceOperator.revoke(approveInstanceKey, message));
+        return R.success(approveFlowRuntimeContainer.revoke(approveInstanceKey, message));
     }
 
     @Operation(summary = "approve flow")
     @PostMapping("approved/{approveInstanceKey}")
     public R<Boolean> approved(@PathVariable String approveInstanceKey, String message){
-        return R.success(instanceOperator.approve(approveInstanceKey, message));
+        return R.success(approveFlowRuntimeContainer.approve(approveInstanceKey, message));
     }
 
     @Operation(summary = "reject approve flow")
     @PostMapping("reject/{approveInstanceKey}")
     public R<Boolean> reject(@PathVariable String approveInstanceKey, String message){
-        return R.success(instanceOperator.reject(approveInstanceKey, message));
+        return R.success(approveFlowRuntimeContainer.reject(approveInstanceKey, message));
     }
 
 }

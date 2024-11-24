@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.runtime.engine;
+package io.innospots.workflow.core.engine;
 
 import io.innospots.base.exception.InnospotException;
 import io.innospots.base.model.response.ResponseCode;

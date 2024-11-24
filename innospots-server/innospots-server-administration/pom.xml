@@ -70,6 +70,11 @@
             <groupId>io.innospots</groupId>
             <artifactId>innospots-schedule</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>io.innospots</groupId>
+            <artifactId>innospots-approve-console</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

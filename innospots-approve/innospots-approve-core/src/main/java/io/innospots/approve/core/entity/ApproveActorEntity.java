@@ -11,26 +11,24 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2024/10/19
+ * @date 2024/11/24
  */
 @Getter
 @Setter
 @Entity
-@Table(name = ApproveExecutionEntity.TABLE_NAME)
-@TableName(value = ApproveExecutionEntity.TABLE_NAME)
-public class ApproveExecutionEntity extends PBaseEntity {
+@Table(name = ApproveActorEntity.TABLE_NAME)
+@TableName(value = ApproveActorEntity.TABLE_NAME)
+public class ApproveActorEntity extends PBaseEntity {
 
-    public static final String TABLE_NAME = "approve_flow_execution";
+    public static final String TABLE_NAME = "approve_actor";
 
     @Id
-    @TableId(type = IdType.INPUT)
-    @Column(length = 64)
-    private String approveExecutionId;
+    @TableId(type = IdType.ASSIGN_ID)
+    @Column(length = 16)
+    private String approveActorId;
 
     @Column(length = 32)
     private String approveInstanceKey;
@@ -38,33 +36,22 @@ public class ApproveExecutionEntity extends PBaseEntity {
     @Column(length = 64)
     private String nodeKey;
 
-    @Column(length = 32)
-    private String nodeName;
-
     @Column
     private Integer userId;
 
     @Column(length = 64)
     private String userName;
 
-    @Column
-    private Integer sequenceNumber;
+    @Column(length = 32)
+    private String actorType;
 
     @Column(length = 32)
+    private String approveAction;
+
+    @Column(length = 256)
     private String result;
 
-
-    @Column(length = 2048)
+    @Column(length = 256)
     private String message;
-
-
-    @Column(columnDefinition = "TEXT")
-    private String context;
-
-    @Column
-    private LocalDateTime startTime;
-
-    @Column
-    private LocalDateTime endTime;
 
 }

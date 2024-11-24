@@ -1,0 +1,47 @@
+{
+  "name": "审批条件",
+  "code": "approve_condition",
+  "flowCode": "APPROVE",
+  "primitive": "approve",
+  "vendor": "innospots",
+  "description": "IF条件",
+  "icon": "/node/condition.svg",
+  "nodeType": "io.innospots.workflow.node.app.logic.ConditionNode",
+  "outPorts": [
+    {
+      "id": "true-out",
+      "label": "true",
+      "count": 1
+    },
+    {
+      "id": "false-out",
+      "label": "false",
+      "count": 1
+    }
+  ],
+  "inPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "条件节点"
+      }
+    },{
+      "name": "conditions",
+      "type": "RuleEditor",
+      "valueType": "object",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "fieldSource": "CONDITIONS_1",
+        "label": "条件字段"
+      }
+    }
+  ]
+}

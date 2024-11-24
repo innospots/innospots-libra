@@ -1,0 +1,59 @@
+{
+  "name": "审批分支",
+  "code": "approve_switch",
+  "flowCode": "APPROVE",
+  "primitive": "approve",
+  "vendor": "innospots",
+  "description": "基于字段的分支条件",
+  "icon": "/node/branch.svg",
+  "nodeType": "io.innospots.workflow.node.app.logic.SwitchNode",
+  "outPorts": [
+    {"id": "#1", "label": "#1", "count": 1},
+    {"id": "#2", "label": "#2", "count": 1},
+    {"id": "#3", "label": "#3", "count": 1},
+    {"id": "#default", "label": "#default", "count": 1}
+  ],
+  "inPorts": "1",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "分支节点"
+      }
+    },{
+      "name": "conditionField",
+      "type": "Cascader",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "fieldSource": "SWITCH_1",
+        "dataSource": "input",
+        "label": "条件字段",
+        "optionsType": "inputFields",
+        "options": [{}]
+      }
+    },{
+      "name": "conditions",
+      "type": "BranchConfig",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "分支条件",
+        "dependencies": "conditionField"
+      },
+      "layout": {
+        "h": 7, "minH": 4,
+        "w": 1, "x": 0, "y": 0, "moved": true, "static": false,
+        "resizeHandles": ["s", "n"]
+      }
+    }
+  ]
+}

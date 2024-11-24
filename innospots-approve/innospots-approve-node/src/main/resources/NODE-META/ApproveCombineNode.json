@@ -1,0 +1,54 @@
+{
+  "name": "审批合并",
+  "code": "approve_combine",
+  "flowCode": "APPROVE",
+  "primitive": "approve",
+  "vendor": "innospots",
+  "description": "多个分支合并",
+  "icon": "/node/combine.svg",
+  "nodeType": "io.innospots.workflow.node.app.logic.CombineNode",
+  "outPorts": "1",
+  "inPorts": "4",
+  "components": [
+    {
+      "name": "displayName",
+      "type": "Input",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "节点名称",
+        "placeholder": "请输入节点名称",
+        "initialValue": "合并分支"
+      }
+    },
+    {
+      "name": "output_setting",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "输出设置",
+		"viewType": "picker",
+        "optionsType": "customOptions",
+        "dataSource": "static",
+        "initialValue": "NONE",
+        "options": [
+          {
+            "value": "NONE",
+            "label": "不输出"
+          },
+          {
+            "value": "FIRST",
+            "label": "最先分支输出"
+          },
+          {
+            "value": "LAST",
+            "label": "最后分支输出"
+          }
+        ]
+      }
+    }
+  ]
+}
