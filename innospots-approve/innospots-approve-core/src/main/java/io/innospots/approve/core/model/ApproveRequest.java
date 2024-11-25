@@ -22,7 +22,7 @@ public class ApproveRequest {
     private ApproveStatus status;
     private String belongTo;
     private String approveType;
-    private String originatorId;
+    private String proposerId;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private String orderBy;

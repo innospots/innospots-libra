@@ -21,8 +21,8 @@ public interface ApproveFlowInstanceConverter extends BaseBeanConverter<ApproveF
 
     default ApproveFlowInstanceEntity formToEntity(ApproveForm approveForm){
         ApproveFlowInstanceEntity entity = new ApproveFlowInstanceEntity();
-        entity.setOriginatorId(CCH.userId());
-        entity.setOriginator(CCH.authUser());
+        entity.setProposerId(CCH.userId());
+        entity.setProposer(CCH.authUser());
 
         return entity;
     }

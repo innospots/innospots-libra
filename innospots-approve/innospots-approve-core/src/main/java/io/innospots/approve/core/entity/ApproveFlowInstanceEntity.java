@@ -48,10 +48,10 @@ public class ApproveFlowInstanceEntity extends PBaseEntity {
     private String approveStatus;
 
     @Column
-    private Integer originatorId;
+    private Integer proposerId;
 
     @Column(length = 128)
-    private String originator;
+    private String proposer;
 
     @Column(length = 256)
     private String message;

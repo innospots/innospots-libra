@@ -74,22 +74,22 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
     }
 
     public PageBody<ApproveFlowInstance> page(ApproveRequest approveRequest,
-                                              boolean isOriginator,
+                                              boolean isProposer,
                                               boolean isApprover) {
         PageBody<ApproveFlowInstance> result = new PageBody<>();
         Page<ApproveFlowInstanceEntity> queryPage = new Page<>(approveRequest.getPage(), approveRequest.getSize());
         QueryWrapper<ApproveFlowInstanceEntity> qw = new QueryWrapper<>();
         qw.lambda().eq(approveRequest.getApproveType()!=null, ApproveFlowInstanceEntity::getApproveType, approveRequest.getApproveType())
                 .eq(approveRequest.getBelongTo()!=null, ApproveFlowInstanceEntity::getBelongTo, approveRequest.getBelongTo())
-                .eq(approveRequest.getOriginatorId()!=null, ApproveFlowInstanceEntity::getOriginatorId, approveRequest.getOriginatorId())
+                .eq(approveRequest.getProposerId()!=null, ApproveFlowInstanceEntity::getProposerId, approveRequest.getProposerId())
                 .eq(approveRequest.getStatus()!=null, ApproveFlowInstanceEntity::getApproveStatus, approveRequest.getStatus())
                 .like(approveRequest.getQueryInput()!=null, ApproveFlowInstanceEntity::getMessage, approveRequest.getQueryInput())
                 .between(approveRequest.getStartDate()!=null && approveRequest.getEndDate()!=null, ApproveFlowInstanceEntity::getStartTime, approveRequest.getStartDate(), approveRequest.getEndDate());
-        if(isOriginator){
-            qw.lambda().eq(ApproveFlowInstanceEntity::getOriginatorId, CCH.userId());
+        if(isProposer){
+            qw.lambda().eq(ApproveFlowInstanceEntity::getProposerId, CCH.userId());
         }else if(isApprover){
             qw.lambda().eq(ApproveFlowInstanceEntity::getApproverId, CCH.userId());
-            qw.lambda().eq(approveRequest.getOriginatorId()!=null, ApproveFlowInstanceEntity::getOriginatorId, approveRequest.getOriginatorId());
+            qw.lambda().eq(approveRequest.getProposerId()!=null, ApproveFlowInstanceEntity::getProposerId, approveRequest.getProposerId());
         }
 
         qw.orderByDesc(approveRequest.getOrderBy()!=null, approveRequest.getOrderBy());
