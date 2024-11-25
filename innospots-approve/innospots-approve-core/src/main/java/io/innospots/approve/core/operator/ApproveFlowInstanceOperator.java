@@ -1,5 +1,6 @@
 package io.innospots.approve.core.operator;
 
+import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -14,10 +15,12 @@ import io.innospots.approve.core.model.ApproveRequest;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.utils.CCH;
+import io.innospots.base.utils.time.DateTimeUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * @author Smars
@@ -36,7 +39,18 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
     }
 
     public ApproveFlowInstance save(ApproveForm approveForm) {
-        if(approveForm.getApproveInstanceKey() == null){
+        if (approveForm.getApproveInstanceKey() == null) {
+            Date now = new Date();
+            String prefix = approveForm.getFlowKey().toUpperCase() + DateTimeUtils.formatDate(now, "yyMMdd");
+            String key = null;
+            long c = 0;
+            do {
+                key = prefix + String.format("%04d", CCH.userId()) + RandomUtil.randomNumbers(4);
+                QueryWrapper<ApproveFlowInstanceEntity> qw = new QueryWrapper<>();
+                qw.lambda().eq(ApproveFlowInstanceEntity::getApproveInstanceKey, key);
+                c = this.count(qw);
+            } while (c != 0);
+            approveForm.setApproveInstanceKey(key);
         }
         ApproveFlowInstanceEntity entity = ApproveFlowInstanceConverter.INSTANCE.formToEntity(approveForm);
         this.saveOrUpdate(entity);
@@ -67,8 +81,8 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
         QueryWrapper<ApproveFlowInstanceEntity> qw = new QueryWrapper<>();
         qw.lambda().eq(ApproveFlowInstanceEntity::getApproveInstanceKey, approveInstanceKey);
         ApproveFlowInstanceEntity entity = this.getOne(qw);
-        if(entity == null){
-            throw ResourceException.buildNotExistException(this.getClass(),approveInstanceKey);
+        if (entity == null) {
+            throw ResourceException.buildNotExistException(this.getClass(), approveInstanceKey);
         }
         return ApproveFlowInstanceConverter.INSTANCE.entityToModel(entity);
     }
@@ -79,20 +93,20 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
         PageBody<ApproveFlowInstance> result = new PageBody<>();
         Page<ApproveFlowInstanceEntity> queryPage = new Page<>(approveRequest.getPage(), approveRequest.getSize());
         QueryWrapper<ApproveFlowInstanceEntity> qw = new QueryWrapper<>();
-        qw.lambda().eq(approveRequest.getApproveType()!=null, ApproveFlowInstanceEntity::getApproveType, approveRequest.getApproveType())
-                .eq(approveRequest.getBelongTo()!=null, ApproveFlowInstanceEntity::getBelongTo, approveRequest.getBelongTo())
-                .eq(approveRequest.getProposerId()!=null, ApproveFlowInstanceEntity::getProposerId, approveRequest.getProposerId())
-                .eq(approveRequest.getStatus()!=null, ApproveFlowInstanceEntity::getApproveStatus, approveRequest.getStatus())
-                .like(approveRequest.getQueryInput()!=null, ApproveFlowInstanceEntity::getMessage, approveRequest.getQueryInput())
-                .between(approveRequest.getStartDate()!=null && approveRequest.getEndDate()!=null, ApproveFlowInstanceEntity::getStartTime, approveRequest.getStartDate(), approveRequest.getEndDate());
-        if(isProposer){
+        qw.lambda().eq(approveRequest.getApproveType() != null, ApproveFlowInstanceEntity::getApproveType, approveRequest.getApproveType())
+                .eq(approveRequest.getBelongTo() != null, ApproveFlowInstanceEntity::getBelongTo, approveRequest.getBelongTo())
+                .eq(approveRequest.getProposerId() != null, ApproveFlowInstanceEntity::getProposerId, approveRequest.getProposerId())
+                .eq(approveRequest.getStatus() != null, ApproveFlowInstanceEntity::getApproveStatus, approveRequest.getStatus())
+                .like(approveRequest.getQueryInput() != null, ApproveFlowInstanceEntity::getMessage, approveRequest.getQueryInput())
+                .between(approveRequest.getStartDate() != null && approveRequest.getEndDate() != null, ApproveFlowInstanceEntity::getStartTime, approveRequest.getStartDate(), approveRequest.getEndDate());
+        if (isProposer) {
             qw.lambda().eq(ApproveFlowInstanceEntity::getProposerId, CCH.userId());
-        }else if(isApprover){
+        } else if (isApprover) {
             qw.lambda().eq(ApproveFlowInstanceEntity::getApproverId, CCH.userId());
-            qw.lambda().eq(approveRequest.getProposerId()!=null, ApproveFlowInstanceEntity::getProposerId, approveRequest.getProposerId());
+            qw.lambda().eq(approveRequest.getProposerId() != null, ApproveFlowInstanceEntity::getProposerId, approveRequest.getProposerId());
         }
 
-        qw.orderByDesc(approveRequest.getOrderBy()!=null, approveRequest.getOrderBy());
+        qw.orderByDesc(approveRequest.getOrderBy() != null, approveRequest.getOrderBy());
         Page<ApproveFlowInstanceEntity> page = this.page(queryPage, qw);
         result.setCurrent(page.getCurrent());
         result.setPageSize(page.getSize());
@@ -127,10 +141,10 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
         return this.update(uw);
     }
 
-    private boolean updateApproveStatus(String approveInstanceKey, ApproveStatus approveStatus, String message){
+    private boolean updateApproveStatus(String approveInstanceKey, ApproveStatus approveStatus, String message) {
         UpdateWrapper<ApproveFlowInstanceEntity> uw = new UpdateWrapper<>();
         uw.lambda().set(ApproveFlowInstanceEntity::getApproveStatus, approveStatus.name())
-                .set(message!=null,ApproveFlowInstanceEntity::getMessage, message)
+                .set(message != null, ApproveFlowInstanceEntity::getMessage, message)
                 .eq(ApproveFlowInstanceEntity::getApproveInstanceKey, approveInstanceKey);
         return this.update(uw);
     }
