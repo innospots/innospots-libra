@@ -182,14 +182,14 @@ public class ExtensionService {
     /**
      * 通过应用key安装应用到服务
      *
-     * @param appKey
+     * @param extKey
      * @return
      */
-    public ExtensionInstallInfo install(String appKey) {
-        ExtDefinitionEntity extDefinitionEntity = extDefinitionOperator.getBaseMapper().getLastVersion(appKey);
+    public ExtensionInstallInfo install(String extKey) {
+        ExtDefinitionEntity extDefinitionEntity = extDefinitionOperator.getLastVersion(extKey);
         if (extDefinitionEntity == null) {
-            log.error("install app error, appKey {} is not exits", appKey);
-            throw ResourceException.buildNotExistException(this.getClass(), "appKey: " + appKey);
+            log.error("install app error, appKey {} is not exits", extKey);
+            throw ResourceException.buildNotExistException(this.getClass(), "extKey: " + extKey);
         }
         if (!ExtensionStatus.valueOf(extDefinitionEntity.getExtensionStatus()).canBeInstall()) {
             throw ResourceException.buildInstallException(this.getClass(), "application is expired, appKey: " + extDefinitionEntity.getExtKey());
@@ -230,7 +230,7 @@ public class ExtensionService {
 
         List<String> files = JSONUtils.toList(extDefinitionEntity.getZipFileNames(), String.class);
         if (files == null || files.isEmpty()) {
-            throw ResourceException.buildInstallException(this.getClass(), "application install error, zipFileNames is null  appKey: " + extDefinitionEntity.getExtKey());
+            return;
         }
 
         String fileName = files.stream().filter(item -> {

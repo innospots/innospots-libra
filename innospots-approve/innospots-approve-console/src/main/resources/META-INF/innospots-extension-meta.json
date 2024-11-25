@@ -1,0 +1,38 @@
+{
+  "name": "${workflow-name}",
+  "i18nNames": {
+    "en_US": " Approve",
+    "zh_CN": "审批管理"
+  },
+  "version": "v1.0.0",
+  "publishTime": "2024-10-12",
+  "vendor": "Innospots",
+  "extKey": "innospots-approve",
+  "kernelVersion": "v1.0.0",
+  "description": "approve module",
+  "basePackages": [
+    "io.innospots.approve.console"
+  ],
+  "modules": [
+    {
+      "name": "${approve-proposer}",
+      "itemKey": "approve-proposer",
+      "uri": "/approve",
+      "icon": "approve",
+      "i18nNames": {
+        "en_US": "Approve Proposer",
+        "zh_CN": "审批申请"
+      }
+    },
+    {
+      "name": "${approve-approver}",
+      "itemKey": "approve-approver",
+      "uri": "/approve-audit",
+      "icon": "approve",
+      "i18nNames": {
+        "en_US": "Approve Audit",
+        "zh_CN": "审批审核"
+      }
+    }
+  ]
+}

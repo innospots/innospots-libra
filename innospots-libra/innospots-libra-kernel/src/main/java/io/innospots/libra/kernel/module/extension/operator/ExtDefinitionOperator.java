@@ -55,7 +55,7 @@ public class ExtDefinitionOperator extends ServiceImpl<ExtDefinitionDao, ExtDefi
         return registryExtensionDefinition(libraAppProperties);
     }
 
-    private ExtDefinitionEntity getLastVersion(String extKey) {
+    public ExtDefinitionEntity getLastVersion(String extKey) {
         QueryWrapper<ExtDefinitionEntity> qw = new QueryWrapper<>();
         qw.lambda().eq(ExtDefinitionEntity::getExtKey, extKey)
                 .orderByDesc(ExtDefinitionEntity::getExtVersion);

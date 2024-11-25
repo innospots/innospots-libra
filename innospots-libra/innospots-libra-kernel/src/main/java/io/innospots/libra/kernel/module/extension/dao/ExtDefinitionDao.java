@@ -31,23 +31,4 @@ import java.util.List;
 public interface ExtDefinitionDao extends BaseMapper<ExtDefinitionEntity> {
 
 
-    /**
-     * get AppDefinitionEntity by appKey and last version
-     *
-     * @param appKey
-     * @return
-     */
-    @Select("select * from " + ExtDefinitionEntity.TABLE_NAME + " where app_key=#{appKey} order by app_version desc limit 0,1")
-    ExtDefinitionEntity getLastVersion(String appKey);
-
-
-    @Select({
-            "<script>",
-            "select * from " + ExtDefinitionEntity.TABLE_NAME + " where app_key in",
-            "<foreach collection='appKeys' item='item' open='(' separator=',' close=')'>",
-            "#{item}",
-            "</foreach>",
-            "</script>"
-    })
-    List<ExtDefinitionEntity> selectByAppKeys(List<String> appKeys);
 }

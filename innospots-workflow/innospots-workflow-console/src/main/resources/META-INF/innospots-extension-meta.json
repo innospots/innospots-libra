@@ -33,16 +33,6 @@
         "en_US": "Nodes",
         "zh_CN": "节点管理"
       }
-    },
-    {
-      "name": "${approve-workflow}",
-      "itemKey": "approve-workflow",
-      "uri": "/approve",
-      "icon": "approve",
-      "i18nNames": {
-        "en_US": "Approve",
-        "zh_CN": "审批流程"
-      }
     }
   ]
 }
