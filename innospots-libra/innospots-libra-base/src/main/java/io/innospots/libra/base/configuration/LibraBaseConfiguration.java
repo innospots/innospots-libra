@@ -19,6 +19,7 @@
 package io.innospots.libra.base.configuration;
 
 import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
@@ -27,6 +28,7 @@ import com.google.common.collect.ImmutableList;
 import io.innospots.base.entity.handler.EntityMetaObjectHandler;
 import io.innospots.base.store.CacheStoreManager;
 import io.innospots.base.utils.CCH;
+import io.innospots.base.utils.InnospotsIdGenerator;
 import io.innospots.libra.base.temp.SystemTempCacheOperator;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
@@ -107,6 +109,11 @@ public class LibraBaseConfiguration {
     @Bean
     public EntityMetaObjectHandler metaObjectHandler() {
         return new EntityMetaObjectHandler();
+    }
+
+    @Bean
+    public IdentifierGenerator mybatisIdGenerator() {
+        return entity -> InnospotsIdGenerator.generateId();
     }
 
     private boolean ignoreTableCondition(String tableName) {

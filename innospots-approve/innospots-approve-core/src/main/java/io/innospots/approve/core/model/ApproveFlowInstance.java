@@ -33,9 +33,9 @@ public class ApproveFlowInstance {
 
     private String approveType;
 
-    private Integer originatorId;
+    private Integer proposerId;
 
-    private String originator;
+    private String proposer;
 
     private String message;
 
@@ -54,4 +54,6 @@ public class ApproveFlowInstance {
     private ApproveStatus approveStatus;
 
     private List<String> nextNodeKeys;
+
+    private LocalDateTime updatedTime;
 }

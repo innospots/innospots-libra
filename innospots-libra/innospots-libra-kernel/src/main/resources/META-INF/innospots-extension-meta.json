@@ -240,6 +240,15 @@
         "en_US": "Schedule Task",
         "zh_CN": "调度任务管理"
       }
+    },
+    {
+      "itemKey": "libra-system-dictionary",
+      "uri": "/system/dictionary",
+      "adminDefault": true,
+      "i18nNames": {
+        "en_US": "Dictionary",
+        "zh_CN": "系统字典"
+      }
     }
   ]
 }

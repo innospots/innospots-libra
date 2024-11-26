@@ -65,3 +65,4 @@ innospots:
       - /innospots/api/workspace/**
       - /innospots/api/login-log/**
       - /innospots/api/user/**
+      - /innospots/api/dictionary/**

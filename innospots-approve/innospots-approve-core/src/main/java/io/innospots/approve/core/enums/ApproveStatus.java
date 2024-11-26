@@ -21,6 +21,8 @@ public enum ApproveStatus {
 
     REMOVED,
 
+    STARTING,
+
     PROCESSING,
 
     STOPPED;

@@ -19,6 +19,7 @@ import io.innospots.base.utils.time.DateTimeUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -32,7 +33,8 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
 
     public ApproveFlowInstance start(String approveInstanceKey) {
         UpdateWrapper<ApproveFlowInstanceEntity> uw = new UpdateWrapper<>();
-        uw.lambda().set(ApproveFlowInstanceEntity::getApproveStatus, ApproveStatus.PROCESSING.name())
+        uw.lambda().set(ApproveFlowInstanceEntity::getApproveStatus, ApproveStatus.STARTING.name())
+                .set(ApproveFlowInstanceEntity::getStartTime, LocalDateTime.now())
                 .eq(ApproveFlowInstanceEntity::getApproveInstanceKey, approveInstanceKey);
         boolean b = this.update(uw);
         return ApproveFlowInstanceConverter.INSTANCE.entityToModel(this.getById(approveInstanceKey));
@@ -144,6 +146,11 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
     private boolean updateApproveStatus(String approveInstanceKey, ApproveStatus approveStatus, String message) {
         UpdateWrapper<ApproveFlowInstanceEntity> uw = new UpdateWrapper<>();
         uw.lambda().set(ApproveFlowInstanceEntity::getApproveStatus, approveStatus.name())
+                .set(approveStatus == ApproveStatus.REJECTED||
+                        approveStatus ==ApproveStatus.APPROVED, ApproveFlowInstanceEntity::getLastApproveDateTime, LocalDateTime.now())
+                .set(approveStatus != ApproveStatus.STARTING &&
+                        approveStatus != ApproveStatus.PROCESSING,
+                        ApproveFlowInstanceEntity::getEndTime, LocalDateTime.now())
                 .set(message != null, ApproveFlowInstanceEntity::getMessage, message)
                 .eq(ApproveFlowInstanceEntity::getApproveInstanceKey, approveInstanceKey);
         return this.update(uw);
