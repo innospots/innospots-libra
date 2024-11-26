@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 @Getter
 public class ApproveRequest {
 
-    private Integer page;
-    private Integer size;
+    private Integer page=1;
+    private Integer size=20;
     private String queryInput;
     private ApproveStatus status;
     private String belongTo;

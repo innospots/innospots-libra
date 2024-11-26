@@ -41,7 +41,9 @@ public interface ApproveFlowInstanceConverter extends BaseBeanConverter<ApproveF
             base.setLastApproveDateTime(entity.getLastApproveDateTime());
             base.setStartTime(entity.getStartTime());
             base.setEndTime(entity.getEndTime());
-            base.setApproveStatus(ApproveStatus.valueOf(entity.getApproveStatus()));
+            if(entity.getApproveStatus()!=null){
+                base.setApproveStatus(ApproveStatus.valueOf(entity.getApproveStatus()));
+            }
             base.setUpdatedTime(entity.getUpdatedTime());
             list.add(base);
         }

@@ -18,6 +18,7 @@ import io.innospots.base.exception.ResourceException;
 import io.innospots.base.utils.CCH;
 import io.innospots.base.utils.time.DateTimeUtils;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -96,11 +97,11 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
         PageBody<ApproveFlowInstanceBase> result = new PageBody<>();
         Page<ApproveFlowInstanceEntity> queryPage = new Page<>(approveRequest.getPage(), approveRequest.getSize());
         QueryWrapper<ApproveFlowInstanceEntity> qw = new QueryWrapper<>();
-        qw.lambda().eq(approveRequest.getApproveType() != null, ApproveFlowInstanceEntity::getApproveType, approveRequest.getApproveType())
-                .eq(approveRequest.getBelongTo() != null, ApproveFlowInstanceEntity::getBelongTo, approveRequest.getBelongTo())
-                .eq(approveRequest.getProposerId() != null, ApproveFlowInstanceEntity::getProposerId, approveRequest.getProposerId())
+        qw.lambda().eq(StringUtils.isNotEmpty(approveRequest.getApproveType()), ApproveFlowInstanceEntity::getApproveType, approveRequest.getApproveType())
+                .eq(StringUtils.isNotEmpty(approveRequest.getBelongTo()), ApproveFlowInstanceEntity::getBelongTo, approveRequest.getBelongTo())
+                .eq(StringUtils.isNotEmpty(approveRequest.getProposerId()), ApproveFlowInstanceEntity::getProposerId, approveRequest.getProposerId())
                 .eq(approveRequest.getStatus() != null, ApproveFlowInstanceEntity::getApproveStatus, approveRequest.getStatus())
-                .like(approveRequest.getQueryInput() != null, ApproveFlowInstanceEntity::getMessage, approveRequest.getQueryInput())
+                .like(StringUtils.isNotEmpty(approveRequest.getQueryInput()), ApproveFlowInstanceEntity::getMessage, approveRequest.getQueryInput())
                 .between(approveRequest.getStartDate() != null && approveRequest.getEndDate() != null, ApproveFlowInstanceEntity::getStartTime, approveRequest.getStartDate(), approveRequest.getEndDate());
         if (isProposer) {
             qw.lambda().eq(ApproveFlowInstanceEntity::getProposerId, CCH.userId());
@@ -109,7 +110,7 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
             qw.lambda().eq(approveRequest.getProposerId() != null, ApproveFlowInstanceEntity::getProposerId, approveRequest.getProposerId());
         }
 
-        qw.orderByDesc(approveRequest.getOrderBy() != null, approveRequest.getOrderBy());
+        qw.orderByDesc(StringUtils.isNotEmpty(approveRequest.getOrderBy()), approveRequest.getOrderBy());
         Page<ApproveFlowInstanceEntity> page = this.page(queryPage, qw);
         result.setCurrent(page.getCurrent());
         result.setPageSize(page.getSize());
