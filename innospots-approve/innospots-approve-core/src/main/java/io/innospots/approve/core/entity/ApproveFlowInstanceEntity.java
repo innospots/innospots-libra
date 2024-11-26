@@ -53,7 +53,7 @@ public class ApproveFlowInstanceEntity extends PBaseEntity {
     @Column(length = 128)
     private String proposer;
 
-    @Column(length = 256)
+    @Column(length = 512)
     private String message;
 
     @Column(length = 128)
@@ -82,5 +82,8 @@ public class ApproveFlowInstanceEntity extends PBaseEntity {
 
     @Column(columnDefinition = "MEDIUMTEXT")
     private String formData;
+
+    @Column(length = 256)
+    private String result;
 
 }

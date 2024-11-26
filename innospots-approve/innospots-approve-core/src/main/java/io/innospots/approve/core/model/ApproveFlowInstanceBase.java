@@ -1,6 +1,7 @@
 package io.innospots.approve.core.model;
 
 import io.innospots.approve.core.enums.ApproveStatus;
+import io.innospots.base.json.annotation.I18n;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,6 +26,7 @@ public class ApproveFlowInstanceBase {
 
     protected String belongTo;
 
+    @I18n
     protected String approveType;
 
     protected Integer proposerId;
@@ -44,6 +46,9 @@ public class ApproveFlowInstanceBase {
     protected LocalDateTime endTime;
 
     protected ApproveStatus approveStatus;
+
+    @I18n
+    protected String result;
 
     protected LocalDateTime updatedTime;
 }
