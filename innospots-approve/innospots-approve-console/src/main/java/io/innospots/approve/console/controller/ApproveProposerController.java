@@ -38,7 +38,7 @@ public class ApproveProposerController {
 
     @Operation(summary = "create or save approve form data")
     @PostMapping("save")
-    public R<ApproveFlowInstance> save(ApproveForm approveForm) {
+    public R<ApproveFlowInstance> save(@RequestBody ApproveForm approveForm) {
         return R.success(approveFlowInstanceOperator.save(approveForm));
     }
 
