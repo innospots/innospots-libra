@@ -24,6 +24,7 @@ import io.innospots.libra.kernel.module.config.entity.SysDictionaryEntity;
 import io.innospots.libra.kernel.module.config.model.SysConfigItem;
 import io.innospots.libra.kernel.module.config.model.SysDictionary;
 import io.innospots.libra.kernel.module.config.model.SysDictionaryType;
+import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -33,7 +34,9 @@ import java.util.List;
  * @version 1.0.0
  * @date 2022/1/15
  */
+@Mapper
 public interface SysDictionaryConverter extends BaseBeanConverter<SysDictionary, SysDictionaryEntity> {
+
 
     SysDictionaryConverter INSTANCE = Mappers.getMapper(SysDictionaryConverter.class);
 

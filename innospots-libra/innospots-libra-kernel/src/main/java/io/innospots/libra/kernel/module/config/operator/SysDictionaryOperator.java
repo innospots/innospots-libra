@@ -30,7 +30,7 @@ public class SysDictionaryOperator extends ServiceImpl<SysDictionaryDao, SysDict
 
     public List<SysDictionaryType> listTypes(){
         QueryWrapper<SysDictionaryEntity> qw = new QueryWrapper<>();
-        qw.select("DISTINCT `type`","typeName");
+        qw.select("DISTINCT `type`","type_name");
         List<SysDictionaryEntity> entities = this.list(qw);
         return SysDictionaryConverter.INSTANCE.entitiesToTypes(entities);
     }
@@ -51,9 +51,9 @@ public class SysDictionaryOperator extends ServiceImpl<SysDictionaryDao, SysDict
         return this.remove(qw);
     }
 
-    public boolean delete(String type, String code){
+    public boolean delete(String type, String value){
         QueryWrapper<SysDictionaryEntity> qw = new QueryWrapper<>();
-        qw.lambda().eq(SysDictionaryEntity::getType, type).eq(SysDictionaryEntity::getCode, code);
+        qw.lambda().eq(SysDictionaryEntity::getType, type).eq(SysDictionaryEntity::getValue, value);
         return this.remove(qw);
     }
 

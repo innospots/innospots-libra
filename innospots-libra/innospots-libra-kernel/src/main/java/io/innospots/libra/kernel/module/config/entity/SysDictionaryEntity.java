@@ -29,19 +29,19 @@ public class SysDictionaryEntity extends PBaseEntity {
 
     @Id
     @TableId(type = IdType.ASSIGN_ID)
-    @Column(length = 16)
+    @Column(length = 32)
     private String dictId;
 
-    @Column(length = 64)
+    @Column(length = 256)
     private String name;
 
     @Column(length = 64)
-    private String code;
+    private String value;
 
     @Column(length = 32)
     private String type;
 
-    @Column(length = 32)
+    @Column(length = 256)
     private String typeName;
 
     @Column

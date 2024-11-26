@@ -21,12 +21,14 @@ package io.innospots.libra.kernel.module.config.converter;
 import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.libra.kernel.module.config.entity.SysConfigEntity;
 import io.innospots.libra.kernel.module.config.model.SysConfigItem;
+import org.mapstruct.Mapper;
 
 /**
  * @author Smars
  * @version 1.0.0
  * @date 2022/1/15
  */
+@Mapper
 public interface SysConfigConverter extends BaseBeanConverter<SysConfigItem,SysConfigEntity> {
 
 

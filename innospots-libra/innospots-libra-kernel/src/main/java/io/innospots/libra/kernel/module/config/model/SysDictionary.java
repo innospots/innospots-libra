@@ -22,7 +22,7 @@ public class SysDictionary {
     @I18n
     private String name;
 
-    private String code;
+    private String value;
 
     private String type;
 
