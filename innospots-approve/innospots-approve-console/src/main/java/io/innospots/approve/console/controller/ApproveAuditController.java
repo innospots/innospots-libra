@@ -38,14 +38,14 @@ public class ApproveAuditController {
 
     @Operation(summary = "page approver instances by request")
     @GetMapping("page")
-    public PageBody<ApproveFlowInstance> pageByApprover(ApproveRequest approveRequest) {
-        return approveFlowInstanceOperator.page(approveRequest, false, true);
+    public R<PageBody<ApproveFlowInstance>> pageByApprover(ApproveRequest approveRequest) {
+        return R.success(approveFlowInstanceOperator.page(approveRequest, false, true));
     }
 
     @Operation(summary = "get approve instance by approve instance key")
     @GetMapping("/key/{approveInstanceKey}")
-    public ApproveFlowInstance findOne(String approveInstanceKey) {
-        return approveFlowInstanceOperator.findOne(approveInstanceKey);
+    public R<ApproveFlowInstance> findOne(String approveInstanceKey) {
+        return R.success(approveFlowInstanceOperator.findOne(approveInstanceKey));
     }
 
     @Operation(summary = "approve flow")

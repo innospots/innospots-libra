@@ -51,14 +51,14 @@ public class ApproveProposerController {
 
     @Operation(summary = "page proposer instances by request")
     @GetMapping("page")
-    public PageBody<ApproveFlowInstance> pageByProposer(ApproveRequest approveRequest) {
-        return approveFlowInstanceOperator.page(approveRequest, true, false);
+    public R<PageBody<ApproveFlowInstance>> pageByProposer(ApproveRequest approveRequest) {
+        return R.success(approveFlowInstanceOperator.page(approveRequest, true, false));
     }
 
     @Operation(summary = "get approve instance by approve instance key")
     @GetMapping("/key/{approveInstanceKey}")
-    public ApproveFlowInstance findOne(String approveInstanceKey) {
-        return approveFlowInstanceOperator.findOne(approveInstanceKey);
+    public R<ApproveFlowInstance> findOne(String approveInstanceKey) {
+        return R.success(approveFlowInstanceOperator.findOne(approveInstanceKey));
     }
 
     @Operation(summary = "start approve flow")
