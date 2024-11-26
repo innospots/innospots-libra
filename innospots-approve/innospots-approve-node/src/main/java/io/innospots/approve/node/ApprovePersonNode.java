@@ -98,7 +98,7 @@ public class ApprovePersonNode extends BaseNodeExecutor {
         approveActor.setApproveAction(ApproveAction.DONE.name());
         approveActorOperator.saveApproveActor(approveActor);
         ApproveHolder.setActor(approveActor);
-
+        approveFlowInstanceOperator.updateProcessStatus(approveFlowInstance.getApproveInstanceKey());
         return body;
     }
 

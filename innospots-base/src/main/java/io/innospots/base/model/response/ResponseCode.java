@@ -72,6 +72,7 @@ public enum ResponseCode {
     PARAM_NULL("30000", "parameter is null"),
     PARAM_INVALID("30001", "parameter is invalid"),
     PARAM_COUNT_ERROR("30002", "the number of parameter is not match"),
+    PARAM_FIELD_INVALID("30003", "field is invalid"),
     EXECUTE_ERROR("40001", "execute is failed"),
     EXECUTE_FEIGN_ERROR("40002", "execute feign interface is failed"),
     EXECUTE_SCHEDULE_ERROR("40003", "schedule failed"),

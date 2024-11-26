@@ -96,7 +96,7 @@ public class ApproveFlowEngine extends StreamFlowEngine {
         ApproveFlowInstance flowInstance = ApproveHolder.get();
         ApproveStatus approveStatus = flowInstance.getApproveStatus();
 //        ApproveStatus approveStatus = approveFlowInstanceOperator.getApproveStatusByFlowExecutionId(flowExecution.getFlowExecutionId());
-        if (approveStatus == ApproveStatus.PROCESSING) {
+        if (approveStatus == ApproveStatus.PROCESSING ||approveStatus == ApproveStatus.STARTING) {
             return;
         }
         if (approveStatus == ApproveStatus.APPROVED ||

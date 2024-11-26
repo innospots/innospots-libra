@@ -1,8 +1,9 @@
 package io.innospots.libra.kernel.module.config.model;
 
-import io.innospots.base.json.annotation.I18n;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 /**
  * @author Smars
@@ -11,19 +12,10 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class SysDictionary {
-
-    private String dictId;
-
-    @I18n
-    private String name;
-
-    private String value;
+public class SysDictTypeGroup {
 
     private String type;
-
-    @I18n
     private String typeName;
 
-    private Boolean status;
+    private List<SysDictionary> dictionaries;
 }

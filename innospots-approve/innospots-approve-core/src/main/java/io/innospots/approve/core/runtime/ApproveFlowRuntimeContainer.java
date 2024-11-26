@@ -67,7 +67,8 @@ public class ApproveFlowRuntimeContainer {
 
     public boolean approve(String approveInstanceKey, String message){
         execute(approveInstanceKey,buildData(message,ApproveResult.APPROVED));
-        return flowInstanceOperator.approve(approveInstanceKey,message);
+        return true;
+        //return flowInstanceOperator.approve(approveInstanceKey,message);
     }
 
     private Map<String, Object> buildData(String message, ApproveResult approveResult){

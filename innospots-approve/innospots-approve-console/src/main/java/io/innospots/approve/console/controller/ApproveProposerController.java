@@ -45,9 +45,8 @@ public class ApproveProposerController {
 
     @Operation(summary = "update removed status")
     @DeleteMapping("/key/{approveInstanceKey}")
-    public R<ApproveFlowInstance> remove(String approveInstanceKey) {
-        approveFlowInstanceOperator.remove(approveInstanceKey);
-        return null;
+    public R<Boolean> remove(@PathVariable String approveInstanceKey) {
+        return R.success(approveFlowInstanceOperator.remove(approveInstanceKey));
     }
 
     @Operation(summary = "page proposer instances by request")
@@ -65,7 +64,6 @@ public class ApproveProposerController {
     @Operation(summary = "start approve flow")
     @PostMapping("start/{approveInstanceKey}")
     public R<ApproveFlowInstance> start(@PathVariable String approveInstanceKey){
-
         return R.success(approveFlowRuntimeContainer.start(approveInstanceKey));
     }
 

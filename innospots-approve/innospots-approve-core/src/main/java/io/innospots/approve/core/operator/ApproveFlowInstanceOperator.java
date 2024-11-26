@@ -62,22 +62,65 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
     }
 
     public boolean revoke(String approveInstanceKey, String message) {
+        ApproveFlowInstance instance = findOne(approveInstanceKey);
+        if (instance.getApproveStatus() != ApproveStatus.STARTING) {
+            throw ResourceException.buildStatusException(this.getClass(), "the resource status is " +
+                    instance.getApproveStatus() +
+                    ", which only starting status that can be revoked", approveInstanceKey);
+        }
         return updateApproveStatus(approveInstanceKey, ApproveStatus.REVOKED, message);
     }
 
+    public boolean updateProcessStatus(String approveInstanceKey) {
+        ApproveFlowInstance instance = findOne(approveInstanceKey);
+        if (instance.getApproveStatus() == ApproveStatus.STARTING) {
+            return updateApproveStatus(approveInstanceKey, ApproveStatus.PROCESSING, null);
+        }
+        return false;
+    }
+
     public boolean remove(String approveInstanceKey) {
+        ApproveFlowInstance instance = findOne(approveInstanceKey);
+        if (instance.getApproveStatus() == ApproveStatus.STARTING ||
+                instance.getApproveStatus() == ApproveStatus.PROCESSING ||
+                instance.getApproveStatus() == ApproveStatus.APPROVED
+        ) {
+            throw ResourceException.buildStatusException(this.getClass(), "the resource status is " +
+                    instance.getApproveStatus() + ", can't be removed", approveInstanceKey);
+        }
         return updateApproveStatus(approveInstanceKey, ApproveStatus.REMOVED, null);
     }
 
     public boolean approve(String approveInstanceKey, String message) {
+        ApproveFlowInstance instance = findOne(approveInstanceKey);
+        if (instance.getApproveStatus() != ApproveStatus.PROCESSING &&
+                instance.getApproveStatus() != ApproveStatus.STARTING
+        ) {
+            throw ResourceException.buildStatusException(this.getClass(), "the resource status is " +
+                    instance.getApproveStatus() + ", can't be approved", approveInstanceKey);
+        }
         return updateApproveStatus(approveInstanceKey, ApproveStatus.APPROVED, message);
     }
 
     public boolean reject(String approveInstanceKey, String message) {
+        ApproveFlowInstance instance = findOne(approveInstanceKey);
+        if (instance.getApproveStatus() != ApproveStatus.PROCESSING &&
+                instance.getApproveStatus() != ApproveStatus.STARTING
+        ) {
+            throw ResourceException.buildStatusException(this.getClass(), "the resource status is " +
+                    instance.getApproveStatus() + ", can't be rejected", approveInstanceKey);
+        }
         return updateApproveStatus(approveInstanceKey, ApproveStatus.REJECTED, message);
     }
 
     public boolean stop(String approveInstanceKey, String message) {
+        ApproveFlowInstance instance = findOne(approveInstanceKey);
+        if (instance.getApproveStatus() != ApproveStatus.PROCESSING &&
+                instance.getApproveStatus() != ApproveStatus.STARTING
+        ) {
+            throw ResourceException.buildStatusException(this.getClass(), "the resource status is " +
+                    instance.getApproveStatus() + ", can't be stopped", approveInstanceKey);
+        }
         return updateApproveStatus(approveInstanceKey, ApproveStatus.STOPPED, message);
     }
 
@@ -88,7 +131,13 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
         if (entity == null) {
             throw ResourceException.buildNotExistException(this.getClass(), approveInstanceKey);
         }
-        return ApproveFlowInstanceConverter.INSTANCE.entityToModel(entity);
+        ApproveFlowInstance flowInstance = ApproveFlowInstanceConverter.INSTANCE.entityToModel(entity);
+
+        if (flowInstance.getApproveStatus() == ApproveStatus.REMOVED) {
+            throw ResourceException.buildStatusException(this.getClass(), "the resource has been removed", approveInstanceKey);
+        }
+
+        return flowInstance;
     }
 
     public PageBody<ApproveFlowInstanceBase> page(ApproveRequest approveRequest,
@@ -102,6 +151,7 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
                 .eq(StringUtils.isNotEmpty(approveRequest.getProposerId()), ApproveFlowInstanceEntity::getProposerId, approveRequest.getProposerId())
                 .eq(approveRequest.getStatus() != null, ApproveFlowInstanceEntity::getApproveStatus, approveRequest.getStatus())
                 .like(StringUtils.isNotEmpty(approveRequest.getQueryInput()), ApproveFlowInstanceEntity::getMessage, approveRequest.getQueryInput())
+                .ne(ApproveFlowInstanceEntity::getApproveStatus, ApproveStatus.REMOVED)
                 .between(approveRequest.getStartDate() != null && approveRequest.getEndDate() != null, ApproveFlowInstanceEntity::getStartTime, approveRequest.getStartDate(), approveRequest.getEndDate());
         if (isProposer) {
             qw.lambda().eq(ApproveFlowInstanceEntity::getProposerId, CCH.userId());
@@ -111,6 +161,7 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
         }
 
         qw.orderByDesc(StringUtils.isNotEmpty(approveRequest.getOrderBy()), approveRequest.getOrderBy());
+        qw.lambda().orderByDesc(ApproveFlowInstanceEntity::getUpdatedTime);
         Page<ApproveFlowInstanceEntity> page = this.page(queryPage, qw);
         result.setCurrent(page.getCurrent());
         result.setPageSize(page.getSize());
@@ -148,10 +199,10 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
     private boolean updateApproveStatus(String approveInstanceKey, ApproveStatus approveStatus, String message) {
         UpdateWrapper<ApproveFlowInstanceEntity> uw = new UpdateWrapper<>();
         uw.lambda().set(ApproveFlowInstanceEntity::getApproveStatus, approveStatus.name())
-                .set(approveStatus == ApproveStatus.REJECTED||
-                        approveStatus ==ApproveStatus.APPROVED, ApproveFlowInstanceEntity::getLastApproveDateTime, LocalDateTime.now())
+                .set(approveStatus == ApproveStatus.REJECTED ||
+                        approveStatus == ApproveStatus.APPROVED, ApproveFlowInstanceEntity::getLastApproveDateTime, LocalDateTime.now())
                 .set(approveStatus != ApproveStatus.STARTING &&
-                        approveStatus != ApproveStatus.PROCESSING,
+                                approveStatus != ApproveStatus.PROCESSING,
                         ApproveFlowInstanceEntity::getEndTime, LocalDateTime.now())
                 .set(message != null, ApproveFlowInstanceEntity::getMessage, message)
                 .eq(ApproveFlowInstanceEntity::getApproveInstanceKey, approveInstanceKey);

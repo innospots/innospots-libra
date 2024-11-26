@@ -3,6 +3,7 @@ package io.innospots.libra.kernel.module.config.controller;
 import io.innospots.base.model.response.R;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.menu.ModuleMenu;
+import io.innospots.libra.kernel.module.config.model.SysDictTypeGroup;
 import io.innospots.libra.kernel.module.config.model.SysDictionary;
 import io.innospots.libra.kernel.module.config.model.SysDictionaryType;
 import io.innospots.libra.kernel.module.config.operator.SysDictionaryOperator;
@@ -35,16 +36,10 @@ public class SysDictionaryController {
         return R.success(sysDictionaryOperator.list(type));
     }
 
-    @Operation(summary = "Save Dictionary")
-    @PostMapping("save/item")
-    public R<Boolean> saveDictionary(@RequestBody SysDictionary sysDictionary) {
-        return R.success(sysDictionaryOperator.save(sysDictionary));
-    }
-
     @Operation(summary = "Save Dictionary List")
-    @PostMapping("save/list")
-    public R<Boolean> saveDictionary(@RequestBody List<SysDictionary> sysDictionaries) {
-        return R.success(sysDictionaryOperator.save(sysDictionaries));
+    @PostMapping("save")
+    public R<List<SysDictionary>> saveDictionary(@RequestBody SysDictTypeGroup sysDictTypeGroup) {
+        return R.success(sysDictionaryOperator.save(sysDictTypeGroup));
     }
 
     @Operation(summary = "Delete Dictionary")
