@@ -21,7 +21,7 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 @RestController
 @RequestMapping(PATH_ROOT_ADMIN + "approve/audit")
 @ModuleMenu(menuKey = "approve")
-@Tag(name = "approve flow")
+@Tag(name = "approve audit")
 public class ApproveAuditController {
 
 

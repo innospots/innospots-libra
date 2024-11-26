@@ -22,7 +22,7 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 @RestController
 @RequestMapping(PATH_ROOT_ADMIN + "approve/proposer")
 @ModuleMenu(menuKey = "approve")
-@Tag(name = "approve form")
+@Tag(name = "approve proposer")
 public class ApproveProposerController {
 
     private final ApproveFlowInstanceOperator approveFlowInstanceOperator;
