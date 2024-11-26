@@ -1,6 +1,7 @@
 package io.innospots.approve.console.controller;
 
 import io.innospots.approve.core.model.ApproveFlowInstance;
+import io.innospots.approve.core.model.ApproveFlowInstanceBase;
 import io.innospots.approve.core.model.ApproveRequest;
 import io.innospots.approve.core.operator.ApproveFlowInstanceOperator;
 import io.innospots.approve.core.runtime.ApproveFlowRuntimeContainer;
@@ -38,13 +39,13 @@ public class ApproveAuditController {
 
     @Operation(summary = "page approver instances by request")
     @GetMapping("page")
-    public R<PageBody<ApproveFlowInstance>> pageByApprover(ApproveRequest approveRequest) {
+    public R<PageBody<ApproveFlowInstanceBase>> pageByApprover(ApproveRequest approveRequest) {
         return R.success(approveFlowInstanceOperator.page(approveRequest, false, true));
     }
 
     @Operation(summary = "get approve instance by approve instance key")
     @GetMapping("/key/{approveInstanceKey}")
-    public R<ApproveFlowInstance> findOne(String approveInstanceKey) {
+    public R<ApproveFlowInstance> findOne(@PathVariable String approveInstanceKey) {
         return R.success(approveFlowInstanceOperator.findOne(approveInstanceKey));
     }
 

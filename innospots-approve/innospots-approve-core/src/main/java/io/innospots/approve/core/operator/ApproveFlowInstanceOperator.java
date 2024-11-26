@@ -10,6 +10,7 @@ import io.innospots.approve.core.dao.ApproveFlowInstanceDao;
 import io.innospots.approve.core.entity.ApproveFlowInstanceEntity;
 import io.innospots.approve.core.enums.ApproveStatus;
 import io.innospots.approve.core.model.ApproveFlowInstance;
+import io.innospots.approve.core.model.ApproveFlowInstanceBase;
 import io.innospots.approve.core.model.ApproveForm;
 import io.innospots.approve.core.model.ApproveRequest;
 import io.innospots.base.data.body.PageBody;
@@ -89,10 +90,10 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
         return ApproveFlowInstanceConverter.INSTANCE.entityToModel(entity);
     }
 
-    public PageBody<ApproveFlowInstance> page(ApproveRequest approveRequest,
-                                              boolean isProposer,
-                                              boolean isApprover) {
-        PageBody<ApproveFlowInstance> result = new PageBody<>();
+    public PageBody<ApproveFlowInstanceBase> page(ApproveRequest approveRequest,
+                                                  boolean isProposer,
+                                                  boolean isApprover) {
+        PageBody<ApproveFlowInstanceBase> result = new PageBody<>();
         Page<ApproveFlowInstanceEntity> queryPage = new Page<>(approveRequest.getPage(), approveRequest.getSize());
         QueryWrapper<ApproveFlowInstanceEntity> qw = new QueryWrapper<>();
         qw.lambda().eq(approveRequest.getApproveType() != null, ApproveFlowInstanceEntity::getApproveType, approveRequest.getApproveType())
@@ -114,7 +115,7 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
         result.setPageSize(page.getSize());
         result.setTotal(page.getTotal());
         result.setList(CollectionUtils.isEmpty(page.getRecords()) ? new ArrayList<>() :
-                ApproveFlowInstanceConverter.INSTANCE.entitiesToModels(page.getRecords()));
+                ApproveFlowInstanceConverter.INSTANCE.entitiesToBaseModel(page.getRecords()));
 
 
         return result;
