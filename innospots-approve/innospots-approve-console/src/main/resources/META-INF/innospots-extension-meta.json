@@ -15,6 +15,16 @@
   ],
   "modules": [
     {
+      "name": "${approve.flow.management}",
+      "icon": "approve_flow",
+      "itemKey": "approve-flow",
+      "i18nNames": {
+        "en_US": "Approve Flow",
+        "zh_CN": "审批流管理"
+      },
+      "uri": "/workflow/index?workflowType=APPROVE"
+    },
+    {
       "name": "${approve-proposer}",
       "itemKey": "approve-proposer",
       "uri": "/approve",

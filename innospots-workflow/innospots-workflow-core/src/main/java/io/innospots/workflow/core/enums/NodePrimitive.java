@@ -81,6 +81,8 @@ public enum NodePrimitive {
     apiTrigger("workflow.node.primitive.api:API触发器"),
 
     approve("workflow.node.primitive.approve:审批"),
+
+    approveTrigger("workflow.node.primitive.approveTrigger:审批触发节点"),
     /**
      * Normal node.
      */

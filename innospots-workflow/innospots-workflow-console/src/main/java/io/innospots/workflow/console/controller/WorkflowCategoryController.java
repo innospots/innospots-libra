@@ -19,13 +19,14 @@
 package io.innospots.workflow.console.controller;
 
 import io.innospots.base.model.response.R;
-import io.innospots.libra.base.controller.BaseController;
+import io.innospots.libra.base.category.BaseCategory;
 import io.innospots.libra.base.category.CategoryType;
+import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
-import io.innospots.libra.base.category.BaseCategory;
+import io.innospots.workflow.console.enums.WorkflowType;
 import io.innospots.workflow.console.operator.WorkflowCategoryOperator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -60,8 +61,11 @@ public class WorkflowCategoryController extends BaseController {
     @PostMapping
     @Operation(summary = "create workflow category")
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${page.category.add.title}")
-    public R<BaseCategory> createCategory(@Parameter(required = true, name = "categoryName") @RequestParam("categoryName") String categoryName) {
-        BaseCategory category = workflowCategoryOperator.createCategory(categoryName, CategoryType.WORKFLOW);
+    public R<BaseCategory> createCategory(
+            @Parameter(required = true, name = "categoryName") @RequestParam("categoryName") String categoryName,
+            @Parameter(required = false, name = "workflowType") @RequestParam(name = "workflowType", required = false, defaultValue = "EVENT") WorkflowType workflowType
+    ) {
+        BaseCategory category = workflowCategoryOperator.createCategory(categoryName, workflowType);
         return success(category);
     }
 
@@ -77,7 +81,7 @@ public class WorkflowCategoryController extends BaseController {
 
     @OperationLog(operateType = OperateType.DELETE, idParamPosition = 0)
     @DeleteMapping("{categoryId}")
-    @Operation(summary = "delete strategy category")
+    @Operation(summary = "delete workflow category")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.category.delete.title}")
     public R<Boolean> deleteCategory(@Parameter(required = true, name = "categoryId") @PathVariable Integer categoryId) {
         return success(workflowCategoryOperator.deleteCategory(categoryId));
@@ -85,17 +89,23 @@ public class WorkflowCategoryController extends BaseController {
 
 
     @GetMapping
-    @Operation(summary = "strategy category list", description = "param：0-strategy category has no value 1-it has value")
-    public R<List<BaseCategory>> listCategories(Boolean hasNumber) {
-        List<BaseCategory> list = workflowCategoryOperator.list(hasNumber);
+    @Operation(summary = "workflow category list", description = "param：0-strategy category has no value 1-it has value")
+    public R<List<BaseCategory>> listCategories(
+            @Parameter(required = true, name = "hasNumber") @RequestParam(value = "hasNumber",required = false,defaultValue = "true") Boolean hasNumber,
+            @Parameter(required = false, name = "workflowType") @RequestParam(name = "workflowType", required = false, defaultValue = "EVENT") WorkflowType workflowType
+                                                ) {
+        List<BaseCategory> list = workflowCategoryOperator.list(hasNumber,workflowType);
         return success(list);
 
     }
 
     @GetMapping("check/{categoryName}")
     @Operation(summary = "check name duplicate", description = "return: true = duplicate,false = not duplicate")
-    public R<Boolean> checkNameExist(@Parameter(required = true, name = "categoryName") @PathVariable String categoryName) {
-        return success(workflowCategoryOperator.checkNameExist(categoryName, CategoryType.WORKFLOW));
+    public R<Boolean> checkNameExist(
+            @Parameter(required = true, name = "categoryName") @PathVariable String categoryName,
+            @Parameter(required = false, name = "workflowType") @RequestParam(name = "workflowType", required = false, defaultValue = "EVENT") WorkflowType workflowType
+            ) {
+        return success(workflowCategoryOperator.checkNameExist(categoryName,workflowType));
     }
 
 }

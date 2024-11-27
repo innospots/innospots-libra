@@ -16,4 +16,6 @@ public class WorkflowQuery extends FormQuery {
 
     @Schema(title = "data status")
     private DataStatus dataStatus;
+
+    private String flowCode;
 }

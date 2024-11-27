@@ -57,7 +57,7 @@ public class BaseCategoryEntity extends PBaseEntity {
     @Column(length = 128)
     private String categoryName;
 
-    @Column(length = 16)
+    @Column(length = 32)
     //@Enumerated(value = EnumType.STRING)
     private String categoryType;
 

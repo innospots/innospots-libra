@@ -33,4 +33,6 @@ public enum CategoryType {
     APPS,
     APP_TPL,
     WORKFLOW,
+    APPROVE_FLOW,
+    JOB_FLOW,
 }

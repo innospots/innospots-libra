@@ -179,7 +179,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
                 queryWrapper.lambda().eq(FlowNodeDefinitionEntity::getPrimitive, primitive);
             }
         }
-        if (flowCode != null) {
+        if (StringUtils.isNotEmpty(flowCode)) {
             queryWrapper.lambda().eq(FlowNodeDefinitionEntity::getFlowCode, flowCode);
         }
         return FlowNodeDefinitionConverter.INSTANCE.entitiesToModels(this.list(queryWrapper));

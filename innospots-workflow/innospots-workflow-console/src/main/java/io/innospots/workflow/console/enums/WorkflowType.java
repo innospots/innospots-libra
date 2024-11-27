@@ -27,25 +27,10 @@ import lombok.Getter;
 @Getter
 public enum WorkflowType {
 
-    /**
-     * event
-     */
-    SCHEDULE("schedule"),
 
-    /**
-     * cycle
-     */
-    WEBHOOK("webhook"),
-
-    /**
-     * realtime
-     */
-    STREAM("stream"),
-
-    /**
-     * dummy
-     */
-    DUMMY("dummy");
+    EVENT("EVENTS"),
+    APPROVE("APPROVE"),
+    JOB("JOBS");
 
     private final String name;
 

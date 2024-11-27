@@ -33,6 +33,7 @@ import io.innospots.base.exception.ResourceException;
 import io.innospots.base.utils.StringConverter;
 import io.innospots.libra.base.events.NewPageEvent;
 import io.innospots.libra.base.events.NotificationAnnotation;
+import io.innospots.workflow.console.enums.WorkflowType;
 import io.innospots.workflow.console.listener.WorkflowPageListener;
 import io.innospots.workflow.console.model.WorkflowQuery;
 import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
@@ -143,7 +144,7 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
     public PageBody<WorkflowInstance> pageWorkflows(WorkflowQuery request) {
         List<String> nodeCodes = null;
         if (request.getPrimitive() != null) {
-            List<NodeDefinition> nodeDefinitions = flowNodeDefinitionOperator.listOnlineNodes(request.getPrimitive(), null);
+            List<NodeDefinition> nodeDefinitions = flowNodeDefinitionOperator.listOnlineNodes(request.getPrimitive(), request.getFlowCode());
             nodeCodes = nodeDefinitions.stream().map(NodeDefinition::getCode).toList();
         }
 
@@ -332,7 +333,11 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
     private QueryWrapper<WorkflowInstanceEntity> queryWrapper(WorkflowQuery request) {
         QueryWrapper<WorkflowInstanceEntity> query = new QueryWrapper<>();
         LambdaQueryWrapper<WorkflowInstanceEntity> lambda = query.lambda();
-
+        if(StringUtils.isNotEmpty(request.getFlowCode())){
+            lambda.eq(WorkflowInstanceEntity::getTemplateCode, request.getFlowCode());
+        }else{
+            lambda.eq(WorkflowInstanceEntity::getTemplateCode, WorkflowType.EVENT.getName());
+        }
         if (request.getCategoryId() == null) {
             lambda.ne(WorkflowInstanceEntity::getStatus, DataStatus.REMOVED);
             //request.setCategoryId(0);

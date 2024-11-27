@@ -21,9 +21,11 @@ package io.innospots.workflow.console.operator;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import io.innospots.base.enums.DataStatus;
+import io.innospots.libra.base.category.BaseCategoryEntity;
 import io.innospots.libra.base.category.CategoryType;
 import io.innospots.libra.base.category.BaseCategory;
 import io.innospots.libra.base.category.BaseCategoryOperator;
+import io.innospots.workflow.console.enums.WorkflowType;
 import io.innospots.workflow.core.instance.entity.WorkflowInstanceEntity;
 import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +46,25 @@ public class WorkflowCategoryOperator extends BaseCategoryOperator {
         this.workflowInstanceOperator = workflowInstanceOperator;
     }
 
+    public BaseCategory createCategory(String categoryName, WorkflowType workflowType){
+        return super.createCategory(categoryName, toCategoryType(workflowType));
+    }
+
+    public boolean checkNameExist(String categoryName, WorkflowType workflowType) {
+        return super.checkNameExist(categoryName, toCategoryType(workflowType));
+    }
+
+    private CategoryType toCategoryType(WorkflowType workflowType){
+        if(workflowType == WorkflowType.APPROVE){
+            return CategoryType.APPROVE_FLOW;
+        }
+        if(workflowType == WorkflowType.JOB){
+            return CategoryType.JOB_FLOW;
+        }
+        return CategoryType.WORKFLOW;
+    }
+
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean deleteCategory(Integer categoryId) {
@@ -52,8 +73,8 @@ public class WorkflowCategoryOperator extends BaseCategoryOperator {
         return super.deleteCategory(categoryId);
     }
 
-    public List<BaseCategory> list(Boolean hasNumber) {
-        List<BaseCategory> list = super.listCategories(CategoryType.WORKFLOW);
+    public List<BaseCategory> list(Boolean hasNumber,WorkflowType workflowType) {
+        List<BaseCategory> list = super.listCategories(toCategoryType(workflowType));
         if (hasNumber == null) {
             hasNumber = Boolean.TRUE;
         }

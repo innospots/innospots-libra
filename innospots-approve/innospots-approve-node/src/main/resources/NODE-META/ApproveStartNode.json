@@ -2,7 +2,7 @@
   "name": "审批开始",
   "code": "approve_start",
   "flowCode": "APPROVE",
-  "primitive": "approve",
+  "primitive": "approveTrigger",
   "vendor": "innospots",
   "description": "审批开始节点",
   "icon": "/node/approve_start.svg",
@@ -31,6 +31,39 @@
         "label": "是否角色限制",
         "placeholder": "请输入节点名称",
         "initialValue": false
+      }
+    },
+    {
+      "name": "input_fields",
+      "type": "FieldList",
+      "valueType": "array",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "输入字段",
+        "placeholder": "请输入节点名称",
+        "initialValue": "",
+        "customColumns": [
+          {
+            "type": "INPUT",
+            "width": "120px",
+            "code": "code",
+            "title": "字段标识"
+          },
+          {
+            "code": "name",
+            "type": "INPUT",
+            "width": "100px",
+            "title": "字段名称",
+            "default": ""
+          },
+          {
+            "type": "INPUT",
+            "width": "120px",
+            "code": "value",
+            "title": "默认值"
+          }
+        ]
       }
     }
   ]
