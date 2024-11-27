@@ -34,6 +34,11 @@ import java.util.Date;
 public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstanceDao, ApproveFlowInstanceEntity> {
 
     public ApproveFlowInstance start(String approveInstanceKey) {
+        ApproveFlowInstance instance = findOne(approveInstanceKey);
+        if(instance.getApproveStatus() != ApproveStatus.DRAFT){
+            throw ResourceException.buildStatusException(this.getClass(), "the resource status is " +
+                    instance.getApproveStatus() + ", can't be start", approveInstanceKey);
+        }
         UpdateWrapper<ApproveFlowInstanceEntity> uw = new UpdateWrapper<>();
         uw.lambda().set(ApproveFlowInstanceEntity::getApproveStatus, ApproveStatus.STARTING.name())
                 .set(ApproveFlowInstanceEntity::getStartTime, LocalDateTime.now())
@@ -68,7 +73,7 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
                     instance.getApproveStatus() +
                     ", which only starting status that can be revoked", approveInstanceKey);
         }
-        return updateApproveStatus(approveInstanceKey, ApproveStatus.REVOKED, message);
+        return updateApproveStatus(approveInstanceKey, ApproveStatus.DRAFT, message);
     }
 
     public boolean updateProcessStatus(String approveInstanceKey) {
@@ -157,7 +162,7 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
             qw.lambda().eq(ApproveFlowInstanceEntity::getProposerId, CCH.userId());
         } else if (isApprover) {
             qw.lambda().eq(ApproveFlowInstanceEntity::getApproverId, CCH.userId());
-            qw.lambda().eq(approveRequest.getProposerId() != null, ApproveFlowInstanceEntity::getProposerId, approveRequest.getProposerId());
+            qw.lambda().eq(StringUtils.isNotEmpty(approveRequest.getProposerId()), ApproveFlowInstanceEntity::getProposerId, approveRequest.getProposerId());
         }
 
         qw.orderByDesc(StringUtils.isNotEmpty(approveRequest.getOrderBy()), approveRequest.getOrderBy());
