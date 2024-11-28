@@ -86,6 +86,7 @@ public class WorkflowCategoryOperator extends BaseCategoryOperator {
                     new QueryWrapper<WorkflowInstanceEntity>()
                             .select("CASE WHEN CATEGORY_ID IS NULL THEN 0 ELSE CATEGORY_ID END AS CATEGORY_ID, COUNT(1) CNT ")
                             .ne("STATUS", DataStatus.REMOVED.name())
+                            .eq("TEMPLATE_CODE",toCategoryType(workflowType).name())
                             .groupBy("CATEGORY_ID"));
 
             Map<Integer, Integer> groupMap = new HashMap<>();
@@ -106,7 +107,10 @@ public class WorkflowCategoryOperator extends BaseCategoryOperator {
             }
 
             BaseCategory recycle = getRecycleBinCategory();
-            long count = workflowInstanceOperator.count(new QueryWrapper<WorkflowInstanceEntity>().lambda().eq(WorkflowInstanceEntity::getStatus, DataStatus.REMOVED));
+            long count = workflowInstanceOperator.count(new QueryWrapper<WorkflowInstanceEntity>()
+                    .lambda().eq(WorkflowInstanceEntity::getStatus, DataStatus.REMOVED)
+                    .eq(WorkflowInstanceEntity::getTemplateCode, toCategoryType(workflowType).name())
+            );
             recycle.setTotalCount((int) count);
             list.add(recycle);
         }
