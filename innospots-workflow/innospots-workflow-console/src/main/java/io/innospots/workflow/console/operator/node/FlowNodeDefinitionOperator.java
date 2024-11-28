@@ -31,6 +31,7 @@ import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.libra.base.events.AvatarRemoveEvent;
+import io.innospots.workflow.console.enums.WorkflowType;
 import io.innospots.workflow.console.model.NodeQueryRequest;
 import io.innospots.workflow.core.enums.NodePrimitive;
 import io.innospots.workflow.core.node.NodeInfo;
@@ -173,14 +174,16 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
                 .eq(FlowNodeDefinitionEntity::getStatus, DataStatus.ONLINE);
         if (primitive != null) {
             if (primitive == NodePrimitive.trigger) {
-                // trigger include api trigger
-                queryWrapper.lambda().in(FlowNodeDefinitionEntity::getPrimitive, primitive, NodePrimitive.apiTrigger);
+                // trigger include all trigger
+                queryWrapper.lambda().in(FlowNodeDefinitionEntity::getPrimitive, primitive,NodePrimitive.approveTrigger, NodePrimitive.apiTrigger);
             } else {
                 queryWrapper.lambda().eq(FlowNodeDefinitionEntity::getPrimitive, primitive);
             }
         }
         if (StringUtils.isNotEmpty(flowCode)) {
             queryWrapper.lambda().eq(FlowNodeDefinitionEntity::getFlowCode, flowCode);
+        }else{
+            queryWrapper.lambda().eq(FlowNodeDefinitionEntity::getFlowCode, WorkflowType.EVENT.getName());
         }
         return FlowNodeDefinitionConverter.INSTANCE.entitiesToModels(this.list(queryWrapper));
     }

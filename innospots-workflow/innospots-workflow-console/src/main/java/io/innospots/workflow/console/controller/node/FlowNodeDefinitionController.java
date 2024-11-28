@@ -94,9 +94,9 @@ public class FlowNodeDefinitionController extends BaseController {
     @Operation(summary = "list online nodes")
     public R<List<NodeDefinition>> listOnlineNodeDefinitions(
             @Parameter(name = "primitive") @RequestParam(required = false, name = "primitive") NodePrimitive primitive,
-            @Parameter(name = "tplFlowCode") @RequestParam(required = false, name = "tplFlowCode",defaultValue = "EVENTS") String tplFlowCode
+            @Parameter(name = "workflowType") @RequestParam(required = false, name = "workflowType",defaultValue = "EVENTS") String workflowType
             ) {
-        return success(nodeDefinitionService.listOnlineNodes(primitive,tplFlowCode));
+        return success(nodeDefinitionService.listOnlineNodes(primitive,workflowType));
     }
 
     /**
