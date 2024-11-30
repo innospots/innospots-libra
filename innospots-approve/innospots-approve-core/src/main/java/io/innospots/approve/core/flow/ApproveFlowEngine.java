@@ -22,6 +22,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +60,11 @@ public class ApproveFlowEngine extends StreamFlowEngine {
             return;
         }
         super.execute(flow,flowExecution);
+    }
+
+
+    public Flow getFlow(String flowKey){
+        return flowManager.loadFlow(flowKey);
     }
 
 
@@ -115,9 +121,12 @@ public class ApproveFlowEngine extends StreamFlowEngine {
         approveFlowExecutionStoreListener.update(flowExecution);
     }
 
-    public Flow getFlow(String flowKey){
-        return flowManager.loadFlow(flowKey);
+    @Override
+    protected void executeNextNode(String shouldExecuteNode, Flow flow, FlowExecution flowExecution) {
+        BaseNodeExecutor baseAppNode = flow.findNode(shouldExecuteNode);
+        //add to executable node list
+        List<BaseNodeExecutor> nodeExecutors = new ArrayList<>();
+        nodeExecutors.add(baseAppNode);
+        traverseExecuteNode(nodeExecutors, flow, flowExecution);
     }
-
-
 }

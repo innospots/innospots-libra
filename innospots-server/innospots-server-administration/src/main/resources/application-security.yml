@@ -75,15 +75,15 @@ innospots:
             method: POST
             url: https://oauth2.googleapis.com/tokeninfo
             params:
-              client_id: client_id
-              client_secret: client_secret
-              grant_type: authorization_code
-              redirect_uri: redirect_uri
-              code: code
-              scope: scope
-              state: {{state}}
-              response_type: token
-              include_granted_scopes: true
+              client_id: "client_id"
+              client_secret: "client_secret"
+              grant_type: "authorization_code"
+              redirect_uri: "redirect_uri"
+              code: "code"
+              scope: "scope"
+              state: "{{state}}"
+              response_type: "token"
+              include_granted_scopes: "true"
             response:
               access_token: "$.access_token"
               expires_in: "$.expires_in"

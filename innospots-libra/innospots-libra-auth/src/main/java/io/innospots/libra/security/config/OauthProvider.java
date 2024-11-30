@@ -46,9 +46,9 @@ public class OauthProvider {
 
         private String url;
 
-        private Map<String,String> params;
+        private Map<String,Object> params;
 
-        private Map<String,String> response;
+        private Map<String,Object> response;
     }
 
 }

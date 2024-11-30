@@ -68,7 +68,7 @@ public class StreamFlowEngine extends BaseFlowEngine {
      * @param flow
      * @param flowExecution
      */
-    private void traverseExecuteNode(List<BaseNodeExecutor> nodeExecutors, Flow flow, FlowExecution flowExecution) {
+    protected void traverseExecuteNode(List<BaseNodeExecutor> nodeExecutors, Flow flow, FlowExecution flowExecution) {
         List<String> nextNodes = new ArrayList<>();
 
         //依次执行节点，宽度优先执行
@@ -81,17 +81,6 @@ public class StreamFlowEngine extends BaseFlowEngine {
                 if (nodeExecution.nextExecute()) {
                     nextNodes.addAll(nodeExecution.getNextNodeKeys());
                 }
-                /*
-                if(nodeExecution.getStatus() == ExecutionStatus.PENDING){
-                    flowExecution.setStatus(nodeExecution.getStatus());
-                    return;
-                }else if(nodeExecution.getStatus() == ExecutionStatus.FAILED){
-                    flowExecution.setStatus(ExecutionStatus.FAILED);
-                    flowExecution.setMessage(nodeExecution.getMessage());
-                }
-                flowExecution.addNodeExecution(nodeExecution);
-                 */
-
             } catch (Exception e) {
                 log.error("execute node error:{}", nodeExecutor, e);
                 throw InnospotException.buildException(this.getClass(), ResponseCode.EXECUTE_ERROR, e, "node executor error:" + nodeExecutor.nodeKey(), e.getMessage());
@@ -109,61 +98,26 @@ public class StreamFlowEngine extends BaseFlowEngine {
 
         //all next should executable nodes
         for (String nextNode : nextNodes) {
-            if (flowExecution.isDone(nextNode)) {
-                //log.error("The flow is a directed acyclic graph, which has the loop node, please check the flow node config, the loop node key:{}",nextNode);
-                log.warn("next nodes has bean executed, node key:{}", nextNode);
-                continue;
-            }
-            nextNodeExecute(nextNode, flow, flowExecution);
+            executeNextNode(nextNode, flow, flowExecution);
         }
-        /*
-        List<BaseAppNode> nextExecutors = new ArrayList<>();
-        for (String nextNode : nextNodes) {
-            if(flowExecution.isDone(nextNode)){
-                log.error("The flow is a directed acyclic graph, which has the loop node, please check the flow node config, the loop node key:{}",nextNode);
-                continue;
-            }
-
-            //判断来源节点是否都已经执行完成，如果全部执行完成则，可执行后续节点
-            Set<String> sourceKeys = flow.sourceKey(nextNode);
-            boolean isDone = sourceKeys.stream().allMatch(flowExecution::isDone);
-            if(isDone){
-                BaseAppNode baseAppNode = flow.findNode(nextNode);
-                // end node
-                if (baseAppNode!=null && !"END".equals(baseAppNode.getCode())){
-                    nextExecutors.add(baseAppNode);
-                }
-
-            }
-        }//end nextNodes for
-
-        traverseExecuteNode(nextExecutors,flow,flowExecution);
-
-         */
     }
 
 
-    private void nextNodeExecute(String shouldExecuteNode, Flow flow, FlowExecution flowExecution) {
-        //whether all of the source node is complete
-        Set<String> sourceKeys = flow.sourceKey(shouldExecuteNode);
-        //not execute node list
-        List<String> unDoneList = new ArrayList<>();
-
-        if (CollectionUtils.isNotEmpty(sourceKeys)) {
-            for (String source : sourceKeys) {
-                if (!flowExecution.isDone(source)) {
-                    unDoneList.add(source);
-                }
-            }
+    protected void executeNextNode(String shouldExecuteNode, Flow flow, FlowExecution flowExecution) {
+        if (flowExecution.isDone(shouldExecuteNode)) {
+            //log.error("The flow is a directed acyclic graph, which has the loop node, please check the flow node config, the loop node key:{}",nextNode);
+            log.warn("next nodes has bean executed, node key:{}", shouldExecuteNode);
+            return;
         }
-
+        //not execute node list
+        List<String> unDoneList = prevUndoneNodes(shouldExecuteNode, flow, flowExecution);
 
         //have not execute source nodes in the current node
         if (!unDoneList.isEmpty()) {
             for (String unDoneNode : unDoneList) {
                 //recursively invoke the node that needs to be executed in the unDoneList
                 if (flowExecution.isNotExecute(unDoneNode)) {
-                    nextNodeExecute(unDoneNode, flow, flowExecution);
+                    executeNextNode(unDoneNode, flow, flowExecution);
                 }
             }
 
@@ -189,8 +143,18 @@ public class StreamFlowEngine extends BaseFlowEngine {
 
     }
 
-    @Override
-    public FlowExecution run(Long workflowInstanceId, Integer revisionId, String targetNodeKey, List<Map<String, Object>> payloads) {
-        return null;
+    protected List<String> prevUndoneNodes(String nodeKey, Flow flow, FlowExecution flowExecution) {
+        //whether all sources are complete
+        Set<String> sourceKeys = flow.sourceKey(nodeKey);
+        List<String> unDoneList = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(sourceKeys)) {
+            for (String source : sourceKeys) {
+                if (!flowExecution.isDone(source)) {
+                    unDoneList.add(source);
+                }
+            }
+        }
+        return unDoneList;
     }
+
 }
