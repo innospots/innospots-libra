@@ -43,7 +43,7 @@ import jakarta.servlet.Filter;
  * @date 2021/2/15
  */
 @Configuration
-@EnableConfigurationProperties({AuthProperties.class})
+@EnableConfigurationProperties({AuthProperties.class, OauthProviderProperties.class})
 @EntityScan(basePackages = "io.innospots.libra.security.logger.entity")
 @MapperScan(basePackages = {"io.innospots.libra.security.logger.dao",
         "io.innospots.libra.security.auth.basic"})
