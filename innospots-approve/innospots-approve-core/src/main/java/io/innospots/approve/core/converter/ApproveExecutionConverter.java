@@ -22,6 +22,7 @@ public interface ApproveExecutionConverter extends BaseBeanConverter<ApproveExec
     static ApproveExecutionEntity toEntity(NodeExecution nodeExecution, ApproveActor actor) {
         ApproveExecutionEntity entity = new ApproveExecutionEntity();
         entity.setApproveExecutionId(nodeExecution.getNodeExecutionId());
+        entity.setFlowExecutionId(nodeExecution.getFlowExecutionId());
         entity.setNodeKey(nodeExecution.getNodeKey());
         entity.setNodeName(nodeExecution.getNodeName());
         entity.setSequenceNumber(nodeExecution.getSequenceNumber());
@@ -32,7 +33,8 @@ public interface ApproveExecutionConverter extends BaseBeanConverter<ApproveExec
             entity.setUserId(actor.getUserId());
             entity.setUserName(actor.getUserName());
             entity.setApproveInstanceKey(actor.getApproveInstanceKey());
-            entity.setResult(actor.getResult());
+            entity.setResult(actor.getResult()!=null ? actor.getResult():null);
+            entity.setMessage(actor.getMessage());
         } else {
             if (ApproveHolder.get() != null) {
                 entity.setApproveInstanceKey(ApproveHolder.get().getApproveInstanceKey());

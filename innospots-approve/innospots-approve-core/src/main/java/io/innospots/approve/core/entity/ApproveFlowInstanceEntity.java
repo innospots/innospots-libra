@@ -68,8 +68,8 @@ public class ApproveFlowInstanceEntity extends PBaseEntity {
     @Column(length = 32)
     private String approveNodeName;
 
-    @Column(length = 1024)
-    private String nextNodeKeys;
+    @Column(length = 64)
+    private String currentNodeKey;
 
     @Column
     private LocalDateTime lastApproveDateTime;

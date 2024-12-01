@@ -91,7 +91,8 @@ public class ApproveFlowEngine extends StreamFlowEngine {
 
         approveFlowExecutionStoreListener.start(flowExecution);
         ApproveFlowInstance approveFlowInstance = ApproveHolder.get();
-        if (approveFlowInstance.getFlowExecutionId() == null) {
+        if (approveFlowInstance.getFlowExecutionId() == null ||
+                !approveFlowInstance.getFlowExecutionId().equals(flowExecution.getFlowExecutionId())) {
             approveFlowInstanceOperator.bindFlowExecutionId(approveFlowInstance.getApproveInstanceKey(), flowExecution.getFlowExecutionId());
             approveFlowInstance.setFlowExecutionId(flowExecution.getFlowExecutionId());
         }
@@ -128,5 +129,12 @@ public class ApproveFlowEngine extends StreamFlowEngine {
         List<BaseNodeExecutor> nodeExecutors = new ArrayList<>();
         nodeExecutors.add(baseAppNode);
         traverseExecuteNode(nodeExecutors, flow, flowExecution);
+    }
+
+    @Override
+    protected NodeExecution executeNode(BaseNodeExecutor nodeExecutor, FlowExecution flowExecution) {
+        NodeExecution nodeExecution = super.executeNode(nodeExecutor, flowExecution);
+        this.approveFlowInstanceOperator.updateCurrentNodeKey(ApproveHolder.get().getApproveInstanceKey(), nodeExecutor.nodeKey());
+        return nodeExecution;
     }
 }

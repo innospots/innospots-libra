@@ -178,7 +178,7 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
         return result;
     }
 
-    public ApproveFlowInstance getApproveInstanceByFlowExecutionId(String flowExecutionId) {
+    public ApproveFlowInstance getByFlowExecutionId(String flowExecutionId) {
         QueryWrapper<ApproveFlowInstanceEntity> qw = new QueryWrapper<>();
         qw.lambda().eq(ApproveFlowInstanceEntity::getFlowExecutionId, flowExecutionId);
         return ApproveFlowInstanceConverter.INSTANCE.entityToModel(this.getOne(qw));
@@ -200,6 +200,19 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
                 .eq(ApproveFlowInstanceEntity::getApproveInstanceKey, approveInstanceKey);
         return this.update(uw);
     }
+
+    public boolean updateCurrentNodeKey(String approveInstanceKey, String currentNodeKey){
+        UpdateWrapper<ApproveFlowInstanceEntity> uw = new UpdateWrapper<>();
+        uw.lambda().set(ApproveFlowInstanceEntity::getCurrentNodeKey, currentNodeKey)
+                .eq(ApproveFlowInstanceEntity::getApproveInstanceKey, approveInstanceKey);
+        return this.update(uw);
+    }
+
+    public boolean save(ApproveFlowInstance approveFlowInstance){
+        ApproveFlowInstanceEntity entity = ApproveFlowInstanceConverter.INSTANCE.modelToEntity(approveFlowInstance);
+        return super.save(entity);
+    }
+
 
     private boolean updateApproveStatus(String approveInstanceKey, ApproveStatus approveStatus, String message) {
         UpdateWrapper<ApproveFlowInstanceEntity> uw = new UpdateWrapper<>();

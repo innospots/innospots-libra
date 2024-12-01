@@ -44,5 +44,8 @@ public class ApproveHolder {
     public static ApproveActor getActor() {
         return ACTOR.get();
     }
+    public static void removeActor() {
+        ACTOR.remove();
+    }
 
 }

@@ -36,6 +36,9 @@ public class ApproveExecutionEntity extends PBaseEntity {
     private String approveInstanceKey;
 
     @Column(length = 64)
+    private String flowExecutionId;
+
+    @Column(length = 64)
     private String nodeKey;
 
     @Column(length = 32)
@@ -53,6 +56,8 @@ public class ApproveExecutionEntity extends PBaseEntity {
     @Column(length = 32)
     private String result;
 
+    @Column(length = 32)
+    private String approveStatus;
 
     @Column(length = 2048)
     private String message;

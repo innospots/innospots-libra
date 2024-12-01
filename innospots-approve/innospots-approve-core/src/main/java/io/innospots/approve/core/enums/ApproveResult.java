@@ -9,5 +9,6 @@ public enum ApproveResult {
 
     APPROVED,
     REJECTED,
+    PENDING,
     CANCELED;
 }

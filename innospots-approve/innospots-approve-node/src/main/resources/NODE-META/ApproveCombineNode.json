@@ -6,7 +6,7 @@
   "vendor": "innospots",
   "description": "多个分支合并",
   "icon": "/node/combine.svg",
-  "nodeType": "io.innospots.workflow.node.app.logic.CombineNode",
+  "nodeType": "io.innospots.approve.node.ApproveCombineNode",
   "outPorts": "1",
   "inPorts": "4",
   "components": [
@@ -23,29 +23,25 @@
       }
     },
     {
-      "name": "output_setting",
+      "name": "approve_mode",
       "type": "OptionPicker",
       "valueType": "string",
       "copyable": false,
       "deletable": false,
       "settings": {
-        "label": "输出设置",
+        "label": "审批方式",
 		"viewType": "picker",
         "optionsType": "customOptions",
         "dataSource": "static",
-        "initialValue": "NONE",
+        "initialValue": "ALL",
         "options": [
           {
-            "value": "NONE",
-            "label": "不输出"
+            "value": "ALL",
+            "label": "全部通过"
           },
           {
-            "value": "FIRST",
-            "label": "最先分支输出"
-          },
-          {
-            "value": "LAST",
-            "label": "最后分支输出"
+            "value": "EITHER",
+            "label": "任何一个通过"
           }
         ]
       }

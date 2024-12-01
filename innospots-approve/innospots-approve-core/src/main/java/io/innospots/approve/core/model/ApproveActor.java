@@ -1,6 +1,9 @@
 package io.innospots.approve.core.model;
 
+import io.innospots.approve.core.enums.ApproveAction;
+import io.innospots.approve.core.enums.ApproveResult;
 import jakarta.persistence.Column;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +14,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@Builder
 public class ApproveActor {
 
     private String approveActorId;
@@ -25,9 +29,10 @@ public class ApproveActor {
 
     private String actorType;
 
-    private String approveAction;
+    private ApproveAction approveAction;
 
     private String result;
 
     private String message;
+
 }

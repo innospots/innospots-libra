@@ -115,7 +115,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
         nodeExecution.setNodeCode(ni.getCode());
         flowExecution.addNodeExecution(nodeExecution);
         if (this.buildStatus != BuildStatus.DONE) {
-            nodeExecution.end(buildException != null ? buildException.getMessage() : "build fail", ExecutionStatus.FAILED, false);
+            nodeExecution.end(buildException != null ? buildException.getMessage() : "build fail", ExecutionStatus.FAILED);
         } else {
             nodeExecution.setInputs(this.buildExecutionInput(flowExecution));
         }
@@ -251,11 +251,11 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
 
         if (!isFail || ni.isContinueOnFail()) {
             processNextKeys(nodeExecution);
-            nodeExecution.setNext(true);
+            //nodeExecution.setNext(true);
         }
         boolean isDone = nodeExecution.getStatus() != null && nodeExecution.getStatus().isDone();
         if (nodeExecution.getStatus() == null || !isDone) {
-            nodeExecution.end(msg, ExecutionStatus.COMPLETE, true);
+            nodeExecution.end(msg, ExecutionStatus.COMPLETE);
         } else {
             nodeExecution.end(msg);
         }

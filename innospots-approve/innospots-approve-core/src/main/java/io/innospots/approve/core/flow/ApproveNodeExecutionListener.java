@@ -33,10 +33,12 @@ public class ApproveNodeExecutionListener implements INodeExecutionListener {
     @Override
     public void complete(NodeExecution nodeExecution) {
         approveExecutionOperator.createExecution(nodeExecution, ApproveHolder.getActor());
+        ApproveHolder.removeActor();
     }
 
     @Override
     public void fail(NodeExecution nodeExecution) {
         approveExecutionOperator.createExecution(nodeExecution, ApproveHolder.getActor());
+        ApproveHolder.removeActor();
     }
 }

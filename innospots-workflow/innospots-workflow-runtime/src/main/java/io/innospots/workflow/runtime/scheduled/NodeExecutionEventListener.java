@@ -74,7 +74,8 @@ public class NodeExecutionEventListener implements IEventListener<NodeExecutionE
             if (processInfo != null && processInfo.getStatus() == FlowStatus.LOADED) {
                 NodeExecution nodeExecution = flowExecution.getNodeExecution(scheduledNodeExecution.getNodeKey());
                 if (nodeExecution != null) {
-                    nodeExecution.end("scheduled execution", ExecutionStatus.COMPLETE, true);
+                    nodeExecution.end("scheduled execution", ExecutionStatus.COMPLETE);
+                    nodeExecution.setNext(true);
                     nodeExecutionOperator.update(nodeExecution);
                 }
                 boolean b = flowEngine.continueExecute(flowExecution);

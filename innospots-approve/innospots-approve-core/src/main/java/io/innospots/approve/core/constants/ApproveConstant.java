@@ -13,4 +13,6 @@ public interface ApproveConstant {
 
     String APPROVE_MESSAGE = "approveMessage";
 
+    String ACTOR_TYPE_SYS= "flow";
+
 }

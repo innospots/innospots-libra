@@ -1,13 +1,13 @@
 package io.innospots.approve.core.model;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
+import io.innospots.approve.core.enums.ApproveStatus;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author Smars
@@ -16,9 +16,14 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-public class ApproveExecution {
+public class ApproveExecution implements Comparable<ApproveExecution>{
 
+    /**
+     * nodeExecutionId
+     */
     private String approveExecutionId;
+
+    private String flowExecutionId;
 
     private String approveInstanceKey;
 
@@ -34,6 +39,8 @@ public class ApproveExecution {
 
     private String result;
 
+    private ApproveStatus approveStatus;
+
     private String message;
 
     private String context;
@@ -41,4 +48,22 @@ public class ApproveExecution {
     private LocalDateTime startTime;
 
     private LocalDateTime endTime;
+
+    public Map<String, Object> toInfo() {
+        Map<String, Object> info = new LinkedHashMap<>();
+        info.put("approveExecutionId", approveExecutionId);
+        info.put("userId", userId);
+        info.put("userName", userName);
+        info.put("result", result);
+        info.put("approveStatus", approveStatus.name());
+        info.put("message", message);
+        info.put("startTime", startTime);
+        info.put("endTime", endTime);
+        return info;
+    }
+
+    @Override
+    public int compareTo(@NotNull ApproveExecution o) {
+        return o.endTime.compareTo(endTime);
+    }
 }

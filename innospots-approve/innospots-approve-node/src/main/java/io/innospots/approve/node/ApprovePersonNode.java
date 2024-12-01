@@ -1,18 +1,14 @@
 package io.innospots.approve.node;
 
-import io.innospots.approve.core.constants.ApproveConstant;
 import io.innospots.approve.core.enums.ApproveAction;
 import io.innospots.approve.core.enums.ApproveResult;
 import io.innospots.approve.core.model.ApproveActor;
 import io.innospots.approve.core.model.ApproveFlowInstance;
-import io.innospots.approve.core.operator.ApproveActorOperator;
-import io.innospots.approve.core.operator.ApproveFlowInstanceOperator;
 import io.innospots.approve.core.utils.ApproveHolder;
 import io.innospots.base.model.user.UserInfo;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.base.utils.CCH;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -25,10 +21,8 @@ import java.util.Objects;
  * @date 2024/11/20
  */
 @Slf4j
-public class ApprovePersonNode extends BaseNodeExecutor {
+public class ApprovePersonNode extends ApproveBaseNode {
 
-    private ApproveActorOperator approveActorOperator;
-    private ApproveFlowInstanceOperator approveFlowInstanceOperator;
     private String resultField;
     private String messageField;
     private String actorType;
@@ -37,13 +31,12 @@ public class ApprovePersonNode extends BaseNodeExecutor {
 
     @Override
     protected void initialize() {
+        super.initialize();
         resultField = this.valueString("resultField");
         messageField = this.valueString("messageField");
         actorType = this.valueString("actorType");
         userId = this.validInteger("userId");
         roleId = this.validInteger("roleId");
-        approveActorOperator = this.getBean(ApproveActorOperator.class);
-        approveFlowInstanceOperator = this.getBean(ApproveFlowInstanceOperator.class);
     }
 
 
@@ -62,11 +55,12 @@ public class ApprovePersonNode extends BaseNodeExecutor {
         Map<String, Object> body = new HashMap<>();
         if (approveActor == null) {
             //new actor, first execute the node
-            approveActor = new ApproveActor();
-            approveActor.setApproveAction(ApproveAction.PENDING.name());
-            approveActor.setApproveInstanceKey(approveFlowInstance.getApproveInstanceKey());
-            approveActor.setNodeKey(this.nodeKey());
-            approveActorOperator.saveApproveActor(approveActor);
+            approveActor = ApproveActor.builder()
+                    .approveAction(ApproveAction.PENDING)
+                    .approveInstanceKey(approveFlowInstance.getApproveInstanceKey())
+                    .nodeKey(this.nodeKey())
+                    .build();
+            approveActor = approveActorOperator.saveApproveActor(approveActor);
             //not execute next node
             nodeExecution.setNext(false);
             ApproveHolder.setActor(approveActor);
@@ -95,21 +89,13 @@ public class ApprovePersonNode extends BaseNodeExecutor {
         approveActor.setUserId(CCH.userId());
         approveActor.setUserName(CCH.authUser());
         approveActor.setActorType(actorType);
-        approveActor.setApproveAction(ApproveAction.DONE.name());
+        approveActor.setApproveAction(ApproveAction.DONE);
         approveActorOperator.saveApproveActor(approveActor);
         ApproveHolder.setActor(approveActor);
         approveFlowInstanceOperator.updateProcessStatus(approveFlowInstance.getApproveInstanceKey());
         return body;
     }
 
-    private ApproveFlowInstance getApproveFlowInstance(Map<String, Object> item) {
-        ApproveFlowInstance approveFlowInstance = ApproveHolder.get();
-        if (approveFlowInstance == null) {
-            String approveInstanceId = (String) item.get(ApproveConstant.APPROVE_INSTANCE_KEY);
-            approveFlowInstance = approveFlowInstanceOperator.findOne(approveInstanceId);
-        }
-        return approveFlowInstance;
-    }
 
     private boolean validPermission(NodeExecution nodeExecution) {
         UserInfo userInfo = ApproveHolder.getLoginUser();

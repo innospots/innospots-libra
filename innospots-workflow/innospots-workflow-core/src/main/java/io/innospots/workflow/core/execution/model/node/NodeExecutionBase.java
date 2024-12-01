@@ -89,10 +89,9 @@ public class NodeExecutionBase {
     }
 
 
-    public void end(String msg, ExecutionStatus status, boolean next) {
+    public void end(String msg, ExecutionStatus status) {
         this.end(msg);
         this.status = status;
-        this.next = next;
     }
 
     public void end(String msg) {

@@ -21,6 +21,6 @@ public class ApproveFlowInstance extends ApproveFlowInstanceBase {
 
     private Map<String, Object> formData;
 
-    private List<String> nextNodeKeys;
+    private String currentNodeKey;
 
 }

@@ -77,7 +77,7 @@ public class StreamFlowEngine extends BaseFlowEngine {
                 continue;
             }
             try {
-                NodeExecution nodeExecution = nodeExecutor.execute(flowExecution);
+                NodeExecution nodeExecution = executeNode(nodeExecutor, flowExecution);
                 if (nodeExecution.nextExecute()) {
                     nextNodes.addAll(nodeExecution.getNextNodeKeys());
                 }
@@ -102,6 +102,9 @@ public class StreamFlowEngine extends BaseFlowEngine {
         }
     }
 
+    protected NodeExecution executeNode(BaseNodeExecutor nodeExecutor, FlowExecution flowExecution){
+        return nodeExecutor.execute(flowExecution);
+    }
 
     protected void executeNextNode(String shouldExecuteNode, Flow flow, FlowExecution flowExecution) {
         if (flowExecution.isDone(shouldExecuteNode)) {
