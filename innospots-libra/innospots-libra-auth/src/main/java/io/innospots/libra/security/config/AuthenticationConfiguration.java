@@ -25,9 +25,11 @@ import io.innospots.libra.base.configuration.AuthProperties;
 import io.innospots.libra.base.filter.IgnorePathFilter;
 import io.innospots.libra.security.auth.AuthenticationProvider;
 import io.innospots.libra.security.auth.basic.UserPasswordAuthenticationProvider;
+import io.innospots.libra.security.auth.oauth.OauthAuthenticationProvider;
 import io.innospots.libra.security.filter.AuthenticationFilter;
 import io.innospots.libra.security.jwt.JwtAuthManager;
 import io.innospots.libra.security.operator.AuthUserOperator;
+import io.innospots.libra.security.operator.OauthUserOperator;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -51,7 +53,7 @@ import jakarta.servlet.Filter;
 public class AuthenticationConfiguration {
 
     @ConditionalOnProperty(prefix = "innospots.security", name = "mode", havingValue = "BASIC")
-    @Bean
+    @Bean("userPasswordAuthenticationProvider")
     public AuthenticationProvider userPasswordAuthenticationProvider(
             PasswordEncoder passwordEncoder,
             JwtAuthManager jwtAuthManager,
@@ -62,7 +64,7 @@ public class AuthenticationConfiguration {
     }
 
     @ConditionalOnProperty(prefix = "innospots.security", name = "mode", havingValue = "EXHIBITION")
-    @Bean
+    @Bean("userPasswordAuthenticationProvider")
     public AuthenticationProvider exhibitAuthenticationProvider(
             PasswordEncoder passwordEncoder,
             JwtAuthManager jwtAuthManager,
@@ -70,6 +72,17 @@ public class AuthenticationConfiguration {
             InnospotsConfigProperties innospotsConfigProperties
     ) {
         return new UserPasswordAuthenticationProvider(passwordEncoder,jwtAuthManager,authUserOperator,innospotsConfigProperties);
+    }
+
+    @ConditionalOnProperty(prefix = "innospots.security.oauth-provider", name = "enabled", havingValue = "true")
+    @Bean("oauthAuthenticationProvider")
+    public AuthenticationProvider oauthAuthenticationProvider(
+            PasswordEncoder passwordEncoder,
+            JwtAuthManager jwtAuthManager,
+            OauthUserOperator oauthUserOperator,
+            OauthProviderProperties oauthProviderProperties
+    ) {
+        return new OauthAuthenticationProvider(passwordEncoder,jwtAuthManager,oauthUserOperator,oauthProviderProperties);
     }
 
     @Bean

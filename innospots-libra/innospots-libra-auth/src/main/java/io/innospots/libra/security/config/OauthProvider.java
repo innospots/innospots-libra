@@ -18,7 +18,9 @@ public class OauthProvider {
 
     private String providerName;
 
-    private boolean enabled=true;
+    private boolean enabled = true;
+
+    private String icon;
 
     @NestedConfigurationProperty
     private UrlInfo authInfo;
@@ -32,12 +34,6 @@ public class OauthProvider {
     @NestedConfigurationProperty
     private UrlInfo userInfo;
 
-    private String tokenPath = "$.access_token";
-
-    private String expiresPath = "$.expires_in";
-
-    private String refreshPath = "$.refresh_token";
-
     @Getter
     @Setter
     public static class UrlInfo {
@@ -49,6 +45,8 @@ public class OauthProvider {
         private Map<String,Object> params;
 
         private Map<String,Object> response;
+
+        private Map<String,Object>  errorResponse;
     }
 
 }

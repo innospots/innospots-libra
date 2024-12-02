@@ -18,51 +18,36 @@
 
 package io.innospots.libra.security.controller;
 
-import io.innospots.base.config.InnospotsConfigProperties;
+import io.innospots.base.exception.AuthenticationException;
 import io.innospots.base.model.response.R;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.security.auth.AuthToken;
-import io.innospots.libra.security.auth.Authentication;
-import io.innospots.libra.security.auth.AuthenticationProvider;
-import io.innospots.libra.security.auth.model.LoginRequest;
+import io.innospots.libra.security.jwt.JwtAuthManager;
+import io.innospots.libra.security.jwt.JwtToken;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import static io.innospots.base.exception.AuthenticationException.buildTokenExpiredException;
+import static io.innospots.base.exception.AuthenticationException.buildTokenInvalidException;
 import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
+import static io.innospots.libra.security.context.SecurityContextHolder.getContext;
 
 /**
- * @author Smars
- * @date 2021/2/16
+ * @author fuling
+ * @version 1.0.0
+ * @date 2022/11/15
  */
 @RestController
-@RequestMapping(PATH_ROOT_ADMIN + "login-auth")
-@Tag(name = "Auth Login")
-public class LoginAuthController extends BaseController {
-
-    @Resource(name = "userPasswordAuthenticationProvider")
-    private  AuthenticationProvider authenticationProvider;
-    @Autowired
-    private  InnospotsConfigProperties innospotsConfigProperties;
-
-
-
-
-    @PostMapping
-    @Operation(summary = "login", description = "authenticate userName and password")
-    public R<AuthToken> authenticate(@RequestBody LoginRequest request) {
-
-        Authentication authentication = authenticationProvider.authenticate(request);
-        return success(authentication.getToken().newInstance());
+@RequestMapping("/auth")
+public class GithubOauthTestController extends BaseController {
+    @GetMapping("/callback")
+    public R<String> checkToken() {
+        return success("ok");
     }
-
-    @GetMapping(path = "public-key")
-    @Operation(summary = "get public key", description = "get public key")
-    public R<String> getPublicKey() {
-        return success(innospotsConfigProperties.getPublicKey());
-    }
-
 }

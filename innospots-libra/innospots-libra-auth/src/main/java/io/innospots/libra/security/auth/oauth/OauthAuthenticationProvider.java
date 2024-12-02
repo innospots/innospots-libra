@@ -18,18 +18,137 @@
 
 package io.innospots.libra.security.auth.oauth;
 
+import io.innospots.base.crypto.PasswordEncoder;
+import io.innospots.base.events.EventBusCenter;
+import io.innospots.base.exception.AuthenticationException;
 import io.innospots.base.exception.InnospotException;
+import io.innospots.base.model.user.UserInfo;
+import io.innospots.base.utils.http.HttpClientBuilder;
+import io.innospots.libra.base.enums.LoginStatus;
+import io.innospots.libra.base.events.LoginEvent;
 import io.innospots.libra.security.auth.Authentication;
 import io.innospots.libra.security.auth.AuthenticationProvider;
+import io.innospots.libra.security.auth.model.AuthUser;
 import io.innospots.libra.security.auth.model.LoginRequest;
+import io.innospots.libra.security.auth.model.OauthUser;
+import io.innospots.libra.security.config.OauthProvider;
+import io.innospots.libra.security.config.OauthProviderProperties;
+import io.innospots.libra.security.jwt.JwtAuthManager;
+import io.innospots.libra.security.jwt.JwtToken;
+import io.innospots.libra.security.operator.OauthUserOperator;
+import lombok.AllArgsConstructor;
+import org.noear.snack.ONode;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Smars
  * @date 2021/2/16
  */
+@AllArgsConstructor
 public class OauthAuthenticationProvider implements AuthenticationProvider {
+    private PasswordEncoder passwordEncoder;
+
+    private JwtAuthManager authManager;
+
+    private OauthUserOperator oauthUserOperator;
+
+    private OauthProviderProperties oauthProviderProperties;
+
     @Override
     public Authentication authenticate(LoginRequest request) throws InnospotException {
-        return null;
+        if(!oauthProviderProperties.isEnabled() ){
+            throw AuthenticationException.buildException(this.getClass(), "oauth to enable are not supported, login failed");
+        }
+        List<OauthProvider> providers = oauthProviderProperties.getProviders();
+        OauthProvider provider = null;
+        for(OauthProvider oauthProvider : providers){
+            if(oauthProvider.equals(request.getLoginType())){
+                provider = oauthProvider;
+            }
+        }
+        if(provider == null || provider.getTokenInfo() == null){
+            throw AuthenticationException.buildException(this.getClass(), "oauth provider not found, login failed");
+        }
+        String token = requestToken(provider.getTokenInfo(),request.getSecurityCode());
+        OauthUser oauthUser = requestUser(provider.getUserInfo(),token);
+        UserInfo userInfo = oauthUserOperator.createOauthUser(oauthUser);
+
+        AuthUser authUser = userInfo2AuthUser(userInfo);
+        JwtToken jwtToken = authManager.generateToken(authUser);
+        Authentication authentication = new Authentication();
+        authentication.setAuthenticated(true);
+        authentication.setAuthUser(authUser);
+        authentication.setRequest(request);
+        authentication.setToken(jwtToken);
+        EventBusCenter.getInstance().asyncPost(new LoginEvent(oauthUser.getProviderId(), LoginStatus.SUCCESS.name(), "${log.message.login.success}"));
+        return authentication;
+    }
+    private String requestToken(OauthProvider.UrlInfo tokenInfo, String code) throws InnospotException {
+        if(tokenInfo == null){
+            throw AuthenticationException.buildException(this.getClass(), "oauth provider not found, login failed");
+        }
+        Map<String,Object> params = tokenInfo.getParams();
+        for(String param : params.keySet()){
+            if(params.get(param).equals("{{code}}")){
+                params.put(param,code);
+            }
+        }
+        ONode tokenNode = handleProviderUrl(tokenInfo);
+        String accessToken = tokenNode.select(tokenInfo.getResponse().get("error").toString()).getString();
+        return accessToken;
+
+    }
+
+    private OauthUser requestUser(OauthProvider.UrlInfo userInfo,String accessToken) {
+        if(userInfo == null){
+            throw AuthenticationException.buildException(this.getClass(), "oauth provider not found, login failed");
+        }
+        Map<String,Object> params = userInfo.getParams();
+        for(String param : params.keySet()){
+            if(params.get(param).equals("{{accessToken}}")){
+                params.put(param,accessToken);
+            }
+        }
+        ONode userNode = handleProviderUrl(userInfo);
+        Map<String,Object>  resPath = userInfo.getResponse();
+        OauthUser oauthUser = OauthUser.builder()
+                .provider("Google")
+                .providerId(userNode.select(resPath.get("email").toString()).getString())
+                .email(userNode.select(resPath.get("email").toString()).getString())
+                .pictureUrl(userNode.select(resPath.get("picture").toString()).getString())
+                .name(userNode.select(resPath.get("name").toString()).getString())
+                .providerUuid(userNode.select(resPath.get("id").toString()).getString())
+                .build();
+        return oauthUser;
+    }
+
+    private ONode handleProviderUrl(OauthProvider.UrlInfo urlInfo){
+        String rspStr = "";
+        try {
+            if(urlInfo.getMethod().equals("post")){
+                rspStr = HttpClientBuilder.post(urlInfo.getUrl(),urlInfo.getParams(),null);
+            }else if(urlInfo.getMethod().equals("get")){
+                rspStr = HttpClientBuilder.get(urlInfo.getUrl(),urlInfo.getParams(),null);
+            }
+        } catch (IOException e) {
+            throw AuthenticationException.buildException(this.getClass(), "oauth token request error, "+e.getMessage());
+        }
+        ONode resNode = ONode.load(rspStr);
+        String errorMsg = resNode.select(urlInfo.getErrorResponse().get("error").toString()).getString();
+        if(errorMsg != null){
+            throw AuthenticationException.buildException(this.getClass(), "oauth request error, "+errorMsg);
+        }
+        return resNode;
+    }
+
+    private AuthUser userInfo2AuthUser(UserInfo userInfo){
+        AuthUser authUser = AuthUser.builder()
+                .userId(userInfo.getUserId())
+                .userName(userInfo.getUserName())
+                .build();
+        return authUser;
     }
 }

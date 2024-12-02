@@ -18,46 +18,25 @@
 
 package io.innospots.libra.security.auth.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serializable;
+import java.util.Map;
 
-/**
- * @author Smars
- * @date 2021/2/15
- */
 @Getter
 @Setter
-public class LoginRequest implements Serializable {
+@Builder
+public class OauthLoginProvider {
 
-    private static final long serialVersionUID = -8445943548965154778L;
+    private String providerName;
 
-    private String username;
-    private String password;
-    private String securityCode;
-    private String sign;
-    private String loginType;
-    /**
-     * current login organization
-     */
-    private Integer orgId;
-    private Long ts;
+    private String icon;
 
-    public LoginRequest() {
-    }
+    private String method;
 
-    public LoginRequest(String username, String password) {
-        this.ts = System.currentTimeMillis();
-    }
+    private String url;
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("LoginRequest{");
-        sb.append("username='").append(username).append('\'');
-        sb.append(", sign='").append(sign).append('\'');
-        sb.append(", ts=").append(ts);
-        sb.append('}');
-        return sb.toString();
-    }
+    private Map<String,Object> params;
+
 }
