@@ -40,6 +40,7 @@ import lombok.AllArgsConstructor;
 import org.noear.snack.ONode;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -65,7 +66,7 @@ public class OauthAuthenticationProvider implements AuthenticationProvider {
         List<OauthProvider> providers = oauthProviderProperties.getProviders();
         OauthProvider provider = null;
         for(OauthProvider oauthProvider : providers){
-            if(oauthProvider.equals(request.getLoginType())){
+            if(oauthProvider.getProviderName().equals(request.getLoginType())){
                 provider = oauthProvider;
             }
         }
@@ -73,7 +74,7 @@ public class OauthAuthenticationProvider implements AuthenticationProvider {
             throw AuthenticationException.buildException(this.getClass(), "oauth provider not found, login failed");
         }
         String token = requestToken(provider.getTokenInfo(),request.getSecurityCode());
-        OauthUser oauthUser = requestUser(provider.getUserInfo(),token);
+        OauthUser oauthUser = requestUser(provider,token);
         UserInfo userInfo = oauthUserOperator.createOauthUser(oauthUser);
 
         AuthUser authUser = userInfo2AuthUser(userInfo);
@@ -90,32 +91,33 @@ public class OauthAuthenticationProvider implements AuthenticationProvider {
         if(tokenInfo == null){
             throw AuthenticationException.buildException(this.getClass(), "oauth provider not found, login failed");
         }
-        Map<String,Object> params = tokenInfo.getParams();
+        Map<String,Object> params = new HashMap<>(tokenInfo.getParams());
         for(String param : params.keySet()){
             if(params.get(param).equals("{{code}}")){
                 params.put(param,code);
             }
         }
-        ONode tokenNode = handleProviderUrl(tokenInfo);
-        String accessToken = tokenNode.select(tokenInfo.getResponse().get("error").toString()).getString();
+        ONode tokenNode = handleProviderUrl(tokenInfo,params);
+        String accessToken = tokenNode.select(tokenInfo.getResponse().get("access_token").toString()).getString();
         return accessToken;
 
     }
 
-    private OauthUser requestUser(OauthProvider.UrlInfo userInfo,String accessToken) {
-        if(userInfo == null){
+    private OauthUser requestUser(OauthProvider provider,String accessToken) {
+        if(provider == null|| provider.getUserInfo()==null){
             throw AuthenticationException.buildException(this.getClass(), "oauth provider not found, login failed");
         }
-        Map<String,Object> params = userInfo.getParams();
+        OauthProvider.UrlInfo userInfo = provider.getUserInfo();
+        Map<String,Object> params = new HashMap<>(userInfo.getParams());
         for(String param : params.keySet()){
             if(params.get(param).equals("{{accessToken}}")){
                 params.put(param,accessToken);
             }
         }
-        ONode userNode = handleProviderUrl(userInfo);
+        ONode userNode = handleProviderUrl(userInfo,params);
         Map<String,Object>  resPath = userInfo.getResponse();
         OauthUser oauthUser = OauthUser.builder()
-                .provider("Google")
+                .provider(provider.getProviderName())
                 .providerId(userNode.select(resPath.get("email").toString()).getString())
                 .email(userNode.select(resPath.get("email").toString()).getString())
                 .pictureUrl(userNode.select(resPath.get("picture").toString()).getString())
@@ -125,13 +127,13 @@ public class OauthAuthenticationProvider implements AuthenticationProvider {
         return oauthUser;
     }
 
-    private ONode handleProviderUrl(OauthProvider.UrlInfo urlInfo){
+    private ONode handleProviderUrl(OauthProvider.UrlInfo urlInfo,Map<String,Object> params){
         String rspStr = "";
         try {
-            if(urlInfo.getMethod().equals("post")){
-                rspStr = HttpClientBuilder.post(urlInfo.getUrl(),urlInfo.getParams(),null);
-            }else if(urlInfo.getMethod().equals("get")){
-                rspStr = HttpClientBuilder.get(urlInfo.getUrl(),urlInfo.getParams(),null);
+            if(urlInfo.getMethod().equals("POST")){
+                rspStr = HttpClientBuilder.post(urlInfo.getUrl(),params,null);
+            }else if(urlInfo.getMethod().equals("GET")){
+                rspStr = HttpClientBuilder.get(urlInfo.getUrl(),params,null);
             }
         } catch (IOException e) {
             throw AuthenticationException.buildException(this.getClass(), "oauth token request error, "+e.getMessage());
