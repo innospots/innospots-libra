@@ -83,10 +83,6 @@ public class UserOperator extends ServiceImpl<UserDao, SysUserEntity> {
      * @param user
      * @return
      */
-    @Transactional(rollbackFor = Exception.class)
-    @NotificationAnnotation(name = "${event.create.user}", code = "create_user",
-            module = "libra-user",
-            title = "${event.create.user.title}", content = "${event.create.user.content}")
     public UserInfo createUser(UserForm user) {
         if (StringUtils.isBlank(user.getPassword())) {
             throw ValidatorException.buildMissingException(this.getClass(), "password must not be null");
@@ -129,6 +125,25 @@ public class UserOperator extends ServiceImpl<UserDao, SysUserEntity> {
         sysUser.setRemark(user.getRemark());
         sysUser.setAvatarKey(user.getAvatarKey());
         return this.updateById(sysUser);
+    }
+    /**
+     * add oauth user
+     *
+     * @param user
+     * @return
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @NotificationAnnotation(name = "${event.create.user}", code = "create_oath_user",
+            module = "libra-user",
+            title = "${event.create.user.title}", content = "${event.create.user.content}")
+    public UserInfo creatOauthUser(UserInfo user) {
+        String password = RsaKeyManager.decrypt(user.getPassword(), innospotsConfigProperties.getPrivateKey());
+        user.setPassword(passwordEncoder.encode(password));
+        UserInfoConverter userInfoConverter = UserInfoConverter.INSTANCE;
+        SysUserEntity sysUser = userInfoConverter.modelToEntity(user);
+        sysUser.setStatus(DataStatus.ONLINE.name());
+        this.save(sysUser);
+        return userInfoConverter.entityToModel(sysUser);
     }
 
     /**

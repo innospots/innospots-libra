@@ -18,51 +18,71 @@
 
 package io.innospots.libra.security.controller;
 
-import io.innospots.base.config.InnospotsConfigProperties;
+import io.innospots.base.exception.InnospotException;
 import io.innospots.base.model.response.R;
 import io.innospots.libra.base.controller.BaseController;
 import io.innospots.libra.security.auth.AuthToken;
 import io.innospots.libra.security.auth.Authentication;
 import io.innospots.libra.security.auth.AuthenticationProvider;
 import io.innospots.libra.security.auth.model.LoginRequest;
+import io.innospots.libra.security.auth.model.OauthLoginProvider;
+import io.innospots.libra.security.config.OauthProvider;
+import io.innospots.libra.security.config.OauthProviderProperties;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 
 /**
- * @author Smars
- * @date 2021/2/16
+ * @author castor_ling
+ * @date 2024/11/27
  */
 @RestController
-@RequestMapping(PATH_ROOT_ADMIN + "login-auth")
-@Tag(name = "Auth Login")
-public class LoginAuthController extends BaseController {
+@RequestMapping(PATH_ROOT_ADMIN + "login-oauth")
+@Tag(name = "OAuth Login")
+public class OauthLoginAuthController extends BaseController {
 
-    @Resource(name = "userPasswordAuthenticationProvider")
+    @Resource(name = "oauthAuthenticationProvider")
     private  AuthenticationProvider authenticationProvider;
     @Autowired
-    private  InnospotsConfigProperties innospotsConfigProperties;
-
-
-
+    OauthProviderProperties oauthProviderProperties;
 
     @PostMapping
-    @Operation(summary = "login", description = "authenticate userName and password")
-    public R<AuthToken> authenticate(@RequestBody LoginRequest request) {
-
+    @Operation(summary = "login", description = "oauth authenticate")
+    public R<AuthToken> authenticate(@RequestBody LoginRequest request) throws InnospotException  {
         Authentication authentication = authenticationProvider.authenticate(request);
+
         return success(authentication.getToken().newInstance());
     }
 
-    @GetMapping(path = "public-key")
-    @Operation(summary = "get public key", description = "get public key")
-    public R<String> getPublicKey() {
-        return success(innospotsConfigProperties.getPublicKey());
+    @GetMapping(path = "list")
+    @Operation(summary = "oauth list", description = "get oauth list")
+    public R<List<OauthLoginProvider>> getOauthList() {
+        List<OauthLoginProvider> providers = new ArrayList<>();
+        if(oauthProviderProperties.isEnabled()){
+            for (OauthProvider provider : oauthProviderProperties.getProviders()){
+                OauthProvider.UrlInfo authInfo = provider.getAuthInfo();
+
+                if(provider.isEnabled() && authInfo != null){
+                    OauthLoginProvider oauthProvider = OauthLoginProvider.builder()
+                            .providerName(provider.getProviderName())
+                            .icon(provider.getIcon())
+                            .method(authInfo.getMethod())
+                            .url(authInfo.getUrl())
+                            .params(authInfo.getParams())
+                            .build();
+                    providers.add(oauthProvider);
+                }
+            }
+        }
+        return success(providers);
     }
 
 }

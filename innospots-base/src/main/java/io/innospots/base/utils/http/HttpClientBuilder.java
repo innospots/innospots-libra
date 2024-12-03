@@ -298,8 +298,7 @@ public class HttpClientBuilder {
         HttpData httpData = new HttpData();
         StringBuffer param = new StringBuffer();
         url = dualPathVar(url, params);
-        url = dualQueryVar(url, params);
-        httpData.getParams().putAll(params);
+        //url = dualQueryVar(url, params);
 
         HttpPost httpPost = new HttpPost(url);
         if (MapUtils.isNotEmpty(headers)) {
@@ -316,9 +315,19 @@ public class HttpClientBuilder {
 
                 httpPost.setEntity(stringEntity);
             }
+            if(params != null && MapUtils.isNotEmpty(params)){
+                httpData.getParams().putAll(params);
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+                Set<Map.Entry<String, Object>> entrySet = params.entrySet();
+                for (Map.Entry<String, Object> entry : entrySet) {
+                    param.append(entry.getKey()+":"+entry.getValue().toString());
+                    nameValuePairs.add(new BasicNameValuePair(entry.getKey(), entry.getValue().toString()));
+                }
+                httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            }
             HttpDataResponseHandler responseHandler = new HttpDataResponseHandler();
             HttpData response = httpContext != null ?
-                    httpClient.execute(httpPost, httpContext, responseHandler) : httpClient.execute(httpPost,responseHandler);
+                    httpClient.execute(httpPost, httpContext, responseHandler) : httpClient.execute(httpPost, responseHandler);
             httpData.fill(response);
             if (logger.isDebugEnabled()) {
                 StringBuilder out = new StringBuilder();
@@ -439,6 +448,10 @@ public class HttpClientBuilder {
 
     public static String post(String url, Map<String, Object> params, String requestBody) throws IOException {
         return doPost(getDefaultHttpClient(), url, null, params, requestBody, null).getBody().toString();
+    }
+
+    public static String post(String url, Map<String, String> header, Map<String, Object> params, String requestBody) throws IOException {
+        return doPost(getDefaultHttpClient(), url, header, params, requestBody, null).getBody().toString();
     }
 
     public static String get(String url, Map<String, Object> param, Map<String, String> header) throws IOException {
