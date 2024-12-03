@@ -49,7 +49,10 @@
         "label": "审批角色",
         "viewType": "picker",
         "dataSource": "static",
-        "options": []
+        "options": [
+          {"label": "管理员", "value": "1"},
+          {"label": "普通用户", "value": "3"}
+        ]
       },
       "conditions": [
         {

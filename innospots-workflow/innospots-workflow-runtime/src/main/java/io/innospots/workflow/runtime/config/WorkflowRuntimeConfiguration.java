@@ -109,7 +109,7 @@ public class WorkflowRuntimeConfiguration {
         return new NodeExecutionEventListener(flowExecutionOperator, nodeExecutionOperator, scheduledNodeExecutionOperator);
     }
 
-    @Bean
+    @Bean("EVENTS_FlowEngine")
     public CarrierFlowEngine carrierFlowEngine(FlowManager flowManager, List<IFlowExecutionListener> flowExecutionListeners) {
         return new CarrierFlowEngine(flowExecutionListeners, flowManager);
     }

@@ -19,6 +19,7 @@
 package io.innospots.libra.kernel.module.system.controller;
 
 import io.innospots.base.data.body.PageBody;
+import io.innospots.base.model.field.SelectItem;
 import io.innospots.base.model.response.R;
 import io.innospots.libra.kernel.module.system.model.role.RoleInfo;
 import io.innospots.base.model.user.SimpleUser;
@@ -148,5 +149,11 @@ public class RoleController extends BaseController {
     public R<List<String>> listUserRole() {
         List<String> roleNames = userRoleService.getUserRoles();
         return success(roleNames);
+    }
+
+    @GetMapping("list-select")
+    public R<List<SelectItem>> listRoleSelects() {
+        List<SelectItem> roleSelects = userRoleService.listRoles();
+        return success(roleSelects);
     }
 }

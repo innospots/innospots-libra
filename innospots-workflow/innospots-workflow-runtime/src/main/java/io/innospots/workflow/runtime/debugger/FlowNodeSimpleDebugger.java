@@ -89,7 +89,7 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
 
         inputs = convertApiInput(inputs,workflowBaseBody);
 
-        IFlowEngine flowEngine = FlowEngineManager.eventFlowEngine();
+        IFlowEngine flowEngine = FlowEngineManager.flowEngineByTemplate(workflowBaseBody.getTemplateCode());
         BuildProcessInfo buildProcessInfo = flowEngine.prepare(workflowInstanceId, 0, true);
         log.info("build info:{}", buildProcessInfo);
         Map<String, NodeExecutionDisplay> result = new LinkedHashMap<>();
@@ -118,6 +118,7 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
         }
 
         FlowExecution flowExecution = fillFlowExecution(inputs, workflowInstanceId);
+        flowExecution.fillExecutionId(workflowBaseBody.getFlowKey());
 
 
         //endNodeKey

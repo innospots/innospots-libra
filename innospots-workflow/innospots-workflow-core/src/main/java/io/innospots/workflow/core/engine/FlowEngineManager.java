@@ -29,7 +29,7 @@ public class FlowEngineManager {
 
 
     public static IFlowEngine eventFlowEngine() {
-        return flowEngine("carrierFlowEngine");
+        return flowEngine("EVENTS_FlowEngine");
 //        return flowEngine("parallelStreamFlowEngine");
 //        return flowEngine("streamFlowEngine");
     }
@@ -38,5 +38,8 @@ public class FlowEngineManager {
         return BeanContextAwareUtils.getBean(engineName, IFlowEngine.class);
     }
 
+    public static IFlowEngine flowEngineByTemplate(String templateCode) {
+        return BeanContextAwareUtils.getBean(templateCode + "_FlowEngine", IFlowEngine.class);
+    }
 
 }
