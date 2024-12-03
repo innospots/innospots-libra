@@ -350,4 +350,16 @@ public class FlowNodeGroupOperator {
 
         return flowNodeGroupNodeDao.selectList(queryWrapper);
     }
+
+    public List<FlowNodeGroupNodeEntity> getGroupNodeByNodeIds(String flowTplCode, List<Integer> nodeIds) {
+        QueryWrapper<FlowTemplateEntity> tq = new QueryWrapper<>();
+        tq.lambda().eq(FlowTemplateEntity::getTplCode, flowTplCode);
+        FlowTemplateEntity templateEntity = flowTemplateDao.selectOne(tq);
+
+        QueryWrapper<FlowNodeGroupNodeEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(FlowNodeGroupNodeEntity::getFlowTplId, templateEntity.getFlowTplId())
+                .in(FlowNodeGroupNodeEntity::getNodeId, nodeIds);
+
+        return flowNodeGroupNodeDao.selectList(queryWrapper);
+    }
 }

@@ -26,20 +26,18 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.CaseFormat;
 import io.innospots.base.data.body.PageBody;
-import io.innospots.base.data.request.FormQuery;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.utils.StringConverter;
 import io.innospots.libra.base.events.NewPageEvent;
 import io.innospots.libra.base.events.NotificationAnnotation;
-import io.innospots.workflow.console.enums.WorkflowType;
+import io.innospots.workflow.core.enums.WorkflowType;
 import io.innospots.workflow.console.listener.WorkflowPageListener;
 import io.innospots.workflow.console.model.WorkflowQuery;
 import io.innospots.workflow.console.operator.node.FlowNodeDefinitionOperator;
 import io.innospots.workflow.console.operator.node.FlowTemplateOperator;
 import io.innospots.workflow.core.enums.FlowVersion;
-import io.innospots.workflow.core.enums.NodePrimitive;
 import io.innospots.workflow.core.flow.model.WorkflowBaseInfo;
 import io.innospots.workflow.core.flow.model.WorkflowInfo;
 import io.innospots.workflow.core.instance.converter.WorkflowInstanceConverter;
@@ -53,7 +51,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.w3c.dom.Node;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -336,7 +333,7 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
         if(StringUtils.isNotEmpty(request.getWorkflowType())){
             lambda.eq(WorkflowInstanceEntity::getTemplateCode, request.getWorkflowType());
         }else{
-            lambda.eq(WorkflowInstanceEntity::getTemplateCode, WorkflowType.EVENT.getName());
+            lambda.eq(WorkflowInstanceEntity::getTemplateCode, WorkflowType.EVENTS.getName());
         }
         if (request.getCategoryId() == null) {
             lambda.ne(WorkflowInstanceEntity::getStatus, DataStatus.REMOVED);

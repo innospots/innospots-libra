@@ -32,7 +32,8 @@
         "placeholder": "请输入节点名称",
         "initialValue": "条件节点"
       }
-    },{
+    },
+    {
       "name": "conditions",
       "type": "RuleEditor",
       "valueType": "object",
@@ -42,6 +43,23 @@
         "fieldSource": "CONDITIONS_1",
         "label": "条件字段"
       }
+    }
+  ],
+  "inputFields": [
+    {
+      "name": "部门",
+      "code": "department",
+      "valueType": "STRING"
+    },
+    {
+      "name": "岗位",
+      "code": "position",
+      "valueType": "STRING"
+    },
+    {
+      "name": "项目",
+      "code": "project",
+      "valueType": "STRING"
     }
   ]
 }

@@ -62,7 +62,7 @@
       ]
     }
   ],
-  "output": [
+  "outputFields": [
     {
       "name": "1",
       "code": "1",

@@ -185,9 +185,11 @@ public class NodeDefinitionService {
 
     public NodeDefinition getNodeDefinitionById(Integer nodeId) {
         NodeDefinition nodeDefinition = flowNodeDefinitionOperator.getNodeDefinition(nodeId);
-        List<FlowNodeGroupNodeEntity> entityList = flowNodeGroupOperator.getGroupNodeByNodeIds(1, Collections.singletonList(nodeId));
-        if (!CollectionUtils.isEmpty(entityList)) {
-            nodeDefinition.setNodeGroupId(entityList.get(0).getNodeGroupId());
+        if(nodeDefinition.getNodeGroupId()==null){
+            List<FlowNodeGroupNodeEntity> entityList = flowNodeGroupOperator.getGroupNodeByNodeIds(nodeDefinition.getFlowCode(), Collections.singletonList(nodeId));
+            if (!CollectionUtils.isEmpty(entityList)) {
+                nodeDefinition.setNodeGroupId(entityList.get(0).getNodeGroupId());
+            }
         }
         return nodeDefinition;
     }

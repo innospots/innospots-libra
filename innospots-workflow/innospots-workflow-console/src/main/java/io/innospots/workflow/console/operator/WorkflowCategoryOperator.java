@@ -21,11 +21,10 @@ package io.innospots.workflow.console.operator;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import io.innospots.base.enums.DataStatus;
-import io.innospots.libra.base.category.BaseCategoryEntity;
 import io.innospots.libra.base.category.CategoryType;
 import io.innospots.libra.base.category.BaseCategory;
 import io.innospots.libra.base.category.BaseCategoryOperator;
-import io.innospots.workflow.console.enums.WorkflowType;
+import io.innospots.workflow.core.enums.WorkflowType;
 import io.innospots.workflow.core.instance.entity.WorkflowInstanceEntity;
 import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,7 +54,7 @@ public class WorkflowCategoryOperator extends BaseCategoryOperator {
     }
 
     private CategoryType toCategoryType(WorkflowType workflowType){
-        if(workflowType == WorkflowType.APPROVE){
+        if(workflowType == WorkflowType.APPROVAL){
             return CategoryType.APPROVE_FLOW;
         }
         if(workflowType == WorkflowType.JOB){
@@ -86,7 +85,7 @@ public class WorkflowCategoryOperator extends BaseCategoryOperator {
                     new QueryWrapper<WorkflowInstanceEntity>()
                             .select("CASE WHEN CATEGORY_ID IS NULL THEN 0 ELSE CATEGORY_ID END AS CATEGORY_ID, COUNT(1) CNT ")
                             .ne("STATUS", DataStatus.REMOVED.name())
-                            .eq("TEMPLATE_CODE",toCategoryType(workflowType).name())
+                            .eq("TEMPLATE_CODE",workflowType.name())
                             .groupBy("CATEGORY_ID"));
 
             Map<Integer, Integer> groupMap = new HashMap<>();

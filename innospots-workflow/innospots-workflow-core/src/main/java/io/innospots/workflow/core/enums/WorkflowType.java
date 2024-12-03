@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-package io.innospots.workflow.console.enums;
+package io.innospots.workflow.core.enums;
 
 import lombok.Getter;
 
@@ -28,8 +28,8 @@ import lombok.Getter;
 public enum WorkflowType {
 
 
-    EVENT("EVENTS"),
-    APPROVE("APPROVE"),
+    EVENTS("EVENTS"),
+    APPROVAL("APPROVAL"),
     JOB("JOBS");
 
     private final String name;

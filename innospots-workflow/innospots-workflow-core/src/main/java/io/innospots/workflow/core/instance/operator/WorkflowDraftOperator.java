@@ -96,6 +96,9 @@ public class WorkflowDraftOperator {
         return true;
     }
 
+    private void fillNodeInfo(WorkflowBaseBody workflowBaseBody){
+    }
+
     /**
      * get draft workflow by id
      *
@@ -118,45 +121,60 @@ public class WorkflowDraftOperator {
         if (entity == null) {
             throw ResourceException.buildAbandonException(this.getClass(), flowKey);
         }
-        return fillNodeAndEdge(entity,FlowVersion.DRAFT.getVersion());
+        return fillNodeAndEdge(entity, FlowVersion.DRAFT.getVersion());
     }
 
     public WorkflowBody getDraftWorkflow(Long flowInstanceId) {
         WorkflowBody cacheWorkflow = getCacheWorkflow(flowInstanceId);
-        if(cacheWorkflow!=null){
+        if (cacheWorkflow != null) {
+            cacheWorkflow.initialize();
             return cacheWorkflow;
         }
         WorkflowInstanceEntity entity = workflowInstanceDao.selectById(flowInstanceId);
         if (entity == null) {
             throw ResourceException.buildAbandonException(this.getClass(), flowInstanceId);
         }
-        return fillNodeAndEdge(entity,FlowVersion.DRAFT.getVersion());
+        return fillNodeAndEdge(entity, FlowVersion.DRAFT.getVersion());
     }
 
 
-
     public List<Map<String, Object>> selectNodeInputFields(Long workflowInstanceId, String nodeKey, Set<String> sourceNodeKeys) {
-        WorkflowBaseBody workflowBaseBody = getDraftWorkflow(workflowInstanceId);
-        if (workflowBaseBody == null) {
-            log.warn("select workflowBaseBody is null:{}, nodeKey:{}",workflowInstanceId, nodeKey);
+        WorkflowBody workflowBody = getDraftWorkflow(workflowInstanceId);
+        if (workflowBody == null) {
+            log.warn("select workflowBaseBody is null:{}, nodeKey:{}", workflowInstanceId, nodeKey);
             return Collections.emptyList();
         }
 
+        NodeInstance crtNode = workflowBody.findNode(nodeKey);
+        if (crtNode == null) {
+            return Collections.emptyList();
+        }
+        List<Map<String, Object>> result = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(crtNode.getInputFields())) {
+            Map<String, Object> nodeMap = new HashMap<>();
+            nodeMap.put("nodeKey", crtNode.getNodeKey());
+            nodeMap.put("nodeName", crtNode.getDisplayName());
+            List<Map<String, Object>> fieldList = toInputFields(crtNode.getInputFields());
+            nodeMap.put("fields", fieldList);
+            result.add(nodeMap);
+            return result;
+        }
+
         if (CollectionUtils.isEmpty(sourceNodeKeys)) {
-            sourceNodeKeys = workflowBaseBody.getEdges().stream().
+            sourceNodeKeys = workflowBody.getEdges().stream().
                     filter(edge -> nodeKey.equals(edge.getTarget())).
                     map(Edge::getSource).collect(Collectors.toSet());
 //            sourceNodeKeys = this.edgeOperator.selectSourceNodeKey(workflowInstanceId,0,nodeKey);
         }
         if (CollectionUtils.isEmpty(sourceNodeKeys)) {
-            log.warn("sourceNode key, select input field is null:{}, nodeKey:{}",workflowInstanceId, nodeKey);
+            log.warn("sourceNode key, select input field is null:{}, nodeKey:{}", workflowInstanceId, nodeKey);
             return Collections.emptyList();
         }
-        List<Map<String, Object>> result = new ArrayList<>();
+
         final Set<String> finalSourceNodeKeys = sourceNodeKeys;
-        List<NodeInstance> nodeInstances = workflowBaseBody.getNodes().stream()
+        List<NodeInstance> nodeInstances = workflowBody.getNodes().stream()
                 .filter(nodeInstance -> finalSourceNodeKeys.contains(nodeInstance.getNodeKey()))
-                .collect(Collectors.toList());
+                .toList();
 //        List<NodeInstance> nodeInstances = this.nodeInstanceOperator.listNodeInstancesByNodeKeys(workflowInstanceId,0,sourceNodeKeys);
         for (NodeInstance nodeInstance : nodeInstances) {
             List<ParamField> outputFieldList = nodeInstance.getOutputFields();
@@ -169,8 +187,8 @@ public class WorkflowDraftOperator {
                 result.add(nodeMap);
             }
         }//end for
-        if(result.isEmpty()){
-            log.warn("select input field is null:{}, nodeKey:{}",workflowInstanceId, nodeKey);
+        if (result.isEmpty()) {
+            log.warn("select input field is null:{}, nodeKey:{}", workflowInstanceId, nodeKey);
         }
         return result;
     }
@@ -193,10 +211,11 @@ public class WorkflowDraftOperator {
 
 
     /**
-     *  Gets the output field of the workflow instance node.
-     *  By default, it is obtained from the cache. The cache does not get the draft instance
+     * Gets the output field of the workflow instance node.
+     * By default, it is obtained from the cache. The cache does not get the draft instance
+     *
      * @param workflowInstanceId
-     * @param nodeKey  nodeKey
+     * @param nodeKey            nodeKey
      * @return
      */
     public List<Map<String, Object>> getNodeOutputFieldOfInstance(Long workflowInstanceId, String nodeKey) {
@@ -245,6 +264,7 @@ public class WorkflowDraftOperator {
 
     /**
      * modify flow instance
+     *
      * @param workflowBaseBody workflow instance
      * @return workflow instance
      */
@@ -274,7 +294,7 @@ public class WorkflowDraftOperator {
         edgeOperator.saveDraftEdgeInstances(workflowBaseBody.getWorkflowInstanceId(),
                 workflowBaseBody.getEdges());
 
-        workflowBaseBody = fillNodeAndEdge(entity,FlowVersion.DRAFT.getVersion());
+        workflowBaseBody = fillNodeAndEdge(entity, FlowVersion.DRAFT.getVersion());
 
         saveFlowInstanceToCache(workflowBaseBody);
 
@@ -285,7 +305,7 @@ public class WorkflowDraftOperator {
 
     @Transactional(rollbackFor = {Exception.class})
     @CacheEvict(cacheNames = CACHE_NAME, allEntries = true)
-    public synchronized WorkflowBody publish(Long workflowInstanceId, String description,int maxVersionKeep) {
+    public synchronized WorkflowBody publish(Long workflowInstanceId, String description, int maxVersionKeep) {
         //check instance exits
         WorkflowInstanceEntity entity = workflowInstanceDao.selectById(workflowInstanceId);
         if (entity == null) {
@@ -300,7 +320,7 @@ public class WorkflowDraftOperator {
         }
 
         if (entity.getRevision() > 0) {
-            WorkflowBody workflowBody = fillNodeAndEdge(entity,entity.getRevision());
+            WorkflowBody workflowBody = fillNodeAndEdge(entity, entity.getRevision());
             if (draftWorkflowBody.equalContent(workflowBody)) {
                 throw WorkflowPublishException.buildUnchangedException(this.getClass(), "the workflow is not be changed, revision:" + workflowBody.getRevision());
             }
@@ -368,11 +388,11 @@ public class WorkflowDraftOperator {
             throw ResourceException.buildAbandonException(this.getClass(), workflowInstanceId);
         }
 
-        return fillNodeAndEdge(entity,FlowVersion.DRAFT.getVersion());
+        return fillNodeAndEdge(entity, FlowVersion.DRAFT.getVersion());
     }
 
 
-    private WorkflowBody fillNodeAndEdge(WorkflowInstanceEntity entity,Integer revision) {
+    private WorkflowBody fillNodeAndEdge(WorkflowInstanceEntity entity, Integer revision) {
         WorkflowBody flowInstance = WorkflowInstanceConverter.INSTANCE.entityToFlowBody(entity);
         flowInstance.setNodes(nodeInstanceOperator.getNodeInstanceByFlowInstanceId(entity.getWorkflowInstanceId(), revision));
         flowInstance.setEdges(edgeOperator.getEdgeByFlowInstanceId(entity.getWorkflowInstanceId(), revision));

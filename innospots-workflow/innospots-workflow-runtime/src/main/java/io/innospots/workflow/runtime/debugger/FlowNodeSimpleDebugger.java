@@ -24,6 +24,7 @@ import com.google.common.collect.Lists;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.utils.time.DateTimeUtils;
+import io.innospots.workflow.core.enums.WorkflowType;
 import io.innospots.workflow.core.execution.enums.RecordMode;
 import io.innospots.workflow.core.flow.Flow;
 import io.innospots.workflow.core.instance.operator.WorkflowDraftOperator;
@@ -119,6 +120,9 @@ public class FlowNodeSimpleDebugger implements FlowNodeDebugger {
 
         FlowExecution flowExecution = fillFlowExecution(inputs, workflowInstanceId);
         flowExecution.fillExecutionId(workflowBaseBody.getFlowKey());
+        if(WorkflowType.APPROVAL.getName().equals(workflowBaseBody.getTemplateCode())){
+            flowExecution.resetCurrentNodeKey(nodeKey);
+        }
 
 
         //endNodeKey

@@ -24,6 +24,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.exception.ValidatorException;
+import io.innospots.base.json.JSONUtils;
+import io.innospots.base.model.field.ParamField;
 import io.innospots.base.utils.CCH;
 import io.innospots.workflow.core.enums.FlowVersion;
 import io.innospots.workflow.core.instance.converter.NodeInstanceConverter;
@@ -39,11 +41,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -136,12 +138,24 @@ public class NodeInstanceOperator extends ServiceImpl<NodeInstanceDao, NodeInsta
         if (CollectionUtils.isEmpty(nodeInstances)) {
             return;
         }
+        List<FlowNodeDefinitionEntity> list = flowNodeDefinitionDao
+                .selectBatchIds(nodeInstances.stream()
+                        .map(NodeInstance::getNodeDefinitionId).toList());
+
+        Map<Integer, FlowNodeDefinitionEntity> nodeMap = list.stream()
+                .collect(Collectors.toMap(FlowNodeDefinitionEntity::getNodeId, Function.identity()));
+
         for (NodeInstance nodeInstance : nodeInstances) {
             try {
                 BaseNodeExecutor nodeExecutor = NodeExecutorFactory.newInstance(nodeInstance);
                 if (nodeExecutor instanceof TriggerNode) {
                     // build input fields to instance
                     nodeExecutor.build();
+                }
+                FlowNodeDefinitionEntity nodeDefinitionEntity = nodeMap.get(nodeInstance.getNodeDefinitionId());
+                if (nodeDefinitionEntity.getInputFields() != null
+                        && CollectionUtils.isEmpty(nodeInstance.getInputFields())) {
+                    nodeInstance.setInputFields(JSONUtils.toList(nodeDefinitionEntity.getInputFields(), ParamField.class));
                 }
             } catch (Exception e) {
                 log.error(e.getMessage());

@@ -26,7 +26,7 @@ import io.innospots.libra.base.log.OperateType;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
-import io.innospots.workflow.console.enums.WorkflowType;
+import io.innospots.workflow.core.enums.WorkflowType;
 import io.innospots.workflow.console.operator.WorkflowCategoryOperator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -92,7 +92,7 @@ public class WorkflowCategoryController extends BaseController {
     @Operation(summary = "workflow category list", description = "param：0-strategy category has no value 1-it has value")
     public R<List<BaseCategory>> listCategories(
             @Parameter(required = true, name = "hasNumber") @RequestParam(value = "hasNumber",required = false,defaultValue = "true") Boolean hasNumber,
-            @Parameter(required = false, name = "workflowType") @RequestParam(name = "workflowType", required = false, defaultValue = "EVENT") WorkflowType workflowType
+            @Parameter(required = false, name = "workflowType") @RequestParam(name = "workflowType", required = false, defaultValue = "EVENTS") WorkflowType workflowType
                                                 ) {
         List<BaseCategory> list = workflowCategoryOperator.list(hasNumber,workflowType);
         return success(list);
@@ -103,7 +103,7 @@ public class WorkflowCategoryController extends BaseController {
     @Operation(summary = "check name duplicate", description = "return: true = duplicate,false = not duplicate")
     public R<Boolean> checkNameExist(
             @Parameter(required = true, name = "categoryName") @PathVariable String categoryName,
-            @Parameter(required = false, name = "workflowType") @RequestParam(name = "workflowType", required = false, defaultValue = "EVENT") WorkflowType workflowType
+            @Parameter(required = false, name = "workflowType") @RequestParam(name = "workflowType", required = false, defaultValue = "EVENTS") WorkflowType workflowType
             ) {
         return success(workflowCategoryOperator.checkNameExist(categoryName,workflowType));
     }

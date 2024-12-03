@@ -22,7 +22,7 @@
         "en_US": "Approve Flow",
         "zh_CN": "审批流管理"
       },
-      "uri": "/workflow/APPROVE"
+      "uri": "/workflow/APPROVAL"
     },
     {
       "name": "${approve-proposer}",

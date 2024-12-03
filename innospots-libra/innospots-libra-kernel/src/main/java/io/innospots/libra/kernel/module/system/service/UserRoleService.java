@@ -108,7 +108,7 @@ public class UserRoleService {
     public List<SelectItem> listRoles(){
         List<SysRoleEntity> roleEntities = roleOperator.list();
         return roleEntities.stream().map(roleEntity ->
-                new SelectItem(roleEntity.getRoleName(), roleEntity.getRoleCode()))
+                new SelectItem(roleEntity.getRoleName(), String.valueOf(roleEntity.getRoleId())))
                 .collect(Collectors.toList());
     }
 
