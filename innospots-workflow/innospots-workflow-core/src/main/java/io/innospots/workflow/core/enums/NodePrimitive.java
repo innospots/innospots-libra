@@ -101,6 +101,10 @@ public enum NodePrimitive {
         return this.label;
     }
 
+    public boolean isTrigger(){
+        return this.name().toLowerCase().endsWith(NodePrimitive.trigger.name());
+    }
+
     public static List<SelectItem> primitiveSelectItems() {
         return Arrays.stream(NodePrimitive.values())
                 .map(nodePrimitive ->

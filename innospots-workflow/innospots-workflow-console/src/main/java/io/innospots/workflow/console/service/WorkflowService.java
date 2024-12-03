@@ -18,15 +18,14 @@
 
 package io.innospots.workflow.console.service;
 
-import io.innospots.connector.core.schema.model.SchemaField;
-import io.innospots.connector.core.schema.model.SchemaRegistry;
-import io.innospots.connector.core.schema.model.SchemaRegistryType;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.model.field.ParamField;
+import io.innospots.connector.core.schema.model.SchemaField;
+import io.innospots.connector.core.schema.model.SchemaRegistry;
+import io.innospots.connector.core.schema.model.SchemaRegistryType;
 import io.innospots.workflow.console.model.WorkflowQuery;
 import io.innospots.workflow.console.operator.instance.WorkflowInstanceOperator;
-import io.innospots.workflow.core.enums.NodePrimitive;
 import io.innospots.workflow.core.flow.model.WorkflowBaseInfo;
 import io.innospots.workflow.core.flow.model.WorkflowBody;
 import io.innospots.workflow.core.flow.model.WorkflowInfo;
@@ -85,15 +84,15 @@ public class WorkflowService {
         return workflowInstanceOperator.createWorkflow(workflow);
     }
 
-    public boolean updateWorkflow(WorkflowInstance workflow){
+    public boolean updateWorkflow(WorkflowInstance workflow) {
         return workflowInstanceOperator.updateWorkflow(workflow);
     }
 
-    public boolean removeWorkflowToRecycle(Long workflowInstanceId){
+    public boolean removeWorkflowToRecycle(Long workflowInstanceId) {
         return workflowInstanceOperator.removeWorkflowToRecycle(workflowInstanceId);
     }
 
-    public boolean deleteByWorkflowBody(Long workflowInstanceId){
+    public boolean deleteByWorkflowBody(Long workflowInstanceId) {
         Boolean delete = workflowBodyOperator.deleteByWorkflowBody(workflowInstanceId);
         if (delete) {
             executionService.deleteExecutionByFlowInstanceId(workflowInstanceId);
@@ -104,12 +103,12 @@ public class WorkflowService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateWorkflowStatus(long workflowInstanceId, DataStatus dataStatus){
+    public boolean updateWorkflowStatus(long workflowInstanceId, DataStatus dataStatus) {
         boolean up = workflowInstanceOperator.updateWorkflowStatus(workflowInstanceId, dataStatus);
         if (up) {
             WorkflowInstanceEntity instanceEntity = workflowInstanceOperator.getWorkflowInstanceEntity(workflowInstanceId);
             instanceEntity.setStatus(String.valueOf(dataStatus));
-            if(Objects.equals("CRONTIMER",instanceEntity.getTriggerCode())){
+            if (Objects.equals("CRONTIMER", instanceEntity.getTriggerCode())) {
                 //TODO 有更新调度失败的问题，需要确定跟新异常处置
                 scheduleFlowJobService.updateScheduleStatus(instanceEntity);
             }
@@ -121,7 +120,7 @@ public class WorkflowService {
         return workflowInstanceOperator.getWorkflowInstance(workflowInstanceId);
     }
 
-    public List<WorkflowBaseInfo> listWorkflows(@PathVariable String triggerCode){
+    public List<WorkflowBaseInfo> listWorkflows(@PathVariable String triggerCode) {
         return workflowInstanceOperator.listWorkflows(triggerCode);
     }
 
@@ -129,18 +128,22 @@ public class WorkflowService {
         return workflowInstanceOperator.pageWorkflows(request);
     }
 
-    public SchemaRegistry getApiWorkflowSchemaRegistry(String workflowInstanceId){
-        WorkflowBody workflowBody = workflowBodyOperator.getWorkflowBody(Long.parseLong(workflowInstanceId),true);
+    public SchemaRegistry getApiWorkflowSchemaRegistry(String workflowInstanceId) {
+        WorkflowBody workflowBody = workflowBodyOperator.getWorkflowBody(Long.parseLong(workflowInstanceId), true);
         SchemaRegistry schemaRegistry = new SchemaRegistry();
         for (NodeInstance start : workflowBody.getStarts()) {
-            if(start.getPrimitive() == NodePrimitive.trigger || start.getPrimitive() == NodePrimitive.apiTrigger){
-                try{
-                    BaseNodeExecutor nodeExecutor = NodeExecutorFactory.build(workflowBody.identifier(), start);
-                    if(nodeExecutor instanceof TriggerNode){
+            if (start.getPrimitive().isTrigger()) {
+                BaseNodeExecutor nodeExecutor =null;
+//            if(start.getPrimitive() == NodePrimitive.trigger || start.getPrimitive() == NodePrimitive.apiTrigger){
+                try {
+                    nodeExecutor = NodeExecutorFactory.build(workflowBody.identifier(), start);
+                    if (nodeExecutor instanceof TriggerNode) {
                         schemaRegistry.setConfigs(((TriggerNode) nodeExecutor).triggerInfo());
                     }
-                }catch (Exception e){
-                    log.error(e.getMessage(),e);
+
+
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
                 }
                 schemaRegistry.setRegistryId(workflowInstanceId);
                 schemaRegistry.setCategoryId(workflowBody.getCategoryId());
@@ -150,9 +153,11 @@ public class WorkflowService {
                 schemaRegistry.setConnectorName("workflow-api");
                 schemaRegistry.setRegistryType(SchemaRegistryType.WORKFLOW);
                 schemaRegistry.setCategoryId(workflowBody.getCategoryId());
-                schemaRegistry.addConfig("flowKey",workflowBody.getFlowKey());
+                schemaRegistry.addConfig("flowKey", workflowBody.getFlowKey());
+                schemaRegistry.addConfig("workflowType",workflowBody.getTemplateCode());
                 List<SchemaField> schemaFields = new ArrayList<>();
-                for (ParamField inputField : start.getInputFields()) {
+                List<ParamField> inputFields = nodeExecutor!=null?nodeExecutor.inputFields():start.getInputFields();
+                for (ParamField inputField : inputFields) {
                     SchemaField schemaField = SchemaField.convert(inputField);
                     schemaField.setRegistryId(workflowInstanceId);
                     schemaFields.add(schemaField);

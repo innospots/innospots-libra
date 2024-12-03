@@ -18,6 +18,7 @@
 
 package io.innospots.workflow.core.node.executor;
 
+import io.innospots.base.model.field.ParamField;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.node.field.NodeParamField;
@@ -28,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +63,14 @@ public class StateNode extends BaseNodeExecutor {
                 inputFields = NodeInstanceUtils.buildParamFields(ni, FIELDS);
             }
         }
+    }
+
+    @Override
+    public List<ParamField> inputFields() {
+        if(inputFields!=null){
+            return new ArrayList<>(inputFields);
+        }
+        return super.inputFields();
     }
 
     /*

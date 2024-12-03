@@ -5,6 +5,7 @@ import io.innospots.approve.core.enums.ApproveStatus;
 import io.innospots.approve.core.model.ApproveFlowInstance;
 import io.innospots.approve.core.utils.ApproveHolder;
 import io.innospots.base.exception.ResourceException;
+import io.innospots.base.model.field.ParamField;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import io.innospots.workflow.core.node.field.NodeParamField;
 import io.innospots.workflow.core.utils.NodeInstanceUtils;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +41,13 @@ public class ApproveStartNode extends ApproveBaseNode {
         super.invoke(nodeExecution);
     }
 
+    @Override
+    public List<ParamField> inputFields() {
+        if(inputFields!=null){
+            return new ArrayList<>(inputFields);
+        }
+        return super.inputFields();
+    }
 
     @Override
     protected Object processItem(Map<String, Object> item) {

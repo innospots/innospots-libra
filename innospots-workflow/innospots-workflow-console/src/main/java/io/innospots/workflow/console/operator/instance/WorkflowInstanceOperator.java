@@ -141,7 +141,7 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
     public PageBody<WorkflowInstance> pageWorkflows(WorkflowQuery request) {
         List<String> nodeCodes = null;
         if (request.getPrimitive() != null) {
-            List<NodeDefinition> nodeDefinitions = flowNodeDefinitionOperator.listOnlineNodes(request.getPrimitive(), request.getWorkflowType());
+            List<NodeDefinition> nodeDefinitions = flowNodeDefinitionOperator.listOnlineNodes(request.getPrimitive(), request.templateCode());
             nodeCodes = nodeDefinitions.stream().map(NodeDefinition::getCode).toList();
         }
 
@@ -331,7 +331,7 @@ public class WorkflowInstanceOperator extends ServiceImpl<WorkflowInstanceDao, W
         QueryWrapper<WorkflowInstanceEntity> query = new QueryWrapper<>();
         LambdaQueryWrapper<WorkflowInstanceEntity> lambda = query.lambda();
         if(StringUtils.isNotEmpty(request.getWorkflowType())){
-            lambda.eq(WorkflowInstanceEntity::getTemplateCode, request.getWorkflowType());
+            lambda.eq(WorkflowInstanceEntity::getTemplateCode, request.templateCode());
         }else{
             lambda.eq(WorkflowInstanceEntity::getTemplateCode, WorkflowType.EVENTS.getName());
         }
