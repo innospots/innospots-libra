@@ -28,6 +28,7 @@ public class ApprovePersonNode extends ApproveBaseNode {
     private String actorType;
     private Integer userId;
     private Integer roleId;
+    private Integer leaderLevel;
 
     @Override
     protected void initialize() {
@@ -35,8 +36,9 @@ public class ApprovePersonNode extends ApproveBaseNode {
         resultField = this.valueString("resultField");
         messageField = this.valueString("messageField");
         actorType = this.valueString("actorType");
-        userId = this.validInteger("userId");
-        roleId = this.validInteger("roleId");
+        userId = this.valueInteger("userId");
+        roleId = this.valueInteger("roleId");
+        leaderLevel = this.valueInteger("leaderLevel");
     }
 
 

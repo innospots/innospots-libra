@@ -35,6 +35,7 @@
         "initialValue": "role",
         "options": [
           {"label": "角色", "value": "role"},
+          {"label": "主管", "value": "leader"},
           {"label": "指定成员", "value": "person"}
         ]
       }
@@ -48,8 +49,15 @@
       "settings": {
         "label": "审批角色",
         "viewType": "picker",
-        "dataSource": "static",
-        "options": []
+        "dataSource": "interface",
+        "dynamicOptions": {
+          "url": "/innospots/api/role/list-select",
+          "method": "GET",
+          "fieldNames": {
+            "value": "value",
+            "label": "label"
+          }
+        }
       },
       "conditions": [
         {
@@ -86,6 +94,36 @@
               "name": "actorType",
               "opt": "EQUAL",
               "value": "person"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "leaderLevel",
+      "type": "OptionPicker",
+      "valueType": "string",
+      "copyable": false,
+      "deletable": false,
+      "settings": {
+        "label": "主管级别",
+        "viewType": "picker",
+        "dataSource": "static",
+        "options": [
+          {"label": "上级主管", "value": "1"},
+          {"label": "二级主管", "value": "2"},
+          {"label": "三级主管", "value": "3"}
+        ]
+      },
+      "conditions": [
+        {
+          "result": "visible",
+          "relation": "OR",
+          "children": [
+            {
+              "name": "actorType",
+              "opt": "EQUAL",
+              "value": "leader"
             }
           ]
         }

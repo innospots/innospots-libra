@@ -24,6 +24,7 @@ innospots:
       - /**/v3/api-docs/**
       - /swagger-resources/**
       - /innospots/api/login-auth/**
+      - /innospots/api/login-oauth/**
       - /innospots/api/temp-token/**
       - /innospots/api/i18n/locale/**/*.json
       - /innospots/api/i18n/locale/**
@@ -71,22 +72,38 @@ innospots:
       providers:
         - providerName: google
           enabled: true
+          icon: https://www.google.com.hk/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png
           auth-info:
-            method: POST
-            url: https://oauth2.googleapis.com/tokeninfo
+            method: GET
+            url: https://accounts.google.com/o/oauth2/v2/auth
             params:
-              client_id: "client_id"
-              client_secret: "client_secret"
-              grant_type: "authorization_code"
-              redirect_uri: "redirect_uri"
-              code: "code"
-              scope: "scope"
-              state: "{{state}}"
-              response_type: "token"
-              include_granted_scopes: "true"
+              response_type: code
+              client_id: ${google_oauth_client_id}
+              redirect_uri: http://localhost:9800/oauth/callback
+              scope: email profile
+              access_type: offline
+          token-info:
+            method: POST
+            url: https://oauth2.googleapis.com/token
+            params:
+              client_id: ${google_oauth_client_id}
+              client_secret: ${google_oauth_secret}
+              grant_type: authorization_code
+              redirect_uri: http://localhost:9800/oauth/callback
+              code: "{{code}}"
             response:
               access_token: "$.access_token"
-              expires_in: "$.expires_in"
-              refresh_token: "$.refresh_token"
-              scope: "$.scope"
-              token_type: "$.token_type"
+            error-response:
+              error: "$.error.msg"
+          user-info:
+            method: GET
+            url: https://www.googleapis.com/oauth2/v2/userinfo
+            params:
+              access_token: "{{accessToken}}"
+            response:
+              email: "$.email"
+              pictureUrl: "$.picture"
+              name: "$.name"
+              providerUuid: "$.id"
+            error-response:
+              error: "$.error"

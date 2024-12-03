@@ -84,6 +84,14 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
 
     protected abstract void initialize();
 
+    public List<ParamField> inputFields(){
+        return ni.getInputFields();
+    }
+
+    public List<ParamField> outputFields(){
+        return ni.getOutputFields();
+    }
+
 
     public BaseNodeExecutor build() {
         buildStatus = BuildStatus.BUILDING;

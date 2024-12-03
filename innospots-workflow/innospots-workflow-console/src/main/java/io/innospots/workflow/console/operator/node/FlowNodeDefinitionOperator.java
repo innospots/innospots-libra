@@ -31,7 +31,7 @@ import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.exception.ValidatorException;
 import io.innospots.libra.base.events.AvatarRemoveEvent;
-import io.innospots.workflow.console.enums.WorkflowType;
+import io.innospots.workflow.core.enums.WorkflowType;
 import io.innospots.workflow.console.model.NodeQueryRequest;
 import io.innospots.workflow.core.enums.NodePrimitive;
 import io.innospots.workflow.core.node.NodeInfo;
@@ -183,7 +183,7 @@ public class FlowNodeDefinitionOperator extends ServiceImpl<FlowNodeDefinitionDa
         if (StringUtils.isNotEmpty(flowCode)) {
             queryWrapper.lambda().eq(FlowNodeDefinitionEntity::getFlowCode, flowCode);
         }else{
-            queryWrapper.lambda().eq(FlowNodeDefinitionEntity::getFlowCode, WorkflowType.EVENT.getName());
+            queryWrapper.lambda().eq(FlowNodeDefinitionEntity::getFlowCode, WorkflowType.EVENTS.getName());
         }
         return FlowNodeDefinitionConverter.INSTANCE.entitiesToModels(this.list(queryWrapper));
     }

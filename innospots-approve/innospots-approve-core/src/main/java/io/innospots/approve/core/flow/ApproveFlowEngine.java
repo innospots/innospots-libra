@@ -31,7 +31,7 @@ import java.util.Map;
  * @vesion 2.0
  * @date 2024/11/19
  */
-@Component
+@Component("APPROVE_FlowEngine")
 @Slf4j
 public class ApproveFlowEngine extends StreamFlowEngine {
 
@@ -91,12 +91,14 @@ public class ApproveFlowEngine extends StreamFlowEngine {
 
         approveFlowExecutionStoreListener.start(flowExecution);
         ApproveFlowInstance approveFlowInstance = ApproveHolder.get();
-        if (approveFlowInstance.getFlowExecutionId() == null ||
-                !approveFlowInstance.getFlowExecutionId().equals(flowExecution.getFlowExecutionId())) {
+        if (approveFlowInstance!=null &&
+                (approveFlowInstance.getFlowExecutionId() == null ||
+                !approveFlowInstance.getFlowExecutionId().equals(flowExecution.getFlowExecutionId()))) {
             approveFlowInstanceOperator.bindFlowExecutionId(approveFlowInstance.getApproveInstanceKey(), flowExecution.getFlowExecutionId());
             approveFlowInstance.setFlowExecutionId(flowExecution.getFlowExecutionId());
         }
     }
+
 
     @Override
     protected void completeFlow(FlowExecution flowExecution,boolean isUpdate) {

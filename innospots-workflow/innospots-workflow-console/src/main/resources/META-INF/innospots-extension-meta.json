@@ -27,7 +27,7 @@
     {
       "name": "${node-management}",
       "itemKey": "node-management",
-      "uri": "/workflow/nodes",
+      "uri": "/node-definition",
       "icon": "node-management",
       "i18nNames": {
         "en_US": "Nodes",

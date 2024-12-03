@@ -20,6 +20,8 @@ package io.innospots.libra.kernel.module.system.service;
 
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.events.EventBusCenter;
+import io.innospots.base.model.field.SelectItem;
+import io.innospots.libra.kernel.module.system.entity.SysRoleEntity;
 import io.innospots.libra.kernel.module.system.model.role.RoleInfo;
 import io.innospots.base.model.user.SimpleUser;
 import io.innospots.base.utils.BeanContextAware;
@@ -101,6 +103,13 @@ public class UserRoleService {
             EventBusCenter.postSync(new RoleDelEvent(roleId));
         }
         return result;
+    }
+
+    public List<SelectItem> listRoles(){
+        List<SysRoleEntity> roleEntities = roleOperator.list();
+        return roleEntities.stream().map(roleEntity ->
+                new SelectItem(roleEntity.getRoleName(), String.valueOf(roleEntity.getRoleId())))
+                .collect(Collectors.toList());
     }
 
     public PageBody<RoleInfo> pageRoles(FormQuery request) {

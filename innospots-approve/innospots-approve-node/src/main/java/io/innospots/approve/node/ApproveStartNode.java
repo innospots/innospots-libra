@@ -1,13 +1,19 @@
 package io.innospots.approve.node;
 
+import io.innospots.approve.core.constants.ApproveConstant;
+import io.innospots.approve.core.enums.ApproveStatus;
+import io.innospots.approve.core.model.ApproveFlowInstance;
+import io.innospots.approve.core.utils.ApproveHolder;
+import io.innospots.base.exception.ResourceException;
+import io.innospots.base.model.field.ParamField;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import io.innospots.workflow.core.node.field.NodeParamField;
 import io.innospots.workflow.core.utils.NodeInstanceUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +24,7 @@ import java.util.Map;
  * @date 2024/11/20
  */
 @Slf4j
-public class ApproveStartNode extends BaseNodeExecutor {
+public class ApproveStartNode extends ApproveBaseNode {
 
     private static final String FIELDS = "input_fields";
 
@@ -26,6 +32,7 @@ public class ApproveStartNode extends BaseNodeExecutor {
 
     @Override
     protected void initialize() {
+        super.initialize();
         inputFields = NodeInstanceUtils.buildParamFields(ni, FIELDS);
     }
 
@@ -34,6 +41,13 @@ public class ApproveStartNode extends BaseNodeExecutor {
         super.invoke(nodeExecution);
     }
 
+    @Override
+    public List<ParamField> inputFields() {
+        if(inputFields!=null){
+            return new ArrayList<>(inputFields);
+        }
+        return super.inputFields();
+    }
 
     @Override
     protected Object processItem(Map<String, Object> item) {
@@ -45,11 +59,27 @@ public class ApproveStartNode extends BaseNodeExecutor {
             Object v = item != null ? item.getOrDefault(inputField.getCode(), inputField.getValue()) : inputField.getValue();
             if (v != null && StringUtils.isNotEmpty(v.toString())) {
                 nItem.put(inputField.getCode(), v);
+                fillApproveFlowInstance(inputField.getCode(),v.toString());
             }
         }//end inputFields
         if (log.isDebugEnabled()) {
             log.debug("start node input:{}", nItem);
         }
         return nItem;
+    }
+
+    private void fillApproveFlowInstance(String code,String v) {
+        if (ApproveHolder.get() == null) {
+            if (code.equals(ApproveConstant.APPROVE_INSTANCE_KEY)) {
+                ApproveFlowInstance flowInstance = this.approveFlowInstanceOperator.findOne(v);
+                if(flowInstance.getApproveStatus() != ApproveStatus.STARTING &&
+                        flowInstance.getApproveStatus() != ApproveStatus.PROCESSING
+                ){
+                    throw ResourceException.buildStatusException(this.getClass(), "the Approve status is " +
+                            flowInstance.getApproveStatus() + ", can't be executed", v);
+                }
+                ApproveHolder.set(flowInstance);
+            }
+        }
     }
 }
