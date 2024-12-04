@@ -72,13 +72,9 @@ public class SysUserEntity extends BaseEntity {
     private String remark;
 
     @Column(length = 16)
-//    @Enumerated(EnumType.STRING)
     private String status;
-//    private DataStatus status;
 
     @Column(length = 16)
-//    @Enumerated(EnumType.STRING)
-//    private OnOff onOff;
     private String onOff;
 
     @Column
@@ -95,6 +91,9 @@ public class SysUserEntity extends BaseEntity {
 
     @Column(length = 64)
     private String avatarKey;
+
+    @Column
+    private String groupId;
 
     @Override
     public String toString() {

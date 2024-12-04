@@ -65,6 +65,7 @@ public class LibraBaseConfiguration {
             "sys_org_user",
             "sys_service_registry",
             "sys_user",
+            "sys_oauth_user",
             "sys_user_role",
             "ext_definition",
 //            "flow_template",
