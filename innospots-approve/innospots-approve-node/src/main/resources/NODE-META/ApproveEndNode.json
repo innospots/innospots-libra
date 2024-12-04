@@ -1,7 +1,7 @@
 {
   "name": "审批结束",
   "code": "approve_end",
-  "flowCode": "APPROVE",
+  "flowCode": "APPROVAL",
   "primitive": "approve",
   "vendor": "innospots",
   "description": "审批结束节点",

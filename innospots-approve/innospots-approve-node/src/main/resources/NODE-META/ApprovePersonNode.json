@@ -1,7 +1,7 @@
 {
   "name": "审批人员",
   "code": "approve_person",
-  "flowCode": "APPROVE",
+  "flowCode": "APPROVAL",
   "primitive": "approve",
   "vendor": "innospots",
   "description": "审批人员节点",

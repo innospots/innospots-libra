@@ -1,7 +1,7 @@
 {
   "name": "审批合并",
   "code": "approve_combine",
-  "flowCode": "APPROVE",
+  "flowCode": "APPROVAL",
   "primitive": "approve",
   "vendor": "innospots",
   "description": "多个分支合并",
