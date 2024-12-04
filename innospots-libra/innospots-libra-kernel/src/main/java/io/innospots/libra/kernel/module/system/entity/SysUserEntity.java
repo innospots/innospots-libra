@@ -93,7 +93,7 @@ public class SysUserEntity extends BaseEntity {
     private String avatarKey;
 
     @Column
-    private String groupId;
+    private Integer groupId;
 
     @Override
     public String toString() {
