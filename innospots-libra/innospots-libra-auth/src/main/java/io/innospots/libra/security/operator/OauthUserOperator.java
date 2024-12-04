@@ -28,6 +28,7 @@ import io.innospots.libra.security.auth.basic.OAuthUserDao;
 import io.innospots.libra.security.auth.entity.OauthUserEntity;
 import io.innospots.libra.security.auth.model.OauthUser;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,7 +42,7 @@ import java.util.List;
  */
 @Service
 public class OauthUserOperator extends ServiceImpl<OAuthUserDao, OauthUserEntity> {
-
+    @Autowired
     private AuthSysUserReader authSysUserReader;
 
     private static Integer ROLE_ID = 1;

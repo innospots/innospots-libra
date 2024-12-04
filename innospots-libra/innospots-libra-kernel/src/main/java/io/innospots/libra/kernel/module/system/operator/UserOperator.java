@@ -137,8 +137,7 @@ public class UserOperator extends ServiceImpl<UserDao, SysUserEntity> {
             module = "libra-user",
             title = "${event.create.user.title}", content = "${event.create.user.content}")
     public UserInfo creatOauthUser(UserInfo user) {
-        String password = RsaKeyManager.decrypt(user.getPassword(), innospotsConfigProperties.getPrivateKey());
-        user.setPassword(passwordEncoder.encode(password));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         UserInfoConverter userInfoConverter = UserInfoConverter.INSTANCE;
         SysUserEntity sysUser = userInfoConverter.modelToEntity(user);
         sysUser.setStatus(DataStatus.ONLINE.name());
