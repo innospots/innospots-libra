@@ -86,7 +86,7 @@ public class OauthUserOperator extends ServiceImpl<OAuthUserDao, OauthUserEntity
     }
     private UserInfo oauthUser2UserInfo (OauthUser oauthUser){
         UserInfo userInfo = new UserInfo();
-
+        userInfo.setAvatarKey(oauthUser.getPictureUrl());
         userInfo.setRealName( oauthUser.getName() );
         userInfo.setUserName( oauthUser.getProviderId() );
         userInfo.setLastAccessTime( LocalDateTime.now() );
