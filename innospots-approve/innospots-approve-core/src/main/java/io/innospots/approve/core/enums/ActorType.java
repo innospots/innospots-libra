@@ -3,12 +3,10 @@ package io.innospots.approve.core.enums;
 /**
  * @author Smars
  * @vesion 2.0
- * @date 2024/11/24
+ * @date 2024/12/4
  */
-public enum ApproveAction {
+public enum ActorType {
 
-    PENDING,
-    CANCELED,
-    DONE;
+    USER, ROLE, LEADER,FLOW
 
 }

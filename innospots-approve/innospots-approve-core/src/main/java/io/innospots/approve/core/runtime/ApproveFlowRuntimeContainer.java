@@ -4,11 +4,13 @@ import io.innospots.approve.core.constants.ApproveConstant;
 import io.innospots.approve.core.enums.ApproveResult;
 import io.innospots.approve.core.flow.ApproveFlowEngine;
 import io.innospots.approve.core.model.ApproveFlowInstance;
+import io.innospots.approve.core.operator.ApproveActorOperator;
 import io.innospots.approve.core.operator.ApproveFlowInstanceOperator;
 import io.innospots.approve.core.utils.ApproveHolder;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.reader.FlowExecutionReader;
 import io.innospots.workflow.core.flow.Flow;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import java.util.Map;
  * @vesion 2.0
  * @date 2024/11/23
  */
+@Slf4j
 @Component
 public class ApproveFlowRuntimeContainer {
 
@@ -30,12 +33,15 @@ public class ApproveFlowRuntimeContainer {
 
     private final FlowExecutionReader flowExecutionReader;
 
+    private final ApproveActorOperator actorOperator;
+
     public ApproveFlowRuntimeContainer(ApproveFlowInstanceOperator flowInstanceOperator,
                                        ApproveFlowEngine approveFlowEngine,
-                                       FlowExecutionReader flowExecutionReader) {
+                                       FlowExecutionReader flowExecutionReader, ApproveActorOperator actorOperator) {
         this.flowInstanceOperator = flowInstanceOperator;
         this.approveFlowEngine = approveFlowEngine;
         this.flowExecutionReader = flowExecutionReader;
+        this.actorOperator = actorOperator;
     }
 
     public ApproveFlowInstance execute(String approveInstanceKey, Map<String,Object> data) {
@@ -57,7 +63,11 @@ public class ApproveFlowRuntimeContainer {
 
 
     public boolean revoke(String approveInstanceKey, String message){
-        return flowInstanceOperator.revoke(approveInstanceKey,message);
+        boolean result = flowInstanceOperator.revoke(approveInstanceKey,message);
+        if(result){
+            result = actorOperator.cancelApprove(approveInstanceKey);
+        }
+        return result;
     }
 
     public boolean reject(String approveInstanceKey, String message){
@@ -93,6 +103,7 @@ public class ApproveFlowRuntimeContainer {
             flowExecution.addInput(data);
         }
         ApproveHolder.set(flowInstance);
+        log.info("execute flow:{}",flowInstance);
         approveFlowEngine.execute(flowExecution);
         ApproveHolder.remove();
     }

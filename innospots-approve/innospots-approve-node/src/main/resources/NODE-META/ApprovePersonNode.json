@@ -34,9 +34,9 @@
         "dataSource": "static",
         "initialValue": "role",
         "options": [
-          {"label": "角色", "value": "role"},
-          {"label": "主管", "value": "leader"},
-          {"label": "指定成员", "value": "person"}
+          {"label": "角色", "value": "ROLE"},
+          {"label": "主管", "value": "LEADER"},
+          {"label": "指定成员", "value": "USER"}
         ]
       }
     },
@@ -67,7 +67,7 @@
             {
               "name": "actorType",
               "opt": "EQUAL",
-              "value": "role"
+              "value": "ROLE"
             }
           ]
         }
@@ -93,7 +93,7 @@
             {
               "name": "actorType",
               "opt": "EQUAL",
-              "value": "person"
+              "value": "USER"
             }
           ]
         }
@@ -123,7 +123,7 @@
             {
               "name": "actorType",
               "opt": "EQUAL",
-              "value": "leader"
+              "value": "LEADER"
             }
           ]
         }

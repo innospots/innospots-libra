@@ -1,10 +1,12 @@
 package io.innospots.approve.core.operator;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.innospots.approve.core.converter.ApproveActorConverter;
 import io.innospots.approve.core.dao.ApproveActorDao;
 import io.innospots.approve.core.entity.ApproveActorEntity;
+import io.innospots.approve.core.enums.ApproveAction;
 import io.innospots.approve.core.model.ApproveActor;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ApproveActorOperator extends ServiceImpl<ApproveActorDao, ApproveActorEntity> {
 
-    public ApproveActor getApproveActor(String approveInstanceKey,String nodeKey) {
+    public ApproveActor getApproveActor(String approveInstanceKey, String nodeKey) {
         QueryWrapper<ApproveActorEntity> qw = new QueryWrapper<>();
         qw.lambda().eq(ApproveActorEntity::getApproveInstanceKey, approveInstanceKey)
                 .eq(ApproveActorEntity::getNodeKey, nodeKey);
@@ -28,6 +30,13 @@ public class ApproveActorOperator extends ServiceImpl<ApproveActorDao, ApproveAc
         ApproveActorEntity entity = ApproveActorConverter.INSTANCE.modelToEntity(approveActor);
         this.save(entity);
         return ApproveActorConverter.INSTANCE.entityToModel(entity);
+    }
+
+    public boolean cancelApprove(String approveInstanceKey) {
+        UpdateWrapper<ApproveActorEntity> uw = new UpdateWrapper<>();
+        uw.lambda().set(ApproveActorEntity::getApproveAction, ApproveAction.CANCELED.name())
+                .eq(ApproveActorEntity::getApproveInstanceKey, approveInstanceKey);
+        return this.update(uw);
     }
 
 }

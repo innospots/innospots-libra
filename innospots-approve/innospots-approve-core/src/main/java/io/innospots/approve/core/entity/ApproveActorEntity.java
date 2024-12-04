@@ -34,6 +34,9 @@ public class ApproveActorEntity extends PBaseEntity {
     private String approveInstanceKey;
 
     @Column(length = 64)
+    private String flowExecutionId;
+
+    @Column(length = 64)
     private String nodeKey;
 
     @Column
@@ -44,6 +47,9 @@ public class ApproveActorEntity extends PBaseEntity {
 
     @Column(length = 32)
     private String actorType;
+
+    @Column
+    private Integer actorId;
 
     @Column(length = 32)
     private String approveAction;
