@@ -8,7 +8,7 @@ spring:
 
 innospots:
   config:
-    host: http://1.15.20.45:${server.port}
+    host: http://www.innospots.com:8000
   db:
     driver-class-name: ${DB_DRIVER:com.mysql.cj.jdbc.Driver}
     jdbc-url: jdbc:mysql://${DB_IP}:${DB_PORT:3306}/${DB_NAME}?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=${DB_TIMEZONE:GMT%2B8}&zeroDateTimeBehavior=CONVERT_TO_NULL
