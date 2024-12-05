@@ -35,7 +35,7 @@
         "initialValue": "role",
         "options": [
           {"label": "角色", "value": "ROLE"},
-          {"label": "主管", "value": "LEADER"},
+          {"label": "主管", "value": "GROUP"},
           {"label": "指定成员", "value": "USER"}
         ]
       }
@@ -123,7 +123,7 @@
             {
               "name": "actorType",
               "opt": "EQUAL",
-              "value": "LEADER"
+              "value": "GROUP"
             }
           ]
         }

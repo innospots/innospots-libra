@@ -7,6 +7,7 @@ import io.innospots.approve.core.utils.ApproveHolder;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.model.response.ResponseCode;
 import io.innospots.base.quartz.ExecutionStatus;
+import io.innospots.base.utils.CCH;
 import io.innospots.workflow.core.engine.IFlowEngine;
 import io.innospots.workflow.core.engine.StreamFlowEngine;
 import io.innospots.workflow.core.enums.FlowStatus;
@@ -86,7 +87,7 @@ public class ApproveFlowEngine extends StreamFlowEngine {
         } else if (flow.getFlowStatus() == FlowStatus.FAIL) {
             flowExecution.setStatus(ExecutionStatus.FAILED);
         } else {
-            flowExecution.setStatus(ExecutionStatus.NOT_PREPARED);
+            //flowExecution.setStatus(ExecutionStatus.NOT_PREPARED);
         }
 
         approveFlowExecutionStoreListener.start(flowExecution);
@@ -137,6 +138,7 @@ public class ApproveFlowEngine extends StreamFlowEngine {
 
     @Override
     protected NodeExecution executeNode(BaseNodeExecutor nodeExecutor, FlowExecution flowExecution) {
+        CCH.sessionId(flowExecution.getFlowExecutionId());
         NodeExecution nodeExecution = super.executeNode(nodeExecutor, flowExecution);
         log.info("execute node:{}", nodeExecution);
         this.approveFlowInstanceOperator.updateCurrentNodeKey(ApproveHolder.get().getApproveInstanceKey(), nodeExecutor.nodeKey());

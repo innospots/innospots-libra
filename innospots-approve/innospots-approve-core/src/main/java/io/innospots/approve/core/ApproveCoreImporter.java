@@ -26,6 +26,5 @@ public @interface ApproveCoreImporter {
     @ComponentScan(basePackages = {"io.innospots.approve.core"})
     @Configuration
     class ApproveInnerCoreConfiguration{
-
     }
 }

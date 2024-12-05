@@ -24,7 +24,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import io.innospots.base.model.user.UserInfo;
 import io.innospots.libra.kernel.events.MessageEvent;
-import io.innospots.libra.base.user.SysUserReader;
+import io.innospots.base.service.SysUserReadService;
 import io.innospots.libra.kernel.module.notification.entity.NotificationMessageEntity;
 import io.innospots.libra.kernel.module.notification.model.NotificationChannel;
 import io.innospots.libra.kernel.module.notification.model.NotificationSetting;
@@ -64,17 +64,17 @@ public class NotificationSenderManager {
 
     private final EmailAccountLoader emailAccountLoader;
 
-    private final SysUserReader sysUserReader;
+    private final SysUserReadService sysUserReadService;
 
     public NotificationSenderManager(NotificationChannelOperator notificationChannelOperator,
                                      NotificationSettingOperator notificationSettingOperator,
                                      NotificationMessageOperator notificationMessageOperator,
                                      EmailAccountLoader emailAccountLoader,
-                                     SysUserReader sysUserReader) {
+                                     SysUserReadService sysUserReadService) {
         this.notificationChannelOperator = notificationChannelOperator;
         this.notificationSettingOperator = notificationSettingOperator;
         this.notificationMessageOperator = notificationMessageOperator;
-        this.sysUserReader = sysUserReader;
+        this.sysUserReadService = sysUserReadService;
         this.emailAccountLoader = emailAccountLoader;
     }
 
@@ -99,7 +99,7 @@ public class NotificationSenderManager {
         if (CollectionUtils.isNotEmpty(channels) && CollectionUtils.isNotEmpty(groups)) {
             List<Integer> roleIds = groups.stream().collect(Collectors.toCollection(() -> new ArrayList<>(groups.size())));
 
-            List<UserInfo> users = sysUserReader.listUserByRoleIds(roleIds);
+            List<UserInfo> users = sysUserReadService.listUserByRoleIds(roleIds);
             if (CollectionUtils.isEmpty(users)) {
                 return;
             }

@@ -27,7 +27,7 @@ public class ApproveActorEntity extends PBaseEntity {
 
     @Id
     @TableId(type = IdType.ASSIGN_ID)
-    @Column(length = 16)
+    @Column(length = 32)
     private String approveActorId;
 
     @Column(length = 32)

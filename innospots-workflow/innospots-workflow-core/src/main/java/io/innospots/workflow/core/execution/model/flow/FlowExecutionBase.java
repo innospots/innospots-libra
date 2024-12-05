@@ -144,11 +144,15 @@ public class FlowExecutionBase implements Initializer {
 
 
     public void addNodeExecution(NodeExecution nodeExecution) {
+        nodeExecutions.put(nodeExecution.getNodeKey(), nodeExecution);
+        /*
         if (this.isSkipNodeExecution()) {
             nodeExecutions.put(nodeExecution.getNodeKey(), null);
         } else {
-            nodeExecutions.put(nodeExecution.getNodeKey(), nodeExecution);
+
         }
+
+         */
     }
 
     public void addNodeExecutions(List<NodeExecution> nodeExecutions) {

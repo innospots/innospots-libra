@@ -180,7 +180,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
 
         if (CollectionUtils.isNotEmpty(nodeExecution.getInputs())) {
             for (ExecutionInput executionInput : nodeExecution.getInputs()) {
-                flowLogger.flowInfo("key: {}, name: {}, node input: {}", nodeExecution.getNodeKey(), executionInput.log().toString());
+                flowLogger.flowInfo("key: {}, name: {}, node input: {}", nodeExecution.getNodeKey(),this.nodeName(), executionInput.log().toString());
                 if (CollectionUtils.isNotEmpty(executionInput.getData())) {
                     for (Map<String, Object> item : executionInput.getData()) {
                         Object result = processItem(item, nodeExecution);
@@ -260,7 +260,9 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
 
         if (!isFail || ni.isContinueOnFail()) {
             processNextKeys(nodeExecution);
-            //nodeExecution.setNext(true);
+            if(nodeExecution.getNext() == null){
+                nodeExecution.setNext(true);
+            }
         }
         boolean isDone = nodeExecution.getStatus() != null && nodeExecution.getStatus().isDone();
         if (nodeExecution.getStatus() == null || !isDone) {

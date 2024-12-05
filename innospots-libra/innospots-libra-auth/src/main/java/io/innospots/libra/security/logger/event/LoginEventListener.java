@@ -21,7 +21,7 @@ package io.innospots.libra.security.logger.event;
 import io.innospots.base.events.IEventListener;
 import io.innospots.base.model.user.UserInfo;
 import io.innospots.libra.base.events.LoginEvent;
-import io.innospots.libra.base.user.SysUserReader;
+import io.innospots.base.service.SysUserReadService;
 import io.innospots.libra.base.terminal.TerminalRequestContextHolder;
 import io.innospots.libra.security.auth.model.AuthUser;
 import io.innospots.libra.security.logger.entity.LoginLogEntity;
@@ -46,12 +46,12 @@ public class LoginEventListener implements IEventListener<LoginEvent> {
 
     private final AuthUserOperator authUserOperator;
 
-    private final SysUserReader sysUserReader;
+    private final SysUserReadService sysUserReadService;
 
-    public LoginEventListener(LoginLogOperator loginLogOperator, AuthUserOperator authUserOperator, SysUserReader sysUserReader) {
+    public LoginEventListener(LoginLogOperator loginLogOperator, AuthUserOperator authUserOperator, SysUserReadService sysUserReadService) {
         this.loginLogOperator = loginLogOperator;
         this.authUserOperator = authUserOperator;
-        this.sysUserReader = sysUserReader;
+        this.sysUserReadService = sysUserReadService;
     }
 
 
@@ -66,7 +66,7 @@ public class LoginEventListener implements IEventListener<LoginEvent> {
         if (user != null) {
             Integer userId = user.getUserId();
             loginLog.setUserId(userId);
-            UserInfo userInfo = sysUserReader.getUserInfo(userId);
+            UserInfo userInfo = sysUserReadService.getUserInfo(userId);
             if (userInfo != null) {
                 loginLog.setUserRoleName(String.join(",", userInfo.getRoleNames()));
                 loginLog.setUserAvatar(userInfo.getAvatarKey());

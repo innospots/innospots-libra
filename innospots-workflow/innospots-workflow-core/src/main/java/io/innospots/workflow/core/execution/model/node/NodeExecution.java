@@ -133,7 +133,7 @@ public class NodeExecution extends NodeExecutionBase {
     }
 
     public boolean nextExecute() {
-        return next && CollectionUtils.isNotEmpty(nextNodeKeys);
+        return next!=null && next && CollectionUtils.isNotEmpty(nextNodeKeys);
     }
 
     public void addNextNodeKey(String nodeKey) {

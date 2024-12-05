@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-package io.innospots.libra.base.user;
+package io.innospots.base.service;
 
 import io.innospots.base.model.user.SimpleUser;
 import io.innospots.base.model.user.UserInfo;
@@ -28,7 +28,7 @@ import java.util.List;
  * @version 1.0.0
  * @date 2022/1/30
  */
-public interface SysUserReader {
+public interface SysUserReadService {
 
     /**
      * get user by primary ids

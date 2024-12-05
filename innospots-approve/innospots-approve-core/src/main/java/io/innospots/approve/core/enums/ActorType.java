@@ -7,6 +7,6 @@ package io.innospots.approve.core.enums;
  */
 public enum ActorType {
 
-    USER, ROLE, LEADER,FLOW
+    USER, ROLE, GROUP,FLOW
 
 }

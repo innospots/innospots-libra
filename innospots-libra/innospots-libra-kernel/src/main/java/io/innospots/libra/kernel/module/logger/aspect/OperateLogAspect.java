@@ -25,7 +25,7 @@ import io.innospots.base.model.user.UserInfo;
 import io.innospots.base.utils.CCH;
 import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
-import io.innospots.libra.base.user.SysUserReader;
+import io.innospots.base.service.SysUserReadService;
 import io.innospots.libra.base.terminal.TerminalRequestContextHolder;
 import io.innospots.libra.kernel.module.logger.entity.SysOperateLogEntity;
 import io.innospots.libra.kernel.module.logger.operator.SysLogOperator;
@@ -49,12 +49,12 @@ import java.time.LocalDateTime;
 public class OperateLogAspect {
 
     private final SysLogOperator sysLogOperator;
-    private final SysUserReader sysUserReader;
+    private final SysUserReadService sysUserReadService;
 
 
-    public OperateLogAspect(SysLogOperator sysLogOperator, SysUserReader sysUserReader) {
+    public OperateLogAspect(SysLogOperator sysLogOperator, SysUserReadService sysUserReadService) {
         this.sysLogOperator = sysLogOperator;
-        this.sysUserReader = sysUserReader;
+        this.sysUserReadService = sysUserReadService;
     }
 
     @Pointcut("@annotation(io.innospots.libra.base.log.OperationLog)")
@@ -120,7 +120,7 @@ public class OperateLogAspect {
             operateLog.setOperateTime(LocalDateTime.now());
             operateLog.fill(TerminalRequestContextHolder.getTerminal());
 
-            UserInfo userInfo = sysUserReader.getUserInfo(userId);
+            UserInfo userInfo = sysUserReadService.getUserInfo(userId);
             if (userInfo != null) {
                 operateLog.setRoles(String.join(",", userInfo.getRoleNames()));
                 operateLog.setUserAvatar(userInfo.getAvatarKey());

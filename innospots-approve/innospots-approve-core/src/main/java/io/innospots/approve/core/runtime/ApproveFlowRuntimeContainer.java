@@ -7,6 +7,11 @@ import io.innospots.approve.core.model.ApproveFlowInstance;
 import io.innospots.approve.core.operator.ApproveActorOperator;
 import io.innospots.approve.core.operator.ApproveFlowInstanceOperator;
 import io.innospots.approve.core.utils.ApproveHolder;
+import io.innospots.base.exception.ResourceException;
+import io.innospots.base.exception.ServiceException;
+import io.innospots.base.exception.data.DataOperationException;
+import io.innospots.base.model.response.ResponseCode;
+import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.reader.FlowExecutionReader;
 import io.innospots.workflow.core.flow.Flow;
@@ -105,6 +110,9 @@ public class ApproveFlowRuntimeContainer {
         ApproveHolder.set(flowInstance);
         log.info("execute flow:{}",flowInstance);
         approveFlowEngine.execute(flowExecution);
+        if(flowExecution.getStatus() == ExecutionStatus.FAILED || flowExecution.getStatus() == ExecutionStatus.NOT_PREPARED){
+            throw new ServiceException(this.getClass(), ResponseCode.EXECUTE_ERROR,"flow execution is fail","");
+        }
         ApproveHolder.remove();
     }
 

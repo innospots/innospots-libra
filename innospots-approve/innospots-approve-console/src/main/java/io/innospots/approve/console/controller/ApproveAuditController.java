@@ -5,12 +5,15 @@ import io.innospots.approve.core.model.ApproveFlowInstanceBase;
 import io.innospots.approve.core.model.ApproveRequest;
 import io.innospots.approve.core.operator.ApproveFlowInstanceOperator;
 import io.innospots.approve.core.runtime.ApproveFlowRuntimeContainer;
+import io.innospots.approve.core.service.ApproveAuditService;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.response.R;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 
@@ -30,17 +33,26 @@ public class ApproveAuditController {
 
     private final ApproveFlowRuntimeContainer approveFlowRuntimeContainer;
 
+    private final ApproveAuditService approveAuditService;
+
     public ApproveAuditController(ApproveFlowInstanceOperator approveFlowInstanceOperator,
-                                  ApproveFlowRuntimeContainer approveFlowRuntimeContainer) {
+                                  ApproveFlowRuntimeContainer approveFlowRuntimeContainer, ApproveAuditService approveAuditService) {
         this.approveFlowInstanceOperator = approveFlowInstanceOperator;
         this.approveFlowRuntimeContainer = approveFlowRuntimeContainer;
+        this.approveAuditService = approveAuditService;
     }
 
 
     @Operation(summary = "page approver instances by request")
     @GetMapping("page")
-    public R<PageBody<ApproveFlowInstanceBase>> pageByApprover(ApproveRequest approveRequest) {
-        return R.success(approveFlowInstanceOperator.page(approveRequest, false, true));
+    public R<PageBody<ApproveFlowInstanceBase>> pageByApprover(
+            @RequestParam(required = false) String approveType,
+            @RequestParam(required = false) LocalDateTime startTime,
+            @RequestParam(required = false) LocalDateTime endTime,
+            @RequestParam(required = false, defaultValue = "1") Integer page,
+            @RequestParam(required = false, defaultValue = "20") Integer size
+    ) {
+        return R.success(approveAuditService.pageAudit(page,size,approveType,startTime,endTime));
     }
 
     @Operation(summary = "get approve instance by approve instance key")

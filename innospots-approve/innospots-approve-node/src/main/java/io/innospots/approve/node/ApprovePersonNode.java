@@ -6,8 +6,10 @@ import io.innospots.approve.core.enums.ApproveResult;
 import io.innospots.approve.core.model.ApproveActor;
 import io.innospots.approve.core.model.ApproveFlowInstance;
 import io.innospots.approve.core.utils.ApproveHolder;
+import io.innospots.base.model.user.UserGroup;
 import io.innospots.base.model.user.UserInfo;
 import io.innospots.base.quartz.ExecutionStatus;
+import io.innospots.base.service.IUserGroupService;
 import io.innospots.base.utils.CCH;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +53,7 @@ public class ApprovePersonNode extends ApproveBaseNode {
     @Override
     protected Object processItem(Map<String, Object> item, NodeExecution nodeExecution) {
         ApproveFlowInstance approveFlowInstance = getApproveFlowInstance(item);
-        ApproveActor approveActor = approveActorOperator.getApproveActor(approveFlowInstance.getApproveInstanceKey(), this.nodeKey());
+        ApproveActor approveActor = approveActorOperator.getApproveActorByFlowExecutionId(approveFlowInstance.getFlowExecutionId(), this.nodeKey());
         String message = (String) item.get(messageField);
         String result = (String) item.get(resultField);
 
@@ -66,19 +68,30 @@ public class ApprovePersonNode extends ApproveBaseNode {
                     .approveExecutionId(nodeExecution.getNodeExecutionId())
                     .flowExecutionId(nodeExecution.getFlowExecutionId())
                     .build();
-            fillActorType(approveActor);
+            fillActorType(approveActor,approveFlowInstance);
             approveActor = approveActorOperator.saveApproveActor(approveActor);
             //not execute next node
             nodeExecution.setNext(false);
             ApproveHolder.setActor(approveActor);
+            body.putAll(item);
+            return body;
+        }
+
+        if(approveActor.getApproveAction()!=ApproveAction.PENDING){
+            body.putAll(item);
+            nodeExecution.setMessage("actor can't approve, action is " + approveActor.getApproveAction());
             return body;
         }
 
         if (!validPermission(nodeExecution)) {
+            body.putAll(item);
+            nodeExecution.setMessage("not allow permission");
             return body;
         }
 
         if (result == null) {
+            body.putAll(item);
+            nodeExecution.setMessage("result field is null");
             log.warn("not have {} field in the payload:{}", resultField, item);
             return body;
         }
@@ -132,14 +145,21 @@ public class ApprovePersonNode extends ApproveBaseNode {
         return hasAuth;
     }
 
-    private void fillActorType(ApproveActor approveActor){
-        if(actorType == ActorType.LEADER){
-            approveActor.setActorId(leaderLevel);
+    private void fillActorType(ApproveActor approveActor,ApproveFlowInstance flowInstance){
+        if(actorType == ActorType.GROUP){
+            UserGroup userGroup = getUserGroup(flowInstance);
+            approveActor.setActorId(userGroup.getGroupId());
         }else if(actorType == ActorType.ROLE){
             approveActor.setActorId(roleId);
         }else if(actorType == ActorType.USER){
             approveActor.setActorId(userId);
         }
+    }
+
+    private UserGroup getUserGroup(ApproveFlowInstance flowInstance){
+        IUserGroupService userGroupService = getBean(IUserGroupService.class);
+        UserGroup userGroup = userGroupService.findParentUserGroupByUserId(flowInstance.getProposerId(),leaderLevel);
+        return userGroup;
     }
 
 }

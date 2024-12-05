@@ -51,7 +51,7 @@ public class NodeExecutionBase {
     protected ExecutionStatus status;
     protected LocalDateTime startTime;
     protected LocalDateTime endTime;
-    protected boolean next;
+    protected Boolean next;
 
     protected String message;
 

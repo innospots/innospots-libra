@@ -21,7 +21,7 @@ package io.innospots.libra.kernel.module.system.service;
 import io.innospots.libra.kernel.module.system.model.role.RoleInfo;
 import io.innospots.base.model.user.SimpleUser;
 import io.innospots.base.model.user.UserInfo;
-import io.innospots.libra.base.user.SysUserReader;
+import io.innospots.base.service.SysUserReadService;
 import io.innospots.libra.kernel.module.system.entity.UserRoleEntity;
 import io.innospots.libra.kernel.module.system.converter.UserInfoConverter;
 import io.innospots.libra.kernel.module.system.operator.RoleOperator;
@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  * @date 2022/4/26
  */
 @Component
-public class SystemUserReader implements SysUserReader {
+public class SystemUserReadService implements SysUserReadService {
 
     private final UserOperator userOperator;
 
@@ -48,7 +48,7 @@ public class SystemUserReader implements SysUserReader {
 
     private final UserRoleOperator userRoleOperator;
 
-    public SystemUserReader(UserOperator userOperator, RoleOperator roleOperator, UserRoleOperator userRoleOperator) {
+    public SystemUserReadService(UserOperator userOperator, RoleOperator roleOperator, UserRoleOperator userRoleOperator) {
         this.userOperator = userOperator;
         this.roleOperator = roleOperator;
         this.userRoleOperator = userRoleOperator;

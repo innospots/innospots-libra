@@ -44,6 +44,7 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
         UpdateWrapper<ApproveFlowInstanceEntity> uw = new UpdateWrapper<>();
         uw.lambda().set(ApproveFlowInstanceEntity::getApproveStatus, ApproveStatus.STARTING.name())
                 .set(ApproveFlowInstanceEntity::getStartTime, LocalDateTime.now())
+                .set(ApproveFlowInstanceEntity::getFlowExecutionId,null)
                 .eq(ApproveFlowInstanceEntity::getApproveInstanceKey, approveInstanceKey);
         log.info("update approve instance status to starting: {}", approveInstanceKey);
         boolean b = this.update(uw);

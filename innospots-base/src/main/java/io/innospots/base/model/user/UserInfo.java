@@ -68,4 +68,20 @@ public class UserInfo extends SimpleUser {
     private OnOff onOff;
 
     private Integer loginTimes;
+
+    private Integer groupId;
+
+
+    @Override
+    public String toString() {
+        return "{" +
+                "roleIds=" + roleIds +
+                ", admin=" + admin +
+                ", groupId=" + groupId +
+                ", userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", avatarKey='" + avatarKey + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

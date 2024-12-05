@@ -21,7 +21,7 @@ package io.innospots.libra.kernel.module.todo.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.user.UserInfo;
-import io.innospots.libra.base.user.SysUserReader;
+import io.innospots.base.service.SysUserReadService;
 import io.innospots.libra.kernel.module.todo.converter.TodoTaskConverter;
 import io.innospots.libra.kernel.module.todo.entity.TodoTaskEntity;
 import io.innospots.libra.kernel.module.todo.entity.TodoTaskTagEntity;
@@ -60,14 +60,14 @@ public class TodoTaskService {
 
     private final TodoTaskCommentOperator todoTaskCommentOperator;
 
-    private final SysUserReader sysUserReader;
+    private final SysUserReadService sysUserReadService;
 
     public TodoTaskService(TodoTaskOperator todoTaskOperator, TodoTaskTagOperator todoTaskTagOperator,
-                           TodoTaskCommentOperator todoTaskCommentOperator, SysUserReader sysUserReader) {
+                           TodoTaskCommentOperator todoTaskCommentOperator, SysUserReadService sysUserReadService) {
         this.todoTaskOperator = todoTaskOperator;
         this.todoTaskTagOperator = todoTaskTagOperator;
         this.todoTaskCommentOperator = todoTaskCommentOperator;
-        this.sysUserReader = sysUserReader;
+        this.sysUserReadService = sysUserReadService;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -112,7 +112,7 @@ public class TodoTaskService {
 
     public TodoTask getTodoTaskWithComment(Integer taskId) {
         TodoTask task = this.getTodoTask(taskId);
-        List<UserInfo> userInfos = sysUserReader.listUsersByIds(Collections.singletonList(task.getPrincipalUserId()));
+        List<UserInfo> userInfos = sysUserReadService.listUsersByIds(Collections.singletonList(task.getPrincipalUserId()));
         if (CollectionUtils.isNotEmpty(userInfos)) {
             task.setPrincipalUserName(userInfos.get(0).getUserName());
         }
@@ -120,7 +120,7 @@ public class TodoTaskService {
         userNames.add(task.getCreatedBy());
         List<TodoTaskComment> entities = todoTaskCommentOperator.getTodoTaskComments(taskId);
         userNames.addAll(entities.stream().map(TodoTaskComment::getCreatedBy).collect(Collectors.toList()));
-        userInfos = sysUserReader.listUsersByNames(userNames);
+        userInfos = sysUserReadService.listUsersByNames(userNames);
         Map<String, UserInfo> userInfoMap = userInfos.stream().collect(Collectors.toMap(UserInfo::getUserName, Function.identity()));
         if (MapUtils.isNotEmpty(userInfoMap) && userInfoMap.get(task.getCreatedBy()) != null) {
             task.setAvatarKey(userInfoMap.get(task.getCreatedBy()).getAvatarKey());
@@ -173,13 +173,13 @@ public class TodoTaskService {
         List<Integer> principalUserIds = todoTasks.stream().map(TodoTask::getPrincipalUserId).collect(Collectors.toList());
         List<Integer> taskIds = todoTasks.stream().map(TodoTask::getTaskId).distinct().collect(Collectors.toList());
         List<String> userNames = todoTasks.stream().map(TodoTask::getCreatedBy).collect(Collectors.toList());
-        List<UserInfo> userNameInfos = sysUserReader.listUsersByNames(userNames);
+        List<UserInfo> userNameInfos = sysUserReadService.listUsersByNames(userNames);
         Map<String, UserInfo> userNameInfoMap = userNameInfos.stream().collect(Collectors.toMap(UserInfo::getUserName, Function.identity()));
 
         List<TodoTaskTagEntity> tags = todoTaskTagOperator.listByTaskIds(taskIds);
         Map<Integer, List<TodoTaskTagEntity>> tagMap = tags.stream().collect(Collectors.groupingBy(TodoTaskTagEntity::getTaskId));
 
-        List<UserInfo> userIdInfos = sysUserReader.listUsersByIds(principalUserIds);
+        List<UserInfo> userIdInfos = sysUserReadService.listUsersByIds(principalUserIds);
         Map<Integer, UserInfo> userIdInfoMap = userIdInfos.stream().collect(Collectors.toMap(UserInfo::getUserId, Function.identity()));
 
         List<Map<String, Object>> comments = todoTaskCommentOperator.selectCountByTaskId(taskIds);

@@ -50,7 +50,7 @@ public class ApproveStartNode extends ApproveBaseNode {
     }
 
     @Override
-    protected Object processItem(Map<String, Object> item) {
+    protected Object processItem(Map<String, Object> item,NodeExecution nodeExecution) {
         if (CollectionUtils.isEmpty(inputFields)) {
             return item;
         }
@@ -66,8 +66,9 @@ public class ApproveStartNode extends ApproveBaseNode {
             }
         }//end inputFields
         nItem.putAll(item);
+        nodeExecution.setNext(true);
         log.debug("start node input:{}", nItem);
-        this.flowLogger.flowInfo("","","");
+        this.flowLogger.flowInfo("start approve, body: {}",nItem);
         return nItem;
     }
 

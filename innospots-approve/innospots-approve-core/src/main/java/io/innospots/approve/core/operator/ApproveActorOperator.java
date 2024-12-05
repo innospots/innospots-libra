@@ -18,6 +18,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class ApproveActorOperator extends ServiceImpl<ApproveActorDao, ApproveActorEntity> {
 
+    public ApproveActor getApproveActorByFlowExecutionId(String flowExecutionId, String nodeKey) {
+        QueryWrapper<ApproveActorEntity> qw = new QueryWrapper<>();
+        qw.lambda().eq(ApproveActorEntity::getFlowExecutionId, flowExecutionId)
+                .eq(ApproveActorEntity::getNodeKey, nodeKey);
+        ApproveActorEntity entity = this.getOne(qw);
+        return ApproveActorConverter.INSTANCE.entityToModel(entity);
+    }
+
     public ApproveActor getApproveActor(String approveInstanceKey, String nodeKey) {
         QueryWrapper<ApproveActorEntity> qw = new QueryWrapper<>();
         qw.lambda().eq(ApproveActorEntity::getApproveInstanceKey, approveInstanceKey)
