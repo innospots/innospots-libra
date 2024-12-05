@@ -1,5 +1,6 @@
 package io.innospots.approve.node;
 
+import io.innospots.approve.core.enums.ActorType;
 import io.innospots.approve.core.enums.ApproveAction;
 import io.innospots.approve.core.enums.ApproveResult;
 import io.innospots.approve.core.model.ApproveActor;
@@ -25,7 +26,7 @@ public class ApprovePersonNode extends ApproveBaseNode {
 
     private String resultField;
     private String messageField;
-    private String actorType;
+    private ActorType actorType;
     private Integer userId;
     private Integer roleId;
     private Integer leaderLevel;
@@ -35,7 +36,7 @@ public class ApprovePersonNode extends ApproveBaseNode {
         super.initialize();
         resultField = this.valueString("resultField");
         messageField = this.valueString("messageField");
-        actorType = this.valueString("actorType");
+        actorType = ActorType.valueOf(this.valueString("actorType"));
         userId = this.valueInteger("userId");
         roleId = this.valueInteger("roleId");
         leaderLevel = this.valueInteger("leaderLevel");
@@ -59,9 +60,13 @@ public class ApprovePersonNode extends ApproveBaseNode {
             //new actor, first execute the node
             approveActor = ApproveActor.builder()
                     .approveAction(ApproveAction.PENDING)
+                    .actorType(actorType)
                     .approveInstanceKey(approveFlowInstance.getApproveInstanceKey())
                     .nodeKey(this.nodeKey())
+                    .approveExecutionId(nodeExecution.getNodeExecutionId())
+                    .flowExecutionId(nodeExecution.getFlowExecutionId())
                     .build();
+            fillActorType(approveActor);
             approveActor = approveActorOperator.saveApproveActor(approveActor);
             //not execute next node
             nodeExecution.setNext(false);
@@ -92,6 +97,8 @@ public class ApprovePersonNode extends ApproveBaseNode {
         approveActor.setUserName(CCH.authUser());
         approveActor.setActorType(actorType);
         approveActor.setApproveAction(ApproveAction.DONE);
+        approveActor.setApproveExecutionId(nodeExecution.getNodeExecutionId());
+        approveActor.setFlowExecutionId(nodeExecution.getFlowExecutionId());
         approveActorOperator.saveApproveActor(approveActor);
         ApproveHolder.setActor(approveActor);
         approveFlowInstanceOperator.updateProcessStatus(approveFlowInstance.getApproveInstanceKey());
@@ -124,4 +131,15 @@ public class ApprovePersonNode extends ApproveBaseNode {
         }
         return hasAuth;
     }
+
+    private void fillActorType(ApproveActor approveActor){
+        if(actorType == ActorType.LEADER){
+            approveActor.setActorId(leaderLevel);
+        }else if(actorType == ActorType.ROLE){
+            approveActor.setActorId(roleId);
+        }else if(actorType == ActorType.USER){
+            approveActor.setActorId(userId);
+        }
+    }
+
 }

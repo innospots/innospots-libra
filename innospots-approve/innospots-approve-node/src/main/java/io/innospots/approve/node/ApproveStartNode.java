@@ -61,10 +61,13 @@ public class ApproveStartNode extends ApproveBaseNode {
                 nItem.put(inputField.getCode(), v);
                 fillApproveFlowInstance(inputField.getCode(),v.toString());
             }
+            if(item!=null){
+                item.remove(inputField.getCode());
+            }
         }//end inputFields
-        if (log.isDebugEnabled()) {
-            log.debug("start node input:{}", nItem);
-        }
+        nItem.putAll(item);
+        log.debug("start node input:{}", nItem);
+        this.flowLogger.flowInfo("","","");
         return nItem;
     }
 

@@ -23,4 +23,27 @@ public class ApproveFlowInstance extends ApproveFlowInstanceBase {
 
     private String currentNodeKey;
 
+
+    @Override
+    public String toString() {
+        return "{" +
+                "flowExecutionId='" + flowExecutionId + '\'' +
+                ", currentNodeKey='" + currentNodeKey + '\'' +
+                ", approveInstanceKey='" + approveInstanceKey + '\'' +
+                ", flowKey='" + flowKey + '\'' +
+                ", appKey='" + appKey + '\'' +
+                ", belongTo='" + belongTo + '\'' +
+                ", proposer='" + proposer + '\'' +
+                ", proposerId=" + proposerId +
+                ", message='" + message + '\'' +
+                ", approver='" + approver + '\'' +
+                ", approverId=" + approverId +
+                ", approveStatus=" + approveStatus +
+                ", result='" + result + '\'' +
+                ", approveType='" + approveType + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", lastApproveDateTime=" + lastApproveDateTime +
+                '}';
+    }
 }

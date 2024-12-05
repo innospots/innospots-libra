@@ -1,7 +1,7 @@
 {
   "name": "审批通知",
   "code": "approve_notice",
-  "flowCode": "APPROVE",
+  "flowCode": "APPROVAL",
   "primitive": "approve",
   "vendor": "innospots",
   "description": "审批通知节点",

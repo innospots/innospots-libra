@@ -121,6 +121,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
                 nodeKey(),
                 flowExecution);
         nodeExecution.setNodeCode(ni.getCode());
+        nodeExecution.setNodeName(ni.getName());
         flowExecution.addNodeExecution(nodeExecution);
         if (this.buildStatus != BuildStatus.DONE) {
             nodeExecution.end(buildException != null ? buildException.getMessage() : "build fail", ExecutionStatus.FAILED);

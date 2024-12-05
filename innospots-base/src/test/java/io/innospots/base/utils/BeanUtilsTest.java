@@ -5,6 +5,7 @@ import io.innospots.base.condition.Opt;
 import io.innospots.base.model.BaseModelInfo;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -33,6 +34,12 @@ public class BeanUtilsTest {
         BeanUtils.toBean(m, BaseModelInfo.class);
         Opt opt = Opt.IN;
         System.out.println(opt instanceof Enum);
+    }
 
+    @Test
+    void test(){
+        String p = "/home/webapp";
+        File file = new File(p,"");
+        System.out.println(file.getAbsolutePath());
     }
 }

@@ -19,6 +19,7 @@
 package io.innospots.approve.node;
 
 import io.innospots.approve.core.constants.ApproveConstant;
+import io.innospots.approve.core.enums.ActorType;
 import io.innospots.approve.core.enums.ApproveAction;
 import io.innospots.approve.core.enums.ApproveResult;
 import io.innospots.approve.core.enums.ApproveStatus;
@@ -86,9 +87,10 @@ public class ApproveCombineNode extends ApproveBaseNode {
             nodeOutput.addResult(approveExecution.toInfo());
         }
         ApproveActor actor = ApproveActor.builder()
-                .actorType(ApproveConstant.ACTOR_TYPE_SYS)
+                .actorType(ActorType.FLOW)
                 .approveAction(ApproveAction.DONE)
                 .approveInstanceKey(ApproveHolder.get().getApproveInstanceKey())
+                .flowExecutionId(nodeExecution.getFlowExecutionId())
                 .nodeKey(this.nodeKey())
                 .userId(CCH.userId())
                 .userName(CCH.authUser())

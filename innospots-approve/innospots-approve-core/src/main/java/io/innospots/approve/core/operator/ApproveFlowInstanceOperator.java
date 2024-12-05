@@ -17,6 +17,7 @@ import io.innospots.base.data.body.PageBody;
 import io.innospots.base.exception.ResourceException;
 import io.innospots.base.utils.CCH;
 import io.innospots.base.utils.time.DateTimeUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -30,6 +31,7 @@ import java.util.Date;
  * @vesion 2.0
  * @date 2024/11/22
  */
+@Slf4j
 @Component
 public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstanceDao, ApproveFlowInstanceEntity> {
 
@@ -43,6 +45,7 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
         uw.lambda().set(ApproveFlowInstanceEntity::getApproveStatus, ApproveStatus.STARTING.name())
                 .set(ApproveFlowInstanceEntity::getStartTime, LocalDateTime.now())
                 .eq(ApproveFlowInstanceEntity::getApproveInstanceKey, approveInstanceKey);
+        log.info("update approve instance status to starting: {}", approveInstanceKey);
         boolean b = this.update(uw);
         return ApproveFlowInstanceConverter.INSTANCE.entityToModel(this.getById(approveInstanceKey));
     }

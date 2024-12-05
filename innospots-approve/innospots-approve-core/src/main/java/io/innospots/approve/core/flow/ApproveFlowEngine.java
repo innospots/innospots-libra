@@ -90,10 +90,12 @@ public class ApproveFlowEngine extends StreamFlowEngine {
         }
 
         approveFlowExecutionStoreListener.start(flowExecution);
+        log.info("start flow execution:{}", flowExecution);
         ApproveFlowInstance approveFlowInstance = ApproveHolder.get();
         if (approveFlowInstance!=null &&
                 (approveFlowInstance.getFlowExecutionId() == null ||
                 !approveFlowInstance.getFlowExecutionId().equals(flowExecution.getFlowExecutionId()))) {
+            log.info("bind flow execution:{} to approve instance:{}", flowExecution.getFlowExecutionId(), approveFlowInstance.getApproveInstanceKey());
             approveFlowInstanceOperator.bindFlowExecutionId(approveFlowInstance.getApproveInstanceKey(), flowExecution.getFlowExecutionId());
             approveFlowInstance.setFlowExecutionId(flowExecution.getFlowExecutionId());
         }
@@ -136,7 +138,9 @@ public class ApproveFlowEngine extends StreamFlowEngine {
     @Override
     protected NodeExecution executeNode(BaseNodeExecutor nodeExecutor, FlowExecution flowExecution) {
         NodeExecution nodeExecution = super.executeNode(nodeExecutor, flowExecution);
+        log.info("execute node:{}", nodeExecution);
         this.approveFlowInstanceOperator.updateCurrentNodeKey(ApproveHolder.get().getApproveInstanceKey(), nodeExecutor.nodeKey());
+        log.info("update approve flow instance current node,approveInstanceKey: {}, nodeKey:{}", ApproveHolder.get().getApproveInstanceKey(), nodeExecutor.nodeKey());
         return nodeExecution;
     }
 }

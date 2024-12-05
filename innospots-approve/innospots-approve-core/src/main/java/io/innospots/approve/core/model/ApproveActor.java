@@ -1,5 +1,6 @@
 package io.innospots.approve.core.model;
 
+import io.innospots.approve.core.enums.ActorType;
 import io.innospots.approve.core.enums.ApproveAction;
 import io.innospots.approve.core.enums.ApproveResult;
 import jakarta.persistence.Column;
@@ -27,12 +28,18 @@ public class ApproveActor {
 
     private String userName;
 
-    private String actorType;
+    private ActorType actorType;
+
+    private Integer actorId;
 
     private ApproveAction approveAction;
 
     private String result;
 
     private String message;
+
+    private String flowExecutionId;
+
+    private String approveExecutionId;
 
 }

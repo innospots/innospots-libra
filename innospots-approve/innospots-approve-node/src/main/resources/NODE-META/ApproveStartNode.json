@@ -1,7 +1,7 @@
 {
   "name": "审批开始",
   "code": "approve_start",
-  "flowCode": "APPROVE",
+  "flowCode": "APPROVAL",
   "primitive": "approveTrigger",
   "vendor": "innospots",
   "description": "审批开始节点",

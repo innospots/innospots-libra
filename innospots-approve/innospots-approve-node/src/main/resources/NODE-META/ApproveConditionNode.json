@@ -1,7 +1,7 @@
 {
   "name": "审批条件",
   "code": "approve_condition",
-  "flowCode": "APPROVE",
+  "flowCode": "APPROVAL",
   "primitive": "approve",
   "vendor": "innospots",
   "description": "IF条件",
