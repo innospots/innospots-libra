@@ -79,7 +79,7 @@ innospots:
             params:
               response_type: code
               client_id: ${google_oauth_client_id}
-              redirect_uri: http://localhost:9800/oauth/callback
+              redirect_uri: /oauth/callback
               scope: email profile
               access_type: offline
           token-info:
@@ -89,7 +89,7 @@ innospots:
               client_id: ${google_oauth_client_id}
               client_secret: ${google_oauth_secret}
               grant_type: authorization_code
-              redirect_uri: http://localhost:9800/oauth/callback
+              redirect_uri: /oauth/callback
               code: "{{code}}"
             response:
               access_token: "$.access_token"

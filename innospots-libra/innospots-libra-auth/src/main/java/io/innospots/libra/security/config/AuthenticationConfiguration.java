@@ -80,9 +80,10 @@ public class AuthenticationConfiguration {
             JwtAuthManager jwtAuthManager,
             AuthUserOperator authUserOperator,
             OauthUserOperator oauthUserOperator,
-            OauthProviderProperties oauthProviderProperties
+            OauthProviderProperties oauthProviderProperties,
+            InnospotsConfigProperties innospotsConfigProperties
     ) {
-        return new OauthAuthenticationProvider(jwtAuthManager,authUserOperator,oauthUserOperator,oauthProviderProperties);
+        return new OauthAuthenticationProvider(jwtAuthManager,authUserOperator,oauthUserOperator,oauthProviderProperties,innospotsConfigProperties);
     }
 
     @Bean

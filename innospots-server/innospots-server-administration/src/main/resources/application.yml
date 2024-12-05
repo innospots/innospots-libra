@@ -72,6 +72,7 @@ mybatis-plus:
 
 innospots:
   config:
+    host: 1.15.20.45
     enable-swagger: true
     upload-file-path: .download_files/
     ext-lib-path: ./ext_lib/

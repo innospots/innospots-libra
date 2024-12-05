@@ -20,13 +20,11 @@ package io.innospots.libra.security.auth.oauth;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
-import io.innospots.base.crypto.PasswordEncoder;
+import io.innospots.base.config.InnospotsConfigProperties;
 import io.innospots.base.events.EventBusCenter;
 import io.innospots.base.exception.AuthenticationException;
 import io.innospots.base.exception.InnospotException;
-import io.innospots.base.json.JSONUtils;
 import io.innospots.base.model.user.UserInfo;
-import io.innospots.base.utils.http.HttpClientBuilder;
 import io.innospots.libra.base.enums.LoginStatus;
 import io.innospots.libra.base.events.LoginEvent;
 import io.innospots.libra.security.auth.Authentication;
@@ -44,7 +42,6 @@ import io.innospots.libra.security.operator.OauthUserOperator;
 import lombok.AllArgsConstructor;
 import org.noear.snack.ONode;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,6 +61,7 @@ public class OauthAuthenticationProvider implements AuthenticationProvider {
 
     private OauthProviderProperties oauthProviderProperties;
 
+    private InnospotsConfigProperties innospotsConfigProperties;
 
     @Override
     public Authentication authenticate(LoginRequest request) throws InnospotException {
@@ -110,6 +108,8 @@ public class OauthAuthenticationProvider implements AuthenticationProvider {
                 params.put(param,code);
             }
         }
+        tokenParamAddHost(params);
+
         ONode tokenNode = handleProviderUrl(tokenInfo,params);
         String accessToken = tokenNode.select(tokenInfo.getResponse().get("access_token").toString()).getString();
         return accessToken;
@@ -127,6 +127,7 @@ public class OauthAuthenticationProvider implements AuthenticationProvider {
                 params.put(param,accessToken);
             }
         }
+        tokenParamAddHost(params);
         ONode userNode = handleProviderUrl(userInfo,params);
         Map<String,Object>  resPath = userInfo.getResponse();
         OauthUser oauthUser = new OauthUser();
@@ -163,6 +164,13 @@ public class OauthAuthenticationProvider implements AuthenticationProvider {
             throw AuthenticationException.buildException(this.getClass(), "oauth request error, "+errorMsg);
         }
         return resNode;
+    }
+
+    public void tokenParamAddHost(Map<String,Object> params){
+        if(params.containsKey("redirect_uri")){
+            String redirectUri = params.get("redirect_uri").toString();
+            params.put("redirect_uri",innospotsConfigProperties.getHost() + redirectUri);
+        }
     }
 
     private AuthUser userInfo2AuthUser(UserInfo userInfo){
