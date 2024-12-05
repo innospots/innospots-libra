@@ -32,6 +32,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "innospots.config")
 public class InnospotsConfigProperties {
 
+    private String host =  "";
 
     /**
      * enable swagger api
