@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.innospots.base.entity.PBaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,7 +18,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = ApproveExecutionEntity.TABLE_NAME)
+@Table(name = ApproveExecutionEntity.TABLE_NAME,indexes = {@Index(name = "idx_flow_execution", columnList = "flowExecutionId")})
 @TableName(value = ApproveExecutionEntity.TABLE_NAME)
 public class ApproveExecutionEntity extends PBaseEntity {
 
@@ -60,7 +57,7 @@ public class ApproveExecutionEntity extends PBaseEntity {
     private String result;
 
     @Column(length = 32)
-    private String approveStatus;
+    private String approveResult;
 
     @Column(length = 32)
     private String executionStatus;

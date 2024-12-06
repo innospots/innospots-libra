@@ -42,7 +42,7 @@ public interface WorkflowRevisionDao extends BaseMapper<WorkflowRevisionEntity> 
         QueryWrapper<WorkflowRevisionEntity> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(WorkflowRevisionEntity::getWorkflowInstanceId,workflowInstanceId)
                 .orderByDesc(WorkflowRevisionEntity::getFlowRevisionId);
-        return this.selectOne(wrapper);
+        return this.selectOne(wrapper,false);
     }
 
     /**

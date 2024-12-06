@@ -22,23 +22,18 @@ import io.innospots.approve.core.constants.ApproveConstant;
 import io.innospots.approve.core.enums.ActorType;
 import io.innospots.approve.core.enums.ApproveAction;
 import io.innospots.approve.core.enums.ApproveResult;
-import io.innospots.approve.core.enums.ApproveStatus;
 import io.innospots.approve.core.model.ApproveActor;
 import io.innospots.approve.core.model.ApproveExecution;
-import io.innospots.approve.core.operator.ApproveActorOperator;
-import io.innospots.approve.core.operator.ApproveExecutionOperator;
 import io.innospots.approve.core.utils.ApproveHolder;
-import io.innospots.base.utils.CCH;
 import io.innospots.workflow.core.execution.model.ExecutionOutput;
 import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
-import io.innospots.workflow.core.node.executor.BaseNodeExecutor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.mapdb.CC;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -63,9 +58,9 @@ public class ApproveCombineNode extends ApproveBaseNode {
     protected void invoke(NodeExecution nodeExecution, FlowExecution flowExecution) {
         ExecutionOutput nodeOutput = this.buildOutput(nodeExecution);
 
-        List<ApproveExecution> executions = approveExecutionOperator.listApproveExecutions(flowExecution.getFlowExecutionId(), this.prevNodeKeys());
+        List<ApproveExecution> executions = listPrevApproveExecution(flowExecution.getFlowExecutionId());
 
-        if(CollectionUtils.isEmpty(executions) || executions.size() < this.prevNodeKeys().size()){
+        if (CollectionUtils.isEmpty(executions) || executions.size() < this.prevNodeKeys().size()) {
             String message = "not all of the approve nodes have been executed completely.";
             nodeExecution.setMessage(message);
             nodeExecution.setNext(false);
@@ -75,29 +70,21 @@ public class ApproveCombineNode extends ApproveBaseNode {
         boolean approved = false;
         if (approveMode == ApproveMode.ALL) {
             approved = executions.stream()
-                    .allMatch(ae -> Objects.equals(ae.getApproveStatus(), ApproveStatus.APPROVED));
+                    .allMatch(ae -> Objects.equals(ae.getApproveResult(), ApproveResult.APPROVED));
         } else {
             approved = executions.stream()
-                    .anyMatch(ae -> Objects.equals(ae.getApproveStatus(), ApproveStatus.APPROVED));
+                    .anyMatch(ae -> Objects.equals(ae.getApproveResult(), ApproveResult.APPROVED));
         }
 
         nodeExecution.setNext(approved);
 
-        for (ApproveExecution approveExecution : executions) {
-            nodeOutput.addResult(approveExecution.toInfo());
-        }
-        ApproveActor actor = ApproveActor.builder()
-                .actorType(ActorType.FLOW)
-                .approveAction(ApproveAction.DONE)
-                .approveInstanceKey(ApproveHolder.get().getApproveInstanceKey())
-                .flowExecutionId(nodeExecution.getFlowExecutionId())
-                .nodeKey(this.nodeKey())
-                .userId(CCH.userId())
-                .userName(CCH.authUser())
-                .result(approved ? ApproveResult.APPROVED.name():ApproveResult.REJECTED.name())
-                .build();
-        actor = approveActorOperator.saveApproveActor(actor);
-        ApproveHolder.setActor(actor);
+        ApproveResult approveResult = approved ? ApproveResult.APPROVED : ApproveResult.REJECTED;
+        fillApproveActor(nodeExecution, ApproveAction.DONE, ActorType.FLOW, approveResult,true);
+
+        Map<String,Object> result = new HashMap<>();
+        result.put(ApproveConstant.APPROVE_RESULT, approveResult.name());
+        result.put(ApproveConstant.APPROVE_INSTANCE_KEY, ApproveHolder.get().getApproveInstanceKey());
+        nodeOutput.addResult(result);
     }
 
     public enum ApproveMode {

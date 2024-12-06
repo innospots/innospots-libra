@@ -214,7 +214,7 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
 
     public boolean save(ApproveFlowInstance approveFlowInstance){
         ApproveFlowInstanceEntity entity = ApproveFlowInstanceConverter.INSTANCE.modelToEntity(approveFlowInstance);
-        return super.save(entity);
+        return super.saveOrUpdate(entity);
     }
 
 

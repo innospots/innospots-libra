@@ -40,8 +40,18 @@
       "uri": "/approve-audit",
       "icon": "approve",
       "i18nNames": {
-        "en_US": "Approve Audit",
-        "zh_CN": "审批审核"
+        "en_US": "Audit",
+        "zh_CN": "待审核"
+      }
+    },
+    {
+      "name": "${audit-records}",
+      "itemKey": "audit-records",
+      "uri": "/audit-records",
+      "icon": "approve",
+      "i18nNames": {
+        "en_US": "Audit Record",
+        "zh_CN": "审核记录"
       }
     }
   ]

@@ -1,6 +1,7 @@
 package io.innospots.approve.core.model;
 
 import io.innospots.approve.core.enums.ApproveAction;
+import io.innospots.approve.core.enums.ApproveResult;
 import io.innospots.approve.core.enums.ApproveStatus;
 import io.innospots.base.quartz.ExecutionStatus;
 import lombok.Getter;
@@ -43,7 +44,7 @@ public class ApproveExecution implements Comparable<ApproveExecution>{
 
     private ExecutionStatus executionStatus;
 
-    private ApproveStatus approveStatus;
+    private ApproveResult approveResult;
 
     private String message;
 
@@ -59,7 +60,7 @@ public class ApproveExecution implements Comparable<ApproveExecution>{
         info.put("userId", userId);
         info.put("userName", userName);
         info.put("result", result);
-        info.put("approveStatus", approveStatus.name());
+        info.put("approveResult", approveResult);
         info.put("message", message);
         info.put("startTime", startTime);
         info.put("endTime", endTime);

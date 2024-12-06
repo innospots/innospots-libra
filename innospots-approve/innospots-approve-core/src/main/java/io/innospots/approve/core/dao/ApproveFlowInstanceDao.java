@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.innospots.approve.core.entity.ApproveFlowInstanceEntity;
+import io.innospots.approve.core.model.ApproveActorFlowInstance;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -50,6 +51,33 @@ public interface ApproveFlowInstanceDao extends BaseMapper<ApproveFlowInstanceEn
             @Param("roleIds") List<Integer> roleIds,
             @Param("userId") Integer userId,
             @Param("groupId") Integer groupId,
+            @Param("approveType") String approveType,
+            @Param("startTime") LocalDateTime startTime,
+            @Param("endTime") LocalDateTime endTime
+    );
+
+    @Select({
+            "<script>",
+            "SELECT afi.*,aa.actor_type,aa.approve_action,aa.node_key,aa.user_name,aa.message as act_msg,aa.result as act_result,aa.created_time as opt_time FROM approve_flow_instance afi",
+            "JOIN approve_actor aa ON afi.approve_instance_key = aa.approve_instance_key",
+            "WHERE",
+            "aa.user_id = #{userId}",
+            "AND aa.approve_action = 'DONE'",
+            "<if test='approveType != null'>",
+            "AND afi.approve_type = #{approveType}",
+            "</if>",
+            "<if test='startTime != null'>",
+            "AND aa.updated_time &gt; #{startTime}",
+            "</if>",
+            "<if test='endTime != null'>",
+            "AND aa.updated_time &lt; #{endTime}",
+            "</if>",
+            "ORDER BY aa.updated_time ASC",
+            "</script>"
+    })
+    IPage<ApproveActorFlowInstance> selectApproveAuditHistoryFlowInstances(
+            Page<ApproveActorFlowInstance> page,
+            @Param("userId") Integer userId,
             @Param("approveType") String approveType,
             @Param("startTime") LocalDateTime startTime,
             @Param("endTime") LocalDateTime endTime

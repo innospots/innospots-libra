@@ -1,5 +1,6 @@
 package io.innospots.approve.console.controller;
 
+import io.innospots.approve.core.model.ApproveActorFlowInstance;
 import io.innospots.approve.core.model.ApproveFlowInstance;
 import io.innospots.approve.core.model.ApproveFlowInstanceBase;
 import io.innospots.approve.core.model.ApproveRequest;
@@ -53,6 +54,18 @@ public class ApproveAuditController {
             @RequestParam(required = false, defaultValue = "20") Integer size
     ) {
         return R.success(approveAuditService.pageAudit(page,size,approveType,startTime,endTime));
+    }
+
+    @Operation(summary = "page history approver instances by request")
+    @GetMapping("page/history")
+    public R<PageBody<ApproveActorFlowInstance>> pageHistoryByApprover(
+            @RequestParam(required = false) String approveType,
+            @RequestParam(required = false) LocalDateTime startTime,
+            @RequestParam(required = false) LocalDateTime endTime,
+            @RequestParam(required = false, defaultValue = "1") Integer page,
+            @RequestParam(required = false, defaultValue = "20") Integer size
+    ) {
+        return R.success(approveAuditService.pageAuditHistory(page,size,approveType,startTime,endTime));
     }
 
     @Operation(summary = "get approve instance by approve instance key")

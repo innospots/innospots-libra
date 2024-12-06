@@ -34,7 +34,7 @@ public class ApproveActor {
 
     private ApproveAction approveAction;
 
-    private String result;
+    private ApproveResult result;
 
     private String message;
 

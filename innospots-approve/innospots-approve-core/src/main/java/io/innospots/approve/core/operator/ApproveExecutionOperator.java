@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.innospots.approve.core.converter.ApproveExecutionConverter;
 import io.innospots.approve.core.dao.ApproveExecutionDao;
 import io.innospots.approve.core.entity.ApproveExecutionEntity;
+import io.innospots.approve.core.enums.ApproveResult;
 import io.innospots.approve.core.model.ApproveActor;
 import io.innospots.approve.core.model.ApproveExecution;
 import io.innospots.base.quartz.ExecutionStatus;
@@ -21,7 +22,6 @@ import java.util.List;
 @Component
 public class ApproveExecutionOperator extends ServiceImpl<ApproveExecutionDao, ApproveExecutionEntity> {
 
-
     public ApproveExecution saveExecution(NodeExecution nodeExecution, ApproveActor actor){
         ApproveExecutionEntity entity = ApproveExecutionConverter.toEntity(nodeExecution,actor);
         saveOrUpdate(entity);
@@ -34,6 +34,7 @@ public class ApproveExecutionOperator extends ServiceImpl<ApproveExecutionDao, A
                 .in(ApproveExecutionEntity::getNodeKey, nodeKeys);
         return ApproveExecutionConverter.INSTANCE.entitiesToModels(list(qw));
     }
+
 
     public ApproveExecutionEntity findApproveExecutionByFlowExecutionIdAndNodeKey(String flowExecutionId, String nodeKey){
         QueryWrapper<ApproveExecutionEntity> qw = new QueryWrapper<>();
@@ -51,4 +52,5 @@ public class ApproveExecutionOperator extends ServiceImpl<ApproveExecutionDao, A
                 .in(ApproveExecutionEntity::getExecutionStatus, ExecutionStatus.PENDING.name(),ExecutionStatus.FAILED.name());
         return list(qw).stream().map(ApproveExecutionEntity::getNodeKey).toList();
     }
+
 }

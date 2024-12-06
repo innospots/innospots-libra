@@ -33,11 +33,11 @@ public interface ApproveExecutionConverter extends BaseBeanConverter<ApproveExec
         entity.setEndTime(nodeExecution.getEndTime());
         entity.setExecutionStatus(nodeExecution.getStatus().name());
         if (actor != null) {
+            entity.setApproveResult(actor.getResult()!=null ? actor.getResult().name():null);
             entity.setUserId(actor.getUserId());
             entity.setApproveActorId(actor.getApproveActorId());
             entity.setUserName(actor.getUserName());
             entity.setApproveInstanceKey(actor.getApproveInstanceKey());
-            entity.setResult(actor.getResult()!=null ? actor.getResult():null);
             entity.setMessage(actor.getMessage());
         } else {
             if (ApproveHolder.get() != null) {

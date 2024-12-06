@@ -65,6 +65,13 @@ public class ApprovePersonNode extends ApproveBaseNode {
         String result = (String) item.get(resultField);
 
         Map<String, Object> body = new HashMap<>();
+        body.put(ApproveConstant.APPROVE_INSTANCE_KEY, approveFlowInstance.getApproveNodeKey());
+        if(message!=null){
+            body.put(ApproveConstant.APPROVE_MESSAGE, message);
+        }
+        if(result!=null){
+            body.put(ApproveConstant.APPROVE_RESULT, result);
+        }
         if (approveActor == null) {
             //new actor, first execute the node
             approveActor = ApproveActor.builder()
@@ -81,24 +88,20 @@ public class ApprovePersonNode extends ApproveBaseNode {
             nodeExecution.setNext(false);
             ApproveHolder.setActor(approveActor);
             nodeExecution.setStatus(ExecutionStatus.PENDING);
-            body.putAll(item);
             return body;
         }
 
         if (approveActor.getApproveAction() != ApproveAction.PENDING) {
-            body.putAll(item);
             nodeExecution.setMessage("actor can't approve, action is " + approveActor.getApproveAction());
             return body;
         }
 
         if (!validPermission(nodeExecution)) {
-            body.putAll(item);
             nodeExecution.setMessage("not allow permission");
             return body;
         }
 
         if (result == null) {
-            body.putAll(item);
             nodeExecution.setMessage("result field is null");
             log.warn("not have {} field in the payload:{}", resultField, item);
             return body;
@@ -109,9 +112,8 @@ public class ApprovePersonNode extends ApproveBaseNode {
         } else {
             nodeExecution.setNext(false);
         }
-
         nodeExecution.setMessage(message);
-        approveActor.setResult(result);
+        approveActor.setResult(ApproveResult.valueOf(result));
         approveActor.setMessage(message);
         approveActor.setUserId(CCH.userId());
         approveActor.setUserName(CCH.authUser());

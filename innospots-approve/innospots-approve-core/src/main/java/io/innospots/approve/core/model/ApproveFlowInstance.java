@@ -23,6 +23,10 @@ public class ApproveFlowInstance extends ApproveFlowInstanceBase {
 
     private String currentNodeKey;
 
+    private String approveNodeKey;
+
+    private String approveNodeName;
+
 
     @Override
     public String toString() {

@@ -1,14 +1,19 @@
 package io.innospots.approve.core.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.innospots.approve.core.converter.ApproveFlowInstanceConverter;
 import io.innospots.approve.core.dao.ApproveFlowInstanceDao;
+import io.innospots.approve.core.entity.ApproveActorEntity;
 import io.innospots.approve.core.entity.ApproveFlowInstanceEntity;
+import io.innospots.approve.core.enums.ApproveAction;
+import io.innospots.approve.core.model.ApproveActorFlowInstance;
 import io.innospots.approve.core.model.ApproveFlowInstanceBase;
 import io.innospots.approve.core.utils.ApproveHolder;
 import io.innospots.base.data.body.PageBody;
 import io.innospots.base.model.user.UserInfo;
+import io.innospots.base.utils.CCH;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -50,4 +55,26 @@ public class ApproveAuditService {
 
         return pageBody;
     }
+
+    public PageBody<ApproveActorFlowInstance> pageAuditHistory(Integer page, Integer size,
+                                                              String approveType,
+                                                              LocalDateTime startTime, LocalDateTime endTime){
+
+        Page<ApproveActorFlowInstance> pg = new Page<>(page,size);
+        if("".equals(approveType)){
+            approveType = null;
+        }
+        IPage<ApproveActorFlowInstance> pgEntities = approveFlowInstanceDao
+                .selectApproveAuditHistoryFlowInstances(pg,CCH.userId(),approveType,startTime,endTime);
+        PageBody<ApproveActorFlowInstance> pageBody = new PageBody<>();
+        List<ApproveActorFlowInstance> list = pgEntities.getRecords();
+        pageBody.setList(list);
+        pageBody.setTotal(pgEntities.getTotal());
+        pageBody.setPageSize(pgEntities.getSize());
+        pageBody.setCurrent(pgEntities.getCurrent());
+        pageBody.setTotalPage(pg.getPages());
+
+        return pageBody;
+    }
+
 }
