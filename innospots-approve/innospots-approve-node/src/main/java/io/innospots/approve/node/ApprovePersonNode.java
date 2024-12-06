@@ -1,5 +1,6 @@
 package io.innospots.approve.node;
 
+import io.innospots.approve.core.constants.ApproveConstant;
 import io.innospots.approve.core.enums.ActorType;
 import io.innospots.approve.core.enums.ApproveAction;
 import io.innospots.approve.core.enums.ApproveResult;
@@ -38,6 +39,12 @@ public class ApprovePersonNode extends ApproveBaseNode {
         super.initialize();
         resultField = this.valueString("resultField");
         messageField = this.valueString("messageField");
+        if(resultField==null){
+            resultField = ApproveConstant.APPROVE_RESULT;
+        }
+        if(messageField == null){
+            messageField = ApproveConstant.APPROVE_MESSAGE;
+        }
         actorType = ActorType.valueOf(this.valueString("actorType"));
         userId = this.valueInteger("userId");
         roleId = this.valueInteger("roleId");
@@ -68,16 +75,17 @@ public class ApprovePersonNode extends ApproveBaseNode {
                     .approveExecutionId(nodeExecution.getNodeExecutionId())
                     .flowExecutionId(nodeExecution.getFlowExecutionId())
                     .build();
-            fillActorType(approveActor,approveFlowInstance);
+            fillActorType(approveActor, approveFlowInstance);
             approveActor = approveActorOperator.saveApproveActor(approveActor);
             //not execute next node
             nodeExecution.setNext(false);
             ApproveHolder.setActor(approveActor);
+            nodeExecution.setStatus(ExecutionStatus.PENDING);
             body.putAll(item);
             return body;
         }
 
-        if(approveActor.getApproveAction()!=ApproveAction.PENDING){
+        if (approveActor.getApproveAction() != ApproveAction.PENDING) {
             body.putAll(item);
             nodeExecution.setMessage("actor can't approve, action is " + approveActor.getApproveAction());
             return body;
@@ -100,7 +108,6 @@ public class ApprovePersonNode extends ApproveBaseNode {
             nodeExecution.setNext(true);
         } else {
             nodeExecution.setNext(false);
-            nodeExecution.setStatus(ExecutionStatus.FAILED);
         }
 
         nodeExecution.setMessage(message);
@@ -117,7 +124,6 @@ public class ApprovePersonNode extends ApproveBaseNode {
         approveFlowInstanceOperator.updateProcessStatus(approveFlowInstance.getApproveInstanceKey());
         return body;
     }
-
 
     private boolean validPermission(NodeExecution nodeExecution) {
         UserInfo userInfo = ApproveHolder.getLoginUser();
@@ -145,20 +151,20 @@ public class ApprovePersonNode extends ApproveBaseNode {
         return hasAuth;
     }
 
-    private void fillActorType(ApproveActor approveActor,ApproveFlowInstance flowInstance){
-        if(actorType == ActorType.GROUP){
+    private void fillActorType(ApproveActor approveActor, ApproveFlowInstance flowInstance) {
+        if (actorType == ActorType.GROUP) {
             UserGroup userGroup = getUserGroup(flowInstance);
             approveActor.setActorId(userGroup.getGroupId());
-        }else if(actorType == ActorType.ROLE){
+        } else if (actorType == ActorType.ROLE) {
             approveActor.setActorId(roleId);
-        }else if(actorType == ActorType.USER){
+        } else if (actorType == ActorType.USER) {
             approveActor.setActorId(userId);
         }
     }
 
-    private UserGroup getUserGroup(ApproveFlowInstance flowInstance){
+    private UserGroup getUserGroup(ApproveFlowInstance flowInstance) {
         IUserGroupService userGroupService = getBean(IUserGroupService.class);
-        UserGroup userGroup = userGroupService.findParentUserGroupByUserId(flowInstance.getProposerId(),leaderLevel);
+        UserGroup userGroup = userGroupService.findParentUserGroupByUserId(flowInstance.getProposerId(), leaderLevel);
         return userGroup;
     }
 

@@ -17,6 +17,7 @@ import io.innospots.workflow.core.execution.reader.FlowExecutionReader;
 import io.innospots.workflow.core.flow.Flow;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,6 +68,7 @@ public class ApproveFlowRuntimeContainer {
     }
 
 
+    @Transactional
     public boolean revoke(String approveInstanceKey, String message){
         boolean result = flowInstanceOperator.revoke(approveInstanceKey,message);
         if(result){

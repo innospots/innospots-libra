@@ -1,6 +1,8 @@
 package io.innospots.approve.core.model;
 
+import io.innospots.approve.core.enums.ApproveAction;
 import io.innospots.approve.core.enums.ApproveStatus;
+import io.innospots.base.quartz.ExecutionStatus;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -38,6 +40,8 @@ public class ApproveExecution implements Comparable<ApproveExecution>{
     private Integer sequenceNumber;
 
     private String result;
+
+    private ExecutionStatus executionStatus;
 
     private ApproveStatus approveStatus;
 

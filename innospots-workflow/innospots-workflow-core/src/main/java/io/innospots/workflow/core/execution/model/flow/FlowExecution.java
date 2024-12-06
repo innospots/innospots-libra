@@ -170,6 +170,11 @@ public class FlowExecution extends FlowExecutionBase {
         this.currentNodeKeys.add(nodeKey);
     }
 
+    public void resetCurrentNodeKey(List<String> nodeKeys) {
+        this.currentNodeKeys.clear();
+        this.currentNodeKeys.addAll(nodeKeys);
+    }
+
     public void addCurrentNodeKey(String nodeKey) {
         this.currentNodeKeys.add(nodeKey);
     }

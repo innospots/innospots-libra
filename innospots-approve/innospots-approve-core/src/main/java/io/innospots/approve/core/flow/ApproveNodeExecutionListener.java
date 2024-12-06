@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Component
 public class ApproveNodeExecutionListener implements INodeExecutionListener {
 
-    private ApproveExecutionOperator approveExecutionOperator;
+    private final ApproveExecutionOperator approveExecutionOperator;
 
     public ApproveNodeExecutionListener(ApproveExecutionOperator approveExecutionOperator) {
         this.approveExecutionOperator = approveExecutionOperator;
@@ -32,13 +32,13 @@ public class ApproveNodeExecutionListener implements INodeExecutionListener {
 
     @Override
     public void complete(NodeExecution nodeExecution) {
-        approveExecutionOperator.createExecution(nodeExecution, ApproveHolder.getActor());
+        approveExecutionOperator.saveExecution(nodeExecution, ApproveHolder.getActor());
         ApproveHolder.removeActor();
     }
 
     @Override
     public void fail(NodeExecution nodeExecution) {
-        approveExecutionOperator.createExecution(nodeExecution, ApproveHolder.getActor());
+        approveExecutionOperator.saveExecution(nodeExecution, ApproveHolder.getActor());
         ApproveHolder.removeActor();
     }
 }

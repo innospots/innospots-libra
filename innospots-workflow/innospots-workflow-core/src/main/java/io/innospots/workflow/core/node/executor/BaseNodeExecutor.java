@@ -114,9 +114,7 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
 
 
     protected NodeExecution prepare(FlowExecution flowExecution) {
-        if (flowLogger == null) {
-            flowLogger = FlowLoggerFactory.getLogger();
-        }
+
         NodeExecution nodeExecution = NodeExecution.buildNewNodeExecution(
                 nodeKey(),
                 flowExecution);
@@ -134,7 +132,9 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
     @Override
     public NodeExecution execute(FlowExecution flowExecution) {
         CCH.executionId(flowExecution.getFlowExecutionId());
-
+        if (flowLogger == null) {
+            flowLogger = FlowLoggerFactory.getLogger();
+        }
         flowExecution.resetCurrentNodeKey(this.nodeKey());
         NodeExecution nodeExecution = prepare(flowExecution);
         if (nodeExecution.getStatus() == ExecutionStatus.FAILED) {
@@ -360,6 +360,8 @@ public abstract class BaseNodeExecutor implements INodeExecutor {
                     nodeExecutionListener.complete(nodeExecution);
                 } else if (nodeExecution.getStatus() == ExecutionStatus.FAILED) {
                     nodeExecutionListener.fail(nodeExecution);
+                } else if(nodeExecution.getStatus().isDone()){
+                    nodeExecutionListener.complete(nodeExecution);
                 } else {
                     logger.error("nodeExecutionListeners other status:{} nodeExecution:{}", nodeExecution.getStatus(), nodeExecution);
                 }

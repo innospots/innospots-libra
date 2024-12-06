@@ -5,6 +5,8 @@ import io.innospots.approve.core.model.ApproveActor;
 import io.innospots.approve.core.model.ApproveExecution;
 import io.innospots.approve.core.utils.ApproveHolder;
 import io.innospots.base.converter.BaseBeanConverter;
+import io.innospots.base.quartz.ExecutionStatus;
+import io.innospots.workflow.core.execution.model.flow.FlowExecution;
 import io.innospots.workflow.core.execution.model.node.NodeExecution;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -29,6 +31,7 @@ public interface ApproveExecutionConverter extends BaseBeanConverter<ApproveExec
         entity.setMessage(nodeExecution.getMessage());
         entity.setStartTime(nodeExecution.getStartTime());
         entity.setEndTime(nodeExecution.getEndTime());
+        entity.setExecutionStatus(nodeExecution.getStatus().name());
         if (actor != null) {
             entity.setUserId(actor.getUserId());
             entity.setApproveActorId(actor.getApproveActorId());
@@ -43,6 +46,20 @@ public interface ApproveExecutionConverter extends BaseBeanConverter<ApproveExec
         }
 
         return entity;
+    }
+
+    static NodeExecution newNodeExecution(ApproveExecutionEntity approveExecutionEntity, FlowExecution flowExecution) {
+        NodeExecution nodeExecution = NodeExecution.buildNewNodeExecution(approveExecutionEntity.getNodeKey(),flowExecution);
+        nodeExecution.setNodeExecutionId(approveExecutionEntity.getApproveExecutionId());
+        nodeExecution.setNodeKey(approveExecutionEntity.getNodeKey());
+        nodeExecution.setNodeName(approveExecutionEntity.getNodeName());
+        nodeExecution.setSequenceNumber(approveExecutionEntity.getSequenceNumber());
+        //nodeExecution.setMessage(approveExecutionEntity.getMessage());
+        nodeExecution.setStartTime(approveExecutionEntity.getStartTime());
+        //nodeExecution.setEndTime(approveExecutionEntity.getEndTime());
+        //nodeExecution.setStatus(ExecutionStatus.valueOf(approveExecutionEntity.getExecutionStatus()));
+        nodeExecution.setFlowExecutionId(approveExecutionEntity.getFlowExecutionId());
+        return nodeExecution;
     }
 
 }

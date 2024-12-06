@@ -62,6 +62,9 @@ public class ApproveExecutionEntity extends PBaseEntity {
     @Column(length = 32)
     private String approveStatus;
 
+    @Column(length = 32)
+    private String executionStatus;
+
     @Column(length = 2048)
     private String message;
 

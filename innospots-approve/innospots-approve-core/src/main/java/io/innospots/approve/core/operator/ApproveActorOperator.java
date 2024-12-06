@@ -36,7 +36,7 @@ public class ApproveActorOperator extends ServiceImpl<ApproveActorDao, ApproveAc
 
     public ApproveActor saveApproveActor(ApproveActor approveActor) {
         ApproveActorEntity entity = ApproveActorConverter.INSTANCE.modelToEntity(approveActor);
-        this.save(entity);
+        this.saveOrUpdate(entity);
         return ApproveActorConverter.INSTANCE.entityToModel(entity);
     }
 
