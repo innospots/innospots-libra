@@ -61,8 +61,6 @@ public class OauthAuthenticationProvider implements AuthenticationProvider {
 
     private OauthProviderProperties oauthProviderProperties;
 
-    private InnospotsConfigProperties innospotsConfigProperties;
-
     @Override
     public Authentication authenticate(LoginRequest request) throws InnospotException {
         if(!oauthProviderProperties.isEnabled() ){
@@ -108,8 +106,6 @@ public class OauthAuthenticationProvider implements AuthenticationProvider {
                 params.put(param,code);
             }
         }
-        tokenParamAddHost(params);
-
         ONode tokenNode = handleProviderUrl(tokenInfo,params);
         String accessToken = tokenNode.select(tokenInfo.getResponse().get("access_token").toString()).getString();
         return accessToken;
@@ -127,7 +123,6 @@ public class OauthAuthenticationProvider implements AuthenticationProvider {
                 params.put(param,accessToken);
             }
         }
-        tokenParamAddHost(params);
         ONode userNode = handleProviderUrl(userInfo,params);
         Map<String,Object>  resPath = userInfo.getResponse();
         OauthUser oauthUser = new OauthUser();
@@ -166,12 +161,6 @@ public class OauthAuthenticationProvider implements AuthenticationProvider {
         return resNode;
     }
 
-    public void tokenParamAddHost(Map<String,Object> params){
-        if(params.containsKey("redirect_uri")){
-            String redirectUri = params.get("redirect_uri").toString();
-            params.put("redirect_uri",innospotsConfigProperties.getHost() + redirectUri);
-        }
-    }
 
     private AuthUser userInfo2AuthUser(UserInfo userInfo){
         AuthUser authUser = AuthUser.builder()

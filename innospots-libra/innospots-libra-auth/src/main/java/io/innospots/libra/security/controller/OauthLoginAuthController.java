@@ -74,11 +74,6 @@ public class OauthLoginAuthController extends BaseController {
                 OauthProvider.UrlInfo authInfo = provider.getAuthInfo();
 
                 if(provider.isEnabled() && authInfo != null){
-                    if(authInfo.getParams().containsKey("redirect_uri")){
-                        String redirectUri = authInfo.getParams().get("redirect_uri").toString();
-                        authInfo.getParams().put("redirect_uri",innospotsConfigProperties.getHost() + redirectUri);
-                    }
-
                     OauthLoginProvider oauthProvider = OauthLoginProvider.builder()
                             .providerName(provider.getProviderName())
                             .icon(provider.getIcon())
