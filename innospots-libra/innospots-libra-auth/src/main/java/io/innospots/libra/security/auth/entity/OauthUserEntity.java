@@ -32,13 +32,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 /**
  * @author Smars
  * @date 2024/11/25
  */
 @Getter
 @Setter
-@Builder
 @Entity
 @TableName(value = OauthUserEntity.TABLE_NAME)
 @Table(name = OauthUserEntity.TABLE_NAME)
@@ -50,13 +51,15 @@ public class OauthUserEntity extends BaseEntity {
      * 主键
      */
     @Id
+    @Column
     @TableId(type = IdType.AUTO)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String oauthUserId;
+    private Integer oauthUserId;
 
     /**
      * 系统用户ID
      */
+    @Column
     private Integer sysUserId;
 
     /**
@@ -68,11 +71,13 @@ public class OauthUserEntity extends BaseEntity {
     /**
      * OAuth提供商返回的唯一用户ID
      */
+    @Column
     private String providerId;
 
     /**
      * OAuth提供商返回的ID
      */
+    @Column
     private String providerUuid;
 
     /**
@@ -90,12 +95,14 @@ public class OauthUserEntity extends BaseEntity {
     /**
      * 用户头像URL
      */
+    @Column
     private String pictureUrl;
 
     /**
      * 最后登录时间
      */
-    private DateTime lastLoginTime;
+    @Column
+    private LocalDateTime lastLoginTime;
 
     @Override
     public String toString() {
