@@ -3,7 +3,6 @@ package io.innospots.approve.console.controller;
 import io.innospots.approve.core.model.ApproveActorFlowInstance;
 import io.innospots.approve.core.model.ApproveFlowInstance;
 import io.innospots.approve.core.model.ApproveFlowInstanceBase;
-import io.innospots.approve.core.model.ApproveRequest;
 import io.innospots.approve.core.operator.ApproveFlowInstanceOperator;
 import io.innospots.approve.core.runtime.ApproveFlowRuntimeContainer;
 import io.innospots.approve.core.service.ApproveAuditService;
@@ -12,6 +11,7 @@ import io.innospots.base.model.response.R;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -48,8 +48,8 @@ public class ApproveAuditController {
     @GetMapping("page")
     public R<PageBody<ApproveFlowInstanceBase>> pageByApprover(
             @RequestParam(required = false) String approveType,
-            @RequestParam(required = false) LocalDateTime startTime,
-            @RequestParam(required = false) LocalDateTime endTime,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime startTime,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime endTime,
             @RequestParam(required = false, defaultValue = "1") Integer page,
             @RequestParam(required = false, defaultValue = "20") Integer size
     ) {
@@ -60,8 +60,8 @@ public class ApproveAuditController {
     @GetMapping("page/history")
     public R<PageBody<ApproveActorFlowInstance>> pageHistoryByApprover(
             @RequestParam(required = false) String approveType,
-            @RequestParam(required = false) LocalDateTime startTime,
-            @RequestParam(required = false) LocalDateTime endTime,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime startTime,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime endTime,
             @RequestParam(required = false, defaultValue = "1") Integer page,
             @RequestParam(required = false, defaultValue = "20") Integer size
     ) {

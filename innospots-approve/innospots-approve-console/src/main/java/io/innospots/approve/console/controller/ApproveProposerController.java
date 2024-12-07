@@ -1,5 +1,6 @@
 package io.innospots.approve.console.controller;
 
+import io.innospots.approve.core.enums.ApproveStatus;
 import io.innospots.approve.core.model.ApproveFlowInstance;
 import io.innospots.approve.core.model.ApproveFlowInstanceBase;
 import io.innospots.approve.core.model.ApproveForm;
@@ -11,7 +12,10 @@ import io.innospots.base.model.response.R;
 import io.innospots.libra.base.menu.ModuleMenu;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 
@@ -51,7 +55,24 @@ public class ApproveProposerController {
 
     @Operation(summary = "page proposer instances by request")
     @GetMapping("page")
-    public R<PageBody<ApproveFlowInstanceBase>> pageByProposer(ApproveRequest approveRequest) {
+    public R<PageBody<ApproveFlowInstanceBase>> pageByProposer(
+            @RequestParam(required = false) String approveType,
+            @RequestParam(required = false) ApproveStatus approveStatus,
+            @RequestParam(required = false) String orderBy,
+            @RequestParam(required = false) Integer proposerId,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime startDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime endDate,
+            @RequestParam(required = false, defaultValue = "1") Integer page,
+            @RequestParam(required = false, defaultValue = "20") Integer size) {
+        ApproveRequest approveRequest = new ApproveRequest();
+        approveRequest.setApproveType(approveType);
+        approveRequest.setStatus(approveStatus);
+        approveRequest.setOrderBy(orderBy);
+        approveRequest.setStartDate(startDate);
+        approveRequest.setEndDate(endDate);
+        approveRequest.setPage(page);
+        approveRequest.setSize(size);
+        approveRequest.setProposerId(proposerId);
         return R.success(approveFlowInstanceOperator.page(approveRequest, true, false));
     }
 

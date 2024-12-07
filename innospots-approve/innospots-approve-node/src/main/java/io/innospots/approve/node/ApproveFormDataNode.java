@@ -22,7 +22,7 @@ import java.util.Map;
  * @vesion 2.0
  * @date 2024/11/24
  */
-public class ApproveFormDataNode extends BaseNodeExecutor {
+public class ApproveFormDataNode extends ApproveBaseNode {
 
     public static final String FIELD_CREDENTIAL_KEY = "credential_key";
 
@@ -51,28 +51,22 @@ public class ApproveFormDataNode extends BaseNodeExecutor {
     @Override
     protected Object processItem(Map<String, Object> item, NodeExecution nodeExecution) {
         ApproveFlowInstance flowInstance = getApproveFlowInstance(item);
-        Map<String, Object> formData = new HashMap<>();
-        formData.put(ApproveConstant.APPROVE_INSTANCE_KEY, flowInstance.getApproveInstanceKey());
+        Map<String,Object> formData = flowInstance.getFormData();
+        Map<String, Object> data = new HashMap<>();
+        data.put(ApproveConstant.APPROVE_INSTANCE_KEY, flowInstance.getApproveInstanceKey());
         for (SchemaField schemaField : schemaRegistry.getSchemaFields()) {
             Object v = formData.get(schemaField.getCode());
             if (v != null) {
                 if (v instanceof Map || v instanceof List) {
-                    formData.put(schemaField.getCode(), JSONUtils.toJsonString(v));
+                    data.put(schemaField.getCode(), JSONUtils.toJsonString(v));
                 } else {
-                    formData.put(schemaField.getCode(), v);
+                    data.put(schemaField.getCode(), v);
                 }
             }
         }
-        dataOperator.insert(tableName, formData);
+        flowLogger.flowInfo("save approve form data:{}",flowInstance.getApproveInstanceKey());
+        dataOperator.upsert(tableName,ApproveConstant.APPROVE_INSTANCE_KEY, data);
         return formData;
     }
 
-    private ApproveFlowInstance getApproveFlowInstance(Map<String, Object> item) {
-        ApproveFlowInstance approveFlowInstance = ApproveHolder.get();
-        if (approveFlowInstance == null) {
-            String approveInstanceId = (String) item.get(ApproveConstant.APPROVE_INSTANCE_KEY);
-            approveFlowInstance = approveFlowInstanceOperator.findOne(approveInstanceId);
-        }
-        return approveFlowInstance;
-    }
 }

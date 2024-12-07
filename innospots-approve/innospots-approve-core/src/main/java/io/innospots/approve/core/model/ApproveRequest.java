@@ -18,11 +18,10 @@ public class ApproveRequest {
 
     private Integer page=1;
     private Integer size=20;
-    private String queryInput;
     private ApproveStatus status;
     private String belongTo;
     private String approveType;
-    private String proposerId;
+    private Integer proposerId;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private String orderBy;

@@ -157,16 +157,15 @@ public class ApproveFlowInstanceOperator extends ServiceImpl<ApproveFlowInstance
         QueryWrapper<ApproveFlowInstanceEntity> qw = new QueryWrapper<>();
         qw.lambda().eq(StringUtils.isNotEmpty(approveRequest.getApproveType()), ApproveFlowInstanceEntity::getApproveType, approveRequest.getApproveType())
                 .eq(StringUtils.isNotEmpty(approveRequest.getBelongTo()), ApproveFlowInstanceEntity::getBelongTo, approveRequest.getBelongTo())
-                .eq(StringUtils.isNotEmpty(approveRequest.getProposerId()), ApproveFlowInstanceEntity::getProposerId, approveRequest.getProposerId())
+                .eq(approveRequest.getProposerId()!=null, ApproveFlowInstanceEntity::getProposerId, approveRequest.getProposerId())
                 .eq(approveRequest.getStatus() != null, ApproveFlowInstanceEntity::getApproveStatus, approveRequest.getStatus())
-                .like(StringUtils.isNotEmpty(approveRequest.getQueryInput()), ApproveFlowInstanceEntity::getMessage, approveRequest.getQueryInput())
                 .ne(ApproveFlowInstanceEntity::getApproveStatus, ApproveStatus.REMOVED)
                 .between(approveRequest.getStartDate() != null && approveRequest.getEndDate() != null, ApproveFlowInstanceEntity::getStartTime, approveRequest.getStartDate(), approveRequest.getEndDate());
         if (isProposer) {
             qw.lambda().eq(ApproveFlowInstanceEntity::getProposerId, CCH.userId());
         } else if (isApprover) {
             qw.lambda().eq(ApproveFlowInstanceEntity::getApproverId, CCH.userId());
-            qw.lambda().eq(StringUtils.isNotEmpty(approveRequest.getProposerId()), ApproveFlowInstanceEntity::getProposerId, approveRequest.getProposerId());
+            qw.lambda().eq(approveRequest.getProposerId()!=null, ApproveFlowInstanceEntity::getProposerId, approveRequest.getProposerId());
         }
 
         qw.orderByDesc(StringUtils.isNotEmpty(approveRequest.getOrderBy()), approveRequest.getOrderBy());
