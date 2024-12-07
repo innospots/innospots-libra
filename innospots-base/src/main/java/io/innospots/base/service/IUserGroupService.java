@@ -1,6 +1,6 @@
 package io.innospots.base.service;
 
-import io.innospots.base.model.user.UserGroup;
+import io.innospots.base.model.user.UserSimpleGroup;
 
 /**
  * @author Smars
@@ -9,9 +9,9 @@ import io.innospots.base.model.user.UserGroup;
  */
 public interface IUserGroupService {
 
-    UserGroup findUserGroupByUserId(Integer userId);
+    UserSimpleGroup findUserGroupByUserId(Integer userId);
 
-    UserGroup findParentUserGroupByUserId(Integer userId);
+    UserSimpleGroup findParentUserGroupByUserId(Integer userId);
 
     /**
      *
@@ -19,5 +19,5 @@ public interface IUserGroupService {
      * @param level 0: current group, 1: parent group, 2: grandparent group, 3: great-grandparent group etc.
      * @return
      */
-    UserGroup findParentUserGroupByUserId(Integer userId,Integer level);
+    UserSimpleGroup findParentUserGroupByUserId(Integer userId, Integer level);
 }

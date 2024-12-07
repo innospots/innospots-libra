@@ -41,7 +41,8 @@ public class ApproveExecutionService {
             throw ResourceException.buildAbandonException(this.getClass(), "flow execution is not exist, key: " + approveInstanceKey);
         }
         QueryWrapper<ApproveExecutionEntity> qw = new QueryWrapper<>();
-        qw.lambda().eq(ApproveExecutionEntity::getFlowExecutionId, flowInstanceEntity.getFlowExecutionId());
+        qw.lambda().eq(ApproveExecutionEntity::getFlowExecutionId, flowInstanceEntity.getFlowExecutionId())
+                .orderByAsc(ApproveExecutionEntity::getSequenceNumber);
         return ApproveExecutionConverter.INSTANCE.entitiesToModels(executionOperator.list(qw));
     }
 

@@ -1,10 +1,14 @@
 package io.innospots.libra.kernel.module.system.operator;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import io.innospots.base.model.user.UserGroup;
+import io.innospots.base.exception.ResourceException;
+import io.innospots.base.model.user.UserSimpleGroup;
 import io.innospots.libra.kernel.module.system.converter.UserGroupConverter;
+import io.innospots.libra.kernel.module.system.converter.UserSimpleGroupConverter;
 import io.innospots.libra.kernel.module.system.dao.UserGroupDao;
 import io.innospots.libra.kernel.module.system.entity.SysUserGroupEntity;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -13,12 +17,27 @@ import java.util.List;
  * @vesion 2.0
  * @date 2024/12/6
  */
+@Component
 public class UserGroupOperator extends ServiceImpl<UserGroupDao, SysUserGroupEntity> {
 
 
 
-    public UserGroup saveGroup(UserGroup group) {
-        SysUserGroupEntity entity  = UserGroupConverter.INSTANCE.modelToEntity(group);
+    public UserSimpleGroup saveGroup(UserSimpleGroup group) {
+        SysUserGroupEntity entity  = UserSimpleGroupConverter.INSTANCE.modelToEntity(group);
+        QueryWrapper<SysUserGroupEntity> qw = new QueryWrapper<>();
+        qw.lambda().eq(SysUserGroupEntity::getGroupCode, entity.getGroupCode())
+                .ne(group.getGroupId()!=null,SysUserGroupEntity::getGroupId, group.getGroupId());
+        long cnt = this.count(qw);
+        if(cnt>0){
+            throw ResourceException.buildExistException(this.getClass(), "group code has exist", entity.getGroupCode());
+        }
+        qw = new QueryWrapper<>();
+        qw.lambda().eq(SysUserGroupEntity::getGroupName, entity.getGroupName())
+                .ne(group.getGroupId()!=null,SysUserGroupEntity::getGroupId, group.getGroupId());
+        cnt = this.count(qw);
+        if(cnt>0){
+            throw ResourceException.buildExistException(this.getClass(), "group name has exist", entity.getGroupName());
+        }
         this.saveOrUpdate(entity);
         group.setGroupId(entity.getGroupId());
         return group;
@@ -29,9 +48,15 @@ public class UserGroupOperator extends ServiceImpl<UserGroupDao, SysUserGroupEnt
         return this.baseMapper.deleteById(groupId);
     }
 
-    public UserGroup getGroup(Integer groupId) {
+    public UserSimpleGroup getGroup(Integer groupId) {
         SysUserGroupEntity entity = this.getById(groupId);
-        return UserGroupConverter.INSTANCE.entityToModel(entity);
+        return UserSimpleGroupConverter.INSTANCE.entityToModel(entity);
+    }
+
+    public List<UserSimpleGroup> listGroups() {
+        QueryWrapper<SysUserGroupEntity> qw = new QueryWrapper<>();
+        List<SysUserGroupEntity> entities = this.list(qw);
+        return UserSimpleGroupConverter.INSTANCE.entitiesToModels(entities);
     }
 
 

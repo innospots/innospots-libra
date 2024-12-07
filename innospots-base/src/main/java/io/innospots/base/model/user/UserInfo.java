@@ -69,8 +69,6 @@ public class UserInfo extends SimpleUser {
 
     private Integer loginTimes;
 
-    private Integer groupId;
-
 
     @Override
     public String toString() {

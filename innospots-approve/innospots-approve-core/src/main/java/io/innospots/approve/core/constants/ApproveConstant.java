@@ -8,6 +8,7 @@ package io.innospots.approve.core.constants;
 public interface ApproveConstant {
 
     String APPROVE_INSTANCE_KEY = "approveInstanceKey";
+    String APPROVE_INSTANCE_KEY_DB = "approve_instance_key";
 
     String APPROVE_RESULT = "approveResult";
 

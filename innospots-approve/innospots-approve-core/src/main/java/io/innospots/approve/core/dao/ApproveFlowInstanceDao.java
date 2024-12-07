@@ -58,7 +58,7 @@ public interface ApproveFlowInstanceDao extends BaseMapper<ApproveFlowInstanceEn
 
     @Select({
             "<script>",
-            "SELECT afi.*,aa.actor_type,aa.approve_action,aa.node_key,aa.user_name,aa.message as act_msg,aa.result as act_result,aa.created_time as opt_time FROM approve_flow_instance afi",
+            "SELECT afi.*,aa.actor_type,aa.approve_action,aa.node_key,aa.user_name,aa.message as act_msg,aa.result as act_result,aa.updated_time as opt_time FROM approve_flow_instance afi",
             "JOIN approve_actor aa ON afi.approve_instance_key = aa.approve_instance_key",
             "WHERE",
             "aa.user_id = #{userId}",
@@ -72,7 +72,7 @@ public interface ApproveFlowInstanceDao extends BaseMapper<ApproveFlowInstanceEn
             "<if test='endTime != null'>",
             "AND aa.updated_time &lt; #{endTime}",
             "</if>",
-            "ORDER BY aa.updated_time ASC",
+            "ORDER BY aa.updated_time DESC",
             "</script>"
     })
     IPage<ApproveActorFlowInstance> selectApproveAuditHistoryFlowInstances(

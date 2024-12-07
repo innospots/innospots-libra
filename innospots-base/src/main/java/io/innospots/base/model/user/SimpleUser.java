@@ -64,4 +64,8 @@ public class SimpleUser {
     protected Integer lastProjectId;
 
     protected String email;
+
+    protected Integer groupId;
+
+    protected String groupName;
 }

@@ -27,6 +27,7 @@ import io.innospots.libra.kernel.module.system.operator.RoleResourceOperator;
 import io.innospots.libra.kernel.module.system.operator.UserRoleOperator;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,7 +36,7 @@ import java.util.stream.Collectors;
  * @author Smars
  * @date 2022/1/12
  */
-@Component
+@Service
 public class UserResourceService {
 
     private final RoleResourceOperator roleResourceOperator;

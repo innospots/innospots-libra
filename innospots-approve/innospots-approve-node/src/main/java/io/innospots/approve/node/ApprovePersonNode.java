@@ -7,7 +7,7 @@ import io.innospots.approve.core.enums.ApproveResult;
 import io.innospots.approve.core.model.ApproveActor;
 import io.innospots.approve.core.model.ApproveFlowInstance;
 import io.innospots.approve.core.utils.ApproveHolder;
-import io.innospots.base.model.user.UserGroup;
+import io.innospots.base.model.user.UserSimpleGroup;
 import io.innospots.base.model.user.UserInfo;
 import io.innospots.base.quartz.ExecutionStatus;
 import io.innospots.base.service.IUserGroupService;
@@ -155,8 +155,8 @@ public class ApprovePersonNode extends ApproveBaseNode {
 
     private void fillActorType(ApproveActor approveActor, ApproveFlowInstance flowInstance) {
         if (actorType == ActorType.GROUP) {
-            UserGroup userGroup = getUserGroup(flowInstance);
-            approveActor.setActorId(userGroup.getGroupId());
+            UserSimpleGroup userSimpleGroup = getUserGroup(flowInstance);
+            approveActor.setActorId(userSimpleGroup.getGroupId());
         } else if (actorType == ActorType.ROLE) {
             approveActor.setActorId(roleId);
         } else if (actorType == ActorType.USER) {
@@ -164,10 +164,10 @@ public class ApprovePersonNode extends ApproveBaseNode {
         }
     }
 
-    private UserGroup getUserGroup(ApproveFlowInstance flowInstance) {
+    private UserSimpleGroup getUserGroup(ApproveFlowInstance flowInstance) {
         IUserGroupService userGroupService = getBean(IUserGroupService.class);
-        UserGroup userGroup = userGroupService.findParentUserGroupByUserId(flowInstance.getProposerId(), leaderLevel);
-        return userGroup;
+        UserSimpleGroup userSimpleGroup = userGroupService.findParentUserGroupByUserId(flowInstance.getProposerId(), leaderLevel);
+        return userSimpleGroup;
     }
 
 }

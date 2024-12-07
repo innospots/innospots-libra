@@ -28,6 +28,7 @@ import io.innospots.libra.kernel.module.system.operator.RoleOperator;
 import io.innospots.libra.kernel.module.system.operator.UserOperator;
 import io.innospots.libra.kernel.module.system.operator.UserRoleOperator;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,7 +40,7 @@ import java.util.stream.Collectors;
  * @version 1.0.0
  * @date 2022/4/26
  */
-@Component
+@Service
 public class SystemUserReadService implements SysUserReadService {
 
     private final UserOperator userOperator;

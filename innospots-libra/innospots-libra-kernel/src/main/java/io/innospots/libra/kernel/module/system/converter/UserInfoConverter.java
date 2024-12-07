@@ -22,9 +22,14 @@ import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.base.model.user.SimpleUser;
 import io.innospots.base.model.user.UserInfo;
 import io.innospots.libra.kernel.module.system.entity.SysUserEntity;
+import io.innospots.libra.kernel.module.system.entity.SysUserGroupEntity;
 import io.innospots.libra.kernel.module.system.model.user.UserForm;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author chenc
@@ -38,4 +43,14 @@ public interface UserInfoConverter extends BaseBeanConverter<UserInfo,SysUserEnt
     SysUserEntity formModel2Entity(UserForm userInfo);
 
     UserInfo simple2Info(SimpleUser simpleUser);
+
+    default List<SimpleUser> entitiesToSimpleUsers(List<SysUserEntity> entities, Map<Integer, String> groupEntityMap){
+        List<SimpleUser> simpleUsers = new ArrayList<>();
+        for (SysUserEntity entity : entities) {
+            SimpleUser simpleUser = simple2Info(entityToModel(entity));
+            simpleUser.setGroupName(groupEntityMap.get(entity.getGroupId()));
+            simpleUsers.add(simpleUser);
+        }
+        return simpleUsers;
+    }
 }

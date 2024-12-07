@@ -33,7 +33,6 @@ public class ApproveFormDataNode extends ApproveBaseNode {
     private String credentialKey;
 
     private String tableName;
-    private ApproveFlowInstanceOperator approveFlowInstanceOperator;
     private SchemaRegistry schemaRegistry;
 
     @Override
@@ -45,7 +44,7 @@ public class ApproveFormDataNode extends ApproveBaseNode {
             dataOperator = connectionMinder.buildOperator();
             schemaRegistry = connectionMinder.schemaRegistryByCode(tableName);
         }
-        this.approveFlowInstanceOperator = getBean(ApproveFlowInstanceOperator.class);
+        super.initialize();
     }
 
     @Override
@@ -53,7 +52,7 @@ public class ApproveFormDataNode extends ApproveBaseNode {
         ApproveFlowInstance flowInstance = getApproveFlowInstance(item);
         Map<String,Object> formData = flowInstance.getFormData();
         Map<String, Object> data = new HashMap<>();
-        data.put(ApproveConstant.APPROVE_INSTANCE_KEY, flowInstance.getApproveInstanceKey());
+        data.put(ApproveConstant.APPROVE_INSTANCE_KEY_DB, flowInstance.getApproveInstanceKey());
         for (SchemaField schemaField : schemaRegistry.getSchemaFields()) {
             Object v = formData.get(schemaField.getCode());
             if (v != null) {
@@ -64,8 +63,8 @@ public class ApproveFormDataNode extends ApproveBaseNode {
                 }
             }
         }
-        flowLogger.flowInfo("save approve form data:{}",flowInstance.getApproveInstanceKey());
-        dataOperator.upsert(tableName,ApproveConstant.APPROVE_INSTANCE_KEY, data);
+        flowLogger.flowInfo("save approve form data, table:{}, data:{}",tableName,flowInstance.getApproveInstanceKey());
+        dataOperator.upsert(tableName,ApproveConstant.APPROVE_INSTANCE_KEY_DB, data);
         return formData;
     }
 

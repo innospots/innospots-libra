@@ -15,8 +15,9 @@ import java.util.List;
  * @date 2024/12/6
  */
 @Mapper
-public interface UserGroupConverter extends BaseBeanConverter<UserGroup, SysUserGroupEntity> {
+public interface UserSimpleGroupConverter extends BaseBeanConverter<UserSimpleGroup, SysUserGroupEntity> {
 
-    UserGroupConverter INSTANCE = Mappers.getMapper(UserGroupConverter.class);
+    UserSimpleGroupConverter INSTANCE = Mappers.getMapper(UserSimpleGroupConverter.class);
+
 
 }
