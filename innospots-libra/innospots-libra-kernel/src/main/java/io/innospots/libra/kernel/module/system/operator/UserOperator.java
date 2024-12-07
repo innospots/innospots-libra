@@ -230,6 +230,29 @@ public class UserOperator extends ServiceImpl<UserDao, SysUserEntity> {
         return UserInfoConverter.INSTANCE.entityToModel(user);
     }
 
+    public boolean updateUserGroup(Integer userId, Integer groupId) {
+        SysUserEntity user = this.getById(userId);
+        if (user == null) {
+            throw ResourceException.buildExistException(this.getClass(), "user does not exist");
+        }
+        user.setGroupId(groupId);
+        return this.updateById(user);
+    }
+
+    public boolean updateUsersGroup(List<Integer> userIds, Integer groupId) {
+        UpdateWrapper<SysUserEntity> uw = new UpdateWrapper<>();
+        uw.lambda().set(SysUserEntity::getGroupId, groupId)
+                .in(SysUserEntity::getUserId, userIds);
+        return this.update(uw);
+    }
+
+    public boolean resetUserGroup(Integer oldGroupId){
+        UpdateWrapper<SysUserEntity> uw = new UpdateWrapper<>();
+        uw.lambda().set(SysUserEntity::getGroupId, null)
+                .eq(SysUserEntity::getGroupId, oldGroupId);
+        return this.update(uw);
+    }
+
 
     /**
      * Filter data sets by criteria

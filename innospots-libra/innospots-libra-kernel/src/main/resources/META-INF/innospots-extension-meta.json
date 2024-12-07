@@ -135,6 +135,15 @@
       }
     },
     {
+      "itemKey": "libra-user-group",
+      "uri": "/system/user-group",
+      "adminDefault": true,
+      "i18nNames": {
+        "en_US": "Groups",
+        "zh_CN": "用户组"
+      }
+    },
+    {
       "itemKey": "libra-rbac",
       "uri": "/config/rbac",
       "adminDefault": true,

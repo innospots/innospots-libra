@@ -1,8 +1,8 @@
 package io.innospots.libra.kernel.module.system.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import io.innospots.base.model.user.SimpleUser;
-import io.innospots.base.model.user.UserInfo;
 import io.innospots.libra.kernel.module.system.converter.UserGroupConverter;
 import io.innospots.libra.kernel.module.system.converter.UserInfoConverter;
 import io.innospots.libra.kernel.module.system.entity.SysUserEntity;
@@ -10,14 +10,10 @@ import io.innospots.libra.kernel.module.system.entity.SysUserGroupEntity;
 import io.innospots.libra.kernel.module.system.model.user.UserGroup;
 import io.innospots.libra.kernel.module.system.operator.UserGroupOperator;
 import io.innospots.libra.kernel.module.system.operator.UserOperator;
-import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -38,6 +34,32 @@ public class UserGroupService {
         this.userOperator = userOperator;
     }
 
+    public boolean deleteGroup(Integer groupId){
+       boolean del = userGroupOperator.deleteGroup(groupId);
+       if(del){
+           del = userOperator.resetUserGroup(groupId);
+       }
+       return del;
+    }
+
+    public boolean updateUserPersonGroup(List<Integer> userIds, Integer groupId){
+        return userOperator.updateUsersGroup(userIds,groupId);
+    }
+
+    public boolean updateGroupHeader(Integer groupId, String headerUserId){
+        UpdateWrapper<SysUserGroupEntity> uw = new UpdateWrapper<>();
+        uw.lambda().set(SysUserGroupEntity::getHeadUserId, headerUserId)
+                .eq(SysUserGroupEntity::getGroupId, groupId);
+        return userGroupOperator.update(uw);
+    }
+
+    public boolean updateAssistantUsers(Integer groupId, List<Integer> assistantUserIds){
+        UpdateWrapper<SysUserGroupEntity> uw = new UpdateWrapper<>();
+        uw.lambda().set(SysUserGroupEntity::getAssistantUserIds, assistantUserIds)
+                .eq(SysUserGroupEntity::getGroupId, groupId);
+        return userGroupOperator.update(uw);
+    }
+
 
     public List<UserGroup> listUserGroups() {
         QueryWrapper<SysUserGroupEntity> qw = new QueryWrapper<>();
@@ -46,9 +68,17 @@ public class UserGroupService {
         QueryWrapper<SysUserEntity> userQw = new QueryWrapper<>();
         userQw.select("group_id", "COUNT(*) AS userCount")
                 .groupBy("group_id");
-        Map<String, Object> um = userOperator.getMap(userQw);
+        List<Map<String, Object>> umList = userOperator.listMaps(userQw);
+        Map<Integer, Object> um = new HashMap<>();
+        for (Map<String, Object> map : umList) {
+            Object gid = map.get("group_id");
+            Object ut = map.get("userCount");
+            if(gid !=null){
+                um.put(Integer.parseInt(gid.toString()), ut);
+            }
+        }
         for (UserGroup group : groups) {
-            Object v = um.get("userCount");
+            Object v = um.get(group.getGroupId());
             group.setUserCount(v == null ? 0 : Integer.parseInt(v.toString()));
             if (group.getParentGroupId() != null) {
                 group.setParentGroup(groupMap.get(group.getParentGroupId()));

@@ -1,5 +1,6 @@
 package io.innospots.base.model.user;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +13,7 @@ import java.util.List;
  */
 @Getter
 @Setter
+@Schema(title = "User Group")
 public class UserSimpleGroup {
 
     protected Integer groupId;
