@@ -83,19 +83,6 @@ public class AuthenticationConfiguration {
             OauthProviderProperties oauthProviderProperties,
             InnospotsConfigProperties innospotsConfigProperties
     ) {
-        for (OauthProvider provider : oauthProviderProperties.getProviders()){
-            OauthProvider.UrlInfo authInfo = provider.getAuthInfo();
-            String redirectUri = authInfo.getParams().get("redirect_uri").toString();
-            if(!redirectUri.startsWith(innospotsConfigProperties.getHost())){
-                authInfo.getParams().put("redirect_uri",innospotsConfigProperties.getHost() + redirectUri);
-            }
-            OauthProvider.UrlInfo tokenInfo = provider.getTokenInfo();
-            String tokenRedirectUri = tokenInfo.getParams().get("redirect_uri").toString();
-            if(!tokenRedirectUri.startsWith(innospotsConfigProperties.getHost())){
-                tokenInfo.getParams().put("redirect_uri",innospotsConfigProperties.getHost() + tokenRedirectUri);
-            }
-        }
-
         return new OauthAuthenticationProvider(jwtAuthManager,authUserOperator,oauthUserOperator,oauthProviderProperties);
     }
 

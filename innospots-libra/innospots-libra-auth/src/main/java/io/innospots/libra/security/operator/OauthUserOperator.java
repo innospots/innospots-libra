@@ -71,18 +71,17 @@ public class OauthUserOperator extends ServiceImpl<OAuthUserDao, OauthUserEntity
             title = "${event.create.oauthuser.title}", content = "${event.create.oauthuser.content}")
     public UserInfo createOauthUser(OauthUser oauthUser) {
         UserInfo userInfo = authSysUserReader.creatOauthUser(oauthUser2UserInfo(oauthUser));
-        OauthUserEntity oauthUserEntity =  OauthUserEntity.builder()
-                .sysUserId(userInfo.getUserId())
-                .email(oauthUser.getEmail())
-                .provider(oauthUser.getProvider())
-                .providerId(oauthUser.getProviderId())
-                .providerUuid(oauthUser.getProviderUuid())
-                .name(oauthUser.getName())
-                .pictureUrl(oauthUser.getPictureUrl())
-                .lastLoginTime(new DateTime())
-                .build();
-         this.save(oauthUserEntity);
-         return userInfo;
+        OauthUserEntity oauthUserEntity =  new OauthUserEntity();
+        oauthUserEntity.setSysUserId(userInfo.getUserId());
+        oauthUserEntity.setEmail(oauthUser.getEmail());
+        oauthUserEntity.setProvider(oauthUser.getProvider());
+        oauthUserEntity.setProviderId(oauthUser.getProviderId());
+        oauthUserEntity.setProviderUuid(oauthUser.getProviderUuid());
+        oauthUserEntity.setName(oauthUser.getName());
+        oauthUserEntity.setPictureUrl(oauthUser.getPictureUrl());
+        oauthUserEntity.setLastLoginTime(LocalDateTime.now());
+        this.save(oauthUserEntity);
+        return userInfo;
     }
     private UserInfo oauthUser2UserInfo (OauthUser oauthUser){
         UserInfo userInfo = new UserInfo();

@@ -17,7 +17,7 @@ spring:
 
 innospots:
   config:
-    host: http://127.0.0.1:${server.port}
+    host: http://localhost:8000
   db:
     driver-class-name: org.h2.Driver
     jdbc-url: jdbc:h2:${INNOS_ROOT};MODE=MySQL;DB_CLOSE_DELAY=-1

@@ -78,6 +78,7 @@ public class OauthAuthenticationProvider implements AuthenticationProvider {
         }
         String token = requestToken(provider.getTokenInfo(),request.getSecurityCode());
         OauthUser oauthUser = requestUser(provider,token);
+
         OauthUserEntity oauthUserEntity = oauthUserOperator.getByProviderId(oauthUser.getProviderId(),oauthUser.getProvider());
         AuthUser authUser = null;
         if(oauthUserEntity != null){
@@ -160,7 +161,6 @@ public class OauthAuthenticationProvider implements AuthenticationProvider {
         }
         return resNode;
     }
-
 
     private AuthUser userInfo2AuthUser(UserInfo userInfo){
         AuthUser authUser = AuthUser.builder()

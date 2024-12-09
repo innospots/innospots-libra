@@ -53,6 +53,7 @@ innospots:
       - /dashboard/image/**
       - /monitor/**
       - /monitor
+      - /oauth/callback
     ignore-permission-paths:
       - /innospots/api/auth-token/**
       - /innospots/api/access/**
@@ -79,7 +80,7 @@ innospots:
             params:
               response_type: code
               client_id: ${google_oauth_client_id}
-              redirect_uri: /oauth/callback
+              redirect_uri: ${innospots.config.host}/oauth/callback
               scope: email profile
               access_type: offline
           token-info:
@@ -89,12 +90,12 @@ innospots:
               client_id: ${google_oauth_client_id}
               client_secret: ${google_oauth_secret}
               grant_type: authorization_code
-              redirect_uri: /oauth/callback
+              redirect_uri: ${innospots.config.host}/oauth/callback
               code: "{{code}}"
             response:
               access_token: "$.access_token"
             error-response:
-              error: "$.error.msg"
+              error: "$.error"
           user-info:
             method: GET
             url: https://www.googleapis.com/oauth2/v2/userinfo
