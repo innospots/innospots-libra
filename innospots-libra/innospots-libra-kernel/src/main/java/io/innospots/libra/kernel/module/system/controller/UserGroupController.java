@@ -9,6 +9,7 @@ import io.innospots.libra.base.menu.ModuleMenu;
 import io.innospots.libra.base.menu.ResourceItemOperation;
 import io.innospots.libra.kernel.module.system.model.user.GroupForm;
 import io.innospots.libra.kernel.module.system.model.user.UserGroup;
+import io.innospots.libra.kernel.module.system.model.user.UserGroupInfo;
 import io.innospots.libra.kernel.module.system.operator.UserGroupOperator;
 import io.innospots.libra.kernel.module.system.service.UserGroupService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -82,11 +83,18 @@ public class UserGroupController {
         return R.success(userGroupService.updateGroupHeader(groupId,headerUserId));
     }
 
+    @Operation(description = "get user group")
+    @GetMapping
+    public R<UserGroupInfo> getUserGroup(@PathVariable Integer groupId){
+        return R.success(userGroupService.getUserGroupInfo(groupId));
+    }
 
     @Operation(description = "list user group")
     @GetMapping("list")
-    public R<List<UserGroup>> listUserGroups(){
-        return R.success(userGroupService.listUserGroups());
+    public R<List<UserGroup>> listUserGroups(
+            @RequestParam(required = false) Integer groupId,
+            @RequestParam(required = false) String userName){
+        return R.success(userGroupService.listUserGroups(groupId,userName));
     }
 
     @Operation(description = "list user by group id")

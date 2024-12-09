@@ -8,9 +8,11 @@ import io.innospots.libra.kernel.module.system.converter.UserInfoConverter;
 import io.innospots.libra.kernel.module.system.entity.SysUserEntity;
 import io.innospots.libra.kernel.module.system.entity.SysUserGroupEntity;
 import io.innospots.libra.kernel.module.system.model.user.UserGroup;
+import io.innospots.libra.kernel.module.system.model.user.UserGroupInfo;
 import io.innospots.libra.kernel.module.system.operator.UserGroupOperator;
 import io.innospots.libra.kernel.module.system.operator.UserOperator;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -60,9 +62,27 @@ public class UserGroupService {
         return userGroupOperator.update(uw);
     }
 
+    public UserGroupInfo getUserGroupInfo(Integer groupId){
+        SysUserGroupEntity groupEntity = userGroupOperator.getById(groupId);
 
-    public List<UserGroup> listUserGroups() {
+        QueryWrapper<SysUserEntity> userQw = new QueryWrapper<>();
+        userQw.select("COUNT(*) AS userCount")
+              .eq("group_id", groupId);
+        Map<String,Object> m = userOperator.getMap(userQw);
+        int count = m.get("userCount") == null ? 0 : Integer.parseInt(m.get("userCount").toString());
+        SysUserEntity userEntity = null;
+        if(groupEntity.getHeadUserId()!=null){
+            userEntity = userOperator.getById(groupEntity.getHeadUserId());
+        }
+        return UserGroupConverter.userGroupInfo(groupEntity, userEntity, count);
+    }
+
+
+
+    public List<UserGroup> listUserGroups(Integer groupId,String userName) {
         QueryWrapper<SysUserGroupEntity> qw = new QueryWrapper<>();
+        qw.lambda().eq(groupId!=null,SysUserGroupEntity::getGroupId, groupId)
+                .like(StringUtils.isNotBlank(userName),SysUserGroupEntity::getGroupName, "%" + userName + "%");
         List<UserGroup> groups = UserGroupConverter.INSTANCE.entitiesToModels(userGroupOperator.list(qw));
         Map<Integer, UserGroup> groupMap = groups.stream().collect(Collectors.toMap(UserGroup::getGroupId, Function.identity()));
         QueryWrapper<SysUserEntity> userQw = new QueryWrapper<>();

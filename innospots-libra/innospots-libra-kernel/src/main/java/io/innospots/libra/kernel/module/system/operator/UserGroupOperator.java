@@ -8,6 +8,7 @@ import io.innospots.libra.kernel.module.system.converter.UserSimpleGroupConverte
 import io.innospots.libra.kernel.module.system.dao.UserGroupDao;
 import io.innospots.libra.kernel.module.system.entity.SysUserGroupEntity;
 import io.innospots.libra.kernel.module.system.model.user.GroupForm;
+import io.innospots.libra.kernel.module.system.model.user.UserGroupInfo;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
