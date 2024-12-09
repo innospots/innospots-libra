@@ -79,10 +79,8 @@ public class UserGroupService {
 
 
 
-    public List<UserGroup> listUserGroups(Integer groupId,String userName) {
+    public List<UserGroup> listUserGroups() {
         QueryWrapper<SysUserGroupEntity> qw = new QueryWrapper<>();
-        qw.lambda().eq(groupId!=null,SysUserGroupEntity::getGroupId, groupId)
-                .like(StringUtils.isNotBlank(userName),SysUserGroupEntity::getGroupName, "%" + userName + "%");
         List<UserGroup> groups = UserGroupConverter.INSTANCE.entitiesToModels(userGroupOperator.list(qw));
         Map<Integer, UserGroup> groupMap = groups.stream().collect(Collectors.toMap(UserGroup::getGroupId, Function.identity()));
         QueryWrapper<SysUserEntity> userQw = new QueryWrapper<>();
@@ -107,7 +105,7 @@ public class UserGroupService {
         return groups;
     }
 
-    public List<SimpleUser> listUserByGroupId(Integer groupId, boolean includeSubGroup) {
+    public List<SimpleUser> listUserByGroupId(Integer groupId,String userName, boolean includeSubGroup) {
         Set<Integer> groupIds = new HashSet<>();
         groupIds.add(groupId);
         Set<Integer> totalGroupIds = new HashSet<>();
@@ -122,7 +120,8 @@ public class UserGroupService {
                 .stream().collect(Collectors.toMap(SysUserGroupEntity::getGroupId, SysUserGroupEntity::getGroupName));
 
         QueryWrapper<SysUserEntity> qw = new QueryWrapper<>();
-        qw.lambda().in(SysUserEntity::getGroupId, totalGroupIds);
+        qw.lambda().in(SysUserEntity::getGroupId, totalGroupIds)
+                .like(userName!=null, SysUserEntity::getUserName, "%"+userName+"%");
         List<SysUserEntity> userEntities = userOperator.list(qw);
 
         return UserInfoConverter.INSTANCE.entitiesToSimpleUsers(userEntities, groupMap);

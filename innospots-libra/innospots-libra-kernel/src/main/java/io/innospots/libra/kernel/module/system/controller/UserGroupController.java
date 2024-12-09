@@ -84,24 +84,23 @@ public class UserGroupController {
     }
 
     @Operation(description = "get user group")
-    @GetMapping
+    @GetMapping("{groupId}")
     public R<UserGroupInfo> getUserGroup(@PathVariable Integer groupId){
         return R.success(userGroupService.getUserGroupInfo(groupId));
     }
 
     @Operation(description = "list user group")
     @GetMapping("list")
-    public R<List<UserGroup>> listUserGroups(
-            @RequestParam(required = false) Integer groupId,
-            @RequestParam(required = false) String userName){
-        return R.success(userGroupService.listUserGroups(groupId,userName));
+    public R<List<UserGroup>> listUserGroups(){
+        return R.success(userGroupService.listUserGroups());
     }
 
     @Operation(description = "list user by group id")
     @GetMapping("{groupId}/users")
     public R<List<SimpleUser>> listUserByGroupId(@PathVariable Integer groupId,
+                                                 @RequestParam(required = false) String userName,
                                                  @RequestParam(required = false) Boolean includeSubGroup){
-        return R.success(userGroupService.listUserByGroupId(groupId,includeSubGroup));
+        return R.success(userGroupService.listUserByGroupId(groupId,userName,includeSubGroup));
     }
 
 }
