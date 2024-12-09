@@ -85,8 +85,8 @@ public class UserGroupController {
 
     @Operation(description = "list user group")
     @GetMapping("list")
-    public List<UserGroup> listUserGroups(){
-        return userGroupService.listUserGroups();
+    public R<List<UserGroup>> listUserGroups(){
+        return R.success(userGroupService.listUserGroups());
     }
 
     @Operation(description = "list user by group id")
