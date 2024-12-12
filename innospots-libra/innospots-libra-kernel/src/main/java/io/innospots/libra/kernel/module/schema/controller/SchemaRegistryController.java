@@ -70,7 +70,7 @@ public class SchemaRegistryController extends BaseController {
     @OperationLog(operateType = OperateType.CREATE, primaryField = "registryId")
     @PostMapping
     @ResourceItemOperation(key = "SchemaDatasource-updateSchemaDatasource")
-    @Operation(summary = "create schema registry")
+    @Operation(description = "create schema registry")
     public R<SchemaRegistry> createSchemaRegistry(
             @Parameter(name = "schema registry") @Validated @RequestBody SchemaRegistry schemaRegistry, BindingResult bindingResult) {
         SchemaRegistry save = schemaRegistryOperator.createSchemaRegistry(schemaRegistry);
@@ -80,7 +80,7 @@ public class SchemaRegistryController extends BaseController {
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "registryId")
     @PutMapping
     @ResourceItemOperation
-    @Operation(summary = "update schema registry", description = "")
+    @Operation(description = "update schema registry")
     public R<SchemaRegistry> updateSchemaRegistry(
             @Parameter(name = "schema registry") @Validated @RequestBody SchemaRegistry schemaRegistry, BindingResult bindingResult) {
         SchemaRegistry update = schemaRegistryOperator.updateSchemaRegistry(schemaRegistry);
@@ -90,7 +90,7 @@ public class SchemaRegistryController extends BaseController {
     @OperationLog(operateType = OperateType.DELETE, idParamPosition = 0)
     @DeleteMapping("{registryId}")
     @ResourceItemOperation
-    @Operation(summary = "delete schema registry", description = "")
+    @Operation(description = "delete schema registry")
     public R<Boolean> deleteSchemaRegistry(
             @Parameter(name = "registryId") @PathVariable String registryId) {
         Boolean delete = schemaRegistryOperator.deleteSchemaRegistry(registryId);
@@ -98,7 +98,7 @@ public class SchemaRegistryController extends BaseController {
     }
 
     @GetMapping("list/apps/{appKey}")
-    @Operation(summary = "list app schema registries", description = "")
+    @Operation(description = "list app schema registries")
     public R<List<SchemaRegistry>> listAppSchemaRegistries(
             @Parameter(name = "appKey") @PathVariable String appKey
     ) {
@@ -106,7 +106,7 @@ public class SchemaRegistryController extends BaseController {
     }
 
     @GetMapping("list")
-    @Operation(summary = "list schema registries", description = "")
+    @Operation(description = "list schema registries")
     public R<List<SchemaRegistry>> listSchemaRegistries(
             @Parameter(name = "credentialKey") @RequestParam(value = "credentialKey") String credentialKey,
             @Parameter(name = "includeField") @RequestParam(value = "includeField", required = false, defaultValue = "true") Boolean includeField
@@ -117,7 +117,7 @@ public class SchemaRegistryController extends BaseController {
     }
 
     @GetMapping("page/apps/{appKey}")
-    @Operation(summary = "page schemaRegistry by appKey", description = "")
+    @Operation(description = "page schemaRegistry by appKey")
     public R<PageBody<SchemaRegistry>> pageSchemaRegistryByType(
             @Parameter(name = "appKey") @PathVariable String appKey,
             @Parameter(name = "name") @RequestParam(value = "name") String name,
@@ -130,7 +130,7 @@ public class SchemaRegistryController extends BaseController {
     }
 
     @GetMapping("page")
-    @Operation(summary = "page schemaRegistry")
+    @Operation(description = "page schemaRegistry")
     public R<PageBody<SchemaRegistry>> pageSchemaRegistries(
             @Parameter(name = "page") @RequestParam(value = "page") Integer page,
             @Parameter(name = "size") @RequestParam(value = "size") Integer size,
@@ -151,7 +151,7 @@ public class SchemaRegistryController extends BaseController {
     }
 
     @GetMapping("catalog/list")
-    @Operation(summary = "list schema catalog from middleware", description = "")
+    @Operation(description = "list schema catalog from middleware")
     public R<List<SchemaCatalog>> listSchemaRegistries(
             @Parameter(name = "credentialKey") @RequestParam(value = "credentialKey") String credentialKey) {
         IDataConnectionMinder minder = dataConnectionMinderManager.getMinder(credentialKey);
@@ -160,7 +160,7 @@ public class SchemaRegistryController extends BaseController {
     }
 
     @GetMapping
-    @Operation(summary = "get schema registry", description = "support connectType: QUEUE,JDBC")
+    @Operation(description = "support connectType: QUEUE,JDBC")
     public R<SchemaRegistry> getSchemaRegistry(
             @Parameter(name = "credentialKey") @RequestParam(value = "credentialKey") String credentialKey,
             @Parameter(name = "tableName", description = "When the credential's connectType = JDBC, tableName is required")
@@ -178,7 +178,7 @@ public class SchemaRegistryController extends BaseController {
     }
 
     @GetMapping("fetch-sample")
-    @Operation(summary = "schema registry fetch sample")
+    @Operation(description = "schema registry fetch sample")
     public R<Object> fetchSample(
             @Parameter(name = "credentialKey") @RequestParam(value = "credentialKey") String credentialKey,
             @Parameter(name = "tableName") @RequestParam(value = "tableName") String tableName) {
@@ -188,7 +188,7 @@ public class SchemaRegistryController extends BaseController {
 
     /*
     @GetMapping("fetch-samples")
-    @Operation(summary = "schema registry fetch samples", description = "support SourceType: QUEUE,JDBC")
+    @Operation(description = "schema registry fetch samples", description = "support SourceType: QUEUE,JDBC")
     public InnospotResponse<PageBody<Map<String, Object>>> fetchSamples(
             @Parameter(name = "credentialId") @RequestParam(value = "credentialKey") String credentialKey,
             @Parameter(name = "page") @RequestParam("page") int page,

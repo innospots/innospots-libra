@@ -60,7 +60,7 @@ public class PageController extends BaseController {
     @OperationLog(operateType = OperateType.CREATE, primaryField = "id")
     @PostMapping
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
-    @Operation(summary = "save page")
+    @Operation(description = "save page")
     public R<PageDetail> createOrUpdate(
             @Parameter(name = "pageDetail", required = true) @Validated @RequestBody PageDetail pageDetail,
             BindingResult bindingResult) {
@@ -72,7 +72,7 @@ public class PageController extends BaseController {
     @OperationLog(operateType = OperateType.PUBLISH, primaryField = "id")
     @PostMapping("publish")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.publish}")
-    @Operation(summary = "publish page")
+    @Operation(description = "publish page")
     public R<PageDetail> publishPage(
             @Parameter(name = "pageDetail", required = true) @Validated @RequestBody PageDetail pageDetail,
             BindingResult bindingResult) {
@@ -83,7 +83,7 @@ public class PageController extends BaseController {
     @OperationLog(operateType = OperateType.DELETE, idParamPosition = 0)
     @DeleteMapping("{id}")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
-    @Operation(summary = "delete page")
+    @Operation(description = "delete page")
     public R<Boolean> deletePage(@Parameter(name = "id", required = true) @PathVariable Integer id) {
         boolean delete = pageOperator.deletePage(id);
         return success(delete);
@@ -91,7 +91,7 @@ public class PageController extends BaseController {
 
 
     @GetMapping("{id}")
-    @Operation(summary = "page detail")
+    @Operation(description = "page detail")
     public R<PageDetail> getPageDetail(@Parameter(name = "id", required = true) @PathVariable Integer id) {
         PageDetail pageDetail = pageOperator.getPageDetail(id);
         return success(pageDetail);
@@ -99,7 +99,7 @@ public class PageController extends BaseController {
 
     // TODO 待拆分page和list接口
     @GetMapping("page")
-    @Operation(summary = "page list")
+    @Operation(description = "page list")
     public R<PageBody<Page>> pagePages(@Parameter(name = "categoryId") @RequestParam(value = "categoryId", required = false) Integer categoryId,
                                        @Parameter(name = "queryCode") @RequestParam(value = "queryCode", required = false) String queryCode,
                                        @Parameter(name = "page") @RequestParam("page") int page,
@@ -111,7 +111,7 @@ public class PageController extends BaseController {
     @OperationLog(operateType = OperateType.UPDATE_STATUS, idParamPosition = 0)
     @PutMapping("{id}/status/{status}")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.status}")
-    @Operation(summary = "update status", description = "page enable disable, ONLINE | OFFLINE")
+    @Operation(description = "page enable disable, ONLINE | OFFLINE")
     public R<Boolean> updateStatus(@Parameter(name = "id", required = true) @PathVariable Integer id,
                                    @Parameter(name = "status", required = true) @PathVariable DataStatus status) {
         boolean updateStatus = pageOperator.updateStatus(id, status);
@@ -121,7 +121,7 @@ public class PageController extends BaseController {
     @OperationLog(operateType = OperateType.RECYCLE, idParamPosition = 0)
     @PutMapping("{id}/recycle")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${page.category.recycle_bin}")
-    @Operation(summary = "recycle page")
+    @Operation(description = "recycle page")
     public R<Boolean> recyclePage(
             @Parameter(name = "id", required = true) @PathVariable Integer id) {
         return success(pageOperator.recyclePage(id));

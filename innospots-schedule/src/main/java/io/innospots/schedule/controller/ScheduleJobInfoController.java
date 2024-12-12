@@ -58,7 +58,7 @@ public class ScheduleJobInfoController {
     @OperationLog(operateType = OperateType.CREATE, primaryField = "jobKey")
     @PostMapping
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
-    @Operation(summary = "create schedule")
+    @Operation(description = "create schedule")
     public R<ScheduleJobInfo> createScheduleJobInfo(@Validated @RequestBody ScheduleJobInfo scheduleJobInfo) {
         return R.success(scheduleJobInfoOperator.createScheduleJobInfo(scheduleJobInfo));
     }
@@ -67,7 +67,7 @@ public class ScheduleJobInfoController {
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "jobKey")
     @PutMapping
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
-    @Operation(summary = "update schedule")
+    @Operation(description = "update schedule")
     public R<ScheduleJobInfo> updateScheduleJobInfo(@Validated @RequestBody ScheduleJobInfo scheduleJobInfo) {
         return R.success(scheduleJobInfoOperator.updateScheduleJobInfo(scheduleJobInfo));
     }
@@ -87,13 +87,13 @@ public class ScheduleJobInfoController {
     @OperationLog(operateType = OperateType.DELETE, primaryField = "jobKey")
     @DeleteMapping("{jobKey}")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
-    @Operation(summary = "delete schedule")
+    @Operation(description = "delete schedule")
     public R<Boolean> deleteScheduleJobInfo(@PathVariable String jobKey) {
         return R.success(scheduleJobInfoOperator.deleteScheduleJobInfo(jobKey));
     }
 
     @GetMapping("page")
-    @Operation(summary = "page schedule list")
+    @Operation(description = "page schedule list")
     public R<PageBody<ScheduleJobInfo>> pageScheduleJobInfo(
             @Parameter(name = "page") @RequestParam("page") int page,
             @Parameter(name = "size") @RequestParam("size") int size,

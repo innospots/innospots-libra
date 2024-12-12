@@ -37,20 +37,20 @@ public class FlowNodeMetaController {
     }
 
     @GetMapping("list-meta")
-    @Operation(summary = "list node meta")
+    @Operation(description = "list node meta")
     public R<Collection<NodeMetaInfo>> listMetaInfo(){
         return R.success(NodeMetaInfoLoader.nodeMetaInfos());
     }
 
     @GetMapping("list-info")
-    @Operation(summary = "list node info")
+    @Operation(description = "list node info")
     public R<List<NodeInfo>> listNodeInfo(){
         List<NodeMetaInfo> metas = new ArrayList<>(NodeMetaInfoLoader.nodeMetaInfos());
         return R.success(FlowNodeDefinitionConverter.INSTANCE.metaToInfoList(metas));
     }
 
     @GetMapping("list-definition")
-    @Operation(summary = "list node definition according node metas")
+    @Operation(description = "list node definition according node metas")
     public R<List<NodeDefinition>> listNodeDefinition(){
         List<NodeDefinition> definitions = new ArrayList<>();
         for (NodeMetaInfo nodeMetaInfo : NodeMetaInfoLoader.nodeMetaInfos()) {
@@ -60,14 +60,14 @@ public class FlowNodeMetaController {
     }
 
     @GetMapping("definition/{code}")
-    @Operation(summary = "node definition by code")
+    @Operation(description = "node definition by code")
     public R<NodeDefinition> getNodeDefinitionByCode(
             @PathVariable String code){
         return R.success(NodeDefinitionBuilder.build(code));
     }
 
     @GetMapping("reload")
-    @Operation(summary = "reload node meta info")
+    @Operation(description = "reload node meta info")
     public R<List<NodeInfo>> reload(){
         NodeMetaInfoLoader.load();
         List<NodeMetaInfo> metas = new ArrayList<>(NodeMetaInfoLoader.nodeMetaInfos());
@@ -75,7 +75,7 @@ public class FlowNodeMetaController {
     }
 
     @PutMapping("synchronize/{force}")
-    @Operation(summary = "synchronize node meta info")
+    @Operation(description = "synchronize node meta info")
     public R<List<NodeDefinition>> synchronize(@PathVariable boolean force){
         return R.success(nodeMetaService.synchronizeNodeMeta(force));
     }

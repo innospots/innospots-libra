@@ -62,7 +62,7 @@ public class LibraWorkspaceController {
 
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "id")
     @PostMapping
-    @Operation(summary = "update workspace")
+    @Operation(description = "update workspace")
     public R<Workspace> updateWorkspace(@Parameter(name = "pageDetail", required = true) @RequestBody Workspace workspace) {
         Workspace update = workspaceOperator.updateWorkspace(workspace);
         return success(update);
@@ -70,7 +70,7 @@ public class LibraWorkspaceController {
 
     @ResourceItemOperation
     @GetMapping
-    @Operation(summary = "get current user workspace")
+    @Operation(description = "get current user workspace")
     public R<Workspace> getWorkspaceByCurrentUser() {
         Workspace workspace = workspaceOperator.getWorkspaceByCurrentUser();
         return success(workspace);
@@ -78,14 +78,14 @@ public class LibraWorkspaceController {
 
     @ResourceItemOperation
     @GetMapping("latest-activity")
-    @Operation(summary = "get latest activity")
+    @Operation(description = "get latest activity")
     public R<News> getLatestActivity() {
         return success(workspaceService.getActivityInfo());
     }
 
     @ResourceItemOperation
     @GetMapping("update-app")
-    @Operation(summary = "get app update")
+    @Operation(description = "get app update")
     public R<PageBody<AppUpdateInfo>> getUpdateApp() {
         PageBody<AppUpdateInfo> pageBody = new PageBody<>();
         List<AppUpdateInfo> appUpdateInfos = new ArrayList<>();
@@ -102,14 +102,14 @@ public class LibraWorkspaceController {
 
     @ResourceItemOperation
     @GetMapping("latest-news")
-    @Operation(summary = "get news info")
+    @Operation(description = "get news info")
     public R<NewsInfo> getNewsInfo() {
         return success(workspaceService.getNewsInfo());
     }
 
     @ResourceItemOperation
     @GetMapping("system")
-    @Operation(summary = "get system info")
+    @Operation(description = "get system info")
     public R<SystemInfo> getSystemInfo() {
         return success(workspaceOperator.getSystemInfo());
     }

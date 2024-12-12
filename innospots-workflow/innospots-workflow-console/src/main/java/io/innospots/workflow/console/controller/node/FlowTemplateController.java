@@ -52,7 +52,7 @@ public class FlowTemplateController extends BaseController {
     }
 
     @GetMapping("list")
-    @Operation(summary = "flow node templates")
+    @Operation(description = "flow node templates")
     public R<List<FlowTemplateBase>> listTemplates() {
         return R.success(flowTemplateOperator.listOnlineFlowTemplates());
     }

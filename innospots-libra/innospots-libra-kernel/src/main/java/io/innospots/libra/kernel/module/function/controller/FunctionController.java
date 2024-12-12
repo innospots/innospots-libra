@@ -53,7 +53,7 @@ public class FunctionController extends BaseController {
     private FunctionDefinitionOperator functionDefinitionOperator;
 
     @GetMapping("list")
-    @Operation(summary = "function list")
+    @Operation(description = "function list")
     public R<List<FunctionCategory>> listFunctions(
             @RequestParam(required = false) String functionType,
             @RequestParam(required = false) String cateType) {
@@ -63,7 +63,7 @@ public class FunctionController extends BaseController {
 
     @OperationLog(operateType = OperateType.CREATE, primaryField = "functionId", idParamPosition = 0)
     @PostMapping
-    @Operation(summary = "create new function")
+    @Operation(description = "create new function")
     public R<Boolean> createFunction(@RequestBody FunctionDefinition functionDefinition) {
         return R.success(functionDefinitionOperator.createFunction(functionDefinition));
     }
@@ -71,14 +71,14 @@ public class FunctionController extends BaseController {
 
     @OperationLog(operateType = OperateType.DELETE, idParamPosition = 0)
     @DeleteMapping("{functionId}")
-    @Operation(summary = "delete function")
+    @Operation(description = "delete function")
     public R<Boolean> deleteFunction(@PathVariable Integer functionId) {
         return R.success(functionDefinitionOperator.deleteFunction(functionId));
     }
 
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "functionId", idParamPosition = 0)
     @PutMapping
-    @Operation(summary = "update function")
+    @Operation(description = "update function")
     public R<Boolean> updateFunction(@RequestBody FunctionDefinition functionDefinition) {
         return R.success(functionDefinitionOperator.updateFunction(functionDefinition));
     }

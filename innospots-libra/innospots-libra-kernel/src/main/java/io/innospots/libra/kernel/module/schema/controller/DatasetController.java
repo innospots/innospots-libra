@@ -58,7 +58,7 @@ public class DatasetController {
 
     @PostMapping
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
-    @Operation(summary = "create dataset")
+    @Operation(description = "create dataset")
     @OperationLog(operateType = OperateType.CREATE, primaryField = "id")
     public R<Dataset> createDataset(
             @Parameter(name = "dataset") @Validated @RequestBody Dataset dataset, BindingResult bindingResult) {
@@ -68,7 +68,7 @@ public class DatasetController {
 
     @PutMapping
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
-    @Operation(summary = "update dataset")
+    @Operation(description = "update dataset")
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "id")
     public R<Dataset> updateDataset(
             @Parameter(name = "dataset") @Validated @RequestBody Dataset dataset, BindingResult bindingResult) {
@@ -79,21 +79,21 @@ public class DatasetController {
     @DeleteMapping("{id}")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @OperationLog(idParamPosition = 0, operateType = OperateType.DELETE)
-    @Operation(summary = "delete dataset")
+    @Operation(description = "delete dataset")
     public R<Boolean> deleteDataset(@Parameter(name = "id") @PathVariable String id) {
         Boolean delete = datasetOperator.deleteDataset(id);
         return success(delete);
     }
 
     @GetMapping("{id}")
-    @Operation(summary = "get dataset")
+    @Operation(description = "get dataset")
     public R<Dataset> getDatasetById(@Parameter(name = "id") @PathVariable String id) {
         Dataset dataset = datasetOperator.getDatasetById(id);
         return success(dataset);
     }
 
     @GetMapping("page")
-    @Operation(summary = "page datasets")
+    @Operation(description = "page datasets")
     public R<PageBody<Dataset>> pageDatasets(
             @Parameter(name = "page") @RequestParam(value = "page") Integer page,
             @Parameter(name = "size") @RequestParam(value = "size") Integer size,
@@ -106,7 +106,7 @@ public class DatasetController {
     }
 
     @GetMapping("list")
-    @Operation(summary = "list datasets")
+    @Operation(description = "list datasets")
     public R<List<Dataset>> listDatasets(
             @Parameter(name = "categoryId") @RequestParam(value = "categoryId", required = false) Integer categoryId,
             @Parameter(name = "queryCode") @RequestParam(value = "queryCode", required = false) String queryCode,

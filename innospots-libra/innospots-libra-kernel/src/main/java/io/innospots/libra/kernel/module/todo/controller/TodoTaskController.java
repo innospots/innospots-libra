@@ -68,7 +68,7 @@ public class TodoTaskController extends BaseController {
     @PostMapping
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
     @OperationLog(operateType = OperateType.CREATE, primaryField = "taskId")
-    @Operation(summary = "create task")
+    @Operation(description = "create task")
     public R<TodoTask> createTodoTask(@Parameter(name = "todoTask", required = true) @Validated @RequestBody TodoTask todoTask) {
 
         TodoTask create = todoTaskService.createTodoTask(todoTask);
@@ -78,7 +78,7 @@ public class TodoTaskController extends BaseController {
     @PutMapping
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
     @OperationLog(primaryField = "taskId", operateType = OperateType.UPDATE)
-    @Operation(summary = "update task")
+    @Operation(description = "update task")
     public R<Boolean> updateTodoTask(@Parameter(name = "todoTask", required = true) @Validated @RequestBody TodoTask todoTask) {
 
         Boolean update = todoTaskService.updateTodoTask(todoTask);
@@ -88,7 +88,7 @@ public class TodoTaskController extends BaseController {
     @DeleteMapping("{taskId}")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @OperationLog(idParamPosition = 0, operateType = OperateType.DELETE)
-    @Operation(summary = "delete task")
+    @Operation(description = "delete task")
     public R<Boolean> deleteTodoTask(@Parameter(name = "taskId", required = true) @PathVariable Integer taskId) {
 
         Boolean delete = todoTaskService.deleteTodoTask(taskId);
@@ -96,7 +96,7 @@ public class TodoTaskController extends BaseController {
     }
 
     @GetMapping("{taskId}")
-    @Operation(summary = "view task")
+    @Operation(description = "view task")
     public R<TodoTask> getTodoTask(@Parameter(name = "taskId", required = true) @PathVariable Integer taskId) {
 
         TodoTask view = todoTaskService.getTodoTask(taskId);
@@ -106,7 +106,7 @@ public class TodoTaskController extends BaseController {
     @PutMapping("{taskId}/status/{taskStatus}")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}", label = "${common.button.status}")
     @OperationLog(idParamPosition = 0, operateType = OperateType.UPDATE_STATUS)
-    @Operation(summary = "update task status")
+    @Operation(description = "update task status")
     public R<Boolean> updateTaskStatus(@Parameter(required = true, name = "taskId") @PathVariable Integer taskId,
                                        @Parameter(required = true, name = "taskStatus") @PathVariable TaskStatus taskStatus) {
 
@@ -115,19 +115,19 @@ public class TodoTaskController extends BaseController {
     }
 
     @GetMapping("priority")
-    @Operation(summary = "get priority")
+    @Operation(description = "get priority")
     public R<List<String>> getPriority() {
         return success(todoTaskService.getPriority());
     }
 
     @GetMapping("tag")
-    @Operation(summary = "get tag")
+    @Operation(description = "get tag")
     public R<List<String>> getTag() {
         return success(todoTaskTagOperator.getTag());
     }
 
     @GetMapping("page")
-    @Operation(summary = "query task")
+    @Operation(description = "query task")
     public R<PageBody<TodoTask>> pageTodoTasks(TodoTaskForm request) {
         PageBody<TodoTask> pageModel = todoTaskService.pageTasks(request);
         return success(pageModel);

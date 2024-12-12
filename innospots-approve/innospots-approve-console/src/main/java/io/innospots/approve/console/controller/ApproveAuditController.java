@@ -44,7 +44,7 @@ public class ApproveAuditController {
     }
 
 
-    @Operation(summary = "page approver instances by request")
+    @Operation(description = "page approver instances by request")
     @GetMapping("page")
     public R<PageBody<ApproveFlowInstanceBase>> pageByApprover(
             @RequestParam(required = false) String approveType,
@@ -56,7 +56,7 @@ public class ApproveAuditController {
         return R.success(approveAuditService.pageAudit(page,size,approveType,startTime,endTime));
     }
 
-    @Operation(summary = "page history approver instances by request")
+    @Operation(description = "page history approver instances by request")
     @GetMapping("page/history")
     public R<PageBody<ApproveActorFlowInstance>> pageHistoryByApprover(
             @RequestParam(required = false) String approveType,
@@ -68,19 +68,19 @@ public class ApproveAuditController {
         return R.success(approveAuditService.pageAuditHistory(page,size,approveType,startTime,endTime));
     }
 
-    @Operation(summary = "get approve instance by approve instance key")
+    @Operation(description = "get approve instance by approve instance key")
     @GetMapping("/key/{approveInstanceKey}")
     public R<ApproveFlowInstance> findOne(@PathVariable String approveInstanceKey) {
         return R.success(approveFlowInstanceOperator.findOne(approveInstanceKey));
     }
 
-    @Operation(summary = "approve flow")
+    @Operation(description = "approve flow")
     @PostMapping("approved/{approveInstanceKey}")
     public R<Boolean> approved(@PathVariable String approveInstanceKey, String message){
         return R.success(approveFlowRuntimeContainer.approve(approveInstanceKey, message));
     }
 
-    @Operation(summary = "reject approve flow")
+    @Operation(description = "reject approve flow")
     @PostMapping("reject/{approveInstanceKey}")
     public R<Boolean> reject(@PathVariable String approveInstanceKey, String message){
         return R.success(approveFlowRuntimeContainer.reject(approveInstanceKey, message));

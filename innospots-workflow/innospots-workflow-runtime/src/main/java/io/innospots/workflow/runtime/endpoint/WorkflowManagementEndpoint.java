@@ -64,58 +64,58 @@ public class WorkflowManagementEndpoint {
     }
 
     @PostMapping("load/{workInstanceId}/{revision}")
-    @Operation(summary = "load workflow instance")
+    @Operation(description = "load workflow instance")
     public R<Flow> load(@PathVariable Long workInstanceId, @PathVariable Integer revision) {
         Flow flow = flowManager.loadFlow(workInstanceId, revision);
         return success(flow);
     }
 
     @PostMapping("load/{workInstanceId}")
-    @Operation(summary = "load latest workflow instance")
+    @Operation(description = "load latest workflow instance")
     public R<Flow> load(@PathVariable Long workInstanceId) {
         Flow flow = flowManager.loadFlow(workInstanceId);
         return success(flow);
     }
 
     @PutMapping("clear/{workInstanceId}/{revision}")
-    @Operation(summary = "clear workflow instance cache")
+    @Operation(description = "clear workflow instance cache")
     public R<Boolean> clear(@PathVariable Long workInstanceId, @PathVariable Integer revision) {
         return success(flowManager.clear(workInstanceId, revision));
     }
 
     @PutMapping("clear/{workInstanceId}")
-    @Operation(summary = "clear latest workflow instance")
+    @Operation(description = "clear latest workflow instance")
     public R<Boolean> clear(@PathVariable Long workInstanceId) {
         return success(flowManager.clear(workInstanceId));
     }
 
     @GetMapping("info/{workInstanceId}/{revision}")
-    @Operation(summary = "show workflow instance")
+    @Operation(description = "show workflow instance")
     public R<Flow> info(@PathVariable Long workInstanceId, @PathVariable Integer revision) {
         return success(flowManager.findFlow(workInstanceId, revision));
     }
 
 
     @GetMapping("info/{workInstanceId}")
-    @Operation(summary = "show latest workflow instance")
+    @Operation(description = "show latest workflow instance")
     public R<Flow> info(@PathVariable Long workInstanceId) {
         return success(flowManager.findFlow(workInstanceId));
     }
 
     @GetMapping("runtime")
-    @Operation(summary = "published workflow in runtime")
+    @Operation(description = "published workflow in runtime")
     public R<Map<String, Object>> runtime() {
         return success(containerManager.runtimeTriggers());
     }
 
     @GetMapping("schedule-infos")
-    @Operation(summary = "published schedule workflow")
+    @Operation(description = "published schedule workflow")
     public R<List<Map<String, Object>>> scheduleInfo() {
         return success(quartzScheduleManager.schedulerInfo());
     }
 
     @GetMapping("webhook-address")
-    @Operation(summary = "webhook address")
+    @Operation(description = "webhook address")
     public R<Map<String, String>> apiAddress() {
         Map<String, String> flowInfo = new LinkedHashMap<>();
         String host = workflowRuntimeProperties.getHost();

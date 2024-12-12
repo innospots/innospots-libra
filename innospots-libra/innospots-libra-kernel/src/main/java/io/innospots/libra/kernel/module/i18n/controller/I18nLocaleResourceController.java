@@ -55,7 +55,7 @@ public class I18nLocaleResourceController {
     }
 
     @GetMapping("list")
-    @Operation(summary = "list available locale code,when create new language and select the language code")
+    @Operation(description = "list available locale code,when create new language and select the language code")
     public R<TreeMap<String, String>> listAvailableLocale() {
         return success(localeList());
     }
@@ -68,7 +68,7 @@ public class I18nLocaleResourceController {
      * @return
      */
     @GetMapping("{localeCode}/{module}.json")
-    @Operation(summary = "")
+    @Operation(description = "")
     public R<TreeMap<String, String>> getLocaleResource(HttpServletRequest request,
                                                         @Parameter @PathVariable String localeCode,
                                                         @Parameter @PathVariable String module) {

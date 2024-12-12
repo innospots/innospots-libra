@@ -60,7 +60,7 @@ public class TaskExecutionController {
     }
 
     @GetMapping("page/task-execution")
-    @Operation(summary = "page task executions")
+    @Operation(description = "page task executions")
     public R<PageBody<TaskExecution>> pageTaskExecutions(TaskExecutionForm request) {
 
         PageBody<TaskExecution> pageModel = taskExecutionOperator.pageTaskExecutions(request);
@@ -68,7 +68,7 @@ public class TaskExecutionController {
     }
 
     @GetMapping("{taskExecutionId}")
-    @Operation(summary = "view task executions")
+    @Operation(description = "view task executions")
     public R<TaskExecution> getTaskExecution(@Parameter(name = "taskExecutionId", required = true) @PathVariable String taskExecutionId) {
 
         TaskExecution taskExecution = taskExecutionOperator.getTaskExecutionById(taskExecutionId);
@@ -76,7 +76,7 @@ public class TaskExecutionController {
     }
 
     @PutMapping("{taskExecutionId}/{operateType}")
-    @Operation(summary = "operate task executions")
+    @Operation(description = "operate task executions")
     public R<Boolean> operateTaskExecution(@Parameter(name = "taskExecutionId", required = true) @PathVariable String taskExecutionId,
                                            @PathVariable TaskEvent.TaskAction operateType) {
         boolean result;
@@ -93,7 +93,7 @@ public class TaskExecutionController {
     }
 
     @GetMapping("task-code")
-    @Operation(summary = "get taskCode")
+    @Operation(description = "get taskCode")
     public R<List<String>> getTaskCode() {
         List<String> taskCodes = new ArrayList<>();
         for (TaskExecutionStatus status : TaskExecutionStatus.values()) {
@@ -103,7 +103,7 @@ public class TaskExecutionController {
     }
 
     @GetMapping("apps")
-    @Operation(summary = "get apps")
+    @Operation(description = "get apps")
     public R<List<String>> getApps() {
         List<String> apps = new ArrayList<>();
         apps.add("工作流引擎");

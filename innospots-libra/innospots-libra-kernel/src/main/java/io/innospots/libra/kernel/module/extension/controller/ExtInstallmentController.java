@@ -65,7 +65,7 @@ public class ExtInstallmentController {
      * @return
      */
     @GetMapping("list")
-    @Operation(summary = "extension installed list")
+    @Operation(description = "extension installed list")
     public R<List<ExtensionInstallInfo>> listInstalledExtensions() {
 
         return success(extInstallmentOperator.installedExtensions());
@@ -77,7 +77,7 @@ public class ExtInstallmentController {
      * @return
      */
     @GetMapping("list/base-info")
-    @Operation(summary = "extension base info installed list")
+    @Operation(description = "extension base info installed list")
     public R<List<LibraExtensionProperties>> listInstalledExtBaseInfos() {
 
         return success(extInstallmentOperator.installedExtBaseInfos());
@@ -86,7 +86,7 @@ public class ExtInstallmentController {
 
     @PostMapping("extension/{extKey}")
     @ResourceItemOperation(type = BUTTON, icon = "install", name = "${app.market.button.install}")
-    @Operation(summary = "extension install by extKey")
+    @Operation(description = "extension install by extKey")
     @OperationLog(operateType = OperateType.INSTALL, idParamPosition = 0)
     public R<ExtensionInstallInfo> installByKey(@PathVariable String extKey) {
         return success(extensionService.install(extKey));
@@ -95,7 +95,7 @@ public class ExtInstallmentController {
 
     @PostMapping("enabled/{extKey}")
     @ResourceItemOperation(type = BUTTON, icon = "available", name = "${app.market.button.enable}")
-    @Operation(summary = "extension available")
+    @Operation(description = "extension available")
     @OperationLog(operateType = OperateType.INSTALL, idParamPosition = 0)
     public R<Boolean> enabled(@PathVariable String extKey) {
         return success(extInstallmentOperator.enabled(extKey));
@@ -103,7 +103,7 @@ public class ExtInstallmentController {
 
     @PostMapping("disabled/{extKey}")
     @ResourceItemOperation(type = BUTTON, icon = "disabled", name = "${app.market.button.disable}")
-    @Operation(summary = "extension disabled")
+    @Operation(description = "extension disabled")
     @OperationLog(operateType = OperateType.INACTIVE, idParamPosition = 0)
     public R<Boolean> disabled(@PathVariable String extKey) {
         return success(extInstallmentOperator.disabled(extKey));

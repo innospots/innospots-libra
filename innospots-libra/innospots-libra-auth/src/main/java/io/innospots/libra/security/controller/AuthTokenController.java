@@ -52,7 +52,7 @@ public class AuthTokenController extends BaseController {
     }
 
     @GetMapping("check")
-    @Operation(summary = "check whether the user is login")
+    @Operation(description = "check whether the user is login")
     public R<AuthToken> checkToken() {
         JwtToken authToken = (JwtToken) getContext();
         if (authToken == null) {
@@ -65,7 +65,7 @@ public class AuthTokenController extends BaseController {
     }
 
     @GetMapping("refresh")
-    @Operation(summary = "refresh token and return newToken", description = "get token")
+    @Operation(description = "refresh token and return newToken")
     public R<String> getToken() {
         AuthToken authToken = getContext();
         authToken = authManager.refreshToken(authToken.getRawToken());
@@ -74,7 +74,7 @@ public class AuthTokenController extends BaseController {
 
     /*
     @GetMapping("switch-organization/{orgId}")
-    @Operation(summary = "switch organization, the token should be changed")
+    @Operation(description = "switch organization, the token should be changed")
     public InnospotResponse<String> switchOrganization(@PathVariable Integer orgId) {
         AuthToken authToken = getContext();
         authToken = authManager.refreshToken(authToken.getRawToken(),orgId);

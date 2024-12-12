@@ -68,7 +68,7 @@ public class FlowNodeDefinitionController extends BaseController {
      * @return Page<NodeDefinition>
      */
     @GetMapping("page")
-    @Operation(summary = "page node definition")
+    @Operation(description = "page node definition")
     public R<PageBody<NodeInfo>> pageNodeDefinitions(
             @RequestParam(required = false, name = "dataStatus") DataStatus dataStatus,
             @RequestParam(name = "flowTplId") Integer flowTplId,
@@ -91,7 +91,7 @@ public class FlowNodeDefinitionController extends BaseController {
 
 
     @GetMapping("list/online")
-    @Operation(summary = "list online nodes")
+    @Operation(description = "list online nodes")
     public R<List<NodeDefinition>> listOnlineNodeDefinitions(
             @Parameter(name = "primitive") @RequestParam(required = false, name = "primitive") NodePrimitive primitive,
             @Parameter(name = "workflowType") @RequestParam(required = false, name = "workflowType",defaultValue = "EVENTS") String workflowType
@@ -107,7 +107,7 @@ public class FlowNodeDefinitionController extends BaseController {
      */
     @OperationLog(operateType = OperateType.CREATE, primaryField = "code")
     @PostMapping("info")
-    @Operation(summary = "create node definition info")
+    @Operation(description = "create node definition info")
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
     public R<NodeInfo> createNodeInfo(@Parameter(name = "node info", required = true) @Validated @RequestBody NodeInfo nodeInfo) {
         return success(nodeDefinitionService.createNodeInfo(nodeInfo));
@@ -121,7 +121,7 @@ public class FlowNodeDefinitionController extends BaseController {
      */
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "nodeId")
     @PutMapping("info")
-    @Operation(summary = "update node definition info")
+    @Operation(description = "update node definition info")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.save.base:更新基本信息}")
     public R<NodeInfo> updateNodeInfo(@Parameter(name = "node info", required = true) @Validated @RequestBody NodeInfo nodeInfo) {
         return success(nodeDefinitionService.updateNodeInfo(nodeInfo));
@@ -129,7 +129,7 @@ public class FlowNodeDefinitionController extends BaseController {
 
     @OperationLog(operateType = OperateType.UPDATE, idParamPosition = 0)
     @PutMapping("group")
-    @Operation(summary = "update node definition group")
+    @Operation(description = "update node definition group")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update.group:变更分组}")
     public R<NodeInfo> updateNodeGroup(
             @Parameter(name = "nodeId", required = true) @RequestParam Integer nodeId,
@@ -147,7 +147,7 @@ public class FlowNodeDefinitionController extends BaseController {
      */
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "nodeId")
     @PutMapping
-    @Operation(summary = "update node definition")
+    @Operation(description = "update node definition")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.save}")
     public R<NodeDefinition> updateNodeDefinition(@Parameter(name = "node definition", required = true) @Validated @RequestBody NodeDefinition nodeDefinition) {
         return success(nodeDefinitionService.updateNodeDefinition(nodeDefinition));
@@ -160,7 +160,7 @@ public class FlowNodeDefinitionController extends BaseController {
      * @return NodeDefinition
      */
     @GetMapping("/{nodeId}")
-    @Operation(summary = "node definition detail info")
+    @Operation(description = "node definition detail info")
     public R<NodeDefinition> getNodeDefinitionById(@Parameter(name = "nodeId", required = true) @PathVariable Integer nodeId) {
 
         return success(nodeDefinitionService.getNodeDefinitionById(nodeId));
@@ -175,7 +175,7 @@ public class FlowNodeDefinitionController extends BaseController {
      */
     @OperationLog(operateType = OperateType.UPDATE_STATUS, idParamPosition = 0)
     @PutMapping("/{nodeId}/status/{status}")
-    @Operation(summary = "update node definition status")
+    @Operation(description = "update node definition status")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.status}")
     public R<Boolean> updateNodeStatus(
             @Parameter(name = "nodeId", required = true) @PathVariable Integer nodeId,
@@ -193,7 +193,7 @@ public class FlowNodeDefinitionController extends BaseController {
      */
     @OperationLog(operateType = OperateType.DELETE, idParamPosition = 0)
     @DeleteMapping("/{nodeId}")
-    @Operation(summary = "delete node definition from db")
+    @Operation(description = "delete node definition from db")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     public R<Boolean> deleteNode(
             @Parameter(name = "nodeId", required = true) @PathVariable Integer nodeId
@@ -202,13 +202,13 @@ public class FlowNodeDefinitionController extends BaseController {
     }
 
     @GetMapping("icons")
-    @Operation(summary = "node icons")
+    @Operation(description = "node icons")
     public R<Map<String, String>> getNodeIcon() {
         return success(nodeDefinitionService.getNodeIcons());
     }
 
     @GetMapping("primitives")
-    @Operation(summary = "node primitives")
+    @Operation(description = "node primitives")
     public R<List<SelectItem>> listPrimitives() {
         return success(NodePrimitive.primitiveSelectItems());
     }

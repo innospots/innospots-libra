@@ -22,9 +22,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.innospots.base.data.body.PageBody;
+import io.innospots.base.entity.BaseEntity;
 import io.innospots.base.enums.DataStatus;
 import io.innospots.base.exception.ResourceException;
-import io.innospots.base.entity.BaseEntity;
 import io.innospots.libra.kernel.module.i18n.converter.I18NLanguageConverter;
 import io.innospots.libra.kernel.module.i18n.converter.I18nDictionaryConverter;
 import io.innospots.libra.kernel.module.i18n.dao.I18nDictionaryDao;
@@ -35,6 +35,7 @@ import io.innospots.libra.kernel.module.i18n.entity.I18nLanguageEntity;
 import io.innospots.libra.kernel.module.i18n.entity.I18nTransMessageEntity;
 import io.innospots.libra.kernel.module.i18n.model.I18nTransMessageGroup;
 import io.innospots.libra.kernel.module.i18n.model.TransHeaderColumn;
+import io.innospots.libra.kernel.module.i18n.model.TransMessageForm;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -90,6 +91,38 @@ public class I18nTransMessageOperator {
         return result;
     }
 
+    @CacheEvict(cacheNames = "locale_resource", allEntries = true)
+    @Transactional
+    public I18nTransMessageGroup createTransMessage(TransMessageForm transMessageForm) {
+        String dictCode = transMessageForm.fillDictCode();
+        I18nDictionaryEntity dictionaryEntity = i18nDictionaryDao.selectOne(
+                new QueryWrapper<I18nDictionaryEntity>()
+                        .lambda().eq(I18nDictionaryEntity::getCode, dictCode));
+        if (dictionaryEntity != null) {
+            throw ResourceException.buildExistException(I18nDictionaryEntity.class, dictCode);
+        }
+        dictionaryEntity = I18nDictionaryConverter.formToEntity(transMessageForm);
+        int cnt = i18nDictionaryDao.insert(dictionaryEntity);
+        if (cnt < 1) {
+            throw ResourceException.buildCreateException(I18nDictionaryEntity.class, dictCode);
+        }
+        I18nTransMessageGroup transMessageGroup = new I18nTransMessageGroup(I18nDictionaryConverter.INSTANCE.entityToModel(dictionaryEntity), transMessageForm.getMessages());
+        saveTransMessageGroupOnly(transMessageGroup, dictionaryEntity.getDictionaryId());
+        return transMessageGroup;
+    }
+
+    @CacheEvict(cacheNames = "locale_resource", allEntries = true)
+    @Transactional
+    public boolean deleteTransMessage(Integer dictionaryId) {
+        boolean d = i18nDictionaryDao.deleteById(dictionaryId) > 0;
+        if (d) {
+            int m = i18nTransMessageDao.delete(new QueryWrapper<I18nTransMessageEntity>()
+                    .lambda().eq(I18nTransMessageEntity::getDictionaryId, dictionaryId));
+            d = m > 0;
+        }
+        return d;
+    }
+
 
     @CacheEvict(cacheNames = "locale_resource", allEntries = true)
     @Transactional(rollbackForClassName = {"Exception"})
@@ -97,22 +130,27 @@ public class I18nTransMessageOperator {
         //先获取字典
         I18nDictionaryEntity dictionaryEntity = i18nDictionaryDao.selectOne(
                 new QueryWrapper<I18nDictionaryEntity>()
-                .lambda().eq(I18nDictionaryEntity::getCode, transMessages.getDictionary().getCode()));
+                        .lambda().eq(I18nDictionaryEntity::getCode, transMessages.getDictionary().getCode()));
         if (dictionaryEntity == null) {
             log.error("modify I18nTransMessageGroup {} is not exist", transMessages.getDictionary().getCode());
             throw ResourceException.buildUpdateException(this.getClass(), "modify I18nTransMessageGroup {} is not exist", transMessages.getDictionary().getCode());
         }
+        return saveTransMessageGroupOnly(transMessages, dictionaryEntity.getDictionaryId());
+    }
 
+    private Boolean saveTransMessageGroupOnly(I18nTransMessageGroup transMessages, Integer dictionaryId) {
         int resultNum = 0;
         int messageNum = 0;
         Map<String, I18nTransMessageEntity> entityMap = new HashMap<>();
-        QueryWrapper<I18nTransMessageEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(I18nTransMessageEntity::getDictionaryId, dictionaryEntity.getDictionaryId());
-        List<I18nTransMessageEntity> entityList = i18nTransMessageDao.selectList(queryWrapper);
-
-        if (entityList != null && !entityList.isEmpty()) {
-            entityMap = entityList.stream().collect(Collectors.toMap(I18nTransMessageEntity::getLocale, Function.identity()));
+        if (dictionaryId != null) {
+            QueryWrapper<I18nTransMessageEntity> queryWrapper = new QueryWrapper<>();
+            queryWrapper.lambda().eq(I18nTransMessageEntity::getDictionaryId, dictionaryId);
+            List<I18nTransMessageEntity> entityList = i18nTransMessageDao.selectList(queryWrapper);
+            if (entityList != null && !entityList.isEmpty()) {
+                entityMap = entityList.stream().collect(Collectors.toMap(I18nTransMessageEntity::getLocale, Function.identity()));
+            }
         }
+
         if (null != transMessages.getMessages()) {
             messageNum = transMessages.getMessages().size();
             String messageValue = "";
@@ -127,7 +165,7 @@ public class I18nTransMessageOperator {
                     i18nTransMessageEntity.setMessage(messageValue);
                     resultNum += i18nTransMessageDao.updateById(i18nTransMessageEntity);
                 } else {
-                    resultNum += i18nTransMessageDao.insert(new I18nTransMessageEntity(dictionaryEntity.getDictionaryId(), entry.getKey(), messageValue));
+                    resultNum += i18nTransMessageDao.insert(new I18nTransMessageEntity(dictionaryId, entry.getKey(), messageValue));
                 }
             }
         }

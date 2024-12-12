@@ -21,6 +21,7 @@ package io.innospots.libra.kernel.module.i18n.converter;
 import io.innospots.base.converter.BaseBeanConverter;
 import io.innospots.libra.kernel.module.i18n.entity.I18nDictionaryEntity;
 import io.innospots.libra.kernel.module.i18n.model.I18nDictionary;
+import io.innospots.libra.kernel.module.i18n.model.TransMessageForm;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -42,6 +43,13 @@ public interface I18nDictionaryConverter extends BaseBeanConverter<I18nDictionar
     @Mapping(target = "dictionaryId", ignore = true)
     void updateEntity4Model(@MappingTarget I18nDictionaryEntity entity, I18nDictionary model);
 
+    static I18nDictionaryEntity formToEntity(TransMessageForm messageForm){
+        I18nDictionaryEntity entity = new I18nDictionaryEntity();
+        entity.setCode(messageForm.getCode());
+        entity.setApp(messageForm.getApp());
+        entity.setModule(messageForm.getModule());
+        return entity;
+    }
 
     List<I18nDictionary> entityToModelList(List<I18nDictionaryEntity> entityList);
 }

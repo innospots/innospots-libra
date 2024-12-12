@@ -49,7 +49,7 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 public class SystemUpdateInfoController extends BaseController {
 
     @GetMapping
-    @Operation(summary = "get system update info")
+    @Operation(description = "get system update info")
     public R<SystemUpdateInfo> getSystemUpdateInfo() {
         SystemUpdateInfo updateInfo = new SystemUpdateInfo();
         LibraExtensionProperties libraProperties = LibraClassPathExtPropertiesLoader.getLibraKernelProperties();

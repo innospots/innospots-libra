@@ -52,7 +52,7 @@ public class LoginAuthController extends BaseController {
 
 
     @PostMapping
-    @Operation(summary = "login", description = "authenticate userName and password")
+    @Operation(description = "authenticate userName and password")
     public R<AuthToken> authenticate(@RequestBody LoginRequest request) {
 
         Authentication authentication = authenticationProvider.authenticate(request);
@@ -60,7 +60,7 @@ public class LoginAuthController extends BaseController {
     }
 
     @GetMapping(path = "public-key")
-    @Operation(summary = "get public key", description = "get public key")
+    @Operation(description = "get public key")
     public R<String> getPublicKey() {
         return success(innospotsConfigProperties.getPublicKey());
     }

@@ -61,7 +61,7 @@ public class I18nCurrencyController extends BaseController {
     @PostMapping
     @OperationLog(operateType = OperateType.CREATE, primaryField = "code")
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
-    @Operation(summary = "create i18n currency")
+    @Operation(description = "create i18n currency")
     public R<Boolean> createCurrency(@Valid @RequestBody I18nCurrency i18nCurrency) {
         if (i18nCurrency.getStatus() == null) {
             i18nCurrency.setStatus(ONLINE);
@@ -73,7 +73,7 @@ public class I18nCurrencyController extends BaseController {
     @OperationLog(operateType = OperateType.UPDATE_STATUS, idParamPosition = 0)
     @PutMapping("{currencyId}/status/{status}")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}", label = "${common.button.status}")
-    @Operation(summary = "update i18n currency status")
+    @Operation(description = "update i18n currency status")
     public R<Boolean> updateStatus(@PathVariable Integer currencyId, @PathVariable Boolean status) {
         DataStatus dataStatus = status ? ONLINE : OFFLINE;
         return success(i18nCurrencyOperator.updateStatus(currencyId, dataStatus));
@@ -82,7 +82,7 @@ public class I18nCurrencyController extends BaseController {
     @OperationLog(operateType = OperateType.DELETE, idParamPosition = 0)
     @DeleteMapping("{currencyId}")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
-    @Operation(summary = "delete i18n currency")
+    @Operation(description = "delete i18n currency")
     public R<Boolean> deleteCurrency(@PathVariable Integer currencyId) {
 
         return success(i18nCurrencyOperator.updateStatus(currencyId, REMOVED));
@@ -91,14 +91,14 @@ public class I18nCurrencyController extends BaseController {
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "currencyId", idParamPosition = 0)
     @PutMapping
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
-    @Operation(summary = "update i18n currency")
+    @Operation(description = "update i18n currency")
     public R<Boolean> updateCurrency(@Valid @RequestBody I18nCurrency i18nCurrency) {
 
         return success(i18nCurrencyOperator.updateCurrency(i18nCurrency));
     }
 
     @GetMapping("page")
-    @Operation(summary = "page of i18n currency")
+    @Operation(description = "page of i18n currency")
     public R<PageBody<I18nCurrency>> pageCurrencies(FormQuery formRequest) {
         return success(i18nCurrencyOperator.pageCurrencies(formRequest));
     }
@@ -108,7 +108,7 @@ public class I18nCurrencyController extends BaseController {
      * @return
      */
     @GetMapping("list")
-    @Operation(summary = "list of i18n currency")
+    @Operation(description = "list of i18n currency")
     public R<List<I18nCurrency>> listCurrencies(@RequestParam(defaultValue = "ONLINE") DataStatus dataStatus) {
         return success(i18nCurrencyOperator.listCurrencies(dataStatus));
     }

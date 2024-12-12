@@ -41,19 +41,19 @@ public class ApproveProposerController {
         this.approveFlowRuntimeContainer = approveFlowRuntimeContainer;
     }
 
-    @Operation(summary = "create or save approve form data")
+    @Operation(description = "create or save approve form data")
     @PostMapping("save")
     public R<ApproveFlowInstance> save(@RequestBody ApproveForm approveForm) {
         return R.success(approveFlowInstanceOperator.save(approveForm));
     }
 
-    @Operation(summary = "update removed status")
+    @Operation(description = "update removed status")
     @DeleteMapping("/key/{approveInstanceKey}")
     public R<Boolean> remove(@PathVariable String approveInstanceKey) {
         return R.success(approveFlowInstanceOperator.remove(approveInstanceKey));
     }
 
-    @Operation(summary = "page proposer instances by request")
+    @Operation(description = "page proposer instances by request")
     @GetMapping("page")
     public R<PageBody<ApproveFlowInstanceBase>> pageByProposer(
             @RequestParam(required = false) String approveType,
@@ -76,19 +76,19 @@ public class ApproveProposerController {
         return R.success(approveFlowInstanceOperator.page(approveRequest, true, false));
     }
 
-    @Operation(summary = "get approve instance by approve instance key")
+    @Operation(description = "get approve instance by approve instance key")
     @GetMapping("/key/{approveInstanceKey}")
     public R<ApproveFlowInstance> findOne(@PathVariable String approveInstanceKey) {
         return R.success(approveFlowInstanceOperator.findOne(approveInstanceKey));
     }
 
-    @Operation(summary = "start approve flow")
+    @Operation(description = "start approve flow")
     @PostMapping("start/{approveInstanceKey}")
     public R<ApproveFlowInstance> start(@PathVariable String approveInstanceKey){
         return R.success(approveFlowRuntimeContainer.start(approveInstanceKey));
     }
 
-    @Operation(summary = "revoke approve flow")
+    @Operation(description = "revoke approve flow")
     @PostMapping("revoke/{approveInstanceKey}")
     public R<Boolean> revoke(@PathVariable String approveInstanceKey, String message){
         return R.success(approveFlowRuntimeContainer.revoke(approveInstanceKey, message));

@@ -48,21 +48,21 @@ public class JobExecutionController {
     }
 
     @GetMapping("page")
-    @Operation(summary = "page job executions")
+    @Operation(description = "page job executions")
     public R<PageBody<JobExecution>> pageJobExecutions(
             ExecutionFormQuery executionFormQuery) {
         return R.success(jobExecutionOperator.
                 pageJobExecutions(executionFormQuery));
     }
 
-    @Operation(summary = "get job execution")
+    @Operation(description = "get job execution")
     @GetMapping("{jobExecutionId}")
     public R<JobExecution> getJobExecution(@PathVariable String jobExecutionId,
                                            @RequestParam(required = false,defaultValue = "true") boolean includeSub) {
         return R.success(jobExecutionOperator.getJobExecution(jobExecutionId, includeSub));
     }
 
-    @Operation(summary = "update job execution status")
+    @Operation(description = "update job execution status")
     @PutMapping("{jobExecutionId}/status/{status}")
     public R<Boolean> updateStatus(@PathVariable String jobExecutionId,
                                    @PathVariable ExecutionStatus status,

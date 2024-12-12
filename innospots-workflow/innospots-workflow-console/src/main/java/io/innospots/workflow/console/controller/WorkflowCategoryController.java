@@ -59,7 +59,7 @@ public class WorkflowCategoryController extends BaseController {
 
     @OperationLog(operateType = OperateType.CREATE, idParamPosition = 0)
     @PostMapping
-    @Operation(summary = "create workflow category")
+    @Operation(description = "create workflow category")
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${page.category.add.title}")
     public R<BaseCategory> createCategory(
             @Parameter(required = true, name = "categoryName") @RequestParam("categoryName") String categoryName,
@@ -71,7 +71,7 @@ public class WorkflowCategoryController extends BaseController {
 
     @OperationLog(operateType = OperateType.UPDATE, idParamPosition = 0)
     @PutMapping("{categoryId}")
-    @Operation(summary = "update strategy category")
+    @Operation(description = "update strategy category")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${page.category.edit.title}")
     public R<Boolean> updateCategory(@Parameter(required = true, name = "categoryId") @PathVariable Integer categoryId,
                                      @Parameter(required = true, name = "categoryName") @RequestParam("categoryName") String categoryName) {
@@ -81,7 +81,7 @@ public class WorkflowCategoryController extends BaseController {
 
     @OperationLog(operateType = OperateType.DELETE, idParamPosition = 0)
     @DeleteMapping("{categoryId}")
-    @Operation(summary = "delete workflow category")
+    @Operation(description = "delete workflow category")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.category.delete.title}")
     public R<Boolean> deleteCategory(@Parameter(required = true, name = "categoryId") @PathVariable Integer categoryId) {
         return success(workflowCategoryOperator.deleteCategory(categoryId));
@@ -89,7 +89,7 @@ public class WorkflowCategoryController extends BaseController {
 
 
     @GetMapping
-    @Operation(summary = "workflow category list", description = "param：0-strategy category has no value 1-it has value")
+    @Operation(description = "param：0-strategy category has no value 1-it has value")
     public R<List<BaseCategory>> listCategories(
             @Parameter(required = true, name = "hasNumber") @RequestParam(value = "hasNumber",required = false,defaultValue = "true") Boolean hasNumber,
             @Parameter(required = false, name = "workflowType") @RequestParam(name = "workflowType", required = false, defaultValue = "EVENTS") WorkflowType workflowType
@@ -100,7 +100,7 @@ public class WorkflowCategoryController extends BaseController {
     }
 
     @GetMapping("check/{categoryName}")
-    @Operation(summary = "check name duplicate", description = "return: true = duplicate,false = not duplicate")
+    @Operation(description = "return: true = duplicate,false = not duplicate")
     public R<Boolean> checkNameExist(
             @Parameter(required = true, name = "categoryName") @PathVariable String categoryName,
             @Parameter(required = false, name = "workflowType") @RequestParam(name = "workflowType", required = false, defaultValue = "EVENTS") WorkflowType workflowType

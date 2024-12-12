@@ -69,7 +69,7 @@ public class UserController extends BaseController {
     @PostMapping
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
     @OperationLog(operateType = OperateType.CREATE, primaryField = "userId")
-    @Operation(summary = "create user")
+    @Operation(description = "create user")
     public R<UserInfo> createUser(@Parameter(name = "user", required = true) @Validated @RequestBody UserForm user) {
 
         UserInfo userInfo = userService.createUser(user);
@@ -79,7 +79,7 @@ public class UserController extends BaseController {
     @PutMapping
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
     @OperationLog(primaryField = "userId", operateType = OperateType.UPDATE)
-    @Operation(summary = "update user")
+    @Operation(description = "update user")
     public R<Boolean> updateUser(@Parameter(name = "user", required = true) @Validated @RequestBody UserForm user) {
 
         Boolean update = userService.updateUser(user);
@@ -89,7 +89,7 @@ public class UserController extends BaseController {
     @DeleteMapping("{userId}")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @OperationLog(idParamPosition = 0, operateType = OperateType.DELETE)
-    @Operation(summary = "delete user")
+    @Operation(description = "delete user")
     public R<Boolean> deleteUser(@Parameter(name = "userId", required = true) @PathVariable Integer userId) {
 
         Boolean delete = userService.deleteUser(userId);
@@ -97,7 +97,7 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("{userId}")
-    @Operation(summary = "view user")
+    @Operation(description = "view user")
     public R<UserInfo> getUser(@Parameter(name = "userId", required = true) @PathVariable Integer userId) {
 
         UserInfo view = userService.getUser(userId);
@@ -105,7 +105,7 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("page")
-    @Operation(summary = "query user")
+    @Operation(description = "query user")
     public R<PageBody<UserInfo>> pageUsers(FormQuery request) {
         PageBody<UserInfo> pageModel = userService.pageUsers(request);
         return success(pageModel);
@@ -114,7 +114,7 @@ public class UserController extends BaseController {
     @OperationLog(operateType = OperateType.UPLOAD)
     @PostMapping(value = "avatar")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}", label = "${setting.account.button.header}")
-    @Operation(summary = "upload avatar")
+    @Operation(description = "upload avatar")
     public R<String> uploadAvatar(@Parameter(name = "image", required = true) @RequestParam("image") MultipartFile uploadFile) {
 
         return success(userService.uploadAvatar(uploadFile));
@@ -123,7 +123,7 @@ public class UserController extends BaseController {
     @PutMapping("password")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}", label = "${setting.password.button.update}")
     @OperationLog(primaryField = "userId", operateType = OperateType.UPDATE)
-    @Operation(summary = "change user password")
+    @Operation(description = "change user password")
     public R<Boolean> changePassword(@Parameter(name = "user password", required = true) @Valid @RequestBody UserPassword userPassword) {
 
         Boolean update = userOperator.changePassword(userPassword);
@@ -134,7 +134,7 @@ public class UserController extends BaseController {
     @PutMapping("{userId}/status/{userStatus}")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}", label = "${member.slip.status.button.update}")
     @OperationLog(idParamPosition = 0, operateType = OperateType.UPDATE_STATUS)
-    @Operation(summary = "enable/disabled user")
+    @Operation(description = "enable/disabled user")
     public R<Boolean> updateUserStatus(@Parameter(required = true, name = "userId") @PathVariable Integer userId,
                                        @Parameter(required = true, name = "userStatus") @PathVariable DataStatus userStatus) {
 
@@ -143,13 +143,13 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("related-user")
-    @Operation(summary = "get related user")
+    @Operation(description = "get related user")
     public R<List<Integer>> getRelatedUser() {
         return success(userService.getRelatedUser());
     }
 
     @GetMapping("admin")
-    @Operation(summary = "whether the current user is admin")
+    @Operation(description = "whether the current user is admin")
     public R<Boolean> isAdmin() {
         return success(userService.currentUserAdminRole());
     }

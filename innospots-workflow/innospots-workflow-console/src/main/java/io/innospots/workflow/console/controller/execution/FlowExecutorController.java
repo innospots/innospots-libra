@@ -53,7 +53,7 @@ public class FlowExecutorController {
 
     @OperationLog(operateType = OperateType.EXECUTE, idParamPosition = 0)
     @PostMapping("workflow-instance/{workflowInstanceId}")
-    @Operation(summary = "execute flow")
+    @Operation(description = "execute flow")
     @ResourceItemOperation(key = "workflow-builder-execute", type = BUTTON, name = "${common.button.run}")
     public R<Map<String, NodeExecutionDisplay>> executeFlow(@Parameter(name = "workflowInstanceId") @PathVariable Long workflowInstanceId,
                                                             @Parameter(name = "input") @RequestBody(required = false) Map<String, Object> input) {
@@ -62,7 +62,7 @@ public class FlowExecutorController {
 
     @OperationLog(operateType = OperateType.EXECUTE, idParamPosition = 0)
     @PostMapping("workflow-instance/{workflowInstanceId}/node-instance/{nodeKey}/data")
-    @Operation(summary = "execute this node using json input")
+    @Operation(description = "execute this node using json input")
     @ResourceItemOperation(key = "workflow-builder-execute")
     public R<Map<String, NodeExecutionDisplay>> executeNode(@Parameter(name = "workflowInstanceId") @PathVariable Long workflowInstanceId,
                                                             @Parameter(name = "nodeKey") @PathVariable String nodeKey,
@@ -72,7 +72,7 @@ public class FlowExecutorController {
 
     @OperationLog(operateType = OperateType.EXECUTE, idParamPosition = 0)
     @PostMapping("workflow-instance/{workflowInstanceId}/node-instance/{nodeKey}/data-list")
-    @Operation(summary = "execute this node using array input")
+    @Operation(description = "execute this node using array input")
     @ResourceItemOperation(key = "workflow-builder-execute")
     public R<Map<String, NodeExecutionDisplay>> executeNode(@Parameter(name = "workflowInstanceId") @PathVariable Long workflowInstanceId,
                                                             @Parameter(name = "nodeKey") @PathVariable String nodeKey,
@@ -86,7 +86,7 @@ public class FlowExecutorController {
 
     @OperationLog(operateType = OperateType.EXECUTE, idParamPosition = 0)
     @PostMapping("workflow-instance/{workflowInstanceId}/node-instance/output")
-    @Operation(summary = "node execution output display")
+    @Operation(description = "node execution output display")
     @ResourceItemOperation(key = "workflow-builder-execute")
     public R<Map<String, NodeExecutionDisplay>> nodeExecutionOutput(@Parameter(name = "workflowInstanceId") @PathVariable Long workflowInstanceId,
                                                                     @Parameter(name = "nodeKeys") @RequestBody(required = false) List<String> nodeKeys) {
@@ -95,14 +95,14 @@ public class FlowExecutorController {
     }
 
     @GetMapping("current/{workflowInstanceId}")
-    @Operation(summary = "current workflow execution")
+    @Operation(description = "current workflow execution")
     public R<FlowExecutionBase> currentFlowExecution(@PathVariable Long workflowInstanceId) {
         return success(FlowNodeDebuggerBuilder.build("nodeDebugger").currentExecuting(workflowInstanceId));
     }
 
     @OperationLog(operateType = OperateType.UPDATE, idParamPosition = 0)
     @PostMapping("stop/flow-execution/{workflowExecutionId}")
-    @Operation(summary = "stop workflow execution")
+    @Operation(description = "stop workflow execution")
     @ResourceItemOperation(key = "workflow-builder-execute")
     public R<FlowExecutionBase> currentFlowExecution(@PathVariable String workflowExecutionId) {
         return success(FlowNodeDebuggerBuilder.build("nodeDebugger").stop(workflowExecutionId));
@@ -110,7 +110,7 @@ public class FlowExecutorController {
 
     @OperationLog(operateType = OperateType.UPDATE, idParamPosition = 0)
     @PostMapping("stop/workflow/{flowKey}")
-    @Operation(summary = "stop current executing workflow by key")
+    @Operation(description = "stop current executing workflow by key")
     @ResourceItemOperation(key = "workflow-builder-execute")
     public R<FlowExecutionBase> stopWorkflowByKey(@PathVariable String flowKey) {
         return success(FlowNodeDebuggerBuilder.build("nodeDebugger").stop(flowKey));

@@ -75,7 +75,7 @@ public class RoleController extends BaseController {
     @PostMapping
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
     @OperationLog(operateType = OperateType.CREATE, primaryField = "roleId")
-    @Operation(summary = "create role")
+    @Operation(description = "create role")
     public R<RoleInfo> createRole(@Parameter(name = "role", required = true) @Valid @RequestBody RoleInfo role) {
 
         RoleInfo save = roleOperator.createRole(role);
@@ -85,7 +85,7 @@ public class RoleController extends BaseController {
     @PutMapping
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "roleId")
-    @Operation(summary = "update role")
+    @Operation(description = "update role")
     public R<Boolean> updateRole(@Parameter(name = "role", required = true) @Valid @RequestBody RoleInfo role) {
 
         Boolean update = roleOperator.updateRole(role);
@@ -96,7 +96,7 @@ public class RoleController extends BaseController {
     @DeleteMapping("{roleId}")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @OperationLog(operateType = OperateType.DELETE, idParamPosition = 0)
-    @Operation(summary = "delete role", description = "delete role")
+    @Operation(description = "delete role")
     public R<Boolean> deleteRole(@Parameter(name = "roleId", required = true) @PathVariable Integer roleId) {
 
         Boolean delete = userRoleService.deleteRole(roleId);
@@ -104,7 +104,7 @@ public class RoleController extends BaseController {
     }
 
     @GetMapping("{roleId}")
-    @Operation(summary = "get role info")
+    @Operation(description = "get role info")
     public R<RoleInfo> getRole(@Parameter(name = "roleId", required = true) @PathVariable Integer roleId) {
 
         RoleInfo view = roleOperator.getRole(roleId);
@@ -112,14 +112,14 @@ public class RoleController extends BaseController {
     }
 
     @GetMapping("page")
-    @Operation(summary = "role list")
+    @Operation(description = "role list")
     public R<PageBody<RoleInfo>> pageRoles(FormQuery request) {
         PageBody<RoleInfo> pageModel = userRoleService.pageRoles(request);
         return success(pageModel);
     }
 
     @GetMapping("{roleId}/users")
-    @Operation(summary = "role user list")
+    @Operation(description = "role user list")
     public R<List<SimpleUser>> listRoleUsers(@PathVariable Integer roleId) {
         List<SimpleUser> users = userRoleService.listRoleUsers(roleId);
         return success(users);
@@ -128,7 +128,7 @@ public class RoleController extends BaseController {
     @PostMapping("{roleId}/user")
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}", label = "${role.list.button.add_member}")
     @OperationLog(operateType = OperateType.ADD, idParamPosition = 0)
-    @Operation(summary = "batch add user role")
+    @Operation(description = "batch add user role")
     public R<List<SimpleUser>> addUserRole(@Parameter(name = "roleId", required = true) @PathVariable Integer roleId,
                                            @RequestBody UserRole userRole) {
         userRoleOperator.saveUserRoles(userRole.getUserIds(), singletonList(roleId));
@@ -138,7 +138,7 @@ public class RoleController extends BaseController {
     @DeleteMapping("{roleId}/user/{userId}")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.update}", label = "${role.list.button.delete_member}")
     @OperationLog(operateType = OperateType.CREATE, primaryField = "roleId")
-    @Operation(summary = "delete user role")
+    @Operation(description = "delete user role")
     public R<Boolean> deleteUserRole(@Parameter(name = "roleId", required = true) @PathVariable Integer roleId,
                                      @Parameter(name = "userId", required = true) @PathVariable Integer userId) {
         Boolean delete = userRoleOperator.delete(userId, roleId);

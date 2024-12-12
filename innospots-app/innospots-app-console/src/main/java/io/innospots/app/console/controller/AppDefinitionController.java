@@ -34,7 +34,7 @@ public class AppDefinitionController extends BaseController {
     }
 
     @GetMapping("{appKey}")
-    @Operation(summary = "get application")
+    @Operation(description = "get application")
     public R<AppDefinition> getAppDefinition(
             @Parameter(required = true, name = "appKey") @PathVariable String appKey) {
         AppDefinition appDefinition = appDefinitionOperator.getAppDefinition(appKey);
@@ -42,7 +42,7 @@ public class AppDefinitionController extends BaseController {
     }
 
     @PostMapping
-    @Operation(summary = "create application")
+    @Operation(description = "create application")
     public R<AppDefinition> createAppDefinition(
             @Parameter(required = true, name = "createAppFrom") @RequestBody CreateAppFrom createAppFrom) {
         AppDefinition appDefinition = appDefinitionOperator.createAppDefinition(createAppFrom);
@@ -50,26 +50,26 @@ public class AppDefinitionController extends BaseController {
     }
 
     @PutMapping
-    @Operation(summary = "update application")
+    @Operation(description = "update application")
     public R<AppDefinition> updateAppDefinition(@RequestBody AppDefinition appDefinition) {
         AppDefinition updateAppDefinition = appDefinitionOperator.updateAppDefinition(appDefinition);
         return R.success(updateAppDefinition);
     }
 
     @PutMapping("{appKey}/status/{status}")
-    @Operation(summary = "update application status")
+    @Operation(description = "update application status")
     public R<Boolean> updateStatus(@PathVariable String appKey, @PathVariable DataStatus status) {
         return R.success(appDefinitionOperator.updateStatus(appKey, status));
     }
 
     @DeleteMapping("{appKey}")
-    @Operation(summary = "delete application")
+    @Operation(description = "delete application")
     public R<Boolean> deleteAppDefinition(@PathVariable String appKey) {
         return R.success(appDefinitionOperator.deleteAppDefinition(appKey));
     }
 
     @GetMapping("page")
-    @Operation(summary = "application page")
+    @Operation(description = "application page")
     public R<PageBody<AppDefinition>> pageAppInfos(AppQueryRequest queryRequest) {
         return R.success(appDefinitionOperator.pageAppInfos(queryRequest));
     }

@@ -30,32 +30,32 @@ public class SysDictionaryController {
         this.sysDictionaryOperator = sysDictionaryOperator;
     }
 
-    @Operation(summary = "Query Dictionary List")
+    @Operation(description = "Query Dictionary List")
     @GetMapping("list/{type}")
     public R<List<SysDictionary>> listDictionaries(@PathVariable String type) {
         return R.success(sysDictionaryOperator.list(type));
     }
 
-    @Operation(summary = "Save Dictionary List")
+    @Operation(description = "Save Dictionary List")
     @PostMapping("save")
     public R<List<SysDictionary>> saveDictionary(@RequestBody SysDictTypeGroup sysDictTypeGroup) {
         return R.success(sysDictionaryOperator.save(sysDictTypeGroup));
     }
 
-    @Operation(summary = "Delete Dictionary")
+    @Operation(description = "Delete Dictionary")
     @PostMapping("delete-item/{type}")
     public R<Boolean> deleteDictionary(@PathVariable String type, @RequestParam String code) {
         return R.success(sysDictionaryOperator.delete(type, code));
     }
 
-    @Operation(summary = "Delete Dictionary Type")
+    @Operation(description = "Delete Dictionary Type")
     @PostMapping("delete-type/{type}")
     public R<Boolean> deleteDictionary(@PathVariable String type) {
         return R.success(sysDictionaryOperator.delete(type));
     }
 
     @GetMapping("list-types")
-    @Operation(summary = "Query Dictionary Type List")
+    @Operation(description = "Query Dictionary Type List")
     public R<List<SysDictionaryType>> listTypes() {
         return R.success(sysDictionaryOperator.listTypes());
     }

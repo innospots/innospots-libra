@@ -63,7 +63,7 @@ public class TodoTaskCommentController extends BaseController {
     @PostMapping
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
     @OperationLog(operateType = OperateType.CREATE, primaryField = "commentId")
-    @Operation(summary = "create task comment")
+    @Operation(description = "create task comment")
     public R<TodoTaskComment> createTodoTaskComment(@Parameter(name = "todoTaskComment", required = true) @Validated @RequestBody TodoTaskComment todoTaskComment) {
 
         TodoTaskComment create = todoTaskCommentOperator.createTodoTaskComment(todoTaskComment);
@@ -71,7 +71,7 @@ public class TodoTaskCommentController extends BaseController {
     }
 
     @GetMapping("{taskId}")
-    @Operation(summary = "view task with comment")
+    @Operation(description = "view task with comment")
     public R<TodoTask> getTodoTaskWithComment(@Parameter(name = "taskId", required = true) @PathVariable Integer taskId) {
 
         TodoTask view = todoTaskService.getTodoTaskWithComment(taskId);
@@ -81,7 +81,7 @@ public class TodoTaskCommentController extends BaseController {
     @DeleteMapping("{commentId}")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @OperationLog(idParamPosition = 0, operateType = OperateType.DELETE)
-    @Operation(summary = "delete task comment")
+    @Operation(description = "delete task comment")
     public R<Boolean> deleteTodoTaskComment(@Parameter(name = "commentId", required = true) @PathVariable Integer commentId) {
 
         Boolean delete = todoTaskCommentOperator.deleteTodoTaskComment(commentId);
@@ -91,7 +91,7 @@ public class TodoTaskCommentController extends BaseController {
     //    @OperationLog(operateType = OperateType.UPLOAD)
     @PostMapping(value = "image")
 //    @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
-    @Operation(summary = "upload image")
+    @Operation(description = "upload image")
     public R<List<String>> uploadImage(@Parameter(name = "images", required = true) @RequestParam("images") List<MultipartFile> uploadFiles) {
 
         return success(todoTaskCommentOperator.uploadImage(uploadFiles));

@@ -49,7 +49,7 @@ public class ConnectorSchemaController {
     }
 
     @GetMapping("config/list")
-    @Operation(summary = "config list", description = "Query Config list")
+    @Operation(description = "Query Config list")
     public R<List<ConnectionMinderSchema>> configList() {
         List<ConnectionMinderSchema> schemaList = ConnectionMinderSchemaLoader.connectionMinderSchemas();
         return success(schemaList);

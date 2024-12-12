@@ -20,19 +20,21 @@ package io.innospots.libra.kernel.module.i18n.controller;
 
 import io.innospots.base.model.response.R;
 import io.innospots.libra.base.controller.BaseController;
+import io.innospots.libra.base.log.OperateType;
+import io.innospots.libra.base.log.OperationLog;
 import io.innospots.libra.base.menu.ModuleMenu;
+import io.innospots.libra.base.menu.ResourceItemOperation;
 import io.innospots.libra.kernel.module.i18n.operator.I18nDictionaryOperator;
+import io.innospots.libra.kernel.module.i18n.operator.I18nTransMessageOperator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 import static io.innospots.base.model.response.R.success;
 import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
+import static io.innospots.libra.base.menu.ItemType.BUTTON;
 
 /**
  * @author Smars
@@ -46,29 +48,39 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 @Tag(name = "I18n Dictionary")
 public class I18nDictionaryController extends BaseController {
 
-    private I18nDictionaryOperator i18nDictionaryOperator;
+    private final I18nDictionaryOperator i18nDictionaryOperator;
+    private final I18nTransMessageOperator i18nTransMessageOperator;
 
-    public I18nDictionaryController(I18nDictionaryOperator i18nDictionaryOperator) {
+    public I18nDictionaryController(I18nDictionaryOperator i18nDictionaryOperator, I18nTransMessageOperator i18nTransMessageOperator) {
         this.i18nDictionaryOperator = i18nDictionaryOperator;
+        this.i18nTransMessageOperator = i18nTransMessageOperator;
     }
 
 
     @GetMapping("list-app")
-    @Operation(summary = "list app of i18n dictionary")
+    @Operation(description = "list app of i18n dictionary")
     public R<List<String>> listApp() {
         return success(i18nDictionaryOperator.listApps());
     }
 
     @GetMapping("list-module")
-    @Operation(summary = "list module of i18n dictionary")
+    @Operation(description = "list module of i18n dictionary")
     public R<List<String>> listModule() {
         return success(i18nDictionaryOperator.listModules());
     }
 
     @GetMapping("list-module/app/{app}")
-    @Operation(summary = "list module of i18n dictionary by app")
+    @Operation(description = "list module of i18n dictionary by app")
     public R<List<String>> listModule(@PathVariable String app) {
         return success(i18nDictionaryOperator.listModulesByAppName(app));
+    }
+
+    @OperationLog(operateType = OperateType.DELETE)
+    @DeleteMapping("{dictionaryId}")
+    @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
+    @Operation(description = "delete dictionary and translate message")
+    public R<Boolean> deleteDictionary(@PathVariable Integer dictionaryId){
+        return success(i18nTransMessageOperator.deleteTransMessage(dictionaryId));
     }
 
 }

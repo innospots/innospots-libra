@@ -47,7 +47,7 @@ public class CredentialOauth2Controller {
     }
 
     @GetMapping("callback/{credentialTypeCode}")
-    @Operation(summary = "oauth2 credential callback")
+    @Operation(description = "oauth2 credential callback")
     public String callback(
             @Parameter(name = "credentialTypeCode") @PathVariable String credentialTypeCode,
             @Parameter(name = "code") @RequestParam("code") String code,
@@ -58,7 +58,7 @@ public class CredentialOauth2Controller {
 
 //    @Deprecated
 //    @GetMapping("status/{clientId}/{clientSecret}")
-//    @Operation(summary = "oauth2 credential status")
+//    @Operation(description = "oauth2 credential status")
 //    public InnospotResponse<Boolean> result(
 //            @Parameter(name = "clientId") @PathVariable("clientId") String clientId,
 //            @Parameter(name = "clientSecret") @PathVariable("clientSecret") String clientSecret

@@ -57,7 +57,7 @@ public class NotificationMessageController extends BaseController {
     }
 
     @GetMapping("page")
-    @Operation(summary = "page message")
+    @Operation(description = "page message")
     public R<PageBody<NotificationMessage>> pageMessages(MessageFormQuery request) {
         PageBody<NotificationMessage> pageModel = notificationMessageOperator.pageMessages(request);
         return success(pageModel);
@@ -65,7 +65,7 @@ public class NotificationMessageController extends BaseController {
 
     @PutMapping("read")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}", label = "${message.list.button.read}")
-    @Operation(summary = "mark read")
+    @Operation(description = "mark read")
     public R<Boolean> updateMessage(@Parameter(name = "messageIds") @RequestBody List<String> messageIds) {
 
         Boolean update = notificationMessageOperator.updateMessage(messageIds);
@@ -73,7 +73,7 @@ public class NotificationMessageController extends BaseController {
     }
 
     @GetMapping("count/unread")
-    @Operation(summary = "count unread message")
+    @Operation(description = "count unread message")
     public R<Long> countUnreadMessage() {
         return success(notificationMessageOperator.countUnreadMessage());
     }
@@ -81,7 +81,7 @@ public class NotificationMessageController extends BaseController {
     @OperationLog(operateType = OperateType.DELETE)
     @DeleteMapping
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
-    @Operation(summary = "delete message")
+    @Operation(description = "delete message")
     public R<Boolean> deleteMessage(@Parameter(name = "messageIds") @RequestBody List<Integer> messageIds) {
 
         Boolean delete = notificationMessageOperator.deleteMessage(messageIds);

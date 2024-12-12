@@ -60,7 +60,7 @@ public class TempTokenController {
 
     /*
     @GetMapping("{userId}/{orgId}")
-    @Operation(summary = "temp user token using orgId")
+    @Operation(description = "temp user token using orgId")
     public InnospotResponse<String> tempToken(@Parameter(name = "userId", required = true) @PathVariable Integer userId,
                                    @PathVariable Integer orgId) {
 
@@ -75,7 +75,7 @@ public class TempTokenController {
      */
 
     @GetMapping("{userId}")
-    @Operation(summary = "temp user token")
+    @Operation(description = "temp user token")
     public R<String> tempToken(@Parameter(name = "userId", required = true) @PathVariable Integer userId) {
 
         AuthUser authUser = authUserOperator.view(AuthUser.builder().userId(userId).build());
@@ -84,7 +84,7 @@ public class TempTokenController {
     }
 
     @GetMapping("getCoupon")
-    @Operation(summary = "n8n策略流测试，后面会删除")
+    @Operation(description = "n8n策略流测试，后面会删除")
     public Map<String, String> getCoupon(@RequestParam String customerName, @RequestParam String mobileNo) {
         Map<String, String> couponMap = new HashMap<>();
         couponMap.put("customerName", customerName);
@@ -94,7 +94,7 @@ public class TempTokenController {
     }
 
     @GetMapping("getMessage")
-    @Operation(summary = "n8n发送短信测试，后面会删除")
+    @Operation(description = "n8n发送短信测试，后面会删除")
     public String getMessage(@RequestParam String message, @RequestParam String mobileNo) {
         logger.info("message: {}， mobileNo: {}", message, mobileNo);
         return "发送成功";

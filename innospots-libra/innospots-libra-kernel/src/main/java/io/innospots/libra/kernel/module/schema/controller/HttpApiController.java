@@ -65,7 +65,7 @@ public class HttpApiController extends BaseController {
     @OperationLog(operateType = OperateType.CREATE, primaryField = "registryId")
     @PostMapping
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
-    @Operation(summary = "create http api registry")
+    @Operation(description = "create http api registry")
     public R<ApiSchemaRegistry> createHttpApi(@Validated @RequestBody ApiSchemaRegistry apiSchemaRegistry) {
 
         ApiSchemaRegistry save = httpApiOperator.createApiRegistry(apiSchemaRegistry);
@@ -75,7 +75,7 @@ public class HttpApiController extends BaseController {
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "registryId")
     @PutMapping
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
-    @Operation(summary = "update http api")
+    @Operation(description = "update http api")
     public R<ApiSchemaRegistry> updateHttpApi(@Validated @RequestBody ApiSchemaRegistry apiSchemaRegistry) {
         ApiSchemaRegistry update = httpApiOperator.updateApiRegistry(apiSchemaRegistry);
         return success(update);
@@ -84,21 +84,21 @@ public class HttpApiController extends BaseController {
     @OperationLog(operateType = OperateType.DELETE, idParamPosition = 0)
     @DeleteMapping("{registryId}")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
-    @Operation(summary = "delete http api")
+    @Operation(description = "delete http api")
     public R<Boolean> deleteHttpApi(@Parameter(name = "registryId") @PathVariable String registryId) {
         Boolean delete = httpApiOperator.deleteApiRegistry(registryId);
         return success(delete);
     }
 
     @GetMapping("{registryId}")
-    @Operation(summary = "get api registry by id")
+    @Operation(description = "get api registry by id")
     public R<ApiSchemaRegistry> getHttpApiById(@Parameter(name = "registryId") @PathVariable String registryId) {
         ApiSchemaRegistry apiSchemaRegistry = httpApiOperator.getApiRegistry(registryId);
         return success(apiSchemaRegistry);
     }
 
     @GetMapping
-    @Operation(summary = "list api registry")
+    @Operation(description = "list api registry")
     public R<List<ApiSchemaRegistry>> listHttpApi(
             @Parameter(name = "queryCode") @RequestParam(value = "queryCode", required = false) String queryCode,
             @Parameter(name = "sort", description = "sort field") @RequestParam(value = "sort", required = false, defaultValue = "createdTime") String sort) {
@@ -109,7 +109,7 @@ public class HttpApiController extends BaseController {
 
     @OperationLog(operateType = OperateType.FETCH, primaryField = "registryId", idParamPosition = 0)
     @PostMapping("fetch-sample")
-    @Operation(summary = "http api fetch-sample")
+    @Operation(description = "http api fetch-sample")
     public R<Object> fetchSample(@Validated @RequestBody ApiSchemaRegistry apiSchemaRegistry) {
         ConnectionCredential connectionCredential = connectionCredentialReader.readCredential(apiSchemaRegistry.getCredentialKey());
         HttpConnection httpConnection = new HttpConnection(connectionCredential);

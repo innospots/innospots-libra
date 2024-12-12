@@ -67,7 +67,7 @@ public class WorkflowBuilderController extends BaseController {
      */
     @GetMapping("{workflowInstanceId}/revision/{revision}")
     @ResourceItemOperation(type = BUTTON, icon = "edit", name = "${common.button.edit}")
-    @Operation(summary = "get flow instance by revision")
+    @Operation(description = "get flow instance by revision")
     public R<WorkflowBaseBody> getFlowInstanceByRevision(@PathVariable Long workflowInstanceId,
                                                          @PathVariable Integer revision,
                                                          @RequestParam(defaultValue = "true") Boolean includeNodes) {
@@ -81,7 +81,7 @@ public class WorkflowBuilderController extends BaseController {
      * @return
      */
     @GetMapping("draft/{workflowInstanceId}")
-    @Operation(summary = "get flow instance by draft")
+    @Operation(description = "get flow instance by draft")
     public R<WorkflowBaseBody> getFlowInstanceByDraft(@PathVariable Long workflowInstanceId) {
         return success(workflowBuilderService.getFlowInstanceByDraft(workflowInstanceId));
     }
@@ -95,7 +95,7 @@ public class WorkflowBuilderController extends BaseController {
      * @return
      */
     @GetMapping("lasted/{workflowInstanceId}")
-    @Operation(summary = "get flow instance by lasted")
+    @Operation(description = "get flow instance by lasted")
     public R<WorkflowBaseBody> getFlowInstanceByLasted(@PathVariable Long workflowInstanceId,
                                                        @RequestParam(defaultValue = "true") Boolean includeNodes) {
         return success(workflowBuilderService.getFlowInstanceByLasted(workflowInstanceId, includeNodes));
@@ -109,7 +109,7 @@ public class WorkflowBuilderController extends BaseController {
      * @return
      */
     @PostMapping("cache")
-    @Operation(summary = "save flow instance to cache")
+    @Operation(description = "save flow instance to cache")
     @ResourceItemOperation(key = "workflow-builder-opt")
     public R<Boolean> saveCache(@Validated @RequestBody WorkflowBaseBody workflowBaseBody) {
         return success(workflowBuilderService.saveCache(workflowBaseBody));
@@ -117,7 +117,7 @@ public class WorkflowBuilderController extends BaseController {
 
 
     @GetMapping("/{workflowInstanceId}/node-key/{nodeKey}/input-fields")
-    @Operation(summary = "the input data fields, which current select node")
+    @Operation(description = "the input data fields, which current select node")
     public R<List<Map<String, Object>>> listNodeInputFields(
             @PathVariable Long workflowInstanceId,
             @PathVariable String nodeKey,
@@ -134,7 +134,7 @@ public class WorkflowBuilderController extends BaseController {
      */
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "workflowInstanceId")
     @PutMapping("draft")
-    @Operation(summary = "save flow instance draft revision")
+    @Operation(description = "save flow instance draft revision")
     @ResourceItemOperation(key = "workflow-builder-opt", type = BUTTON, icon = "save", name = "${common.button.save}")
     public R<WorkflowBaseBody> saveDraft(@Validated @RequestBody WorkflowBaseBody workflowBaseBody) {
         return success(workflowBuilderService.saveDraft(workflowBaseBody));
@@ -149,7 +149,7 @@ public class WorkflowBuilderController extends BaseController {
      */
     @OperationLog(operateType = OperateType.PUBLISH, idParamPosition = 0)
     @PostMapping("publish/{workflowInstanceId}")
-    @Operation(summary = "publish flow instance")
+    @Operation(description = "publish flow instance")
     @ResourceItemOperation(type = BUTTON, icon = "save", name = "${common.button.publish}")
     public R<Boolean> publish(@PathVariable Long workflowInstanceId,
                               @RequestParam(defaultValue = "") String description) {

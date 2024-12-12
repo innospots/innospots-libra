@@ -57,7 +57,7 @@ public class SysOperateLogController extends BaseController {
     }
 
     @GetMapping("page")
-    @Operation(summary = "query the operate log", description = "query the operate log")
+    @Operation(description = "query the operate log")
     public R<PageBody<SysOperateLog>> pageLogs(LogFormQuery queryRequest) {
 
         PageBody<SysOperateLog> pageBody = logOperator.pageLogs(queryRequest);
@@ -65,7 +65,7 @@ public class SysOperateLogController extends BaseController {
     }
 
     @GetMapping("{logId}")
-    @Operation(summary = "view log")
+    @Operation(description = "view log")
     public R<SysOperateLog> getLog(@Parameter(name = "logId", required = true) @PathVariable Integer logId) {
 
         SysOperateLog view = logOperator.getLog(logId);
@@ -73,25 +73,25 @@ public class SysOperateLogController extends BaseController {
     }
 
     @GetMapping("newest")
-    @Operation(summary = "list newest UseLog")
+    @Operation(description = "list newest UseLog")
     public R<List<UserLogInfo>> listNewestLogs() {
         return success(logOperator.listNewestLogs());
     }
 
     @GetMapping("module")
-    @Operation(summary = "get module")
+    @Operation(description = "get module")
     public R<List<String>> getModule() {
         return success(logOperator.getModule());
     }
 
     @GetMapping("operate")
-    @Operation(summary = "get operate")
+    @Operation(description = "get operate")
     public R<List<String>> getOperate() {
         return success(logOperator.getOperate());
     }
 
     @GetMapping("resource")
-    @Operation(summary = "get resource")
+    @Operation(description = "get resource")
     public R<List<String>> getResource() {
         return success(logOperator.getResource());
     }

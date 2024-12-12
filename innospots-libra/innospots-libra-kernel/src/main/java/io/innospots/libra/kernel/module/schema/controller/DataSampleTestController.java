@@ -58,7 +58,7 @@ public class DataSampleTestController extends BaseController {
     }
 
     @PostMapping("send/message/{code}")
-    @Operation(summary = "send message to kafka datasource")
+    @Operation(description = "send message to kafka datasource")
     public R<Boolean> sendMessage(
             @Parameter(name = "code") @PathVariable String credentialKey,
             @Parameter(name = "topic") @RequestParam(name = "topic") String topic,
@@ -73,7 +73,7 @@ public class DataSampleTestController extends BaseController {
 
 //    @PostMapping("receive/message/{datasourceId}")
 //    @ResourceItemOperation
-//    @Operation(summary = "receive message to kafka")
+//    @Operation(description = "receive message to kafka")
 //    public InnospotResponse<DataBody<Map<String, Object>>> receive(
 //            @PathVariable Integer datasourceId,
 //            @RequestParam String topic,

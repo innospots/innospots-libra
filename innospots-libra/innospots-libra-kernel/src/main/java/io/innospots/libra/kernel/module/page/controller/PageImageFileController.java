@@ -54,7 +54,7 @@ public class PageImageFileController {
     @OperationLog(operateType = OperateType.UPLOAD)
     @ResourceItemOperation(key = "Page-publishPage")
     @PostMapping(value = "image", consumes = "multipart/form-data")
-    @Operation(summary = "upload dashboard or widget background image")
+    @Operation(description = "upload dashboard or widget background image")
     public R<String> uploadVizImage(
             @Parameter(name = "fileName") @RequestParam(required = false) String fileName,
             @Parameter(name = "image", required = true) @RequestPart("image") MultipartFile image) {

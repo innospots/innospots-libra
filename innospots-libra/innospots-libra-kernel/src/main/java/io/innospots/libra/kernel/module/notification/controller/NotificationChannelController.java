@@ -61,7 +61,7 @@ public class NotificationChannelController extends BaseController {
     @OperationLog(operateType = OperateType.CREATE, primaryField = "channelId")
     @PostMapping
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.add}")
-    @Operation(summary = "create channel")
+    @Operation(description = "create channel")
     public R<NotificationChannel> createChannel(@Parameter(name = "messageChannel", required = true) @Valid @RequestBody NotificationChannel notificationChannel) {
 
         NotificationChannel save = notificationChannelOperator.createChannel(notificationChannel);
@@ -71,7 +71,7 @@ public class NotificationChannelController extends BaseController {
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "channelId")
     @PutMapping
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.edit}")
-    @Operation(summary = "update channel")
+    @Operation(description = "update channel")
     public R<Boolean> updateChannel(@Parameter(name = "messageChannel", required = true) @Valid @RequestBody NotificationChannel notificationChannel) {
 
         Boolean update = notificationChannelOperator.updateChannel(notificationChannel);
@@ -81,7 +81,7 @@ public class NotificationChannelController extends BaseController {
     @OperationLog(operateType = OperateType.UPDATE_STATUS, idParamPosition = 0)
     @PutMapping("{channelId}/{dataStatus}")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.status}", label = "${message.channel.status.change}")
-    @Operation(summary = "update channel status")
+    @Operation(description = "update channel status")
     public R<Boolean> updateStatus(@Parameter(name = "channelId", required = true) @PathVariable Integer channelId,
                                    @Parameter(required = true, name = "dataStatus") @PathVariable DataStatus dataStatus) {
 
@@ -92,7 +92,7 @@ public class NotificationChannelController extends BaseController {
     @OperationLog(operateType = OperateType.DELETE, idParamPosition = 0)
     @DeleteMapping("{channelId}")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
-    @Operation(summary = "delete channel")
+    @Operation(description = "delete channel")
     public R<Boolean> deleteChannel(@Parameter(name = "channelId", required = true) @PathVariable Integer channelId) {
 
         Boolean delete = notificationChannelOperator.deleteChannel(channelId);
@@ -100,14 +100,14 @@ public class NotificationChannelController extends BaseController {
     }
 
     @GetMapping
-    @Operation(summary = "list message channel")
+    @Operation(description = "list message channel")
     public R<List<NotificationChannel>> listChannels() {
         List<NotificationChannel> list = notificationChannelOperator.listChannels();
         return success(list);
     }
 
     @GetMapping("mapping")
-    @Operation(summary = "mapping column")
+    @Operation(description = "mapping column")
     public R<List<MessageElement>> mapping() {
         List<MessageElement> messageElements = new ArrayList<>();
         messageElements.add(new MessageElement("user_name", "${notification.user.label}"));

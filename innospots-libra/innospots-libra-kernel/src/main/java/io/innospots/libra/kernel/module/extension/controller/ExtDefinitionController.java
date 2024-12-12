@@ -70,7 +70,7 @@ public class ExtDefinitionController {
 
 
     @GetMapping("{extKey}/modules")
-    @Operation(summary = "extension modules")
+    @Operation(description = "extension modules")
     public R<List<ResourceItem>> listMenus(@PathVariable String extKey) {
         LibraExtensionProperties libraExtProperties = getLibraExtProperties(extKey);
         if (libraExtProperties == null) {
@@ -88,21 +88,21 @@ public class ExtDefinitionController {
     }
 
     @GetMapping("items/{parentMenuKey}")
-    @Operation(summary = "extension dynamic sub menus")
+    @Operation(description = "extension dynamic sub menus")
     public R<List<ResourceItem>> listSubMenus(@PathVariable String parentMenuKey) {
 
         return success(extMenuExporter.listMenuItems(parentMenuKey));
     }
 
     @GetMapping("list")
-    @Operation(summary = "list definition extensions")
+    @Operation(description = "list definition extensions")
     public R<List<LibraExtensionInformation>> listAppInfos() {
         //return success(appDefinitionOperator.listApplications());
         return success(extensionService.listLibraAppInformation(null));
     }
 
     /*
-    @Operation(summary = "download the extension definition from market")
+    @Operation(description = "download the extension definition from market")
     @ResourceItemOperation(type = BUTTON, icon = "download", name = "${app.main.button.download}")
     @PostMapping("download/market/{id}")
     @OperationLog(operateType = OperateType.DOWNLOAD,idParamPosition = 0)
@@ -114,7 +114,7 @@ public class ExtDefinitionController {
 
     /*
     @Deprecated
-    @Operation(summary = "download the extension definition from desk")
+    @Operation(description = "download the extension definition from desk")
     @ResourceItemOperation(type = BUTTON, icon = "download", name = "${app.main.button.download_desk}")
     @PostMapping("download/desk")
     @OperationLog(operateType = OperateType.DOWNLOAD)
@@ -130,7 +130,7 @@ public class ExtDefinitionController {
      */
     /*
     @Deprecated
-    @Operation(summary = "registry the extension definition")
+    @Operation(description = "registry the extension definition")
     @PostMapping("registry/{extKey}")
     @OperationLog(operateType = OperateType.DOWNLOAD,idParamPosition = 0)
     public InnospotResponse<LibraExtensionProperties> registryExtension(@PathVariable String extKey){

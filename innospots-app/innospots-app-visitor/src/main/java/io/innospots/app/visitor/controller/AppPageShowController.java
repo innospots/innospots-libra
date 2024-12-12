@@ -27,14 +27,14 @@ public class AppPageShowController {
         this.appShowVisitor = appShowVisitor;
     }
 
-    @Operation(summary = "check access according appKey")
+    @Operation(description = "check access according appKey")
     @PostMapping("{appPath}/access/check")
     public R<AppToken> valid(@PathVariable String appPath,
                              @RequestBody RequestAccess requestAccess){
         return appShowVisitor.checkAccess(appPath,requestAccess);
     }
 
-    @Operation(summary = "get app definition page")
+    @Operation(description = "get app definition page")
     @GetMapping("{appPath}/show")
     public R<AppDefinition> showPage(@PathVariable String appPath){
         return R.success(appShowVisitor.getAppDefinitionByAppPath(appPath));

@@ -36,7 +36,7 @@ public class AppDataController {
         this.appDataOperator = appDataOperator;
     }
 
-    @Operation(summary = "show and read data from table or api")
+    @Operation(description = "show and read data from table or api")
     @GetMapping("{appKey}/registry/{registryId}")
     public R<Map<String,Object>> show(@PathVariable String appKey,
                                       @PathVariable String registryId,
@@ -44,7 +44,7 @@ public class AppDataController {
         return R.success(appDataOperator.show(appKey,registryId,params));
     }
 
-    @Operation(summary = "show and read list data from table or api")
+    @Operation(description = "show and read list data from table or api")
     @GetMapping("{appKey}/registry/{registryId}/list")
     public R<List<Object>> list(@PathVariable String appKey,
                                 @PathVariable String registryId,
@@ -53,7 +53,7 @@ public class AppDataController {
         return R.success(appDataOperator.list(appKey,registryId,params));
     }
 
-    @Operation(summary = "page list from table or api")
+    @Operation(description = "page list from table or api")
     @GetMapping("{appKey}/registry/{registryId}/page")
     public R<PageBody<Map<String,Object>>> page(@PathVariable String appKey,
                                                 @PathVariable String registryId,
@@ -62,7 +62,7 @@ public class AppDataController {
         return R.success(appDataOperator.page(appKey,registryId,params));
     }
 
-    @Operation(summary = "write and submit data to table or api")
+    @Operation(description = "write and submit data to table or api")
     @PostMapping("{appKey}/registry/{registryId}")
     public Object submit(
             @PathVariable String appKey,
@@ -72,7 +72,7 @@ public class AppDataController {
     }
 
 
-    @Operation(summary = "upload file")
+    @Operation(description = "upload file")
     @PostMapping("{appKey}/upload")
     public R<ExecutionResource> upload(
             @Parameter(name = "appKey",required = true) @PathVariable("appKey") String appKey,
@@ -81,7 +81,7 @@ public class AppDataController {
         return R.success(executionResource);
     }
 
-    @Operation(summary = "download resource")
+    @Operation(description = "download resource")
     @GetMapping("resource/{appKey}")
     public ResponseEntity resource(
             @Parameter(name = "appKey",required = true) @PathVariable("appKey") String appKey,

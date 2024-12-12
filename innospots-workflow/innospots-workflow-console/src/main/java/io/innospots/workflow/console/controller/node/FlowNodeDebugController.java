@@ -48,7 +48,7 @@ public class FlowNodeDebugController {
 
 
     @PostMapping("upload-file/{force}")
-    @Operation(summary = "upload debug file")
+    @Operation(description = "upload debug file")
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.upload}")
     public R<ExecutionResource> uploadFile
             (@Parameter(name = "files", required = true) @RequestParam("files") MultipartFile uploadFile,   @PathVariable boolean force){
@@ -59,7 +59,7 @@ public class FlowNodeDebugController {
 
     @OperationLog(operateType = OperateType.EXECUTE)
     @PostMapping("execute")
-    @Operation(summary = "debug app node")
+    @Operation(description = "debug app node")
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.execute}")
     public R<NodeExecutionDisplay> execute(
             @RequestBody DebugPayload debugPayload){

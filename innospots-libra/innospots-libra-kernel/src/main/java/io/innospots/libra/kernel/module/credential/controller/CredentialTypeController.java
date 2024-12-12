@@ -59,7 +59,7 @@ public class CredentialTypeController {
     @PostMapping
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
     @OperationLog(operateType = CREATE, primaryField = "typeCode")
-    @Operation(summary = "create credential type")
+    @Operation(description = "create credential type")
     public R<CredentialType> createCredentialType(@Parameter(name = "credentialType") @RequestBody CredentialType credentialType) {
         CredentialType create = credentialTypeOperator.createCredentialType(credentialType);
         return success(create);
@@ -68,7 +68,7 @@ public class CredentialTypeController {
     @PutMapping
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
     @OperationLog(operateType = UPDATE, primaryField = "typeCode")
-    @Operation(summary = "update credential type")
+    @Operation(description = "update credential type")
     public R<CredentialType> updateCredentialType(@Parameter(name = "credentialType") @Validated @RequestBody CredentialType credentialType) {
         CredentialType update = credentialTypeOperator.updateCredentialType(credentialType);
         return success(update);
@@ -77,14 +77,14 @@ public class CredentialTypeController {
     @DeleteMapping("{typeCode}")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @OperationLog(operateType = DELETE, idParamPosition = 0)
-    @Operation(summary = "delete credential type")
+    @Operation(description = "delete credential type")
     public R<Boolean> deleteCredentialType(@Parameter(name = "typeCode") @PathVariable String typeCode) {
         Boolean delete = credentialTypeOperator.deleteCredentialType(typeCode);
         return success(delete);
     }
 
     @GetMapping("{typeCode}")
-    @Operation(summary = "get credential type")
+    @Operation(description = "get credential type")
     public R<CredentialType> getCredentialType(@Parameter(name = "typeCode") @PathVariable String typeCode) {
         CredentialType view = credentialTypeOperator.getCredentialType(typeCode);
         return success(view);
@@ -92,14 +92,14 @@ public class CredentialTypeController {
 
 
     @GetMapping("page")
-    @Operation(summary = "page list")
+    @Operation(description = "page list")
     public R<PageBody<CredentialType>> pageCredentialTypes(FormQuery formQuery) {
         PageBody<CredentialType> pages = credentialTypeOperator.pageCredentialTypes(formQuery);
         return success(pages);
     }
 
     @GetMapping("list")
-    @Operation(summary = "list")
+    @Operation(description = "list")
     public R<List<CredentialType>> listCredentialTypes(@Parameter(name = "connectorName") @RequestParam(required = false) String connectorName) {
         List<CredentialType> list = credentialTypeOperator.listCredentialTypes(connectorName);
         return success(list);

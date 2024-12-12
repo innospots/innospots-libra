@@ -58,7 +58,7 @@ public class NotificationSettingController extends BaseController {
     }
 
     @GetMapping("events")
-    @Operation(summary = "get the list of the module in the events.")
+    @Operation(description = "get the list of the module in the events.")
     public R<Map<String, NotificationGroup>> events() {
         return success(NotificationDefinitionLoader.load());
     }

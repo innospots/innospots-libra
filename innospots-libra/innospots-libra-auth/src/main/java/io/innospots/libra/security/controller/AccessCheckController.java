@@ -57,7 +57,7 @@ public class AccessCheckController extends BaseController {
     }
 
     @GetMapping("check")
-    @Operation(summary = "check whether the user is login")
+    @Operation(description = "check whether the user is login")
     public R<AuthToken> checkToken(@RequestParam(required = false) String pageUrl, HttpServletRequest httpRequest) {
         JwtToken authToken = (JwtToken) getContext();
         if (authToken == null) {

@@ -54,14 +54,14 @@ public class FlowNodeGroupController extends BaseController {
     }
 
     @PostMapping
-    @Operation(summary = "create node group")
+    @Operation(description = "create node group")
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.category.add.title}")
     public R<NodeGroupBaseInfo> createNodeGroup(String name, String templateCode){
         return R.success(flowNodeGroupOperator.createNodeGroup(name,templateCode));
     }
 
     @PutMapping("re-name")
-    @Operation(summary = "re-name node group")
+    @Operation(description = "re-name node group")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.category.edit.title}")
     public R<Boolean> reNameNodeGroup(
             @Parameter(name = "nodeGroupId") @RequestParam Integer nodeGroupId,
@@ -70,14 +70,14 @@ public class FlowNodeGroupController extends BaseController {
     }
 
     @DeleteMapping("{nodeGroupId}")
-    @Operation(summary = "remove node group")
+    @Operation(description = "remove node group")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.category.delete.title}")
     public R<Boolean> removeNodeGroup(@PathVariable Integer nodeGroupId){
         return R.success(flowNodeGroupOperator.removeNodeGroup(nodeGroupId));
     }
 
     @PutMapping("swap-position")
-    @Operation(summary = "swap node group position")
+    @Operation(description = "swap node group position")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.category.swap.title:调序}")
     public R<List<NodeGroupBaseInfo>> swapPosition(
             @Parameter(name = "targetGroupId") @RequestParam Integer targetGroupId,
@@ -87,7 +87,7 @@ public class FlowNodeGroupController extends BaseController {
 
 
     @GetMapping("list/{templateCode}")
-    @Operation(summary = "flow node group list by template code")
+    @Operation(description = "flow node group list by template code")
     public R<List<NodeGroup>> listCategories(
             @Parameter(name = "templateCode") @PathVariable String templateCode,
             @Parameter(name = "includeNodes") @RequestParam(required = false, name = "includeNodes",defaultValue = "false") boolean includeNodes,

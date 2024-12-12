@@ -53,14 +53,14 @@ public class WebhookRuntimeEndpoint {
         this.webhookRuntimeContainer = webhookRuntimeContainer;
     }
 
-    @Operation(summary = "get webhook response")
+    @Operation(description = "get webhook response")
     @GetMapping("response/{contextId}")
     public WorkflowResponse getResponse(@PathVariable String contextId){
         return webhookRuntimeContainer.getResponseByContextId(contextId);
     }
 
     @PostMapping(value = "async/{path}")
-    @Operation(summary = "async post webhook")
+    @Operation(description = "async post webhook")
     public WorkflowResponse asyncPost(
             HttpServletRequest request,
             @Parameter(required = true) @PathVariable String path,
@@ -73,7 +73,7 @@ public class WebhookRuntimeEndpoint {
     }
 
     @PostMapping(value = "{path}")
-    @Operation(summary = "post webhook")
+    @Operation(description = "post webhook")
     public WorkflowResponse apiPost(
             HttpServletRequest request,
             @Parameter(required = true) @PathVariable String path,
@@ -86,7 +86,7 @@ public class WebhookRuntimeEndpoint {
     }
 
     @PostMapping("v2/{path}")
-    @Operation(summary = "post webhook v2")
+    @Operation(description = "post webhook v2")
     public WorkflowResponse eventPost(@Parameter(required = true) @PathVariable String path,
                                       @Parameter(required = false) @RequestParam Map<String, Object> params,
                                       @Parameter(required = false) @RequestHeader Map<String, Object> headers,
@@ -102,7 +102,7 @@ public class WebhookRuntimeEndpoint {
     }
 
     @GetMapping("{path}")
-    @Operation(summary = "get webhook")
+    @Operation(description = "get webhook")
     public WorkflowResponse apiGet(
             @Parameter(required = true) @PathVariable String path,
                                    HttpServletRequest request,
@@ -114,7 +114,7 @@ public class WebhookRuntimeEndpoint {
     }
 
     @GetMapping("stream/{flowKey}")
-    @Operation(summary = "api stream webhook")
+    @Operation(description = "api stream webhook")
     public SseEmitter apiStream(String flowExecutionId,String flowKey){
         return FlowEmitter.createResponseEmitter(flowExecutionId,flowKey);
     }

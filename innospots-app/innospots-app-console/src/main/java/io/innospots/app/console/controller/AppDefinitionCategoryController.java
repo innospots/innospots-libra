@@ -40,7 +40,7 @@ public class AppDefinitionCategoryController extends BaseController {
 
     @OperationLog(operateType = OperateType.CREATE, idParamPosition = 0)
     @PostMapping
-    @Operation(summary = "create application category")
+    @Operation(description = "create application category")
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${app.category.add.title}")
     public R<BaseCategory> createCategory(@Parameter(required = true, name = "categoryName") @RequestParam("categoryName") String categoryName) {
         BaseCategory category = appDefinitionCategoryOperator.createCategory(categoryName, CategoryType.APPS);
@@ -49,7 +49,7 @@ public class AppDefinitionCategoryController extends BaseController {
 
     @OperationLog(operateType = OperateType.UPDATE, idParamPosition = 0)
     @PutMapping("{categoryId}")
-    @Operation(summary = "update application category")
+    @Operation(description = "update application category")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${page.category.edit.title}")
     public R<Boolean> updateCategory(@Parameter(required = true, name = "categoryId") @PathVariable Integer categoryId,
                                      @Parameter(required = true, name = "categoryName") @RequestParam("categoryName") String categoryName) {
@@ -59,7 +59,7 @@ public class AppDefinitionCategoryController extends BaseController {
 
     @OperationLog(operateType = OperateType.DELETE, idParamPosition = 0)
     @DeleteMapping("{categoryId}")
-    @Operation(summary = "delete application category")
+    @Operation(description = "delete application category")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.category.delete.title}")
     public R<Boolean> deleteCategory(@Parameter(required = true, name = "categoryId") @PathVariable Integer categoryId) {
         return success(appDefinitionCategoryOperator.deleteCategory(categoryId));
@@ -67,7 +67,7 @@ public class AppDefinitionCategoryController extends BaseController {
 
 
     @GetMapping
-    @Operation(summary = "application category list")
+    @Operation(description = "application category list")
     public R<List<BaseCategory>> listCategories() {
         List<BaseCategory> list = appDefinitionCategoryOperator.listCategories();
         return success(list);
@@ -75,7 +75,7 @@ public class AppDefinitionCategoryController extends BaseController {
     }
 
 //    @GetMapping("check/{categoryName}")
-//    @Operation(summary = "check name duplicate", description = "return: true = duplicate,false = not duplicate")
+//    @Operation(description = "check name duplicate", description = "return: true = duplicate,false = not duplicate")
 //    public InnospotResponse<Boolean> checkNameExist(@Parameter(required = true, name = "categoryName") @PathVariable String categoryName) {
 //        return success(appDefinitionCategoryOperator.checkNameExist(categoryName, CategoryType.APPS));
 //    }

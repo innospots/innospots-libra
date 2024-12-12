@@ -46,7 +46,7 @@ public class SecretKeyController extends BaseController {
     }
 
     @GetMapping
-    @Operation(summary = "get secret Key")
+    @Operation(description = "get secret Key")
     public R<String> secretKey() {
         return R.success(configProperties.getSecretKey());
     }

@@ -58,7 +58,7 @@ public class OauthLoginAuthController extends BaseController {
     InnospotsConfigProperties innospotsConfigProperties;
 
     @PostMapping
-    @Operation(summary = "login", description = "oauth authenticate")
+    @Operation(description = "oauth authenticate")
     public R<AuthToken> authenticate(@RequestBody LoginRequest request) throws InnospotException  {
         Authentication authentication = authenticationProvider.authenticate(request);
 
@@ -66,7 +66,7 @@ public class OauthLoginAuthController extends BaseController {
     }
 
     @GetMapping(path = "list")
-    @Operation(summary = "oauth list", description = "get oauth list")
+    @Operation(description = "get oauth list")
     public R<List<OauthLoginProvider>> getOauthList() {
         List<OauthLoginProvider> providers = new ArrayList<>();
         if(oauthProviderProperties.isEnabled()){

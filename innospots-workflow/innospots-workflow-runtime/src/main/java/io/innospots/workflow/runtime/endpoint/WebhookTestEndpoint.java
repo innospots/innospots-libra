@@ -52,7 +52,7 @@ public class WebhookTestEndpoint {
     }
 
     @PostMapping("webhook/{flowKey}")
-    @Operation(summary = "post webhook")
+    @Operation(description = "post webhook")
     public WorkflowResponse eventPost(@Parameter(required = true) @PathVariable String flowKey,
                                       @Parameter(required = false) @RequestParam Map<String, Object> params,
                                       @Parameter(required = false) @RequestHeader Map<String, Object> headers,
@@ -66,7 +66,7 @@ public class WebhookTestEndpoint {
     }
 
     @GetMapping("webhook/{flowKey}")
-    @Operation(summary = "get webhook")
+    @Operation(description = "get webhook")
     public WorkflowResponse eventGet(@Parameter(required = true) @PathVariable String flowKey,
                                      @Parameter(required = false) @RequestParam(required = false) Map<String, Object> params,
                                      @Parameter(required = false) @RequestHeader(required = false) Map<String, Object> headers) {
@@ -80,7 +80,7 @@ public class WebhookTestEndpoint {
 
 
     @PostMapping(value = "{flowKey}")
-    @Operation(summary = "post webhook upload files")
+    @Operation(description = "post webhook upload files")
     public R<String> eventPost(
             @Parameter(required = true) @PathVariable String flowKey,
             @Parameter(required = false) @RequestHeader Map<String, Object> headers,

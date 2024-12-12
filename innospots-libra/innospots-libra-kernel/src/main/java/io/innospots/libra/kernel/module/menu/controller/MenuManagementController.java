@@ -60,13 +60,13 @@ public class MenuManagementController extends BaseController {
     }
 
     @GetMapping("list")
-    @Operation(summary = "menu tree list")
+    @Operation(description = "menu tree list")
     public R<List<MenuResourceItem>> listMenuItems(@RequestParam(value = "queryInput", required = false) String queryInput) {
         return success(menuManagementOperator.listMenuItems(queryInput));
     }
 
     @GetMapping("list/{itemType}")
-    @Operation(summary = "list menu items which the itemType is category")
+    @Operation(description = "list menu items which the itemType is category")
     public R<List<MenuResourceItem>> listDirectoryMenuTree(@Parameter(name = "itemType") @PathVariable ItemType itemType) {
         return success(menuManagementOperator.listMenuItemsByItemType(itemType));
     }
@@ -74,7 +74,7 @@ public class MenuManagementController extends BaseController {
     @OperationLog(operateType = OperateType.UPDATE_STATUS, idParamPosition = 0)
     @PutMapping("menu-item/{resourceId}/status/{status}")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.status}")
-    @Operation(summary = "update menu item status")
+    @Operation(description = "update menu item status")
     public R<Boolean> updateStatus(@Parameter(name = "resourceId") @PathVariable Integer resourceId,
                                    @Parameter(name = "status") @PathVariable Boolean status) {
         return success(menuManagementOperator.updateStatus(resourceId, status));
@@ -83,7 +83,7 @@ public class MenuManagementController extends BaseController {
     @OperationLog(operateType = OperateType.DELETE, idParamPosition = 0)
     @DeleteMapping("menu-item/{resourceId}")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
-    @Operation(summary = "delete menu item")
+    @Operation(description = "delete menu item")
     public R<Boolean> deleteMenuById(@Parameter(name = "resourceId") @PathVariable Integer resourceId) {
         return success(menuManagementOperator.deleteMenuById(resourceId));
     }
@@ -91,7 +91,7 @@ public class MenuManagementController extends BaseController {
     @OperationLog(operateType = OperateType.CREATE, idParamPosition = 0, primaryField = "itemKey")
     @PostMapping("menu-item")
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
-    @Operation(summary = "create new menu item")
+    @Operation(description = "create new menu item")
     public R<MenuResourceItem> createMenu(@Valid @RequestBody NewMenuItem newMenuItem) {
         return success(menuManagementOperator.createMenu(newMenuItem));
     }
@@ -99,7 +99,7 @@ public class MenuManagementController extends BaseController {
     @OperationLog(operateType = OperateType.UPDATE, idParamPosition = 0, primaryField = "resourceId")
     @PutMapping("menu-item")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
-    @Operation(summary = "update menu item")
+    @Operation(description = "update menu item")
     public R<Boolean> updateMenu(@RequestBody NewMenuItem newMenuItem) {
         Boolean update = menuManagementOperator.updateMenu(newMenuItem);
         return success(update);
@@ -108,7 +108,7 @@ public class MenuManagementController extends BaseController {
 
     @OperationLog(operateType = OperateType.UPDATE, idParamPosition = 0, primaryField = "resourceId")
     @PutMapping("menu-item/order")
-    @Operation(summary = "order menu items")
+    @Operation(description = "order menu items")
     public R<List<MenuResourceItem>> orderMenuItems(@RequestBody MenuOrders menuOrders) {
         return success(menuManagementOperator.orderItems(menuOrders));
     }

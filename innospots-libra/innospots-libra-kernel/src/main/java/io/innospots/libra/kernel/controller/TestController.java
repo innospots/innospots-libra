@@ -61,7 +61,7 @@ public class TestController {
 
 
     @GetMapping("jar/loader")
-    @Operation(summary = "jar loader")
+    @Operation(description = "jar loader")
     public R<Boolean> LibLoader(@Parameter(name = "jarName") @RequestParam(value = "jarName", required = false, defaultValue = "innospots-extension-apps-1.0.0-SNAPSHOT.jar") String jarName) {
 
 //        String jarUrl = "file://" + innospotsConfigProperties.getExtLibPath() + jarName;

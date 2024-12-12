@@ -57,7 +57,7 @@ public class DatasetDataController {
     }
 
     @PostMapping("execute")
-    @Operation(summary = "dataset execute")
+    @Operation(description = "dataset execute")
     public R<Dataframe> execute(
             @Parameter(name = "credentialKey") @RequestParam("credentialKey") String credentialKey,
             @Parameter(name = "page") @RequestParam("page") int page,
@@ -68,7 +68,7 @@ public class DatasetDataController {
     }
 
     @PostMapping
-    @Operation(summary = "dataset data")
+    @Operation(description = "dataset data")
     public R<Dataframe> datasetData(
             @Parameter(name = "viewExecuteParam") @Validated @RequestBody ViewExecuteParam viewExecuteParam,
             BindingResult bindingResult) {
@@ -77,7 +77,7 @@ public class DatasetDataController {
     }
 
     @PostMapping("function/validate")
-    @Operation(summary = "dataset function validate")
+    @Operation(description = "dataset function validate")
     public R<Boolean> functionValidate(
             @Parameter(name = "validateParam") @RequestBody Map<String, Object> validateParam) {
         if (MapUtils.isEmpty(validateParam)) {
@@ -93,7 +93,7 @@ public class DatasetDataController {
     }
 
     @GetMapping("function/support/{viewId}")
-    @Operation(summary = "function support list")
+    @Operation(description = "function support list")
     public R<Set<StdSqlOperator>> functionValidate(
             @Parameter(name = "viewId") @PathVariable(name = "viewId") String viewId) {
         Set<StdSqlOperator> sqlOperators = dataframeExecutor.supportedFunctions(viewId);

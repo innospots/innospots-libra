@@ -60,7 +60,7 @@ public class SchemaCategoryController {
     }
 
     @PostMapping
-    @Operation(summary = "create dataset category")
+    @Operation(description = "create dataset category")
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${meta.view.category.button.create}")
     @OperationLog(operateType = OperateType.CREATE, primaryField = "categoryId")
     public R<BaseCategory> createDatasetCategory(
@@ -71,7 +71,7 @@ public class SchemaCategoryController {
     }
 
     @PutMapping("{categoryId}")
-    @Operation(summary = "update dataset category")
+    @Operation(description = "update dataset category")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${meta.view.category.button.update}")
     @OperationLog(operateType = OperateType.UPDATE, idParamPosition = 0)
     public R<Boolean> updateDatasetCategory(
@@ -84,7 +84,7 @@ public class SchemaCategoryController {
 
     @OperationLog(operateType = OperateType.DELETE, idParamPosition = 0)
     @DeleteMapping("{categoryId}")
-    @Operation(summary = "delete dataset category")
+    @Operation(description = "delete dataset category")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${meta.view.category.button.delete}")
     public R<Boolean> deleteDatasetCategory(
             @Parameter(required = true, name = "categoryId") @PathVariable Integer categoryId) {
@@ -92,7 +92,7 @@ public class SchemaCategoryController {
     }
 
     @GetMapping("list")
-    @Operation(summary = "list dataset categories")
+    @Operation(description = "list dataset categories")
     public R<List<BaseCategory>> listDatasetCategories() {
         List<BaseCategory> list = schemaCategoryOperator.listCategories();
         return success(list);

@@ -76,7 +76,7 @@ public class I18nLanguageController extends BaseController {
     @OperationLog(operateType = OperateType.CREATE, primaryField = "name", idParamPosition = 0)
     @PostMapping
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
-    @Operation(summary = "create i18n language")
+    @Operation(description = "create i18n language")
     public R<Boolean> createLanguage(@Valid @RequestBody I18nLanguage i18nLanguage) {
         if (i18nLanguage.getStatus() == null) {
             i18nLanguage.setStatus(ONLINE);
@@ -91,7 +91,7 @@ public class I18nLanguageController extends BaseController {
      * @return Boolean
      */
     @GetMapping("exist-locale/{locale}")
-    @Operation(summary = "has i18n language")
+    @Operation(description = "has i18n language")
     public R<Boolean> hasLocaleLanguage(@PathVariable String locale) {
         return success(i18nLanguageOperator.hasExist(locale));
     }
@@ -103,7 +103,7 @@ public class I18nLanguageController extends BaseController {
      * @return Boolean
      */
     @GetMapping("/{languageId}")
-    @Operation(summary = "get i18n language")
+    @Operation(description = "get i18n language")
     public R<I18nLanguage> getLocaleLanguage(@PathVariable Integer languageId) {
         return success(i18nLanguageOperator.getLanguage(languageId));
     }
@@ -119,7 +119,7 @@ public class I18nLanguageController extends BaseController {
     @OperationLog(operateType = OperateType.UPDATE, idParamPosition = 0)
     @PutMapping("{languageId}/status/{status}")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}", label = "${common.button.status}")
-    @Operation(summary = "update i18n language status online or offline")
+    @Operation(description = "update i18n language status online or offline")
     public R<Boolean> updateStatus(@PathVariable Integer languageId, @PathVariable Boolean status) {
         DataStatus dataStatus = status ? ONLINE : OFFLINE;
         if (dataStatus.equals(OFFLINE)) {
@@ -141,7 +141,7 @@ public class I18nLanguageController extends BaseController {
     @OperationLog(operateType = OperateType.DELETE, idParamPosition = 0)
     @DeleteMapping("{languageId}")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
-    @Operation(summary = "delete i18n language")
+    @Operation(description = "delete i18n language")
     public R<Boolean> deleteLanguage(@PathVariable Integer languageId) {
         //判断是否可以关闭
         OrganizationInfo organizationInfo = sysConfigCommonService.getOrganization();
@@ -160,7 +160,7 @@ public class I18nLanguageController extends BaseController {
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "languageId", idParamPosition = 0)
     @PutMapping
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
-    @Operation(summary = "update i18n language")
+    @Operation(description = "update i18n language")
     public R<Boolean> updateLanguage(@Valid @RequestBody I18nLanguage i18nLanguage) {
         if (i18nLanguage.getStatus().equals(OFFLINE)) {
             //判断是否可以关闭
@@ -180,7 +180,7 @@ public class I18nLanguageController extends BaseController {
      * @return
      */
     @GetMapping("page")
-    @Operation(summary = "page i18n language")
+    @Operation(description = "page i18n language")
     public R<PageBody<I18nLanguage>> pageLanguages(FormQuery formRequest) {
         return success(i18nLanguageOperator.pageLanguages(formRequest));
     }
@@ -192,7 +192,7 @@ public class I18nLanguageController extends BaseController {
      * @return
      */
     @GetMapping("list")
-    @Operation(summary = "list i18n language")
+    @Operation(description = "list i18n language")
     public R<List<I18nLanguage>> listLanguages(@RequestParam(defaultValue = "ONLINE") DataStatus dataStatus) {
         return success(i18nLanguageOperator.list(dataStatus));
     }

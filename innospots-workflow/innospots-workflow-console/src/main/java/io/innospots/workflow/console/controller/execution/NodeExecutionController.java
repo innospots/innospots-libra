@@ -52,7 +52,7 @@ public class NodeExecutionController extends BaseController {
     }
 
     @GetMapping("list/latest/workflow-instance/{workflowInstanceId}")
-    @Operation(summary = "latest node execution using workflowInstanceId")
+    @Operation(description = "latest node execution using workflowInstanceId")
     public R<Map<String, NodeExecutionDisplay>> latestNodeExecutionsByFlowInstance(
             @Parameter(name = "workflowInstanceId") @PathVariable Long workflowInstanceId,
             @Parameter(name = "revision") @RequestParam(required = false, defaultValue = "0") Integer revision
@@ -62,7 +62,7 @@ public class NodeExecutionController extends BaseController {
     }
 
     @GetMapping("list/workflow-execution/{flowExecutionId}")
-    @Operation(summary = "list all the node executions using flowExecutionId")
+    @Operation(description = "list all the node executions using flowExecutionId")
     public R<Map<String, NodeExecutionDisplay>> listNodeExecutionsByFlowExecution(
             @Parameter(name = "flowExecutionId") @PathVariable String flowExecutionId) {
 
@@ -71,7 +71,7 @@ public class NodeExecutionController extends BaseController {
 
 
     @GetMapping("find/node-execution/{nodeExecutionId}")
-    @Operation(summary = "find the node executions using primary id, nodeExecutionId")
+    @Operation(description = "find the node executions using primary id, nodeExecutionId")
     public R<NodeExecutionDisplay> findNodeExecution(
             @Parameter(name = "nodeExecutionId") @PathVariable String nodeExecutionId,
             @Parameter(name = "page") @RequestParam(required = false, defaultValue = "1") Integer page,

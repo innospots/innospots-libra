@@ -48,7 +48,7 @@ public class CustomChartController {
     private static final String CUSTOM_CHART_PLUGINS = "custom-chart-plugins";
 
     @GetMapping("custom/charts")
-    @Operation(summary = "custom charts")
+    @Operation(description = "custom charts")
     public R<Set<String>> listCustomChart() {
         Set<String> set = new HashSet<>();
         try {

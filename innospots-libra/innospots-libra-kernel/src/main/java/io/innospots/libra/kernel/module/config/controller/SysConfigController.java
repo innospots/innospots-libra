@@ -59,7 +59,7 @@ public class SysConfigController extends BaseController {
     }
 
     @GetMapping("email")
-    @Operation(summary = "get email server info")
+    @Operation(description = "get email server info")
     public R<EmailServerInfo> showEmailConfigs() {
         return success(sysConfigOperator.getEmailServerInfo());
     }
@@ -67,14 +67,14 @@ public class SysConfigController extends BaseController {
     @PostMapping("email")
     @OperationLog(operateType = OperateType.UPDATE)
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${setting.email.button.save}")
-    @Operation(summary = "save email server info")
+    @Operation(description = "save email server info")
     public R<Boolean> saveEmailConfig(@RequestBody @Valid EmailServerInfo emailServerInfo) {
 
         return success(sysConfigOperator.saveEmailServerConfig(emailServerInfo) > 0);
     }
 
     @GetMapping("organization")
-    @Operation(summary = "get organization info")
+    @Operation(description = "get organization info")
     public R<OrganizationInfo> showOrganizationConfigs() {
         return success(sysConfigService.getOrganization());
     }
@@ -82,7 +82,7 @@ public class SysConfigController extends BaseController {
     @PostMapping("organization")
     @OperationLog(operateType = OperateType.UPDATE)
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${setting.organization.button.save}")
-    @Operation(summary = "save organization info")
+    @Operation(description = "save organization info")
     public R<Boolean> saveOrganizationConfig(@RequestBody @Valid OrganizationInfo organizationInfo) {
         return success(sysConfigService.saveOrganizationConfig(organizationInfo) > 0);
     }
@@ -90,7 +90,7 @@ public class SysConfigController extends BaseController {
     @OperationLog(operateType = OperateType.UPDATE)
     @PostMapping(value = "logo")
     @ResourceItemOperation(type = BUTTON, icon = "upload", name = "${common.button.upload}")
-    @Operation(summary = "upload image")
+    @Operation(description = "upload image")
     public R<String> uploadLogo(@Parameter(name = "image", required = true) @RequestParam("image") MultipartFile uploadFile) {
 
         return success(sysConfigService.uploadLogo(uploadFile));
@@ -99,7 +99,7 @@ public class SysConfigController extends BaseController {
     @OperationLog(operateType = OperateType.UPDATE)
     @PostMapping(value = "favicon")
     @ResourceItemOperation(type = BUTTON, icon = "upload", name = "${common.button.upload}")
-    @Operation(summary = "upload image")
+    @Operation(description = "upload image")
     public R<String> uploadFavicon(@Parameter(name = "image", required = true) @RequestParam("image") MultipartFile uploadFile) {
 
         return success(sysConfigService.uploadFavicon(uploadFile));

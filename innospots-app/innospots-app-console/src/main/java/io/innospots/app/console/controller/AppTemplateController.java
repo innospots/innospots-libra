@@ -26,7 +26,7 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 public class AppTemplateController extends BaseController {
 
     @GetMapping("{templateKey}")
-    @Operation(summary = "get application")
+    @Operation(description = "get application")
     public R<AppTemplate> getAppDefinition(
             @Parameter(required = true, name = "templateKey") @PathVariable String templateKey) {
 

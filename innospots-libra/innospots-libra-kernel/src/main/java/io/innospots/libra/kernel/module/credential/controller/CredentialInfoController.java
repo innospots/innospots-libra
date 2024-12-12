@@ -73,7 +73,7 @@ public class CredentialInfoController extends BaseController {
     }
 
     @PostMapping("connection/test")
-    @Operation(summary = "test connection", description = "Connection test")
+    @Operation(description = "test connection")
     public R<Object> testConnection(@Parameter(name = "credentialInfo") @Validated @RequestBody CredentialInfo credentialInfo) {
         if (StringUtils.isBlank(credentialInfo.getEncryptFormValues())) {
             throw buildInvalidException(this.getClass(), "schemaDatasource formValues can not be empty");
@@ -88,7 +88,7 @@ public class CredentialInfoController extends BaseController {
     @PostMapping
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${common.button.create}")
     @OperationLog(operateType = CREATE, primaryField = "credentialKey")
-    @Operation(summary = "create credential")
+    @Operation(description = "create credential")
     public R<CredentialInfo> createCredentialInfo(@Parameter(name = "credentialInfo") @Validated @RequestBody CredentialInfo credentialInfo) {
         CredentialInfo create = credentialInfoOperator.createCredential(credentialInfo);
         return success(create);
@@ -97,7 +97,7 @@ public class CredentialInfoController extends BaseController {
     @PutMapping
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.update}")
     @OperationLog(operateType = UPDATE, primaryField = "credentialKey")
-    @Operation(summary = "update credential")
+    @Operation(description = "update credential")
     public R<CredentialInfo> updateCredentialInfo(@Parameter(name = "credentialInfo") @Validated @RequestBody CredentialInfo appCredentialInfo) {
         CredentialInfo update = credentialInfoOperator.updateCredential(appCredentialInfo);
         return success(update);
@@ -106,14 +106,14 @@ public class CredentialInfoController extends BaseController {
     @DeleteMapping("{credentialKey}")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @OperationLog(operateType = DELETE, idParamPosition = 0)
-    @Operation(summary = "delete credential")
+    @Operation(description = "delete credential")
     public R<Boolean> deleteCredentialInfo(@Parameter(name = "credentialKey") @PathVariable String credentialKey) {
         Boolean delete = credentialInfoOperator.deleteCredential(credentialKey);
         return success(delete);
     }
 
     @GetMapping("{credentialKey}")
-    @Operation(summary = "get credential")
+    @Operation(description = "get credential")
     public R<CredentialInfo> getCredentialInfo(@Parameter(name = "credentialKey") @PathVariable String credentialKey) {
         CredentialInfo view = credentialInfoOperator.getCredential(credentialKey);
         return success(view);
@@ -121,7 +121,7 @@ public class CredentialInfoController extends BaseController {
 
 
     @GetMapping("page")
-    @Operation(summary = "page list")
+    @Operation(description = "page list")
     public R<PageBody<SimpleCredentialInfo>> CredentialInfoPages(FormQuery formQuery) {
         PageBody<SimpleCredentialInfo> pages = credentialInfoOperator.pageCredentials(formQuery);
         return success(pages);
@@ -129,7 +129,7 @@ public class CredentialInfoController extends BaseController {
 
 
     @GetMapping("simple/list")
-    @Operation(summary = "list credentials by credential type or connect type")
+    @Operation(description = "list credentials by credential type or connect type")
     public R<List<SimpleCredentialInfo>> listSimpleCredentials(
             @RequestParam(required = false) String credentialTypeCode,
             @RequestParam(required = false) ConnectType connectType

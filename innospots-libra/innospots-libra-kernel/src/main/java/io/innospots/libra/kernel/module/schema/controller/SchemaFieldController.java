@@ -67,7 +67,7 @@ public class SchemaFieldController extends BaseController {
 
 
     @GetMapping("list")
-    @Operation(summary = "list schema fields", description = "support SourceType: QUEUE,JDBC Parameter. requirements: registryId is required when SourceType = QUEUE, tableName is required when SourceType = JDBC")
+    @Operation(description = "support SourceType: QUEUE,JDBC Parameter. requirements: registryId is required when SourceType = QUEUE, tableName is required when SourceType = JDBC")
     public R<List<SchemaField>> listSchemaFields(
             @Parameter(name = "credentialKey") @RequestParam(value = "credentialKey") String credentialKey,
             @Parameter(name = "tableName") @RequestParam(value = "tableName", required = false) String tableName,
@@ -84,7 +84,7 @@ public class SchemaFieldController extends BaseController {
 
     @OperationLog(operateType = OperateType.UPDATE, primaryField = "fieldId")
     @PostMapping("upsert")
-    @Operation(summary = "upsert schema field", description = "support SourceType: QUEUE")
+    @Operation(description = "support SourceType: QUEUE")
     public R<SchemaField> upsertSchemaField(
             @Parameter(name = "schema field") @Validated @RequestBody SchemaField schemaField, BindingResult bindingResult) {
         SchemaField upsert = schemaFieldOperator.upsertSchemaField(schemaField);
@@ -92,7 +92,7 @@ public class SchemaFieldController extends BaseController {
     }
 
     @PostMapping("parse")
-    @Operation(summary = "schema field json parse")
+    @Operation(description = "schema field json parse")
     public R<List<SchemaField>> schemaFieldJsonParse(
             @Parameter(name = "json") @RequestBody String json) {
         List<SchemaField> schemaFields = schemaFieldOperator.parseToSchemaFields(json);
@@ -100,7 +100,7 @@ public class SchemaFieldController extends BaseController {
     }
 
     @DeleteMapping("{fieldId}")
-    @Operation(summary = "delete schema field", description = "support SourceType: QUEUE")
+    @Operation(description = "support SourceType: QUEUE")
     public R<Boolean> deleteSchemaField(@Parameter(name = "fieldId") @PathVariable Integer fieldId) {
         Boolean delete = schemaFieldOperator.deleteSchemaField(fieldId);
         return success(delete);

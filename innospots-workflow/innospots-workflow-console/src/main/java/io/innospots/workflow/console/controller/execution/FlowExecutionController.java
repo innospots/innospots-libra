@@ -65,7 +65,7 @@ public class FlowExecutionController extends BaseController {
     }
 
     @GetMapping("page/workflow-instance/{workflowInstanceId}")
-    @Operation(summary = "page flow executions using workflowInstanceId")
+    @Operation(description = "page flow executions using workflowInstanceId")
     public R<PageBody<FlowExecutionBase>> pageFlowExecutions(
             @Parameter(name = "workflowInstanceId") @PathVariable Long workflowInstanceId,
             @Parameter(name = "page") @RequestParam(required = false, defaultValue = "0") Integer page,
@@ -83,7 +83,7 @@ public class FlowExecutionController extends BaseController {
     }
 
     @GetMapping("result-code")
-    @Operation(summary = "get resultCode")
+    @Operation(description = "get resultCode")
     public R<List<String>> getResultCode() {
         List<String> resultCodes = new ArrayList<>();
         resultCodes.add("COMPLETE");
@@ -92,7 +92,7 @@ public class FlowExecutionController extends BaseController {
     }
 
     @GetMapping("latest/workflow-instance/{workflowInstanceId}")
-    @Operation(summary = "find latest flow execution using workflowInstanceId")
+    @Operation(description = "find latest flow execution using workflowInstanceId")
     public R<FlowExecutionBase> findLatestFlowExecution(
             @Parameter(name = "workflowInstanceId") @PathVariable Long workflowInstanceId,
             @Parameter(name = "revision") @RequestParam(required = false, defaultValue = "0") Integer revision
@@ -101,7 +101,7 @@ public class FlowExecutionController extends BaseController {
     }
 
     @GetMapping("id/{flowExecutionId}")
-    @Operation(summary = "get flow execution by flowExecutionId")
+    @Operation(description = "get flow execution by flowExecutionId")
     public R<FlowExecutionBase> getFlowExecution(
             @Parameter(name = "flowExecutionId") @PathVariable String flowExecutionId
     ) {

@@ -51,7 +51,7 @@ public class WorkflowStatController extends BaseController {
     }
 
     @GetMapping("{workflowInstanceId}")
-    @Operation(summary = "get statistics")
+    @Operation(description = "get statistics")
     public R<WorkflowStatistics> getWorkflowStat(@Parameter(name = "workflowInstanceId", required = true) @PathVariable Long workflowInstanceId) {
         WorkflowStatistics statistics = workflowExecutionService.getWorkflowStat(workflowInstanceId);
         return success(statistics);

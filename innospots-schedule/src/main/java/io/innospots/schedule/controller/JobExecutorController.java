@@ -47,7 +47,7 @@ public class JobExecutorController {
         this.readJobDispatcher = readJobDispatcher;
     }
 
-    @Operation(summary = "execute schedule job")
+    @Operation(description = "execute schedule job")
     @OperationLog(operateType = OperateType.EXECUTE)
     @PostMapping("execute/{jobKey}")
     public R<Void> launch(@PathVariable String jobKey, @RequestBody Map<String, Object> params) {
@@ -56,14 +56,14 @@ public class JobExecutorController {
     }
 
     @OperationLog(operateType = OperateType.UPDATE_STATUS)
-    @Operation(summary = "cancel schedule job in the queue")
+    @Operation(description = "cancel schedule job in the queue")
     @PostMapping("cancel/{jobKey}")
     public R<Integer> cancel(@PathVariable String jobKey) {
         return R.success(readJobDispatcher.cancel(jobKey));
     }
 
     @OperationLog(operateType = OperateType.EXECUTE)
-    @Operation(summary = "retry execute schedule job")
+    @Operation(description = "retry execute schedule job")
     @PostMapping("retry/{jobExecutionId}")
     public R<Integer> retry(@PathVariable String jobExecutionId) {
         int c = readJobDispatcher.retryDispatch(jobExecutionId);
@@ -71,7 +71,7 @@ public class JobExecutorController {
     }
 
     @OperationLog(operateType = OperateType.EXECUTE)
-    @Operation(summary = "continue execute stopped job")
+    @Operation(description = "continue execute stopped job")
     @PostMapping("continue/{jobExecutionId}")
     public R<Integer> continueExecute(@PathVariable String jobExecutionId) {
         int c = readJobDispatcher.continueDispatch(jobExecutionId);
@@ -79,7 +79,7 @@ public class JobExecutorController {
     }
 
     @OperationLog(operateType = OperateType.OFFLINE)
-    @Operation(summary = "stop executing job")
+    @Operation(description = "stop executing job")
     @PostMapping("stop/{jobExecutionId}")
     public R<Integer> stop(@PathVariable String jobExecutionId,
                            @RequestParam(required = false) String message) {

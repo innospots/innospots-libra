@@ -37,13 +37,13 @@ public class ExecutorStateController {
     }
 
     @GetMapping("quartz-jobs")
-    @Operation(summary = "quartz schedule job in the executor")
+    @Operation(description = "quartz schedule job in the executor")
     public R<List<Map<String, Object>>> scheduleInfo() {
         return success(quartzScheduleManager.schedulerInfo());
     }
 
     @GetMapping("running-jobs")
-    @Operation(summary = "running schedule job in the executor")
+    @Operation(description = "running schedule job in the executor")
     public R<List<JobExecution>> runningJobs() {
         return success(readyJobLauncher.currentCacheExecutions());
     }

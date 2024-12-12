@@ -30,7 +30,7 @@ import static io.innospots.libra.base.controller.BaseController.PATH_ROOT_ADMIN;
 public class WorkflowTriggerController {
 
 
-    @Operation(summary = "page webhook registries")
+    @Operation(description = "page webhook registries")
     @GetMapping("webhook/registries")
     public R<PageBody<SchemaRegistry>> pageWebhookTriggerRegistry(
             @Parameter(name = "flowName") @RequestParam(required = false) String flowName,

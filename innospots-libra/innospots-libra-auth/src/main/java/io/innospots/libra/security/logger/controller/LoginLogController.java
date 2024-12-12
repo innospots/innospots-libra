@@ -52,14 +52,14 @@ public class LoginLogController {
     }
 
     @GetMapping("page")
-    @Operation(summary = "page logs")
+    @Operation(description = "page logs")
     public R<PageBody<LoginLog>> pageLoginLogs(LogFormQuery request) {
         PageBody<LoginLog> pageModel = loginLogOperator.pageLogs(request);
         return success(pageModel);
     }
 
     @GetMapping("{logId}")
-    @Operation(summary = "view log detail")
+    @Operation(description = "view log detail")
     public R<LoginLog> view(@Parameter(name = "logId", required = true) @PathVariable Integer logId) {
 
         LoginLog view = loginLogOperator.getLog(logId);
@@ -67,7 +67,7 @@ public class LoginLogController {
     }
 
     @GetMapping("current-user/page")
-    @Operation(summary = "list login user's logs")
+    @Operation(description = "list login user's logs")
     public R<PageBody<LoginLog>> pageCurrentUserLogs(
             @RequestParam(defaultValue = "1", required = false) Integer page,
             @RequestParam(defaultValue = "20", required = false) Integer size) {
@@ -75,19 +75,19 @@ public class LoginLogController {
     }
 
     @GetMapping("latest")
-    @Operation(summary = "current user latest login log")
+    @Operation(description = "current user latest login log")
     public R<LoginLog> getLatest() {
         return success(loginLogOperator.getLatest());
     }
 
     @GetMapping("browsers")
-    @Operation(summary = "list browser")
+    @Operation(description = "list browser")
     public R<List<String>> listBrowsers() {
         return success(loginLogOperator.listBrowsers());
     }
 
     @GetMapping("operation-systems")
-    @Operation(summary = "list os")
+    @Operation(description = "list os")
     public R<List<String>> listOperationSystems() {
         return success(loginLogOperator.listOperationSystems());
     }

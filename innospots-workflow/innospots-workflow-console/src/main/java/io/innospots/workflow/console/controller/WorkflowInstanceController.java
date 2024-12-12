@@ -70,7 +70,7 @@ public class WorkflowInstanceController extends BaseController {
     @PostMapping
     @ResourceItemOperation(type = BUTTON, icon = "create", name = "${workflow.main.button.add}")
     @OperationLog(operateType = OperateType.CREATE, primaryField = "workflowInstanceId")
-    @Operation(summary = "create workflow")
+    @Operation(description = "create workflow")
     public R<WorkflowInstance> createWorkflow(@Parameter(name = "workflow") @Valid @RequestBody WorkflowInfo workflow) {
         WorkflowInstance workflowInstance = workflowService.createWorkflow(workflow);
         return success(workflowInstance);
@@ -85,7 +85,7 @@ public class WorkflowInstanceController extends BaseController {
     @PutMapping
     @OperationLog(idParamPosition = 0, primaryField = "workflowInstanceId", operateType = OperateType.UPDATE)
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.button.save}")
-    @Operation(summary = "update workflow")
+    @Operation(description = "update workflow")
     public R<Boolean> updateWorkflow(@Parameter(name = "workflow") @Valid @RequestBody WorkflowInstance workflow) {
         Boolean updateInfo = workflowService.updateWorkflow(workflow);
         return success(updateInfo);
@@ -99,7 +99,7 @@ public class WorkflowInstanceController extends BaseController {
      */
     @PutMapping("{workflowInstanceId}/recycle")
     @OperationLog(idParamPosition = 0, operateType = OperateType.RECYCLE)
-    @Operation(summary = "remove workflow to recycle bin", description = "remove workflow to recycle bin")
+    @Operation(description = "remove workflow to recycle bin")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.tooltip.recycle_bin}")
     public R<Boolean> removeWorkflowToRecycle(@Parameter(required = true, name = "workflowInstanceId") @PathVariable Long workflowInstanceId) {
         Boolean delete = workflowService.removeWorkflowToRecycle(workflowInstanceId);
@@ -107,7 +107,7 @@ public class WorkflowInstanceController extends BaseController {
     }
 
     @DeleteMapping("{workflowInstanceId}")
-    @Operation(summary = "delete workflow from system")
+    @Operation(description = "delete workflow from system")
     @ResourceItemOperation(type = BUTTON, icon = "delete", name = "${common.button.delete}")
     @OperationLog(idParamPosition = 0, operateType = OperateType.DELETE)
     public R<Boolean> deleteWorkflowInstance(@Parameter(required = true, name = "workflowInstanceId") @PathVariable Long workflowInstanceId) {
@@ -122,7 +122,7 @@ public class WorkflowInstanceController extends BaseController {
      */
     @PutMapping("{workflowInstanceId}/{dataStatus}")
     @OperationLog(idParamPosition = 0, operateType = OperateType.UPDATE_STATUS)
-    @Operation(summary = "update workflow status", description = "update workflow status")
+    @Operation(description = "update workflow status")
     @ResourceItemOperation(type = BUTTON, icon = "update", name = "${common.text.status}")
     public R<Boolean> updateDataStatus(@Parameter(required = true, name = "workflowInstanceId") @PathVariable Long workflowInstanceId,
                                        @Parameter(required = true, name = "dataStatus") @PathVariable DataStatus dataStatus) {
@@ -137,7 +137,7 @@ public class WorkflowInstanceController extends BaseController {
      * @return
      */
     @GetMapping("{workflowInstanceId}")
-    @Operation(summary = "get workflowInfo")
+    @Operation(description = "get workflowInfo")
     public R<WorkflowInstance> getWorkflowInstance(@Parameter(required = true, name = "workflowInstanceId") @PathVariable Long workflowInstanceId) {
         WorkflowInstance info = workflowService.getWorkflowInstance(workflowInstanceId);
         return success(info);
@@ -149,20 +149,20 @@ public class WorkflowInstanceController extends BaseController {
      * @return
      */
     @GetMapping("page")
-    @Operation(summary = "page workflows")
+    @Operation(description = "page workflows")
     public R<PageBody<WorkflowInstance>> pageWorkflows(WorkflowQuery request) {
         PageBody<WorkflowInstance> page = workflowService.getWorkflows(request);
         return success(page);
     }
 
     @GetMapping("registry/{workflowInstanceId}")
-    @Operation(summary = "get workflow api registry by workflowInstanceId")
+    @Operation(description = "get workflow api registry by workflowInstanceId")
     public R<SchemaRegistry> workflowApiRegistry(@PathVariable String workflowInstanceId) {
         return success(workflowService.getApiWorkflowSchemaRegistry(workflowInstanceId));
     }
 
     @GetMapping("list/trigger-code/{triggerCode}")
-    @Operation(summary = "list workflows")
+    @Operation(description = "list workflows")
     public List<WorkflowBaseInfo> listWorkflows(@PathVariable String triggerCode) {
         return workflowService.listWorkflows(triggerCode);
     }
