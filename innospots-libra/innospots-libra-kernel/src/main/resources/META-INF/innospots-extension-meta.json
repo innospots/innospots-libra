@@ -5,6 +5,7 @@
     "zh_CN": "系统核心"
   },
   "version": "v1.0.0",
+  "icon": "/static/images/common/s_logo.png",
   "publishTime": "2023-01-01",
   "vendor": "Innospots",
   "extKey": "innospots-libra-extension-kernel",

@@ -5,6 +5,7 @@
     "zh_CN": "审批管理"
   },
   "version": "v1.0.0",
+  "icon": "/images/approval.png",
   "publishTime": "2024-10-12",
   "vendor": "Innospots",
   "extKey": "innospots-approve",

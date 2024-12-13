@@ -19,6 +19,7 @@
 package io.innospots.libra.base.extension;
 
 import io.innospots.base.i18n.LocaleMessageUtils;
+import io.innospots.base.json.annotation.I18n;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections4.MapUtils;
@@ -36,6 +37,7 @@ import java.util.Map;
 @Getter
 public class LibraExtensionInformation {
 
+    @I18n
     protected String name;
 
     protected String author;

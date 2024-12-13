@@ -65,18 +65,13 @@ public class ExtInstallmentOperator extends ServiceImpl<ExtInstallmentDao, ExtIn
 
         List<ExtDefinitionEntity> extDefinitionEntityList = extDefinitionDao.selectList(null);
         List<ExtInstallmentEntity> list = this.baseMapper.selectList(null);
-        Map<String, ExtInstallmentEntity> installmentEntityMap = list.stream().collect(Collectors.toMap(ExtInstallmentEntity::getExtKey, item -> item));
-        for (ExtDefinitionEntity extDefinitionEntity : extDefinitionEntityList) {
-            ExtInstallmentEntity extInstallmentEntity;
-            if (installmentEntityMap.containsKey(extDefinitionEntity.getExtKey())) {
-                extInstallmentEntity = installmentEntityMap.get(extDefinitionEntity.getExtKey());
-            } else {
-                extInstallmentEntity = new ExtInstallmentEntity();
-                extInstallmentEntity.setExtKey(extDefinitionEntity.getExtKey());
-            }
+        Map<String,ExtDefinitionEntity> extDefinitionEntityMap = extDefinitionEntityList.stream().collect(Collectors.toMap(ExtDefinitionEntity::getExtKey, item -> item));
 
+        for (ExtInstallmentEntity extInstallmentEntity : list) {
+            ExtDefinitionEntity extDefinitionEntity = extDefinitionEntityMap.get(extInstallmentEntity.getExtKey());
             resList.add(AppInstallmentConverter.INSTANCE.entityToModel(extInstallmentEntity, extDefinitionEntity));
         }
+
         return resList;
     }
 

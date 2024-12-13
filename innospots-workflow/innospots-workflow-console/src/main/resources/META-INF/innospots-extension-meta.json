@@ -7,6 +7,7 @@
   "version": "v1.0.0",
   "publishTime": "2021-10-12",
   "vendor": "Innospots",
+  "icon": "/images/workflow.png",
   "extKey": "innospots-workflow",
   "kernelVersion": "v1.0.0",
   "description": "workflow module",
